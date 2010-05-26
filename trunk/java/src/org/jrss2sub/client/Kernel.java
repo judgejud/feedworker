@@ -61,16 +61,19 @@ public class Kernel {
     public final String EZTV = "Eztv";
     public final String BTCHAT = "Btchat";
     public final String MYITASA = "MyItasa";
+    public final String MYSUBSF = "MySubsf";
     //PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
     private final String SPLIT_SUB = ".sub";
     private final String SPLIT_HDTV = ".hdtv";
     private final String SPLIT_POINT = "\\.";
-    private final String[] QUALITY = new String[]{Quality.ALL.toString(), Quality.NORMAL.toString(),
-                            Quality.FORM_720p.toString(), Quality.FORM_1080p.toString(),
-                            Quality.BLURAY.toString(), Quality.DVDRIP.toString(),
-                            Quality.HR.toString(), Quality.DIFF.toString()};
+    private final String CMD_DELETE = "delete";
+    private final String[] QUALITY = new String[]{Quality.ALL.toString(), 
+                            Quality.NORMAL.toString(), Quality.FORM_720p.toString(),
+                            Quality.FORM_1080p.toString(), Quality.BLURAY.toString(),
+                            Quality.DVDRIP.toString(), Quality.HR.toString(),
+                            Quality.DIFF.toString()};
     //PRIVATE STATIC VARIABLES
     private static Kernel core = null;
     //PRIVATE VARIABLES
@@ -82,8 +85,7 @@ public class Kernel {
     private Timer timer;
     private String lastItasa = null, lastMyItasa = null, lastSubsf = null,
             lastEztv = null, lastBtchat = null;
-    private TreeMap<FilterSub, String> mapRole;
-    private boolean isChangedMap = false;
+    private TreeMap<FilterSub, String> mapRole;    
     private ManageException error = ManageException.getIstance();
     /**Restituisce l'istanza corrente del kernel
      *
@@ -138,9 +140,11 @@ public class Kernel {
             for (int i = 0; i < als.size(); i++) {
                 InputStream is = http.getTorrent(als.get(i));
                 if (is != null) {
-                    File f = new File(prop.getTorrentDest() + File.separator + http.getNameFile());
+                    File f = new File(prop.getTorrentDest() + File.separator +
+                            http.getNameFile());
                     downloadSingle(is, f);
-                    fireNewTextPaneEvent("Scaricato: " + http.getNameFile(), MyTextPaneEvent.TORRENT);
+                    fireNewTextPaneEvent("Scaricato: " + http.getNameFile(),
+                            MyTextPaneEvent.TORRENT);
                 } else
                     printAlert("Non posso gestire " + als.get(i).split(".")[1]);
             }
@@ -156,7 +160,8 @@ public class Kernel {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    private void downloadSingle(InputStream is, File f) throws FileNotFoundException, IOException {
+    private void downloadSingle(InputStream is, File f) throws FileNotFoundException,
+            IOException {
         OutputStream out = new FileOutputStream(f);
         byte buf[] = new byte[1024];
         int len;
@@ -211,15 +216,16 @@ public class Kernel {
                         File filesub = al.get(i);
                         String namesub = al.get(i).getName();
                         dest = mapPath(namesub, SPLIT_SUB);
-                        if (dest!=null){
-
+                        if (dest!=null && dest.toLowerCase().equals(CMD_DELETE))
+                            filesub.delete();
+                        else {
+                            s.moveFromLocal(filesub, dest);
+                            if (dest==null)
+                                dest = "";
+                            fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
+                                    " nella cartella condivisa samba\\" + dest,
+                                    MyTextPaneEvent.SUB);
                         }
-                        s.moveFromLocal(filesub, dest);
-                        if (dest==null)
-                            dest = "";
-                        fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
-                                " nella cartella condivisa samba\\" + dest,
-                                MyTextPaneEvent.SUB);
                     }                    
                 } catch (IOException ex) {
                     error.launch(ex, getClass(), dest);
@@ -229,18 +235,19 @@ public class Kernel {
                     File filesub = al.get(i);
                     String namesub = al.get(i).getName();
                     String dest = mapPath(namesub, SPLIT_SUB);
-                    if (dest==null)
-                        dest = prop.getSubDest();
+                    if (dest!=null && dest.toLowerCase().equals(CMD_DELETE))
+                        filesub.delete();
                     else {
-
-                    }
-                    try {
-                        Io.moveFile(filesub, dest);
-                        fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
-                                " nel seguente percorso: " + dest,
-                                MyTextPaneEvent.SUB);
-                    } catch (IOException ex) {
-                        error.launch(ex, getClass(), dest);
+                        if (dest==null)
+                            dest = prop.getSubDest();
+                        try {
+                            Io.moveFile(filesub, dest);
+                            fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
+                                    " nel seguente percorso: " + dest,
+                                    MyTextPaneEvent.SUB);
+                        } catch (IOException ex) {
+                            error.launch(ex, getClass(), dest);
+                        }
                     }
                 }
             }
@@ -286,7 +293,7 @@ public class Kernel {
         String _serie = temp[0];
         for (int i = 1; i < pos; i++)
             _serie += " " + temp[i];
-        fil = new FilterSub(_serie, num, version);
+        fil = new FilterSub(_serie, num, version, null, null);
         return fil;
     }
     /**cerca la posizione della stringa corrispondente al numero di serie ed episodio
@@ -410,17 +417,9 @@ public class Kernel {
      * @param data
      */
     public void closeApp(String data) {
-        if (prop.isAdvancedDest() && isChangedMap){
-            try {
-                new Xml().writeMap(mapRole);
-            } catch (IOException ex) {
-                error.launch(ex, getClass(), null);
-            }
-        }
         prop.setLastDate(data);
-        if (!prop.isFirstRun()) {
-            prop.writeOnlyLastDate();
-        }
+        if (!prop.isFirstRun())
+            prop.writeOnlyLastDate();        
         System.exit(0);
     }
     /**Restituisce i nodi per la jtree Settings
@@ -525,7 +524,7 @@ public class Kernel {
                                             MyTextPaneEvent.FEED_TORRENT2);
                                 continua = false;
                             }
-                            if (download && (isNotStagione((String)matrice.get(i)[2])))
+                            if ((isNotStagione((String)matrice.get(i)[2])) && download )
                                 downItasaAuto(matrice.get(i)[0]);
                         } else
                             matrice.remove(i);
@@ -687,10 +686,14 @@ public class Kernel {
      *
      * @param temp treepam regole
      */
-    public void saveMap(TreeMap<FilterSub, String> temp){
-        mapRole = temp;
-        isChangedMap = true;        
-        fireNewTextPaneEvent("Regola/e memorizzate", MyTextPaneEvent.OK);
+    public void saveMap(TreeMap<FilterSub, String> temp){        
+        try {
+            new Xml().writeMap(temp);
+            mapRole = temp;
+            fireNewTextPaneEvent("Regola/e memorizzate", MyTextPaneEvent.OK);
+        } catch (IOException ex) {
+            error.launch(ex, getClass(), null);
+        }
     }
     /**converte la treemap delle regole in arraylist di String[]
      *
@@ -703,8 +706,8 @@ public class Kernel {
             matrix = new ArrayList<String[]>();
             while (it.hasNext()) {
                 FilterSub key = (FilterSub) it.next();
-                matrix.add(new String[]{key.getName(), key.getSeason(),
-                                        key.getQuality(), mapRole.get(key)});
+                matrix.add(new String[]{key.getName(), key.getSeason(), key.getQuality(),
+                            mapRole.get(key), key.getStatus(), key.getDay()});
             }
         }
         return matrix;
@@ -733,7 +736,7 @@ public class Kernel {
         boolean check = true;
         String[] array = name.split(" ");
         for (int i = 0; i < array.length; i++) {
-            if (array[i].toLowerCase().equalsIgnoreCase("stagione")) {
+            if (array[i].toLowerCase().equals("stagione")) {
                 check = false;
                 break;
             }
@@ -746,6 +749,24 @@ public class Kernel {
      */
     public String[] getQuality(){
         return QUALITY;
+    }
+
+    private String getSynoId(InputStream is){
+        String id = null;
+        /*
+        JSONValue value = JSONParser.parse(jSon);
+        JSONArray arr = value.isArray();
+        for (int i = 0; i < arr.size(); i++) {
+            JSONObject obj = arr.get(I).isObject();
+            if (obj != null)
+                recordList.add(getProductAsRecord(obj, false));
+        }
+        record.setAttribute("id", JSONUtil.getLong("id", prodObj));
+        record.setAttribute("code", JSONUtil.getString("code", prodObj));
+        record.setAttribute("name", JSONUtil.getString("name", prodObj));
+        record.setAttribute("creationDate", JSONUtil.getDate("creationDate", prodObj));
+         */
+        return id;
     }
     /**Stampa lo stato del download redirectory coi download in corso o nessun download*/
     public void synoStatus() {

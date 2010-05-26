@@ -19,8 +19,13 @@ import org.lp.myUtils.Swing;
  * @author luca
  */
 class tableXml extends JTable implements TableXmlEventListener{
-    private final String[] nameCols = {"Serie", "Stagione", "Versione", "Destinazione"};
+    private final String[] nameCols = {"Serie", "Stagione", "Versione", "Destinazione", "Stato",
+                                        "Giorno"};
     private final String[] itemsCombo = Mediator.getIstance().getElemEnum();
+    private final String[] itemsComboSettimana = {"", "Domenica", "Lunedì", "Martedì",
+                                                "Mercoledì", "Giovedì", "Venerdì", "Sabato"};
+    private final String[] itemsComboStato = {"","In corso", "Sospeso", "In attesa",
+                                            "Season Finale", "Series finale"};
     private final Font font = new Font("Arial", Font.PLAIN, 10);
     /**Costruttore*/
     public tableXml() {
@@ -29,18 +34,26 @@ class tableXml extends JTable implements TableXmlEventListener{
         setModel(dtm);
 
         getTableHeader().setReorderingAllowed(false);
-
-        Swing.setTableDimensionLockColumn(this, 0, 270);
+        
         Swing.setTableDimensionLockColumn(this, 1, 55);
         Swing.setTableDimensionLockColumn(this, 2, 60);
-        Swing.setTableDimensionLockColumn(this, 3, 270);
-        // Set the combobox editor on the 1st visible column
-        TableColumn col = getColumnModel().getColumn(2);
-        col.setCellEditor(new MyComboBoxEditor(itemsCombo));
+        Swing.setTableDimensionLockColumn(this, 4, 90);
+        Swing.setTableDimensionLockColumn(this, 5, 75);
+
+        setComboColumn(2, itemsCombo);
+        setComboColumn(4, itemsComboStato);
+        setComboColumn(5, itemsComboSettimana);
+        
+        setFont(font);
+    }
+
+    private void setComboColumn(int num, String[] items){
+        // Set the combobox editor on column
+        TableColumn col = getColumnModel().getColumn(num);
+        col.setCellEditor(new MyComboBoxEditor(items));
         // If the cell should appear like a combobox in its
         // non-editing state, also set the combobox renderer
-        col.setCellRenderer(new MyComboBoxRenderer(itemsCombo));
-        setFont(font);
+        col.setCellRenderer(new MyComboBoxRenderer(items));
     }
     @Override
     public void objReceived(TableXmlEvent evt) {
@@ -59,8 +72,8 @@ class tableXml extends JTable implements TableXmlEventListener{
             setFont(font);
         }
         @Override
-        public Component getTableCellRendererComponent(
-                JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
             if (isSelected) {
                 setForeground(table.getSelectionForeground());
                 super.setBackground(table.getSelectionBackground());

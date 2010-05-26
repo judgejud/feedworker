@@ -70,6 +70,10 @@ public class Mediator {
     String getSubsf(){
         return core.SUBSF;
     }
+
+    String getMySubsf(){
+        return core.MYSUBSF;
+    }
     /**Restituisce il testo eztv
      *
      * @return eztv
@@ -223,6 +227,9 @@ public class Mediator {
             String season = (String)jtable.getValueAt(i, 1);
             String quality = (String)jtable.getValueAt(i, 2);
             String path = (String)jtable.getValueAt(i, 3);
+            String status = (String)jtable.getValueAt(i, 4);
+            String day = (String)jtable.getValueAt(i, 5);            
+
             if (Lang.verifyTextNotNull(name)){
                 if (Lang.verifyTextNotNull(path)){
                     try {
@@ -234,11 +241,12 @@ public class Mediator {
                             _break = true;
                             break;
                         }
-                        FilterSub f = new FilterSub(name, season, quality);
+                        FilterSub f = new FilterSub(name, season, quality, status, day);
                         if (!temp.containsKey(f))
                             temp.put(f, path);
                         else{
-                            printAlert("Riga: "+ i +" trovato duplicato, si prega di correggerlo");
+                            printAlert("Riga: "+ i +
+                                    " trovato duplicato, si prega di correggerlo");
                         _break = true;
                         break;
                         }
@@ -252,7 +260,7 @@ public class Mediator {
                     _break = true;
                     break;
                 }
-            } else{
+            } else {
                 printAlert("Riga: "+ i + " immettere il nome della regola/sub/serie");
                 _break = true;
                 break;

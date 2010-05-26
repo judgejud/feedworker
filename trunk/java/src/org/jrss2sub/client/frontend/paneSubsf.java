@@ -17,13 +17,14 @@ import javax.swing.JScrollPane;
 class paneSubsf extends paneAbstract{
     private static paneSubsf jpanel = null;
     private JButton jbDown, jbClean;
-    private tableRss jtable;
+    private tableRss jtSubsf, jtMySubsf;
 
     private paneSubsf(){
         super();
         initPane();
         initButtons();
-        proxy.setTableRssListener(jtable);
+        proxy.setTableRssListener(jtSubsf);
+        proxy.setTableRssListener(jtMySubsf);
     }
 
     public static paneSubsf getPanel(){
@@ -34,11 +35,16 @@ class paneSubsf extends paneAbstract{
 
     @Override
     void initPane() {
-        jtable = new tableRss(proxy.getSubsf());
-        JScrollPane jScrollTable1 = new JScrollPane(jtable);
+        jtSubsf = new tableRss(proxy.getSubsf());
+        jtMySubsf = new tableRss(proxy.getMySubsf());
+        JScrollPane jScrollTable1 = new JScrollPane(jtSubsf);
         jScrollTable1.setPreferredSize(TABLESCROLLSIZE);
         jScrollTable1.setAutoscrolls(true);
         add(jScrollTable1, BorderLayout.WEST);
+        JScrollPane jScrollTable2 = new JScrollPane(jtMySubsf);
+        jScrollTable2.setPreferredSize(TABLESCROLLSIZE);
+        jScrollTable2.setAutoscrolls(true);
+        add(jScrollTable2, BorderLayout.EAST);
         setVisible(true);
     }
 
@@ -60,7 +66,8 @@ class paneSubsf extends paneAbstract{
         jbClean.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.cleanSelect(jtable);
+                proxy.cleanSelect(jtSubsf);
+                proxy.cleanSelect(jtMySubsf);
             }
         });
 
@@ -82,11 +89,11 @@ class paneSubsf extends paneAbstract{
 
     private void jbDownMouseClicked(){
         if (jbDown.isEnabled())
-            proxy.downloadSub(jtable, null, false);
+            proxy.downloadSub(jtSubsf, jtMySubsf, false);
     }
 
     public void setEnableButton(boolean e){
         jbDown.setEnabled(e);
         jbClean.setEnabled(e);
-    }   
+    }
 }
