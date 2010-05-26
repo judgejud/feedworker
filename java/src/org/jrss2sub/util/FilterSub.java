@@ -8,11 +8,15 @@ public class FilterSub implements Comparable<FilterSub>{
     private String name;
     private String season;
     private String quality;
+    private String day;
+    private String status;
 
-    public FilterSub(String name, String season, String quality) {
+    public FilterSub(String name, String season, String quality, String status, String day) {
         this.name = name.toLowerCase();
         this.season = season;
         this.quality = quality;
+        this.day = day;
+        this.status = status;
     }
 
     public String getName() {
@@ -29,6 +33,22 @@ public class FilterSub implements Comparable<FilterSub>{
 
     public void setQuality(String q){
         quality = q;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

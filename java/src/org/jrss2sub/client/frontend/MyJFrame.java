@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 //IMPORT JAVAX
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -39,21 +41,21 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
 
     protected paneSetting jpSettings;
     protected JTabbedPane jtabbedpane;   
-    protected MyJTextPane jtpLog;
+    protected textpaneLog jtpLog;
     
     private Mediator proxy = Mediator.getIstance();
     private Property prop = Property.getIstance();
     private paneItasa jpItasa;
     private paneTorrent jpTorrent;
-    private paneSubsf jpSubsf;    
+    private paneSubsf jpSubsf;
     /**Costruttore*/
     public MyJFrame(){
+        super();
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setSize(SCREENSIZE);
         this.setPreferredSize(SCREENSIZE);
         this.setMinimumSize(SCREENSIZE);
         this.setTitle(NAME + " build " + BUILD + " by " + AUTHORNAME);
-        this.setResizable(false);
         this.setIconImage(Convert.getResourceImage(SUB_RSS));
         initComponents();
         initMenuBar();
@@ -84,7 +86,7 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
             jtabbedpane.addTab("Destinazione Sub", paneRole.getPanel());
         jtabbedpane.addTab("Impostazioni", jpSettings);
 
-        jtpLog = new MyJTextPane();
+        jtpLog = new textpaneLog();
         JScrollPane jScrollText1 = new JScrollPane(jtpLog);
         jScrollText1.setPreferredSize(new Dimension(1000,165));       
         add(jScrollText1, BorderLayout.SOUTH);
@@ -141,26 +143,21 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
         menu_Jrss.add(itemJrssClose);
 
         JMenu menu_Laf = new JMenu(" Look & Feel ");
-        menu_Laf.setEnabled(false);
         menuBar.add(menu_Laf);
-        // Create a menu item
-        JMenuItem itemLaf01 = new JMenuItem("Standard");
-        JMenuItem itemLaf02 = new JMenuItem("Blackmoon");
-        JMenuItem itemLaf03 = new JMenuItem("Blackstar");
-        JMenuItem itemLaf04 = new JMenuItem("Blueice");
-        JMenuItem itemLaf05 = new JMenuItem("Bluesteel");
-        JMenuItem itemLaf06 = new JMenuItem("GreenDream");
-        JMenuItem itemLaf07 = new JMenuItem("Silvermoon");
-
-        //item.addActionListener();
-        menu_Laf.add(itemLaf01);
-        menu_Laf.add(itemLaf02);
-        menu_Laf.add(itemLaf03);
-        menu_Laf.add(itemLaf04);
-        menu_Laf.add(itemLaf05);
-        menu_Laf.add(itemLaf06);
-        menu_Laf.add(itemLaf07);
-
+        JCheckBoxMenuItem[] itemsLaf = new JCheckBoxMenuItem[7];
+        itemsLaf[0] = new JCheckBoxMenuItem("Standard");
+        itemsLaf[1] = new JCheckBoxMenuItem("Blackmoon");
+        itemsLaf[2] = new JCheckBoxMenuItem("Blackstar");
+        itemsLaf[3] = new JCheckBoxMenuItem("Blueice");
+        itemsLaf[4] = new JCheckBoxMenuItem("Bluesteel");
+        itemsLaf[5] = new JCheckBoxMenuItem("GreenDream");
+        itemsLaf[6] = new JCheckBoxMenuItem("Silvermoon");
+        ButtonGroup bg = new ButtonGroup();
+        for (int i=0; i<itemsLaf.length; i++){
+            bg.add(itemsLaf[i]);
+            menu_Laf.add(itemsLaf[i]);
+        }
+        
         JMenu menu_syno = new JMenu(" Synology ");
         JMenuItem itemSynoVideoMove = new JMenuItem("Sposta video");
         JMenuItem itemSynoStatus = new JMenuItem("Stato");

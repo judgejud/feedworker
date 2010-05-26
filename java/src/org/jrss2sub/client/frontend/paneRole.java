@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import org.lp.myUtils.Swing;
 /**
  *
+ * 
  * @author luca
  */
 class paneRole extends paneAbstract{
@@ -36,9 +37,9 @@ class paneRole extends paneAbstract{
     void initPane() {
         jtable = new tableXml();
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
-        jScrollTable1.setPreferredSize(new Dimension(650, 460));
+        //jScrollTable1.setPreferredSize(new Dimension(650, 460));
         jScrollTable1.setAutoscrolls(true);
-        add(jScrollTable1, BorderLayout.WEST);
+        add(jScrollTable1, BorderLayout.CENTER);
         setVisible(true);
         proxy.setTableXmlListener(jtable);
     }
