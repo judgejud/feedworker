@@ -34,10 +34,10 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
     protected final String SUB_RSS = "favicon.gif";
 
     private final Dimension SCREENSIZE = new Dimension(1024, 768);
-    private final Dimension TABBEDSIZE = new Dimension(1024, 540);
+    private final Dimension TABBEDSIZE = new Dimension(1024, 580);
     private final String AUTHORNAME = "Luka Judge";
-    private final String BUILD = "170";
-    private final String NAME = "jRss2Sub 1.04";    
+    private final String BUILD = "171";
+    private final String NAME = "jRss2Sub 1.05";
 
     protected paneSetting jpSettings;
     protected JTabbedPane jtabbedpane;   
@@ -52,7 +52,6 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
     public MyJFrame(){
         super();
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        this.setSize(SCREENSIZE);
         this.setPreferredSize(SCREENSIZE);
         this.setMinimumSize(SCREENSIZE);
         this.setTitle(NAME + " build " + BUILD + " by " + AUTHORNAME);
@@ -68,7 +67,7 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
         this.setLayout(new BorderLayout());
         jtabbedpane = new JTabbedPane();
         jtabbedpane.setPreferredSize(TABBEDSIZE);
-        this.add(jtabbedpane, BorderLayout.NORTH);
+        this.add(jtabbedpane, BorderLayout.CENTER);
         jpSettings = paneSetting.getPanel();
         if (prop.isItasa()){
             jpItasa = paneItasa.getPanel();
@@ -88,7 +87,7 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
 
         jtpLog = new textpaneLog();
         JScrollPane jScrollText1 = new JScrollPane(jtpLog);
-        jScrollText1.setPreferredSize(new Dimension(1000,165));       
+        jScrollText1.setPreferredSize(new Dimension(1000,140));
         add(jScrollText1, BorderLayout.SOUTH);
 
         jtpLog.appendOK("Versione java in uso: " + Lang.getJavaVersion());

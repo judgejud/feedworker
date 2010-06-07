@@ -24,7 +24,7 @@ class tableXml extends JTable implements TableXmlEventListener{
     private final String[] itemsCombo = Mediator.getIstance().getElemEnum();
     private final String[] itemsComboSettimana = {"", "Domenica", "Lunedì", "Martedì",
                                                 "Mercoledì", "Giovedì", "Venerdì", "Sabato"};
-    private final String[] itemsComboStato = {"","In corso", "Sospeso", "In attesa",
+    private final String[] itemsComboStato = {"","In corso", "Sospeso", "In attesa", "In arrivo",
                                             "Season Finale", "Series finale"};
     private final Font font = new Font("Arial", Font.PLAIN, 10);
     /**Costruttore*/

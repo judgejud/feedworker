@@ -736,7 +736,9 @@ public class Kernel {
         boolean check = true;
         String[] array = name.split(" ");
         for (int i = 0; i < array.length; i++) {
-            if (array[i].toLowerCase().equals("stagione")) {
+            String confronta = array[i].toLowerCase();
+            if (confronta.equals("stagione") || confronta.equals("season") ||
+                    confronta.equals("completa") ) {
                 check = false;
                 break;
             }
