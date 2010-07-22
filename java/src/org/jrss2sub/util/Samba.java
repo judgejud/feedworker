@@ -53,7 +53,7 @@ public class Samba {
             sambaPath += path + "/";
         sambaPath += local.getName();
         sambaPath.replaceAll(" ", "%20");
-        SmbFile server = new SmbFile(sambaPath ,auth);
+        SmbFile server = new SmbFile(sambaPath, auth);
         OutputStream out = new SmbFileOutputStream(server);
         try {
             while (true) {

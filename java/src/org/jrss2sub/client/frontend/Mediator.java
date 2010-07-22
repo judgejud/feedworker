@@ -28,6 +28,7 @@ import org.lp.myUtils.lang.Lang;
 //IMPORT SUN
 import com.sun.syndication.io.FeedException;
 import java.awt.Color;
+import org.jrss2sub.client.DownloadThread;
 import org.jrss2sub.util.Quality;
 /**Classe mediatrice tra gui e kernel, detta anche kernel della gui.
  *
@@ -172,6 +173,7 @@ public class Mediator {
         core.addMyTextPaneEventListener(listener);
         ManageException.getIstance().addMyTextPaneEventListener(listener);
         addMyTextPaneEventListener(listener);
+        new DownloadThread().addMyTextPaneEventListener(listener);
     }
 
     void setFrameListener(MyJFrameEventListener listener){
