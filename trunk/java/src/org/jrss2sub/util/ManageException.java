@@ -49,6 +49,7 @@ public class ManageException{
      */
     public void launch(FeedException ex, Class c, String text){
         String msg = ex.getMessage();
+        ex.printStackTrace();
         String err01 = "Invalid XML: Error on line";
         if (msg.substring(0,err01.length()).equalsIgnoreCase(err01))
             printAlert("Non posso analizzare il feed XML "+ text);
@@ -71,7 +72,6 @@ public class ManageException{
      */
     public void launch(IllegalArgumentException ex, Class c){
         String msg = ex.getMessage();
-        String error01 = "";
         printAlert("il link inserito non corrisponde a feed RSS");
         printError(ex, c);
     }

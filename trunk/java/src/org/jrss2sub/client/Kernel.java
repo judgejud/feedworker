@@ -1,10 +1,12 @@
 package org.jrss2sub.client;
 //IMPORT JAVA
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.text.ParseException;
@@ -41,10 +43,7 @@ import de.javasoft.plaf.synthetica.SyntheticaGreenDreamLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaSilverMoonLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
-//import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
 //IMPORT JCIFS
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import jcifs.smb.SmbException;
 //IMPORT APACHE
 import org.apache.http.HttpEntity;
@@ -85,7 +84,7 @@ public class Kernel {
     private Timer timer;
     private String lastItasa = null, lastMyItasa = null, lastSubsf = null,
             lastEztv = null, lastBtchat = null;
-    private TreeMap<FilterSub, String> mapRole;    
+    private TreeMap<FilterSub, String> mapRole;
     private ManageException error = ManageException.getIstance();
     /**Restituisce l'istanza corrente del kernel
      *
@@ -102,6 +101,7 @@ public class Kernel {
      * @param itasa
      */
     public void downloadSub(ArrayList<String> als, boolean itasa) {
+        /*
         int connection_Timeout = Lang.stringToInt(Property.getIstance().getTimeout())*1000;
         Http http = new Http(connection_Timeout);
         ArrayList<File> alf = new ArrayList<File>();
@@ -128,6 +128,38 @@ public class Kernel {
         }
         http.closeClient();
         analyzeDest(alf);
+        */
+        DownloadThread dt = new DownloadThread(mapRole, als, itasa);
+    }
+    /**effettua il download automatico di myitasa
+     * comprende le fasi anche di estrazione zip e analizzazione percorso definitivo.
+     * @param link link da analizzare
+     */
+    private void downItasaAuto(Object link) {
+        /*
+        int connection_Timeout = Lang.stringToInt(Property.getIstance().getTimeout())*1000;
+        Http http = new Http(connection_Timeout);
+        try{
+            http.connectItasa(prop.getItasaUser(), prop.getItasaPwd());
+            HttpEntity entity = http.requestGetEntity(String.valueOf(link), true);
+            if (entity.getContentLength() != -1) {                
+                String n = http.getNameFile();
+                int l = n.length();
+                File f = File.createTempFile(n.substring(0, l - 4), n.substring(l - 4));
+                downloadSingle(entity.getContent(), f);
+                analyzeDest(extract(f));
+            } else
+                printAlert("Sessione scaduta");
+        } catch (StringIndexOutOfBoundsException ex) {
+            error.launch(ex, this.getClass(), true);
+        } catch (IOException ex) {
+            error.launch(ex, getClass(), null);
+        }
+        http.closeClient();
+        */
+        ArrayList<String> als = new ArrayList<String>();
+        als.add(link.toString());
+        DownloadThread dt = new DownloadThread(mapRole, als, true);
     }
     /**Scarica i torrent
      *
@@ -386,8 +418,7 @@ public class Kernel {
     public void setLookFeel() {
         SyntheticaLookAndFeel laf = null;
         String lf = prop.getLookFeel();
-        try {
-//            SyntheticaSimple2DLookAndFeel laf = new SyntheticaSimple2DLookAndFeel();
+        try {            
             if (lf == null || lf.equalsIgnoreCase("") || lf.equalsIgnoreCase("standard"))
                 laf = new SyntheticaStandardLookAndFeel();
             else if (lf.equalsIgnoreCase("blackmoon"))
@@ -404,6 +435,8 @@ public class Kernel {
                 laf = new SyntheticaSilverMoonLookAndFeel();
 //            else if (lf.equalsIgnoreCase("whitevision"))
 //                laf = new SyntheticaWhiteVisionLookAndFeel();
+//            else if (lf.equalsIgnoreCase("simple2d"))
+//                laf = new SyntheticaSimple2DLookAndFeel();
             UIManager.setLookAndFeel(laf);
         } catch (ParseException ex) {
             error.launch(ex, getClass());
@@ -452,33 +485,7 @@ public class Kernel {
     /**Scrive l'ultima data d'aggiornamento nel file properties */
     public void writeLastDate() {
         prop.writeOnlyLastDate();
-    }
-    /**effettua il download automatico di myitasa
-     * comprende le fasi anche di estrazione zip e analizzazione percorso definitivo.
-     * @param link link da analizzare
-     */
-    private void downItasaAuto(Object link) {
-        int connection_Timeout = Lang.stringToInt(Property.getIstance().getTimeout())*1000;
-        Http http = new Http(connection_Timeout);
-        try{
-            http.connectItasa(prop.getItasaUser(), prop.getItasaPwd());
-            HttpEntity entity = http.requestGetEntity(String.valueOf(link), true);
-            if (entity.getContentLength() != -1) {
-                File f = null;
-                String n = http.getNameFile();
-                int l = n.length();
-                f = File.createTempFile(n.substring(0, l - 4), n.substring(l - 4));
-                downloadSingle(entity.getContent(), f);
-                analyzeDest(extract(f));
-            } else
-                printAlert("Sessione scaduta");
-        } catch (StringIndexOutOfBoundsException ex) {
-            error.launch(ex, this.getClass(), true);
-        } catch (IOException ex) {
-            error.launch(ex, getClass(), null);
-        }
-        http.closeClient();
-    }
+    }    
     /**Restituisce l'arraylist contenente i feed rss
      * 
      * @param urlRss url rss da analizzare
