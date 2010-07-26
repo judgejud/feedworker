@@ -46,20 +46,11 @@ public class DownloadThread implements Runnable{
     private List listenerTextPane = new ArrayList();
     private static DownloadThread dt = null;
     
-    public static DownloadThread getInstance(){
-        if (dt==null)
-            dt = new DownloadThread();
-        return dt;
-    }
-
-    void start(TreeMap<FilterSub, String> map, ArrayList<String> _als, boolean _itasa){
+    public DownloadThread(TreeMap<FilterSub, String> map, ArrayList<String> _als, boolean _itasa){
         als = _als;
         itasa = _itasa;
-        mapRole = map;
-        Thread t = new Thread(this, "Thread figlio");
-        t.start();
-    }
-
+        mapRole = map;        
+    }    
     /**
      * 
      */

@@ -59,10 +59,8 @@ public class Kernel {
     //PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
-    //private final String SPLIT_SUB = ".sub";
     private final String SPLIT_HDTV = ".hdtv";
     private final String SPLIT_POINT = "\\.";
-    //private final String CMD_DELETE = "delete";
     private final String[] QUALITY = new String[]{Quality.ALL.toString(), 
                             Quality.NORMAL.toString(), Quality.FORM_720p.toString(),
                             Quality.FORM_1080p.toString(), Quality.BLURAY.toString(),
@@ -95,8 +93,9 @@ public class Kernel {
      * @param als arraylist di link
      * @param itasa
      */
-    public void downloadSub(ArrayList<String> als, boolean itasa) {        
-        DownloadThread.getInstance().start(mapRole, als, itasa);
+    public void downloadSub(ArrayList<String> als, boolean itasa) {
+        Thread t = new Thread(new DownloadThread(mapRole, als, itasa), "Thread download");
+        t.start();
     }
     /**effettua il download automatico di myitasa
      * comprende le fasi anche di estrazione zip e analizzazione percorso definitivo.
@@ -105,7 +104,8 @@ public class Kernel {
     private void downItasaAuto(Object link) {        
         ArrayList<String> als = new ArrayList<String>();
         als.add(link.toString());
-        DownloadThread.getInstance().start(mapRole, als, true);
+        Thread t = new Thread(new DownloadThread(mapRole, als, true), "Thread download");
+        t.start();
     }
     /**Scarica i torrent
      *
