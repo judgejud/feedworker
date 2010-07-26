@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
-import java.util.zip.ZipException;
 //IMPORT JAVAX
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -29,9 +28,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.jrss2sub.client.frontend.events.*;
 import org.jrss2sub.util.*;
 //IMPORT MYUTILS
-import org.lp.myUtils.Io;
 import org.lp.myUtils.lang.Lang;
-import org.lp.myUtils.Util;
 //IMPORT SUN
 import com.sun.syndication.io.FeedException;
 //IMPORT JAVASOFT
@@ -45,8 +42,6 @@ import de.javasoft.plaf.synthetica.SyntheticaSilverMoonLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
 //IMPORT JCIFS
 import jcifs.smb.SmbException;
-//IMPORT APACHE
-import org.apache.http.HttpEntity;
 //IMPORT JDOM
 import org.jdom.JDOMException;
 /**Motore di jrss2sub
@@ -64,10 +59,10 @@ public class Kernel {
     //PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
-    private final String SPLIT_SUB = ".sub";
+    //private final String SPLIT_SUB = ".sub";
     private final String SPLIT_HDTV = ".hdtv";
     private final String SPLIT_POINT = "\\.";
-    private final String CMD_DELETE = "delete";
+    //private final String CMD_DELETE = "delete";
     private final String[] QUALITY = new String[]{Quality.ALL.toString(), 
                             Quality.NORMAL.toString(), Quality.FORM_720p.toString(),
                             Quality.FORM_1080p.toString(), Quality.BLURAY.toString(),
@@ -129,7 +124,7 @@ public class Kernel {
         http.closeClient();
         analyzeDest(alf);
         */
-        DownloadThread dt = new DownloadThread(mapRole, als, itasa);
+        new DownloadThread(mapRole, als, itasa);
     }
     /**effettua il download automatico di myitasa
      * comprende le fasi anche di estrazione zip e analizzazione percorso definitivo.
@@ -159,7 +154,7 @@ public class Kernel {
         */
         ArrayList<String> als = new ArrayList<String>();
         als.add(link.toString());
-        DownloadThread dt = new DownloadThread(mapRole, als, true);
+        new DownloadThread(mapRole, als, true);
     }
     /**Scarica i torrent
      *
@@ -209,6 +204,7 @@ public class Kernel {
      * @param f file zip di riferimento da estrarre
      * @return
      */
+    /*
     private ArrayList<File> extract(File f) {
         String temp = f.getName().substring(f.getName().length() - 3);
         ArrayList<File> alf = null;
@@ -229,15 +225,18 @@ public class Kernel {
         //return Zip.getAlFile();
         return alf;
     }
+     *
+     */
     /**analizza il sub e lo sposta nella destinazione pertinente
      * 
      * @param al arraylist di file sub
      */
+    /*
     private void analyzeDest(ArrayList<File> al) {
         /*TODO: Flash.Forward.s01e11e12.720p.R.sub.itasa.srt nella cartella
          condivisa samba\flash forward
          * problema: nessuna regola specificata per il 720, rivedere il search version.
-         */
+         
         if (al.size() > 0) {
             if (!prop.isDirLocal()) {
                 String dest = null;
@@ -285,6 +284,8 @@ public class Kernel {
             }
         }
     }
+     *
+     */
     /**Restituisce il valore/percorso della chiave ad esso associato nella treemap
      *
      * @param name nome del file da analizzare

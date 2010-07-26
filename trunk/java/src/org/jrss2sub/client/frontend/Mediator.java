@@ -1,5 +1,6 @@
 package org.jrss2sub.client.frontend;
 //IMPORT JAVA
+import java.awt.Color;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,6 +15,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.jrss2sub.client.Kernel;
 import org.jrss2sub.client.Property;
 import org.jrss2sub.client.Rss;
+import org.jrss2sub.client.DownloadThread;
 import org.jrss2sub.client.frontend.events.MyTextPaneEvent;
 import org.jrss2sub.client.frontend.events.MyJFrameEvent;
 import org.jrss2sub.client.frontend.events.MyJFrameEventListener;
@@ -22,14 +24,12 @@ import org.jrss2sub.client.frontend.events.TableRssEventListener;
 import org.jrss2sub.client.frontend.events.TableXmlEventListener;
 import org.jrss2sub.util.FilterSub;
 import org.jrss2sub.util.ManageException;
+import org.jrss2sub.util.Quality;
 //IMPORT MYUTILS
 import org.lp.myUtils.Awt;
 import org.lp.myUtils.lang.Lang;
 //IMPORT SUN
 import com.sun.syndication.io.FeedException;
-import java.awt.Color;
-import org.jrss2sub.client.DownloadThread;
-import org.jrss2sub.util.Quality;
 /**Classe mediatrice tra gui e kernel, detta anche kernel della gui.
  *
  * @author luca
@@ -171,9 +171,10 @@ public class Mediator {
 
     void setTextPaneListener(MyTextPaneEventListener listener){
         core.addMyTextPaneEventListener(listener);
+        new DownloadThread().addMyTextPaneEventListener(listener);
         ManageException.getIstance().addMyTextPaneEventListener(listener);
         addMyTextPaneEventListener(listener);
-        new DownloadThread().addMyTextPaneEventListener(listener);
+
     }
 
     void setFrameListener(MyJFrameEventListener listener){
