@@ -79,6 +79,7 @@ public class Kernel {
             lastEztv = null, lastBtchat = null;
     private TreeMap<FilterSub, String> mapRole;
     private ManageException error = ManageException.getIstance();
+    private MyTextPaneEventListener mytpel;
     /**Restituisce l'istanza corrente del kernel
      *
      * @return istanza kernel
@@ -94,7 +95,9 @@ public class Kernel {
      * @param itasa
      */
     public void downloadSub(ArrayList<String> als, boolean itasa) {
-        Thread t = new Thread(new DownloadThread(mapRole, als, itasa), "Thread download");
+        DownloadThread dt = new DownloadThread(mapRole, als, itasa);
+        Thread t = new Thread(dt, "Thread download");
+        dt.addMyTextPaneEventListener(mytpel);
         t.start();
     }
     /**effettua il download automatico di myitasa
@@ -104,7 +107,9 @@ public class Kernel {
     private void downItasaAuto(Object link) {        
         ArrayList<String> als = new ArrayList<String>();
         als.add(link.toString());
-        Thread t = new Thread(new DownloadThread(mapRole, als, true), "Thread download");
+        DownloadThread dt = new DownloadThread(mapRole, als, true);
+        Thread t = new Thread(dt, "Thread download");
+        dt.addMyTextPaneEventListener(mytpel);
         t.start();
     }
     /**Scarica i torrent
@@ -769,6 +774,10 @@ public class Kernel {
         } catch (IOException ex) {
             error.launch(ex, getClass(), null);
         }
+    }
+
+    public void setDownloadThreadListener(MyTextPaneEventListener listener) {
+        mytpel = listener;
     }
     /**Stampa il messaggio di alert invocando il metodo fire opportuno
      *
