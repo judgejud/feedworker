@@ -44,16 +44,21 @@ public class DownloadThread implements Runnable{
     private ManageException error = ManageException.getIstance();
     private TreeMap<FilterSub, String> mapRole;
     private List listenerTextPane = new ArrayList();
+    private static DownloadThread dt = null;
+    
+    public static DownloadThread getInstance(){
+        if (dt==null)
+            dt = new DownloadThread();
+        return dt;
+    }
 
-    DownloadThread(TreeMap<FilterSub, String> map, ArrayList<String> _als, boolean _itasa){
+    void start(TreeMap<FilterSub, String> map, ArrayList<String> _als, boolean _itasa){
         als = _als;
         itasa = _itasa;
         mapRole = map;
         Thread t = new Thread(this, "Thread figlio");
         t.start();
     }
-
-    public DownloadThread() {}
 
     /**
      * 
@@ -76,7 +81,6 @@ public class DownloadThread implements Runnable{
                         downloadSingle(entity.getContent(), f);
                         alf.addAll(extract(f));
                     } else
-                        //System.out.println("Sessione scaduta");
                         printAlert("Sessione scaduta");
                 }
             } //end for
@@ -128,7 +132,6 @@ public class DownloadThread implements Runnable{
                 error.launch(ex, getClass(), null);
             }
         } else
-            //System.out.println("Scaricato: " + f.getName());
             fireNewTextPaneEvent("Scaricato: " + f.getName(), MyTextPaneEvent.OK);
         //return Zip.getAlFile();
         return alf;
@@ -158,8 +161,6 @@ public class DownloadThread implements Runnable{
                             s.moveFromLocal(filesub, dest);
                             if (dest==null)
                                 dest = "";
-                            System.out.println("Estratto " + al.get(i).getName() +
-                                    " nella cartella condivisa samba\\" + dest);
                             fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
                                     " nella cartella condivisa samba\\" + dest,
                                     MyTextPaneEvent.SUB);
@@ -180,8 +181,6 @@ public class DownloadThread implements Runnable{
                             dest = prop.getSubDest();
                         try {
                             Io.moveFile(filesub, dest);
-                            System.out.println("Estratto " + al.get(i).getName() +
-                                    " nel seguente percorso: " + dest);
                             fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
                                     " nel seguente percorso: " + dest,
                                     MyTextPaneEvent.SUB);

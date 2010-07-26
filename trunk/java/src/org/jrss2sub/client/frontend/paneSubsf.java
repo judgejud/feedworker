@@ -9,7 +9,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-
 /**
  *
  * @author luca
@@ -88,8 +87,10 @@ class paneSubsf extends paneAbstract{
     }
 
     private void jbDownMouseClicked(){
-        if (jbDown.isEnabled())
+        if (jbDown.isEnabled()){
             proxy.downloadSub(jtSubsf, jtMySubsf, false);
+            proxy.cleanSelect(jtSubsf);
+        }
     }
 
     public void setEnableButton(boolean e){
