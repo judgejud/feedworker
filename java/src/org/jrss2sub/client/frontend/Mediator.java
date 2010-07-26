@@ -15,7 +15,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.jrss2sub.client.Kernel;
 import org.jrss2sub.client.Property;
 import org.jrss2sub.client.Rss;
-import org.jrss2sub.client.DownloadThread;
 import org.jrss2sub.client.frontend.events.MyTextPaneEvent;
 import org.jrss2sub.client.frontend.events.MyJFrameEvent;
 import org.jrss2sub.client.frontend.events.MyJFrameEventListener;
@@ -171,7 +170,7 @@ public class Mediator {
 
     void setTextPaneListener(MyTextPaneEventListener listener){
         core.addMyTextPaneEventListener(listener);
-        DownloadThread.getInstance().addMyTextPaneEventListener(listener);
+        core.setDownloadThreadListener(listener);
         ManageException.getIstance().addMyTextPaneEventListener(listener);
         addMyTextPaneEventListener(listener);
 
