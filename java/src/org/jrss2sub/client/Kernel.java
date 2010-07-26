@@ -95,66 +95,17 @@ public class Kernel {
      * @param als arraylist di link
      * @param itasa
      */
-    public void downloadSub(ArrayList<String> als, boolean itasa) {
-        /*
-        int connection_Timeout = Lang.stringToInt(Property.getIstance().getTimeout())*1000;
-        Http http = new Http(connection_Timeout);
-        ArrayList<File> alf = new ArrayList<File>();
-        try{
-            if (itasa)
-                http.connectItasa(prop.getItasaUser(), prop.getItasaPwd());
-            for (int i = 0; i < als.size(); i++) {
-                HttpEntity entity = http.requestGetEntity(als.get(i), itasa);
-                if (entity != null) {
-                    if (entity.getContentLength() != -1) {
-                        String n = http.getNameFile();
-                        int l = n.length();
-                        File f = File.createTempFile(n.substring(0, l - 4), n.substring(l - 4));
-                        downloadSingle(entity.getContent(), f);
-                        alf.addAll(extract(f));
-                    } else
-                        printAlert("Sessione scaduta");                    
-                }
-            } //end for
-        } catch (StringIndexOutOfBoundsException ex) {
-            error.launch(ex, this.getClass(), itasa);
-        } catch (IOException ex) {
-            error.launch(ex, this.getClass(), null);
-        }
-        http.closeClient();
-        analyzeDest(alf);
-        */
-        new DownloadThread(mapRole, als, itasa);
+    public void downloadSub(ArrayList<String> als, boolean itasa) {        
+        DownloadThread.getInstance().start(mapRole, als, itasa);
     }
     /**effettua il download automatico di myitasa
      * comprende le fasi anche di estrazione zip e analizzazione percorso definitivo.
      * @param link link da analizzare
      */
-    private void downItasaAuto(Object link) {
-        /*
-        int connection_Timeout = Lang.stringToInt(Property.getIstance().getTimeout())*1000;
-        Http http = new Http(connection_Timeout);
-        try{
-            http.connectItasa(prop.getItasaUser(), prop.getItasaPwd());
-            HttpEntity entity = http.requestGetEntity(String.valueOf(link), true);
-            if (entity.getContentLength() != -1) {                
-                String n = http.getNameFile();
-                int l = n.length();
-                File f = File.createTempFile(n.substring(0, l - 4), n.substring(l - 4));
-                downloadSingle(entity.getContent(), f);
-                analyzeDest(extract(f));
-            } else
-                printAlert("Sessione scaduta");
-        } catch (StringIndexOutOfBoundsException ex) {
-            error.launch(ex, this.getClass(), true);
-        } catch (IOException ex) {
-            error.launch(ex, getClass(), null);
-        }
-        http.closeClient();
-        */
+    private void downItasaAuto(Object link) {        
         ArrayList<String> als = new ArrayList<String>();
         als.add(link.toString());
-        new DownloadThread(mapRole, als, true);
+        DownloadThread.getInstance().start(mapRole, als, true);
     }
     /**Scarica i torrent
      *
@@ -198,94 +149,7 @@ public class Kernel {
         out.flush();
         out.close();
         is.close();
-    }    
-    /**Estrae lo zip e restituisce l'arraylist di file contenuti nello zip
-     *
-     * @param f file zip di riferimento da estrarre
-     * @return
-     */
-    /*
-    private ArrayList<File> extract(File f) {
-        String temp = f.getName().substring(f.getName().length() - 3);
-        ArrayList<File> alf = null;
-        if (temp.toUpperCase().equalsIgnoreCase("ZIP")) {
-            try {
-                String path = f.getParent();
-                if (!path.substring(path.length() - 1).equals(File.separator))
-                    path += File.separator;
-                alf = Util.unzip(f, "__MACOSX/", path);
-                f.delete();
-            } catch (ZipException ex) {
-                error.launch(ex, getClass());
-            } catch (IOException ex) {
-                error.launch(ex, getClass(), null);
-            }
-        } else 
-            fireNewTextPaneEvent("Scaricato: " + f.getName(), MyTextPaneEvent.OK);        
-        //return Zip.getAlFile();
-        return alf;
-    }
-     *
-     */
-    /**analizza il sub e lo sposta nella destinazione pertinente
-     * 
-     * @param al arraylist di file sub
-     */
-    /*
-    private void analyzeDest(ArrayList<File> al) {
-        /*TODO: Flash.Forward.s01e11e12.720p.R.sub.itasa.srt nella cartella
-         condivisa samba\flash forward
-         * problema: nessuna regola specificata per il 720, rivedere il search version.
-         
-        if (al.size() > 0) {
-            if (!prop.isDirLocal()) {
-                String dest = null;
-                try {
-                    Samba s = Samba.getIstance(prop.getSambaIP(), prop.getSambaDir(),
-                            prop.getSambaDomain(), prop.getSambaUser(), prop.getSambaPwd());
-                    for (int i = 0; i < al.size(); i++) {
-                        File filesub = al.get(i);
-                        String namesub = al.get(i).getName();
-                        dest = mapPath(namesub, SPLIT_SUB);
-                        if (dest!=null && dest.toLowerCase().equals(CMD_DELETE))
-                            filesub.delete();
-                        else {
-                            s.moveFromLocal(filesub, dest);
-                            if (dest==null)
-                                dest = "";
-                            fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
-                                    " nella cartella condivisa samba\\" + dest,
-                                    MyTextPaneEvent.SUB);
-                        }
-                    }                    
-                } catch (IOException ex) {
-                    error.launch(ex, getClass(), dest);
-                }
-            } else {
-                for (int i = 0; i < al.size(); i++) {
-                    File filesub = al.get(i);
-                    String namesub = al.get(i).getName();
-                    String dest = mapPath(namesub, SPLIT_SUB);
-                    if (dest!=null && dest.toLowerCase().equals(CMD_DELETE))
-                        filesub.delete();
-                    else {
-                        if (dest==null)
-                            dest = prop.getSubDest();
-                        try {
-                            Io.moveFile(filesub, dest);
-                            fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
-                                    " nel seguente percorso: " + dest,
-                                    MyTextPaneEvent.SUB);
-                        } catch (IOException ex) {
-                            error.launch(ex, getClass(), dest);
-                        }
-                    }
-                }
-            }
-        }
-    }
-     *
-     */
+    }        
     /**Restituisce il valore/percorso della chiave ad esso associato nella treemap
      *
      * @param name nome del file da analizzare

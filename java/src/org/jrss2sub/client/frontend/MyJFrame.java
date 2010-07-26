@@ -36,8 +36,8 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
     private final Dimension SCREENSIZE = new Dimension(1024, 768);
     private final Dimension TABBEDSIZE = new Dimension(1024, 580);
     private final String AUTHORNAME = "Luka Judge";
-    private final String BUILD = "171";
-    private final String NAME = "jRss2Sub 1.05";
+    private final String BUILD = "172";
+    private final String NAME = "jRss2Sub 1.06";
 
     protected paneSetting jpSettings;
     protected JTabbedPane jtabbedpane;   
