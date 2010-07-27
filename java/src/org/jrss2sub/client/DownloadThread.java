@@ -40,7 +40,7 @@ public class DownloadThread implements Runnable{
 
     private ArrayList<String> als;
     private boolean itasa;
-    private Property prop = Property.getIstance();
+    private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
     private TreeMap<FilterSub, String> mapRole;
     private List listenerTextPane = new ArrayList();
@@ -58,7 +58,7 @@ public class DownloadThread implements Runnable{
      * 
      */
     public void run() {
-        int connection_Timeout = Lang.stringToInt(Property.getIstance().getTimeout())*1000;
+        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getTimeout())*1000;
         Http http = new Http(connection_Timeout);
         ArrayList<File> alf = new ArrayList<File>();
         try{

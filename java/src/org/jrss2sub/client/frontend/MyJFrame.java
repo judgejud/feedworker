@@ -20,7 +20,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 //IMPORT JRSS2SUB
-import org.jrss2sub.client.Property;
+import org.jrss2sub.client.ApplicationSettings;
 import org.jrss2sub.client.frontend.events.MyJFrameEvent;
 import org.jrss2sub.client.frontend.events.MyJFrameEventListener;
 import org.jrss2sub.util.Convert;
@@ -44,7 +44,7 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
     protected textpaneLog jtpLog;
     
     private Mediator proxy = Mediator.getIstance();
-    private Property prop = Property.getIstance();
+    private ApplicationSettings prop = ApplicationSettings.getIstance();
     private paneItasa jpItasa;
     private paneTorrent jpTorrent;
     private paneSubsf jpSubsf;
@@ -92,7 +92,7 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
 
         jtpLog.appendOK("Versione java in uso: " + Lang.getJavaVersion());
 
-        if (prop.isFirstRun()){
+        if (prop.isFirstTimeRun()){
             jtabbedpane.setSelectedComponent(jpSettings);
             changeEnabledButton(false);
             jtpLog.appendOK("Benvenuto al primo utilizzo.");

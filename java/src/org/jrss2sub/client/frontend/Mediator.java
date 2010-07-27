@@ -13,7 +13,7 @@ import javax.swing.JTable;
 import javax.swing.tree.DefaultMutableTreeNode;
 //IMPORT JRSS2SUB
 import org.jrss2sub.client.Kernel;
-import org.jrss2sub.client.Property;
+import org.jrss2sub.client.ApplicationSettings;
 import org.jrss2sub.client.Rss;
 import org.jrss2sub.client.frontend.events.MyTextPaneEvent;
 import org.jrss2sub.client.frontend.events.MyJFrameEvent;
@@ -36,7 +36,7 @@ import com.sun.syndication.io.FeedException;
 public class Mediator {
     private static Mediator proxy = null;
     private Kernel core = Kernel.getIstance();
-    private Property prop = Property.getIstance();
+    private ApplicationSettings prop = ApplicationSettings.getIstance();
     private List listenerTextPane  = new ArrayList();
     private List listenerJFrame = new ArrayList();
     private ManageException error = ManageException.getIstance();
@@ -392,7 +392,7 @@ public class Mediator {
             String subsf, String torrent) {
         String oldLF = prop.getLookFeel();
         String oldMin = prop.getRss_agg();
-        boolean first = prop.isFirstRun();
+        boolean first = prop.isFirstTimeRun();
         boolean oldAD = prop.isAdvancedDest();
         boolean save = false;
         if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
@@ -418,7 +418,7 @@ public class Mediator {
                 else
                     fireNewJFrameEvent("REMOVE_PANE_RULEZ");
             }
-            if (!prop.isFirstRun() && first) {
+            if (!prop.isFirstTimeRun() && first) {
                 fireNewJFrameEvent("ENABLED_BUTTON");
                 runRss();
             } else {
@@ -445,7 +445,7 @@ public class Mediator {
         prop.setSubDest(destSub);
         prop.setRss_agg(time);
         prop.setLookFeel(laf);
-        prop.setAudioRSS(audio);
+        prop.enableAudioAdvisor(audio);
         prop.setSambaDomain(sambaDomain);
         prop.setSambaIP(sambaIP);
         prop.setSambaDir(sambaDir);

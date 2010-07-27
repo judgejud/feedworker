@@ -29,7 +29,7 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 //IMPORT JRSS2SUB
-import org.jrss2sub.client.Property;
+import org.jrss2sub.client.ApplicationSettings;
 //IMPORT MYUTILS
 import org.lp.myUtils.Awt;
 import org.lp.myUtils.Swing;
@@ -54,7 +54,7 @@ public class paneSetting extends JPanel {
             jtfRssItasa, jtfRssMyItasa, jtfRssSubsf, jtfDestTorrent, jtfItasaUser;
     private JPasswordField jpfSamba, jpfItasa;
     private ButtonGroup bgLocalSamba, bgDownItasa;
-    private Property prop = Property.getIstance();
+    private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Mediator proxy = Mediator.getIstance();
 
     private paneSetting() {
@@ -555,7 +555,7 @@ public class paneSetting extends JPanel {
         jtfDestSub.setText(prop.getSubDest());
         jcbMinuti.setSelectedItem(prop.getRss_agg());
         jcbLookFeel.setSelectedItem(prop.getLookFeel());
-        jcbAudio.setSelected(prop.isAudioRSS());
+        jcbAudio.setSelected(prop.enabledAudioAdvisor());
         jrbDirLocal.setSelected(prop.isDirLocal());
         jrbDirSamba.setSelected(!prop.isDirLocal());
         jtfSambaDomain.setText(prop.getSambaDomain());
