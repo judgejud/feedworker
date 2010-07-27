@@ -140,7 +140,7 @@ public class Mediator {
     }
 
     void downloadTorrent(JTable jt1, JTable jt2){
-        if (Lang.verifyTextNotNull(prop.getTorrentDest())) {
+        if (Lang.verifyTextNotNull(prop.getTorrentDestinationFolder())) {
             ArrayList<String> alLinks = addLinks(jt1);
             alLinks.addAll(addLinks(jt2));
             if (alLinks.size() > 0)
@@ -304,7 +304,7 @@ public class Mediator {
     boolean checkSaveTorrent(String text) {
         if (!Lang.verifyTextNotNull(text))
             printAlert("La Destinazione dei Torrent non può essere vuota");
-        prop.setTorrentDest(text);
+        prop.setTorrentDestinationFolder(text);
         return true;
     }
     /**verifica impostazioni subsf
@@ -317,7 +317,7 @@ public class Mediator {
             try {
                 new URL(text);
                 check = testRss(text, "subsfactory");
-                prop.setRssSubsf(text);
+                prop.setSubsfactoryFeedURL(text);
             } catch (MalformedURLException e) {
                 error.launch(e, getClass(), "subsfactory");
                 check = false;
@@ -390,19 +390,19 @@ public class Mediator {
             String time, String laf, boolean audio, String timeout, boolean advancedDest,
             String itasa, String myitasa, String user, String pwd, boolean auto,
             String subsf, String torrent) {
-        String oldLF = prop.getLookFeel();
-        String oldMin = prop.getRss_agg();
+        String oldLF = prop.getApplicationLookAndFeel();
+        String oldMin = prop.getRefreshInterval();
         boolean first = prop.isFirstTimeRun();
-        boolean oldAD = prop.isAdvancedDest();
+        boolean oldAD = prop.enabledCustomDestinationFolder();
         boolean save = false;
         if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                 sambaUser, sambaPwd)) {
             save = true;
-            if (prop.isItasa() && save)
+            if (prop.hasItasaOption() && save)
                 save = checkSaveItasa(itasa, myitasa, user, pwd);            
-            if (prop.isSubsfactory() && save)
+            if (prop.hasSubsfactoryOption() && save)
                 save = checkSaveSubsf(subsf);
-            if (prop.isTorrent() && save)
+            if (prop.hasTorrentOption() && save)
                 checkSaveTorrent(torrent);
         }
         if (save) {
@@ -410,10 +410,10 @@ public class Mediator {
                 sambaUser, sambaPwd, time, laf, audio, timeout, advancedDest);
             setPropItasa(itasa, myitasa, user, pwd, auto);
             proxy.writeProp();
-            if (!oldLF.equals(prop.getLookFeel()))
+            if (!oldLF.equals(prop.getApplicationLookAndFeel()))
                 setLookFeel();
-            if (oldAD != prop.isAdvancedDest()) {
-                if (prop.isAdvancedDest())
+            if (oldAD != prop.enabledCustomDestinationFolder()) {
+                if (prop.enabledCustomDestinationFolder())
                     fireNewJFrameEvent("ADD_PANE_RULEZ");
                 else
                     fireNewJFrameEvent("REMOVE_PANE_RULEZ");
@@ -423,7 +423,7 @@ public class Mediator {
                 runRss();
             } else {
                 if (Lang.verifyTextNotNull(oldMin) &&
-                        !oldMin.equalsIgnoreCase(prop.getRss_agg()))
+                        !oldMin.equalsIgnoreCase(prop.getRefreshInterval()))
                     restartRss();
                 /*
                 if ((Lang.verifyTextNotNull(oldTor)) &
@@ -433,7 +433,7 @@ public class Mediator {
                 }
                  */
             }
-            fireNewTextPaneEvent("Impostazioni salvate in " + prop.getFILE_SETTINGS(),
+            fireNewTextPaneEvent("Impostazioni salvate in " + prop.getSettingsFilename(),
                     MyTextPaneEvent.OK);
         }
     }
@@ -441,28 +441,28 @@ public class Mediator {
     private void setPropGlobal(boolean dirLocal, String destSub, String sambaDomain,
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
             String time, String laf, boolean audio, String timeout, boolean advancedDest) {
-        prop.setDirLocal(dirLocal);
-        prop.setSubDest(destSub);
-        prop.setRss_agg(time);
-        prop.setLookFeel(laf);
+        prop.localFolder(dirLocal);
+        prop.setSubtitleDestinationFolder(destSub);
+        prop.setRefreshInterval(time);
+        prop.setApplicationLookAndFeel(laf);
         prop.enableAudioAdvisor(audio);
-        prop.setSambaDomain(sambaDomain);
-        prop.setSambaIP(sambaIP);
-        prop.setSambaDir(sambaDir);
-        prop.setSambaUser(sambaUser);
-        prop.setSambaPwd(sambaPwd);
-        prop.setTimeout(timeout);
-        prop.setAdvancedDest(advancedDest);
+        prop.setCifsShareDomain(sambaDomain);
+        prop.setCifsShareLocation(sambaIP);
+        prop.setCifsSharePath(sambaDir);
+        prop.setCifsShareUsername(sambaUser);
+        prop.setCifsSharePassword(sambaPwd);
+        prop.setHttpTimeout(timeout);
+        prop.enableCustomDestinationFolder(advancedDest);
         //prop.setFont(jcbFont.getSelectedItem().toString());
     }
 
     private void setPropItasa(String itasa, String myitasa, String user, String pwd,
             boolean auto) {
-        prop.setRssItasa(itasa);
-        prop.setRssMyItasa(myitasa);
-        prop.setItasaUser(user);
-        prop.setItasaPwd(pwd);
-        prop.setDown_auto(auto);
+        prop.setItasaFeedURL(itasa);
+        prop.setMyitasaFeedURL(myitasa);
+        prop.setMyitasaUsername(user);
+        prop.setMyitasaPassword(pwd);
+        prop.setAutoDownload(auto);
     }
 
     /**Invia alla download station del nas i link torrent selezionati

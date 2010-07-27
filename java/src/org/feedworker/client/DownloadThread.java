@@ -58,12 +58,12 @@ public class DownloadThread implements Runnable{
      * 
      */
     public void run() {
-        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getTimeout())*1000;
+        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getHttpTimeout())*1000;
         Http http = new Http(connection_Timeout);
         ArrayList<File> alf = new ArrayList<File>();
         try{
             if (itasa)
-                http.connectItasa(prop.getItasaUser(), prop.getItasaPwd());
+                http.connectItasa(prop.getMyitasaUsername(), prop.getMyitasaPassword());
 
             for (int i = 0; i < als.size(); i++) {
                 HttpEntity entity = http.requestGetEntity(als.get(i), itasa);
@@ -140,11 +140,11 @@ public class DownloadThread implements Runnable{
          * problema: nessuna regola specificata per il 720, rivedere il search version.
          */
         if (al.size() > 0) {
-            if (!prop.isDirLocal()) {
+            if (!prop.isLocalFolder()) {
                 String dest = null;
                 try {
-                    Samba s = Samba.getIstance(prop.getSambaIP(), prop.getSambaDir(),
-                            prop.getSambaDomain(), prop.getSambaUser(), prop.getSambaPwd());
+                    Samba s = Samba.getIstance(prop.getCifsShareLocation(), prop.getCifsSharePath(),
+                            prop.getCifsShareDomain(), prop.getCifsShareUsername(), prop.getCifsSharePassword());
                     for (int i = 0; i < al.size(); i++) {
                         File filesub = al.get(i);
                         String namesub = al.get(i).getName();
@@ -172,7 +172,7 @@ public class DownloadThread implements Runnable{
                         filesub.delete();
                     else {
                         if (dest==null)
-                            dest = prop.getSubDest();
+                            dest = prop.getSubtitleDestinationFolder();
                         try {
                             Io.moveFile(filesub, dest);
                             fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
