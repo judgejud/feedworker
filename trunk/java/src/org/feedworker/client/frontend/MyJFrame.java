@@ -69,19 +69,19 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
         jtabbedpane.setPreferredSize(TABBEDSIZE);
         this.add(jtabbedpane, BorderLayout.CENTER);
         jpSettings = paneSetting.getPanel();
-        if (prop.isItasa()){
+        if (prop.hasItasaOption()){
             jpItasa = paneItasa.getPanel();
             jtabbedpane.addTab("ItalianSubs", jpItasa);
         }
-        if (prop.isSubsfactory()){
+        if (prop.hasSubsfactoryOption()){
             jpSubsf = paneSubsf.getPanel();
             jtabbedpane.addTab("SubsFactory", jpSubsf);
         }
-        if (prop.isTorrent()){
+        if (prop.hasTorrentOption()){
             jpTorrent = paneTorrent.getPanel();
             jtabbedpane.addTab("Torrent", jpTorrent);
         }
-        if (prop.isAdvancedDest())
+        if (prop.enabledCustomDestinationFolder())
             jtabbedpane.addTab("Destinazione Sub", paneRole.getPanel());
         jtabbedpane.addTab("Impostazioni", jpSettings);
 
@@ -100,8 +100,8 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
                     "devi configurare le impostazioni presenti nella specifica sezione");
         } else {
             jpSettings.settingsValue();            
-            jtpLog.appendOK("Ciao " + prop.getItasaUser());
-            jtpLog.appendOK("Impostazioni caricate da " + prop.getFILE_SETTINGS());
+            jtpLog.appendOK("Ciao " + prop.getMyitasaUsername());
+            jtpLog.appendOK("Impostazioni caricate da " + prop.getSettingsFilename());
         }
         
         pack();
@@ -264,11 +264,11 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
      * @param e stato
      */
     protected void changeEnabledButton(boolean e){
-        if (prop.isItasa())
+        if (prop.hasItasaOption())
             jpItasa.setButtonEnabled(e);
-        if (prop.isSubsfactory())
+        if (prop.hasSubsfactoryOption())
             jpSubsf.setEnableButton(e);
-        if (prop.isTorrent())
+        if (prop.hasTorrentOption())
             jpTorrent.setButtonEnabled(e);
     }
     /**inizializza i listener per l'ascolto*/

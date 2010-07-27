@@ -84,15 +84,15 @@ public class paneSetting extends JPanel {
         gbc.gridx = 1;
         gbc.weightx = 1;
         add(jpSettingGlobal, gbc);
-        if (prop.isItasa()) {
+        if (prop.hasItasaOption()) {
             initPanelSettingsItasa();
             add(jpSettingItasa, gbc);
         }
-        if (prop.isSubsfactory()) {
+        if (prop.hasSubsfactoryOption()) {
             initPanelSettingsSubsf();
             add(jpSettingSubsf, gbc);
         }
-        if (prop.isTorrent()) {
+        if (prop.hasTorrentOption()) {
             initPanelSettingsTorrent();
             add(jpSettingTorrent, gbc);
         }
@@ -481,33 +481,33 @@ public class paneSetting extends JPanel {
             String temp = paths[i].toString();
             if (evt.isAddedPath(i) && (temp.length() > 10)) {
                 String node = temp.substring(11, temp.length() - 1);
-                if (node.equalsIgnoreCase("jRss2Sub")) {
-                    if (prop.isItasa())
+                if (node.equalsIgnoreCase("General")) {
+                    if (prop.hasItasaOption())
                         jpSettingItasa.setVisible(false);                    
-                    if (prop.isSubsfactory())
+                    if (prop.hasSubsfactoryOption())
                         jpSettingSubsf.setVisible(false);                    
-                    if (prop.isTorrent())
+                    if (prop.hasTorrentOption())
                         jpSettingTorrent.setVisible(false);                    
                     jpSettingGlobal.setVisible(true);
                 } else if (node.equalsIgnoreCase("Itasa")) {
                     jpSettingGlobal.setVisible(false);
-                    if (prop.isSubsfactory())
+                    if (prop.hasSubsfactoryOption())
                         jpSettingSubsf.setVisible(false);                    
-                    if (prop.isTorrent())
+                    if (prop.hasTorrentOption())
                         jpSettingTorrent.setVisible(false);                   
                     jpSettingItasa.setVisible(true);
                 } else if (node.equalsIgnoreCase("Subsfactory")) {
                     jpSettingGlobal.setVisible(false);
-                    if (prop.isItasa())
+                    if (prop.hasItasaOption())
                         jpSettingItasa.setVisible(false);                    
-                    if (prop.isTorrent())
+                    if (prop.hasTorrentOption())
                         jpSettingTorrent.setVisible(false);                    
                     jpSettingSubsf.setVisible(true);
                 } else if (node.equalsIgnoreCase("Torrent")) {
                     jpSettingGlobal.setVisible(false);
-                    if (prop.isItasa())
+                    if (prop.hasItasaOption())
                         jpSettingItasa.setVisible(false);                    
-                    if (prop.isSubsfactory())
+                    if (prop.hasSubsfactoryOption())
                         jpSettingSubsf.setVisible(false);                   
                     jpSettingTorrent.setVisible(true);
                 }
@@ -537,13 +537,13 @@ public class paneSetting extends JPanel {
 
     public void settingsValue() {
         settingsGlobalValue();
-        if (prop.isItasa()) {
+        if (prop.hasItasaOption()) {
             settingsItasaValue();
         }
-        if (prop.isSubsfactory()) {
+        if (prop.hasSubsfactoryOption()) {
             settingsSubsfValue();
         }
-        if (prop.isTorrent()) {
+        if (prop.hasTorrentOption()) {
             settingsTorrentValue();
         }
     }
@@ -552,36 +552,36 @@ public class paneSetting extends JPanel {
      *
      */
     private void settingsGlobalValue() {
-        jtfDestSub.setText(prop.getSubDest());
-        jcbMinuti.setSelectedItem(prop.getRss_agg());
-        jcbLookFeel.setSelectedItem(prop.getLookFeel());
+        jtfDestSub.setText(prop.getSubtitleDestinationFolder());
+        jcbMinuti.setSelectedItem(prop.getRefreshInterval());
+        jcbLookFeel.setSelectedItem(prop.getApplicationLookAndFeel());
         jcbAudio.setSelected(prop.enabledAudioAdvisor());
-        jrbDirLocal.setSelected(prop.isDirLocal());
-        jrbDirSamba.setSelected(!prop.isDirLocal());
-        jtfSambaDomain.setText(prop.getSambaDomain());
-        jtfSambaDir.setText(prop.getSambaDir());
-        jtfSambaIP.setText(prop.getSambaIP());
-        jtfSambaUser.setText(prop.getSambaUser());
-        jpfSamba.setText(prop.getSambaPwd());
-        jcbTimeout.setSelectedItem(prop.getTimeout());
-        jcbAdvancedDest.setSelected(prop.isAdvancedDest());
+        jrbDirLocal.setSelected(prop.isLocalFolder());
+        jrbDirSamba.setSelected(!prop.isLocalFolder());
+        jtfSambaDomain.setText(prop.getCifsShareDomain());
+        jtfSambaDir.setText(prop.getCifsSharePath());
+        jtfSambaIP.setText(prop.getCifsShareLocation());
+        jtfSambaUser.setText(prop.getCifsShareUsername());
+        jpfSamba.setText(prop.getCifsSharePassword());
+        jcbTimeout.setSelectedItem(prop.getHttpTimeout());
+        jcbAdvancedDest.setSelected(prop.enabledCustomDestinationFolder());
     }
 
     private void settingsItasaValue() {
-        jtfRssItasa.setText(prop.getRssItasa());
-        jtfRssMyItasa.setText(prop.getRssMyItasa());
-        jtfItasaUser.setText(prop.getItasaUser());
-        jpfItasa.setText(prop.getItasaPwd());
-        jrbDownAuto.setSelected(prop.isDown_auto());
-        jrbDownManual.setSelected(!prop.isDown_auto());
+        jtfRssItasa.setText(prop.getItasaFeedURL());
+        jtfRssMyItasa.setText(prop.getMyitasaFeedURL());
+        jtfItasaUser.setText(prop.getMyitasaUsername());
+        jpfItasa.setText(prop.getMyitasaPassword());
+        jrbDownAuto.setSelected(prop.isAutoDownload());
+        jrbDownManual.setSelected(!prop.isAutoDownload());
     }
 
     private void settingsTorrentValue() {
-        jtfDestTorrent.setText(prop.getTorrentDest());
+        jtfDestTorrent.setText(prop.getTorrentDestinationFolder());
     }
 
     private void settingsSubsfValue() {
-        jtfRssSubsf.setText(prop.getRssSubsf());
+        jtfRssSubsf.setText(prop.getSubsfactoryFeedURL());
     }
 
     public void setDataAggiornamento(String data) {

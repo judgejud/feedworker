@@ -385,7 +385,7 @@ public class ApplicationSettings {
 		return SETTINGS_FILENAME;
 	}
 
-	public String getApplicationLookFeel() {
+	public String getApplicationLookAndFeel() {
 		if (applicationLookAndFeel == null)
 			applicationLookAndFeel = "";
 		return applicationLookAndFeel;
@@ -435,7 +435,7 @@ public class ApplicationSettings {
 		this.cifsShareDomain = cifsShareDomain;
 	}
 	
-	public String getcCifsShareUsername() {
+	public String getCifsShareUsername() {
 		return cifsShareUsername;
 	}
 

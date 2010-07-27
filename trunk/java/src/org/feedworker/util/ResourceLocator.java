@@ -8,7 +8,7 @@ import java.net.URL;
  */
 public class ResourceLocator {    
     private static String curDir ;
-    private final static String RESOURCES = "/org/jrss2sub/resource/";
+    private final static String RESOURCES = "/org/feedworker/resource/";
     /**Restituisce il percorso di lavoro corrente comprensivo di primo separatore
      *
      * @return percorso lavoro

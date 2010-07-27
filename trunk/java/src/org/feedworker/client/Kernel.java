@@ -117,13 +117,13 @@ public class Kernel {
      * @param als arraylist di link
      */
     public void downloadTorrent(ArrayList<String> als) {
-        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getTimeout())*1000;
+        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getHttpTimeout())*1000;
         Http http = new Http(connection_Timeout);
         try {
             for (int i = 0; i < als.size(); i++) {
                 InputStream is = http.getTorrent(als.get(i));
                 if (is != null) {
-                    File f = new File(prop.getTorrentDest() + File.separator +
+                    File f = new File(prop.getTorrentDestinationFolder() + File.separator +
                             http.getNameFile());
                     downloadSingle(is, f);
                     fireNewTextPaneEvent("Scaricato: " + http.getNameFile(),
@@ -287,7 +287,7 @@ public class Kernel {
     /**imposta il LookAndFeel*/
     public void setLookFeel() {
         SyntheticaLookAndFeel laf = null;
-        String lf = prop.getLookFeel();
+        String lf = prop.getApplicationLookAndFeel();
         try {            
             if (lf == null || lf.equalsIgnoreCase("") || lf.equalsIgnoreCase("standard"))
                 laf = new SyntheticaStandardLookAndFeel();
@@ -320,7 +320,7 @@ public class Kernel {
      * @param data
      */
     public void closeApp(String data) {
-        prop.setLastDate(data);
+        prop.setLastDateTimeRefresh(data);
         if (!prop.isFirstTimeRun())
             prop.writeOnlyLastDate();        
         System.exit(0);
@@ -332,22 +332,22 @@ public class Kernel {
     public DefaultMutableTreeNode getSettingsNode() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
         root.add(new DefaultMutableTreeNode("General"));
-        if (prop.isItasa())
+        if (prop.hasItasaOption())
             root.add(new DefaultMutableTreeNode("Itasa"));        
-        if (prop.isSubsfactory())
+        if (prop.hasSubsfactoryOption())
             root.add(new DefaultMutableTreeNode("Subsfactory"));        
-        if (prop.isTorrent())
+        if (prop.hasTorrentOption())
             root.add(new DefaultMutableTreeNode("Torrent"));        
         return root;
     }
     /**Scrive le proprietà dell'applicazione nel file properties */
     public void writeProp() {
         prop.writeGeneralSettings();
-        if (prop.isItasa())
+        if (prop.hasItasaOption())
             prop.writeItasaSettings();       
-        if (prop.isSubsfactory())
+        if (prop.hasSubsfactoryOption())
             prop.writeSubsfactorySettings();        
-        if (prop.isTorrent()) 
+        if (prop.hasTorrentOption()) 
             prop.writeTorrentSettings();        
         //if (prop.isFirstTimeRun())
         //    prop.writeFirstRunFalse();        
@@ -367,7 +367,7 @@ public class Kernel {
     private ArrayList<Object[]> getFeedRss(String urlRss, String data, String from, boolean download) {
         Rss rss = null;
         ArrayList<Object[]> matrice = null;
-        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getTimeout())*1000;
+        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getHttpTimeout())*1000;
         Http http = new Http(connection_Timeout);
         try {
             InputStream ist = http.getStreamRss(urlRss);
@@ -420,11 +420,11 @@ public class Kernel {
     /**Esegue gli rss*/
     public void runRss() {
         if (!prop.isFirstTimeRun()) {
-            prop.setLastDate(Convert.actualTime());
+            prop.setLastDateTimeRefresh(Convert.actualTime());
             runItasa(true);
             runSubsfactory(true);
             runTorrent(true);
-            int delay = Lang.stringToInt(prop.getRss_agg()) * 60000;
+            int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
             runTimer(delay);
         }
     }
@@ -439,7 +439,7 @@ public class Kernel {
             public void run() {
                 boolean icontray = false;
                 //String data = prop.getLastDate();
-                prop.setLastDate(Convert.actualTime());
+                prop.setLastDateTimeRefresh(Convert.actualTime());
                 if (runItasa(false))
                     icontray = true;                
                 if (runSubsfactory(false))
@@ -457,7 +457,7 @@ public class Kernel {
                         error.launch(ex, getClass(), null);
                     }
                 }
-                fireNewJFrameEvent(icontray, prop.getLastDate());
+                fireNewJFrameEvent(icontray, prop.getLastDateTimeRefresh());
             }//end run
         }, delay, delay);
     }
@@ -468,13 +468,13 @@ public class Kernel {
      */
     private boolean runItasa(boolean first) {
         boolean status = false;
-        if (prop.isItasa()) {
+        if (prop.hasItasaOption()) {
             ArrayList<Object[]> feedIta, feedMyita;
-            if (Lang.verifyTextNotNull(prop.getRssItasa())) {
+            if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
                 if (first)
-                    feedIta = getFeedRss(prop.getRssItasa(), lastItasa, null, false);
+                    feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, null, false);
                 else
-                    feedIta = getFeedRss(prop.getRssItasa(), lastItasa, ITASA, false);
+                    feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA, false);
                 if ((feedIta != null) && (feedIta.size() > 0)) {
                     if (!first)
                         status = true;                    
@@ -482,12 +482,12 @@ public class Kernel {
                     fireTableRssEvent(feedIta, ITASA);
                 }
             }
-            if (Lang.verifyTextNotNull(prop.getRssMyItasa())) {
+            if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
                 if (first)
-                    feedMyita = getFeedRss(prop.getRssMyItasa(), lastMyItasa, null, false);
+                    feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa, null, false);
                 else
-                    feedMyita = getFeedRss(prop.getRssMyItasa(), lastMyItasa, MYITASA,
-                            prop.isDown_auto());
+                    feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa, MYITASA,
+                            prop.isAutoDownload());
                 if ((feedMyita != null) && (feedMyita.size() > 0)) {
                     if (!first)
                         status = true;                    
@@ -505,12 +505,12 @@ public class Kernel {
      */
     private boolean runSubsfactory(boolean first) {
         boolean status = false;
-        if ((prop.isSubsfactory()) && (Lang.verifyTextNotNull(prop.getRssSubsf()))) {
+        if ((prop.hasSubsfactoryOption()) && (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL()))) {
             ArrayList<Object[]> feed;
             if (first) {
-                feed = getFeedRss(prop.getRssSubsf(), lastSubsf, null, false);
+                feed = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf, null, false);
             } else {
-                feed = getFeedRss(prop.getRssSubsf(), lastSubsf, SUBSF, false);
+                feed = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf, SUBSF, false);
             }
             if ((feed != null) && (feed.size() > 0)) {
                 if (!first)
@@ -528,7 +528,7 @@ public class Kernel {
      */
     private boolean runTorrent(boolean first) {
         boolean status = false;
-        if (prop.isTorrent()) {
+        if (prop.hasTorrentOption()) {
             ArrayList<Object[]> feedEz, feedBt;
             if (first) {
                 feedEz = getFeedRss(RSS_TORRENT_EZTV, lastEztv, null, false);
@@ -556,7 +556,7 @@ public class Kernel {
     public void stopAndRestartTimer() {
         timer.cancel();
         timer.purge();
-        int delay = Lang.stringToInt(prop.getRss_agg()) * 60000;
+        int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
         runTimer(delay);
     }
     /**Sostituisce la treemap delle regole con quella creata dal mediator
@@ -591,7 +591,7 @@ public class Kernel {
     }
     /**Carica l'xml delle regole*/
     public void loadXml(){
-        if (prop.isAdvancedDest()){
+        if (prop.enabledCustomDestinationFolder()){
             Xml x = new Xml();
             try {
                 mapRole = x.initializeReader();
@@ -649,14 +649,14 @@ public class Kernel {
     }
     /**Stampa lo stato del download redirectory coi download in corso o nessun download*/
     public void synoStatus() {
-        String url = "http://" + prop.getSambaIP() + ":5000/download/download_redirector.cgi";
+        String url = "http://" + prop.getCifsShareLocation() + ":5000/download/download_redirector.cgi";
         String filename = "         \"filename\" : \"";
         String progress = "         \"progress\" : \"";
         String itemsNull = "   \"items\" : [],";
         String dss = "Download Station Synology: ";
         try {
             Http http = new Http();
-            String synoID = http.synoConnectGetID(url, prop.getSambaUser(), prop.getSambaPwd());
+            String synoID = http.synoConnectGetID(url, prop.getCifsShareUsername(), prop.getCifsSharePassword());
             http.closeClient();
             if (Lang.verifyTextNotNull(synoID)){
                 http = new Http();
@@ -691,8 +691,8 @@ public class Kernel {
     }
     /**effettua la move video sul synology*/
     public void synoMoveVideo(){
-        Samba s = Samba.getIstance(prop.getSambaIP(), prop.getSambaDir(),
-                            prop.getSambaDomain(), prop.getSambaUser(), prop.getSambaPwd());
+        Samba s = Samba.getIstance(prop.getCifsShareLocation(), prop.getCifsSharePath(),
+                            prop.getCifsShareDomain(), prop.getCifsShareUsername(), prop.getCifsSharePassword());
         try {
             analyzeVideoSamba(s, s.listDir(null, "avi"));
             analyzeVideoSamba(s, s.listDir(null, "mkv"));
@@ -740,9 +740,9 @@ public class Kernel {
      */
     public void synoDownloadRedirectory(ArrayList<String> link){
         Http http = new Http();
-        String url = "http://" + prop.getSambaIP() + ":5000/download/download_redirector.cgi";
+        String url = "http://" + prop.getCifsShareLocation() + ":5000/download/download_redirector.cgi";
         try {            
-            String synoID = http.synoConnectGetID(url, prop.getSambaUser(), prop.getSambaPwd());
+            String synoID = http.synoConnectGetID(url, prop.getCifsShareUsername(), prop.getCifsSharePassword());
             http.closeClient();            
             if (Lang.verifyTextNotNull(synoID)){
                 for (int i=0; i<link.size(); i++){
@@ -760,13 +760,14 @@ public class Kernel {
     /**Pulisce i task completati*/
     public void synoClearFinish() {
         Http http = new Http();
-        String url = "http://" + prop.getSambaIP() + ":5000/download/download_redirector.cgi";
+		String url = "http://" + prop.getCifsShareLocation()
+				+ ":5000/download/download_redirector.cgi";
         try {
-            String synoID = http.synoConnectGetID(url, prop.getSambaUser(), prop.getSambaPwd());
+            String synoID = http.synoConnectGetID(url, prop.getCifsShareUsername(), prop.getCifsSharePassword());
             http.closeClient();
             if (Lang.verifyTextNotNull(synoID)){
                 http = new Http();
-                http.synoClearTask(url, synoID, prop.getSambaUser());
+                http.synoClearTask(url, synoID, prop.getCifsShareUsername());
                 http.closeClient();
                 fireNewTextPaneEvent("Download Station Synology: cancellati task completati.",
                     MyTextPaneEvent.SYNOLOGY);
