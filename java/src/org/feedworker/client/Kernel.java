@@ -365,7 +365,7 @@ public class Kernel {
      * @return arraylist di feed(array di oggetti)
      */
     private ArrayList<Object[]> getFeedRss(String urlRss, String data, String from, boolean download) {
-        Rss rss = null;
+        RSSParser rss = null;
         ArrayList<Object[]> matrice = null;
         int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getHttpTimeout())*1000;
         Http http = new Http(connection_Timeout);
@@ -374,7 +374,7 @@ public class Kernel {
             if (ist != null) {
                 File ft = File.createTempFile("rss", ".xml");
                 downloadSingle(ist, ft);
-                rss = new Rss(ft);
+                rss = new RSSParser(ft);
                 matrice = rss.read();
                 ft.delete();
                 boolean continua = true;

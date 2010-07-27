@@ -14,7 +14,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 //IMPORT JRSS2SUB
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.Kernel;
-import org.feedworker.client.Rss;
+import org.feedworker.client.RSSParser;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.client.frontend.events.MyJFrameEventListener;
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
@@ -205,7 +205,7 @@ public class Mediator {
         boolean passed = false;
         new URL(link);
         try {
-            new Rss(link);
+            new RSSParser(link);
             passed = true;
         } catch (FeedException ex) {
             error.launch(ex, getClass(), from);
