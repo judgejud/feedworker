@@ -69,7 +69,7 @@ public class Kernel {
     //PRIVATE STATIC VARIABLES
     private static Kernel core = null;
     //PRIVATE VARIABLES
-    private Property prop = Property.getIstance();
+    private ApplicationSettings prop = ApplicationSettings.getIstance();
     private List listenerTableRss = new ArrayList();
     private List listenerTableXml = new ArrayList();
     private List listenerTextPane = new ArrayList();
@@ -117,7 +117,7 @@ public class Kernel {
      * @param als arraylist di link
      */
     public void downloadTorrent(ArrayList<String> als) {
-        int connection_Timeout = Lang.stringToInt(Property.getIstance().getTimeout())*1000;
+        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getTimeout())*1000;
         Http http = new Http(connection_Timeout);
         try {
             for (int i = 0; i < als.size(); i++) {
@@ -321,7 +321,7 @@ public class Kernel {
      */
     public void closeApp(String data) {
         prop.setLastDate(data);
-        if (!prop.isFirstRun())
+        if (!prop.isFirstTimeRun())
             prop.writeOnlyLastDate();        
         System.exit(0);
     }
@@ -330,8 +330,8 @@ public class Kernel {
      * @return nodi jtree
      */
     public DefaultMutableTreeNode getSettingsNode() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settaggi");
-        root.add(new DefaultMutableTreeNode("jRss2Sub"));
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
+        root.add(new DefaultMutableTreeNode("General"));
         if (prop.isItasa())
             root.add(new DefaultMutableTreeNode("Itasa"));        
         if (prop.isSubsfactory())
@@ -342,15 +342,15 @@ public class Kernel {
     }
     /**Scrive le proprietà dell'applicazione nel file properties */
     public void writeProp() {
-        prop.writeGlobal();
+        prop.writeGeneralSettings();
         if (prop.isItasa())
-            prop.writeItasa();       
+            prop.writeItasaSettings();       
         if (prop.isSubsfactory())
-            prop.writeSubsf();        
+            prop.writeSubsfactorySettings();        
         if (prop.isTorrent()) 
-            prop.writeTorrent();        
-        if (prop.isFirstRun())
-            prop.writeFirstRunFalse();        
+            prop.writeTorrentSettings();        
+        //if (prop.isFirstTimeRun())
+        //    prop.writeFirstRunFalse();        
     }
     /**Scrive l'ultima data d'aggiornamento nel file properties */
     public void writeLastDate() {
@@ -367,7 +367,7 @@ public class Kernel {
     private ArrayList<Object[]> getFeedRss(String urlRss, String data, String from, boolean download) {
         Rss rss = null;
         ArrayList<Object[]> matrice = null;
-        int connection_Timeout = Lang.stringToInt(Property.getIstance().getTimeout())*1000;
+        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getTimeout())*1000;
         Http http = new Http(connection_Timeout);
         try {
             InputStream ist = http.getStreamRss(urlRss);
@@ -419,7 +419,7 @@ public class Kernel {
     }    
     /**Esegue gli rss*/
     public void runRss() {
-        if (!prop.isFirstRun()) {
+        if (!prop.isFirstTimeRun()) {
             prop.setLastDate(Convert.actualTime());
             runItasa(true);
             runSubsfactory(true);
@@ -446,7 +446,7 @@ public class Kernel {
                     icontray = true;                
                 if (runTorrent(false))
                     icontray = true;                
-                if ((icontray) && (prop.isAudioRSS())) {
+                if ((icontray) && (prop.enabledAudioAdvisor())) {
                     try {
                         AudioPlay.playWav();
                     } catch (UnsupportedAudioFileException ex) {

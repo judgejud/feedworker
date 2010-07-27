@@ -17,29 +17,30 @@ import org.lp.myUtils.lang.JVM;
  * @author luca judge
  */
 class FeedWorkerClient {
+	private static final String applicationName = "FeedWorker";
+	
 	public static void main(String args[]) {
 		final JVM jvm = new JVM();
-		final String applicationID = "FeedWorker";
 		boolean alreadyRunning;
 		
 		if (!jvm.isOrLater(15)) {
-			JOptionPane.showMessageDialog(null, "E' necessario disporre di una versione della JVM >= 1.5", applicationID,
+			JOptionPane.showMessageDialog(null, "E' necessario disporre di una versione della JVM >= 1.5", applicationName,
 					JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
 		} else {
 			try {
-				JUnique.acquireLock(applicationID);
+				JUnique.acquireLock(applicationName);
 				alreadyRunning = false;
 			} catch (AlreadyLockedException e) {
 				JOptionPane.showMessageDialog(null,
 						"C'è già la stessa applicazione avviata, Chiuderla",
-						applicationID, JOptionPane.ERROR_MESSAGE);
+						applicationName, JOptionPane.ERROR_MESSAGE);
 				alreadyRunning = true;
 			}
 			
 			if (!alreadyRunning) {
 				ResourceLocator.setWorkspace();
-				Property.getIstance();
+				ApplicationSettings.getIstance();
 				Logging.getIstance();
 				EventQueue.invokeLater(new Runnable() {
 					@Override
@@ -57,4 +58,8 @@ class FeedWorkerClient {
 			}
 		}
 	}// end main
+	
+	public static String getApplicationName() {
+		return applicationName;
+	}
 }// end class
