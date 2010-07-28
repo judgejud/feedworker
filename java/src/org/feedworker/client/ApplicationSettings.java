@@ -34,7 +34,7 @@ public class ApplicationSettings {
 			httpTimeout, applicationBuild, applicationFont;
 
 	private boolean hasSubsfactoryOption, hasTorrentOption, hasItasaOption,
-			isAutoDownload, enableAudioAdvisor, isFirstTimeRun, isLocalFolder,
+			isAutoDownload, enableAudioAdvisor, isApplicationFirstTimeUsed, isLocalFolder,
 			enableIconizedRun, enableRunAtStartup,
 			enableCustomDestinationFolder;
 
@@ -72,7 +72,7 @@ public class ApplicationSettings {
 				setApplicationLookAndFeel(getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
 				enableAudioAdvisor(Boolean.parseBoolean(getDecryptedValue("ENABLE_AUDIO_ADVISOR")));
 				// setTorrent(Boolean.parseBoolean(getDecryptedValue("TORRENT")));
-				isFirstTimeRun = Boolean.parseBoolean(getDecryptedValue("IS_FIRST_TIME_RUN"));
+				isApplicationFirstTimeUsed = Boolean.parseBoolean(getDecryptedValue("IS_FIRST_TIME_RUN"));
 				// setItasa(Boolean.parseBoolean(getDecryptedValue("ITALIANSUBS")));
 				localFolder(Boolean.parseBoolean(getDecryptedValue("IS_LOCAL_FOLDER")));
 				setTorrentDestinationFolder(getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
@@ -84,9 +84,10 @@ public class ApplicationSettings {
 				setHttpTimeout(getDecryptedValue("HTTP_TIMEOUT"));
 				setApplicationFont(getDecryptedValue("APPLICATION_FONT"));
 				enableCustomDestinationFolder(Boolean.parseBoolean(getDecryptedValue("ENABLE_CUSTOM_DESTINATION_FOLDER")));
-			} else
+			} else {
 				loadDefaultSettings();
 				storeSettings();
+			}	
 		} catch (IOException e) {
 			error.launch(e, getClass(), null);
 		}
@@ -234,14 +235,14 @@ public class ApplicationSettings {
 		hasItasaOption = true;
 		hasSubsfactoryOption = true;
 		hasTorrentOption = true;
-		isFirstTimeRun = true;
+		isApplicationFirstTimeUsed = true;
 		applicationBuild = "121";
 
 		try {
 			properties.setProperty(propertyEncrypter.encrypt("ITALIANSUBS"),
 					valueEncrypter.encrypt(Boolean.toString(hasItasaOption)));
 			properties.setProperty(propertyEncrypter.encrypt("FIRSTRUN"),
-					valueEncrypter.encrypt(Boolean.toString(isFirstTimeRun)));
+					valueEncrypter.encrypt(Boolean.toString(isApplicationFirstTimeUsed)));
 			properties.setProperty(propertyEncrypter.encrypt("TORRENT"),
 					valueEncrypter.encrypt(Boolean.toString(hasTorrentOption)));
 			properties.setProperty(propertyEncrypter.encrypt("SUBSFACTORY"),
@@ -403,12 +404,8 @@ public class ApplicationSettings {
 		this.torrentDestinationFolder = torrentDestinationFolder;
 	}
 
-	public boolean isFirstTimeRun() {
-		// return isFirstTimeRun;
-		if (SETTINGS_FILE.exists()) {
-			return false;
-		}
-		return true;
+	public boolean isApplicationFirstTimeUsed() {
+		return isApplicationFirstTimeUsed;
 	}
 
 	public String getCifsSharePath() {
