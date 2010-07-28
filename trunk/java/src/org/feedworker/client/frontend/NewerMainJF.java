@@ -34,7 +34,7 @@ public class NewerMainJF extends MainJF {
     private void initSysTray() {
         if (SystemTray.isSupported()) {
             iconRss = Convert.getResourceImage(INCOMING_FEED_ICON);
-            iconSub = FeedWorkerClient.getApplicationIcon();
+            iconSub = FeedWorkerClient.APPLICATION_ICON;
             PopupMenu popup = new PopupMenu();
             MenuItem defaultItem = new MenuItem(" Close " + FeedWorkerClient.APPLICATION_NAME);
             defaultItem.addActionListener(new ActionListener() {
@@ -58,7 +58,7 @@ public class NewerMainJF extends MainJF {
                             trayIcon.setImage(iconRss);
                         }
                     } catch (Exception e) {
-                        jtpLog.appendError(e.getMessage());
+                        logJTP.appendError(e.getMessage());
                     }
                     setVisible(true);
                 }
@@ -71,7 +71,7 @@ public class NewerMainJF extends MainJF {
         try {
             tray.add(trayIcon);
         } catch (Exception e) {
-            jtpLog.appendError(e.getMessage());
+            logJTP.appendError(e.getMessage());
             setVisible(true);
         }
     }
