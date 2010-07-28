@@ -15,7 +15,7 @@ import org.feedworker.util.Convert;
  *
  * @author luca
  */
-public class textpaneLog extends JTextPane implements MyTextPaneEventListener{
+class textpaneLog extends JTextPane implements MyTextPaneEventListener{
     //PRIVATE FINAL
     private final Color GOLD = new Color(255,215,0);
     private final Color ORANGE = new Color(255,165,0);
@@ -28,7 +28,7 @@ public class textpaneLog extends JTextPane implements MyTextPaneEventListener{
     /**Costruttore
      * Inizializza la myjtextpane
      */
-    public textpaneLog() {
+    textpaneLog() {
         super();
         this.setEditable(false);
         this.setBackground(Color.black);

@@ -296,7 +296,7 @@ public class Mediator {
      */
     boolean checkSaveTorrent(String text) {
         if (!Lang.verifyTextNotNull(text))
-            printAlert("La Destinazione dei Torrent non può essere vuota");        
+            printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai scaricare .torrent");
         return true;
     }
     /**verifica impostazioni subsf
@@ -314,7 +314,7 @@ public class Mediator {
                 check = false;
             }
         } else
-            printAlert("Non immettendo link RSS Subsfactory non potrai usare i feed Subsfactory");
+            printAlert("Avviso: Non immettendo link RSS Subsfactory non potrai usare i feed Subsfactory");
         return check;
     }
     //TODO sistemare il controllo itasa
@@ -326,21 +326,23 @@ public class Mediator {
             String pwd) {
         boolean check = true;
         try {
-            if (Lang.verifyTextNotNull(itasa))
-                check = testRss(itasa, "itasa");
-            if (check){
-                if (Lang.verifyTextNotNull(myitasa))
-                    check = testRss(myitasa, "myitasa");
+            if (!Lang.verifyTextNotNull(itasa) && !Lang.verifyTextNotNull(myitasa))
+                printAlert("Avviso: Non immettendo link RSS itasa e/o myitasa non potrai usare " +
+                        "i feed italiansubs");
+            else {
+                if (Lang.verifyTextNotNull(itasa))
+                    check = testRss(itasa, "itasa");
                 if (check){
-                    if (!Lang.verifyTextNotNull(user))
-                        printAlert("L'Username Itasa non può essere vuoto.");
-                    else if (!Lang.verifyTextNotNull(new String(pwd)))
-                        printAlert("La Password Itasa non può essere vuota.");
+                    if (Lang.verifyTextNotNull(myitasa))
+                        check = testRss(myitasa, "myitasa");
+                    if (check){
+                        if (!Lang.verifyTextNotNull(user))
+                            printAlert("Avviso: senza Username Itasa non potrai scaricare i subs");
+                        else if (!Lang.verifyTextNotNull(new String(pwd)))
+                            printAlert("Avviso: senza Password Itasa non potrai scaricare i subs");
+                    }
                 }
             }
-            if (!Lang.verifyTextNotNull(itasa) && !Lang.verifyTextNotNull(myitasa))
-                printAlert("Non immettendo rss itasa e/o myitasa non potrai usare " +
-                        "i feed di italiansubs");
         } catch (MalformedURLException ex) {
             error.launch(ex, getClass(), "Itasa");
             check = false;

@@ -1,5 +1,4 @@
 package org.feedworker.client.frontend;
-
 //IMPORT JAVA
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -8,8 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -145,23 +142,7 @@ public class MainJF extends JFrame implements WindowListener,
 				applicationClose();
 			}
 		});
-		fileJM.add(closeJMI);
-
-		JMenu lookAndFeelJM = new JMenu(" Look & Feel ");
-		applicationJMB.add(lookAndFeelJM);
-		JCheckBoxMenuItem[] lookAndFeelJCBMI = new JCheckBoxMenuItem[7];		
-		lookAndFeelJCBMI[0] = new JCheckBoxMenuItem(" Standard ");
-		lookAndFeelJCBMI[1] = new JCheckBoxMenuItem(" Blackmoon ");
-		lookAndFeelJCBMI[2] = new JCheckBoxMenuItem(" Blackstar ");
-		lookAndFeelJCBMI[3] = new JCheckBoxMenuItem(" Blueice ");
-		lookAndFeelJCBMI[4] = new JCheckBoxMenuItem(" Bluesteel ");
-		lookAndFeelJCBMI[5] = new JCheckBoxMenuItem(" GreenDream ");
-		lookAndFeelJCBMI[6] = new JCheckBoxMenuItem(" Silvermoon ");	
-		ButtonGroup lookAndFeelBG = new ButtonGroup();		
-		for (int i = 0; i < lookAndFeelJCBMI.length; i++) {
-			lookAndFeelBG.add(lookAndFeelJCBMI[i]);
-			lookAndFeelJM.add(lookAndFeelJCBMI[i]);
-		}
+		fileJM.add(closeJMI);		
 
 		JMenu nasJM = new JMenu(" NAS ");
 		JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
