@@ -409,7 +409,7 @@ public class Mediator {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                 sambaUser, sambaPwd, time, laf, audio, timeout, advancedDest);
             setPropItasa(itasa, myitasa, user, pwd, auto);
-            proxy.writeProp();
+            writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel()))
                 setLookFeel();
             if (oldAD != prop.enabledCustomDestinationFolder()) {
