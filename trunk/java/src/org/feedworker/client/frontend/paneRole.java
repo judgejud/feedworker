@@ -17,7 +17,7 @@ import org.lp.myUtils.Swing;
  * 
  * @author luca
  */
-class paneRole extends paneAbstract{
+class paneRole extends AbstractJP{
     private static paneRole jpanel = null;
     private tableXml jtable;    
 
@@ -29,12 +29,12 @@ class paneRole extends paneAbstract{
 
     private paneRole(){
         super();
-        initPane();
-        initButtons();
+        initializePanel();
+        initializeButtons();
     }
 
     @Override
-    void initPane() {
+    void initializePanel() {
         jtable = new tableXml();
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         //jScrollTable1.setPreferredSize(new Dimension(650, 460));
@@ -45,7 +45,7 @@ class paneRole extends paneAbstract{
     }
 
     @Override
-    void initButtons() {
+    void initializeButtons() {
         JButton jbAddRow = new JButton(" + ");
         jbAddRow.setToolTipText("Aggiungi riga alla tabella");
         jbAddRow.setBorder(BORDER);
@@ -92,20 +92,20 @@ class paneRole extends paneAbstract{
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = BUTTONSPACEINSETS;
+        gbc.insets = BUTTON_SPACE_INSETS;
         gbc.anchor = GridBagConstraints.NORTHWEST;
 
-        jpButton.add(jbAddRow, gbc);
+        actionJP.add(jbAddRow, gbc);
         gbc.gridx = 1;
-        jpButton.add(jbRemoveRow, gbc);
+        actionJP.add(jbRemoveRow, gbc);
         gbc.gridx = 2;
-        jpButton.add(jbSaveRole, gbc);
+        actionJP.add(jbSaveRole, gbc);
         gbc.gridx = 3;
-        jpButton.add(jbAddDir, gbc);
+        actionJP.add(jbAddDir, gbc);
         gbc.gridx = 4;                
-        jpButton.add(jlTemp, gbc);
+        actionJP.add(jlTemp, gbc);
 
-        add(jpButton, BorderLayout.NORTH);
+        add(actionJP, BorderLayout.NORTH);
     }
 
     private void jbAddRowMouseClicked(){
