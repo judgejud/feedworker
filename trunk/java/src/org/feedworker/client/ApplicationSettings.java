@@ -118,7 +118,7 @@ public class ApplicationSettings {
         try {
             propertiesCrypting("SUBTITLE_DESTINATION_FOLDER", subtitleDestinationFolder);
             propertiesCrypting("REFRESH_INTERVAL", refreshInterval);
-            propertiesCrypting("CLIENT_LOOK_AND_FEEL", applicationLookAndFeel);
+            propertiesCrypting("APPLICATION_LOOK_AND_FEEL", applicationLookAndFeel);
             propertiesCrypting("ENABLE_AUDIO_ADVISOR", enableAudioAdvisor);
             propertiesCrypting("IS_LOCAL_FOLDER", isLocalFolder);
             propertiesCrypting("CIFS_SHARE_PATH", cifsSharePath);
@@ -214,6 +214,7 @@ public class ApplicationSettings {
         hasSubsfactoryOption = true;
         hasTorrentOption = true;
         isApplicationFirstTimeUsed = true;
+        applicationLookAndFeel = "standard";
         applicationBuild = "121";
 
         try {
@@ -274,9 +275,8 @@ public class ApplicationSettings {
     }
 
     public String getMyitasaUsername() {
-        if (myitasaUsername == null) {
-            myitasaUsername = "";
-        }
+        if (myitasaUsername == null)
+            myitasaUsername = "";        
         return myitasaUsername;
     }
 
@@ -285,9 +285,8 @@ public class ApplicationSettings {
     }
 
     public String getMyitasaPassword() {
-        if (myitasaPassword == null) {
-            myitasaPassword = "";
-        }
+        if (myitasaPassword == null)
+            myitasaPassword = "";        
         return myitasaPassword;
     }
 
@@ -361,10 +360,7 @@ public class ApplicationSettings {
         return SETTINGS_FILENAME;
     }
 
-    public String getApplicationLookAndFeel() {
-        if (applicationLookAndFeel == null) {
-            applicationLookAndFeel = "";
-        }
+    public String getApplicationLookAndFeel() {        
         return applicationLookAndFeel;
     }
 
