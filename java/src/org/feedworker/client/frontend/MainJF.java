@@ -2,6 +2,7 @@ package org.feedworker.client.frontend;
 //IMPORT JAVA
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -37,13 +38,13 @@ public class MainJF extends JFrame implements WindowListener,
 
 	protected paneSetting settingsJP;
 	protected JTabbedPane mainJTP;
-	protected textpaneLog jtpLog;
+	protected LogJTP logJTP;
 
 	private Mediator proxy = Mediator.getIstance();
 	private ApplicationSettings prop = ApplicationSettings.getIstance();
-	private ItasaJP jpItasa;
-	private TorrentJP jpTorrent;
-	private SubsFactoryJP jpSubsf;
+	private ItasaJP itasaJP;
+	private TorrentJP torrentJP;
+	private SubsfactoryJP subsfactoryJP;
 
 	/** Costruttore */
 	public MainJF() {
@@ -54,7 +55,7 @@ public class MainJF extends JFrame implements WindowListener,
 		this.setTitle(FeedWorkerClient.APPLICATION_NAME + " build "
 				+ FeedWorkerClient.APPLICATION_BUILD + " by "
 				+ FeedWorkerClient.AUTHOR_NAME);
-		this.setIconImage(FeedWorkerClient.getApplicationIcon());
+		this.setIconImage(FeedWorkerClient.APPLICATION_ICON);
 		initializeMenuBar();
 		initializeComponents();
 		initListeners();
@@ -70,39 +71,39 @@ public class MainJF extends JFrame implements WindowListener,
 		settingsJP = paneSetting.getPanel();
 		
 		if (prop.hasItasaOption()) {
-			jpItasa = ItasaJP.getPanel();
-			mainJTP.addTab("Itasa", jpItasa);
+			itasaJP = ItasaJP.getPanel();
+			mainJTP.addTab("Itasa", itasaJP);
 		}
 		if (prop.hasSubsfactoryOption()) {
-			jpSubsf = SubsFactoryJP.getPanel();
-			mainJTP.addTab("Subsfactory", jpSubsf);
+			subsfactoryJP = SubsfactoryJP.getPanel();
+			mainJTP.addTab("Subsfactory", subsfactoryJP);
 		}
 		if (prop.hasTorrentOption()) {
-			jpTorrent = TorrentJP.getPanel();
-			mainJTP.addTab("Torrent", jpTorrent);
+			torrentJP = TorrentJP.getPanel();
+			mainJTP.addTab("Torrent", torrentJP);
 		}
 		if (prop.enabledCustomDestinationFolder())
 			mainJTP.addTab("Subtitle Destination", paneRole.getPanel());
 		mainJTP.addTab("Settings", settingsJP);
 
-		jtpLog = new textpaneLog();
-		JScrollPane jScrollText1 = new JScrollPane(jtpLog);
+		logJTP = new LogJTP();
+		JScrollPane jScrollText1 = new JScrollPane(logJTP);
 		jScrollText1.setPreferredSize(new Dimension(1000, 140));
 		add(jScrollText1, BorderLayout.SOUTH);
 
-		jtpLog.appendOK("Versione java in uso: " + Lang.getJavaVersion());
+		logJTP.appendOK("Versione java in uso: " + Lang.getJavaVersion());
 
 		if (prop.isApplicationFirstTimeUsed()) {
 			mainJTP.setSelectedComponent(settingsJP);
 			changeEnabledButton(false);
-			jtpLog.appendOK("Benvenuto al primo utilizzo.");
-			jtpLog
+			logJTP.appendOK("Benvenuto al primo utilizzo.");
+			logJTP
 					.appendAlert("Per poter usare il client, "
 							+ "devi configurare le impostazioni presenti nella specifica sezione");
 		} else {
 			settingsJP.settingsValue();
-			jtpLog.appendOK("Ciao " + prop.getMyitasaUsername());
-			jtpLog.appendOK("Impostazioni caricate da "
+			logJTP.appendOK("Ciao " + prop.getMyitasaUsername());
+			logJTP.appendOK("Impostazioni caricate da "
 					+ prop.getSettingsFilename());
 		}
 
@@ -120,7 +121,7 @@ public class MainJF extends JFrame implements WindowListener,
 		clearLogJMI.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				jtpLog.setText(null);
+				logJTP.setText(null);
 			}
 		});
 		fileJM.add(clearLogJMI);
@@ -142,8 +143,27 @@ public class MainJF extends JFrame implements WindowListener,
 				applicationClose();
 			}
 		});
+		fileJM.add(closeJMI);
+		
+		/* -- Al momento non è implementata la gestione del Look & Feel nel Menù
+		JMenu lookAndFeelJM = new JMenu(" Look & Feel ");
+		applicationJMB.add(lookAndFeelJM);
+		JCheckBoxMenuItem[] lookAndFeelJCBMI = new JCheckBoxMenuItem[7];		
+		lookAndFeelJCBMI[0] = new JCheckBoxMenuItem(" Standard ");
+		lookAndFeelJCBMI[1] = new JCheckBoxMenuItem(" Blackmoon ");
+		lookAndFeelJCBMI[2] = new JCheckBoxMenuItem(" Blackstar ");
+		lookAndFeelJCBMI[3] = new JCheckBoxMenuItem(" Blueice ");
+		lookAndFeelJCBMI[4] = new JCheckBoxMenuItem(" Bluesteel ");
+		lookAndFeelJCBMI[5] = new JCheckBoxMenuItem(" GreenDream ");
+		lookAndFeelJCBMI[6] = new JCheckBoxMenuItem(" Silvermoon ");	
+		ButtonGroup lookAndFeelBG = new ButtonGroup();		
+		for (int i = 0; i < lookAndFeelJCBMI.length; i++) {
+			lookAndFeelBG.add(lookAndFeelJCBMI[i]);
+			lookAndFeelJM.add(lookAndFeelJCBMI[i]);
+		}
 		fileJM.add(closeJMI);		
-
+		*/
+		
 		JMenu nasJM = new JMenu(" NAS ");
 		JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
 		JMenuItem taskStatusJMI = new JMenuItem(" Task status ");
@@ -276,17 +296,17 @@ public class MainJF extends JFrame implements WindowListener,
 	 */
 	protected void changeEnabledButton(boolean e) {
 		if (prop.hasItasaOption())
-			jpItasa.setButtonEnabled(e);
+			itasaJP.setButtonEnabled(e);
 		if (prop.hasSubsfactoryOption())
-			jpSubsf.setEnableButton(e);
+			subsfactoryJP.setEnableButton(e);
 		if (prop.hasTorrentOption())
-			jpTorrent.setButtonEnabled(e);
+			torrentJP.setButtonEnabled(e);
 	}
 
 	/** inizializza i listener per l'ascolto */
 	private void initListeners() {
 		addWindowListener(this);
-		proxy.setTextPaneListener(jtpLog);
+		proxy.setTextPaneListener(logJTP);
 		proxy.setFrameListener(this);
 	}
 
