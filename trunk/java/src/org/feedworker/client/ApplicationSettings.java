@@ -58,16 +58,16 @@ public class ApplicationSettings {
                 setMyitasaPassword(getDecryptedValue("MYITASA_PASSWORD"));
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
                 setSubtitleDestinationFolder(getDecryptedValue("SUBTITLE_DESTINATION_FOLDER"));
-                // setSubsFactory(Boolean.parseBoolean(getDecryptedValue("SUBSFACTORY")));
+                setSubfactoryOption(Boolean.parseBoolean(getDecryptedValue("SUBSFACTORY")));
                 setRefreshInterval(getDecryptedValue("REFRESH_INTERVAL"));
                 setAutoDownload(Boolean.parseBoolean(getDecryptedValue("IS_AUTO_DOWNLOAD")));
                 setLastDateTimeRefresh(getDecryptedValue("LAST_DATETIME_REFRESH"));
                 setApplicationLookAndFeel(getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
                 enableAudioAdvisor(Boolean.parseBoolean(getDecryptedValue("ENABLE_AUDIO_ADVISOR")));
-                // setTorrent(Boolean.parseBoolean(getDecryptedValue("TORRENT")));
+                setTorrentOption(Boolean.parseBoolean(getDecryptedValue("TORRENT")));
                 isApplicationFirstTimeUsed = Boolean.parseBoolean(
                         getDecryptedValue("IS_APPLICATION_FIRST_TIME_USED"));
-                // setItasa(Boolean.parseBoolean(getDecryptedValue("ITALIANSUBS")));
+                setItasaOption(Boolean.parseBoolean(getDecryptedValue("ITALIANSUBS")));
                 localFolder(Boolean.parseBoolean(getDecryptedValue("IS_LOCAL_FOLDER")));
                 setTorrentDestinationFolder(getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
                 setCifsSharePath(getDecryptedValue("CIFS_SHARE_PATH"));
@@ -223,7 +223,7 @@ public class ApplicationSettings {
         try {
             properties.setProperty(propertyEncrypter.encrypt("ITALIANSUBS"),
                     valueEncrypter.encrypt(Boolean.toString(hasItasaOption)));
-            properties.setProperty(propertyEncrypter.encrypt("FIRSTRUN"),
+            properties.setProperty(propertyEncrypter.encrypt("IS_APPLICATION_FIRST_TIME_USED"),
                     valueEncrypter.encrypt(Boolean.toString(isApplicationFirstTimeUsed)));
             properties.setProperty(propertyEncrypter.encrypt("TORRENT"),
                     valueEncrypter.encrypt(Boolean.toString(hasTorrentOption)));
