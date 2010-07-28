@@ -1,67 +1,75 @@
 package org.feedworker.client;
+
 //IMPORT JUNIQUE
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
-//IMPORT JAVA
+
 import java.awt.EventQueue;
-//IMPORT JAVAX
+import java.awt.Image;
+
 import javax.swing.JOptionPane;
-//IMPORT JRSS2SUB
-import org.feedworker.client.frontend.MyJFrame;
-import org.feedworker.client.frontend.MyJFrame_6;
+
+import org.feedworker.client.frontend.MainJF;
+import org.feedworker.client.frontend.NewerMainJF;
+import org.feedworker.util.Convert;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
 import org.lp.myUtils.lang.JVM;
 
-/**Client
+/**
+ * Client
  * 
  * @author luca judge
  */
-class FeedWorkerClient {
-    private static final String applicationName = "FeedWorker";
+public class FeedWorkerClient {
+	public static final String APPLICATION_NAME = "FeedWorker";
+	public static final String AUTHOR_NAME = "Luka Judge aka WebLuka";
+	public static final String APPLICATION_BUILD = "173";
+	
+	private static final String APPLICATION_ICON = "ApplicationIcon.png";
 
-    public static void main(String args[]) {
-        final JVM jvm = new JVM();
-        boolean alreadyRunning;
+	public static void main(String args[]) {
+		final JVM jvm = new JVM();
+		boolean alreadyRunning;
 
-        if (!jvm.isOrLater(15)) {
-            JOptionPane.showMessageDialog(null,
-                "E' necessario disporre di una versione della JVM >= 1.5",
-                applicationName, JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
-        } else {
-            try {
-                JUnique.acquireLock(applicationName);
-                alreadyRunning = false;
-            } catch (AlreadyLockedException e) {
-                JOptionPane.showMessageDialog(null,
-                    "C'è già la stessa applicazione avviata.",
-                    applicationName, JOptionPane.ERROR_MESSAGE);
-                alreadyRunning = true;
-            }
+		if (!jvm.isOrLater(15)) {
+			JOptionPane.showMessageDialog(null,
+					"E' necessario disporre di una versione della JVM >= 1.5",
+					APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		} else {
+			try {
+				JUnique.acquireLock(APPLICATION_NAME);
+				alreadyRunning = false;
+			} catch (AlreadyLockedException e) {
+				JOptionPane.showMessageDialog(null,
+						"C'è già la stessa applicazione avviata.",
+						APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+				alreadyRunning = true;
+			}
 
-            if (!alreadyRunning) {
-                ResourceLocator.setWorkspace();
-                ApplicationSettings.getIstance();
-                Logging.getIstance();
-                EventQueue.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        Kernel k = Kernel.getIstance();
-                        k.setLookFeel();
-                        if (jvm.isOrLater(16))
-                                new MyJFrame_6();
-                        else if (jvm.isOrLater(15))
-                                new MyJFrame();
-                        k.loadXml();
-                        k.runRss();
-                    } // end run
-                }); // end invokelater
-            }
-        }
-    }// end main
-
-    public static String getApplicationName() {
-        return applicationName;
-    }
+			if (!alreadyRunning) {
+				ResourceLocator.setWorkspace();
+				ApplicationSettings.getIstance();
+				Logging.getIstance();
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						Kernel k = Kernel.getIstance();
+						k.setLookFeel();
+						if (jvm.isOrLater(16))
+							new NewerMainJF();
+						else if (jvm.isOrLater(15))
+							new MainJF();
+						k.loadXml();
+						k.runRss();
+					} // end run
+				}); // end invokelater
+			}
+		}
+	}// end main
+	
+	public static Image getApplicationIcon() {
+		return Convert.getResourceImage(APPLICATION_ICON);
+	}
 }// end class
