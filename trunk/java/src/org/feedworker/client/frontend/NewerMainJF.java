@@ -11,35 +11,36 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 //IMPORT JRSS2SUB
+import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.util.Convert;
 /**Jframe per versioni java 6 e superiori
  *
  * @author luca judge
  */
-public class MyJFrame_6 extends MyJFrame {
+public class NewerMainJF extends MainJF {
     //VARIABLES PRIVATE FINAL
-    private final String GIF_RSS = "rss_icon.gif";
+	private static final String INCOMING_FEED_ICON = "IncomingFeedIcon.png";;
     //VARIABLES PRIVATE
     private SystemTray tray;
     private TrayIcon trayIcon;
     private Image iconRss, iconSub;
     /**Costruttore*/
-    public MyJFrame_6() {
+    public NewerMainJF() {
         super();
         initSysTray();
     }
     /**inizializza la system tray*/
     private void initSysTray() {
         if (SystemTray.isSupported()) {
-            iconRss = Convert.getResourceImage(GIF_RSS);
-            iconSub = Convert.getResourceImage(SUB_RSS);
+            iconRss = Convert.getResourceImage(INCOMING_FEED_ICON);
+            iconSub = FeedWorkerClient.getApplicationIcon();
             PopupMenu popup = new PopupMenu();
-            MenuItem defaultItem = new MenuItem("Chiudi jRss2Sub");
+            MenuItem defaultItem = new MenuItem(" Close " + FeedWorkerClient.APPLICATION_NAME);
             defaultItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
-                    appClosing();
+                    applicationClose();
                 }
             });
             popup.add(defaultItem);
@@ -81,12 +82,12 @@ public class MyJFrame_6 extends MyJFrame {
             trayIcon.setImage(iconSub);
         }
         if (evt.getDate()!=null)
-            jpSettings.setDataAggiornamento(evt.getDate());
+            settingsJP.setDataAggiornamento(evt.getDate());
         if (evt.getOperaz()!=null){
             if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ"))
-                jtabbedpane.addTab("Destinazione avanzata",paneRole.getPanel());
+                mainJTP.addTab("Destinazione avanzata",paneRole.getPanel());
             else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ"))
-                jtabbedpane.remove(paneRole.getPanel());
+                mainJTP.remove(paneRole.getPanel());
             else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON"))
                 changeEnabledButton(true);
         }
