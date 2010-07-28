@@ -15,23 +15,26 @@ import javax.swing.border.SoftBevelBorder;
  *da questo astratto reimplementino i metodi
  * @author luca
  */
-abstract class paneAbstract extends JPanel{
-    private final Dimension TABBEDSIZE = new Dimension(1024, 540);
-    private final Dimension BUTTONPANESIZE = new Dimension(1000,30);   
+abstract class AbstractJP extends JPanel{
+    private final Dimension TAB_SIZE = new Dimension(1024, 540);
+    private final Dimension ACTION_PANEL_SIZE = new Dimension(1000,30);   
     protected final SoftBevelBorder BORDER = new SoftBevelBorder(BevelBorder.RAISED);
-    protected final Insets BUTTONSPACEINSETS = new Insets(0, 2, 0, 2);
-    protected final Dimension TABLESCROLLSIZE = new Dimension(500, 460);
-    protected JPanel jpButton;
+    protected final Insets BUTTON_SPACE_INSETS = new Insets(0, 2, 0, 2);
+    protected final Dimension TABLE_SCROLL_SIZE = new Dimension(500, 460);
+    protected JPanel actionJP;
     protected Mediator proxy = Mediator.getIstance();
+    
     /**Costruttore protetto, per essere invocato dai figli tramite ereditarietà*/
-    protected paneAbstract(){
+    protected AbstractJP(){
         super(new BorderLayout());
-        setPreferredSize(TABBEDSIZE);
-        jpButton = new JPanel(new GridBagLayout());
-        jpButton.setPreferredSize(BUTTONPANESIZE);
+        setPreferredSize(TAB_SIZE);
+        actionJP = new JPanel(new GridBagLayout());
+        actionJP.setPreferredSize(ACTION_PANEL_SIZE);
     }
+    
     /**inizializza il pannello*/
-    abstract void initPane();
+    abstract void initializePanel();
+    
     /**inizializza i bottoni del pannello nord*/
-    abstract void initButtons();
+    abstract void initializeButtons();
 }

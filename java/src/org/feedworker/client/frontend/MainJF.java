@@ -44,9 +44,9 @@ public class MainJF extends JFrame implements WindowListener,
 
 	private Mediator proxy = Mediator.getIstance();
 	private ApplicationSettings prop = ApplicationSettings.getIstance();
-	private paneItasa jpItasa;
-	private paneTorrent jpTorrent;
-	private paneSubsf jpSubsf;
+	private ItasaJP jpItasa;
+	private TorrentJP jpTorrent;
+	private SubsFactoryJP jpSubsf;
 
 	/** Costruttore */
 	public MainJF() {
@@ -73,20 +73,20 @@ public class MainJF extends JFrame implements WindowListener,
 		settingsJP = paneSetting.getPanel();
 		
 		if (prop.hasItasaOption()) {
-			jpItasa = paneItasa.getPanel();
+			jpItasa = ItasaJP.getPanel();
 			mainJTP.addTab("Itasa", jpItasa);
 		}
 		if (prop.hasSubsfactoryOption()) {
-			jpSubsf = paneSubsf.getPanel();
+			jpSubsf = SubsFactoryJP.getPanel();
 			mainJTP.addTab("Subsfactory", jpSubsf);
 		}
 		if (prop.hasTorrentOption()) {
-			jpTorrent = paneTorrent.getPanel();
+			jpTorrent = TorrentJP.getPanel();
 			mainJTP.addTab("Torrent", jpTorrent);
 		}
 		if (prop.enabledCustomDestinationFolder())
 			mainJTP.addTab("Subtitle Destination", paneRole.getPanel());
-		mainJTP.addTab("Impostazioni", settingsJP);
+		mainJTP.addTab("Settings", settingsJP);
 
 		jtpLog = new textpaneLog();
 		JScrollPane jScrollText1 = new JScrollPane(jtpLog);

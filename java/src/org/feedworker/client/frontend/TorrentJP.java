@@ -12,44 +12,44 @@ import javax.swing.JScrollPane;
  *
  * @author luca
  */
-class paneTorrent extends paneAbstract{
-    private static paneTorrent jpanel = null;
+class TorrentJP extends AbstractJP{
+    private static TorrentJP jpanel = null;
     private JButton jbDown, jbCopyLinks, jbClean, jbFireNas;
     private tableRss jtTorrent1, jtTorrent2; 
         
-    private paneTorrent(){
+    private TorrentJP(){
         super();
-        initPane();
-        initButtons();
+        initializePanel();
+        initializeButtons();
         proxy.setTableRssListener(jtTorrent1);
         proxy.setTableRssListener(jtTorrent2);
     }
 
-    static paneTorrent getPanel(){
+    static TorrentJP getPanel(){
         if (jpanel==null)
-            jpanel = new paneTorrent();
+            jpanel = new TorrentJP();
         return jpanel;
     }
 
     @Override
-    void initPane() {        
+    void initializePanel() {        
         jtTorrent1 = new tableRss(proxy.getEztv());
         jtTorrent1.setTitleDescriptionColumn("Descrizione Torrent EZTV");
         JScrollPane jsp1 = new JScrollPane(jtTorrent1);
-        jsp1.setPreferredSize(TABLESCROLLSIZE);
+        jsp1.setPreferredSize(TABLE_SCROLL_SIZE);
         jsp1.setAutoscrolls(true);
         add(jsp1, BorderLayout.WEST);
 
         jtTorrent2 = new tableRss(proxy.getBtchat());
         jtTorrent2.setTitleDescriptionColumn("Descrizione Torrent BTCHAT");
         JScrollPane jsp2 = new JScrollPane(jtTorrent2);
-        jsp2.setPreferredSize(TABLESCROLLSIZE);
+        jsp2.setPreferredSize(TABLE_SCROLL_SIZE);
         jsp2.setAutoscrolls(true);
         add(jsp2, BorderLayout.EAST);
     }
 
     @Override
-    void initButtons() {
+    void initializeButtons() {
         jbDown = new JButton(" Download ");
         jbDown.setToolTipText("Scarica i .torrent selezionati");
         jbDown.setBorder(BORDER);
@@ -95,15 +95,15 @@ class paneTorrent extends paneAbstract{
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = BUTTONSPACEINSETS;
-        jpButton.add(jbDown, gbc);
+        gbc.insets = BUTTON_SPACE_INSETS;
+        actionJP.add(jbDown, gbc);
         gbc.gridx = 1;
-        jpButton.add(jbCopyLinks, gbc);
+        actionJP.add(jbCopyLinks, gbc);
         gbc.gridx = 2;
-        jpButton.add(jbClean, gbc);
+        actionJP.add(jbClean, gbc);
         gbc.gridx = 3;
-        jpButton.add(jbFireNas, gbc);
-        add(jpButton, BorderLayout.NORTH);
+        actionJP.add(jbFireNas, gbc);
+        add(actionJP, BorderLayout.NORTH);
     }
 
     private void jbDownMouseClicked(){

@@ -13,42 +13,42 @@ import javax.swing.JScrollPane;
  *
  * @author luca
  */
-class paneSubsf extends paneAbstract{
-    private static paneSubsf jpanel = null;
+class SubsFactoryJP extends AbstractJP{
+    private static SubsFactoryJP jpanel = null;
     private JButton jbDown, jbClean;
     private tableRss jtSubsf, jtMySubsf;
 
-    private paneSubsf(){
+    private SubsFactoryJP(){
         super();
-        initPane();
-        initButtons();
+        initializePanel();
+        initializeButtons();
         proxy.setTableRssListener(jtSubsf);
         proxy.setTableRssListener(jtMySubsf);
     }
 
-    public static paneSubsf getPanel(){
+    public static SubsFactoryJP getPanel(){
         if (jpanel==null)
-            jpanel = new paneSubsf();
+            jpanel = new SubsFactoryJP();
         return jpanel;
     }
 
     @Override
-    void initPane() {
+    void initializePanel() {
         jtSubsf = new tableRss(proxy.getSubsf());
         jtMySubsf = new tableRss(proxy.getMySubsf());
         JScrollPane jScrollTable1 = new JScrollPane(jtSubsf);
-        jScrollTable1.setPreferredSize(TABLESCROLLSIZE);
+        jScrollTable1.setPreferredSize(TABLE_SCROLL_SIZE);
         jScrollTable1.setAutoscrolls(true);
         add(jScrollTable1, BorderLayout.WEST);
         JScrollPane jScrollTable2 = new JScrollPane(jtMySubsf);
-        jScrollTable2.setPreferredSize(TABLESCROLLSIZE);
+        jScrollTable2.setPreferredSize(TABLE_SCROLL_SIZE);
         jScrollTable2.setAutoscrolls(true);
         add(jScrollTable2, BorderLayout.EAST);
         setVisible(true);
     }
 
     @Override
-    void initButtons() {
+    void initializeButtons() {
         jbDown = new JButton(" Download ");
         jbDown.setToolTipText("Scarica i sub selezionati");
         jbDown.setBorder(BORDER);
@@ -74,16 +74,16 @@ class paneSubsf extends paneAbstract{
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = BUTTONSPACEINSETS;
-        jpButton.add(jbDown, gbc);
+        gbc.insets = BUTTON_SPACE_INSETS;
+        actionJP.add(jbDown, gbc);
         gbc.gridx = 1;
-        jpButton.add(jbClean, gbc);
+        actionJP.add(jbClean, gbc);
         gbc.gridwidth=3;
         gbc.gridx=2;
         JLabel jlTemp = new JLabel();
         jlTemp.setPreferredSize(new Dimension(800, 20));
-        jpButton.add(jlTemp, gbc);
-        add(jpButton, BorderLayout.NORTH);
+        actionJP.add(jlTemp, gbc);
+        add(actionJP, BorderLayout.NORTH);
     }
 
     private void jbDownMouseClicked(){
