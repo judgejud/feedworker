@@ -321,7 +321,7 @@ public class Kernel {
      */
     public void closeApp(String data) {
         prop.setLastDateTimeRefresh(data);
-        if (!prop.isFirstTimeRun())
+        if (!prop.isApplicationFirstTimeUsed())
             prop.writeOnlyLastDate();        
         System.exit(0);
     }
@@ -419,7 +419,7 @@ public class Kernel {
     }    
     /**Esegue gli rss*/
     public void runRss() {
-        if (!prop.isFirstTimeRun()) {
+        if (!prop.isApplicationFirstTimeUsed()) {
             prop.setLastDateTimeRefresh(Convert.actualTime());
             runItasa(true);
             runSubsfactory(true);

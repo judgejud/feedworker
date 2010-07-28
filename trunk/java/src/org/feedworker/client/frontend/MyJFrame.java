@@ -92,7 +92,7 @@ public class MyJFrame extends JFrame implements WindowListener, MyJFrameEventLis
 
         jtpLog.appendOK("Versione java in uso: " + Lang.getJavaVersion());
 
-        if (prop.isFirstTimeRun()){
+        if (prop.isApplicationFirstTimeUsed()){
             jtabbedpane.setSelectedComponent(jpSettings);
             changeEnabledButton(false);
             jtpLog.appendOK("Benvenuto al primo utilizzo.");

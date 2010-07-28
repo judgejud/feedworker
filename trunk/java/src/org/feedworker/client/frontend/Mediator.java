@@ -392,7 +392,7 @@ public class Mediator {
             String subsf, String torrent) {
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
-        boolean first = prop.isFirstTimeRun();
+        boolean first = prop.isApplicationFirstTimeUsed();
         boolean oldAD = prop.enabledCustomDestinationFolder();
         boolean save = false;
         if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
@@ -418,7 +418,7 @@ public class Mediator {
                 else
                     fireNewJFrameEvent("REMOVE_PANE_RULEZ");
             }
-            if (!prop.isFirstTimeRun() && first) {
+            if (!prop.isApplicationFirstTimeUsed() && first) {
                 fireNewJFrameEvent("ENABLED_BUTTON");
                 runRss();
             } else {
