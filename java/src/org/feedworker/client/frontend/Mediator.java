@@ -40,6 +40,7 @@ public class Mediator {
     private List listenerTextPane  = new ArrayList();
     private List listenerJFrame = new ArrayList();
     private ManageException error = ManageException.getIstance();
+
     /**Restituisce l'istanza attiva del Mediator
      * se non esiste la crea
      * @return Mediator
@@ -184,15 +185,7 @@ public class Mediator {
     DefaultMutableTreeNode getTreeNode(){
         return core.getSettingsNode();
     }
-
-    void writeProp(){
-        core.writeProp();
-    }
-
-    void setLookFeel(){
-        core.setLookFeel();
-    }
-
+    
     void restartRss(){
         core.stopAndRestartTimer();
     }
@@ -303,8 +296,7 @@ public class Mediator {
      */
     boolean checkSaveTorrent(String text) {
         if (!Lang.verifyTextNotNull(text))
-            printAlert("La Destinazione dei Torrent non può essere vuota");
-        prop.setTorrentDestinationFolder(text);
+            printAlert("La Destinazione dei Torrent non può essere vuota");        
         return true;
     }
     /**verifica impostazioni subsf
@@ -316,14 +308,13 @@ public class Mediator {
         if (Lang.verifyTextNotNull(text)) {
             try {
                 new URL(text);
-                check = testRss(text, "subsfactory");
-                prop.setSubsfactoryFeedURL(text);
+                check = testRss(text, "subsfactory");                
             } catch (MalformedURLException e) {
                 error.launch(e, getClass(), "subsfactory");
                 check = false;
             }
         } else
-            printAlert("Non immettendo link RSS Subsfactory non potrai usare il tab Subsfactory");
+            printAlert("Non immettendo link RSS Subsfactory non potrai usare i feed Subsfactory");
         return check;
     }
     //TODO sistemare il controllo itasa
@@ -348,7 +339,7 @@ public class Mediator {
                 }
             }
             if (!Lang.verifyTextNotNull(itasa) && !Lang.verifyTextNotNull(myitasa))
-                printAlert("Non immettendo rss itasa e myitasa non potrai usare " +
+                printAlert("Non immettendo rss itasa e/o myitasa non potrai usare " +
                         "i feed di italiansubs");
         } catch (MalformedURLException ex) {
             error.launch(ex, getClass(), "Itasa");
@@ -409,9 +400,11 @@ public class Mediator {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                 sambaUser, sambaPwd, time, laf, audio, timeout, advancedDest);
             setPropItasa(itasa, myitasa, user, pwd, auto);
-            writeProp();
+            prop.setSubsfactoryFeedURL(subsf);
+            prop.setTorrentDestinationFolder(torrent);
+            core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel()))
-                setLookFeel();
+                printAlert("Il Look&Feel selezionato sarà disponibile al riavvio del client.");
             if (oldAD != prop.enabledCustomDestinationFolder()) {
                 if (prop.enabledCustomDestinationFolder())
                     fireNewJFrameEvent("ADD_PANE_RULEZ");
