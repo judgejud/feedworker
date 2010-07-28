@@ -347,10 +347,10 @@ public class Kernel {
             prop.writeItasaSettings();       
         if (prop.hasSubsfactoryOption())
             prop.writeSubsfactorySettings();        
-        if (prop.hasTorrentOption()) 
-            prop.writeTorrentSettings();        
-        //if (prop.isFirstTimeRun())
-        //    prop.writeFirstRunFalse();        
+        if (prop.hasTorrentOption())
+            prop.writeTorrentSettings();
+        if (prop.isApplicationFirstTimeUsed())
+            prop.writeApplicationFirstTimeUsedFalse();
     }
     /**Scrive l'ultima data d'aggiornamento nel file properties */
     public void writeLastDate() {
