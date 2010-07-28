@@ -77,16 +77,9 @@ public class Convert {
      */
     public static Image getResourceImage(String name){
         String stringa = ResourceLocator.getResourcePath() + name;
-        ImageIcon icon = new ImageIcon(ResourceLocator.convertStringToURL(stringa));
-        return icon.getImage();
-        /*
-        ImageIcon image = null;
-        
+        ImageIcon icon = new ImageIcon(ResourceLocator.convertStringToURL(stringa));        
         if (Lang.isWindows())
-            image = Swing.scaleImage(icon,16,16);
-        else
-            image = Swing.scaleImage(icon,22,22);
-        return image.getImage();
-        */
+            icon = Swing.scaleImage(icon,16,16);
+        return icon.getImage();
     }    
 }
