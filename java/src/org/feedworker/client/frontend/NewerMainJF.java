@@ -20,7 +20,7 @@ import org.feedworker.util.Convert;
  */
 public class NewerMainJF extends MainJF {
     //VARIABLES PRIVATE FINAL
-	private static final String INCOMING_FEED_ICON = "IncomingFeedIcon.png";;
+	private static final String INCOMING_FEED_ICON = "IncomingFeedIcon2.png";;
     //VARIABLES PRIVATE
     private SystemTray tray;
     private TrayIcon trayIcon;
@@ -47,14 +47,14 @@ public class NewerMainJF extends MainJF {
             // get the SystemTray instance
             tray = SystemTray.getSystemTray();
             // load an image
-            trayIcon = new TrayIcon(iconRss, "jRss2Sub", popup);
+            trayIcon = new TrayIcon(iconRss, FeedWorkerClient.APPLICATION_NAME, popup);
             trayIcon.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent evt) {
                     try {
                         tray.remove(trayIcon);
                         if (trayIcon.getImage().equals(iconSub)) {
-                            trayIcon.setToolTip("jRss2Sub");
+                            trayIcon.setToolTip(FeedWorkerClient.APPLICATION_NAME);
                             trayIcon.setImage(iconRss);
                         }
                     } catch (Exception e) {
