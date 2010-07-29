@@ -3,10 +3,11 @@ package org.feedworker.client.frontend;
 import java.awt.event.WindowEvent;
 import java.io.File;
 
-import javax.swing.ImageIcon;
-
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -16,8 +17,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.feedworker.client.FeedWorkerClient;
-import org.feedworker.client.frontend.events.MyJFrameEvent;
-import org.feedworker.util.Convert;
 
 public class EnhancedMainJF extends MainJF {
 
@@ -25,15 +24,23 @@ public class EnhancedMainJF extends MainJF {
 
 	public EnhancedMainJF() {
 		super();
-		//initSysTray();
 	}
 
 	private void initSysTray() {
 		Display display = new Display();
 		Shell shell = new Shell(display);
 		// Image image = new Image(display, 16, 16);
-		Image image = new Image(display, (new File(INCOMING_FEED_ICON))
-				.getAbsolutePath());
+		final Image image = new Image(display, (new File(INCOMING_FEED_ICON)).getAbsolutePath());
+		
+		Canvas canvas = new Canvas(shell,SWT.NO_REDRAW_RESIZE);
+	    canvas.addPaintListener(new PaintListener() {
+	        public void paintControl(PaintEvent e) {
+	         e.gc.drawImage(image,0,0);
+	        }
+	    });
+		
+		
+		
 		final Tray tray = display.getSystemTray();
 		if (tray == null) {
 			System.out.println("The system tray is not available");
