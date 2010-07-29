@@ -9,8 +9,8 @@ import java.awt.Image;
 
 import javax.swing.JOptionPane;
 
+import org.feedworker.client.frontend.EnhancedMainJF;
 import org.feedworker.client.frontend.MainJF;
-import org.feedworker.client.frontend.NewerMainJF;
 import org.feedworker.util.Convert;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
@@ -60,7 +60,7 @@ public class FeedWorkerClient {
 						Kernel k = Kernel.getIstance();
 						k.setLookFeel();
 						if (jvm.isOrLater(16))
-							new NewerMainJF();
+							new EnhancedMainJF();
 						else if (jvm.isOrLater(15))
 							new MainJF();
 						k.loadXml();

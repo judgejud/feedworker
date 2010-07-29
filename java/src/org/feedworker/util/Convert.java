@@ -81,5 +81,9 @@ public class Convert {
         if (Lang.isWindows())
             icon = Swing.scaleImage(icon,16,16);
         return icon.getImage();
-    }    
+    }
+    
+    public static String getResourcePath(String name) {
+        return ResourceLocator.getResourcePath() + name;
+    }
 }
