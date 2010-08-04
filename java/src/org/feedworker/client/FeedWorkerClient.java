@@ -14,7 +14,7 @@ import org.feedworker.client.frontend.MainJF;
 import org.feedworker.util.Convert;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
-import org.lp.myUtils.lang.JVM;
+import org.jfacility.lang.JVM;
 
 /**
  * Client
@@ -22,8 +22,7 @@ import org.lp.myUtils.lang.JVM;
  * @author luca judge
  */
 public class FeedWorkerClient {
-
-	public static final String APPLICATION_NAME = "FeedWorker";
+        public static final String APPLICATION_NAME = "FeedWorker";
 	public static final String AUTHOR_NAME = "Luka Judge";
 	public static final String APPLICATION_BUILD = "173";
 	private static final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
