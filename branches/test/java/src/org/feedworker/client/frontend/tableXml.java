@@ -13,7 +13,7 @@ import javax.swing.table.TableColumn;
 import org.feedworker.client.frontend.events.TableXmlEvent;
 import org.feedworker.client.frontend.events.TableXmlEventListener;
 //IMPORT MYUTILS
-import org.lp.myUtils.Swing;
+import org.jfacility.Swing;
 /**
  *
  * @author luca

@@ -10,8 +10,8 @@ import java.util.Locale;
 //IMPORT JAVAX
 import javax.swing.ImageIcon;
 //IMPORT MYUTILS
-import org.lp.myUtils.lang.Lang;
-import org.lp.myUtils.Swing;
+import org.jfacility.lang.Lang;
+import org.jfacility.Swing;
 /**Utility di conversioni varie
  * 
  * @author luca judge

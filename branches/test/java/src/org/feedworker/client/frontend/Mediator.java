@@ -25,8 +25,8 @@ import org.feedworker.util.FilterSub;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 //IMPORT MYUTILS
-import org.lp.myUtils.Awt;
-import org.lp.myUtils.lang.Lang;
+import org.jfacility.Awt;
+import org.jfacility.lang.Lang;
 //IMPORT SUN
 import com.sun.syndication.io.FeedException;
 /**Classe mediatrice tra gui e kernel, detta anche kernel della gui.
