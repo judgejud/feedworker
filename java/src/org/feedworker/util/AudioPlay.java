@@ -6,7 +6,7 @@ import java.net.URL;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import org.lp.myUtils.Sound;
+import org.jfacility.Sound;
 
 /**
  * 

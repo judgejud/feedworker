@@ -2,7 +2,6 @@ package org.feedworker.client.frontend;
 //IMPORT JAVA
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -23,7 +22,7 @@ import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.client.frontend.events.MyJFrameEventListener;
-import org.lp.myUtils.lang.Lang;
+import org.jfacility.lang.Lang;
 
 /**
  * Gui base per java 1.5

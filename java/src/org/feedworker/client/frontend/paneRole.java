@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 //IMPORT MYUTILS
-import org.lp.myUtils.Swing;
+import org.jfacility.Swing;
 /**
  *
  * 

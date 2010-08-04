@@ -31,8 +31,8 @@ import javax.swing.tree.TreeSelectionModel;
 //IMPORT JRSS2SUB
 import org.feedworker.client.ApplicationSettings;
 //IMPORT MYUTILS
-import org.lp.myUtils.Awt;
-import org.lp.myUtils.Swing;
+import org.jfacility.Awt;
+import org.jfacility.Swing;
 /**
  *
  * @author luca
