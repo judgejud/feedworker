@@ -10,7 +10,7 @@ import java.util.Properties;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.ResourceLocator;
 
-import org.lp.myUtils.crypto.DesEncrypter;
+import org.jfacility.crypto.DesEncrypter;
 
 public class ApplicationSettings {
 
