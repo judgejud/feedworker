@@ -45,18 +45,25 @@ import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.Samba;
 import org.jdom.JDOMException;
-import org.lp.myUtils.lang.Lang;
+import org.jfacility.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
 
+import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlackMoonLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlackStarLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlueIceLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaBlueMoonLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlueSteelLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaGreenDreamLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaMauveMetallicLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaOrangeMetallicLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaSilverMoonLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaSimple2DLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaSkyMetallicLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
 
 /**
  * Motore di jrss2sub
@@ -313,9 +320,9 @@ public class Kernel {
 	 */
 	private void listDir(String dir, String ext) {
 		String[] list = new File(dir).list(new ExtensionFilter(ext)); // Get
-																		// list
-																		// of
-																		// names
+		// list
+		// of
+		// names
 		Arrays.sort(list); // Sort it (Data Structuring chapter))
 		for (int i = 0; i < list.length; i++)
 			System.out.println(list[i]); // Print the list
@@ -354,35 +361,49 @@ public class Kernel {
 
 	/** imposta il LookAndFeel */
 	public void setLookFeel() {
-		SyntheticaLookAndFeel laf = null;
-		String lf = prop.getApplicationLookAndFeel();
 		try {
-			if (lf == null || lf.equalsIgnoreCase("")
-					|| lf.equalsIgnoreCase("standard"))
+			String[] li = {"Licensee=AppWork UG", "LicenseRegistrationNumber=289416475", "Product=Synthetica", "LicenseType=Small Business License", "ExpireDate=--.--.----", "MaxVersion=2.999.999"};
+            UIManager.put("Synthetica.license.info", li);
+            UIManager.put("Synthetica.license.key", "C1410294-61B64AAC-4B7D3039-834A82A1-37E5D695");			
+			
+			SyntheticaLookAndFeel laf = new SyntheticaStandardLookAndFeel();
+			String lf = prop.getApplicationLookAndFeel();
+
+			if (lf.equalsIgnoreCase("Synthetica Standard"))
 				laf = new SyntheticaStandardLookAndFeel();
-			else if (lf.equalsIgnoreCase("blackmoon"))
+			else if (lf.equalsIgnoreCase("Synthetica BlackEye"))
+				laf = new SyntheticaBlackEyeLookAndFeel();
+			else if (lf.equalsIgnoreCase("Synthetica BlackMoon"))
 				laf = new SyntheticaBlackMoonLookAndFeel();
-			else if (lf.equalsIgnoreCase("blackstar"))
+			else if (lf.equalsIgnoreCase("Synthetica BlackStar"))
 				laf = new SyntheticaBlackStarLookAndFeel();
-			else if (lf.equalsIgnoreCase("blueice"))
+			else if (lf.equalsIgnoreCase("Synthetica BlueIce"))
 				laf = new SyntheticaBlueIceLookAndFeel();
-			else if (lf.equalsIgnoreCase("bluesteel"))
+			else if (lf.equalsIgnoreCase("Synthetica BlueMoon"))
+				laf = new SyntheticaBlueMoonLookAndFeel();
+			else if (lf.equalsIgnoreCase("Synthetica BlueSteel"))
 				laf = new SyntheticaBlueSteelLookAndFeel();
-			else if (lf.equalsIgnoreCase("greendream"))
+			else if (lf.equalsIgnoreCase("Synthetica GreenDream"))
 				laf = new SyntheticaGreenDreamLookAndFeel();
-			else if (lf.equalsIgnoreCase("silvermoon"))
+			else if (lf.equalsIgnoreCase("Synthetica MaouveMetallic"))
+				laf = new SyntheticaMauveMetallicLookAndFeel();
+			else if (lf.equalsIgnoreCase("Synthetica OrangeMetallic"))
+				laf = new SyntheticaOrangeMetallicLookAndFeel();
+			else if (lf.equalsIgnoreCase("Synthetica SilverMoon"))
 				laf = new SyntheticaSilverMoonLookAndFeel();
-			// else if (lf.equalsIgnoreCase("whitevision"))
-			// laf = new SyntheticaWhiteVisionLookAndFeel();
-			// else if (lf.equalsIgnoreCase("simple2d"))
-			// laf = new SyntheticaSimple2DLookAndFeel();
+			else if (lf.equalsIgnoreCase("Synthetica Simple2D"))
+				laf = new SyntheticaSimple2DLookAndFeel();
+			else if (lf.equalsIgnoreCase("Synthetica SkyMetallic"))
+				laf = new SyntheticaSkyMetallicLookAndFeel();
+			else if (lf.equalsIgnoreCase("Synthetica WhiteVision"))
+				laf = new SyntheticaWhiteVisionLookAndFeel();
+				
 			UIManager.setLookAndFeel(laf);
 		} catch (ParseException ex) {
 			error.launch(ex, getClass());
 		} catch (UnsupportedLookAndFeelException ex) {
 			error.launch(ex, getClass());
 		}
-
 	}
 
 	/**
@@ -1064,18 +1085,18 @@ public class Kernel {
 		listenerJFrame.remove(listener);
 	}
 
+	/*
+	 * Nota: E' stato necessario utilizzare il metodo syncExec perchè
+	 * l'interazione con il thread UI di SWT che gestisce la SysTray può
+	 * avvenire solo in questo modo. In caso contrario l'azione su oggetti SWT
+	 * che vivono in uno specifico thread (UI thread) da un altro thread come in
+	 * questo caso causa una SWTException: Invalid Thread Access.
+	 */
 	private synchronized void fireNewJFrameEvent(boolean _icontray,
 			final String _data) {
 		final boolean icontray = _icontray;
 		final String data = _data;
-		
-		/*
-		 * Nota: E' stato necessario utilizzare il metodo syncExec perchè l'interazione con
-		 * il thread UI di SWT che gestisce la SysTray può avvenire solo in questo modo.
-		 * In caso contrario l'azione su oggetti SWT che vivono in uno specifico thread (UI thread)
-		 * da un altro thread come in questo caso causa una SWTException: Invalid Thread Access.
-		 */
-		
+
 		Display.getDefault().syncExec(new Runnable() {
 			public void run() {
 				MyJFrameEvent event = new MyJFrameEvent(this, icontray, data);
