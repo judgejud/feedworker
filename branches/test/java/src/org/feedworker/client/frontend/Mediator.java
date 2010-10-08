@@ -14,7 +14,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 //IMPORT JRSS2SUB
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.Kernel;
-import org.feedworker.client.RSSParser;
+import org.feedworker.client.RssParser;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.client.frontend.events.MyJFrameEventListener;
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
@@ -198,7 +198,7 @@ public class Mediator {
         boolean passed = false;
         new URL(link);
         try {
-            new RSSParser(link);
+            new RssParser(link);
             passed = true;
         } catch (FeedException ex) {
             error.launch(ex, getClass(), from);
@@ -386,7 +386,7 @@ public class Mediator {
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
-        boolean oldAD = prop.enabledCustomDestinationFolder();
+        boolean oldAD = prop.isEnabledCustomDestinationFolder();
         boolean save = false;
         if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                 sambaUser, sambaPwd)) {
@@ -407,8 +407,8 @@ public class Mediator {
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel()))
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio del client.");
-            if (oldAD != prop.enabledCustomDestinationFolder()) {
-                if (prop.enabledCustomDestinationFolder())
+            if (oldAD != prop.isEnabledCustomDestinationFolder()) {
+                if (prop.isEnabledCustomDestinationFolder())
                     fireNewJFrameEvent("ADD_PANE_RULEZ");
                 else
                     fireNewJFrameEvent("REMOVE_PANE_RULEZ");
@@ -440,24 +440,24 @@ public class Mediator {
         prop.setSubtitleDestinationFolder(destSub);
         prop.setRefreshInterval(time);
         prop.setApplicationLookAndFeel(laf);
-        prop.enableAudioAdvisor(audio);
+        prop.setEnableAudioAdvisor(audio);
         prop.setCifsShareDomain(sambaDomain);
         prop.setCifsShareLocation(sambaIP);
         prop.setCifsSharePath(sambaDir);
         prop.setCifsShareUsername(sambaUser);
         prop.setCifsSharePassword(sambaPwd);
         prop.setHttpTimeout(timeout);
-        prop.enableCustomDestinationFolder(advancedDest);
-        //prop.setFont(jcbFont.getSelectedItem().toString());
+        prop.setEnableCustomDestinationFolder(advancedDest);
+        
     }
 
     private void setPropItasa(String itasa, String myitasa, String user, String pwd,
             boolean auto) {
         prop.setItasaFeedURL(itasa);
         prop.setMyitasaFeedURL(myitasa);
-        prop.setMyitasaUsername(user);
-        prop.setMyitasaPassword(pwd);
-        prop.setAutoDownload(auto);
+        prop.setItasaUsername(user);
+        prop.setItasaPassword(pwd);
+        prop.setAutoDownloadMyItasa(auto);
     }
 
     /**Invia alla download station del nas i link torrent selezionati
