@@ -9,9 +9,9 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 //IMPORT JAVAX
 import javax.swing.ImageIcon;
-//IMPORT MYUTILS
+//IMPORT JFACILITY
 import org.jfacility.lang.Lang;
-import org.jfacility.Swing;
+import org.jfacility.swing.Swing;
 /**Utility di conversioni varie
  * 
  * @author luca judge
@@ -52,7 +52,9 @@ public class Convert {
      * @return
      */
     private static String calendarToString(Calendar cal){
-        String s = cal.get(Calendar.DATE)+"/"+ (cal.get(Calendar.MONTH)+1)+"/"+ cal.get(Calendar.YEAR) + " " +
+        String s = cal.get(Calendar.DATE) + "/" +
+                (cal.get(Calendar.MONTH) + 1) + "/" +
+                cal.get(Calendar.YEAR) + " " +
                 addZero(cal.get(Calendar.HOUR_OF_DAY)) + ":" +
                 addZero(cal.get(Calendar.MINUTE)) + ":" +
                 addZero(cal.get(Calendar.SECOND));
