@@ -517,10 +517,7 @@ public class Kernel {
         if (prop.hasItasaOption()) {
             ArrayList<Object[]> feedIta, feedMyita;
             if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
-                if (first)
-                    feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, null, false);
-                else
-                    feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA, false);
+                feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA, false);
                 if ((feedIta != null) && (feedIta.size() > 0)) {
                     if (!first)
                         status = true;
@@ -528,16 +525,12 @@ public class Kernel {
                     fireTableRssEvent(feedIta, ITASA);
                 }
             }
-            if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
-                if (first)
-                    feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa, null, false);
-                else
-                    feedMyita = getFeedRss(prop.getMyitasaFeedURL(),
-                            lastMyItasa, MYITASA, prop.isAutoDownloadMyItasa());                
+            if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {                
+                feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa, MYITASA,
+                        prop.isAutoDownloadMyItasa());
                 if ((feedMyita != null) && (feedMyita.size() > 0)) {
-                    if (!first) {
+                    if (!first)
                         status = true;
-                    }
                     lastMyItasa = (String) feedMyita.get(0)[1];
                     fireTableRssEvent(feedMyita, MYITASA);
                 }
@@ -555,15 +548,11 @@ public class Kernel {
         boolean status = false;
         if ((prop.hasSubsfactoryOption()) &&
                 (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL()))) {
-            ArrayList<Object[]> feed;
-            if (first)
-                feed = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf, null, false);
-            else
-                feed = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf, SUBSF, false);
+            ArrayList<Object[]> feed =
+                    getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf, SUBSF, false);
             if ((feed != null) && (feed.size() > 0)) {
-                if (!first) {
+                if (!first)
                     status = true;
-                }
                 lastSubsf = (String) feed.get(0)[1];
                 fireTableRssEvent(feed, SUBSF);
             }
@@ -580,14 +569,8 @@ public class Kernel {
         boolean status = false;
         if (prop.hasTorrentOption()) {
             ArrayList<Object[]> feedEz, feedBt;
-            if (first) {
-                feedEz = getFeedRss(RSS_TORRENT_EZTV, lastEztv, null, false);
-                feedBt = getFeedRss(RSS_TORRENT_BTCHAT, lastBtchat, null, false);
-            } else {
-                feedEz = getFeedRss(RSS_TORRENT_EZTV, lastEztv, EZTV, false);
-                feedBt = getFeedRss(RSS_TORRENT_BTCHAT, lastBtchat, BTCHAT,
-                        false);
-            }
+            feedEz = getFeedRss(RSS_TORRENT_EZTV, lastEztv, EZTV, false);
+            feedBt = getFeedRss(RSS_TORRENT_BTCHAT, lastBtchat, BTCHAT, false);
             if ((feedEz != null) && (feedEz.size() > 0)) {
                 if (!first)
                     status = true;

@@ -23,114 +23,116 @@ import org.feedworker.util.ResourceLocator;
 
 public class EnhancedMainJF extends MainJF {
 
-	private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon2.png";
-	private final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
-	private Image currentIcon;
-	private Display display;
-	private TrayItem trayIcon;
-	private Tray tray;
-	private Menu trayMenu;
-	private MenuItem trayMenuItem;
+    private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon2.png";
+    private final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
+    private Image currentIcon;
+    private Display display;
+    private TrayItem trayIcon;
+    private Tray tray;
+    private Menu trayMenu;
+    private MenuItem trayMenuItem;
 
-	public EnhancedMainJF() {
-		super();
-	}
+    public EnhancedMainJF() {
+        super();
+    }
 
-	private void initializeSysTray() throws URISyntaxException {
-		display = Display.getDefault();
-		Shell shell = new Shell(display);
+    private void initializeSysTray() throws URISyntaxException {
+        display = Display.getDefault();
+        Shell shell = new Shell(display);
 
-		currentIcon = new Image(display,
-				getAbsoluteResourcePath(APPLICATION_ICON_FILE_NAME));
+        currentIcon = new Image(display,
+                getAbsoluteResourcePath(APPLICATION_ICON_FILE_NAME));
 
-		Canvas canvas = new Canvas(shell, SWT.NO_REDRAW_RESIZE);
-		canvas.addPaintListener(new PaintListener() {
-			public void paintControl(PaintEvent e) {
-				e.gc.drawImage(currentIcon, 0, 0);
-			}
-		});
+        Canvas canvas = new Canvas(shell, SWT.NO_REDRAW_RESIZE);
+        canvas.addPaintListener(new PaintListener() {
+            @Override
+            public void paintControl(PaintEvent e) {
+                e.gc.drawImage(currentIcon, 0, 0);
+            }
+        });
 
-		tray = display.getSystemTray();
-		if (tray == null)
-			System.out.println("The system tray is not available");
-		else {
-			trayIcon = new TrayItem(tray, SWT.NONE);
-			trayIcon.setToolTipText(FeedWorkerClient.APPLICATION_NAME);
-			trayIcon.setImage(currentIcon);
+        tray = display.getSystemTray();
+        if (tray == null)
+            logJTP.appendAlert("La system tray non è disponibile.");
+        else {
+            trayIcon = new TrayItem(tray, SWT.NONE);
+            trayIcon.setToolTipText(FeedWorkerClient.APPLICATION_NAME);
+            trayIcon.setImage(currentIcon);
 
-			trayIcon.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event event) {
-					currentIcon.dispose();
-					display.dispose();
-					setVisible(true);
-				}
-			});
-			
-			trayIcon.addListener(SWT.MenuDetect, new Listener() {
-				public void handleEvent(Event event) {
-					trayMenu.setVisible(true);
-				}
-			});
+            trayIcon.addListener(SWT.Selection, new Listener() {
+                @Override
+                public void handleEvent(Event event) {
+                    currentIcon.dispose();
+                    display.dispose();
+                    setVisible(true);
+                }
+            });
 
-			trayMenu = new Menu(shell, SWT.POP_UP);
-			trayMenuItem = new MenuItem(trayMenu, SWT.PUSH);
-			trayMenuItem.setText("Close");
-			trayMenuItem.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event event) {
-					applicationClose();
-				}
-			});
-			trayMenu.setDefaultItem(trayMenuItem);
-		}
-		//shell.setBounds(50, 50, 300, 200);
-		//shell.open();
-		
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				display.sleep();
-			}
-		}
-	}
+            trayIcon.addListener(SWT.MenuDetect, new Listener() {
+                @Override
+                public void handleEvent(Event event) {
+                    trayMenu.setVisible(true);
+                }
+            });
 
-	@Override
-	public void windowClosing(WindowEvent we) {
-		setVisible(false);
-		try {
-			initializeSysTray();
-		} catch (Exception e) {
-			logJTP.appendError(e.getMessage());
-			setVisible(true);
-		}
-	}
+            trayMenu = new Menu(shell, SWT.POP_UP);
+            trayMenuItem = new MenuItem(trayMenu, SWT.PUSH);
+            trayMenuItem.setText("Close");
+            trayMenuItem.addListener(SWT.Selection, new Listener() {
+                @Override
+                public void handleEvent(Event event) {
+                    applicationClose();
+                }
+            });
+            trayMenu.setDefaultItem(trayMenuItem);
+        }
+        //shell.setBounds(50, 50, 300, 200);
+        //shell.open();
+        while (!shell.isDisposed()) {
+            if (!display.readAndDispatch()) {
+                display.sleep();
+            }
+        }
+    }
 
-	private String getAbsoluteResourcePath(String name)
-			throws URISyntaxException {
-		return new File(ResourceLocator.convertStringToURL(
-				ResourceLocator.getResourcePath() + name).toURI())
-				.getAbsolutePath();
-	}
+    @Override
+    public void windowClosing(WindowEvent we) {
+        setVisible(false);
+        try {
+            initializeSysTray();
+        } catch (Exception e) {
+            logJTP.appendError(e.getMessage());
+            setVisible(true);
+        }
+    }
 
-	@Override
-	public void objReceived(MyJFrameEvent evt) {
-		if ((evt.isIcontray()) && (!this.isVisible())) {
-			try {
-				currentIcon = new Image(display,
-						getAbsoluteResourcePath(INCOMING_FEED_ICON_FILE_NAME));
-				trayIcon.setToolTipText("Incoming Feed ...");
-				trayIcon.setImage(currentIcon);
-			} catch (URISyntaxException ex) {
+    private String getAbsoluteResourcePath(String name)
+            throws URISyntaxException {
+        return new File(ResourceLocator.convertStringToURL(
+                ResourceLocator.getResourcePath() + name).toURI()).getAbsolutePath();
+    }
 
-			}
-		}
-		if (evt.getDate() != null)
-			settingsJP.setDataAggiornamento(evt.getDate());
-		if (evt.getOperaz() != null) {
-			if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ"))
-				mainJTP.addTab("Destinazione avanzata", paneRole.getPanel());
-			else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ"))
-				mainJTP.remove(paneRole.getPanel());
-			else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON"))
-				changeEnabledButton(true);
-		}
-	}
+    @Override
+    public void objReceived(MyJFrameEvent evt) {
+        if ((evt.isIcontray()) && (!this.isVisible())) {
+            try {
+                currentIcon = new Image(display,
+                        getAbsoluteResourcePath(INCOMING_FEED_ICON_FILE_NAME));
+                trayIcon.setToolTipText("Arrivato/i feed :-) ");
+                trayIcon.setImage(currentIcon);
+            } catch (URISyntaxException ex) {
+                logJTP.appendAlert(ex.getMessage());
+            }
+        }
+        if (evt.getDate() != null)
+            settingsJP.setDataAggiornamento(evt.getDate());
+        if (evt.getOperaz() != null) {
+            if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ"))
+                mainJTP.addTab("Destinazione avanzata", paneRole.getPanel());
+            else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ"))
+                mainJTP.remove(paneRole.getPanel());
+            else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON"))
+                changeEnabledButton(true);
+        }
+    }
 }
