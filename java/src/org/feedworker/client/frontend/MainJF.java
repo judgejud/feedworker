@@ -110,12 +110,11 @@ public class MainJF extends JFrame implements WindowListener,
     private void initializeMenuBar() {
         JMenuBar applicationJMB = new JMenuBar();
 
-        JMenu fileJM = new JMenu(" File ");
+        JMenu fileJM = new JMenu(" Operazioni ");
         applicationJMB.add(fileJM);
 
-        JMenuItem clearLogJMI = new JMenuItem(" Clear log ");
+        JMenuItem clearLogJMI = new JMenuItem(" Pulisci log ");
         clearLogJMI.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 logJTP.setText(null);
@@ -123,19 +122,18 @@ public class MainJF extends JFrame implements WindowListener,
         });
         fileJM.add(clearLogJMI);
 
-        JMenuItem saveRuleAsJMI = new JMenuItem(" Save rule as ... ");
-        saveRuleAsJMI.setEnabled(false);
-        saveRuleAsJMI.addActionListener(new ActionListener() {
-
+        JMenuItem bruteRefreshJMI = new JMenuItem(" Forza aggiornamento ");
+        bruteRefreshJMI.setEnabled(false);
+        bruteRefreshJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                proxy.bruteRefresh();
             }
         });
-        fileJM.add(saveRuleAsJMI);
+        fileJM.add(bruteRefreshJMI);
 
-        JMenuItem closeJMI = new JMenuItem(" Close ");
+        JMenuItem closeJMI = new JMenuItem(" Chiudi ");
         closeJMI.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 applicationClose();
