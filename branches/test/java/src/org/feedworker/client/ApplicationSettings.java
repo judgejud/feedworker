@@ -213,21 +213,20 @@ public class ApplicationSettings {
         torrentOption = true;
         applicationFirstTimeUsed = true;
         applicationLookAndFeel = "standard";
-        /*
-        applicationBuild = "121";
+        
+        //applicationBuild = "121";
 
         try {
             propertiesCrypting("ITALIANSUBS", itasaOption);
             propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED", applicationFirstTimeUsed);
             propertiesCrypting("TORRENT", torrentOption);
             propertiesCrypting("SUBSFACTORY", subsfactoryOption);
-            propertiesCrypting("BUILD",applicationBuild);
+            //propertiesCrypting("BUILD",applicationBuild);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
             error.launch(e, getClass(), null);
         }
-         */
     }
 
     /** scrive solo l'ultima data dell'aggiornamento rss */
