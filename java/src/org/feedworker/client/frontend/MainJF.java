@@ -56,7 +56,6 @@ public class MainJF extends JFrame implements WindowListener,
         initializeMenuBar();
         initializeComponents();
         initListeners();
-        this.setVisible(true);
     }
 
     /** Inizializzo i componenti per la GUI */

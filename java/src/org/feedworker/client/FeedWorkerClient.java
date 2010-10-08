@@ -58,14 +58,20 @@ public class FeedWorkerClient {
                         Kernel k = Kernel.getIstance();
                         k.setLookFeel();
                         MainJF jframe = null;
-                        if (jvm.isOrLater(16)) {
+                        if (jvm.isOrLater(16))
                             jframe = new EnhancedMainJF();
-                        } else if (jvm.isOrLater(15)) {
-                            jframe = new MainJF();
-                        }
+                        else if (jvm.isOrLater(15))
+                            jframe = new MainJF();                        
                         k.loadXml();
                         k.runRss();
-                        jframe.setVisible(true);
+                        if (!ApplicationSettings.getIstance().isEnabledIconizedRun())
+                            jframe.setVisible(true);
+                        else {
+                            //if (jvm.isOrLater(16))
+
+                            //else if (jvm.isOrLater(15))
+
+                        }
                     } // end run
                 }); // end invokelater
             } //end if
