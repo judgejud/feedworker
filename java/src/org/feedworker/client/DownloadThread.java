@@ -54,16 +54,15 @@ public class DownloadThread implements Runnable{
 
     public DownloadThread() {}
 
-    /**
-     * 
-     */
+    
+    @Override
     public void run() {
-        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getHttpTimeout())*1000;
+        int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout())*1000;
         Http http = new Http(connection_Timeout);
         ArrayList<File> alf = new ArrayList<File>();
         try{
             if (itasa)
-                http.connectItasa(prop.getMyitasaUsername(), prop.getMyitasaPassword());
+                http.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
 
             for (int i = 0; i < als.size(); i++) {
                 HttpEntity entity = http.requestGetEntity(als.get(i), itasa);
@@ -144,7 +143,8 @@ public class DownloadThread implements Runnable{
                 String dest = null;
                 try {
                     Samba s = Samba.getIstance(prop.getCifsShareLocation(), prop.getCifsSharePath(),
-                            prop.getCifsShareDomain(), prop.getCifsShareUsername(), prop.getCifsSharePassword());
+                            prop.getCifsShareDomain(), prop.getCifsShareUsername(),
+                            prop.getCifsSharePassword());
                     for (int i = 0; i < al.size(); i++) {
                         File filesub = al.get(i);
                         String namesub = al.get(i).getName();
