@@ -14,59 +14,61 @@ import org.feedworker.client.frontend.MainJF;
 import org.feedworker.util.Convert;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
-import org.jfacility.lang.JVM;
 
-/**
- * Client
+import org.jfacility.lang.JVM;
+/**Client
  * 
  * @author luca judge
  */
 public class FeedWorkerClient {
-        public static final String APPLICATION_NAME = "FeedWorker";
-	public static final String AUTHOR_NAME = "Luka Judge";
-	public static final String APPLICATION_BUILD = "173";
-	private static final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
-	public static Image APPLICATION_ICON = Convert.getResourceImage(APPLICATION_ICON_FILE_NAME);
 
-	public static void main(String args[]) {
-		final JVM jvm = new JVM();
-		boolean alreadyRunning;
+    public static final String APPLICATION_NAME = "FeedWorker";
+    public static final String AUTHOR_NAME = "Luka Judge";
+    public static final String APPLICATION_BUILD = "72";
+    private static final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
+    public static Image APPLICATION_ICON = Convert.getResourceImage(APPLICATION_ICON_FILE_NAME);
 
-		if (!jvm.isOrLater(15)) {
-			JOptionPane.showMessageDialog(null,
-					"E' necessario disporre di una versione della JVM >= 1.5",
-					APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
-			System.exit(0);
-		} else {
-			try {
-				JUnique.acquireLock(APPLICATION_NAME);
-				alreadyRunning = false;
-			} catch (AlreadyLockedException e) {
-				JOptionPane.showMessageDialog(null,
-						"C'è già la stessa applicazione avviata.",
-						APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
-				alreadyRunning = true;
-			}
+    public static void main(String args[]) {
+        final JVM jvm = new JVM();
+        boolean alreadyRunning;
 
-			if (!alreadyRunning) {
-				ResourceLocator.setWorkspace();
-				ApplicationSettings.getIstance();
-				Logging.getIstance();
-				EventQueue.invokeLater(new Runnable() {
+        if (!jvm.isOrLater(15)) {
+            JOptionPane.showMessageDialog(null,
+                    "E' necessario disporre di una versione della JVM >= 1.5",
+                    APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        } else {
+            try {
+                JUnique.acquireLock(APPLICATION_NAME);
+                alreadyRunning = false;
+            } catch (AlreadyLockedException e) {
+                JOptionPane.showMessageDialog(null,
+                        "C'è già la stessa applicazione avviata.",
+                        APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
+                alreadyRunning = true;
+            }
 
-					@Override
-					public void run() {
-						Kernel k = Kernel.getIstance();
-						k.setLookFeel();
-						if (jvm.isOrLater(16))
-							new EnhancedMainJF();
-						else if (jvm.isOrLater(15))
-							new MainJF();
-						k.loadXml();
-						k.runRss();
-					} // end run
-				}); // end invokelater
-			}
-		}
-	}// end main
+            if (!alreadyRunning) {
+                ResourceLocator.setWorkspace();
+                ApplicationSettings.getIstance();
+                Logging.getIstance();
+                EventQueue.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Kernel k = Kernel.getIstance();
+                        k.setLookFeel();
+                        MainJF jframe = null;
+                        if (jvm.isOrLater(16)) {
+                            jframe = new EnhancedMainJF();
+                        } else if (jvm.isOrLater(15)) {
+                            jframe = new MainJF();
+                        }
+                        k.loadXml();
+                        k.runRss();
+                        jframe.setVisible(true);
+                    } // end run
+                }); // end invokelater
+            } //end if
+        }
+    }// end main
 }// end class
