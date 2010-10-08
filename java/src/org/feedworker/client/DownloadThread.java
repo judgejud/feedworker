@@ -53,7 +53,6 @@ public class DownloadThread implements Runnable{
     }
 
     public DownloadThread() {}
-
     
     @Override
     public void run() {
