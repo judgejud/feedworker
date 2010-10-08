@@ -25,28 +25,12 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.tree.DefaultMutableTreeNode;
-
-import jcifs.smb.SmbException;
-
-import org.eclipse.swt.widgets.Display;
-import org.feedworker.client.frontend.events.MyJFrameEvent;
-import org.feedworker.client.frontend.events.MyJFrameEventListener;
-import org.feedworker.client.frontend.events.MyTextPaneEvent;
-import org.feedworker.client.frontend.events.MyTextPaneEventListener;
-import org.feedworker.client.frontend.events.TableRssEvent;
-import org.feedworker.client.frontend.events.TableRssEventListener;
-import org.feedworker.client.frontend.events.TableXmlEvent;
-import org.feedworker.client.frontend.events.TableXmlEventListener;
-import org.feedworker.util.AudioPlay;
-import org.feedworker.util.Convert;
-import org.feedworker.util.ExtensionFilter;
-import org.feedworker.util.FilterSub;
-import org.feedworker.util.ManageException;
-import org.feedworker.util.Quality;
-import org.feedworker.util.Samba;
-import org.jdom.JDOMException;
+//IMPORT JRSS2SUB
+import org.feedworker.client.frontend.events.*;
+import org.feedworker.util.*;
+//IMPORT MYUTILS
 import org.jfacility.lang.Lang;
-
+//IMPORT SUN
 import com.sun.syndication.io.FeedException;
 
 import de.javasoft.plaf.synthetica.SyntheticaBlackMoonLookAndFeel;
@@ -57,6 +41,12 @@ import de.javasoft.plaf.synthetica.SyntheticaGreenDreamLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaSilverMoonLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
+
+import jcifs.smb.SmbException;
+
+import org.eclipse.swt.widgets.Display;
+
+import org.jdom.JDOMException;
 
 /**
  * Motore di jrss2sub
@@ -97,8 +87,7 @@ public class Kernel {
     private ManageException error = ManageException.getIstance();
     private MyTextPaneEventListener mytpel;
 
-    /**
-     * Restituisce l'istanza corrente del kernel
+    /**Restituisce l'istanza corrente del kernel
      *
      * @return istanza kernel
      */
@@ -109,12 +98,9 @@ public class Kernel {
         return core;
     }
 
-    /**
-     * Scarica lo zip, estrae i sub e invoca l'analizzatore del path di
-     * destinazione
+    /**Scarica lo zip, estrae i sub e invoca l'analizzatore del path di destinazione
      *
-     * @param als
-     *            arraylist di link
+     * @param als arraylist di link
      * @param itasa
      */
     public void downloadSub(ArrayList<String> als, boolean itasa) {
@@ -124,12 +110,9 @@ public class Kernel {
         t.start();
     }
 
-    /**
-     * effettua il download automatico di myitasa comprende le fasi anche di
-     * estrazione zip e analizzazione percorso definitivo.
-     *
-     * @param link
-     *            link da analizzare
+    /**effettua il download automatico di myitasa
+     * comprende le fasi anche di estrazione zip e analizzazione percorso definitivo.
+     * @param link link da analizzare
      */
     private void downItasaAuto(Object link) {
         ArrayList<String> als = new ArrayList<String>();
@@ -140,21 +123,19 @@ public class Kernel {
         t.start();
     }
 
-    /**
-     * Scarica i torrent
+    /**Scarica i torrent
      *
-     * @param als
-     *            arraylist di link
+     * @param als arraylist di link
      */
     public void downloadTorrent(ArrayList<String> als) {
-        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getHttpTimeout()) * 1000;
+        int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
         Http http = new Http(connection_Timeout);
         try {
             for (int i = 0; i < als.size(); i++) {
                 InputStream is = http.getTorrent(als.get(i));
                 if (is != null) {
-                    File f = new File(prop.getTorrentDestinationFolder()
-                            + File.separator + http.getNameFile());
+                    File f = new File(prop.getTorrentDestinationFolder() + File.separator
+                            + http.getNameFile());
                     downloadSingle(is, f);
                     fireNewTextPaneEvent("Scaricato: " + http.getNameFile(),
                             MyTextPaneEvent.TORRENT);
@@ -168,18 +149,15 @@ public class Kernel {
         http.closeClient();
     }
 
-    /**
-     * Effettua il download dell'inputStream sotto forma di file
+    /**Effettua il download dell'inputStream sotto forma di file
      *
-     * @param is
-     *            http content-stream
-     * @param f
-     *            file di riferimento su cui mandare il flusso di inputstream
+     * @param is http content-stream
+     * @param f file di riferimento su cui mandare il flusso di inputstream
      * @throws FileNotFoundException
      * @throws IOException
      */
-    private void downloadSingle(InputStream is, File f)
-            throws FileNotFoundException, IOException {
+    private void downloadSingle(InputStream is, File f) throws FileNotFoundException,
+            IOException {
         OutputStream out = new FileOutputStream(f);
         byte buf[] = new byte[1024];
         int len;
@@ -191,14 +169,10 @@ public class Kernel {
         is.close();
     }
 
-    /**
-     * Restituisce il valore/percorso della chiave ad esso associato nella
-     * treemap
+    /**Restituisce il valore/percorso della chiave ad esso associato nella treemap
      *
-     * @param name
-     *            nome del file da analizzare
-     * @param parsing
-     *            valore sul quale effettuare lo split
+     * @param name nome del file da analizzare
+     * @param parsing valore sul quale effettuare lo split
      * @return path di destinazione
      */
     private String mapPath(String name, String parsing) {
@@ -217,14 +191,10 @@ public class Kernel {
         return path;
     }
 
-    /**
-     * Effettua l'analisi del nome del file restituendo l'oggetto filtro da
-     * confrontare
+    /**Effettua l'analisi del nome del file restituendo l'oggetto filtro da confrontare
      *
-     * @param name
-     *            nome del file da analizzare
-     * @param split
-     *            stringa col quale effettuare lo split del nome del file
+     * @param name nome del file da analizzare
+     * @param split stringa col quale effettuare lo split del nome del file
      * @return oggetto filtro
      */
     private FilterSub parsingNamefile(String name, String split) {
@@ -247,10 +217,8 @@ public class Kernel {
         return fil;
     }
 
-    /**
-     * cerca la posizione della stringa corrispondente al numero di serie ed
-     * episodio nell'array; es: s01e01
-     *
+    /**cerca la posizione della stringa corrispondente al numero di serie ed episodio
+     * nell'array; es: s01e01
      * @param _array
      * @return restituisce la posizione se l'ha trovato, altrimenti -1
      */
@@ -265,8 +233,7 @@ public class Kernel {
         return pos;
     }
 
-    /**
-     * cerca il numero della serie nel testo
+    /**cerca il numero della serie nel testo
      *
      * @param text
      * @return numero serie/stagione
@@ -288,11 +255,9 @@ public class Kernel {
         return number;
     }
 
-    /**
-     * cerca la versione/qualità del sub/video
+    /**cerca la versione/qualità del sub/video
      *
-     * @param text
-     *            testo da confrontare
+     * @param text testo da confrontare
      * @return versione video/sub
      */
     private String searchVersion(String text) {
@@ -303,49 +268,36 @@ public class Kernel {
                 break;
             }
         }
-        if (version == null) {
-            version = Quality.NORMAL.toString();
-        }
+        if (version == null)
+            version = Quality.NORMAL.toString();        
         return version;
     }
-
-    // TODO: non usata, se sarà implementata, cambiare la parte di stampa
-    /**
-     * effetta la stampa dei file con l'estensione e la directory in cui cercare
+    //TODO: non usata, se sarà implementata, cambiare la parte di stampa
+    /**effuetta la stampa dei file con l'estensione e la directory in cui cercare
      *
-     * @param dir
-     *            directory su cui effettuare la ricerca
-     * @param ext
-     *            estensione dei file da cercare
+     * @param dir directory su cui effettuare la ricerca
+     * @param ext estensione dei file da cercare
      */
     private void listDir(String dir, String ext) {
-        String[] list = new File(dir).list(new ExtensionFilter(ext)); // Get
-        // list
-        // of
-        // names
-        Arrays.sort(list); // Sort it (Data Structuring chapter))
+        // Get list of names
+        String[] list = new File(dir).list(new ExtensionFilter(ext));
+        // Sort it (Data Structuring chapter))
+        Arrays.sort(list); 
         for (int i = 0; i < list.length; i++) {
-            System.out.println(list[i]); // Print the list
+            System.out.println(list[i]);
         }
     }
 
-    /**
-     * testa la connessione a samba
+    /**testa la connessione a samba
      *
-     * @param ip
-     *            ip della macchina samba
-     * @param dir
-     *            directory condivisa
-     * @param dom
-     *            dominio
-     * @param user
-     *            utente
-     * @param pwd
-     *            password
+     * @param ip ip della macchina samba
+     * @param dir directory condivisa
+     * @param dom dominio
+     * @param user utente
+     * @param pwd password
      * @return true se positivo, false altrimenti
      */
-    public boolean testSamba(String ip, String dir, String dom, String user,
-            String pwd) {
+    public boolean testSamba(String ip, String dir, String dom, String user, String pwd) {
         boolean test = false;
         Samba.resetInstance();
         Samba s = Samba.getIstance(ip, dir, dom, user, pwd);
@@ -365,8 +317,7 @@ public class Kernel {
         SyntheticaLookAndFeel laf = null;
         String lf = prop.getApplicationLookAndFeel();
         try {
-            if (lf == null || lf.equalsIgnoreCase("")
-                    || lf.equalsIgnoreCase("standard")) {
+            if (lf == null || lf.equalsIgnoreCase("") || lf.equalsIgnoreCase("standard")) {
                 laf = new SyntheticaStandardLookAndFeel();
             } else if (lf.equalsIgnoreCase("blackmoon")) {
                 laf = new SyntheticaBlackMoonLookAndFeel();
@@ -394,8 +345,7 @@ public class Kernel {
 
     }
 
-    /**
-     * chiude l'applicazione salvando la data nel settings
+    /**chiude l'applicazione salvando la data nel settings
      *
      * @param data
      */
@@ -407,8 +357,7 @@ public class Kernel {
         System.exit(0);
     }
 
-    /**
-     * Restituisce i nodi per la jtree Settings
+    /**Restituisce i nodi per la jtree Settings
      *
      * @return nodi jtree
      */
@@ -430,18 +379,14 @@ public class Kernel {
     /** Scrive le proprietà dell'applicazione nel file properties */
     public void writeProp() {
         prop.writeGeneralSettings();
-        if (prop.hasItasaOption()) {
+        if (prop.hasItasaOption())
             prop.writeItasaSettings();
-        }
-        if (prop.hasSubsfactoryOption()) {
+        if (prop.hasSubsfactoryOption())
             prop.writeSubsfactorySettings();
-        }
-        if (prop.hasTorrentOption()) {
+        if (prop.hasTorrentOption())
             prop.writeTorrentSettings();
-        }
-        if (prop.isApplicationFirstTimeUsed()) {
+        if (prop.isApplicationFirstTimeUsed())
             prop.writeApplicationFirstTimeUsedFalse();
-        }
     }
 
     /** Scrive l'ultima data d'aggiornamento nel file properties */
@@ -449,24 +394,19 @@ public class Kernel {
         prop.writeOnlyLastDate();
     }
 
-    /**
-     * Restituisce l'arraylist contenente i feed rss
+    /**Restituisce l'arraylist contenente i feed rss
      *
-     * @param urlRss
-     *            url rss da analizzare
-     * @param data
-     *            data da confrontare
-     * @param from
-     *            provenienza
-     * @param download
-     *            download automatico
+     * @param urlRss url rss da analizzare
+     * @param data data da confrontare
+     * @param from provenienza
+     * @param download download automatico
      * @return arraylist di feed(array di oggetti)
      */
-    private ArrayList<Object[]> getFeedRss(String urlRss, String data,
-            String from, boolean download) {
+    private ArrayList<Object[]> getFeedRss(String urlRss, String data, String from,
+            boolean download) {
         RssParser rss = null;
         ArrayList<Object[]> matrice = null;
-        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getHttpTimeout()) * 1000;
+        int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
         Http http = new Http(connection_Timeout);
         try {
             InputStream ist = http.getStreamRss(urlRss);
@@ -484,30 +424,24 @@ public class Kernel {
                         if (confronta.before(Convert.stringToDate(date_matrix))) {
                             if (continua) {
                                 if (from.equals(ITASA)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_ITASA);
-                                } else if (from.equals(MYITASA)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                } else if (from.equals(MYITASA) && !prop.isAutoDownloadMyItasa()) {
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_MYITASA);
                                 } else if (from.equals(SUBSF)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_SUBSF);
                                 } else if (from.equals(EZTV)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_TORRENT1);
                                 } else if (from.equals(BTCHAT)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_TORRENT2);
                                 }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2]))
-                                    && download) {
+                            if ((isNotStagione((String) matrice.get(i)[2])) && download) {
                                 downItasaAuto(matrice.get(i)[0]);
                             }
                         } else {
@@ -538,51 +472,47 @@ public class Kernel {
         }
     }
 
-    /**
-     * esegue gli rss sotto timer
+    /**esegue gli rss sotto timer
      *
-     * @param delay
-     *            tempo in secondi per il timer
+     * @param delay tempo in secondi per il timer
      */
     private void runTimer(int delay) {
         timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run() {
-                boolean icontray = false;
-                // String data = prop.getLastDate();
-                prop.setLastDateTimeRefresh(Convert.actualTime());
-                if (runItasa(false)) {
-                    icontray = true;
-                }
-                if (runSubsfactory(false)) {
-                    icontray = true;
-                }
-                if (runTorrent(false)) {
-                    icontray = true;
-                }
-                if ((icontray) && (prop.isEnabledAudioAdvisor())) {
-                    try {
-                        AudioPlay.playWav();
-                    } catch (UnsupportedAudioFileException ex) {
-                        error.launch(ex, getClass());
-                    } catch (LineUnavailableException ex) {
-                        error.launch(ex, getClass());
-                    } catch (IOException ex) {
-                        error.launch(ex, getClass(), null);
+        try {
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    boolean icontray = false;
+                    // String data = prop.getLastDate();
+                    prop.setLastDateTimeRefresh(Convert.actualTime());
+                    if (runItasa(false))
+                        icontray = true;
+                    if (runSubsfactory(false))
+                        icontray = true;
+                    if (runTorrent(false))
+                        icontray = true;
+                    if ((icontray) && (prop.isEnabledAudioAdvisor())) {
+                        try {
+                            AudioPlay.playWav();
+                        } catch (UnsupportedAudioFileException ex) {
+                            error.launch(ex, getClass());
+                        } catch (LineUnavailableException ex) {
+                            error.launch(ex, getClass());
+                        } catch (IOException ex) {
+                            error.launch(ex, getClass(), null);
+                        }
                     }
-                }
-                fireNewJFrameEvent(icontray, prop.getLastDateTimeRefresh());
-            }// end run
-        }, delay, delay);
+                    fireNewJFrameEvent(icontray, prop.getLastDateTimeRefresh());
+                }//end run
+            }, delay, delay);
+        } catch (IllegalStateException ex) {
+            error.launch(ex, getClass());
+        }
     }
 
-    /**
-     * Esegue la parte rss itasa
+    /**Esegue la parte rss itasa
      *
-     * @param first
-     *            primo lancio
+     * @param first primo lancio
      * @return true se ci sono nuovi feed, false altrimenti
      */
     private boolean runItasa(boolean first) {
@@ -590,29 +520,23 @@ public class Kernel {
         if (prop.hasItasaOption()) {
             ArrayList<Object[]> feedIta, feedMyita;
             if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
-                if (first) {
-                    feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa,
-                            null, false);
-                } else {
-                    feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa,
-                            ITASA, false);
-                }
+                if (first)
+                    feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, null, false);
+                else
+                    feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA, false);
                 if ((feedIta != null) && (feedIta.size() > 0)) {
-                    if (!first) {
+                    if (!first)
                         status = true;
-                    }
                     lastItasa = (String) feedIta.get(0)[1];
                     fireTableRssEvent(feedIta, ITASA);
                 }
             }
             if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
-                if (first) {
+                if (first)
+                    feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa, null, false);
+                else
                     feedMyita = getFeedRss(prop.getMyitasaFeedURL(),
-                            lastMyItasa, null, false);
-                } else {
-                    feedMyita = getFeedRss(prop.getMyitasaFeedURL(),
-                            lastMyItasa, MYITASA, prop.isAutoDownloadMyItasa());
-                }
+                            lastMyItasa, MYITASA, prop.isAutoDownloadMyItasa());                
                 if ((feedMyita != null) && (feedMyita.size() > 0)) {
                     if (!first) {
                         status = true;
@@ -625,25 +549,20 @@ public class Kernel {
         return status;
     }
 
-    /**
-     * Esegue la parte rss subsfactory
+    /**Esegue la parte rss subsfactory
      *
-     * @param first
-     *            primo lancio
+     * @param first primo lancio
      * @return true se ci sono nuovi feed, false altrimenti
      */
     private boolean runSubsfactory(boolean first) {
         boolean status = false;
-        if ((prop.hasSubsfactoryOption())
-                && (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL()))) {
+        if ((prop.hasSubsfactoryOption()) &&
+                (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL()))) {
             ArrayList<Object[]> feed;
-            if (first) {
-                feed = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf,
-                        null, false);
-            } else {
-                feed = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf,
-                        SUBSF, false);
-            }
+            if (first)
+                feed = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf, null, false);
+            else
+                feed = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf, SUBSF, false);
             if ((feed != null) && (feed.size() > 0)) {
                 if (!first) {
                     status = true;
@@ -655,11 +574,9 @@ public class Kernel {
         return status;
     }
 
-    /**
-     * Esegue la parte rss torrent
+    /**Esegue la parte rss torrent
      *
-     * @param first
-     *            primo lancio
+     * @param first primo lancio
      * @return true se ci sono nuovi feed, false altrimenti
      */
     private boolean runTorrent(boolean first) {
@@ -675,16 +592,14 @@ public class Kernel {
                         false);
             }
             if ((feedEz != null) && (feedEz.size() > 0)) {
-                if (!first) {
+                if (!first)
                     status = true;
-                }
                 lastEztv = (String) feedEz.get(0)[1];
                 fireTableRssEvent(feedEz, EZTV);
             }
             if ((feedBt != null) && (feedBt.size() > 0)) {
-                if (!first) {
+                if (!first)
                     status = true;
-                }
                 lastBtchat = (String) feedBt.get(0)[1];
                 fireTableRssEvent(feedBt, BTCHAT);
             }
@@ -692,10 +607,7 @@ public class Kernel {
         return status;
     }
 
-    /**
-     * Interrompe il timer attuale e ne fa partire uno nuovo col nuovo
-     * intervallo
-     */
+    /**Interrompe il timer attuale e ne fa partire uno nuovo col nuovo intervallo*/
     public void stopAndRestartTimer() {
         timer.cancel();
         timer.purge();
@@ -703,11 +615,9 @@ public class Kernel {
         runTimer(delay);
     }
 
-    /**
-     * Sostituisce la treemap delle regole con quella creata dal mediator
+    /**Sostituisce la treemap delle regole con quella creata dal mediator
      *
-     * @param temp
-     *            treepam regole
+     * @param temp treepam regole
      */
     public void saveMap(TreeMap<FilterSub, String> temp) {
         try {
@@ -719,8 +629,7 @@ public class Kernel {
         }
     }
 
-    /**
-     * converte la treemap delle regole in arraylist di String[]
+    /**converte la treemap delle regole in arraylist di String[]
      *
      * @return arraylist regole
      */
@@ -745,9 +654,8 @@ public class Kernel {
             Xml x = new Xml();
             try {
                 mapRole = x.initializeReader();
-                if (mapRole != null) {
+                if (mapRole != null)
                     fireTableXmlEvent(convertTreemapToArraylist());
-                }
             } catch (JDOMException ex) {
                 error.launch(ex, getClass());
             } catch (IOException ex) {
@@ -756,11 +664,9 @@ public class Kernel {
         }
     }
 
-    /**
-     * Verifica se il nome non presenta la parola "stagione"
+    /**Verifica se il nome non presenta la parola "stagione"
      *
-     * @param name
-     *            nome da controllare
+     * @param name nome da controllare
      * @return risultato controllo
      */
     private boolean isNotStagione(String name) {
@@ -777,8 +683,7 @@ public class Kernel {
         return check;
     }
 
-    /**
-     * restituice l'array con le informazioni sulle versioni video
+    /**restituice l'array con le informazioni sulle versioni video
      *
      * @return array versioni video
      */
@@ -802,10 +707,7 @@ public class Kernel {
         return id;
     }
 
-    /**
-     * Stampa lo stato del download redirectory coi download in corso o nessun
-     * download
-     */
+    /**Stampa lo stato del download redirectory coi download in corso o nessun download*/
     public void synoStatus() {
         String url = "http://" + prop.getCifsShareLocation()
                 + ":5000/download/download_redirector.cgi";
@@ -815,7 +717,8 @@ public class Kernel {
         String dss = "Download Station Synology: ";
         try {
             Http http = new Http();
-            String synoID = http.synoConnectGetID(url, prop.getCifsShareUsername(), prop.getCifsSharePassword());
+            String synoID = http.synoConnectGetID(url, prop.getCifsShareUsername(),
+                    prop.getCifsSharePassword());
             http.closeClient();
             if (Lang.verifyTextNotNull(synoID)) {
                 http = new Http();
@@ -853,7 +756,9 @@ public class Kernel {
 
     /** effettua la move video sul synology */
     public void synoMoveVideo() {
-        Samba s = Samba.getIstance(prop.getCifsShareLocation(), prop.getCifsSharePath(), prop.getCifsShareDomain(), prop.getCifsShareUsername(), prop.getCifsSharePassword());
+        Samba s = Samba.getIstance(prop.getCifsShareLocation(), prop.getCifsSharePath(), 
+                prop.getCifsShareDomain(), prop.getCifsShareUsername(),
+                prop.getCifsSharePassword());
         try {
             analyzeVideoSamba(s, s.listDir(null, "avi"));
             analyzeVideoSamba(s, s.listDir(null, "mkv"));
@@ -864,14 +769,11 @@ public class Kernel {
         }
     }
 
-    /**
-     * Analizza i nomi dei file e se per ciascuno trova una corrispondenza tra
+    /**Analizza i nomi dei file e se per ciascuno trova una corrispondenza tra
      * le regole, sposta il file nel path opportuno
      *
-     * @param s
-     *            istanza samba
-     * @param fileList
-     *            array di nomi di file
+     * @param s istanza samba
+     * @param fileList array di nomi di file
      */
     private void analyzeVideoSamba(Samba s, String[] fileList) {
         for (int i = 0; i < fileList.length; i++) {
@@ -913,7 +815,8 @@ public class Kernel {
         String url = "http://" + prop.getCifsShareLocation()
                 + ":5000/download/download_redirector.cgi";
         try {
-            String synoID = http.synoConnectGetID(url, prop.getCifsShareUsername(), prop.getCifsSharePassword());
+            String synoID = http.synoConnectGetID(url, prop.getCifsShareUsername(),
+                    prop.getCifsSharePassword());
             http.closeClient();
             if (Lang.verifyTextNotNull(synoID)) {
                 for (int i = 0; i < link.size(); i++) {
@@ -936,7 +839,8 @@ public class Kernel {
         String url = "http://" + prop.getCifsShareLocation()
                 + ":5000/download/download_redirector.cgi";
         try {
-            String synoID = http.synoConnectGetID(url, prop.getCifsShareUsername(), prop.getCifsSharePassword());
+            String synoID = http.synoConnectGetID(url, prop.getCifsShareUsername(),
+                    prop.getCifsSharePassword());
             http.closeClient();
             if (Lang.verifyTextNotNull(synoID)) {
                 http = new Http();
@@ -1088,16 +992,15 @@ public class Kernel {
     private synchronized void fireNewJFrameEvent(boolean _icontray, final String _data) {
         final boolean icontray = _icontray;
         final String data = _data;
-
         /*
          * Nota: E' stato necessario utilizzare il metodo syncExec perchè l'interazione con
          * il thread UI di SWT che gestisce la SysTray può avvenire solo in questo modo.
-         * In caso contrario l'azione su oggetti SWT che vivono in uno specifico thread (UI thread)
-         * da un altro thread come in questo caso causa una SWTException: Invalid Thread Access.
+         * In caso contrario l'azione su oggetti SWT che vivono in uno specifico thread 
+         * (UI thread) da un altro thread come in questo caso causa una SWTException:
+         * Invalid Thread Access.
          */
 
         Display.getDefault().syncExec(new Runnable() {
-
             @Override
             public void run() {
                 MyJFrameEvent event = new MyJFrameEvent(this, icontray, data);
