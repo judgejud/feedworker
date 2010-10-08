@@ -358,25 +358,6 @@ public class Kernel {
         System.exit(0);
     }
 
-    /**Restituisce i nodi per la jtree Settings
-     *
-     * @return nodi jtree
-     */
-    public DefaultMutableTreeNode getSettingsNode() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
-        root.add(new DefaultMutableTreeNode("General"));
-        if (prop.hasItasaOption()) {
-            root.add(new DefaultMutableTreeNode("Itasa"));
-        }
-        if (prop.hasSubsfactoryOption()) {
-            root.add(new DefaultMutableTreeNode("Subsfactory"));
-        }
-        if (prop.hasTorrentOption()) {
-            root.add(new DefaultMutableTreeNode("Torrent"));
-        }
-        return root;
-    }
-
     /** Scrive le proprietà dell'applicazione nel file properties */
     public void writeProp() {
         prop.writeGeneralSettings();
@@ -452,6 +433,8 @@ public class Kernel {
             error.launch(ex, getClass());
         } catch (FeedException ex) {
             error.launch(ex, getClass(), from);
+        } catch (IllegalArgumentException ex) {
+            error.launch(ex, getClass());
         } catch (IOException ex) {
             error.launch(ex, getClass(), from);
         }

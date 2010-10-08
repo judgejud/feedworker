@@ -182,8 +182,20 @@ public class Mediator {
         addMyJFrameEventListener(listener);
     }
 
+    /**Restituisce i nodi per la jtree Settings
+     *
+     * @return nodi jtree
+     */
     DefaultMutableTreeNode getTreeNode(){
-        return core.getSettingsNode();
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
+        root.add(new DefaultMutableTreeNode("General"));
+        if (prop.hasItasaOption())
+            root.add(new DefaultMutableTreeNode("Itasa"));
+        if (prop.hasSubsfactoryOption())
+            root.add(new DefaultMutableTreeNode("Subsfactory"));
+        if (prop.hasTorrentOption())
+            root.add(new DefaultMutableTreeNode("Torrent"));
+        return root;
     }
     
     void restartRss(){

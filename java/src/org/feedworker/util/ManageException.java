@@ -75,9 +75,9 @@ public class ManageException{
         printAlert("il link inserito non corrisponde a feed RSS");
         printError(ex, c);
     }
-    /**Analizza l'errore IllegalArgumentException
+    /**Analizza l'errore IllegalStateException
      *
-     * @param ex IllegalArgumentException
+     * @param ex IllegalStateException
      * @param c classe di provenienza
      */
     public void launch(IllegalStateException ex, Class c){
