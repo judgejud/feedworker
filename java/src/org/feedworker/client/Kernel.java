@@ -464,7 +464,7 @@ public class Kernel {
      */
     private ArrayList<Object[]> getFeedRss(String urlRss, String data,
             String from, boolean download) {
-        RSSParser rss = null;
+        RssParser rss = null;
         ArrayList<Object[]> matrice = null;
         int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getHttpTimeout()) * 1000;
         Http http = new Http(connection_Timeout);
@@ -473,7 +473,7 @@ public class Kernel {
             if (ist != null) {
                 File ft = File.createTempFile("rss", ".xml");
                 downloadSingle(ist, ft);
-                rss = new RSSParser(ft);
+                rss = new RssParser(ft);
                 matrice = rss.read();
                 ft.delete();
                 boolean continua = true;
@@ -562,7 +562,7 @@ public class Kernel {
                 if (runTorrent(false)) {
                     icontray = true;
                 }
-                if ((icontray) && (prop.enabledAudioAdvisor())) {
+                if ((icontray) && (prop.isEnabledAudioAdvisor())) {
                     try {
                         AudioPlay.playWav();
                     } catch (UnsupportedAudioFileException ex) {
@@ -611,7 +611,7 @@ public class Kernel {
                             lastMyItasa, null, false);
                 } else {
                     feedMyita = getFeedRss(prop.getMyitasaFeedURL(),
-                            lastMyItasa, MYITASA, prop.isAutoDownload());
+                            lastMyItasa, MYITASA, prop.isAutoDownloadMyItasa());
                 }
                 if ((feedMyita != null) && (feedMyita.size() > 0)) {
                     if (!first) {
@@ -741,7 +741,7 @@ public class Kernel {
 
     /** Carica l'xml delle regole */
     public void loadXml() {
-        if (prop.enabledCustomDestinationFolder()) {
+        if (prop.isEnabledCustomDestinationFolder()) {
             Xml x = new Xml();
             try {
                 mapRole = x.initializeReader();

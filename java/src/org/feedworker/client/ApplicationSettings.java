@@ -22,15 +22,15 @@ public class ApplicationSettings {
             + "property";
     private final String ENCRYPTION_VALUE_PWD = FeedWorkerClient.APPLICATION_NAME
             + "value";
-    private String itasaFeedURL, myitasaFeedURL, myitasaUsername,
-            myitasaPassword, subtitleDestinationFolder, refreshInterval,
+    private String itasaFeedURL, myitasaFeedURL, itasaUsername,
+            itasaPassword, subtitleDestinationFolder, refreshInterval,
             lastDateTimeRefresh, applicationLookAndFeel,
             torrentDestinationFolder, cifsShareLocation, cifsSharePath,
             cifsShareUsername, cifsSharePassword, cifsShareDomain,
-            subsfactoryFeedURL, httpTimeout, applicationBuild, applicationFont;
-    private boolean hasSubsfactoryOption, hasTorrentOption, hasItasaOption,
-            isAutoDownload, enableAudioAdvisor, isApplicationFirstTimeUsed,
-            isLocalFolder, enableIconizedRun, enableRunAtStartup,
+            subsfactoryFeedURL, httpTimeout;
+    private boolean subsfactoryOption, torrentOption, itasaOption,
+            autoDownloadMyItasa, enableAudioAdvisor, applicationFirstTimeUsed,
+            localFolder, enableIconizedRun, enableRunAtStartup,
             enableCustomDestinationFolder;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
@@ -39,33 +39,30 @@ public class ApplicationSettings {
     /** Costruttore privato */
     private ApplicationSettings() {
         properties = new Properties();
-
         try {
             propertyEncrypter = new DesEncrypter(ENCRYPTION_PROPERTY_PWD);
             valueEncrypter = new DesEncrypter(ENCRYPTION_VALUE_PWD);
-        } catch (GeneralSecurityException e) {
-            error.launch(e, getClass());
-        }
 
-        try {
             if (SETTINGS_FILE.exists()) {
                 // Read properties file.
                 properties.load(new FileInputStream(SETTINGS_FILE));
 
                 setItasaFeedURL(getDecryptedValue("ITASA_FEED_URL"));
                 setMyitasaFeedURL(getDecryptedValue("MYITASA_FEED_URL"));
-                setMyitasaUsername(getDecryptedValue("MYITASA_USERNAME"));
-                setMyitasaPassword(getDecryptedValue("MYITASA_PASSWORD"));
+                setItasaUsername(getDecryptedValue("ITASA_USERNAME"));
+                setItasaPassword(getDecryptedValue("ITASA_PASSWORD"));
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
                 setSubtitleDestinationFolder(getDecryptedValue("SUBTITLE_DESTINATION_FOLDER"));
                 setSubfactoryOption(Boolean.parseBoolean(getDecryptedValue("SUBSFACTORY")));
                 setRefreshInterval(getDecryptedValue("REFRESH_INTERVAL"));
-                setAutoDownload(Boolean.parseBoolean(getDecryptedValue("IS_AUTO_DOWNLOAD")));
+                setAutoDownloadMyItasa(Boolean.parseBoolean(
+                        getDecryptedValue("IS_AUTO_DOWNLOAD_MYITASA")));
                 setLastDateTimeRefresh(getDecryptedValue("LAST_DATETIME_REFRESH"));
                 setApplicationLookAndFeel(getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
-                enableAudioAdvisor(Boolean.parseBoolean(getDecryptedValue("ENABLE_AUDIO_ADVISOR")));
+                setEnableAudioAdvisor(Boolean.parseBoolean(
+                        getDecryptedValue("ENABLE_AUDIO_ADVISOR")));
                 setTorrentOption(Boolean.parseBoolean(getDecryptedValue("TORRENT")));
-                isApplicationFirstTimeUsed = Boolean.parseBoolean(
+                applicationFirstTimeUsed = Boolean.parseBoolean(
                         getDecryptedValue("IS_APPLICATION_FIRST_TIME_USED"));
                 setItasaOption(Boolean.parseBoolean(getDecryptedValue("ITALIANSUBS")));
                 localFolder(Boolean.parseBoolean(getDecryptedValue("IS_LOCAL_FOLDER")));
@@ -76,13 +73,16 @@ public class ApplicationSettings {
                 setCifsSharePassword(getDecryptedValue("CIFS_SHARE_PASSWORD"));
                 setCifsShareUsername(getDecryptedValue("CIFS_SHARE_USERNAME"));
                 setHttpTimeout(getDecryptedValue("HTTP_TIMEOUT"));
-                setApplicationFont(getDecryptedValue("APPLICATION_FONT"));
-                enableCustomDestinationFolder(Boolean.parseBoolean(
+                setEnableCustomDestinationFolder(Boolean.parseBoolean(
                         getDecryptedValue("ENABLE_CUSTOM_DESTINATION_FOLDER")));
+                setEnableIconizedRun(Boolean.parseBoolean(
+                        getDecryptedValue("ENABLE_ICONIZED_RUN")));
             } else {
                 loadDefaultSettings();
                 storeSettings();
             }
+        } catch (GeneralSecurityException e) {
+            error.launch(e, getClass());
         } catch (IOException e) {
             error.launch(e, getClass(), null);
         }
@@ -120,7 +120,7 @@ public class ApplicationSettings {
             propertiesCrypting("REFRESH_INTERVAL", refreshInterval);
             propertiesCrypting("APPLICATION_LOOK_AND_FEEL", applicationLookAndFeel);
             propertiesCrypting("ENABLE_AUDIO_ADVISOR", enableAudioAdvisor);
-            propertiesCrypting("IS_LOCAL_FOLDER", isLocalFolder);
+            propertiesCrypting("IS_LOCAL_FOLDER", localFolder);
             propertiesCrypting("CIFS_SHARE_PATH", cifsSharePath);
             propertiesCrypting("CIFS_SHARE_DOMAIN", cifsShareDomain);
             propertiesCrypting("CIFS_SHARE_IP", cifsShareLocation);
@@ -129,8 +129,8 @@ public class ApplicationSettings {
             propertiesCrypting("HTTP_TIMEOUT", httpTimeout);
             propertiesCrypting("ENABLE_CUSTOM_DESTINATION_FOLDER",
                     enableCustomDestinationFolder);
-            // properties.setProperty(desProp.encrypt("FONT"),
-            // desValue.encrypt(font));
+            propertiesCrypting("ENABLE_ICONIZED_RUN", enableIconizedRun);
+
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -144,10 +144,9 @@ public class ApplicationSettings {
         try {
             propertiesCrypting("ITASA_FEED_URL", itasaFeedURL);
             propertiesCrypting("MYITASA_FEED_URL" , myitasaFeedURL);
-            propertiesCrypting("MYITASA_USERNAME", myitasaUsername);
-            propertiesCrypting("MYITASA_PASSWORD", myitasaPassword);
-            propertiesCrypting("IS_AUTO_DOWNLOAD", isAutoDownload);
-
+            propertiesCrypting("ITASA_USERNAME", itasaUsername);
+            propertiesCrypting("ITASA_PASSWORD", itasaPassword);
+            propertiesCrypting("IS_AUTO_DOWNLOAD_MYITASA", autoDownloadMyItasa);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -179,9 +178,9 @@ public class ApplicationSettings {
     }
 
     void writeApplicationFirstTimeUsedFalse() {
-        isApplicationFirstTimeUsed = false;
+        applicationFirstTimeUsed = false;
         try {
-            propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED", isApplicationFirstTimeUsed);
+            propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED", applicationFirstTimeUsed);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -192,7 +191,6 @@ public class ApplicationSettings {
 
     private void propertiesCrypting(String property, boolean value)
             throws GeneralSecurityException, IOException{
-
         properties.setProperty(propertyEncrypter.encrypt(property),
                     valueEncrypter.encrypt(Boolean.toString(value)));
     }
@@ -210,24 +208,26 @@ public class ApplicationSettings {
     }
 
     private void loadDefaultSettings() {
-        hasItasaOption = true;
-        hasSubsfactoryOption = true;
-        hasTorrentOption = true;
-        isApplicationFirstTimeUsed = true;
+        itasaOption = true;
+        subsfactoryOption = true;
+        torrentOption = true;
+        applicationFirstTimeUsed = true;
         applicationLookAndFeel = "standard";
+        /*
         applicationBuild = "121";
 
         try {
-            propertiesCrypting("ITALIANSUBS", hasItasaOption);
-            propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED", isApplicationFirstTimeUsed);
-            propertiesCrypting("TORRENT", hasTorrentOption);
-            propertiesCrypting("SUBSFACTORY", hasSubsfactoryOption);
+            propertiesCrypting("ITALIANSUBS", itasaOption);
+            propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED", applicationFirstTimeUsed);
+            propertiesCrypting("TORRENT", torrentOption);
+            propertiesCrypting("SUBSFACTORY", subsfactoryOption);
             propertiesCrypting("BUILD",applicationBuild);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
             error.launch(e, getClass(), null);
         }
+         */
     }
 
     /** scrive solo l'ultima data dell'aggiornamento rss */
@@ -242,28 +242,28 @@ public class ApplicationSettings {
         }
     }// end writeOnlyLastDate
 
-    public boolean enabledAudioAdvisor() {
+    public boolean isEnabledAudioAdvisor() {
         return enableAudioAdvisor;
     }
 
-    public void enableAudioAdvisor(boolean enableAudioAdvisor) {
+    public void setEnableAudioAdvisor(boolean enableAudioAdvisor) {
         this.enableAudioAdvisor = enableAudioAdvisor;
     }
 
     public boolean hasItasaOption() {
-        return hasItasaOption;
+        return itasaOption;
     }
 
     private void setItasaOption(boolean hasItasaOption) {
-        this.hasItasaOption = hasItasaOption;
+        this.itasaOption = hasItasaOption;
     }
 
     public boolean hasTorrentOption() {
-        return hasTorrentOption;
+        return torrentOption;
     }
 
     private void setTorrentOption(boolean hasTorrentOption) {
-        this.hasTorrentOption = hasTorrentOption;
+        this.torrentOption = hasTorrentOption;
     }
 
     public String getLastDateTimeRefresh() {
@@ -274,24 +274,24 @@ public class ApplicationSettings {
         this.lastDateTimeRefresh = lastDateTimeRefresh;
     }
 
-    public String getMyitasaUsername() {
-        if (myitasaUsername == null)
-            myitasaUsername = "";        
-        return myitasaUsername;
+    public String getItasaUsername() {
+        if (itasaUsername == null)
+            itasaUsername = "";
+        return itasaUsername;
     }
 
-    public void setMyitasaUsername(String myitasaUsername) {
-        this.myitasaUsername = myitasaUsername;
+    public void setItasaUsername(String itasaUsername) {
+        this.itasaUsername = itasaUsername;
     }
 
-    public String getMyitasaPassword() {
-        if (myitasaPassword == null)
-            myitasaPassword = "";        
-        return myitasaPassword;
+    public String getItasaPassword() {
+        if (itasaPassword == null)
+            itasaPassword = "";
+        return itasaPassword;
     }
 
-    public void setMyitasaPassword(String myitasaPassword) {
-        this.myitasaPassword = myitasaPassword;
+    public void setItasaPassword(String itasaPassword) {
+        this.itasaPassword = itasaPassword;
     }
 
     public String getItasaFeedURL() {
@@ -324,12 +324,12 @@ public class ApplicationSettings {
         this.subsfactoryFeedURL = subsfactoryFeedURL;
     }
 
-    public boolean isAutoDownload() {
-        return isAutoDownload;
+    public boolean isAutoDownloadMyItasa() {
+        return autoDownloadMyItasa;
     }
 
-    public void setAutoDownload(boolean isAutoDownload) {
-        this.isAutoDownload = isAutoDownload;
+    public void setAutoDownloadMyItasa(boolean isAutoDownload) {
+        this.autoDownloadMyItasa = isAutoDownload;
     }
 
     public String getRefreshInterval() {
@@ -349,11 +349,11 @@ public class ApplicationSettings {
     }
 
     public boolean hasSubsfactoryOption() {
-        return hasSubsfactoryOption;
+        return subsfactoryOption;
     }
 
     private void setSubfactoryOption(boolean hasSubsfactoryOption) {
-        this.hasSubsfactoryOption = hasSubsfactoryOption;
+        this.subsfactoryOption = hasSubsfactoryOption;
     }
 
     public String getSettingsFilename() {
@@ -377,7 +377,7 @@ public class ApplicationSettings {
     }
 
     public boolean isApplicationFirstTimeUsed() {
-        return isApplicationFirstTimeUsed;
+        return applicationFirstTimeUsed;
     }
 
     public String getCifsSharePath() {
@@ -421,11 +421,11 @@ public class ApplicationSettings {
     }
 
     public boolean isLocalFolder() {
-        return isLocalFolder;
+        return localFolder;
     }
 
     public void localFolder(boolean isLocalFolder) {
-        this.isLocalFolder = isLocalFolder;
+        this.localFolder = isLocalFolder;
     }
 
     public String getHttpTimeout() {
@@ -436,36 +436,27 @@ public class ApplicationSettings {
         this.httpTimeout = httpTimeout;
     }
 
-    public String getApplicationFont() {
-        return applicationFont;
-    }
-
-    public void setApplicationFont(String applicationFont) {
-        this.applicationFont = applicationFont;
-    }
-
-    public boolean enabledCustomDestinationFolder() {
+    public boolean isEnabledCustomDestinationFolder() {
         return enableCustomDestinationFolder;
     }
 
-    public void enableCustomDestinationFolder(
-            boolean enableCustomDestinationFolder) {
+    public void setEnableCustomDestinationFolder(boolean enableCustomDestinationFolder) {
         this.enableCustomDestinationFolder = enableCustomDestinationFolder;
     }
 
-    public boolean enabledIconizedRun() {
+    public boolean isEnabledIconizedRun() {
         return enableIconizedRun;
     }
 
-    public void enableIconizedRun(boolean enableIconizedRun) {
+    public void setEnableIconizedRun(boolean enableIconizedRun) {
         this.enableIconizedRun = enableIconizedRun;
     }
 
-    public boolean enabledRunAtStartup() {
+    public boolean isEnabledRunAtStartup() {
         return enableRunAtStartup;
     }
 
-    public void enableRunAtStartup(boolean enableRunAtStartup) {
+    public void setEnableRunAtStartup(boolean enableRunAtStartup) {
         this.enableRunAtStartup = enableRunAtStartup;
     }
 }// end class
