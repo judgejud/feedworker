@@ -28,11 +28,10 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-//IMPORT JRSS2SUB
+//IMPORT FEEDWORKER
 import org.feedworker.client.ApplicationSettings;
-//IMPORT MYUTILS
-import org.jfacility.Awt;
-import org.jfacility.Swing;
+//IMPORT JFACILITY
+import org.jfacility.swing.Swing;
 /**
  *
  * @author luca
@@ -48,7 +47,7 @@ public class paneSetting extends JPanel {
     private JComboBox jcbMinuti, jcbLookFeel, jcbTimeout, jcbFont;
     private JLabel jlDataAggiornamento;
     private JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
-    private JCheckBox jcbAudio, jcbAdvancedDest;
+    private JCheckBox jcbAudio, jcbAdvancedDest, jcbRunIconized, jcbRunAtStartup;
     private JButton jbDestSub, jbSaveSettings, jbAnnullaSettings, jbDestTorrent;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir, jtfSambaUser,
             jtfRssItasa, jtfRssMyItasa, jtfRssSubsf, jtfDestTorrent, jtfItasaUser;
@@ -163,7 +162,7 @@ public class paneSetting extends JPanel {
         gbc.gridwidth = 1;
 
         DefaultComboBoxModel dcbmM = new DefaultComboBoxModel(
-                new String[]{"5", "10", "20", "30", "40", "50", "60"});
+                new String[]{"3", "6", "10", "15", "20", "30", "45"});
         jcbMinuti = new JComboBox(dcbmM);
         jcbMinuti.setSelectedIndex(2);
         jpSettingGlobal.add(jcbMinuti, gbc);
@@ -325,6 +324,14 @@ public class paneSetting extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = ++y;
+        jpSettingGlobal.add(new JLabel("Avvio iconizzato"), gbc);
+
+        gbc.gridx = 2;
+        jcbRunIconized = new JCheckBox("Abilitato");
+        jpSettingGlobal.add(jcbRunIconized, gbc);
+        /*
+        gbc.gridx = 0;
+        gbc.gridy = ++y;
         gbc.gridwidth = 2;
         JLabel jlFont = new JLabel("Font da usare");
         jpSettingGlobal.add(jlFont, gbc);
@@ -334,7 +341,7 @@ public class paneSetting extends JPanel {
         jcbFont = new JComboBox(dcbmF);
         jcbFont.setEnabled(false);
         jpSettingGlobal.add(jcbFont, gbc);
-
+*/
         bgLocalSamba = new ButtonGroup();
         bgLocalSamba.add(jrbDirLocal);
         bgLocalSamba.add(jrbDirSamba);
@@ -555,7 +562,7 @@ public class paneSetting extends JPanel {
         jtfDestSub.setText(prop.getSubtitleDestinationFolder());
         jcbMinuti.setSelectedItem(prop.getRefreshInterval());
         jcbLookFeel.setSelectedItem(prop.getApplicationLookAndFeel());
-        jcbAudio.setSelected(prop.enabledAudioAdvisor());
+        jcbAudio.setSelected(prop.isEnabledAudioAdvisor());
         jrbDirLocal.setSelected(prop.isLocalFolder());
         jrbDirSamba.setSelected(!prop.isLocalFolder());
         jtfSambaDomain.setText(prop.getCifsShareDomain());
@@ -564,16 +571,17 @@ public class paneSetting extends JPanel {
         jtfSambaUser.setText(prop.getCifsShareUsername());
         jpfSamba.setText(prop.getCifsSharePassword());
         jcbTimeout.setSelectedItem(prop.getHttpTimeout());
-        jcbAdvancedDest.setSelected(prop.enabledCustomDestinationFolder());
+        jcbAdvancedDest.setSelected(prop.isEnabledCustomDestinationFolder());
+        jcbRunIconized.setSelected(prop.isEnabledIconizedRun());
     }
 
     private void settingsItasaValue() {
         jtfRssItasa.setText(prop.getItasaFeedURL());
         jtfRssMyItasa.setText(prop.getMyitasaFeedURL());
-        jtfItasaUser.setText(prop.getMyitasaUsername());
-        jpfItasa.setText(prop.getMyitasaPassword());
-        jrbDownAuto.setSelected(prop.isAutoDownload());
-        jrbDownManual.setSelected(!prop.isAutoDownload());
+        jtfItasaUser.setText(prop.getItasaUsername());
+        jpfItasa.setText(prop.getItasaPassword());
+        jrbDownAuto.setSelected(prop.isAutoDownloadMyItasa());
+        jrbDownManual.setSelected(!prop.isAutoDownloadMyItasa());
     }
 
     private void settingsTorrentValue() {
@@ -594,12 +602,13 @@ public class paneSetting extends JPanel {
 
     private void saveSettings(){
         proxy.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
-                jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(),
-                jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
-                jcbMinuti.getSelectedItem().toString(), jcbLookFeel.getSelectedItem().toString(),
-                jcbAudio.isSelected(), jcbTimeout.getSelectedItem().toString(),
-                jcbAdvancedDest.isSelected(), jtfRssItasa.getText(), jtfRssMyItasa.getText(),
-                jtfItasaUser.getText(), new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
-                jtfRssSubsf.getText(), jtfDestTorrent.getText());
+            jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(),
+            jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
+            jcbMinuti.getSelectedItem().toString(), jcbLookFeel.getSelectedItem().toString(),
+            jcbAudio.isSelected(), jcbTimeout.getSelectedItem().toString(),
+            jcbAdvancedDest.isSelected(), jcbRunIconized.isSelected(),
+            jtfRssItasa.getText(), jtfRssMyItasa.getText(),
+            jtfItasaUser.getText(), new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
+            jtfRssSubsf.getText(), jtfDestTorrent.getText());
     }
 }
