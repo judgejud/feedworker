@@ -3,17 +3,17 @@ package org.feedworker.client.frontend;
 import java.awt.Component;
 import java.awt.Font;
 //IMPORT JAVAX
-import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-//IMPORT JRSS2SUB
+//IMPORT FEEDWORKER
 import org.feedworker.client.frontend.events.TableXmlEvent;
 import org.feedworker.client.frontend.events.TableXmlEventListener;
-//IMPORT MYUTILS
-import org.jfacility.Swing;
+//IMPORT JFACILITY
+import org.jfacility.swing.ComboBoxEditor;
+import org.jfacility.swing.Swing;
 /**
  *
  * @author luca
@@ -50,7 +50,7 @@ class tableXml extends JTable implements TableXmlEventListener{
     private void setComboColumn(int num, String[] items){
         // Set the combobox editor on column
         TableColumn col = getColumnModel().getColumn(num);
-        col.setCellEditor(new MyComboBoxEditor(items));
+        col.setCellEditor(new ComboBoxEditor(items));
         // If the cell should appear like a combobox in its
         // non-editing state, also set the combobox renderer
         col.setCellRenderer(new MyComboBoxRenderer(items));
@@ -84,12 +84,6 @@ class tableXml extends JTable implements TableXmlEventListener{
             // Select the current value
             setSelectedItem(value);
             return this;
-        }
-    }
-
-    class MyComboBoxEditor extends DefaultCellEditor {
-        public MyComboBoxEditor(String[] items) {
-            super(new JComboBox(items));
         }
     }
 }
