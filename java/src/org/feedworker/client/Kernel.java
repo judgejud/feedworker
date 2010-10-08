@@ -112,6 +112,7 @@ public class Kernel {
 
     /**effettua il download automatico di myitasa
      * comprende le fasi anche di estrazione zip e analizzazione percorso definitivo.
+     * 
      * @param link link da analizzare
      */
     private void downItasaAuto(Object link) {
@@ -423,30 +424,27 @@ public class Kernel {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
                         if (confronta.before(Convert.stringToDate(date_matrix))) {
                             if (continua) {
-                                if (from.equals(ITASA)) {
+                                if (from.equals(ITASA))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_ITASA);
-                                } else if (from.equals(MYITASA) && !prop.isAutoDownloadMyItasa()) {
+                                else if (from.equals(MYITASA) && !prop.isAutoDownloadMyItasa())
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_MYITASA);
-                                } else if (from.equals(SUBSF)) {
+                                else if (from.equals(SUBSF))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_SUBSF);
-                                } else if (from.equals(EZTV)) {
+                                else if (from.equals(EZTV))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_TORRENT1);
-                                } else if (from.equals(BTCHAT)) {
+                                else if (from.equals(BTCHAT))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_TORRENT2);
-                                }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2])) && download) {
+                            if ((isNotStagione((String) matrice.get(i)[2])) && download)
                                 downItasaAuto(matrice.get(i)[0]);
-                            }
-                        } else {
+                        } else
                             matrice.remove(i);
-                        }
                     }
                 }
             }
@@ -459,7 +457,6 @@ public class Kernel {
         }
         return matrice;
     }
-
     /** Esegue gli rss */
     public void runRss() {
         if (!prop.isApplicationFirstTimeUsed()) {
