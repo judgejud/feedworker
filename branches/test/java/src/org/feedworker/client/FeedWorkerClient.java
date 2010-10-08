@@ -1,20 +1,19 @@
 package org.feedworker.client;
-
 //IMPORT JUNIQUE
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
-
+//IMPORT JAVA
 import java.awt.EventQueue;
 import java.awt.Image;
-
+//IMPORT JAVAX
 import javax.swing.JOptionPane;
-
+//IMPORT FEEDWORK
 import org.feedworker.client.frontend.EnhancedMainJF;
 import org.feedworker.client.frontend.MainJF;
 import org.feedworker.util.Convert;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
-
+//IMPORT JFACILITY
 import org.jfacility.lang.JVM;
 /**Client
  * 
@@ -67,6 +66,7 @@ public class FeedWorkerClient {
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun())
                             jframe.setVisible(true);
                         else {
+                            //TODO
                             //if (jvm.isOrLater(16))
 
                             //else if (jvm.isOrLater(15))

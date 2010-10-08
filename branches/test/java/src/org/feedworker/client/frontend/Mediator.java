@@ -517,6 +517,10 @@ public class Mediator {
         return col;
     }
 
+    void bruteRefresh() {
+        //TODO
+    }
+
     private void printAlert(String msg){
         fireNewTextPaneEvent(msg, MyTextPaneEvent.ALERT);
     }
