@@ -296,7 +296,8 @@ public class Mediator {
      */
     boolean checkSaveTorrent(String text) {
         if (!Lang.verifyTextNotNull(text))
-            printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai scaricare .torrent");
+            printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai "
+                    + "scaricare .torrent");
         return true;
     }
     /**verifica impostazioni subsf
@@ -314,7 +315,8 @@ public class Mediator {
                 check = false;
             }
         } else
-            printAlert("Avviso: Non immettendo link RSS Subsfactory non potrai usare i feed Subsfactory");
+            printAlert("Avviso: Non immettendo link RSS Subsfactory non potrai usare i feed"
+                    + " Subsfactory");
         return check;
     }
     //TODO sistemare il controllo itasa
@@ -364,13 +366,13 @@ public class Mediator {
             else if (!Lang.verifyTextNotNull(sambaIP))
                 printAlert("INPUT OBBLIGATORIO: L'ip Samba non può essere vuoto.");
             else if (!Lang.verifyTextNotNull(sambaDir))
-                printAlert("INPUT OBBLIGATORIO: La cartella condivisa Samba non può essere vuota.");
+                printAlert("INPUT OBBLIGATORIO: La cartella condivisa Samba non può essere "
+                        + "vuota.");
             else if (!Lang.verifyTextNotNull(sambaUser))
                 printAlert("INPUT OBBLIGATORIO: L'utente Samba non può essere vuoto.");
             else if (!Lang.verifyTextNotNull(sambaPwd))
                 printAlert("INPUT OBBLIGATORIO: La password Samba non può essere vuota.");
-            else if (!proxy.testSamba(sambaIP, sambaDir, sambaDomain,
-                                    sambaUser, sambaPwd))
+            else if (!proxy.testSamba(sambaIP, sambaDir, sambaDomain, sambaUser, sambaPwd))
                 printAlert("Impossibile connettermi al server/dir condivisa Samba");
             else
                 check = true;
@@ -381,8 +383,8 @@ public class Mediator {
     void saveSettings(boolean dirLocal, String destSub, String sambaDomain,
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
             String time, String laf, boolean audio, String timeout, boolean advancedDest,
-            String itasa, String myitasa, String user, String pwd, boolean auto,
-            String subsf, String torrent) {
+            boolean runIconized, String itasa, String myitasa, String user, String pwd,
+            boolean autoMyitasa, String subsf, String torrent) {
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -400,8 +402,8 @@ public class Mediator {
         }
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
-                sambaUser, sambaPwd, time, laf, audio, timeout, advancedDest);
-            setPropItasa(itasa, myitasa, user, pwd, auto);
+                sambaUser, sambaPwd, time, laf, audio, timeout, advancedDest, runIconized);
+            setPropItasa(itasa, myitasa, user, pwd, autoMyitasa);
             prop.setSubsfactoryFeedURL(subsf);
             prop.setTorrentDestinationFolder(torrent);
             core.writeProp();
@@ -435,7 +437,8 @@ public class Mediator {
 
     private void setPropGlobal(boolean dirLocal, String destSub, String sambaDomain,
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
-            String time, String laf, boolean audio, String timeout, boolean advancedDest) {
+            String time, String laf, boolean audio, String timeout, boolean advancedDest,
+            boolean runIconized) {
         prop.localFolder(dirLocal);
         prop.setSubtitleDestinationFolder(destSub);
         prop.setRefreshInterval(time);
@@ -448,7 +451,7 @@ public class Mediator {
         prop.setCifsSharePassword(sambaPwd);
         prop.setHttpTimeout(timeout);
         prop.setEnableCustomDestinationFolder(advancedDest);
-        
+        prop.setEnableIconizedRun(runIconized);
     }
 
     private void setPropItasa(String itasa, String myitasa, String user, String pwd,
