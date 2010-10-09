@@ -226,7 +226,7 @@ public class Mediator {
         return core.testSamba(ip, dir, dir, user, pwd);
     }
 
-    void saveRole(tableXml jtable){
+    void saveRules(tableXml jtable){
         boolean _break = false;
         TreeMap<FilterSub, String> temp = new TreeMap<FilterSub,String>();
         for (int i=0; i<jtable.getRowCount();i++){
@@ -235,7 +235,8 @@ public class Mediator {
             String quality = (String)jtable.getValueAt(i, 2);
             String path = (String)jtable.getValueAt(i, 3);
             String status = (String)jtable.getValueAt(i, 4);
-            String day = (String)jtable.getValueAt(i, 5);            
+            String day = (String)jtable.getValueAt(i, 5);
+            String rename = (String)jtable.getValueAt(i, 6);
 
             if (Lang.verifyTextNotNull(name)){
                 if (Lang.verifyTextNotNull(path)){
@@ -248,7 +249,7 @@ public class Mediator {
                             _break = true;
                             break;
                         }
-                        FilterSub f = new FilterSub(name, season, quality, status, day);
+                        FilterSub f = new FilterSub(name, season, quality, status, day, rename);
                         if (!temp.containsKey(f))
                             temp.put(f, path);
                         else{
@@ -475,6 +476,10 @@ public class Mediator {
         prop.setAutoDownloadMyItasa(auto);
     }
 
+    void bruteRefresh() {
+        core.bruteRefreshRSS();
+    }
+
     /**Invia alla download station del nas i link torrent selezionati
      *
      * @param jt1 tabella1
@@ -515,10 +520,6 @@ public class Mediator {
         else if (version.equals(Quality.BLURAY.toString()))
             col = Color.magenta;
         return col;
-    }
-
-    void bruteRefresh() {
-        //TODO
     }
 
     private void printAlert(String msg){

@@ -10,24 +10,24 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-//IMPORT MYUTILS
+//IMPORT JFACILITY
 import org.jfacility.swing.Swing;
 /**
  *
  * 
  * @author luca
  */
-class paneRole extends AbstractJP{
-    private static paneRole jpanel = null;
+class paneRules extends AbstractJP{
+    private static paneRules jpanel = null;
     private tableXml jtable;    
 
-    public static paneRole getPanel(){
+    public static paneRules getPanel(){
         if (jpanel == null)            
-            jpanel = new paneRole();
+            jpanel = new paneRules();
         return jpanel;
     }
 
-    private paneRole(){
+    private paneRules(){
         super();
         initializePanel();
         initializeButtons();
@@ -110,11 +110,11 @@ class paneRole extends AbstractJP{
 
     private void jbAddRowMouseClicked(){
         DefaultTableModel dtm = (DefaultTableModel) jtable.getModel();
-        dtm.insertRow(0,new Object[]{null,null,"normale",null});
+        dtm.insertRow(0,new Object[]{null,1,"normale",null,null,null,false});
     }
 
     private void jbSaveRoleMouseClicked(){        
-        proxy.saveRole(jtable);
+        proxy.saveRules(jtable);
     }
 
     private void jbRemoveRowMouseClicked(){

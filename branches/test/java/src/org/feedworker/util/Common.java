@@ -16,7 +16,7 @@ import org.jfacility.swing.Swing;
  * 
  * @author luca judge
  */
-public class Convert {
+public class Common {
     /**Converte una jav.util.Date in formato stringa
      *
      * @param d data
@@ -87,5 +87,25 @@ public class Convert {
     
     public static String getResourcePath(String name) {
         return ResourceLocator.getResourcePath() + name;
+    }
+
+    /**cerca il numero della serie nel testo
+     *
+     * @param text
+     * @return numero serie/stagione
+     */
+    public static String searchNumberSeries(String text){
+        String number = null;
+        String analyze = text.substring(0, 1).toLowerCase();
+        if (analyze.equalsIgnoreCase("s")){
+            String temp = text.substring(1, 3);
+            int num = -1;
+            try{
+                num = Lang.stringToInt(temp);
+            } catch(NumberFormatException nfe){}
+            if (num>-1)
+                number = Lang.intToString(num);
+        }
+        return number;
     }
 }

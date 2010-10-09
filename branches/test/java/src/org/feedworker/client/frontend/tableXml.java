@@ -20,7 +20,7 @@ import org.jfacility.swing.Swing;
  */
 class tableXml extends JTable implements TableXmlEventListener{
     private final String[] nameCols = {"Serie", "Stagione", "Versione", "Destinazione", "Stato",
-                                        "Giorno"};
+                                        "Giorno", "Rename"};
     private final String[] itemsCombo = Mediator.getIstance().getElemEnum();
     private final String[] itemsComboSettimana = {"", "Domenica", "Lunedì", "Martedì",
                                                 "Mercoledì", "Giovedì", "Venerdì", "Sabato"};
@@ -30,7 +30,14 @@ class tableXml extends JTable implements TableXmlEventListener{
     /**Costruttore*/
     public tableXml() {
         super();
-        DefaultTableModel dtm = new DefaultTableModel(null, nameCols);
+        DefaultTableModel dtm = new DefaultTableModel(null, nameCols){
+            Class[] types = new Class[]{String.class, Integer.class, String.class, String.class,
+                String.class, String.class, Boolean.class};
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+        };
         setModel(dtm);
 
         getTableHeader().setReorderingAllowed(false);
@@ -39,6 +46,7 @@ class tableXml extends JTable implements TableXmlEventListener{
         Swing.setTableDimensionLockColumn(this, 2, 60);
         Swing.setTableDimensionLockColumn(this, 4, 90);
         Swing.setTableDimensionLockColumn(this, 5, 75);
+        Swing.setTableDimensionLockColumn(this, 6, 55);
 
         setComboColumn(2, itemsCombo);
         setComboColumn(4, itemsComboStato);

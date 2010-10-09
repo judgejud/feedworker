@@ -12,7 +12,7 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 //IMPORT JRSS2SUB
-import org.feedworker.util.Convert;
+import org.feedworker.util.Common;
 
 /**
  * 
@@ -57,7 +57,7 @@ public class RssParser {
             Object[] structuredEntry = new Object[5];
             SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
             structuredEntry[0] = rawEntry.getLink();
-            structuredEntry[1] = Convert.dateToString(rawEntry.getPublishedDate());
+            structuredEntry[1] = Common.dateToString(rawEntry.getPublishedDate());
             structuredEntry[2] = rawEntry.getTitle();
             structuredEntry[3] = false;
             structuredEntryList.add(structuredEntry);

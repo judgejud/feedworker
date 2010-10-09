@@ -1,5 +1,4 @@
 package org.feedworker.client;
-
 //IMPORT JAVA
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,20 +18,19 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
-
+//IMPORT JAVAX
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.tree.DefaultMutableTreeNode;
-//IMPORT JRSS2SUB
+//IMPORT FEEDWORKER
 import org.feedworker.client.frontend.events.*;
 import org.feedworker.util.*;
-//IMPORT MYUTILS
+//IMPORT JFACILITY
 import org.jfacility.lang.Lang;
 //IMPORT SUN
 import com.sun.syndication.io.FeedException;
-
+//IMPORT JAVASOFT
 import de.javasoft.plaf.synthetica.SyntheticaBlackMoonLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlackStarLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlueIceLookAndFeel;
@@ -41,15 +39,14 @@ import de.javasoft.plaf.synthetica.SyntheticaGreenDreamLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaSilverMoonLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
-
+//IMPORT JCIFS
 import jcifs.smb.SmbException;
-
+//IMPORT ECLIPSE
 import org.eclipse.swt.widgets.Display;
-
+//IMPORT JDOM
 import org.jdom.JDOMException;
-
 /**
- * Motore di jrss2sub
+ * Motore di Feedworker
  * 
  * @author luca
  */
@@ -205,16 +202,15 @@ public class Kernel {
         String version = searchVersion(temp[pos]);
         String num;
         pos = searchPosSeries(temp);
-        if (pos > -1) {
-            num = searchNumberSeries(temp[pos]);
-        } else {
+        if (pos > -1)
+            num = Common.searchNumberSeries(temp[pos]);
+        else
             num = "1";
-        }
         String _serie = temp[0];
         for (int i = 1; i < pos; i++) {
             _serie += " " + temp[i];
         }
-        fil = new FilterSub(_serie, num, version, null, null);
+        fil = new FilterSub(_serie, num, version, null, null, null);
         return fil;
     }
 
@@ -226,34 +222,12 @@ public class Kernel {
     private int searchPosSeries(String[] _array) {
         int pos = -1;
         for (int i = 0; i < _array.length; i++) {
-            if (searchNumberSeries(_array[i]) != null) {
+            if (Common.searchNumberSeries(_array[i]) != null) {
                 pos = i;
                 break;
             }
         }
         return pos;
-    }
-
-    /**cerca il numero della serie nel testo
-     *
-     * @param text
-     * @return numero serie/stagione
-     */
-    private String searchNumberSeries(String text) {
-        String number = null;
-        String analyze = text.substring(0, 1).toLowerCase();
-        if (analyze.equalsIgnoreCase("s")) {
-            String temp = text.substring(1, 3);
-            int num = -1;
-            try {
-                num = Lang.stringToInt(temp);
-            } catch (NumberFormatException nfe) {
-            }
-            if (num > -1) {
-                number = Lang.intToString(num);
-            }
-        }
-        return number;
     }
 
     /**cerca la versione/qualità del sub/video
@@ -400,10 +374,10 @@ public class Kernel {
                 ft.delete();
                 boolean continua = true;
                 if (data != null) {
-                    Date confronta = Convert.stringToDate(data);
+                    Date confronta = Common.stringToDate(data);
                     for (int i = matrice.size() - 1; i >= 0; i--) {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
-                        if (confronta.before(Convert.stringToDate(date_matrix))) {
+                        if (confronta.before(Common.stringToDate(date_matrix))) {
                             if (continua) {
                                 if (from.equals(ITASA))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
@@ -443,7 +417,7 @@ public class Kernel {
     /** Esegue gli rss */
     public void runRss() {
         if (!prop.isApplicationFirstTimeUsed()) {
-            prop.setLastDateTimeRefresh(Convert.actualTime());
+            prop.setLastDateTimeRefresh(Common.actualTime());
             runItasa(true);
             runSubsfactory(true);
             runTorrent(true);
@@ -464,7 +438,7 @@ public class Kernel {
                 public void run() {
                     boolean icontray = false;
                     // String data = prop.getLastDate();
-                    prop.setLastDateTimeRefresh(Convert.actualTime());
+                    prop.setLastDateTimeRefresh(Common.actualTime());
                     if (runItasa(false))
                         icontray = true;
                     if (runSubsfactory(false))
@@ -644,6 +618,14 @@ public class Kernel {
             }
         }
         return check;
+    }
+
+    public void bruteRefreshRSS() {
+        runItasa(false);
+        runSubsfactory(false);
+        runTorrent(false);
+        stopAndRestartTimer();
+        fireNewTextPaneEvent("Timer re-inizializzato.", MyTextPaneEvent.OK);
     }
 
     /**restituice l'array con le informazioni sulle versioni video
@@ -962,7 +944,6 @@ public class Kernel {
          * (UI thread) da un altro thread come in questo caso causa una SWTException:
          * Invalid Thread Access.
          */
-
         Display.getDefault().syncExec(new Runnable() {
             @Override
             public void run() {

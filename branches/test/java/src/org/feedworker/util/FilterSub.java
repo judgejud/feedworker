@@ -10,13 +10,16 @@ public class FilterSub implements Comparable<FilterSub>{
     private String quality;
     private String day;
     private String status;
+    private String rename;
 
-    public FilterSub(String name, String season, String quality, String status, String day) {
+    public FilterSub(String name, String season, String quality, String status, String day,
+                    String rename) {
         this.name = name.toLowerCase();
         this.season = season;
         this.quality = quality;
         this.day = day;
         this.status = status;
+        this.rename = rename;
     }
 
     public String getName() {

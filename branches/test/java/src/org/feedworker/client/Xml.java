@@ -30,6 +30,8 @@ class Xml {
     private final String PATH_TAG = "PATH";
     private final String DAY_TAG = "DAY";
     private final String STATUS_TAG = "STATUS";
+    private final String RENAME_TAG = "RENAME";
+
     // VARIABLES PRIVATE
     private Element root;
     private Document document;
@@ -133,6 +135,7 @@ class Xml {
                     String season = role.getChild(SEASON_TAG).getText();
                     String quality = role.getChild(QUALITY_TAG).getText();
                     String path = role.getChild(PATH_TAG).getText();
+                    String rename = role.getChild(RENAME_TAG).getText();
                     try {
                         status = role.getChild(STATUS_TAG).getText();
                     } catch (NullPointerException npe) {
@@ -143,7 +146,7 @@ class Xml {
                     } catch (NullPointerException npe) {
                         day = "";
                     }
-                    map.put(new FilterSub(name, season, quality, status, day),path);
+                    map.put(new FilterSub(name, season, quality, status, day, rename),path);
                 }
             }
         }

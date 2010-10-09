@@ -80,7 +80,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
             mainJTP.addTab("Torrent", torrentJP);
         }
         if (prop.isEnabledCustomDestinationFolder()) {
-            mainJTP.addTab("Subtitle Destination", paneRole.getPanel());
+            mainJTP.addTab("Subtitle Destination", paneRules.getPanel());
         }
         mainJTP.addTab("Settings", settingsJP);
 
@@ -129,7 +129,6 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         fileJM.add(clearLogJMI);
 
         JMenuItem bruteRefreshJMI = new JMenuItem(" Forza aggiornamento ");
-        bruteRefreshJMI.setEnabled(false);
         bruteRefreshJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -147,45 +146,23 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         });
         fileJM.add(closeJMI);
 
-        /* -- Al momento non è implementata la gestione del Look & Feel nel Menù
-        JMenu lookAndFeelJM = new JMenu(" Look & Feel ");
-        applicationJMB.add(lookAndFeelJM);
-        JCheckBoxMenuItem[] lookAndFeelJCBMI = new JCheckBoxMenuItem[7];
-        lookAndFeelJCBMI[0] = new JCheckBoxMenuItem(" Standard ");
-        lookAndFeelJCBMI[1] = new JCheckBoxMenuItem(" Blackmoon ");
-        lookAndFeelJCBMI[2] = new JCheckBoxMenuItem(" Blackstar ");
-        lookAndFeelJCBMI[3] = new JCheckBoxMenuItem(" Blueice ");
-        lookAndFeelJCBMI[4] = new JCheckBoxMenuItem(" Bluesteel ");
-        lookAndFeelJCBMI[5] = new JCheckBoxMenuItem(" GreenDream ");
-        lookAndFeelJCBMI[6] = new JCheckBoxMenuItem(" Silvermoon ");
-        ButtonGroup lookAndFeelBG = new ButtonGroup();
-        for (int i = 0; i < lookAndFeelJCBMI.length; i++) {
-        lookAndFeelBG.add(lookAndFeelJCBMI[i]);
-        lookAndFeelJM.add(lookAndFeelJCBMI[i]);
-        }
-        fileJM.add(closeJMI);
-         */
-
         JMenu nasJM = new JMenu(" NAS ");
         JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
         JMenuItem taskStatusJMI = new JMenuItem(" Task status ");
         JMenuItem deleteCompletedTaskJMI = new JMenuItem(" Delete completed task ");
         videoMoveJMI.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 proxy.synoMoveVideo();
             }
         });
         taskStatusJMI.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 proxy.synoStatus();
             }
         });
         deleteCompletedTaskJMI.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 proxy.synoClearFinish();
@@ -203,7 +180,6 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         JMenuItem helpItasaSettingsJMI = new JMenuItem(" Itasa Settings ");
         JMenuItem helpSubtitleRoleJMI = new JMenuItem(" Subtitle Rule ");
         helpSubtitleRoleJMI.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(getParent(), showRuleHelpPopup(),
@@ -224,7 +200,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
      * @return pannello helprolesub
      */
     private JPanel showRuleHelpPopup() {
-        Dimension dim = new Dimension(500, 300);
+        Dimension dim = new Dimension(550, 300);
         JPanel jpanel = new JPanel();
         jpanel.setPreferredSize(dim);
         jpanel.setVisible(true);
@@ -275,9 +251,9 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         }
         if (evt.getOperaz() != null) {
             if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ")) {
-                mainJTP.addTab("Destinazione avanzata", paneRole.getPanel());
+                mainJTP.addTab("Destinazione avanzata", paneRules.getPanel());
             } else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ")) {
-                mainJTP.remove(paneRole.getPanel());
+                mainJTP.remove(paneRules.getPanel());
             } else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON")) {
                 changeEnabledButton(true);
             }
