@@ -362,9 +362,9 @@ public class Kernel {
 	/** imposta il LookAndFeel */
 	public void setLookFeel() {
 		try {
-			String[] li = {"Licensee=AppWork UG", "LicenseRegistrationNumber=289416475", "Product=Synthetica", "LicenseType=Small Business License", "ExpireDate=--.--.----", "MaxVersion=2.999.999"};
-            UIManager.put("Synthetica.license.info", li);
-            UIManager.put("Synthetica.license.key", "C1410294-61B64AAC-4B7D3039-834A82A1-37E5D695");			
+			//String[] li = {"Licensee=AppWork UG", "LicenseRegistrationNumber=289416475", "Product=Synthetica", "LicenseType=Small Business License", "ExpireDate=--.--.----", "MaxVersion=2.999.999"};
+            //UIManager.put("Synthetica.license.info", li);
+            //UIManager.put("Synthetica.license.key", "C1410294-61B64AAC-4B7D3039-834A82A1-37E5D695");			
 			
 			SyntheticaLookAndFeel laf = new SyntheticaStandardLookAndFeel();
 			String lf = prop.getApplicationLookAndFeel();
