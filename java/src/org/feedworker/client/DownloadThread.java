@@ -20,9 +20,9 @@ import org.feedworker.util.FilterSub;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.Samba;
-import org.lp.myUtils.Io;
-import org.lp.myUtils.Util;
-import org.lp.myUtils.lang.Lang;
+import org.jfacility.Io;
+import org.jfacility.Util;
+import org.jfacility.lang.Lang;
 
 /**
  *
