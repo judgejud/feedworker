@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
-//IMPORT JAVAX
+
 import javax.swing.JTable;
 import javax.swing.tree.DefaultMutableTreeNode;
-//IMPORT JRSS2SUB
+
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.Kernel;
 import org.feedworker.client.RSSParser;
@@ -24,10 +24,9 @@ import org.feedworker.client.frontend.events.TableXmlEventListener;
 import org.feedworker.util.FilterSub;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
-//IMPORT MYUTILS
-import org.lp.myUtils.Awt;
-import org.lp.myUtils.lang.Lang;
-//IMPORT SUN
+import org.jfacility.Awt;
+import org.jfacility.lang.Lang;
+
 import com.sun.syndication.io.FeedException;
 /**Classe mediatrice tra gui e kernel, detta anche kernel della gui.
  *
