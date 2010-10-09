@@ -10,7 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-//IMPORT JAVAX
+
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -28,11 +28,10 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-//IMPORT JRSS2SUB
+
 import org.feedworker.client.ApplicationSettings;
-//IMPORT MYUTILS
-import org.lp.myUtils.Awt;
-import org.lp.myUtils.Swing;
+import org.jfacility.Awt;
+import org.jfacility.Swing;
 /**
  *
  * @author luca
