@@ -5,6 +5,7 @@ import it.sauronsoftware.junique.JUnique;
 //IMPORT JAVA
 import java.awt.EventQueue;
 import java.awt.Image;
+import java.net.URISyntaxException;
 //IMPORT JAVAX
 import javax.swing.JOptionPane;
 //IMPORT FEEDWORK
@@ -60,18 +61,18 @@ public class FeedWorkerClient {
                         if (jvm.isOrLater(16))
                             jframe = new EnhancedMainJF();
                         else if (jvm.isOrLater(15))
-                            jframe = new MainJF();                        
+                            jframe = new MainJF();
                         k.loadXml();
                         k.runRss();
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun())
                             jframe.setVisible(true);
                         else {
-                            //TODO
-                            //if (jvm.isOrLater(16))
-
-                            //else if (jvm.isOrLater(15))
-
-                        }
+                            try {
+                                jframe.initializeSysTray();
+                            } catch (URISyntaxException ex) {
+                                ex.printStackTrace();
+                            }
+                        }                        
                     } // end run
                 }); // end invokelater
             } //end if

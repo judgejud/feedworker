@@ -36,7 +36,8 @@ public class EnhancedMainJF extends MainJF {
         super();
     }
 
-    private void initializeSysTray() throws URISyntaxException {
+    @Override
+    public void initializeSysTray() throws URISyntaxException {
         display = Display.getDefault();
         Shell shell = new Shell(display);
 
