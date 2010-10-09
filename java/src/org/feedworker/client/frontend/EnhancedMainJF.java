@@ -129,9 +129,9 @@ public class EnhancedMainJF extends MainJF {
             settingsJP.setDataAggiornamento(evt.getDate());
         if (evt.getOperaz() != null) {
             if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ"))
-                mainJTP.addTab("Destinazione avanzata", paneRole.getPanel());
+                mainJTP.addTab("Destinazione avanzata", paneRules.getPanel());
             else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ"))
-                mainJTP.remove(paneRole.getPanel());
+                mainJTP.remove(paneRules.getPanel());
             else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON"))
                 changeEnabledButton(true);
         }

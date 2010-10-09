@@ -11,7 +11,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument; //IMPORT JRSS2SUB
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
-import org.feedworker.util.Convert;
+import org.feedworker.util.Common;
 
 /**
  * 
@@ -216,7 +216,7 @@ public class LogJTP extends JTextPane implements MyTextPaneEventListener {
 	 */
 	public void append(String msg, Style s) {
 		try {
-			mysd.insertString(0, Convert.actualTime() + " " + msg + "\n", s);
+			mysd.insertString(0, Common.actualTime() + " " + msg + "\n", s);
 			this.setCaretPosition(0);
 		} catch (BadLocationException ex) {
 		}

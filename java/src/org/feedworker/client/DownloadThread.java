@@ -16,6 +16,7 @@ import org.apache.http.HttpEntity;
 
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
+import org.feedworker.util.Common;
 import org.feedworker.util.FilterSub;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
@@ -222,13 +223,13 @@ public class DownloadThread implements Runnable{
         String num;
         pos = searchPosSeries(temp);
         if (pos>-1)
-            num = searchNumberSeries(temp[pos]);
+            num = Common.searchNumberSeries(temp[pos]);
         else
             num = "1";
         String _serie = temp[0];
         for (int i = 1; i < pos; i++)
             _serie += " " + temp[i];
-        fil = new FilterSub(_serie, num, version, null, null);
+        fil = new FilterSub(_serie, num, version, null, null, null);
         return fil;
     }
     /**cerca la versione/qualità del sub/video
@@ -256,33 +257,13 @@ public class DownloadThread implements Runnable{
     private int searchPosSeries(String[] _array){
         int pos = -1;
         for (int i=0; i<_array.length; i++){
-            if (searchNumberSeries(_array[i])!=null){
+            if (Common.searchNumberSeries(_array[i])!=null){
                 pos = i;
                 break;
             }
         }
         return pos;
-    }
-    /**cerca il numero della serie nel testo
-     *
-     * @param text
-     * @return numero serie/stagione
-     */
-    private String searchNumberSeries(String text){
-        String number = null;
-        String analyze = text.substring(0, 1).toLowerCase();
-        if (analyze.equalsIgnoreCase("s")){
-            String temp = text.substring(1, 3);
-            int num = -1;
-            try{
-                num = Lang.stringToInt(temp);
-            } catch(NumberFormatException nfe){}
-            if (num>-1)
-                number = Lang.intToString(num);
-        }
-        return number;
-    }
-
+    }    
     /**Permette alla classe di registrarsi per l'evento textpane
      *
      * @param listener evento textpane

@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 //IMPORT FEEDWORK
 import org.feedworker.client.frontend.EnhancedMainJF;
 import org.feedworker.client.frontend.MainJF;
-import org.feedworker.util.Convert;
+import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
 //IMPORT JFACILITY
@@ -26,7 +26,7 @@ public class FeedWorkerClient {
     public static final String AUTHOR_NAME = "Luka Judge";
     public static final String APPLICATION_BUILD = "72";
     private static final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
-    public static Image APPLICATION_ICON = Convert.getResourceImage(APPLICATION_ICON_FILE_NAME);
+    public static Image APPLICATION_ICON = Common.getResourceImage(APPLICATION_ICON_FILE_NAME);
 
     public static void main(String args[]) {
         final JVM jvm = new JVM();

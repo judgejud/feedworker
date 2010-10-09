@@ -13,7 +13,7 @@ import java.awt.event.WindowEvent;
 //IMPORT JRSS2SUB
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
-import org.feedworker.util.Convert;
+import org.feedworker.util.Common;
 /**Jframe per versioni java 6 e superiori
  *
  * @author luca judge
@@ -34,7 +34,7 @@ public class NewerMainJF extends MainJF {
     private void initSysTray() {
         if (SystemTray.isSupported()) {
             iconRss = FeedWorkerClient.APPLICATION_ICON;
-            iconSub = Convert.getResourceImage(INCOMING_FEED_ICON);
+            iconSub = Common.getResourceImage(INCOMING_FEED_ICON);
             PopupMenu popup = new PopupMenu();
             MenuItem defaultItem = new MenuItem(" Close " + FeedWorkerClient.APPLICATION_NAME);
             defaultItem.addActionListener(new ActionListener() {
@@ -85,9 +85,9 @@ public class NewerMainJF extends MainJF {
             settingsJP.setDataAggiornamento(evt.getDate());
         if (evt.getOperaz()!=null){
             if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ"))
-                mainJTP.addTab("Destinazione avanzata",paneRole.getPanel());
+                mainJTP.addTab("Destinazione avanzata",paneRules.getPanel());
             else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ"))
-                mainJTP.remove(paneRole.getPanel());
+                mainJTP.remove(paneRules.getPanel());
             else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON"))
                 changeEnabledButton(true);
         }
