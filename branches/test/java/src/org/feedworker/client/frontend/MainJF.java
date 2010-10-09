@@ -2,10 +2,12 @@ package org.feedworker.client.frontend;
 //IMPORT JAVA
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.net.URISyntaxException;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -22,15 +24,14 @@ import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.client.frontend.events.MyJFrameEventListener;
-import org.jfacility.lang.Lang;
 
+import org.jfacility.lang.Lang;
 /**
  * Gui base per java 1.5
  * 
  * @author luca judge
  */
-public class MainJF extends JFrame implements WindowListener,
-        MyJFrameEventListener {
+public class MainJF extends JFrame implements WindowListener, MyJFrameEventListener {
 
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
@@ -104,6 +105,11 @@ public class MainJF extends JFrame implements WindowListener,
         }
 
         pack();
+    }
+
+    public void initializeSysTray() throws URISyntaxException{
+        setVisible(true);
+        setState(Frame.ICONIFIED);
     }
 
     /** inizializza la barra di menù */
@@ -286,15 +292,12 @@ public class MainJF extends JFrame implements WindowListener,
      *            stato
      */
     protected void changeEnabledButton(boolean e) {
-        if (prop.hasItasaOption()) {
+        if (prop.hasItasaOption())
             itasaJP.setButtonEnabled(e);
-        }
-        if (prop.hasSubsfactoryOption()) {
+        if (prop.hasSubsfactoryOption())
             subsfactoryJP.setEnableButton(e);
-        }
-        if (prop.hasTorrentOption()) {
+        if (prop.hasTorrentOption())
             torrentJP.setButtonEnabled(e);
-        }
     }
 
     /** inizializza i listener per l'ascolto */
@@ -303,29 +306,16 @@ public class MainJF extends JFrame implements WindowListener,
         proxy.setTextPaneListener(logJTP);
         proxy.setFrameListener(this);
     }
-
     @Override
-    public void windowOpened(WindowEvent e) {
-    }
-
+    public void windowOpened(WindowEvent e) {    }
     @Override
-    public void windowClosed(WindowEvent e) {
-    }
-
+    public void windowClosed(WindowEvent e) {    }
     @Override
-    public void windowIconified(WindowEvent e) {
-    }
-
+    public void windowIconified(WindowEvent e) {    }
     @Override
-    public void windowDeiconified(WindowEvent e) {
-    }
-
+    public void windowDeiconified(WindowEvent e) {    }
     @Override
-    public void windowActivated(WindowEvent e) {
-    }
-
+    public void windowActivated(WindowEvent e) {    }
     @Override
-    public void windowDeactivated(WindowEvent e) {
-    }
+    public void windowDeactivated(WindowEvent e) {    }
 } // end class
-
