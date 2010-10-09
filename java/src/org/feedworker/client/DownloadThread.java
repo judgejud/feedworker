@@ -20,6 +20,7 @@ import org.feedworker.util.FilterSub;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.Samba;
+
 import org.jfacility.Io;
 import org.jfacility.Util;
 import org.jfacility.lang.Lang;
@@ -141,8 +142,10 @@ public class DownloadThread implements Runnable{
             if (!prop.isLocalFolder()) {
                 String dest = null;
                 try {
-                    Samba s = Samba.getIstance(prop.getCifsShareLocation(), prop.getCifsSharePath(),
-                            prop.getCifsShareDomain(), prop.getCifsShareUsername(),
+                    Samba s = Samba.getIstance(prop.getCifsShareLocation(),
+                            prop.getCifsSharePath(),
+                            prop.getCifsShareDomain(),
+                            prop.getCifsShareUsername(),
                             prop.getCifsSharePassword());
                     for (int i = 0; i < al.size(); i++) {
                         File filesub = al.get(i);
