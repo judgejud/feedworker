@@ -14,7 +14,7 @@ import org.feedworker.client.frontend.MainJF;
 import org.feedworker.util.Convert;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
-import org.lp.myUtils.lang.JVM;
+import org.jfacility.lang.JVM;
 
 /**
  * Client
