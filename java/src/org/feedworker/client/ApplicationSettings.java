@@ -9,8 +9,7 @@ import java.util.Properties;
 
 import org.feedworker.util.ManageException;
 import org.feedworker.util.ResourceLocator;
-
-import org.lp.myUtils.crypto.DesEncrypter;
+import org.jfacility.crypto.DesEncrypter;
 
 public class ApplicationSettings {
 
@@ -215,7 +214,7 @@ public class ApplicationSettings {
         hasTorrentOption = true;
         isApplicationFirstTimeUsed = true;
         applicationLookAndFeel = "standard";
-        applicationBuild = "121";
+        applicationBuild = "173";
 
         try {
             propertiesCrypting("ITALIANSUBS", hasItasaOption);
@@ -223,6 +222,8 @@ public class ApplicationSettings {
             propertiesCrypting("TORRENT", hasTorrentOption);
             propertiesCrypting("SUBSFACTORY", hasSubsfactoryOption);
             propertiesCrypting("BUILD",applicationBuild);
+            propertiesCrypting("APPLICATION_LOOK_AND_FEEL", applicationLookAndFeel);
+            
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
