@@ -231,12 +231,12 @@ public class Mediator {
         TreeMap<FilterSub, String> temp = new TreeMap<FilterSub,String>();
         for (int i=0; i<jtable.getRowCount();i++){
             String name = ((String)jtable.getValueAt(i, 0));
-            String season = (String)jtable.getValueAt(i, 1);
+            String season = jtable.getValueAt(i, 1).toString();
             String quality = (String)jtable.getValueAt(i, 2);
             String path = (String)jtable.getValueAt(i, 3);
             String status = (String)jtable.getValueAt(i, 4);
             String day = (String)jtable.getValueAt(i, 5);
-            String rename = (String)jtable.getValueAt(i, 6);
+            String rename = jtable.getValueAt(i, 6).toString();
 
             if (Lang.verifyTextNotNull(name)){
                 if (Lang.verifyTextNotNull(path)){
@@ -252,11 +252,11 @@ public class Mediator {
                         FilterSub f = new FilterSub(name, season, quality, status, day, rename);
                         if (!temp.containsKey(f))
                             temp.put(f, path);
-                        else{
+                        else {
                             printAlert("Riga: "+ i +
                                     " trovato duplicato, si prega di correggerlo");
-                        _break = true;
-                        break;
+                            _break = true;
+                            break;
                         }
                     } catch (NumberFormatException ex){
                         error.launch(ex, getClass(),Lang.intToString(i));
@@ -337,13 +337,12 @@ public class Mediator {
      *
      * @return booleano che le impostazioni sono ok
      */
-    boolean checkSaveItasa(String itasa, String myitasa, String user,
-            String pwd) {
+    boolean checkSaveItasa(String itasa, String myitasa, String user, String pwd) {
         boolean check = true;
         try {
             if (!Lang.verifyTextNotNull(itasa) && !Lang.verifyTextNotNull(myitasa))
-                printAlert("Avviso: Non immettendo link RSS itasa e/o myitasa non potrai usare " +
-                        "i feed italiansubs");
+                printAlert("Avviso: Non immettendo link RSS itasa e/o myitasa non potrai "
+                        + "usare i feed italiansubs");
             else {
                 if (Lang.verifyTextNotNull(itasa))
                     check = testRss(itasa, "itasa");
@@ -352,9 +351,11 @@ public class Mediator {
                         check = testRss(myitasa, "myitasa");
                     if (check){
                         if (!Lang.verifyTextNotNull(user))
-                            printAlert("Avviso: senza Username Itasa non potrai scaricare i subs");
+                            printAlert("Avviso: senza Username Itasa non potrai scaricare i "
+                                    + "subs");
                         else if (!Lang.verifyTextNotNull(new String(pwd)))
-                            printAlert("Avviso: senza Password Itasa non potrai scaricare i subs");
+                            printAlert("Avviso: senza Password Itasa non potrai scaricare i "
+                                    + "subs");
                     }
                 }
             }

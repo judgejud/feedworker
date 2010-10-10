@@ -50,7 +50,7 @@ class Xml {
                 FilterSub key = (FilterSub) it.next();
                 String value = map.get(key);
                 addRule(key.getName(), key.getSeason(), key.getQuality(),
-                        value, key.getStatus(), key.getDay());
+                        value, key.getStatus(), key.getDay(), key.getRename());
             }
             write();
         }
@@ -70,7 +70,7 @@ class Xml {
      * @param _path percorso
      */
     private void addRule(String _name, String _season, String _version,
-            String _path, String _status, String _day) {
+            String _path, String _status, String _day, String _rename) {
         Element role = new Element(RULE_TAG);
         Element name = new Element(NAME_TAG);
         name.setText(_name);
@@ -90,12 +90,16 @@ class Xml {
         Element day = new Element(DAY_TAG);
         day.setText(_day);
 
+        Element rename = new Element(RENAME_TAG);
+        rename.setText(_rename);
+
         role.addContent(name);
         role.addContent(season);
         role.addContent(quality);
         role.addContent(path);
         role.addContent(status);
         role.addContent(day);
+        role.addContent(rename);
         root.addContent(role);
     }
 
