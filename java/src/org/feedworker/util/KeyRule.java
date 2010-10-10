@@ -1,25 +1,17 @@
 package org.feedworker.util;
-
 /**
  *
  * @author luca
  */
-public class FilterSub implements Comparable<FilterSub>{
+public class KeyRule implements Comparable<KeyRule>{
     private String name;
     private String season;
-    private String quality;
-    private String day;
-    private String status;
-    private boolean rename;
+    private String quality;    
 
-    public FilterSub(String name, String season, String quality, String status, String day,
-                    boolean rename) {
+    public KeyRule(String name, String season, String quality) {
         this.name = name.toLowerCase();
         this.season = season;
         this.quality = quality;
-        this.day = day;
-        this.status = status;
-        this.rename = rename;
     }
 
     public String getName() {
@@ -38,28 +30,8 @@ public class FilterSub implements Comparable<FilterSub>{
         quality = q;
     }
 
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public boolean getRename(){
-        return rename;
-    }
-
     @Override
-    public int compareTo(FilterSub o) {
+    public int compareTo(KeyRule o) {
         if (this.getName().equals(o.getName())){
             if (this.getSeason().equals(o.getSeason())){
                 if (this.getQuality().equals(o.getQuality()) ||

@@ -21,7 +21,7 @@ import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
 import org.feedworker.client.frontend.events.TableRssEventListener;
 import org.feedworker.client.frontend.events.TableXmlEventListener;
-import org.feedworker.util.FilterSub;
+import org.feedworker.util.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 //IMPORT MYUTILS
@@ -29,6 +29,7 @@ import org.jfacility.Awt;
 import org.jfacility.lang.Lang;
 //IMPORT SUN
 import com.sun.syndication.io.FeedException;
+import org.feedworker.util.ValueRule;
 /**Classe mediatrice tra gui e kernel, detta anche kernel della gui.
  *
  * @author luca
@@ -228,7 +229,7 @@ public class Mediator {
 
     void saveRules(tableXml jtable){
         boolean _break = false;
-        TreeMap<FilterSub, String> temp = new TreeMap<FilterSub,String>();
+        TreeMap<KeyRule, ValueRule> temp = new TreeMap<KeyRule,ValueRule>();
         for (int i=0; i<jtable.getRowCount();i++){
             String name = ((String)jtable.getValueAt(i, 0));
             String season = jtable.getValueAt(i, 1).toString();
@@ -249,9 +250,10 @@ public class Mediator {
                             _break = true;
                             break;
                         }
-                        FilterSub f = new FilterSub(name, season, quality, status, day, rename);
-                        if (!temp.containsKey(f))
-                            temp.put(f, path);
+                        KeyRule key = new KeyRule(name, season, quality);
+                        ValueRule value = new ValueRule(path, day, status, rename);
+                        if (!temp.containsKey(key))
+                            temp.put(key, value);
                         else {
                             printAlert("Riga: "+ i +
                                     " trovato duplicato, si prega di correggerlo");

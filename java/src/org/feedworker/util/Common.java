@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 //IMPORT JFACILITY
 import org.jfacility.lang.Lang;
 import org.jfacility.swing.Swing;
-/**Utility di conversioni varie
+/**Classe Utility di conversioni varie e raccolta di metodi comuni
  * 
  * @author luca judge
  */
@@ -98,14 +98,29 @@ public class Common {
         String number = null;
         String analyze = text.substring(0, 1).toLowerCase();
         if (analyze.equalsIgnoreCase("s")){
-            String temp = text.substring(1, 3);
             int num = -1;
             try{
-                num = Lang.stringToInt(temp);
+                num = Lang.stringToInt(text.substring(1, 3));
             } catch(NumberFormatException nfe){}
             if (num>-1)
                 number = Lang.intToString(num);
         }
         return number;
+    }
+
+    /**cerca la posizione della stringa corrispondente al numero di serie ed episodio
+     * nell'array; es: s01e01
+     * @param _array
+     * @return restituisce la posizione se l'ha trovato, altrimenti -1
+     */
+    public static int searchPosSeries(String[] _array) {
+        int pos = -1;
+        for (int i = 0; i < _array.length; i++) {
+            if (searchNumberSeries(_array[i]) != null) {
+                pos = i;
+                break;
+            }
+        }
+        return pos;
     }
 }
