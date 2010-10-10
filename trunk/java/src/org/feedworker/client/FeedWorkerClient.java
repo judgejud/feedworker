@@ -27,7 +27,8 @@ public class FeedWorkerClient {
 	public static final String AUTHOR_NAME = "Luka Judge";
 	public static final String APPLICATION_BUILD = "173";
 	private static final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
-	public static Image APPLICATION_ICON = Convert.getResourceImage(APPLICATION_ICON_FILE_NAME);
+	public static Image APPLICATION_ICON = Convert
+			.getResourceImage(APPLICATION_ICON_FILE_NAME);
 
 	public static void main(String args[]) {
 		final JVM jvm = new JVM();

@@ -1,14 +1,14 @@
 package org.feedworker.client.frontend;
 
 //IMPORT JAVA
-import java.awt.Color; //IMPORT JAVAX
-import java.awt.Point;
+import java.awt.Color;
 
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument; //IMPORT JRSS2SUB
+import javax.swing.text.StyledDocument;
+
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
 import org.feedworker.util.Convert;

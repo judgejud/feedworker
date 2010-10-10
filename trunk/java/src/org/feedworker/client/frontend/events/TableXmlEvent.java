@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.EventObject;
 
 /**
- *
+ * 
  * @author luca
  */
-public class TableXmlEvent extends EventObject{
+public class TableXmlEvent extends EventObject {
 
-    private ArrayList<String[]> obj;
+	private ArrayList<String[]> obj;
 
-    public TableXmlEvent(Object source, ArrayList<String[]> obj) {
-        super(source);
-        this.obj = obj;
-    }
+	public TableXmlEvent(Object source, ArrayList<String[]> obj) {
+		super(source);
+		this.obj = obj;
+	}
 
-    public ArrayList<String[]> getObj() {
-        return obj;
-    }
+	public ArrayList<String[]> getObj() {
+		return obj;
+	}
 }

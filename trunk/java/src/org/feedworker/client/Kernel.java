@@ -362,10 +362,14 @@ public class Kernel {
 	/** imposta il LookAndFeel */
 	public void setLookFeel() {
 		try {
-			//String[] li = {"Licensee=AppWork UG", "LicenseRegistrationNumber=289416475", "Product=Synthetica", "LicenseType=Small Business License", "ExpireDate=--.--.----", "MaxVersion=2.999.999"};
-            //UIManager.put("Synthetica.license.info", li);
-            //UIManager.put("Synthetica.license.key", "C1410294-61B64AAC-4B7D3039-834A82A1-37E5D695");			
-			
+			// String[] li = {"Licensee=AppWork UG",
+			// "LicenseRegistrationNumber=289416475", "Product=Synthetica",
+			// "LicenseType=Small Business License", "ExpireDate=--.--.----",
+			// "MaxVersion=2.999.999"};
+			// UIManager.put("Synthetica.license.info", li);
+			// UIManager.put("Synthetica.license.key",
+			// "C1410294-61B64AAC-4B7D3039-834A82A1-37E5D695");
+
 			SyntheticaLookAndFeel laf = new SyntheticaStandardLookAndFeel();
 			String lf = prop.getApplicationLookAndFeel();
 
@@ -397,7 +401,7 @@ public class Kernel {
 				laf = new SyntheticaSkyMetallicLookAndFeel();
 			else if (lf.equalsIgnoreCase("Synthetica WhiteVision"))
 				laf = new SyntheticaWhiteVisionLookAndFeel();
-				
+
 			UIManager.setLookAndFeel(laf);
 		} catch (ParseException ex) {
 			error.launch(ex, getClass());
@@ -805,8 +809,8 @@ public class Kernel {
 		String dss = "Download Station Synology: ";
 		try {
 			Http http = new Http();
-			String synoID = http.synoConnectGetID(url, prop
-					.getCifsShareUsername(), prop.getCifsSharePassword());
+			String synoID = http.synoConnectGetID(url,
+					prop.getCifsShareUsername(), prop.getCifsSharePassword());
 			http.closeClient();
 			if (Lang.verifyTextNotNull(synoID)) {
 				http = new Http();
@@ -824,11 +828,11 @@ public class Kernel {
 						String _substring = line
 								.substring(0, filename.length());
 						if (_substring.equals(filename))
-							_filename = line.substring(filename.length(), line
-									.length() - 2);
+							_filename = line.substring(filename.length(),
+									line.length() - 2);
 						else if (_substring.equals(progress))
-							_progress = line.substring(progress.length(), line
-									.length() - 2);
+							_progress = line.substring(progress.length(),
+									line.length() - 2);
 					}
 					if (Lang.verifyTextNotNull(_progress)) {
 						fireNewTextPaneEvent(dss + _filename + " " + _progress,
@@ -846,9 +850,9 @@ public class Kernel {
 
 	/** effettua la move video sul synology */
 	public void synoMoveVideo() {
-		Samba s = Samba.getIstance(prop.getCifsShareLocation(), prop
-				.getCifsSharePath(), prop.getCifsShareDomain(), prop
-				.getCifsShareUsername(), prop.getCifsSharePassword());
+		Samba s = Samba.getIstance(prop.getCifsShareLocation(),
+				prop.getCifsSharePath(), prop.getCifsShareDomain(),
+				prop.getCifsShareUsername(), prop.getCifsSharePassword());
 		try {
 			analyzeVideoSamba(s, s.listDir(null, "avi"));
 			analyzeVideoSamba(s, s.listDir(null, "mkv"));
@@ -908,8 +912,8 @@ public class Kernel {
 		String url = "http://" + prop.getCifsShareLocation()
 				+ ":5000/download/download_redirector.cgi";
 		try {
-			String synoID = http.synoConnectGetID(url, prop
-					.getCifsShareUsername(), prop.getCifsSharePassword());
+			String synoID = http.synoConnectGetID(url,
+					prop.getCifsShareUsername(), prop.getCifsSharePassword());
 			http.closeClient();
 			if (Lang.verifyTextNotNull(synoID)) {
 				for (int i = 0; i < link.size(); i++) {
@@ -932,8 +936,8 @@ public class Kernel {
 		String url = "http://" + prop.getCifsShareLocation()
 				+ ":5000/download/download_redirector.cgi";
 		try {
-			String synoID = http.synoConnectGetID(url, prop
-					.getCifsShareUsername(), prop.getCifsSharePassword());
+			String synoID = http.synoConnectGetID(url,
+					prop.getCifsShareUsername(), prop.getCifsSharePassword());
 			http.closeClient();
 			if (Lang.verifyTextNotNull(synoID)) {
 				http = new Http();

@@ -6,8 +6,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.TreeMap; //IMPORT JRSS2SUB
-import org.feedworker.util.FilterSub; //IMPORT JDOM
+import java.util.TreeMap;
+
+import org.feedworker.util.FilterSub;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -75,25 +76,25 @@ class Xml {
 	private void addRule(String _name, String _season, String _version,
 			String _path, String _status, String _day) {
 		Element role = new Element(ROLE_TAG);
-		
+
 		Element name = new Element(NAME_TAG);
 		name.setText(_name);
-		
+
 		Element season = new Element(SEASON_TAG);
 		season.setText(_season);
-		
+
 		Element quality = new Element(QUALITY_TAG);
 		quality.setText(_version);
-		
+
 		Element path = new Element(PATH_TAG);
 		path.setText(_path);
-		
+
 		Element status = new Element(STATUS_TAG);
 		status.setText(_status);
-		
+
 		Element day = new Element(DAY_TAG);
 		day.setText(_day);
-		
+
 		role.addContent(name);
 		role.addContent(season);
 		role.addContent(quality);

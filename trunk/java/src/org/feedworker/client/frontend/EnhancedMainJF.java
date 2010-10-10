@@ -65,7 +65,7 @@ public class EnhancedMainJF extends MainJF {
 					setVisible(true);
 				}
 			});
-			
+
 			trayIcon.addListener(SWT.MenuDetect, new Listener() {
 				public void handleEvent(Event event) {
 					trayMenu.setVisible(true);
@@ -82,9 +82,9 @@ public class EnhancedMainJF extends MainJF {
 			});
 			trayMenu.setDefaultItem(trayMenuItem);
 		}
-		//shell.setBounds(50, 50, 300, 200);
-		//shell.open();
-		
+		// shell.setBounds(50, 50, 300, 200);
+		// shell.open();
+
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
