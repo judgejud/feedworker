@@ -17,10 +17,11 @@ import org.apache.http.HttpEntity;
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
 import org.feedworker.util.Common;
-import org.feedworker.util.FilterSub;
+import org.feedworker.util.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.Samba;
+import org.feedworker.util.ValueRule;
 
 import org.jfacility.Io;
 import org.jfacility.Util;
@@ -44,14 +45,14 @@ public class DownloadThread implements Runnable{
     private boolean itasa;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
-    private TreeMap<FilterSub, String> mapRole;
+    private TreeMap<KeyRule, ValueRule> mapRules;
     private List listenerTextPane = new ArrayList();
     private static DownloadThread dt = null;
     
-    DownloadThread(TreeMap<FilterSub, String> map, ArrayList<String> _als, boolean _itasa){
+    DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als, boolean _itasa){
         als = _als;
         itasa = _itasa;
-        mapRole = map;        
+        mapRules = map;
     }
 
     public DownloadThread() {}
@@ -151,7 +152,8 @@ public class DownloadThread implements Runnable{
                     for (int i = 0; i < al.size(); i++) {
                         File filesub = al.get(i);
                         String namesub = al.get(i).getName();
-                        dest = mapPath(namesub, SPLIT_SUB);
+                        KeyRule key = parsingNamefile(namesub, SPLIT_SUB);
+                        dest = mapPath(key);
                         if (dest!=null && dest.toLowerCase().equals(CMD_DELETE))
                             filesub.delete();
                         else {
@@ -169,13 +171,21 @@ public class DownloadThread implements Runnable{
             } else {
                 for (int i = 0; i < al.size(); i++) {
                     File filesub = al.get(i);
-                    String namesub = al.get(i).getName();
-                    String dest = mapPath(namesub, SPLIT_SUB);
+                    String namesub = filesub.getName();
+                    KeyRule key = parsingNamefile(namesub, SPLIT_SUB);
+                    String dest = mapPath(key);
                     if (dest!=null && dest.toLowerCase().equals(CMD_DELETE))
                         filesub.delete();
                     else {
                         if (dest==null)
                             dest = prop.getSubtitleDestinationFolder();
+                        else {
+                            if (mapRules.get(key).isRename()){
+                                String temp = namesub.split(SPLIT_SUB)[0] +
+                                        namesub.substring(namesub.length()-4);
+                                System.out.println(temp);
+                            }
+                        }
                         try {
                             Io.moveFile(filesub, dest);
                             fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
@@ -189,25 +199,15 @@ public class DownloadThread implements Runnable{
             }
         }
     }
-    /**Restituisce il valore/percorso della chiave ad esso associato nella treemap
+    /**Restituisce il percorso della chiave ad esso associato nella treemap
      *
-     * @param name nome del file da analizzare
-     * @param parsing valore sul quale effettuare lo split
+     * @param 
      * @return path di destinazione
      */
-    private String mapPath(String name, String parsing){
-        String path = null;
-        FilterSub sub = parsingNamefile(name, parsing);
-        if (sub!=null && mapRole!=null) {
-            if (mapRole.containsKey(sub))
-                path = mapRole.get(sub);
-            else {
-                sub.setQuality(Quality.DIFF.toString());
-                if (mapRole.containsKey(sub))
-                    path = mapRole.get(sub);
-            }
-        }
-        return path;
+    private String mapPath(KeyRule key){
+        if (key!=null && mapRules!=null)
+            return mapRules.get(key).getPath();
+        return null;
     }
     /**Effettua l'analisi del nome del file restituendo l'oggetto filtro da confrontare
      *
@@ -215,13 +215,12 @@ public class DownloadThread implements Runnable{
      * @param split stringa col quale effettuare lo split del nome del file
      * @return oggetto filtro
      */
-    private FilterSub parsingNamefile(String name, String split) {
-        FilterSub fil = null;
+    private KeyRule parsingNamefile(String name, String split) {
         String[] temp = (name.split(split))[0].split(SPLIT_POINT);
         int pos = temp.length - 1;
         String version = searchVersion(temp[pos]);
         String num;
-        pos = searchPosSeries(temp);
+        pos = Common.searchPosSeries(temp);
         if (pos>-1)
             num = Common.searchNumberSeries(temp[pos]);
         else
@@ -229,8 +228,17 @@ public class DownloadThread implements Runnable{
         String _serie = temp[0];
         for (int i = 1; i < pos; i++)
             _serie += " " + temp[i];
-        fil = new FilterSub(_serie, num, version, null, null, false);
-        return fil;
+        KeyRule key = new KeyRule(_serie, num, version);
+        if (key!=null && mapRules!=null) {
+            if (mapRules.containsKey(key))
+                return key;
+            else {
+                key.setQuality(Quality.DIFF.toString());
+                if (mapRules.containsKey(key))
+                    return key;
+            }
+        }
+        return null;
     }
     /**cerca la versione/qualità del sub/video
      *
@@ -249,21 +257,7 @@ public class DownloadThread implements Runnable{
             version = Quality.NORMAL.toString();
         return version;
     }
-    /**cerca la posizione della stringa corrispondente al numero di serie ed episodio
-     * nell'array; es: s01e01
-     * @param _array
-     * @return restituisce la posizione se l'ha trovato, altrimenti -1
-     */
-    private int searchPosSeries(String[] _array){
-        int pos = -1;
-        for (int i=0; i<_array.length; i++){
-            if (Common.searchNumberSeries(_array[i])!=null){
-                pos = i;
-                break;
-            }
-        }
-        return pos;
-    }    
+    
     /**Permette alla classe di registrarsi per l'evento textpane
      *
      * @param listener evento textpane

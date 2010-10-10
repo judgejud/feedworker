@@ -80,7 +80,7 @@ public class Kernel {
     private Timer timer;
     private String lastItasa = null, lastMyItasa = null, lastSubsf = null,
             lastEztv = null, lastBtchat = null;
-    private TreeMap<FilterSub, String> mapRole;
+    private TreeMap<KeyRule, ValueRule> mapRules;
     private ManageException error = ManageException.getIstance();
     private MyTextPaneEventListener mytpel;
 
@@ -101,7 +101,7 @@ public class Kernel {
      * @param itasa
      */
     public void downloadSub(ArrayList<String> als, boolean itasa) {
-        DownloadThread dt = new DownloadThread(mapRole, als, itasa);
+        DownloadThread dt = new DownloadThread(mapRules, als, itasa);
         Thread t = new Thread(dt, "Thread download");
         dt.addMyTextPaneEventListener(mytpel);
         t.start();
@@ -115,7 +115,7 @@ public class Kernel {
     private void downItasaAuto(Object link) {
         ArrayList<String> als = new ArrayList<String>();
         als.add(link.toString());
-        DownloadThread dt = new DownloadThread(mapRole, als, true);
+        DownloadThread dt = new DownloadThread(mapRules, als, true);
         Thread t = new Thread(dt, "Thread download");
         dt.addMyTextPaneEventListener(mytpel);
         t.start();
@@ -173,20 +173,10 @@ public class Kernel {
      * @param parsing valore sul quale effettuare lo split
      * @return path di destinazione
      */
-    private String mapPath(String name, String parsing) {
-        String path = null;
-        FilterSub sub = parsingNamefile(name, parsing);
-        if (sub != null && mapRole != null) {
-            if (mapRole.containsKey(sub)) {
-                path = mapRole.get(sub);
-            } else {
-                sub.setQuality(Quality.DIFF.toString());
-                if (mapRole.containsKey(sub)) {
-                    path = mapRole.get(sub);
-                }
-            }
-        }
-        return path;
+    private String mapPath(KeyRule key){
+        if (key!=null && mapRules!=null)
+            return mapRules.get(key).getPath();
+        return null;
     }
 
     /**Effettua l'analisi del nome del file restituendo l'oggetto filtro da confrontare
@@ -195,13 +185,13 @@ public class Kernel {
      * @param split stringa col quale effettuare lo split del nome del file
      * @return oggetto filtro
      */
-    private FilterSub parsingNamefile(String name, String split) {
-        FilterSub fil = null;
+    private KeyRule parsingNamefile(String name, String split) {
+        KeyRule fil = null;
         String[] temp = (name.split(split))[0].split(SPLIT_POINT);
         int pos = temp.length - 1;
         String version = searchVersion(temp[pos]);
         String num;
-        pos = searchPosSeries(temp);
+        pos = Common.searchPosSeries(temp);
         if (pos > -1)
             num = Common.searchNumberSeries(temp[pos]);
         else
@@ -210,25 +200,9 @@ public class Kernel {
         for (int i = 1; i < pos; i++) {
             _serie += " " + temp[i];
         }
-        fil = new FilterSub(_serie, num, version, null, null, false);
+        fil = new KeyRule(_serie, num, version);
         return fil;
-    }
-
-    /**cerca la posizione della stringa corrispondente al numero di serie ed episodio
-     * nell'array; es: s01e01
-     * @param _array
-     * @return restituisce la posizione se l'ha trovato, altrimenti -1
-     */
-    private int searchPosSeries(String[] _array) {
-        int pos = -1;
-        for (int i = 0; i < _array.length; i++) {
-            if (Common.searchNumberSeries(_array[i]) != null) {
-                pos = i;
-                break;
-            }
-        }
-        return pos;
-    }
+    }    
 
     /**cerca la versione/qualità del sub/video
      *
@@ -556,10 +530,10 @@ public class Kernel {
      *
      * @param temp treepam regole
      */
-    public void saveMap(TreeMap<FilterSub, String> temp) {
+    public void saveMap(TreeMap<KeyRule, ValueRule> temp) {
         try {
             new Xml().writeMap(temp);
-            mapRole = temp;
+            mapRules = temp;
             fireNewTextPaneEvent("Regola/e memorizzate", MyTextPaneEvent.OK);
         } catch (IOException ex) {
             error.launch(ex, getClass(), null);
@@ -572,14 +546,15 @@ public class Kernel {
      */
     private ArrayList<Object[]> convertTreemapToArraylist() {
         ArrayList<Object[]> matrix = null;
-        if (mapRole.size() > 0) {
-            Iterator it = mapRole.keySet().iterator();
+        if (mapRules.size() > 0) {
+            Iterator it = mapRules.keySet().iterator();
             matrix = new ArrayList<Object[]>();
             while (it.hasNext()) {
-                FilterSub key = (FilterSub) it.next();
+                KeyRule key = (KeyRule) it.next();
+                ValueRule value = mapRules.get(key);
                 matrix.add(new Object[]{key.getName(), key.getSeason(),
-                            key.getQuality(), mapRole.get(key), key.getStatus(),
-                            key.getDay(), Boolean.valueOf(key.getRename())});
+                            key.getQuality(), value.getPath(), value.getStatus(),
+                            value.getDay(), Boolean.valueOf(value.isRename())});
             }
         }
         return matrix;
@@ -590,8 +565,8 @@ public class Kernel {
         if (prop.isEnabledCustomDestinationFolder()) {
             Xml x = new Xml();
             try {
-                mapRole = x.initializeReader();
-                if (mapRole != null)
+                mapRules = x.initializeReader();
+                if (mapRules != null)
                     fireTableXmlEvent(convertTreemapToArraylist());
             } catch (JDOMException ex) {
                 error.launch(ex, getClass());
@@ -724,11 +699,12 @@ public class Kernel {
         for (int i = 0; i < fileList.length; i++) {
             String name = fileList[i];
             if (name.toLowerCase().contains(SPLIT_HDTV)) {
-                String dest = mapPath(name.toLowerCase(), SPLIT_HDTV);
+                KeyRule key = parsingNamefile(name.toLowerCase(), SPLIT_HDTV);
+                String dest = mapPath(key);
                 if (dest != null) {
                     try {
                         String[] _array = name.toLowerCase().split(SPLIT_HDTV)[0].split("\\.");
-                        int pos = searchPosSeries(_array);
+                        int pos = Common.searchPosSeries(_array);
                         int conta = 0;
                         for (int j = 0; j < pos; j++) {
                             conta += _array[j].length() + 1;

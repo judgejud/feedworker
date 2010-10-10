@@ -6,8 +6,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.TreeMap;
 //IMPORT FEEDWORKER
-import org.feedworker.util.FilterSub;
+import org.feedworker.util.KeyRule;
 //IMPORT JDOM
+import org.feedworker.util.ValueRule;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -42,15 +43,15 @@ class Xml {
      * @param map
      * @throws IOException
      */
-    public void writeMap(TreeMap<FilterSub, String> map) throws IOException {
+    public void writeMap(TreeMap<KeyRule, ValueRule> map) throws IOException {
         if (map.size() > 0) {
             Iterator it = map.keySet().iterator();
             initializeWriter();
             while (it.hasNext()) {
-                FilterSub key = (FilterSub) it.next();
-                String value = map.get(key);
+                KeyRule key = (KeyRule) it.next();
+                ValueRule value = map.get(key);
                 addRule(key.getName(), key.getSeason(), key.getQuality(),
-                        value, key.getStatus(), key.getDay(), key.getRename());
+                        value.getPath(), value.getStatus(), value.getDay(), value.isRename());
             }
             write();
         }
@@ -103,8 +104,7 @@ class Xml {
         root.addContent(role);
     }
 
-    /**
-     * Scrive l'xml
+    /**Scrive l'xml
      *
      * @throws IOException
      */
@@ -123,14 +123,14 @@ class Xml {
      * @throws JDOMException
      * @throws IOException
      */
-    public TreeMap<FilterSub, String> initializeReader() throws JDOMException, IOException {
-        TreeMap<FilterSub, String> map = null;
+    public TreeMap<KeyRule, ValueRule> initializeReader() throws JDOMException, IOException {
+        TreeMap<KeyRule, ValueRule> map = null;
         if (FILE_NAME.exists()) {
             // Creo un SAXBuilder e con esso costruisco un document
             document = new SAXBuilder().build(FILE_NAME);
             int size = document.getRootElement().getChildren().size();
             if (size > 0) {
-                map = new TreeMap<FilterSub, String>();
+                map = new TreeMap<KeyRule, ValueRule>();
                 String status, day;
                 Iterator iterator = document.getRootElement().getChildren().iterator();
                 while (iterator.hasNext()) {
@@ -150,7 +150,8 @@ class Xml {
                     } catch (NullPointerException npe) {
                         day = "";
                     }
-                    map.put(new FilterSub(name, season, quality, status, day, rename),path);
+                    map.put(new KeyRule(name, season, quality),
+                            new ValueRule(path, day, status, rename));
                 }
             }
         }
