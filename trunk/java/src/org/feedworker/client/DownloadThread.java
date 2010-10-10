@@ -13,7 +13,6 @@ import java.util.TreeMap;
 import java.util.zip.ZipException;
 
 import org.apache.http.HttpEntity;
-
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
 import org.feedworker.util.FilterSub;
@@ -23,7 +22,6 @@ import org.feedworker.util.Samba;
 import org.jfacility.Io;
 import org.jfacility.Util;
 import org.jfacility.lang.Lang;
-
 /**
  *
  * @author luca
