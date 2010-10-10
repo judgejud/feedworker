@@ -70,7 +70,7 @@ class Xml {
      * @param _path percorso
      */
     private void addRule(String _name, String _season, String _version,
-            String _path, String _status, String _day, String _rename) {
+            String _path, String _status, String _day, boolean _rename) {
         Element role = new Element(RULE_TAG);
         Element name = new Element(NAME_TAG);
         name.setText(_name);
@@ -91,7 +91,7 @@ class Xml {
         day.setText(_day);
 
         Element rename = new Element(RENAME_TAG);
-        rename.setText(_rename);
+        rename.setText(Boolean.toString(_rename));
 
         role.addContent(name);
         role.addContent(season);
@@ -139,7 +139,7 @@ class Xml {
                     String season = role.getChild(SEASON_TAG).getText();
                     String quality = role.getChild(QUALITY_TAG).getText();
                     String path = role.getChild(PATH_TAG).getText();
-                    String rename = role.getChild(RENAME_TAG).getText();
+                    boolean rename = Boolean.parseBoolean(role.getChild(RENAME_TAG).getText());
                     try {
                         status = role.getChild(STATUS_TAG).getText();
                     } catch (NullPointerException npe) {

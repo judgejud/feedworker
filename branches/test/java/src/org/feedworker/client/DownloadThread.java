@@ -229,7 +229,7 @@ public class DownloadThread implements Runnable{
         String _serie = temp[0];
         for (int i = 1; i < pos; i++)
             _serie += " " + temp[i];
-        fil = new FilterSub(_serie, num, version, null, null, null);
+        fil = new FilterSub(_serie, num, version, null, null, false);
         return fil;
     }
     /**cerca la versione/qualità del sub/video

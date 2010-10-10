@@ -236,7 +236,7 @@ public class Mediator {
             String path = (String)jtable.getValueAt(i, 3);
             String status = (String)jtable.getValueAt(i, 4);
             String day = (String)jtable.getValueAt(i, 5);
-            String rename = jtable.getValueAt(i, 6).toString();
+            boolean rename = Boolean.parseBoolean(jtable.getValueAt(i, 6).toString());
 
             if (Lang.verifyTextNotNull(name)){
                 if (Lang.verifyTextNotNull(path)){
