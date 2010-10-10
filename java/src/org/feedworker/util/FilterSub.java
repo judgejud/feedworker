@@ -10,10 +10,10 @@ public class FilterSub implements Comparable<FilterSub>{
     private String quality;
     private String day;
     private String status;
-    private String rename;
+    private boolean rename;
 
     public FilterSub(String name, String season, String quality, String status, String day,
-                    String rename) {
+                    boolean rename) {
         this.name = name.toLowerCase();
         this.season = season;
         this.quality = quality;
@@ -54,7 +54,7 @@ public class FilterSub implements Comparable<FilterSub>{
         this.status = status;
     }
 
-    public String getRename(){
+    public boolean getRename(){
         return rename;
     }
 

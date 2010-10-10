@@ -210,7 +210,7 @@ public class Kernel {
         for (int i = 1; i < pos; i++) {
             _serie += " " + temp[i];
         }
-        fil = new FilterSub(_serie, num, version, null, null, null);
+        fil = new FilterSub(_serie, num, version, null, null, false);
         return fil;
     }
 
@@ -579,7 +579,7 @@ public class Kernel {
                 FilterSub key = (FilterSub) it.next();
                 matrix.add(new Object[]{key.getName(), key.getSeason(),
                             key.getQuality(), mapRole.get(key), key.getStatus(),
-                            key.getDay(), Boolean.parseBoolean(key.getRename())});
+                            key.getDay(), Boolean.valueOf(key.getRename())});
             }
         }
         return matrix;
