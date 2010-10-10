@@ -570,16 +570,16 @@ public class Kernel {
      *
      * @return arraylist regole
      */
-    private ArrayList<String[]> convertTreemapToArraylist() {
-        ArrayList<String[]> matrix = null;
+    private ArrayList<Object[]> convertTreemapToArraylist() {
+        ArrayList<Object[]> matrix = null;
         if (mapRole.size() > 0) {
             Iterator it = mapRole.keySet().iterator();
-            matrix = new ArrayList<String[]>();
+            matrix = new ArrayList<Object[]>();
             while (it.hasNext()) {
                 FilterSub key = (FilterSub) it.next();
-                matrix.add(new String[]{key.getName(), key.getSeason(),
+                matrix.add(new Object[]{key.getName(), key.getSeason(),
                             key.getQuality(), mapRole.get(key), key.getStatus(),
-                            key.getDay()});
+                            key.getDay(), Boolean.parseBoolean(key.getRename())});
             }
         }
         return matrix;
@@ -870,7 +870,7 @@ public class Kernel {
         listenerTableXml.remove(listener);
     }
 
-    private synchronized void fireTableXmlEvent(ArrayList<String[]> alObj) {
+    private synchronized void fireTableXmlEvent(ArrayList<Object[]> alObj) {
         TableXmlEvent event = new TableXmlEvent(this, alObj);
         Iterator listeners = listenerTableXml.iterator();
         while (listeners.hasNext()) {

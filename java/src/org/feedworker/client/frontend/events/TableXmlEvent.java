@@ -9,14 +9,14 @@ import java.util.EventObject;
  */
 public class TableXmlEvent extends EventObject{
 
-    private ArrayList<String[]> obj;
+    private ArrayList<Object[]> obj;
 
-    public TableXmlEvent(Object source, ArrayList<String[]> obj) {
+    public TableXmlEvent(Object source, ArrayList<Object[]> obj) {
         super(source);
         this.obj = obj;
     }
 
-    public ArrayList<String[]> getObj() {
+    public ArrayList<Object[]> getObj() {
         return obj;
     }
 }

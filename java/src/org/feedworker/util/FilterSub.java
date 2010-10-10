@@ -54,6 +54,10 @@ public class FilterSub implements Comparable<FilterSub>{
         this.status = status;
     }
 
+    public String getRename(){
+        return rename;
+    }
+
     @Override
     public int compareTo(FilterSub o) {
         if (this.getName().equals(o.getName())){
