@@ -27,10 +27,20 @@ public class FeedWorkerClient {
     public static final String APPLICATION_BUILD = "72";
     private static final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
     public static Image APPLICATION_ICON = Common.getResourceImage(APPLICATION_ICON_FILE_NAME);
-
+    private static final Kernel k = Kernel.getIstance(); 
+    
     public static void main(String args[]) {
         final JVM jvm = new JVM();
         boolean alreadyRunning;
+        
+        for (String s : System.getenv().keySet()) {
+        	System.out.println(s + " : " + System.getenv(s));
+        }
+        
+        for (Object s : System.getProperties().keySet()) {
+        	System.out.println(s + " : " + System.getProperty((String)s));
+        }
+        System.out.println(System.getProperties().keySet());
 
         if (!jvm.isOrLater(15)) {
             JOptionPane.showMessageDialog(null,
@@ -38,6 +48,8 @@ public class FeedWorkerClient {
                     APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         } else {
+            k.setLookFeel();
+        	
             try {
                 JUnique.acquireLock(APPLICATION_NAME);
                 alreadyRunning = false;
@@ -47,7 +59,7 @@ public class FeedWorkerClient {
                         APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
                 alreadyRunning = true;
             }
-
+            
             if (!alreadyRunning) {
                 ResourceLocator.setWorkspace();
                 ApplicationSettings.getIstance();
@@ -55,8 +67,8 @@ public class FeedWorkerClient {
                 EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        Kernel k = Kernel.getIstance();
-                        k.setLookFeel();
+                        //Kernel k = Kernel.getIstance();
+                        //k.setLookFeel();
                         MainJF jframe = null;
                         if (jvm.isOrLater(16))
                             jframe = new EnhancedMainJF();
