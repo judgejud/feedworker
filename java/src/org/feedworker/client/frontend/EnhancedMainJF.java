@@ -98,6 +98,7 @@ public class EnhancedMainJF extends MainJF {
 
     @Override
     public void windowClosing(WindowEvent we) {
+    	System.out.println(we.getSource().getClass());
         setVisible(false);
         try {
             initializeSysTray();
