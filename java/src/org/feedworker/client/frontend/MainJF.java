@@ -1,4 +1,5 @@
 package org.feedworker.client.frontend;
+
 //IMPORT JAVA
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -31,7 +32,7 @@ import org.jfacility.lang.Lang;
  */
 public class MainJF extends JFrame implements WindowListener,
 		MyJFrameEventListener {
-	
+
 	private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
 	private final Dimension TAB_SIZE = new Dimension(1024, 580);
 
@@ -68,7 +69,7 @@ public class MainJF extends JFrame implements WindowListener,
 		mainJTP.setPreferredSize(TAB_SIZE);
 		this.add(mainJTP, BorderLayout.CENTER);
 		settingsJP = paneSetting.getPanel();
-		
+
 		if (prop.hasItasaOption()) {
 			itasaJP = ItasaJP.getPanel();
 			mainJTP.addTab("Itasa", itasaJP);
@@ -96,9 +97,8 @@ public class MainJF extends JFrame implements WindowListener,
 			mainJTP.setSelectedComponent(settingsJP);
 			changeEnabledButton(false);
 			logJTP.appendOK("Benvenuto al primo utilizzo.");
-			logJTP
-					.appendAlert("Per poter usare il client, "
-							+ "devi configurare le impostazioni presenti nella specifica sezione");
+			logJTP.appendAlert("Per poter usare il client, "
+					+ "devi configurare le impostazioni presenti nella specifica sezione");
 		} else {
 			settingsJP.settingsValue();
 			logJTP.appendOK("Ciao " + prop.getMyitasaUsername());
@@ -112,10 +112,10 @@ public class MainJF extends JFrame implements WindowListener,
 	/** inizializza la barra di menù */
 	private void initializeMenuBar() {
 		JMenuBar applicationJMB = new JMenuBar();
-		
+
 		JMenu fileJM = new JMenu(" File ");
 		applicationJMB.add(fileJM);
-		
+
 		JMenuItem clearLogJMI = new JMenuItem(" Clear log ");
 		clearLogJMI.addActionListener(new ActionListener() {
 			@Override
@@ -132,7 +132,7 @@ public class MainJF extends JFrame implements WindowListener,
 			public void actionPerformed(ActionEvent e) {
 
 			}
-		});		
+		});
 		fileJM.add(saveRuleAsJMI);
 
 		JMenuItem closeJMI = new JMenuItem(" Close ");
@@ -143,30 +143,29 @@ public class MainJF extends JFrame implements WindowListener,
 			}
 		});
 		fileJM.add(closeJMI);
-		
-		/* -- Al momento non è implementata la gestione del Look & Feel nel Menù
-		JMenu lookAndFeelJM = new JMenu(" Look & Feel ");
-		applicationJMB.add(lookAndFeelJM);
-		JCheckBoxMenuItem[] lookAndFeelJCBMI = new JCheckBoxMenuItem[7];		
-		lookAndFeelJCBMI[0] = new JCheckBoxMenuItem(" Standard ");
-		lookAndFeelJCBMI[1] = new JCheckBoxMenuItem(" Blackmoon ");
-		lookAndFeelJCBMI[2] = new JCheckBoxMenuItem(" Blackstar ");
-		lookAndFeelJCBMI[3] = new JCheckBoxMenuItem(" Blueice ");
-		lookAndFeelJCBMI[4] = new JCheckBoxMenuItem(" Bluesteel ");
-		lookAndFeelJCBMI[5] = new JCheckBoxMenuItem(" GreenDream ");
-		lookAndFeelJCBMI[6] = new JCheckBoxMenuItem(" Silvermoon ");	
-		ButtonGroup lookAndFeelBG = new ButtonGroup();		
-		for (int i = 0; i < lookAndFeelJCBMI.length; i++) {
-			lookAndFeelBG.add(lookAndFeelJCBMI[i]);
-			lookAndFeelJM.add(lookAndFeelJCBMI[i]);
-		}
-		fileJM.add(closeJMI);		
-		*/
-		
+
+		/*
+		 * -- Al momento non è implementata la gestione del Look & Feel nel Menù
+		 * JMenu lookAndFeelJM = new JMenu(" Look & Feel ");
+		 * applicationJMB.add(lookAndFeelJM); JCheckBoxMenuItem[]
+		 * lookAndFeelJCBMI = new JCheckBoxMenuItem[7]; lookAndFeelJCBMI[0] =
+		 * new JCheckBoxMenuItem(" Standard "); lookAndFeelJCBMI[1] = new
+		 * JCheckBoxMenuItem(" Blackmoon "); lookAndFeelJCBMI[2] = new
+		 * JCheckBoxMenuItem(" Blackstar "); lookAndFeelJCBMI[3] = new
+		 * JCheckBoxMenuItem(" Blueice "); lookAndFeelJCBMI[4] = new
+		 * JCheckBoxMenuItem(" Bluesteel "); lookAndFeelJCBMI[5] = new
+		 * JCheckBoxMenuItem(" GreenDream "); lookAndFeelJCBMI[6] = new
+		 * JCheckBoxMenuItem(" Silvermoon "); ButtonGroup lookAndFeelBG = new
+		 * ButtonGroup(); for (int i = 0; i < lookAndFeelJCBMI.length; i++) {
+		 * lookAndFeelBG.add(lookAndFeelJCBMI[i]);
+		 * lookAndFeelJM.add(lookAndFeelJCBMI[i]); } fileJM.add(closeJMI);
+		 */
+
 		JMenu nasJM = new JMenu(" NAS ");
 		JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
 		JMenuItem taskStatusJMI = new JMenuItem(" Task status ");
-		JMenuItem deleteCompletedTaskJMI = new JMenuItem(" Delete completed task ");
+		JMenuItem deleteCompletedTaskJMI = new JMenuItem(
+				" Delete completed task ");
 		videoMoveJMI.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -192,8 +191,7 @@ public class MainJF extends JFrame implements WindowListener,
 
 		JMenu helpJM = new JMenu(" Help ");
 		applicationJMB.add(helpJM);
-		JMenuItem helpGeneralSettingsJMI = new JMenuItem(
-				" General Settings ");
+		JMenuItem helpGeneralSettingsJMI = new JMenuItem(" General Settings ");
 		JMenuItem helpItasaSettingsJMI = new JMenuItem(" Itasa Settings ");
 		JMenuItem helpSubtitleRoleJMI = new JMenuItem(" Subtitle Rule ");
 		helpSubtitleRoleJMI.addActionListener(new ActionListener() {
@@ -223,32 +221,22 @@ public class MainJF extends JFrame implements WindowListener,
 		jpanel.setVisible(true);
 		JTextArea jtaHelp = new JTextArea();
 		jtaHelp.setPreferredSize(dim);
-		jtaHelp
-				.append("Serie: inserire il nome del file scaricato sostituendo i \".\" con lo spazio");
-		jtaHelp
-				.append("\nesempio: Lost.s06e06.sub.itasa.srt -->lost (n.b. no spazio)");
-		jtaHelp
-				.append("\nesempio: Spartacus.Blood.And.Sand.s01e06.sub.itasa.srt -->"
-						+ "spartacus blood and sand");
-		jtaHelp
-				.append("\n\nStagione: immettere il numero della stagione per la quale si vuole "
-						+ "creare la regola");
-		jtaHelp
-				.append("\nad eccezione degli anime/cartoon dove la stagione molto probabilmente è "
-						+ "unica e quindi 1");
-		jtaHelp
-				.append("\n\nQualità: * = tutte le versioni dei sub ; normale = sub qualità standard");
-		jtaHelp
-				.append("\n720p = versione 720p; 1080p = versione 1080p; dvdrip = versione dvdrip");
+		jtaHelp.append("Serie: inserire il nome del file scaricato sostituendo i \".\" con lo spazio");
+		jtaHelp.append("\nesempio: Lost.s06e06.sub.itasa.srt -->lost (n.b. no spazio)");
+		jtaHelp.append("\nesempio: Spartacus.Blood.And.Sand.s01e06.sub.itasa.srt -->"
+				+ "spartacus blood and sand");
+		jtaHelp.append("\n\nStagione: immettere il numero della stagione per la quale si vuole "
+				+ "creare la regola");
+		jtaHelp.append("\nad eccezione degli anime/cartoon dove la stagione molto probabilmente è "
+				+ "unica e quindi 1");
+		jtaHelp.append("\n\nQualità: * = tutte le versioni dei sub ; normale = sub qualità standard");
+		jtaHelp.append("\n720p = versione 720p; 1080p = versione 1080p; dvdrip = versione dvdrip");
 		jtaHelp.append("\nbluray = versione bluray; hr = versione hr");
-		jtaHelp
-				.append("\n\\ = se avete già impostato una regola per una versione e volete che le "
-						+ "altre versioni");
-		jtaHelp
-				.append("\nvadino in un'altra cartella basterà selezionare questa opzione "
-						+ "\"differenziale\"");
-		jtaHelp
-				.append("\n\nPercorso: specificare il percorso dove desiderate che vi estragga il sub");
+		jtaHelp.append("\n\\ = se avete già impostato una regola per una versione e volete che le "
+				+ "altre versioni");
+		jtaHelp.append("\nvadino in un'altra cartella basterà selezionare questa opzione "
+				+ "\"differenziale\"");
+		jtaHelp.append("\n\nPercorso: specificare il percorso dove desiderate che vi estragga il sub");
 		jpanel.add(jtaHelp);
 		return jpanel;
 	}
@@ -277,8 +265,7 @@ public class MainJF extends JFrame implements WindowListener,
 			settingsJP.setDataAggiornamento(evt.getDate());
 		if (evt.getOperaz() != null) {
 			if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ"))
-				mainJTP
-						.addTab("Destinazione avanzata", paneRole.getPanel());
+				mainJTP.addTab("Destinazione avanzata", paneRole.getPanel());
 			else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ"))
 				mainJTP.remove(paneRole.getPanel());
 			else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON"))
