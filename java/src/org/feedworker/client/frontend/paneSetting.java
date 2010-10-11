@@ -302,7 +302,7 @@ public class paneSetting extends JPanel {
 
 		gbc.gridx = 2;
 		DefaultComboBoxModel dcbmL = new DefaultComboBoxModel(new String[] {
-				"Synthetica Standard", "Synthetica BlackEye",
+				"Nimbus", "Synthetica Standard", "Synthetica BlackEye",
 				"Synthetica BlackMoon", "Synthetica BlackStar",
 				"Synthetica BlueIce", "Synthetica BlueMoon",
 				"Synthetica BlueSteel", "Synthetica GreenDream",
