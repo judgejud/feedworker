@@ -19,19 +19,38 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
-//IMPORT JAVAX
+
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-//IMPORT FEEDWORKER
-import org.feedworker.client.frontend.events.*;
-import org.feedworker.util.*;
-//IMPORT JFACILITY
+
+import jcifs.smb.SmbException;
+
+import org.eclipse.swt.widgets.Display;
+import org.feedworker.client.frontend.events.MyJFrameEvent;
+import org.feedworker.client.frontend.events.MyJFrameEventListener;
+import org.feedworker.client.frontend.events.MyTextPaneEvent;
+import org.feedworker.client.frontend.events.MyTextPaneEventListener;
+import org.feedworker.client.frontend.events.TableRssEvent;
+import org.feedworker.client.frontend.events.TableRssEventListener;
+import org.feedworker.client.frontend.events.TableXmlEvent;
+import org.feedworker.client.frontend.events.TableXmlEventListener;
+import org.feedworker.util.AudioPlay;
+import org.feedworker.util.Common;
+import org.feedworker.util.ExtensionFilter;
+import org.feedworker.util.KeyRule;
+import org.feedworker.util.ManageException;
+import org.feedworker.util.Quality;
+import org.feedworker.util.Samba;
+import org.feedworker.util.ValueRule;
+import org.jdom.JDOMException;
 import org.jfacility.lang.Lang;
-//IMPORT SUN
+
+import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
 import com.sun.syndication.io.FeedException;
-//IMPORT JAVASOFT
+
 import de.javasoft.plaf.synthetica.SyntheticaBlackEyeLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlackMoonLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlackStarLookAndFeel;
@@ -39,7 +58,6 @@ import de.javasoft.plaf.synthetica.SyntheticaBlueIceLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlueMoonLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlueSteelLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaGreenDreamLookAndFeel;
-import de.javasoft.plaf.synthetica.SyntheticaLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaMauveMetallicLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaOrangeMetallicLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaSilverMoonLookAndFeel;
@@ -47,12 +65,6 @@ import de.javasoft.plaf.synthetica.SyntheticaSimple2DLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaSkyMetallicLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaWhiteVisionLookAndFeel;
-//IMPORT JCIFS
-import jcifs.smb.SmbException;
-//IMPORT ECLIPSE
-import org.eclipse.swt.widgets.Display;
-//IMPORT JDOM
-import org.jdom.JDOMException;
 
 /**
  * Motore di Feedworker
@@ -314,10 +326,12 @@ public class Kernel {
 			// UIManager.put("Synthetica.license.key",
 			// "C1410294-61B64AAC-4B7D3039-834A82A1-37E5D695");
 
-			SyntheticaLookAndFeel laf = new SyntheticaStandardLookAndFeel();
+			LookAndFeel laf = new SyntheticaStandardLookAndFeel();
 			String lf = prop.getApplicationLookAndFeel();
-
-			if (lf.equalsIgnoreCase("Synthetica Standard"))
+			
+			if (lf.equalsIgnoreCase("Nimbus"))
+				laf = new NimbusLookAndFeel();
+			else if (lf.equalsIgnoreCase("Synthetica Standard"))
 				laf = new SyntheticaStandardLookAndFeel();
 			else if (lf.equalsIgnoreCase("Synthetica BlackEye"))
 				laf = new SyntheticaBlackEyeLookAndFeel();
