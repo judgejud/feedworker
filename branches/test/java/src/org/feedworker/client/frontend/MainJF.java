@@ -141,7 +141,9 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         closeJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	MainJF.this.dispatchEvent(new WindowEvent(MainJF.this, WindowEvent.WINDOW_CLOSING));
+            	WindowEvent we = new WindowEvent(MainJF.this, WindowEvent.WINDOW_CLOSING);
+            	we.setSource(new JMenuItem());
+            	MainJF.this.dispatchEvent(we);
                 //applicationClose();
             }
         });
