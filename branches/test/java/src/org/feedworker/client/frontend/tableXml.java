@@ -41,8 +41,8 @@ class tableXml extends JTable implements TableXmlEventListener{
 
         getTableHeader().setReorderingAllowed(false);
         
-        Swing.setTableDimensionLockColumn(this, 1, 55);
-        Swing.setTableDimensionLockColumn(this, 2, 65);
+        Swing.setTableDimensionLockColumn(this, 1, 60);
+        Swing.setTableDimensionLockColumn(this, 2, 60);
         Swing.setTableDimensionLockColumn(this, 4, 90);
         Swing.setTableDimensionLockColumn(this, 5, 75);
         Swing.setTableDimensionLockColumn(this, 6, 55);
