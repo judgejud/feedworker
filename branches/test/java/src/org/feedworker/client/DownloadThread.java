@@ -153,6 +153,8 @@ public class DownloadThread implements Runnable{
                         if (dest!=null && dest.toLowerCase().equals(CMD_DELETE))
                             filesub.delete();
                         else {
+                            //TODO: terminare rinomina.
+                            String newname = rename(key, namesub);
                             s.moveFromLocal(filesub, dest);
                             if (dest==null)
                                 dest = "";
@@ -175,28 +177,17 @@ public class DownloadThread implements Runnable{
                     else {
                         if (dest==null)
                             dest = prop.getSubtitleDestinationFolder();
-                        else if (mapRules.get(key).isRename()){
-                            String from = key.getName().replaceAll(" ", ".") + ".";
-                            System.out.println(namesub + " " + from);
-                            String newname = namesub.split(SPLIT_SUB)[0].toLowerCase().replaceFirst(from, "");
-                            String ext = namesub.substring(namesub.length()-3);
-                            if (newname.substring(0, 1).equalsIgnoreCase("s"))
-                                newname = newname.substring(4);
-                            else if(newname.substring(0, 1).equalsIgnoreCase("e"))
-                                newname = newname.substring(1);
-                            try {
-                                filesub.renameTo(File.createTempFile(newname, ext));
-                            } catch (IOException ex) {
-                                error.launch(ex, getClass());
-                            }
-                            System.out.println(newname + " " + filesub.getAbsolutePath());
-                        }
+                        String newname = rename(key, namesub);
                         try {
-                            System.out.println(filesub.getAbsolutePath());
-                            Io.moveFile(filesub, dest);
-                            fireNewTextPaneEvent("Estratto " + filesub.getName() +
-                                    " nel seguente percorso: " + dest,
-                                    MyTextPaneEvent.SUB);
+                            String msg = "Estratto " + filesub.getName();
+                            if (newname==null){
+                                Io.moveFile(filesub, dest);
+                            } else {
+                                Io.moveFile(filesub, dest, newname);
+                                msg += " e rinominato in " + newname;
+                            }
+                            msg += " nel seguente percorso: " + dest;
+                            fireNewTextPaneEvent(msg, MyTextPaneEvent.SUB);
                         } catch (IOException ex) {
                             error.launch(ex, getClass());
                         }
@@ -206,6 +197,20 @@ public class DownloadThread implements Runnable{
         }
     }
 
+    private String rename(KeyRule key, String namesub){
+        String newname = null;
+        if (mapRules.get(key).isRename()){
+            String from = key.getName().replaceAll(" ", ".") + ".";
+            newname = namesub.split(SPLIT_SUB)[0].toLowerCase().replaceFirst(from, "");
+            String ext = namesub.substring(namesub.length()-4);
+            if (newname.substring(0, 1).equalsIgnoreCase("s"))
+                newname = newname.substring(4);
+            else if(newname.substring(0, 1).equalsIgnoreCase("e"))
+                newname = newname.substring(1);
+            newname += ext;
+        }
+        return newname;
+    }
     /**Restituisce il percorso della chiave ad esso associato nella treemap
      *
      * @param 
