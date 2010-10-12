@@ -10,12 +10,12 @@ import org.feedworker.client.frontend.MainJF;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
+
 import org.jfacility.Application;
 import org.jfacility.exception.AlreadyStartedApplicationException;
 import org.jfacility.lang.JVM;
 
-/**
- * Client
+/**Client
  * 
  * @author luca judge
  */
@@ -39,7 +39,7 @@ public class FeedWorkerClient {
         feedWorker.enableSingleInstance(true);
 
         final JVM jvm = new JVM();
-
+/*
         for (String s : System.getenv().keySet()) {
             System.out.println(s + " : " + System.getenv(s));
         }
@@ -47,7 +47,7 @@ public class FeedWorkerClient {
         for (Object s : System.getProperties().keySet()) {
             System.out.println(s + " : " + System.getProperty((String) s));
         }
-
+*/
         ResourceLocator.setWorkspace();
         K = Kernel.getIstance();
         K.setLookFeel();
