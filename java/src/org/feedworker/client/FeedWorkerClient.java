@@ -23,7 +23,7 @@ import org.jfacility.lang.JVM;
  */
 public class FeedWorkerClient {
 
-	private static final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
+	private static final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon.png";
 	public static Image APPLICATION_ICON = Common
 			.getResourceImage(APPLICATION_ICON_FILE_NAME);
 	private static Kernel K;
