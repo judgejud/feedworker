@@ -39,7 +39,6 @@ public class FeedWorkerClient {
         feedWorker.enableSingleInstance(true);
 
         final JVM jvm = new JVM();
-        boolean alreadyRunning;
 
         for (String s : System.getenv().keySet()) {
             System.out.println(s + " : " + System.getenv(s));

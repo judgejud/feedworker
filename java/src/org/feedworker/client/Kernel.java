@@ -702,11 +702,12 @@ public class Kernel {
     }
 
     public void bruteRefreshRSS() {
+        fireNewTextPaneEvent("Timer in fase di reinizializzazione.", MyTextPaneEvent.OK);
         runItasa(false);
         runSubsfactory(false);
         runTorrent(false);
         stopAndRestartTimer();
-        fireNewTextPaneEvent("Timer re-inizializzato.", MyTextPaneEvent.OK);
+        fireNewTextPaneEvent("Timer restart ok.", MyTextPaneEvent.OK);
     }
 
     /**
