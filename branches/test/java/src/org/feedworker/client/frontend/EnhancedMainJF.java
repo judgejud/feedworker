@@ -59,7 +59,7 @@ public class EnhancedMainJF extends MainJF {
 			logJTP.appendAlert("La system tray non è disponibile.");
 		else {
 			trayIcon = new TrayItem(tray, SWT.NONE);
-			trayIcon.setToolTipText(FeedWorkerClient.APPLICATION_NAME);
+			trayIcon.setToolTipText(FeedWorkerClient.getApplication().getName());
 			trayIcon.setImage(currentIcon);
 
 			trayIcon.addListener(SWT.Selection, new Listener() {

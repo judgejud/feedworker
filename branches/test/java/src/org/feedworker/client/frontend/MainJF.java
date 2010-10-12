@@ -54,9 +54,9 @@ public class MainJF extends JFrame implements WindowListener,
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		this.setPreferredSize(SCREEN_SIZE);
 		this.setMinimumSize(SCREEN_SIZE);
-		this.setTitle(FeedWorkerClient.APPLICATION_NAME + " build "
-				+ FeedWorkerClient.APPLICATION_BUILD + " by "
-				+ FeedWorkerClient.AUTHOR_NAME);
+		this.setTitle(FeedWorkerClient.getApplication().getName() + " build "
+				+ FeedWorkerClient.getApplication().getBuild() + " by "
+				+ FeedWorkerClient.getApplication().getAuthor());
 		this.setIconImage(FeedWorkerClient.APPLICATION_ICON);
 		initializeMenuBar();
 		initializeComponents();
@@ -145,7 +145,7 @@ public class MainJF extends JFrame implements WindowListener,
 		restartJMI.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Application.restart(null);
+				FeedWorkerClient.getApplication().restart(null);
 			}
 		});
 		fileJM.add(restartJMI);
