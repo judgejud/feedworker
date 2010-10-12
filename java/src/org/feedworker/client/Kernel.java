@@ -326,47 +326,58 @@ public class Kernel {
 			// UIManager.put("Synthetica.license.key",
 			// "C1410294-61B64AAC-4B7D3039-834A82A1-37E5D695");
 
-			LookAndFeel laf = new SyntheticaStandardLookAndFeel();
+			LookAndFeel laf = null;
 			String lf = prop.getApplicationLookAndFeel();
-			
-			if (lf.equalsIgnoreCase("Nimbus"))
-				laf = new NimbusLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica Standard"))
-				laf = new SyntheticaStandardLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica BlackEye"))
-				laf = new SyntheticaBlackEyeLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica BlackMoon"))
-				laf = new SyntheticaBlackMoonLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica BlackStar"))
-				laf = new SyntheticaBlackStarLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica BlueIce"))
-				laf = new SyntheticaBlueIceLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica BlueMoon"))
-				laf = new SyntheticaBlueMoonLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica BlueSteel"))
-				laf = new SyntheticaBlueSteelLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica GreenDream"))
-				laf = new SyntheticaGreenDreamLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica MaouveMetallic"))
-				laf = new SyntheticaMauveMetallicLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica OrangeMetallic"))
-				laf = new SyntheticaOrangeMetallicLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica SilverMoon"))
-				laf = new SyntheticaSilverMoonLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica Simple2D"))
-				laf = new SyntheticaSimple2DLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica SkyMetallic"))
-				laf = new SyntheticaSkyMetallicLookAndFeel();
-			else if (lf.equalsIgnoreCase("Synthetica WhiteVision"))
-				laf = new SyntheticaWhiteVisionLookAndFeel();
 
-			UIManager.setLookAndFeel(laf);
-		} catch (ParseException ex) {
-			error.launch(ex, getClass());
-		} catch (UnsupportedLookAndFeelException ex) {
-			error.launch(ex, getClass());
+			if (lf != null) {
+				if (lf.equalsIgnoreCase("Nimbus"))
+					laf = new NimbusLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica Standard"))
+					laf = new SyntheticaStandardLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica BlackEye"))
+					laf = new SyntheticaBlackEyeLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica BlackMoon"))
+					laf = new SyntheticaBlackMoonLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica BlackStar"))
+					laf = new SyntheticaBlackStarLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica BlueIce"))
+					laf = new SyntheticaBlueIceLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica BlueMoon"))
+					laf = new SyntheticaBlueMoonLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica BlueSteel"))
+					laf = new SyntheticaBlueSteelLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica GreenDream"))
+					laf = new SyntheticaGreenDreamLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica MaouveMetallic"))
+					laf = new SyntheticaMauveMetallicLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica OrangeMetallic"))
+					laf = new SyntheticaOrangeMetallicLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica SilverMoon"))
+					laf = new SyntheticaSilverMoonLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica Simple2D"))
+					laf = new SyntheticaSimple2DLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica SkyMetallic"))
+					laf = new SyntheticaSkyMetallicLookAndFeel();
+				else if (lf.equalsIgnoreCase("Synthetica WhiteVision"))
+					laf = new SyntheticaWhiteVisionLookAndFeel();
+			}
+
+			if (laf == null)
+				UIManager.setLookAndFeel(UIManager
+						.getSystemLookAndFeelClassName());
+			else
+				UIManager.setLookAndFeel(laf);
+		} catch (UnsupportedLookAndFeelException e) {
+			error.launch(e, getClass());
+		} catch (ClassNotFoundException e) {
+			error.launch(e, getClass());
+		} catch (InstantiationException e) {
+			error.launch(e, getClass());
+		} catch (IllegalAccessException e) {
+			error.launch(e, getClass());
+		} catch (ParseException e) {
+			error.launch(e, getClass());
 		}
-
 	}
 
 	/**
