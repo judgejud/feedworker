@@ -96,14 +96,21 @@ public class Common {
      */
     public static String searchNumberSeries(String text){
         String number = null;
-        String analyze = text.substring(0, 1).toLowerCase();
-        if (analyze.equalsIgnoreCase("s")){
+        String first = text.substring(0, 1).toLowerCase();
+        if (first.equalsIgnoreCase("s")){
             int num = -1;
             try{
                 num = Lang.stringToInt(text.substring(1, 3));
             } catch(NumberFormatException nfe){}
             if (num>-1)
                 number = Lang.intToString(num);
+        } else if (first.equalsIgnoreCase("e")){
+            int num = -1;
+            try{
+                num = Lang.stringToInt(text.substring(1, 3));
+            } catch(NumberFormatException nfe){}
+            if (num>-1)
+                number = "1";
         }
         return number;
     }

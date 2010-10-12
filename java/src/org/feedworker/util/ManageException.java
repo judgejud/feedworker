@@ -99,9 +99,13 @@ public class ManageException{
         else
             printError(ex, c);
     }
+
+
+    public void launch(IOException ex, Class c){
+            printError(ex, c);
+    }
     
     public void launch(InstantiationException ex, Class c){
-        String msg = ex.getMessage();
         printError(ex, c);
     }
     
@@ -247,7 +251,6 @@ public class ManageException{
      * @param c classe di provenienza
      */
     public void launch(UnsupportedLookAndFeelException ex, Class c){
-        String msg = ex.getMessage();
         printError(ex, c);
     }
     /**Analizza l'errore ZipException
@@ -256,7 +259,6 @@ public class ManageException{
      * @param c classe di provenienza
      */
     public void launch(ZipException ex, Class c){
-        String msg = ex.getMessage();
         printError(ex, c);
     }
 

@@ -6,7 +6,7 @@ package org.feedworker.util;
 public class KeyRule implements Comparable<KeyRule>{
     private String name;
     private String season;
-    private String quality;    
+    private String quality;
 
     public KeyRule(String name, String season, String quality) {
         this.name = name.toLowerCase();
