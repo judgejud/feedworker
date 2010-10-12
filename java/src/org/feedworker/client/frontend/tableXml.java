@@ -2,16 +2,15 @@ package org.feedworker.client.frontend;
 //IMPORT JAVA
 import java.awt.Component;
 import java.awt.Font;
-//IMPORT JAVAX
+
 import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-//IMPORT FEEDWORKER
+
 import org.feedworker.client.frontend.events.TableXmlEvent;
 import org.feedworker.client.frontend.events.TableXmlEventListener;
-//IMPORT JFACILITY
 import org.jfacility.swing.ComboBoxEditor;
 import org.jfacility.swing.Swing;
 /**

@@ -5,12 +5,12 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-//IMPORT JAVAX
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-//IMPORT JFACILITY
+
 import org.jfacility.swing.Swing;
 /**
  *

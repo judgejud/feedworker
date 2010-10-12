@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
-//IMPORT JRSS2SUB
+
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.util.Common;

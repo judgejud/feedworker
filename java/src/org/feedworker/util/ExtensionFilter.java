@@ -2,7 +2,7 @@ package org.feedworker.util;
 //IMPORT JAVA
 import java.io.File;
 import java.io.FilenameFilter;
-//IMPORT JCIFS
+
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
 import jcifs.smb.SmbFilenameFilter;

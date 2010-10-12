@@ -1,8 +1,6 @@
 package org.feedworker.client;
 
 //IMPORT JUNIQUE
-import it.sauronsoftware.junique.JUnique;
-
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.net.URISyntaxException;
@@ -68,7 +66,7 @@ public class FeedWorkerClient {
 				feedWorker.start();
 				ApplicationSettings.getIstance();
 				Logging.getIstance();
-				
+
 				EventQueue.invokeLater(new Runnable() {
 					@Override
 					public void run() {

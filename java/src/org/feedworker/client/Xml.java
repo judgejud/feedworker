@@ -5,9 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.TreeMap;
-//IMPORT FEEDWORKER
+
 import org.feedworker.util.KeyRule;
-//IMPORT JDOM
 import org.feedworker.util.ValueRule;
 import org.jdom.Document;
 import org.jdom.Element;
