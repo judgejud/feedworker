@@ -23,8 +23,8 @@ import org.feedworker.util.ResourceLocator;
 
 public class EnhancedMainJF extends MainJF {
 
-	private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon2.png";
-	private final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
+	private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
+	private final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon.png";
 	private Image currentIcon;
 	private Display display;
 	private TrayItem trayIcon;
