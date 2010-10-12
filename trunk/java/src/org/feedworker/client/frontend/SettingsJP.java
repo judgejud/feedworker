@@ -32,7 +32,7 @@ import javax.swing.tree.TreeSelectionModel;
 import org.feedworker.client.ApplicationSettings;
 //IMPORT MYUTILS
 import org.jfacility.Awt;
-import org.jfacility.Swing;
+import org.jfacility.swing.Swing;
 /**
  *
  * @author luca
