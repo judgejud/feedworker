@@ -52,8 +52,6 @@ public class DownloadThread implements Runnable{
         itasa = _itasa;
         mapRules = map;
     }
-
-    public DownloadThread() {}
     
     @Override
     public void run() {
@@ -177,26 +175,37 @@ public class DownloadThread implements Runnable{
                     else {
                         if (dest==null)
                             dest = prop.getSubtitleDestinationFolder();
-                        else {
-                            if (mapRules.get(key).isRename()){
-                                String temp = namesub.split(SPLIT_SUB)[0] +
-                                        namesub.substring(namesub.length()-4);
-                                System.out.println(temp);
+                        else if (mapRules.get(key).isRename()){
+                            String from = key.getName().replaceAll(" ", ".") + ".";
+                            System.out.println(namesub + " " + from);
+                            String newname = namesub.split(SPLIT_SUB)[0].toLowerCase().replaceFirst(from, "");
+                            String ext = namesub.substring(namesub.length()-3);
+                            if (newname.substring(0, 1).equalsIgnoreCase("s"))
+                                newname = newname.substring(4);
+                            else if(newname.substring(0, 1).equalsIgnoreCase("e"))
+                                newname = newname.substring(1);
+                            try {
+                                filesub.renameTo(File.createTempFile(newname, ext));
+                            } catch (IOException ex) {
+                                error.launch(ex, getClass());
                             }
+                            System.out.println(newname + " " + filesub.getAbsolutePath());
                         }
                         try {
+                            System.out.println(filesub.getAbsolutePath());
                             Io.moveFile(filesub, dest);
-                            fireNewTextPaneEvent("Estratto " + al.get(i).getName() +
+                            fireNewTextPaneEvent("Estratto " + filesub.getName() +
                                     " nel seguente percorso: " + dest,
                                     MyTextPaneEvent.SUB);
                         } catch (IOException ex) {
-                            error.launch(ex, getClass(), dest);
+                            error.launch(ex, getClass());
                         }
                     }
                 }
             }
         }
     }
+
     /**Restituisce il percorso della chiave ad esso associato nella treemap
      *
      * @param 
@@ -213,20 +222,25 @@ public class DownloadThread implements Runnable{
      * @param split stringa col quale effettuare lo split del nome del file
      * @return oggetto filtro
      */
-    private KeyRule parsingNamefile(String name, String split) {
-        String[] temp = (name.split(split))[0].split(SPLIT_POINT);
+    private KeyRule parsingNamefile(String namefile, String split) {
+        String[] temp = (namefile.split(split))[0].split(SPLIT_POINT);
         int pos = temp.length - 1;
         String version = searchVersion(temp[pos]);
-        String num;
+        String serieNum;
         pos = Common.searchPosSeries(temp);
-        if (pos>-1)
-            num = Common.searchNumberSeries(temp[pos]);
-        else
-            num = "1";
-        String _serie = temp[0];
+        String episodeNum = null;
+        if (pos>-1){
+            serieNum = Common.searchNumberSeries(temp[pos]);
+        } else {
+            serieNum = "1";
+            for (int i=0; i<temp.length; i++){
+                
+            }
+        }
+        String name = temp[0];
         for (int i = 1; i < pos; i++)
-            _serie += " " + temp[i];
-        KeyRule key = new KeyRule(_serie, num, version);
+            name += " " + temp[i];
+        KeyRule key = new KeyRule(name, serieNum, version);
         if (key!=null && mapRules!=null) {
             if (mapRules.containsKey(key))
                 return key;
@@ -238,6 +252,31 @@ public class DownloadThread implements Runnable{
         }
         return null;
     }
+/*
+    private String searchEpisodeNumber(String text) throws StringIndexOutOfBoundsException{
+        String first = text.substring(0, 1).toLowerCase();        
+        String num = null;
+        if (first.equalsIgnoreCase("s")) {
+            String fourth = text.substring(3, 4).toLowerCase();
+            if (fourth.equalsIgnoreCase("e")){
+                try{
+                    num = text.substring(4, text.length());
+                    Lang.stringToInt(num);
+                } catch(NumberFormatException nfe){
+                    num = null;
+                }
+            }
+        } else if (first.equalsIgnoreCase("e")){
+            try{
+                num = text.substring(4, text.length());
+                Lang.stringToInt(num);
+            } catch(NumberFormatException nfe){
+                num = null;
+            }
+        }
+        return num;
+    }
+ */
     /**cerca la versione/qualità del sub/video
      *
      * @param text testo da confrontare
