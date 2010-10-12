@@ -40,7 +40,13 @@ public class ManageException{
         if (core==null)
             core = new ManageException();
         return core;
-    }    
+    }
+    
+    public void launch(ClassNotFoundException ex, Class c){
+        String msg = ex.getMessage();
+        printError(ex, c);
+    }
+
     /**Analizza l'errore feedexception
      *
      * @param ex Feedexception
@@ -65,6 +71,12 @@ public class ManageException{
         String msg = ex.getMessage();
         printError(ex, c);
     }
+    
+    public void launch(IllegalAccessException ex, Class c){
+        String msg = ex.getMessage();
+        printError(ex, c);
+    }
+    
     /**Analizza l'errore IllegalArgumentException
      *
      * @param ex IllegalArgumentException
@@ -88,6 +100,12 @@ public class ManageException{
         else
             printError(ex, c);
     }
+    
+    public void launch(InstantiationException ex, Class c){
+        String msg = ex.getMessage();
+        printError(ex, c);
+    }
+    
     /**Analizza l'errore IOException
      *
      * @param ex IOException
