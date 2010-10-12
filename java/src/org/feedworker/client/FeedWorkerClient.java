@@ -32,7 +32,7 @@ public class FeedWorkerClient {
 	private static final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon2.png";
 	public static Image APPLICATION_ICON = Common
 			.getResourceImage(APPLICATION_ICON_FILE_NAME);
-	private static final Kernel K = Kernel.getIstance();
+	private static Kernel K;
 
 	public static void main(String args[]) {
 		final JVM jvm = new JVM();
@@ -52,6 +52,8 @@ public class FeedWorkerClient {
 					APPLICATION_NAME, JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
 		} else {
+			ResourceLocator.setWorkspace();
+			K=Kernel.getIstance();
 			K.setLookFeel();
 
 			try {
@@ -65,7 +67,6 @@ public class FeedWorkerClient {
 			}
 
 			if (!alreadyRunning) {
-				ResourceLocator.setWorkspace();
 				ApplicationSettings.getIstance();
 				Logging.getIstance();
 				EventQueue.invokeLater(new Runnable() {

@@ -21,6 +21,7 @@ public class ResourceLocator {
      */
     public static void setWorkspace() {        
         curDir = new File(System.getProperty("user.dir")).toURI().getPath();
+        System.out.println(curDir);
     }
     /**Restituisce il path delle risorse
      *
