@@ -7,9 +7,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-//IMPORT JAVAX
+
 import javax.swing.ImageIcon;
-//IMPORT JFACILITY
+
 import org.jfacility.lang.Lang;
 import org.jfacility.swing.Swing;
 /**Classe Utility di conversioni varie e raccolta di metodi comuni

@@ -8,15 +8,14 @@ import java.awt.FontMetrics;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-//IMPORT JAVAX
+
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-//IMPORT JRSS2SUB
+
 import org.feedworker.client.frontend.events.TableRssEvent;
 import org.feedworker.client.frontend.events.TableRssEventListener;
-//IMPORT MYUTILS
 import org.jfacility.swing.Swing;
 /**
  *

@@ -25,8 +25,6 @@ import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.client.frontend.events.MyJFrameEventListener;
-
-import org.jfacility.Application;
 import org.jfacility.lang.Lang;
 
 /**

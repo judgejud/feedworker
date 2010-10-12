@@ -2,26 +2,25 @@ package org.feedworker.util;
 //IMPORT JAVA
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipException;
-import java.security.GeneralSecurityException;
-//IMPORT JAVAX
+
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.UnsupportedLookAndFeelException;
-//IMPORT JRSS2SUB
+
+import jcifs.smb.SmbException;
+
 import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
-//IMPORT SUN
-import com.sun.syndication.io.FeedException;
-//IMPORT JCIFS
-import jcifs.smb.SmbException;
-//IMPORT JDOM
 import org.jdom.JDOMException;
+
+import com.sun.syndication.io.FeedException;
 /**Stampa nella textpane i messaggi d'errore
  * se è un messaggio d'errore "rosso" scrive nel file di log lo stacktrace.
  *
