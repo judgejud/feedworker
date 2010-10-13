@@ -1,0 +1,18 @@
+IMPLEMENTARE
+- colonna rename con checkbox per jtable destinazione avanzata e relativo rename LUCA
+poter ordinare la jtable destinazione avanzata in base al giorno, serie, status
+splashscreen con progress bar
+download all'avvio di myitasa automatico partendo dall'ultima data salvata.
+avvio automatico (x ultimo win-unix-mac)
+*vedere di creare 2http permanenti 1x itasa 1x subsf
+*menu infomazioni di sistema
+*backup e ripristino proprietà (file properties e rules.xml) 
+*ricerca sottotitoli itasa
+*rilnciare eventuali errori SWT dall'enhancedmainjf al mediator e quindi al manageexception.
+ERRORI DA SISTEMARE:
+alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'. PACKY
+
+VERIFICARE LE IMPLEMENTAZIONI
+sistemare "Timeout di lettura null" al primo avvio
+avvio ridotto ad icona (java5)
+autoriavvio
