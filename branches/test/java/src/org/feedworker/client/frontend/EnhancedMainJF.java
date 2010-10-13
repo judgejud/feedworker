@@ -100,7 +100,6 @@ public class EnhancedMainJF extends MainJF {
 
 	@Override
 	public void windowClosing(WindowEvent we) {
-		System.out.println(we.getSource().getClass());
 		if (we.getSource() instanceof JMenuItem) {
 			super.windowClosing(we);
 		} else {
