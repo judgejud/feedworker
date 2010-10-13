@@ -96,7 +96,7 @@ public class FeedWorkerClient {
                 });
 
             } catch (AlreadyStartedApplicationException e) {
-                JOptionPane.showMessageDialog(null,
+                JOptionPane.showMessageDialog(splash,
                         "C'è già la stessa applicazione avviata.",
                         feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
                 feedWorker.shutdown();
