@@ -1,4 +1,5 @@
 package org.feedworker.client;
+
 //IMPORT JAVA
 import java.io.File;
 import java.io.IOException;
@@ -20,48 +21,55 @@ import com.sun.syndication.io.XmlReader;
  */
 public class RssParser {
 
-    private SyndFeed feed;
+	private SyndFeed feed;
 
-    /**Costruttore
-     *
-     * @param f File da trasformare in xmlreader
-     * @throws IllegalArgumentException
-     * @throws FeedException
-     * @throws IOException
-     */
-    public RssParser(File f) throws IllegalArgumentException, FeedException,
-            IOException {
-        SyndFeedInput input = new SyndFeedInput();
-        feed = input.build(new XmlReader(f));
-    }
-    /**Costruttore per testare la connessione e validità del link-feed rss
-     *
-     * @param feedURL
-     * @throws IllegalArgumentException
-     * @throws FeedException
-     * @throws IOException
-     */
-    public RssParser(String feedURL) throws IllegalArgumentException,
-            FeedException, IOException {
-        SyndFeedInput input = new SyndFeedInput();
-        feed = input.build(new XmlReader(new URL(feedURL)));
-    }
-    /**effettua la lettura del feed e restituisce le informazioni
-     *
-     * @return arraylist del feed "parsato"
-     */
-    public ArrayList<Object[]> read() {
-        List rawEntryList = feed.getEntries();
-        ArrayList<Object[]> structuredEntryList = new ArrayList<Object[]>();
-        for (int i = 0; i < rawEntryList.size(); i++) {
-            Object[] structuredEntry = new Object[5];
-            SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
-            structuredEntry[0] = rawEntry.getLink();
-            structuredEntry[1] = Common.dateToString(rawEntry.getPublishedDate());
-            structuredEntry[2] = rawEntry.getTitle();
-            structuredEntry[3] = false;
-            structuredEntryList.add(structuredEntry);
-        }
-        return structuredEntryList;
-    }
+	/**
+	 * Costruttore
+	 * 
+	 * @param f
+	 *            File da trasformare in xmlreader
+	 * @throws IllegalArgumentException
+	 * @throws FeedException
+	 * @throws IOException
+	 */
+	public RssParser(File f) throws IllegalArgumentException, FeedException,
+			IOException {
+		SyndFeedInput input = new SyndFeedInput();
+		feed = input.build(new XmlReader(f));
+	}
+
+	/**
+	 * Costruttore per testare la connessione e validità del link-feed rss
+	 * 
+	 * @param feedURL
+	 * @throws IllegalArgumentException
+	 * @throws FeedException
+	 * @throws IOException
+	 */
+	public RssParser(String feedURL) throws IllegalArgumentException,
+			FeedException, IOException {
+		SyndFeedInput input = new SyndFeedInput();
+		feed = input.build(new XmlReader(new URL(feedURL)));
+	}
+
+	/**
+	 * effettua la lettura del feed e restituisce le informazioni
+	 * 
+	 * @return arraylist del feed "parsato"
+	 */
+	public ArrayList<Object[]> read() {
+		List rawEntryList = feed.getEntries();
+		ArrayList<Object[]> structuredEntryList = new ArrayList<Object[]>();
+		for (int i = 0; i < rawEntryList.size(); i++) {
+			Object[] structuredEntry = new Object[5];
+			SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
+			structuredEntry[0] = rawEntry.getLink();
+			structuredEntry[1] = Common.dateToString(rawEntry
+					.getPublishedDate());
+			structuredEntry[2] = rawEntry.getTitle();
+			structuredEntry[3] = false;
+			structuredEntryList.add(structuredEntry);
+		}
+		return structuredEntryList;
+	}
 }// end class
