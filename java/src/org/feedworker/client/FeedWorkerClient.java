@@ -35,7 +35,7 @@ public class FeedWorkerClient {
         feedWorker = Application.getInstance();
         feedWorker.setName("FeedWorker");
         feedWorker.setAuthor("Luka Judge");
-        feedWorker.setBuild("72");
+        feedWorker.setBuild("129");
         feedWorker.enableSingleInstance(true);
 
         final JVM jvm = new JVM();
