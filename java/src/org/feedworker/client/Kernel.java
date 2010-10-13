@@ -169,14 +169,10 @@ public class Kernel {
         return null;
     }
 
-    /**
-     * Effettua l'analisi del nome del file restituendo l'oggetto filtro da
-     * confrontare
+    /**Effettua l'analisi del nome del file restituendo l'oggetto filtro da confrontare
      *
-     * @param name
-     *            nome del file da analizzare
-     * @param split
-     *            stringa col quale effettuare lo split del nome del file
+     * @param name nome del file da analizzare
+     * @param split stringa col quale effettuare lo split del nome del file
      * @return oggetto filtro
      */
     private KeyRule parsingNamefile(String namefile, String split) {
@@ -197,11 +193,9 @@ public class Kernel {
         return new KeyRule(name, seriesNum, version);
     }
 
-    /**
-     * cerca la versione/qualità del sub/video
+    /**cerca la versione/qualità del sub/video
      *
-     * @param text
-     *            testo da confrontare
+     * @param text testo da confrontare
      * @return versione video/sub
      */
     private String searchVersion(String text) {
@@ -238,19 +232,13 @@ public class Kernel {
         }
     }
 
-    /**
-     * testa la connessione a samba
+    /**testa la connessione a samba
      *
-     * @param ip
-     *            ip della macchina samba
-     * @param dir
-     *            directory condivisa
-     * @param dom
-     *            dominio
-     * @param user
-     *            utente
-     * @param pwd
-     *            password
+     * @param ip ip della macchina samba
+     * @param dir directory condivisa
+     * @param dom dominio
+     * @param user utente
+     * @param pwd password
      * @return true se positivo, false altrimenti
      */
     public boolean testSamba(String ip, String dir, String dom, String user,
@@ -270,8 +258,7 @@ public class Kernel {
     }
 
     /** imposta il LookAndFeel */
-    public void setLookFeel() {
-        try {
+    public void setLookFeel() {        
             // String[] li = {"Licensee=AppWork UG",
             // "LicenseRegistrationNumber=289416475", "Product=Synthetica",
             // "LicenseType=Small Business License", "ExpireDate=--.--.----",
@@ -282,7 +269,7 @@ public class Kernel {
 
             LookAndFeel laf = null;
             String lf = prop.getApplicationLookAndFeel();
-
+            try {
             if (lf != null) {
                 if (lf.equalsIgnoreCase("Nimbus")) {
                     // laf = new NimbusLookAndFeel();
@@ -316,19 +303,12 @@ public class Kernel {
                     // laf = new SyntheticaWhiteVisionLookAndFeel();
                 }
             }
-
             if (laf == null) {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                UIManager.setLookAndFeel(new SyntheticaStandardLookAndFeel());
             } else {
                 UIManager.setLookAndFeel(laf);
             }
         } catch (UnsupportedLookAndFeelException e) {
-            error.launch(e, getClass());
-        } catch (ClassNotFoundException e) {
-            error.launch(e, getClass());
-        } catch (InstantiationException e) {
-            error.launch(e, getClass());
-        } catch (IllegalAccessException e) {
             error.launch(e, getClass());
         } catch (ParseException e) {
             error.launch(e, getClass());
@@ -687,6 +667,10 @@ public class Kernel {
         runTorrent(false);
         stopAndRestartTimer();
         fireNewTextPaneEvent("Timer restart ok.", MyTextPaneEvent.OK);
+    }
+
+    public void restartApplication() {
+        FeedWorkerClient.getApplication().restart(null);
     }
 
     /**
