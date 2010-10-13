@@ -1,7 +1,6 @@
 IMPLEMENTARE
-- colonna rename con checkbox per jtable destinazione avanzata e relativo rename LUCA
+- splashscreen con progress bar LUCA
 poter ordinare la jtable destinazione avanzata in base al giorno, serie, status
-splashscreen con progress bar LUCA
 download all'avvio di myitasa automatico partendo dall'ultima data salvata.
 avvio automatico (x ultimo win-unix-mac)
 *vedere di creare 2http permanenti 1x itasa 1x subsf
@@ -10,6 +9,8 @@ avvio automatico (x ultimo win-unix-mac)
 *ricerca sottotitoli itasa
 *rilnciare eventuali errori SWT dall'enhancedmainjf al mediator e quindi al manageexception.
 *destinazione avanzata in mixed mode 
+*multiutenza? 
+*log4j?
 
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'. PACKY
@@ -18,3 +19,4 @@ VERIFICARE LE IMPLEMENTAZIONI
 sistemare "Timeout di lettura null" al primo avvio
 avvio ridotto ad icona (java5)
 autoriavvio
+colonna rename con checkbox per jtable destinazione avanzata e relativo rename
