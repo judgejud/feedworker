@@ -2,6 +2,12 @@ package org.feedworker.util;
 
 //IMPORT JAVA
 import java.awt.Image;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -153,4 +159,27 @@ public class Common {
 		}
 		return pos;
 	}
+
+    /**
+     * Effettua il download dell'inputStream sotto forma di file
+     *
+     * @param is
+     *            http content-stream
+     * @param f
+     *            file di riferimento su cui mandare il flusso di inputstream
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public static void downloadSingle(InputStream is, File f)
+            throws FileNotFoundException, IOException {
+        OutputStream out = new FileOutputStream(f);
+        byte buf[] = new byte[1024];
+        int len;
+        while ((len = is.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        out.flush();
+        out.close();
+        is.close();
+    }
 }
