@@ -154,7 +154,7 @@ public class DownloadThread implements Runnable{
                             filesub.delete();
                         else {
                             //TODO: terminare rinomina.
-                            String newname = rename(key, namesub);
+                            String newName = rename(key, namesub);                            
                             s.moveFromLocal(filesub, dest);
                             if (dest==null)
                                 dest = "";

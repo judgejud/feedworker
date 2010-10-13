@@ -579,10 +579,7 @@ public class paneSetting extends JPanel {
         }
     }
 
-    /**
-     * Popola le impostazioni con il properties caricato
-     *
-     */
+    /*Popola le impostazioni con il properties caricato*/
     private void settingsGlobalValue() {
         jtfDestSub.setText(prop.getSubtitleDestinationFolder());
         jcbMinuti.setSelectedItem(prop.getRefreshInterval());

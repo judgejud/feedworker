@@ -76,18 +76,6 @@ public class Samba {
         return verify;
    }
 
-    public String[] listDir(String dir, String ext) throws MalformedURLException, SmbException{
-        String sambaPath = pathBase;
-        String[] list = null;
-        if (dir!=null)
-            sambaPath += dir + "/";
-        sambaPath.replaceAll(" ", "%20");        
-        SmbFile server = new SmbFile(sambaPath, auth);
-        list = server.list(new ExtensionFilter(ext)); // Get list of names
-        Arrays.sort(list); // Sort it (Data Structuring chapter))
-        return list;
-    }
-
     public void moveFile(String filename, String newPath, String newName) throws SmbException,
             MalformedURLException{
         String pathOldFile = pathBase + filename;
@@ -108,6 +96,18 @@ public class Samba {
         server.delete();
         test = true;
         return test;
+    }
+
+    public String[] listDir(String dir, String ext) throws MalformedURLException, SmbException{
+        String sambaPath = pathBase;
+        String[] list = null;
+        if (dir!=null)
+            sambaPath += dir + "/";
+        sambaPath.replaceAll(" ", "%20");
+        SmbFile server = new SmbFile(sambaPath, auth);
+        list = server.list(new ExtensionFilter(ext)); // Get list of names
+        Arrays.sort(list); // Sort it (Data Structuring chapter))
+        return list;
     }
 
     public static void resetInstance(){

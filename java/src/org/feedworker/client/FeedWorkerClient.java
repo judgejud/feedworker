@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 
 import org.feedworker.client.frontend.EnhancedMainJF;
 import org.feedworker.client.frontend.MainJF;
+import org.feedworker.client.frontend.SplashScreenJW;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
@@ -31,14 +32,14 @@ public class FeedWorkerClient {
     }
 
     public static void main(String args[]) {
-
+        final SplashScreenJW splash = new SplashScreenJW();
+        splash.setStatusText("Inizializzazione Feedworker");
+        
         feedWorker = Application.getInstance();
         feedWorker.setName("FeedWorker");
         feedWorker.setAuthor("Luka Judge");
         feedWorker.setBuild("129");
-        feedWorker.enableSingleInstance(true);
-
-        final JVM jvm = new JVM();
+        feedWorker.enableSingleInstance(true);        
 /*
         for (String s : System.getenv().keySet()) {
             System.out.println(s + " : " + System.getenv(s));
@@ -48,10 +49,14 @@ public class FeedWorkerClient {
             System.out.println(s + " : " + System.getProperty((String) s));
         }
 */
+        splash.setStatusText("Workspace");
         ResourceLocator.setWorkspace();
+        splash.setStatusText("kernel");
         K = Kernel.getIstance();
+        splash.setStatusText("LAF");
         K.setLookFeel();
-
+        splash.setStatusText("Controllo JVM");
+        final JVM jvm = new JVM();
         if (!jvm.isOrLater(15)) {
             JOptionPane.showMessageDialog(null,
                     "E' necessario disporre di una versione della JVM >= 1.5",
@@ -59,12 +64,14 @@ public class FeedWorkerClient {
             feedWorker.shutdown();
         } else {
             try {
+                splash.setStatusText("Junique");
                 feedWorker.start();
+                splash.setStatusText("ApplicationSettings");
                 ApplicationSettings.getIstance();
+                splash.setStatusText("Logging");
                 Logging.getIstance();
-
+                splash.setStatusText("Run");
                 EventQueue.invokeLater(new Runnable() {
-
                     @Override
                     public void run() {
                         MainJF jframe = null;
@@ -75,6 +82,7 @@ public class FeedWorkerClient {
                         }
                         K.loadXml();
                         K.runRss();
+                        splash.setVisible(false);
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
                             jframe.setVisible(true);
                         } else {
