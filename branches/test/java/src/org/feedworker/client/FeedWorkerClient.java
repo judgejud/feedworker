@@ -41,6 +41,7 @@ public class FeedWorkerClient {
         feedWorker.setAuthor("Luka Judge");
         feedWorker.setBuild("129");
         feedWorker.enableSingleInstance(true);
+        feedWorker.setApplicationClass(FeedWorkerClient.class);
         /*
          * for (String s : System.getenv().keySet()) { System.out.println(s +
          * " : " + System.getenv(s)); }
