@@ -26,7 +26,14 @@ import javax.swing.UnsupportedLookAndFeelException;
 import jcifs.smb.SmbException;
 
 import org.eclipse.swt.widgets.Display;
-import org.feedworker.client.frontend.events.*;
+import org.feedworker.client.frontend.events.MyJFrameEvent;
+import org.feedworker.client.frontend.events.MyJFrameEventListener;
+import org.feedworker.client.frontend.events.MyTextPaneEvent;
+import org.feedworker.client.frontend.events.MyTextPaneEventListener;
+import org.feedworker.client.frontend.events.TableRssEvent;
+import org.feedworker.client.frontend.events.TableRssEventListener;
+import org.feedworker.client.frontend.events.TableXmlEvent;
+import org.feedworker.client.frontend.events.TableXmlEventListener;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
 import org.feedworker.util.ExtensionFilter;
@@ -40,7 +47,14 @@ import org.jfacility.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
 
-import de.javasoft.plaf.synthetica.*;
+import de.javasoft.plaf.synthetica.SyntheticaBlackMoonLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaBlackStarLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaBlueIceLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaBlueMoonLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaBlueSteelLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaGreenDreamLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaSilverMoonLookAndFeel;
+import de.javasoft.plaf.synthetica.SyntheticaStandardLookAndFeel;
 
 /**
  * Motore di Feedworker
