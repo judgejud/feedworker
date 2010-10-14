@@ -25,7 +25,8 @@ import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.client.frontend.events.MyJFrameEventListener;
-import org.jfacility.lang.Lang;
+
+import org.jfacility.lang.MySystem;
 
 /**Gui base per java 1.5
  * 
@@ -89,7 +90,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         jScrollText1.setPreferredSize(new Dimension(1000, 140));
         add(jScrollText1, BorderLayout.SOUTH);
 
-        logJTP.appendOK("Versione java in uso: " + Lang.getJavaVersion());
+        logJTP.appendOK("Versione java in uso: " + MySystem.getJavaVersion());
 
         if (prop.isApplicationFirstTimeUsed()) {
             mainJTP.setSelectedComponent(settingsJP);
