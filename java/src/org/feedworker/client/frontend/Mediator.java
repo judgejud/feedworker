@@ -26,7 +26,6 @@ import org.feedworker.util.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.ValueRule;
-
 import org.jfacility.Awt;
 import org.jfacility.lang.Lang;
 
