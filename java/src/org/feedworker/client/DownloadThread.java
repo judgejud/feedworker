@@ -87,6 +87,7 @@ public class DownloadThread implements Runnable {
          * problema: nessuna regola specificata per il 720, rivedere il search version.
          */
         if (al.size() > 0) {
+            String newName = null;
             if (!prop.isLocalFolder()) {
                 String dest = null;
                 try {
@@ -104,7 +105,9 @@ public class DownloadThread implements Runnable {
                             filesub.delete();
                         } else {
                             //TODO: terminare rinomina.
-                            String newName = rename(key, namesub);
+                            try{
+                                newName = rename(key, namesub);
+                            } catch (NullPointerException e){}
                             s.moveFromLocal(filesub, dest);
                             if (newName != null) {
                                 String oldName = dest + File.separator + filesub.getName();
@@ -133,14 +136,16 @@ public class DownloadThread implements Runnable {
                         if (dest == null) {
                             dest = prop.getSubtitleDestinationFolder();
                         }
-                        String newname = rename(key, namesub);
+                        try{
+                            newName = rename(key, namesub);
+                        } catch (NullPointerException e){}
                         try {
                             String msg = "Estratto " + filesub.getName();
-                            if (newname == null) {
+                            if (newName == null) {
                                 Io.moveFile(filesub, dest);
                             } else {
-                                Io.moveFile(filesub, dest, newname);
-                                msg += " e rinominato in " + newname;
+                                Io.moveFile(filesub, dest, newName);
+                                msg += " e rinominato in " + newName;
                             }
                             msg += " nel seguente percorso: " + dest;
                             fireNewTextPaneEvent(msg, MyTextPaneEvent.SUB);
@@ -187,7 +192,7 @@ public class DownloadThread implements Runnable {
         analyzeDest(alf);
     }
 
-    private String rename(KeyRule key, String namesub) {
+    private String rename(KeyRule key, String namesub) throws NullPointerException{
         String newname = null;
         if (mapRules.get(key).isRename()) {
             String from = key.getName().replaceAll(" ", ".") + ".";

@@ -30,6 +30,7 @@ import org.jfacility.Awt;
 import org.jfacility.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
+import java.net.URISyntaxException;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -607,6 +608,10 @@ public class Mediator {
             col = Color.magenta;
         }
         return col;
+    }
+
+    void printError(URISyntaxException e){
+        ManageException.getIstance().launch(e, null);
     }
 
     private void printAlert(String msg) {
