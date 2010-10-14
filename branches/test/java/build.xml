@@ -1,4 +1,4 @@
-<project default="build_all" basedir=".">
+<project name="Jfacility" default="build_all" basedir=".">
 
 	<!--
                                                    ┌─► jarMain ───────────────────────────┐
@@ -107,7 +107,7 @@
 			<fileset dir="${lib}" includes="**/*" />
 		</copy>
 		<copy todir="${dist}/lib">
-			<fileset dir="../JFacility/dist" includes="**/*" />
+			<fileset dir="../[Java] - JFacility/dist" includes="**/*" />
 		</copy>
 	</target>
 
