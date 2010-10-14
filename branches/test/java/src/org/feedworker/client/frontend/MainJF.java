@@ -39,7 +39,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
     protected paneSetting settingsJP;
     protected JTabbedPane mainJTP;
     protected LogJTP logJTP;
-    private Mediator proxy = Mediator.getIstance();
+    protected Mediator proxy = Mediator.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ItasaJP itasaJP;
     private TorrentJP torrentJP;
