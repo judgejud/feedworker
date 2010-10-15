@@ -12,6 +12,7 @@ import org.feedworker.util.Common;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.ParsingFeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
@@ -32,7 +33,7 @@ public class RssParser {
 	 * @throws FeedException
 	 * @throws IOException
 	 */
-	public RssParser(File f) throws IllegalArgumentException, FeedException,
+	public RssParser(File f) throws IllegalArgumentException, FeedException, ParsingFeedException,
 			IOException {
 		SyndFeedInput input = new SyndFeedInput();
 		feed = input.build(new XmlReader(f));

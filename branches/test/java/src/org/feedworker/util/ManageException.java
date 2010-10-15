@@ -22,6 +22,7 @@ import org.feedworker.client.frontend.events.MyTextPaneEventListener;
 import org.jdom.JDOMException;
 
 import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.ParsingFeedException;
 import java.net.URISyntaxException;
 
 /**
@@ -102,7 +103,7 @@ public class ManageException {
      *            classe di provenienza
      */
     public void launch(IllegalArgumentException ex, Class c) {
-        String msg = ex.getMessage();
+        //String msg = ex.getMessage();
         printAlert("il link inserito non corrisponde a feed RSS");
         printError(ex, c);
     }
@@ -249,15 +250,23 @@ public class ManageException {
         }
     }
 
-    /**
-     * Analizza l'errore ParseException
+    /**Analizza l'errore ParseException
      *
-     * @param ex
-     *            ParseException
-     * @param c
-     *            classe di provenienza
+     * @param ex ParseException
+     * @param c classe di provenienza
      */
     public void launch(ParseException ex, Class c) {
+        printError(ex, c);
+    }
+
+    /**Analizza l'errore ParseException
+     *
+     * @param ex ParseException
+     * @param c classe di provenienza
+     */
+    public void launch(ParsingFeedException ex, Class c) {
+        String error01 = "Invalid XML: Error on line 1: The markup in the document "
+                + "following the root element must be well-formed.";
         String msg = ex.getMessage();
         printError(ex, c);
     }
