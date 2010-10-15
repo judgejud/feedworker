@@ -9,10 +9,10 @@ import javax.swing.JOptionPane;
 import org.feedworker.client.frontend.EnhancedMainJF;
 import org.feedworker.client.frontend.MainJF;
 import org.feedworker.client.frontend.SplashScreenJW;
+import org.feedworker.client.frontend.SplashTest;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
-
 import org.jfacility.Application;
 import org.jfacility.exception.AlreadyStartedApplicationException;
 import org.jfacility.lang.JVM;
@@ -36,22 +36,28 @@ public class FeedWorkerClient {
 
     public static void main(String args[]) {
         System.out.println(org.jfacility.lang.MySystem.getJavaHome());
-        final SplashScreenJW splash = new SplashScreenJW();
-        splash.setStatusText("Inizializzazione Feedworker");
-
+        //final SplashScreenJW splash = new SplashScreenJW();
+        final SplashTest splash = new SplashTest(9);
+        //splash.setStatusText("Inizializzazione Feedworker");
+        splash.updateStartupState("Inizializzazione Feedworker");
+        
         feedWorker = Application.getInstance();
         feedWorker.setName("FeedWorker");
         feedWorker.setAuthor("Luka Judge");
         feedWorker.setBuild("129");
         feedWorker.enableSingleInstance(true);
 
-        splash.setStatusText("Workspace");
+        //splash.setStatusText("Workspace");
+        splash.updateStartupState("Setting Workspace ...");
         ResourceLocator.setWorkspace();
-        splash.setStatusText("kernel");
+        //splash.setStatusText("kernel");
+        splash.updateStartupState("Preparing Kernel instance ...");
         K = Kernel.getIstance();
-        splash.setStatusText("LAF");
+        //splash.setStatusText("LAF");
+        splash.updateStartupState("Setting Look & Feel ...");
         K.setLookFeel();
-        splash.setStatusText("Controllo JVM");
+        //splash.setStatusText("Controllo JVM");
+        splash.updateStartupState("Checking JVM ...");
         final JVM jvm = new JVM();
         if (!jvm.isOrLater(15)) {
             JOptionPane.showMessageDialog(null,
@@ -60,13 +66,17 @@ public class FeedWorkerClient {
             MySystem.shutdown();
         } else {
             try {
-                splash.setStatusText("Junique");
+                //splash.setStatusText("Junique");
+            	splash.updateStartupState("Finding other FeedWorker instance ...");
                 feedWorker.start();
-                splash.setStatusText("ApplicationSettings");
+                //splash.setStatusText("ApplicationSettings");
+                splash.updateStartupState("Loading Application settings ...");
                 ApplicationSettings.getIstance();
-                splash.setStatusText("Logging");
+                //splash.setStatusText("Logging");
+                splash.updateStartupState("Preparing Application logging ...");
                 Logging.getIstance();
-                splash.setStatusText("Run");
+                //splash.setStatusText("Run");
+                splash.updateStartupState("Running ...");
 
                 EventQueue.invokeLater(new Runnable() {
 
@@ -80,7 +90,7 @@ public class FeedWorkerClient {
                         }
                         K.loadXml();
                         K.runRss();
-                        splash.setVisible(false);
+                        //splash.setVisible(false);
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
                             jframe.setVisible(true);
                         } else {
@@ -94,7 +104,7 @@ public class FeedWorkerClient {
                 });
 
             } catch (AlreadyStartedApplicationException e) {
-                splash.setVisible(false);
+                //splash.setVisible(false);
                 JOptionPane.showMessageDialog(null,
                         "C'è già la stessa applicazione avviata.",
                         feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
