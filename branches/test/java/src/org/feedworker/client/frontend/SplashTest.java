@@ -1,73 +1,69 @@
 package org.feedworker.client.frontend;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
 import java.awt.SplashScreen;
-import java.awt.Stroke;
-import java.awt.font.GlyphVector;
 import java.awt.geom.Rectangle2D;
 
 public class SplashTest {
-	private SplashScreen splash;
-	private Graphics2D g;
-	private int steps;
-	private int stepCounter = 0;
 
-	public SplashTest(int steps) {
-		this.steps = steps;
+    private SplashScreen splash;
+    private Graphics2D g;
+    private int steps;
+    private int stepCounter = 0;
+    private static SplashTest splashtest = null;
 
-		this.splash = SplashScreen.getSplashScreen();
-		if (splash == null) {
-			System.out.println("SplashScreen.getSplashScreen() returned null");
-			return;
-		}
-		g = splash.createGraphics();
-		if (g == null) {
-			System.out.println("g is null");
-			return;
-		}
+    private SplashTest(int steps) {
+        this.steps = steps;
 
-		g.setColor(Color.BLACK);
-		g.draw(new Rectangle2D.Double(0, 0, 299, 299));
-		
-		splash.update();
-		System.out.println(splash.getBounds());
+        this.splash = SplashScreen.getSplashScreen();
+        if (splash == null) {
+            System.out.println("SplashScreen.getSplashScreen() returned null");
+            return;
+        }
+        g = splash.createGraphics();
+        if (g == null) {
+            System.out.println("g is null");
+            return;
+        }
 
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-		}
-	}
+        g.setColor(Color.BLACK);
+        g.draw(new Rectangle2D.Double(0, 0, 299, 299));
 
-	public void updateStartupState(String message) {
-		stepCounter++;
+        splash.update();
+        System.out.println(splash.getBounds());
 
-		//g.setColor(Color.BLACK);
-		//g.draw(new Rectangle2D.Double(0, 300, 299, 19));
-		g.setBackground(new Color(255, 255, 255, 0));
-		g.clearRect(0, 301, 299, 20);
-		g.setColor(new Color(157, 53, 7, 255));
-		g.drawString(message, 10, 315);
-		g.setColor(new Color(243, 101, 35, 100));
-		g.fillRect(1, 301, (299 / steps) * stepCounter, 18);
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {}
+    }
 
-		splash.update();
+    public static SplashTest getInstance(){
+        if (splashtest==null)
+            splashtest = new SplashTest(12);
+        return splashtest;
+    }
 
-		if (stepCounter == steps) {
-			try {
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
-			}
+    public void updateStartupState(String message) {
+        stepCounter++;
 
-			closeSplashScreen();
-		}
-	}
+        //g.setColor(Color.BLACK);
+        //g.draw(new Rectangle2D.Double(0, 300, 299, 19));
+        g.setBackground(new Color(255, 255, 255, 0));
+        g.clearRect(0, 301, 299, 20);
+        g.setColor(new Color(157, 53, 7, 255));
+        g.drawString(message, 10, 315);
+        g.setColor(new Color(243, 101, 35, 100));
+        g.fillRect(1, 301, (299 / steps) * stepCounter, 18);
 
-	private void closeSplashScreen() {
-		splash.close();
-	}
+        splash.update();
+
+        if (stepCounter == steps) {
+            //try {
+                //Thread.sleep(10000);
+            //} catch (InterruptedException e) {}
+
+            splash.close();
+        }
+    }
 }
