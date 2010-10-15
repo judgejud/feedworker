@@ -85,15 +85,15 @@ public class FeedWorkerClient {
                     public void run() {
                         MainJF jframe = null;
                         SplashTest splash = SplashTest.getInstance();
-                        splash.updateStartupState("Caricamento GUI ...");
+                        splash.updateStartupState("Loading GUI ...");
                         if (jvm.isOrLater(16)) {
                             jframe = new EnhancedMainJF();
                         } else if (jvm.isOrLater(15)) {
                             jframe = new MainJF();
                         }
-                        splash.updateStartupState("Caricamento xml");
+                        splash.updateStartupState("Loading xml");
                         K.loadXml();
-                        splash.updateStartupState("Inizializzazione RSS...");
+                        splash.updateStartupState("Initializing RSS...");
                         K.runRss();
                         //splash.setVisible(false);
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
@@ -105,7 +105,6 @@ public class FeedWorkerClient {
                                 ex.printStackTrace();
                             }
                         }
-                        splash.close();
                     }
                 });
 
