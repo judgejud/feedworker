@@ -37,7 +37,8 @@ public class FeedWorkerClient {
     public static void main(String args[]) {
         System.out.println(org.jfacility.lang.MySystem.getJavaHome());
         //final SplashScreenJW splash = new SplashScreenJW();
-        final SplashTest splash = new SplashTest(9);
+        //final SplashTest splash = new SplashTest(9);
+        SplashTest splash = SplashTest.getInstance();
         //splash.setStatusText("Inizializzazione Feedworker");
         splash.updateStartupState("Inizializzazione Feedworker");
         
@@ -83,12 +84,16 @@ public class FeedWorkerClient {
                     @Override
                     public void run() {
                         MainJF jframe = null;
+                        SplashTest splash = SplashTest.getInstance();
+                        splash.updateStartupState("Caricamento GUI ...");
                         if (jvm.isOrLater(16)) {
                             jframe = new EnhancedMainJF();
                         } else if (jvm.isOrLater(15)) {
                             jframe = new MainJF();
                         }
+                        splash.updateStartupState("Caricamento xml");
                         K.loadXml();
+                        splash.updateStartupState("Inizializzazione RSS...");
                         K.runRss();
                         //splash.setVisible(false);
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
