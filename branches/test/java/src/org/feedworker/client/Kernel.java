@@ -684,7 +684,7 @@ public class Kernel {
     }
 
     public void restartApplication() {
-        FeedWorkerClient.getApplication().restart(null);
+        FeedWorkerClient.getApplication().restart();
     }
 
     /**

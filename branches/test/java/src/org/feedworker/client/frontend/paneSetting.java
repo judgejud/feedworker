@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
@@ -31,6 +32,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.FeedWorkerClient;
 import org.jfacility.swing.Swing;
 
 /**
@@ -623,6 +625,8 @@ public class paneSetting extends JPanel {
 	}
 
 	private void saveSettings() {
+		String previousLookAndFeel = prop.getApplicationLookAndFeel();
+
 		proxy.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
 				jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir
 						.getText(), jtfSambaUser.getText(),
@@ -634,5 +638,18 @@ public class paneSetting extends JPanel {
 						.getText(), new String(jpfItasa.getPassword()),
 				jrbDownAuto.isSelected(), jtfRssSubsf.getText(), jtfDestTorrent
 						.getText());
+
+		if (previousLookAndFeel != jcbLookFeel.getSelectedItem()) {
+			int returnCode = JOptionPane.showConfirmDialog(this,
+					"Per applicare il nuovo Look & Feel è necessario riavviare "
+							+ FeedWorkerClient.getApplication().getName()
+							+ ". \nPremi Si per riavviare, No altrimenti",
+					"Info", JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
+			if (returnCode == 1) {
+				return;
+			}
+			FeedWorkerClient.getApplication().restart();
+		}
 	}
 }

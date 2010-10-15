@@ -64,7 +64,7 @@ public class FeedWorkerClient {
             JOptionPane.showMessageDialog(null,
                     "E' necessario disporre di una versione della JVM >= 1.5",
                     feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
-            MySystem.shutdown();
+            FeedWorkerClient.getApplication().shutdown();
         } else {
             try {
                 //splash.setStatusText("Junique");
@@ -113,7 +113,7 @@ public class FeedWorkerClient {
                 JOptionPane.showMessageDialog(null,
                         "C'è già la stessa applicazione avviata.",
                         feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
-                MySystem.shutdown();
+                FeedWorkerClient.getApplication().shutdown();
             }
         }
     }
