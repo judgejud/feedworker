@@ -46,6 +46,7 @@ import org.jdom.JDOMException;
 import org.jfacility.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.ParsingFeedException;
 
 import de.javasoft.plaf.synthetica.SyntheticaBlackMoonLookAndFeel;
 import de.javasoft.plaf.synthetica.SyntheticaBlackStarLookAndFeel;
@@ -428,6 +429,8 @@ public class Kernel {
                 }
             }
         } catch (ParseException ex) {
+            error.launch(ex, getClass());
+        } catch (ParsingFeedException ex) {
             error.launch(ex, getClass());
         } catch (FeedException ex) {
             error.launch(ex, getClass(), from);

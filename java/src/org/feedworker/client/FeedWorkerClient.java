@@ -16,7 +16,6 @@ import org.feedworker.util.ResourceLocator;
 import org.jfacility.Application;
 import org.jfacility.exception.AlreadyStartedApplicationException;
 import org.jfacility.lang.JVM;
-import org.jfacility.lang.MySystem;
 
 /**
  * Client
@@ -37,7 +36,6 @@ public class FeedWorkerClient {
     public static void main(String args[]) {
         System.out.println(org.jfacility.lang.MySystem.getJavaHome());
         //final SplashScreenJW splash = new SplashScreenJW();
-        //final SplashTest splash = new SplashTest(9);
         SplashTest splash = SplashTest.getInstance();
         //splash.setStatusText("Inizializzazione Feedworker");
         splash.updateStartupState("Inizializzazione Feedworker");
