@@ -57,13 +57,9 @@ public class SplashTest {
         g.fillRect(1, 301, (299 / steps) * stepCounter, 18);
 
         splash.update();
+    }
 
-        if (stepCounter == steps) {
-            //try {
-                //Thread.sleep(10000);
-            //} catch (InterruptedException e) {}
-
-            splash.close();
-        }
+    public void close(){
+        splash.close();
     }
 }
