@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import javax.swing.JMenuItem;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Image;
@@ -39,7 +40,7 @@ public class EnhancedMainJF extends MainJF {
     }
 
     @Override
-    public void initializeSysTray() throws URISyntaxException {
+    public void initializeSysTray() throws URISyntaxException, SWTException {
         display = Display.getDefault();
         Shell shell = new Shell(display);
 
@@ -113,6 +114,9 @@ public class EnhancedMainJF extends MainJF {
             } catch (URISyntaxException e) {
                 proxy.printError(e);
                 setVisible(true);
+            } catch (SWTException e) {
+                proxy.printError(e);
+                setVisible(true);
             }
         }
     }
@@ -129,7 +133,7 @@ public class EnhancedMainJF extends MainJF {
             try {
                 currentIcon = new Image(display,
                         getAbsoluteResourcePath(INCOMING_FEED_ICON_FILE_NAME));
-                trayIcon.setToolTipText("Arrivato/i feed :-) ");
+                trayIcon.setToolTipText("Arrivato/i nuovo/i feed :-)");
                 trayIcon.setImage(currentIcon);
             } catch (URISyntaxException ex) {
                 logJTP.appendAlert(ex.getMessage());

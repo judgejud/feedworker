@@ -24,6 +24,7 @@ import org.jdom.JDOMException;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 import java.net.URISyntaxException;
+import org.eclipse.swt.SWTException;
 
 /**
  * Stampa nella textpane i messaggi d'errore se è un messaggio d'errore "rosso"
@@ -261,8 +262,9 @@ public class ManageException {
     public void launch(ParsingFeedException ex, Class c, String text) {
         String error01 = "Invalid XML: Error on line 1: The markup in the document "
                 + "following the root element must be well-formed.";
+        String error02 = "Invalid XML: Error on line 1: Content is not allowed in prolog.";
         String msg = ex.getMessage();
-        if (msg.equalsIgnoreCase(error01))
+        if (msg.equalsIgnoreCase(error01) || msg.equalsIgnoreCase(error02))
             printAlert("Non posso analizzare il feed XML " + text);
         else
             printError(ex, c);
@@ -310,6 +312,10 @@ public class ManageException {
         } else {
             printError(ex, c);
         }
+    }
+
+    public void launch(SWTException ex, Class c){
+        printError(ex, c);
     }
 
     /**
