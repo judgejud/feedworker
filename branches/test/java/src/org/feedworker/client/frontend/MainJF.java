@@ -147,7 +147,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         });
         fileJM.add(restartJMI);
 
-        JMenuItem closeJMI = new JMenuItem(" Chiudi ");
+        JMenuItem closeJMI = new JMenuItem(" Esci ");
         closeJMI.addActionListener(new ActionListener() {
 
             @Override
