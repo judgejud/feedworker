@@ -6,8 +6,10 @@ import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
@@ -37,14 +39,25 @@ class SubsfactoryJP extends AbstractJP {
 	void initializePanel() {
 		jtSubsf = new tableRss(proxy.getSubsf());
 		jtMySubsf = new tableRss(proxy.getMySubsf());
+		
+		JPanel jp = new JPanel();
+		add(jp, BorderLayout.CENTER);
+		jp.setLayout(new BoxLayout(jp, BoxLayout.X_AXIS));
+
 		JScrollPane jScrollTable1 = new JScrollPane(jtSubsf);
+		jScrollTable1.setMinimumSize(TABLE_SCROLL_SIZE);
 		jScrollTable1.setPreferredSize(TABLE_SCROLL_SIZE);
 		jScrollTable1.setAutoscrolls(true);
-		add(jScrollTable1, BorderLayout.WEST);
+		jp.add(jScrollTable1);
+		
+		jp.add(Box.createRigidArea(new Dimension(5,0)));
+	
 		JScrollPane jScrollTable2 = new JScrollPane(jtMySubsf);
+		jScrollTable2.setMinimumSize(TABLE_SCROLL_SIZE);
 		jScrollTable2.setPreferredSize(TABLE_SCROLL_SIZE);
 		jScrollTable2.setAutoscrolls(true);
-		add(jScrollTable2, BorderLayout.EAST);
+		jp.add(jScrollTable2);
+		
 		setVisible(true);
 	}
 
@@ -79,11 +92,11 @@ class SubsfactoryJP extends AbstractJP {
 		actionJP.add(jbDown, gbc);
 		gbc.gridx = 1;
 		actionJP.add(jbClean, gbc);
-		gbc.gridwidth = 3;
-		gbc.gridx = 2;
-		JLabel jlTemp = new JLabel();
-		jlTemp.setPreferredSize(new Dimension(800, 20));
-		actionJP.add(jlTemp, gbc);
+		//gbc.gridwidth = 3;
+		//gbc.gridx = 2;
+		//JLabel jlTemp = new JLabel();
+		//jlTemp.setPreferredSize(new Dimension(800, 20));
+		//actionJP.add(jlTemp, gbc);
 		add(actionJP, BorderLayout.NORTH);
 	}
 
