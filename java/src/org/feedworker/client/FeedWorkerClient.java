@@ -6,10 +6,9 @@ import java.net.URISyntaxException;
 
 import javax.swing.JOptionPane;
 
+import org.feedworker.client.frontend.ClassicSplashScreen;
 import org.feedworker.client.frontend.EnhancedMainJF;
 import org.feedworker.client.frontend.MainJF;
-import org.feedworker.client.frontend.ClassicSplashScreen;
-import org.feedworker.client.frontend.EnhancedSplashScreen;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;

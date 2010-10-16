@@ -1,10 +1,6 @@
 package org.feedworker.client.frontend;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.SplashScreen;
-import java.awt.geom.Rectangle2D;
 
 public class EnhancedSplashScreen extends ClassicSplashScreen {
 	private SplashScreen splash;
