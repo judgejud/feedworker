@@ -431,7 +431,7 @@ public class Kernel {
         } catch (ParseException ex) {
             error.launch(ex, getClass());
         } catch (ParsingFeedException ex) {
-            error.launch(ex, getClass());
+            error.launch(ex, getClass(), from);
         } catch (FeedException ex) {
             error.launch(ex, getClass(), from);
         } catch (IllegalArgumentException ex) {

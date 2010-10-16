@@ -65,8 +65,7 @@ public class RssParser {
 			Object[] structuredEntry = new Object[5];
 			SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
 			structuredEntry[0] = rawEntry.getLink();
-			structuredEntry[1] = Common.dateToString(rawEntry
-					.getPublishedDate());
+			structuredEntry[1] = Common.dateToString(rawEntry.getPublishedDate());
 			structuredEntry[2] = rawEntry.getTitle();
 			structuredEntry[3] = false;
 			structuredEntryList.add(structuredEntry);
