@@ -3,6 +3,7 @@ package org.feedworker.util;
 //IMPORT JAVA
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ import org.jdom.JDOMException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import java.net.URISyntaxException;
 import org.eclipse.swt.SWTException;
 
 /**

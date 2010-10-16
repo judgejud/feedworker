@@ -4,6 +4,7 @@ package org.feedworker.client.frontend;
 import java.awt.Color;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,7 +31,6 @@ import org.jfacility.Awt;
 import org.jfacility.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
-import java.net.URISyntaxException;
 import org.eclipse.swt.SWTException;
 
 /**
