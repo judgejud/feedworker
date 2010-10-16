@@ -31,6 +31,7 @@ import org.jfacility.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
 import java.net.URISyntaxException;
+import org.eclipse.swt.SWTException;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -611,6 +612,10 @@ public class Mediator {
     }
 
     void printError(URISyntaxException e){
+        ManageException.getIstance().launch(e, null);
+    }
+
+    void printError(SWTException e){
         ManageException.getIstance().launch(e, null);
     }
 
