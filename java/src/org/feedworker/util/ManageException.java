@@ -51,7 +51,6 @@ public class ManageException {
     }
 
     public void launch(ClassNotFoundException ex, Class c) {
-        String msg = ex.getMessage();
         printError(ex, c);
     }
 
@@ -67,7 +66,6 @@ public class ManageException {
      */
     public void launch(FeedException ex, Class c, String text) {
         String msg = ex.getMessage();
-        ex.printStackTrace();
         String err01 = "Invalid XML: Error on line";
         if (msg.substring(0, err01.length()).equalsIgnoreCase(err01)) {
             printAlert("Non posso analizzare il feed XML " + text);
@@ -85,12 +83,10 @@ public class ManageException {
      *            classe di provenienza
      */
     public void launch(GeneralSecurityException ex, Class c) {
-        String msg = ex.getMessage();
         printError(ex, c);
     }
 
     public void launch(IllegalAccessException ex, Class c) {
-        String msg = ex.getMessage();
         printError(ex, c);
     }
 
@@ -103,7 +99,6 @@ public class ManageException {
      *            classe di provenienza
      */
     public void launch(IllegalArgumentException ex, Class c) {
-        //String msg = ex.getMessage();
         printAlert("il link inserito non corrisponde a feed RSS");
         printError(ex, c);
     }
@@ -183,7 +178,6 @@ public class ManageException {
      *            classe di provenienza
      */
     public void launch(JDOMException ex, Class c) {
-        String msg = ex.getMessage();
         printError(ex, c);
     }
 
@@ -264,11 +258,14 @@ public class ManageException {
      * @param ex ParseException
      * @param c classe di provenienza
      */
-    public void launch(ParsingFeedException ex, Class c) {
+    public void launch(ParsingFeedException ex, Class c, String text) {
         String error01 = "Invalid XML: Error on line 1: The markup in the document "
                 + "following the root element must be well-formed.";
         String msg = ex.getMessage();
-        printError(ex, c);
+        if (msg.equalsIgnoreCase(error01))
+            printAlert("Non posso analizzare il feed XML " + text);
+        else
+            printError(ex, c);
     }
 
     /**
@@ -304,8 +301,7 @@ public class ManageException {
      * @param text
      *            eventuale testo da stampare
      */
-    public void launch(StringIndexOutOfBoundsException ex, Class c,
-            boolean flag_itasa) {
+    public void launch(StringIndexOutOfBoundsException ex, Class c, boolean flag_itasa) {
         String msg = ex.getMessage();
         String error01 = "String index out of range: -1";
         if (flag_itasa && msg.equals(error01)) {

@@ -43,7 +43,7 @@ public class FeedWorkerClient {
         feedWorker = Application.getInstance();
         feedWorker.setName("FeedWorker");
         feedWorker.setAuthor("Luka Judge");
-        feedWorker.setBuild("129");
+        feedWorker.setBuild("151");
         feedWorker.enableSingleInstance(true);
 
         //splash.setStatusText("Workspace");
