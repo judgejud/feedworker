@@ -11,7 +11,8 @@ avvio automatico (x ultimo win-unix-mac)
 *destinazione avanzata in mixed mode 
 *multiutenza? 
 *log4j?
-*salvare i feed in modo da conservare i vecchi fino a numero da definire? 
+*salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
+*destinazione avanzata: bottone info su ciò che è presente nella tabella.
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'. PACKY
 

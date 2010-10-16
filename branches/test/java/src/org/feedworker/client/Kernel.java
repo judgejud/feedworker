@@ -273,18 +273,18 @@ public class Kernel {
     }
 
     /** imposta il LookAndFeel */
-    public void setLookFeel() {        
-            // String[] li = {"Licensee=AppWork UG",
-            // "LicenseRegistrationNumber=289416475", "Product=Synthetica",
-            // "LicenseType=Small Business License", "ExpireDate=--.--.----",
-            // "MaxVersion=2.999.999"};
-            // UIManager.put("Synthetica.license.info", li);
-            // UIManager.put("Synthetica.license.key",
-            // "C1410294-61B64AAC-4B7D3039-834A82A1-37E5D695");
+    public void setLookFeel() {
+        // String[] li = {"Licensee=AppWork UG",
+        // "LicenseRegistrationNumber=289416475", "Product=Synthetica",
+        // "LicenseType=Small Business License", "ExpireDate=--.--.----",
+        // "MaxVersion=2.999.999"};
+        // UIManager.put("Synthetica.license.info", li);
+        // UIManager.put("Synthetica.license.key",
+        // "C1410294-61B64AAC-4B7D3039-834A82A1-37E5D695");
 
-            LookAndFeel laf = null;
-            String lf = prop.getApplicationLookAndFeel();
-            try {
+        LookAndFeel laf = null;
+        String lf = prop.getApplicationLookAndFeel();
+        try {
             if (lf != null) {
                 if (lf.equalsIgnoreCase("Nimbus")) {
                     // laf = new NimbusLookAndFeel();
@@ -418,8 +418,7 @@ public class Kernel {
                                 }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2]))
-                                    && download) {
+                            if ((isNotStagione((String) matrice.get(i)[2])) && download) {
                                 downItasaAuto(matrice.get(i)[0]);
                             }
                         } else {
