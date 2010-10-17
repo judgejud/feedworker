@@ -154,7 +154,7 @@
 		<manifest file="${dist}/Manifest.MF">
 			<attribute name="Created-By" value="Luka Judge" />
 			<attribute name="Main-Class" value="org.feedworker.client.FeedWorkerClient" />
-			<attribute name="SplashScreen-Image" value="org/feedworker/resource/SplashImage2.png" />
+			<attribute name="SplashScreen-Image" value="org/feedworker/resource/SplashImage.png" />
 			<!-- plugins that serialize own classes have to be put in the classpath -->
 			<attribute name="Class-Path" value="${class-path}" />
 		</manifest>
