@@ -44,7 +44,7 @@ public class ClassicSplashScreen {
 
     public void start() {
         Dimension screenDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screenDimension.width - width) / 4;
+        int x = (screenDimension.width - width) / 2;
         int y = (screenDimension.height - height) / 2;
 
         splashJW = new JWindow() {
