@@ -1,6 +1,8 @@
 package org.feedworker.client.frontend;
 
+import java.awt.Color;
 import java.awt.SplashScreen;
+import java.awt.geom.Rectangle2D;
 
 public class EnhancedSplashScreen extends ClassicSplashScreen {
 	private SplashScreen splash;
@@ -9,9 +11,9 @@ public class EnhancedSplashScreen extends ClassicSplashScreen {
 		super(steps);
 	}
 
-	public static ClassicSplashScreen getInstance() {
+	public static ClassicSplashScreen getInstance(int steps) {
 		if (splashscreen == null)
-			splashscreen = new EnhancedSplashScreen(12);
+			splashscreen = new EnhancedSplashScreen(steps);
 		return splashscreen;
 	}
 
@@ -22,18 +24,23 @@ public class EnhancedSplashScreen extends ClassicSplashScreen {
 			return;
 		}
 		
-		g = splash.createGraphics();
-		if (g == null) {
+		graphics2D = splash.createGraphics();
+		if (graphics2D == null) {
 			System.out.println("g is null");
 			return;
 		}
 		
-		initialize();
+		graphics2D.setColor(Color.BLACK);
+		graphics2D.draw(new Rectangle2D.Double(0, 0, 299, 299));
+		
 		splash.update();
 	}	
 
 	public void updateStartupState(String message) {
 		super.updateStartupState(message);
 		splash.update();
+	}
+	
+	public void close() {
 	}
 }

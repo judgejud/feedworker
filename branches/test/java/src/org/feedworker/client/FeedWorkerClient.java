@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 import org.feedworker.client.frontend.ClassicSplashScreen;
 import org.feedworker.client.frontend.EnhancedMainJF;
+import org.feedworker.client.frontend.EnhancedSplashScreen;
 import org.feedworker.client.frontend.MainJF;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
@@ -41,10 +42,17 @@ public class FeedWorkerClient {
         feedWorker.setBuild("151");
         feedWorker.enableSingleInstance(true);
         
-        final ClassicSplashScreen splash = ClassicSplashScreen.getInstance();
+        final JVM jvm = new JVM();
+        final ClassicSplashScreen splash;
+        
+        if (jvm.isOrLater(16)) {
+        	splash = EnhancedSplashScreen.getInstance(12);
+        } else {
+        	splash = ClassicSplashScreen.getInstance(12);
+        }
         
         splash.start();
-        
+
         splash.updateStartupState("Inizializzazione Feedworker");
 
         splash.updateStartupState("Setting Workspace ...");
@@ -54,7 +62,7 @@ public class FeedWorkerClient {
         splash.updateStartupState("Setting Look & Feel ...");
         K.setLookFeel();
         splash.updateStartupState("Checking JVM ...");
-        final JVM jvm = new JVM();
+
         if (!jvm.isOrLater(15)) {
             JOptionPane.showMessageDialog(null,
                     "E' necessario disporre di una versione della JVM >= 1.5",
@@ -86,6 +94,7 @@ public class FeedWorkerClient {
                         splash.updateStartupState("Initializing RSS...");
                         K.runRss();
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
+                        	splash.close();
                             jframe.setVisible(true);
                         } else {
                             try {
