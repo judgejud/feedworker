@@ -25,7 +25,7 @@ import org.jfacility.lang.JVM;
 public class FeedWorkerClient {
 
     private static final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon.png";
-    public static Image APPLICATION_ICON = Common.getResourceImage(APPLICATION_ICON_FILE_NAME);
+    public static Image APPLICATION_ICON = Common.getResourceIcon(APPLICATION_ICON_FILE_NAME);
     private static Kernel K;
     private static Application feedWorker;
 
@@ -41,20 +41,18 @@ public class FeedWorkerClient {
         feedWorker.setAuthor("Luka Judge");
         feedWorker.setBuild("151");
         feedWorker.enableSingleInstance(true);
-        
+
         final JVM jvm = new JVM();
         final ClassicSplashScreen splash;
-        
+
         if (jvm.isOrLater(16)) {
-        	splash = EnhancedSplashScreen.getInstance(12);
+            splash = EnhancedSplashScreen.getInstance(12);
+            //splash = ClassicSplashScreen.getInstance(12);
         } else {
-        	splash = ClassicSplashScreen.getInstance(12);
+            splash = ClassicSplashScreen.getInstance(12);
         }
-        
         splash.start();
-
         splash.updateStartupState("Inizializzazione Feedworker");
-
         splash.updateStartupState("Setting Workspace ...");
         ResourceLocator.setWorkspace();
         splash.updateStartupState("Preparing Kernel instance ...");
@@ -70,7 +68,7 @@ public class FeedWorkerClient {
             FeedWorkerClient.getApplication().shutdown();
         } else {
             try {
-            	splash.updateStartupState("Finding other FeedWorker instance ...");
+                splash.updateStartupState("Finding other FeedWorker instance ...");
                 feedWorker.start();
                 splash.updateStartupState("Loading Application settings ...");
                 ApplicationSettings.getIstance();
@@ -94,7 +92,7 @@ public class FeedWorkerClient {
                         splash.updateStartupState("Initializing RSS...");
                         K.runRss();
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
-                        	splash.close();
+                            splash.close();
                             jframe.setVisible(true);
                         } else {
                             try {
