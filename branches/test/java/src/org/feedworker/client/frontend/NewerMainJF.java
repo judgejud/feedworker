@@ -38,7 +38,7 @@ public class NewerMainJF extends MainJF {
 	private void initSysTray() {
 		if (SystemTray.isSupported()) {
 			iconRss = FeedWorkerClient.APPLICATION_ICON;
-			iconSub = Common.getResourceImage(INCOMING_FEED_ICON);
+			iconSub = Common.getResourceIcon(INCOMING_FEED_ICON);
 			PopupMenu popup = new PopupMenu();
 			MenuItem defaultItem = new MenuItem(" Close "
 					+ FeedWorkerClient.getApplication().getName());

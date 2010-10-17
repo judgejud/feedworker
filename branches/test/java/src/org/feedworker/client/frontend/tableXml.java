@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.Vector;
 
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -69,6 +70,10 @@ class tableXml extends JTable implements TableXmlEventListener {
 
         setAutoCreateColumnsFromModel(false);
         getTableHeader().addMouseListener(new ColumnHeaderListener());
+
+        //getColumnModel().getColumn(0).setHeaderRenderer(new MyTableHeaderRenderer());
+        //getColumnModel().getColumn(4).setHeaderRenderer(new MyTableHeaderRenderer());
+        //getColumnModel().getColumn(5).setHeaderRenderer(new MyTableHeaderRenderer());
     }
 
     private void setComboColumn(int num, String[] items) {
@@ -115,7 +120,7 @@ class tableXml extends JTable implements TableXmlEventListener {
             setSelectedItem(value);
             return this;
         }
-    }
+    } //END CLASS MyComboBoxRenderer
 
     // This comparator is used to sort vectors of data
     class ColumnSorter implements Comparator {
@@ -161,7 +166,7 @@ class tableXml extends JTable implements TableXmlEventListener {
                 }
             }
         }
-    }
+    }//END CLASS columnsorter
 
     class ColumnHeaderListener extends MouseAdapter {
         @Override
@@ -204,5 +209,33 @@ class tableXml extends JTable implements TableXmlEventListener {
             Collections.sort(data, new ColumnSorter(colIndex, ascending));
             model.fireTableStructureChanged();
         }
+    } //END CLASS columnheaderlistener
+
+    class MyTableHeaderRenderer extends JLabel implements TableCellRenderer {
+        // This method is called each time a column header
+        // using this renderer needs to be rendered.
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
+            // 'value' is column header value of column 'vColIndex'
+            // rowIndex is always -1
+            // isSelected is always false
+            // hasFocus is always false
+            // Configure the component with the specified value
+            setText(value.toString());
+            // Set tool tip if desired
+            setToolTipText((String)value);
+            // Since the renderer is a component, return itself
+            return this;
+        }
+        // The following methods override the defaults for performance reasons
+        @Override
+        public void validate() {}
+        @Override
+        public void revalidate() {}
+        @Override
+        protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {}
+        @Override
+        public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {}
     }
 }
