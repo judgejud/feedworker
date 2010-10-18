@@ -19,9 +19,6 @@
 	<property name="lib" value="./lib" />
 	<property name="res" value="${src}/org/feedworker/resource" />
 	<!--
-	<property name="jd" value="${dist}/JDownloader" />
-	
-	<property name="pluginres" value="${dist}/pluginressourcen" />
 	<property name="keystore" value="${user.home}/Desktop/jDownloader.keystore" />
 
 	<loadfile property="svn.revision" srcFile="../.svn/entries">
@@ -45,28 +42,32 @@
 	<property name="exe.windows.script" value="${res}/nsis/nsis-setup.nsi" />
 	<property name="exe.web.script" value="${res}/nsis/webinstaller.nsi" />
 	-->
-	
+
 	<path id="classpath">
-		<fileset dir="${lib}" includes="**/*.jar" />
+		<fileset dir="${dist}/${lib}" includes="**/*.jar" />
 	</path>
 
 	<property name="classpath" value="${toString:classpath}" />
-	
+
 	<echo message="${basedir}" />
 
 	<!-- Deletes the old build -->
 	<target name="clean">
+		<delete dir="${cls}" />
+		<mkdir dir="${cls}" />
 		<delete dir="${dist}" />
 		<mkdir dir="${dist}" />
 		<mkdir dir="${dist}/lib" />
 	</target>
 
 	<!-- Compiles the code -->
-	<target name="compile" depends="clean">
-		<mkdir dir="${cls}" />
+	<target name="compile" depends="copy_res">
 		<javac srcdir="${src}" destdir="${cls}" encoding="UTF-8" source="1.6" target="1.6">
 			<classpath refid="classpath" />
 		</javac>
+		<copy todir="${cls}">
+			<fileset dir="${src}" includes="**/org/feedworker/resource/*" />
+		</copy>
 		<echo message="Finished." />
 	</target>
 
@@ -113,10 +114,12 @@
 
 	<!-- Make the default jar -->
 	<target name="jarMain" depends="compile">
+		<property name="version.number" value="1.0" />
+		<buildnumber file="build.number" />
+		<tstamp>
+			<format property="build.date" pattern="yyyy-MM-dd HH:mm:ss" />
+		</tstamp>
 		<!--
-		<manifest file="${dist}/Manifest.MF">
-			<attribute name="Created-By" value="Luka Judge" />
-		</manifest>
 		<jar file="${jd}/libs/JDHttp.jar" manifest="${dist}/Manifest.MF">
 			<fileset dir="${cls}">
 				<include name="jd/http/**" />
@@ -140,9 +143,9 @@
 		</jar>
 		<delete file="${dist}/Manifest.MF" failonerror="false" />
 		-->
-		
+
 		<pathconvert pathsep=" " dirsep="/" property="class-path">
-		    <map from="${basedir}/dist" to="."/>
+			<map from="${basedir}/dist" to="." />
 			<path>
 				<fileset dir="${dist}/${lib}" includes="**/*.jar" />
 			</path>
@@ -150,49 +153,26 @@
 			<mapper type="regexp" from="[\\/]dist[\\/]JDownloader[\\/](libs[\\/].*)" to="\1" />
 		    -->
 		</pathconvert>
-		
+
 		<manifest file="${dist}/Manifest.MF">
 			<attribute name="Created-By" value="Luka Judge" />
 			<attribute name="Main-Class" value="org.feedworker.client.FeedWorkerClient" />
+			<attribute name="Implementation-Version" value="${version.number}.0.${build.number}" />
+			<attribute name="Built-Date" value="${build.date}" />
 			<attribute name="SplashScreen-Image" value="org/feedworker/resource/SplashImage.png" />
 			<!-- plugins that serialize own classes have to be put in the classpath -->
 			<attribute name="Class-Path" value="${class-path}" />
 		</manifest>
-		<jar file="${dist}/FeedWorker.jar" manifest="${dist}/Manifest.MF">
+
+		<jar file="${dist}/FeedWorker-${version.number}.0.${build.number}.jar" manifest="${dist}/Manifest.MF">
 			<fileset dir="${cls}">
 				<include name="**/*.class" />
 				<include name="**/resource/*" />
 				<!--
 				<exclude name="jd/controlling/reconnect/plugins/*/**" />
 				<exclude name="jd/captcha/**" />
-				<exclude name="jd/dynamics/**" />
-				<exclude name="jd/gui/**" />
-				<exclude name="jd/http/**" />
-				<exclude name="jd/nutils/**" />
-				<exclude name="jd/plugins/hoster/**" />
-				<exclude name="jd/plugins/decrypter/**" />
-				<exclude name="jd/plugins/optional/**" />
-				<exclude name="jd/utils/dev/**" />
-				<exclude name="tests/**" />
 				-->
 			</fileset>
-
-			<!-- Put all plugins which should included in here -->
-			<!--
-			<fileset dir="${cls}">
-				<include name="jd/controlling/reconnect/plugins/extern/**" />
-				<include name="jd/controlling/reconnect/plugins/liveheader/**" />
-				<include name="jd/controlling/reconnect/plugins/proxyrot/**" />
-				<include name="jd/controlling/reconnect/plugins/upnp/**" />
-
-				<include name="jd/plugins/hoster/DirectHTTP*" />
-			</fileset>
-
-			<fileset dir="${res}">
-				<include name="*.properties" />
-				<exclude name="jd/captcha/methods" />
-			</fileset>
-			-->
 		</jar>
 		<echo message="${res}" />
 		<delete file="${dist}/Manifest.MF" failonerror="false" />
