@@ -1,6 +1,4 @@
 IMPLEMENTARE
-- splashscreen PACKY
-poter ordinare la jtable destinazione avanzata in base al giorno, serie, status LUCA
 download all'avvio di myitasa automatico partendo dall'ultima data salvata.
 avvio automatico (x ultimo win-unix-mac)
 *vedere di creare 2http permanenti 1x itasa 1x subsf
@@ -15,7 +13,7 @@ avvio automatico (x ultimo win-unix-mac)
 *destinazione avanzata: bottone info su ciò che è presente nella tabella.
 *feed rss sotto thread
 *destinazione avanzata: integrazione con qlk sito tipo tvrage per lo status e il giorno ed eventuale prelevo dell'ultima puntata trasmessa cioè numero stagione/puntata per ogni serie?
-*trasformazione automatica da roles.xml a rules.xml
+
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'. PACKY
 
@@ -24,3 +22,4 @@ sistemare "Timeout di lettura null" al primo avvio
 avvio ridotto ad icona (java5)
 colonna rename con checkbox per jtable destinazione avanzata e relativo rename
 autoriavvio con java home (e quindi win, linux, mac)
+splashscreen (java 1.5 e jar)

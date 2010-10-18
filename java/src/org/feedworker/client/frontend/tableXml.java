@@ -3,20 +3,15 @@ package org.feedworker.client.frontend;
 //IMPORT JAVA
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Vector;
 
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.feedworker.client.frontend.events.TableXmlEvent;
 import org.feedworker.client.frontend.events.TableXmlEventListener;
@@ -56,24 +51,21 @@ class tableXml extends JTable implements TableXmlEventListener {
 
         getTableHeader().setReorderingAllowed(false);
 
-        Swing.setTableDimensionLockColumn(this, 1, 60);
-        Swing.setTableDimensionLockColumn(this, 2, 60);
+        Swing.setTableDimensionLockColumn(this, 1, 75);
+        Swing.setTableDimensionLockColumn(this, 2, 75);
         Swing.setTableDimensionLockColumn(this, 4, 90);
         Swing.setTableDimensionLockColumn(this, 5, 75);
-        Swing.setTableDimensionLockColumn(this, 6, 55);
+        Swing.setTableDimensionLockColumn(this, 6, 70);
 
         setComboColumn(2, itemsCombo);
         setComboColumn(4, itemsComboStato);
         setComboColumn(5, itemsComboSettimana);
 
-        setFont(font);
+        setFont(font);        
 
-        setAutoCreateColumnsFromModel(false);
-        getTableHeader().addMouseListener(new ColumnHeaderListener());
-
-        //getColumnModel().getColumn(0).setHeaderRenderer(new MyTableHeaderRenderer());
-        //getColumnModel().getColumn(4).setHeaderRenderer(new MyTableHeaderRenderer());
-        //getColumnModel().getColumn(5).setHeaderRenderer(new MyTableHeaderRenderer());
+        setAutoCreateRowSorter(true);
+        TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(getModel());
+        setRowSorter(sorter);
     }
 
     private void setComboColumn(int num, String[] items) {
@@ -121,121 +113,4 @@ class tableXml extends JTable implements TableXmlEventListener {
             return this;
         }
     } //END CLASS MyComboBoxRenderer
-
-    // This comparator is used to sort vectors of data
-    class ColumnSorter implements Comparator {
-        int colIndex;
-        boolean ascending;
-
-        ColumnSorter(int colIndex, boolean ascending) {
-            this.colIndex = colIndex;
-            this.ascending = ascending;
-        }
-
-        @Override
-        public int compare(Object a, Object b) {
-            Vector v1 = (Vector)a;
-            Vector v2 = (Vector)b;
-            Object o1 = v1.get(colIndex);
-            Object o2 = v2.get(colIndex);
-            // Treat empty strains like nulls
-            if (o1 instanceof String && ((String)o1).length() == 0) {
-                o1 = null;
-            }
-            if (o2 instanceof String && ((String)o2).length() == 0) {
-                o2 = null;
-            }
-            // Sort nulls so they appear last, regardless // of sort order
-            if (o1 == null && o2 == null) {
-                return 0;
-            } else if (o1 == null) {
-                return 1;
-            } else if (o2 == null) {
-                return -1;
-            } else if (o1 instanceof Comparable) {
-                if (ascending) {
-                    return ((Comparable)o1).compareTo(o2);
-                } else {
-                    return ((Comparable)o2).compareTo(o1);
-                }
-            } else {
-                if (ascending) {
-                    return o1.toString().compareTo(o2.toString());
-                } else {
-                    return o2.toString().compareTo(o1.toString());
-                }
-            }
-        }
-    }//END CLASS columnsorter
-
-    class ColumnHeaderListener extends MouseAdapter {
-        @Override
-        public void mouseClicked(MouseEvent evt) {
-            JTable table = ((JTableHeader)evt.getSource()).getTable();
-            TableColumnModel colModel = table.getColumnModel();
-            // The index of the column whose header was clicked
-            int vColIndex = colModel.getColumnIndexAtX(evt.getX());
-            //int mColIndex = table.convertColumnIndexToModel(vColIndex);
-            // Return if not clicked on any column header
-            if (vColIndex == -1) { return; }
-            else if(vColIndex == 0 || vColIndex == 4 || vColIndex == 5){
-                // Sort all the rows in descending order based on the
-                // values in the clicked column of the model
-                sortAllRowsBy((DefaultTableModel) table.getModel(), vColIndex, false);
-            }
-            /*
-            // Determine if mouse was clicked between column heads
-            Rectangle headerRect = table.getTableHeader().getHeaderRect(vColIndex);
-            if (vColIndex == 0) {
-                headerRect.width -= 3; // Hard-coded constant
-            } else {
-                headerRect.grow(-3, 0); // Hard-coded constant
-            }
-            if (!headerRect.contains(evt.getX(), evt.getY())) {
-                
-                // Mouse was clicked between column heads
-                // vColIndex is the column head closest to the click
-                // vLeftColIndex is the column head to the left of the click
-                int vLeftColIndex = vColIndex;
-                if (evt.getX() < headerRect.x) {
-                    vLeftColIndex--;
-                }
-            }*/
-        }
-        // Regardless of sort order (ascending or descending), null values always appear last.
-        // colIndex specifies a column in model.
-        private void sortAllRowsBy(DefaultTableModel model, int colIndex, boolean ascending) {
-            Vector data = model.getDataVector();
-            Collections.sort(data, new ColumnSorter(colIndex, ascending));
-            model.fireTableStructureChanged();
-        }
-    } //END CLASS columnheaderlistener
-
-    class MyTableHeaderRenderer extends JLabel implements TableCellRenderer {
-        // This method is called each time a column header
-        // using this renderer needs to be rendered.
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
-            // 'value' is column header value of column 'vColIndex'
-            // rowIndex is always -1
-            // isSelected is always false
-            // hasFocus is always false
-            // Configure the component with the specified value
-            setText(value.toString());
-            // Set tool tip if desired
-            setToolTipText((String)value);
-            // Since the renderer is a component, return itself
-            return this;
-        }
-        // The following methods override the defaults for performance reasons
-        @Override
-        public void validate() {}
-        @Override
-        public void revalidate() {}
-        @Override
-        protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {}
-        @Override
-        public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {}
-    }
 }
