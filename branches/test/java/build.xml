@@ -20,14 +20,6 @@
 	<property name="res" value="${src}/org/feedworker/resource" />
 	<!--
 	<property name="keystore" value="${user.home}/Desktop/jDownloader.keystore" />
-
-	<loadfile property="svn.revision" srcFile="../.svn/entries">
-		<filterchain>
-			<headfilter lines="1" skip="3" />
-			<striplinebreaks />
-		</filterchain>
-	</loadfile>
-	
 	
 	<property name="pack.multios.name" value="JDownloader_multios_${svn.revision}.zip" />
 	<property name="pack.linux.name" value="JDownloader_linux_${svn.revision}.tar.bz2" />
@@ -50,6 +42,41 @@
 	<property name="classpath" value="${toString:classpath}" />
 
 	<echo message="${basedir}" />
+
+	<property file="version.properties" />
+	<property environment="env" />
+	<property name="version.major" value="1" />
+	<property name="version.minor" value="0" />
+
+	<loadfile property="version.revision" srcFile="${src}/.svn/entries">
+		<filterchain>
+			<headfilter lines="1" skip="3" />
+			<striplinebreaks />
+		</filterchain>
+	</loadfile>
+	
+	<buildnumber file="build.number" />
+	
+	<property name="version.build" value="${build.number}" />
+
+	<property name="version.number" value="${version.major}.${version.minor}.${version.revision}.${version.build}" />
+	
+	<tstamp>
+		<format property="build.date" pattern="yyyy-MM-dd HH:mm:ss" />
+	</tstamp>
+	
+	<property name="build.date" value="${build.date}" />
+
+	<propertyfile file="${src}/org/feedworker/config/version.properties">
+		<entry key="version.major" value="${version.major}" />
+		<entry key="version.minor" value="${version.minor}" />
+		<entry key="version.revision" value="${version.revision}" />
+		<entry key="version.build" value="${version.build}" />
+		<entry key="version.number" value="${version.number}" />
+		<entry key="build.date" value="${build.date}" />
+	</propertyfile>
+
+	<echo>Building Version ${version.number}</echo>
 
 	<!-- Deletes the old build -->
 	<target name="clean">
@@ -78,32 +105,6 @@
 
 	<!-- Copies all the additional ressources -->
 	<target name="copy_res" depends="clean">
-		<!--
-		<copy todir="${jd}/jd">
-			<fileset dir="${res}/jd" includes="**/*" />
-		</copy>
-		<copy todir="${jd}/libs">
-			<fileset dir="${res}/libs" includes="**/*" />
-		</copy>
-		<copy file="../../AppWorkUtils/dist/appworkutils.jar" tofile="${jd}/libs/appworkutilities.jar" overwrite="true" failonerror="false" />
-		<copy todir="${jd}/licenses">
-			<fileset dir="${res}/licenses" includes="**/*" />
-		</copy>
-
-		<copy todir="${jd}/languages">
-			<fileset dir="../../AppWorkUtils/resources/languages/" includes="**/*.loc" />
-		</copy>
-		<copy todir="${jd}/images">
-			<fileset dir="../../AppWorkUtils/resources/images/" includes="**/*.png" />
-		</copy>
-		<copy todir="${jd}/tools">
-			<fileset dir="${res}/tools" includes="**/*" />
-		</copy>
-		<copy todir="${jd}">
-			<fileset dir="${res}" includes="*.txt, *.exe, *.bat, outdated.dat" />
-		</copy>
-		<mkdir dir="${jd}/tmp" />
-		-->
 		<copy todir="${dist}/lib">
 			<fileset dir="${lib}" includes="**/*" />
 		</copy>
@@ -114,31 +115,11 @@
 
 	<!-- Make the default jar -->
 	<target name="jarMain" depends="compile">
-		<property name="version.number" value="1.0" />
-		<buildnumber file="build.number" />
-		<tstamp>
-			<format property="build.date" pattern="yyyy-MM-dd HH:mm:ss" />
-		</tstamp>
 		<!--
-		<jar file="${jd}/libs/JDHttp.jar" manifest="${dist}/Manifest.MF">
-			<fileset dir="${cls}">
-				<include name="jd/http/**" />
-			</fileset>
-		</jar>
-		<jar file="${jd}/libs/JDGUI.jar" manifest="${dist}/Manifest.MF">
-			<fileset dir="${cls}">
-				<include name="jd/gui/**" />
-			</fileset>
-		</jar>
 		<jar file="${jd}/libs/JAntiCaptcha.jar" manifest="${dist}/Manifest.MF">
 			<fileset dir="${cls}">
 				<include name="jd/captcha/**" />
 				<exclude name="jd/captcha/methods/**" />
-			</fileset>
-		</jar>
-		<jar file="${jd}/libs/JDUtils.jar" manifest="${dist}/Manifest.MF">
-			<fileset dir="${cls}">
-				<include name="jd/nutils/**" />
 			</fileset>
 		</jar>
 		<delete file="${dist}/Manifest.MF" failonerror="false" />
@@ -157,14 +138,14 @@
 		<manifest file="${dist}/Manifest.MF">
 			<attribute name="Created-By" value="Luka Judge" />
 			<attribute name="Main-Class" value="org.feedworker.client.FeedWorkerClient" />
-			<attribute name="Implementation-Version" value="${version.number}.0.${build.number}" />
+			<attribute name="Implementation-Version" value="${version.number}" />
 			<attribute name="Built-Date" value="${build.date}" />
 			<attribute name="SplashScreen-Image" value="org/feedworker/resource/SplashImage.png" />
 			<!-- plugins that serialize own classes have to be put in the classpath -->
 			<attribute name="Class-Path" value="${class-path}" />
 		</manifest>
 
-		<jar file="${dist}/FeedWorker-${version.number}.0.${build.number}.jar" manifest="${dist}/Manifest.MF">
+		<jar file="${dist}/FeedWorker-${version.number}.jar" manifest="${dist}/Manifest.MF">
 			<fileset dir="${cls}">
 				<include name="**/*.class" />
 				<include name="**/resource/*" />
