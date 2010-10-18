@@ -39,7 +39,6 @@ public class FeedWorkerClient {
         feedWorker = Application.getInstance();
         feedWorker.setName("FeedWorker");
         feedWorker.setAuthor("Luka Judge");
-        feedWorker.setBuild("151");
         feedWorker.enableSingleInstance(true);
 
         final JVM jvm = new JVM();
@@ -47,7 +46,6 @@ public class FeedWorkerClient {
 
         if (jvm.isOrLater(16)) {
             splash = EnhancedSplashScreen.getInstance(12);
-            //splash = ClassicSplashScreen.getInstance(12);
         } else {
             splash = ClassicSplashScreen.getInstance(12);
         }
