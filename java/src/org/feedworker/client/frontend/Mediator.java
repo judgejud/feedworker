@@ -32,6 +32,7 @@ import org.jfacility.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
 import org.eclipse.swt.SWTException;
+import org.feedworker.client.FeedWorkerClient;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -616,7 +617,7 @@ public class Mediator {
     }
 
     void printError(SWTException e){
-        ManageException.getIstance().launch(e, null);
+        ManageException.getIstance().launch(e, EnhancedMainJF.class);
     }
 
     private void printAlert(String msg) {
@@ -664,6 +665,10 @@ public class Mediator {
     }
 
     void restartApplication() {
-        core.restartApplication();
+        FeedWorkerClient.getApplication().restart();
+    }
+
+    String getNameApp(){
+        return FeedWorkerClient.getApplication().getName();
     }
 }

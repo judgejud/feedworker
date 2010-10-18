@@ -32,7 +32,6 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.feedworker.client.ApplicationSettings;
-import org.feedworker.client.FeedWorkerClient;
 import org.jfacility.swing.Swing;
 
 /**
@@ -61,8 +60,8 @@ public class paneSetting extends JPanel {
             jtfDestTorrent, jtfItasaUser, jtfRssMySubsf;
     private JPasswordField jpfSamba, jpfItasa;
     private ButtonGroup bgLocalSamba, bgDownItasa;
-    private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Mediator proxy = Mediator.getIstance();
+    private ApplicationSettings prop = ApplicationSettings.getIstance();
 
     private paneSetting() {
         super(new GridBagLayout());
@@ -490,7 +489,7 @@ public class paneSetting extends JPanel {
         jpSettingSubsf.add(new JLabel("Indirizzo RSS Subsfactory: "), gbc);
 
         gbc.gridx = 1;
-        jtfRssSubsf = new JTextField(30);
+        jtfRssSubsf = new JTextField(25);
         jpSettingSubsf.add(jtfRssSubsf, gbc);
         
         gbc.gridx = 0;
@@ -498,7 +497,7 @@ public class paneSetting extends JPanel {
         jpSettingSubsf.add(new JLabel("Indirizzo RSS Subsf personalizzato: "), gbc);
 
         gbc.gridx = 1;
-        jtfRssMySubsf = new JTextField(30);
+        jtfRssMySubsf = new JTextField(25);
         jpSettingSubsf.add(jtfRssMySubsf, gbc);
     }
 
@@ -646,7 +645,7 @@ public class paneSetting extends JPanel {
         if (previousLookAndFeel != jcbLookFeel.getSelectedItem()) {
             int returnCode = JOptionPane.showConfirmDialog(this,
                     "Per applicare il nuovo Look & Feel è necessario riavviare "
-                    + FeedWorkerClient.getApplication().getName()
+                    + proxy.getNameApp()
                     + ". \nPremi Si per riavviare, No altrimenti",
                     "Info", JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
