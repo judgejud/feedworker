@@ -472,7 +472,7 @@ public class Mediator {
             String time, String laf, boolean audio, String timeout,
             boolean advancedDest, boolean runIconized, String itasa,
             String myitasa, String user, String pwd, boolean autoMyitasa,
-            String subsf, String torrent) {
+            String subsf, String mySubsf, String torrent) {
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
