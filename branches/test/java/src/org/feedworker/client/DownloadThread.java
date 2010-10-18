@@ -104,11 +104,9 @@ public class DownloadThread implements Runnable {
                         if (dest != null && dest.toLowerCase().equals(CMD_DELETE)) {
                             filesub.delete();
                         } else {
-                            //TODO: terminare rinomina.
                             try{
                                 newName = rename(key, namesub);
                             } catch (NullPointerException e){}
-                            System.out.println(filesub.getAbsolutePath() + " " + dest);
                             s.moveFromLocal(filesub, dest);
                             if (newName != null) {
                                 String oldName = dest + File.separator + filesub.getName();

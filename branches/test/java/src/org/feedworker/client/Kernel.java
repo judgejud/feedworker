@@ -685,10 +685,6 @@ public class Kernel {
         fireNewTextPaneEvent("Timer restart ok.", MyTextPaneEvent.OK);
     }
 
-    public void restartApplication() {
-        FeedWorkerClient.getApplication().restart();
-    }
-
     /**
      * restituice l'array con le informazioni sulle versioni video
      *
