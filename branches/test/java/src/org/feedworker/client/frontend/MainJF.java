@@ -51,7 +51,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         this.setPreferredSize(SCREEN_SIZE);
         this.setMinimumSize(SCREEN_SIZE);
         this.setTitle(FeedWorkerClient.getApplication().getName() + " build "
-                + FeedWorkerClient.getApplication().getBuild() + " by "
+                + FeedWorkerClient.getApplication().getBuildNumber() + " by "
                 + FeedWorkerClient.getApplication().getAuthor());
         this.setIconImage(FeedWorkerClient.APPLICATION_ICON);
         initializeMenuBar();
