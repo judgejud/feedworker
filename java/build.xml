@@ -111,6 +111,9 @@
 		<copy todir="${dist}/lib">
 			<fileset dir="../[Java] - JFacility/dist" includes="**/*" />
 		</copy>
+		<copy todir="${dist}/lib">
+			<fileset dir="../[Java] - OpenSanskrit/dist" includes="**/*" />
+		</copy>
 	</target>
 
 	<!-- Make the default jar -->
