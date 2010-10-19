@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -156,19 +154,6 @@ class tableRss extends JTable implements TableRssEventListener {
 			// imposta il testo della cella
 			String text = value.toString();
 			setText(text);
-			// imposta il tooltip della cella
-                        /*
-			int availableWidth = table.getColumnModel().getColumn(column)
-					.getWidth();
-			availableWidth -= table.getIntercellSpacing().getWidth();
-			Insets borderInsets = getBorder().getBorderInsets(this);
-			availableWidth -= (borderInsets.left + borderInsets.right);
-			FontMetrics fm = getFontMetrics(getFont());
-			if (fm.stringWidth(text) > availableWidth)
-				setToolTipText(text);
-			else
-				setToolTipText(null);
-                         */
                         setToolTipText(Swing.getTextToolTip(table, column, this, text));
 			// imposta il font della cella
 			setFont(font);
