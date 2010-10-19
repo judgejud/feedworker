@@ -157,6 +157,7 @@ class tableRss extends JTable implements TableRssEventListener {
 			String text = value.toString();
 			setText(text);
 			// imposta il tooltip della cella
+                        /*
 			int availableWidth = table.getColumnModel().getColumn(column)
 					.getWidth();
 			availableWidth -= table.getIntercellSpacing().getWidth();
@@ -167,6 +168,8 @@ class tableRss extends JTable implements TableRssEventListener {
 				setToolTipText(text);
 			else
 				setToolTipText(null);
+                         */
+                        setToolTipText(Swing.getTextToolTip(table, column, this, text));
 			// imposta il font della cella
 			setFont(font);
 
