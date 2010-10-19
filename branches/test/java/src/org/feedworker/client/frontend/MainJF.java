@@ -53,7 +53,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         this.setTitle(FeedWorkerClient.getApplication().getName() + " build "
                 + FeedWorkerClient.getApplication().getBuildNumber() + " by "
                 + FeedWorkerClient.getApplication().getAuthor());
-        this.setIconImage(FeedWorkerClient.APPLICATION_ICON);
+        this.setIconImage(FeedWorkerClient.getApplication().getIcon());
         initializeMenuBar();
         initializeComponents();
         initListeners();
