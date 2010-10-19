@@ -1,5 +1,6 @@
 IMPLEMENTARE
-download all'avvio di myitasa automatico partendo dall'ultima data salvata.
+download di myitasa automatico all'avvio partendo dall'ultima data salvata. LUCA
+finire mysubsfactory LUCA
 avvio automatico (x ultimo win-unix-mac)
 aggiungere versioning automatico all'applicazione
 *vedere di creare 2http permanenti 1x itasa 1x subsf
@@ -11,7 +12,7 @@ aggiungere versioning automatico all'applicazione
 *multiutenza? 
 *log4j?
 *salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
-*destinazione avanzata: bottone info su ciò che è presente nella tabella.
+*destinazione avanzata: bottone info su ciò che è presente nella tabella e quindi treemap.
 *feed rss sotto thread
 *destinazione avanzata: integrazione con qlk sito tipo tvrage per lo status e il giorno ed eventuale prelevo dell'ultima puntata trasmessa cioè numero stagione/puntata per ogni serie?
 
