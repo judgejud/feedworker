@@ -221,9 +221,7 @@ public class ApplicationSettings {
 		subsfactoryOption = true;
 		torrentOption = true;
 		applicationFirstTimeUsed = true;
-		applicationLookAndFeel = "standard";
-
-		// applicationBuild = "121";
+		applicationLookAndFeel = "System";
 
 		try {
 			propertiesCrypting("ITALIANSUBS", itasaOption);
@@ -231,7 +229,7 @@ public class ApplicationSettings {
 					applicationFirstTimeUsed);
 			propertiesCrypting("TORRENT", torrentOption);
 			propertiesCrypting("SUBSFACTORY", subsfactoryOption);
-			// propertiesCrypting("BUILD",applicationBuild);
+			propertiesCrypting("APPLICATION_LOOK_AND_FEEL", applicationLookAndFeel);
 		} catch (GeneralSecurityException e) {
 			error.launch(e, getClass());
 		} catch (IOException e) {

@@ -15,7 +15,6 @@ import javax.swing.table.TableColumn;
 
 import org.feedworker.client.frontend.events.TableXmlEvent;
 import org.feedworker.client.frontend.events.TableXmlEventListener;
-
 import org.jfacility.swing.ComboBoxEditor;
 import org.jfacility.swing.Swing;
 
