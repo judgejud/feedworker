@@ -1,12 +1,20 @@
 package org.feedworker.client.frontend;
 
 //IMPORT JAVA
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Insets;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -49,6 +57,8 @@ class tableXml extends JTable implements TableXmlEventListener {
         setModel(dtm);
 
         getTableHeader().setReorderingAllowed(false);
+        for (int i=0; i<nameCols.length; i++)
+            getColumnModel().getColumn(i).setHeaderRenderer(new MyTableHeaderRenderer());
 
         getColumnModel().getColumn(0).setMinWidth(70);
         Swing.setTableDimensionLockColumn(this, 1, 75);
@@ -66,6 +76,8 @@ class tableXml extends JTable implements TableXmlEventListener {
         Swing.tableSorter(this);
         this.getColumn(nameCols[0]).setCellRenderer(new JLabelTitleRenderer());
         this.getColumn(nameCols[3]).setCellRenderer(new JLabelTitleRenderer());
+        
+
     }
 
     private void setComboColumn(int num, String[] items) {
@@ -129,4 +141,32 @@ class tableXml extends JTable implements TableXmlEventListener {
             return this;
         }
     } // end class JLabelRenderer
+
+    class MyTableHeaderRenderer extends JLabel implements TableCellRenderer {
+        // This method is called each time a column header
+        // using this renderer needs to be rendered.
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
+            // 'value' is column header value of column 'vColIndex'
+            // rowIndex is always -1
+            // isSelected is always false
+            // hasFocus is always false
+            // Configure the component with the specified value
+            setText(value.toString());
+            setHorizontalAlignment(CENTER);
+            setBorder(new LineBorder(Color.black,1));
+            // Set tool tip if desired setToolTipText((String)value);
+            // Since the renderer is a component, return itself
+            return this;
+        }
+        // The following methods override the defaults for performance reasons
+        @Override
+        public void validate() {}
+        @Override
+        public void revalidate() {}
+        @Override
+        protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {}
+        @Override
+        public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {}
+    }
 }
