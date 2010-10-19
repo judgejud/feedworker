@@ -17,6 +17,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import jcifs.smb.SmbException;
 
+import org.eclipse.swt.SWTException;
 import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
@@ -24,7 +25,6 @@ import org.jdom.JDOMException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import org.eclipse.swt.SWTException;
 
 /**
  * Stampa nella textpane i messaggi d'errore se è un messaggio d'errore "rosso"

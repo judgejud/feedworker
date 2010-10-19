@@ -14,7 +14,9 @@ import java.util.TreeMap;
 import javax.swing.JTable;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.eclipse.swt.SWTException;
 import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.Kernel;
 import org.feedworker.client.RssParser;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
@@ -31,8 +33,6 @@ import org.jfacility.Awt;
 import org.jfacility.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
-import org.eclipse.swt.SWTException;
-import org.feedworker.client.FeedWorkerClient;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.

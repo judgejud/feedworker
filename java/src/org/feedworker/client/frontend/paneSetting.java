@@ -32,6 +32,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.FeedWorkerClient;
 import org.jfacility.swing.Swing;
 
 /**
@@ -108,7 +109,6 @@ public class paneSetting extends JPanel {
         jbAnnullaSettings = new JButton("Annulla");
         jbAnnullaSettings.setBorder(SBBORDER);
         jbSaveSettings.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent evt) {
                 saveSettings();
@@ -304,14 +304,7 @@ public class paneSetting extends JPanel {
         jpSettingGlobal.add(new JLabel("Look&Feel"), gbc);
 
         gbc.gridx = 2;
-        DefaultComboBoxModel dcbmL = new DefaultComboBoxModel(new String[]{
-                    "Nimbus", "Synthetica Standard", "Synthetica BlackEye",
-                    "Synthetica BlackMoon", "Synthetica BlackStar",
-                    "Synthetica BlueIce", "Synthetica BlueMoon",
-                    "Synthetica BlueSteel", "Synthetica GreenDream",
-                    "Synthetica MaouveMetallic", "Synthetica OrangeMetallic",
-                    "Synthetica SilverMoon", "Synthetica Simple2D",
-                    "Synthetica SkyMetallic", "Synthetica WhiteVision"});
+        DefaultComboBoxModel dcbmL = new DefaultComboBoxModel(FeedWorkerClient.getApplication().getAvailableLookAndFeel().toArray());
         jcbLookFeel = new JComboBox(dcbmL);
         jpSettingGlobal.add(jcbLookFeel, gbc);
 
@@ -629,7 +622,7 @@ public class paneSetting extends JPanel {
         return jlDataAggiornamento.getText();
     }
 
-    private void saveSettings() {
+	private void saveSettings() {
         String previousLookAndFeel = prop.getApplicationLookAndFeel();
 
         proxy.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
