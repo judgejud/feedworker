@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
-import org.jfacility.swing.Swing;
+import org.jfacility.javax.swing.Swing;
 
 /**
  * 

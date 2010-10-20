@@ -19,7 +19,7 @@ import org.feedworker.util.Samba;
 import org.feedworker.util.ValueRule;
 import org.jfacility.Io;
 import org.jfacility.Util;
-import org.jfacility.lang.Lang;
+import org.jfacility.java.lang.Lang;
 
 /**
  * 

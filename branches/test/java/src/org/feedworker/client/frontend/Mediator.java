@@ -30,7 +30,7 @@ import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.ValueRule;
 import org.jfacility.Awt;
-import org.jfacility.lang.Lang;
+import org.jfacility.java.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
 
