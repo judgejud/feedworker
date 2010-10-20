@@ -33,7 +33,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
-import org.jfacility.swing.Swing;
+import org.jfacility.javax.swing.Swing;
 
 /**
  * 

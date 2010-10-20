@@ -19,9 +19,6 @@ import java.util.TreeMap;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.LookAndFeel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import jcifs.smb.SmbException;
 
@@ -43,7 +40,7 @@ import org.feedworker.util.Quality;
 import org.feedworker.util.Samba;
 import org.feedworker.util.ValueRule;
 import org.jdom.JDOMException;
-import org.jfacility.lang.Lang;
+import org.jfacility.java.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;

@@ -15,7 +15,7 @@ import javax.swing.table.TableCellRenderer;
 
 import org.feedworker.client.frontend.events.TableRssEvent;
 import org.feedworker.client.frontend.events.TableRssEventListener;
-import org.jfacility.swing.Swing;
+import org.jfacility.javax.swing.Swing;
 
 /**
  * 

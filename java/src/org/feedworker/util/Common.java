@@ -17,9 +17,9 @@ import java.util.Locale;
 
 import javax.swing.ImageIcon;
 
-import org.jfacility.lang.Lang;
-import org.jfacility.lang.MySystem;
-import org.jfacility.swing.Swing;
+import org.jfacility.java.lang.Lang;
+import org.jfacility.java.lang.MySystem;
+import org.jfacility.javax.swing.Swing;
 
 /**Classe Utility di conversioni varie e raccolta di metodi comuni
  * 

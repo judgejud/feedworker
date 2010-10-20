@@ -12,7 +12,7 @@ import org.feedworker.client.frontend.MainJF;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
-import org.jfacility.lang.JVM;
+import org.jfacility.java.lang.JVM;
 import org.opensanskrit.application.AlreadyStartedApplicationException;
 import org.opensanskrit.application.Application;
 
@@ -33,7 +33,7 @@ public class FeedWorkerClient {
     }
 
     public static void main(String args[]) {
-        System.out.println(org.jfacility.lang.MySystem.getJavaHome());
+        System.out.println(org.jfacility.java.lang.MySystem.getJavaHome());
 
         feedWorker = Application.getInstance();
         feedWorkerSettings = ApplicationSettings.getIstance();
