@@ -22,7 +22,7 @@ public class Logging {
 	private Logging() {
 		logger = Logger.getLogger("log");
 		int limit = 100000; // 100k
-		File f = new File("jrss.log");
+		File f = new File("feedworker.log");
 		FileHandler fh = null;
 		try {
 			fh = new FileHandler(f.getAbsolutePath(), limit, 2);

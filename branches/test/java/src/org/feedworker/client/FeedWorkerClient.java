@@ -34,6 +34,8 @@ public class FeedWorkerClient {
     }
 
     public static void main(String args[]) {
+        ResourceLocator.setWorkspace();
+        
         feedWorker = Application.getInstance();
         feedWorkerSettings = ApplicationSettings.getIstance();
 
@@ -53,7 +55,6 @@ public class FeedWorkerClient {
         splash.start();
         splash.updateStartupState("Inizializzazione Feedworker");
         splash.updateStartupState("Setting Workspace ...");
-        ResourceLocator.setWorkspace();
         splash.updateStartupState("Preparing Kernel instance ...");
         K = Kernel.getIstance();
         splash.updateStartupState("Setting Look & Feel ...");
