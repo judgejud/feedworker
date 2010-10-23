@@ -2,10 +2,8 @@ package org.feedworker.client;
 
 import java.awt.EventQueue;
 import java.net.URISyntaxException;
-import java.text.ParseException;
 
 import javax.swing.JOptionPane;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.feedworker.client.frontend.ClassicSplashScreen;
 import org.feedworker.client.frontend.EnhancedMainJF;
@@ -14,11 +12,10 @@ import org.feedworker.client.frontend.MainJF;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
-
 import org.jfacility.java.lang.JVM;
-
 import org.opensanskrit.application.AlreadyStartedApplicationException;
 import org.opensanskrit.application.Application;
+import org.opensanskrit.application.NotAvailableLookAndFeelException;
 
 /**
  * Client
@@ -59,8 +56,12 @@ public class FeedWorkerClient {
         ResourceLocator.setWorkspace();
         splash.updateStartupState("Preparing Kernel instance ...");
         K = Kernel.getIstance();
-        splash.updateStartupState("Setting Look & Feel ...");        
-        feedWorker.setApplicationLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
+        splash.updateStartupState("Setting Look & Feel ...");
+        try {
+        feedWorker.setLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
+        } catch (NotAvailableLookAndFeelException e) {
+        	feedWorker.setLookAndFeel();
+        }
         splash.updateStartupState("Checking JVM ...");
 
         if (!jvm.isOrLater(15)) {
