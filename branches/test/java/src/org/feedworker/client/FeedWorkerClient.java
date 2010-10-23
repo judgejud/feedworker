@@ -60,14 +60,7 @@ public class FeedWorkerClient {
         splash.updateStartupState("Preparing Kernel instance ...");
         K = Kernel.getIstance();
         splash.updateStartupState("Setting Look & Feel ...");        
-        try {
-            feedWorker.setApplicationLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
-        } catch (ParseException ex) {
-        } catch (ClassNotFoundException ex) {
-        } catch (InstantiationException ex) {
-        } catch (IllegalAccessException ex) {
-        } catch (UnsupportedLookAndFeelException ex) {
-        }
+        feedWorker.setApplicationLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
         splash.updateStartupState("Checking JVM ...");
 
         if (!jvm.isOrLater(15)) {
