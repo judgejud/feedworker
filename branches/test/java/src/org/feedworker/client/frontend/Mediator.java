@@ -667,9 +667,7 @@ public class Mediator {
     }
 
     void restartApplication() {
-        try {
             FeedWorkerClient.getApplication().restart();
-        } catch (IOException ex) {}
     }
 
     String getNameApp(){
