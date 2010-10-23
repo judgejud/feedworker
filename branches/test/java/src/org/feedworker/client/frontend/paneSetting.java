@@ -53,7 +53,7 @@ public class paneSetting extends JPanel {
     private JLabel jlDataAggiornamento;
     private JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
     private JCheckBox jcbAudio, jcbAdvancedDest, jcbRunIconized,
-            jcbRunAtStartup;
+            jcbRunAtStartup, jcbDownloadMyitasaStartup;
     private JButton jbDestSub, jbSaveSettings, jbAnnullaSettings,
             jbDestTorrent;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
@@ -406,6 +406,15 @@ public class paneSetting extends JPanel {
         bgDownItasa = new ButtonGroup();
         bgDownItasa.add(jrbDownAuto);
         bgDownItasa.add(jrbDownManual);
+
+        gbc.gridx = 0;
+        gbc.gridy = ++y;
+        gbc.gridwidth = 2;
+        jpSettingItasa.add(new JLabel("myItasa download automatico avvio"), gbc);
+
+        gbc.gridx = 2;
+        jcbDownloadMyitasaStartup = new JCheckBox("Abilitato");
+        jpSettingGlobal.add(jcbDownloadMyitasaStartup, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = ++y;

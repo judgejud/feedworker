@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JTable;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -665,7 +667,9 @@ public class Mediator {
     }
 
     void restartApplication() {
-        FeedWorkerClient.getApplication().restart();
+        try {
+            FeedWorkerClient.getApplication().restart();
+        } catch (IOException ex) {}
     }
 
     String getNameApp(){
