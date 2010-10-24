@@ -61,7 +61,7 @@ public class FeedWorkerClient {
         try {
         feedWorker.setLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
         } catch (NotAvailableLookAndFeelException e) {
-        	feedWorker.setLookAndFeel();
+            feedWorker.setLookAndFeel();
         }
         splash.updateStartupState("Checking JVM ...");
 
