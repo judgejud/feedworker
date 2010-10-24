@@ -371,8 +371,7 @@ public class paneSetting extends JPanel {
 
         gbc.gridx = 2;
         gbc.gridwidth = 3;
-        jtfRssItasa = new JTextField();
-        jtfRssItasa.setColumns(27);
+        jtfRssItasa = new JTextField(25);
         jpSettingItasa.add(jtfRssItasa, gbc);
 
         gbc.gridx = 0;
@@ -384,8 +383,7 @@ public class paneSetting extends JPanel {
 
         gbc.gridx = 2;
         gbc.gridwidth = 3;
-        jtfRssMyItasa = new JTextField();
-        jtfRssMyItasa.setColumns(27);
+        jtfRssMyItasa = new JTextField(25);
         jpSettingItasa.add(jtfRssMyItasa, gbc);
 
         gbc.gridx = 0;
