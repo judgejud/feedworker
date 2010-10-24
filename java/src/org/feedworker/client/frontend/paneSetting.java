@@ -32,7 +32,6 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.feedworker.client.ApplicationSettings;
-import org.feedworker.client.FeedWorkerClient;
 import org.jfacility.javax.swing.Swing;
 
 /**
@@ -43,13 +42,11 @@ public class paneSetting extends JPanel {
 
     private final Dimension TABBEDSIZE = new Dimension(1024, 540);
     private final Dimension INTERNALSETTINGS = new Dimension(500, 430);
-    private final SoftBevelBorder SBBORDER = new SoftBevelBorder(
-            BevelBorder.RAISED);
+    private final SoftBevelBorder SBBORDER = new SoftBevelBorder(BevelBorder.RAISED);
     private static paneSetting jpanel = null;
     private JTree jtSettings;
-    private JPanel jpSettingGlobal, jpSettingItasa, jpSettingSubsf,
-            jpSettingTorrent;
-    private JComboBox jcbMinuti, jcbLookFeel, jcbTimeout, jcbFont;
+    private JPanel jpSettingGlobal, jpSettingItasa, jpSettingSubsf,jpSettingTorrent;
+    private JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
     private JLabel jlDataAggiornamento;
     private JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
     private JCheckBox jcbAudio, jcbAdvancedDest, jcbRunIconized,
@@ -62,11 +59,12 @@ public class paneSetting extends JPanel {
     private JPasswordField jpfSamba, jpfItasa;
     private ButtonGroup bgLocalSamba, bgDownItasa;
     private Mediator proxy = Mediator.getIstance();
-    private ApplicationSettings prop = ApplicationSettings.getIstance();
+    private ApplicationSettings prop;
 
     private paneSetting() {
         super(new GridBagLayout());
         setPreferredSize(TABBEDSIZE);
+        prop = proxy.getSettings();
         initSettings();
     }
 
@@ -304,7 +302,7 @@ public class paneSetting extends JPanel {
         jpSettingGlobal.add(new JLabel("Look&Feel"), gbc);
 
         gbc.gridx = 2;
-        DefaultComboBoxModel dcbmL = new DefaultComboBoxModel(FeedWorkerClient.getApplication().getAvailableLookAndFeel().toArray());
+        DefaultComboBoxModel dcbmL = new DefaultComboBoxModel(proxy.getAvailableLAF());
         jcbLookFeel = new JComboBox(dcbmL);
         jpSettingGlobal.add(jcbLookFeel, gbc);
 
@@ -411,8 +409,9 @@ public class paneSetting extends JPanel {
         jpSettingItasa.add(new JLabel("myItasa download automatico avvio"), gbc);
 
         gbc.gridx = 2;
+        gbc.gridwidth = 1;
         jcbDownloadMyitasaStartup = new JCheckBox("Abilitato");
-        jpSettingGlobal.add(jcbDownloadMyitasaStartup, gbc);
+        jpSettingItasa.add(jcbDownloadMyitasaStartup, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = ++y;
@@ -486,6 +485,7 @@ public class paneSetting extends JPanel {
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.gridx = 0;
         gbc.gridy = 0;
+        gbc.insets = new Insets(2, 1, 2, 1);
         jpSettingSubsf.add(new JLabel("Indirizzo RSS Subsfactory: "), gbc);
 
         gbc.gridx = 1;
