@@ -571,7 +571,7 @@ public class paneSetting extends JPanel {
         }
     }
 
-    public void settingsValue() {
+    void settingsValue() {
         settingsGlobalValue();
         if (prop.isItasaOption())
             settingsItasaValue();
@@ -624,13 +624,14 @@ public class paneSetting extends JPanel {
 
     private void settingsSubsfValue() {
         jtfRssSubsf.setText(prop.getSubsfactoryFeedURL());
+        jtfRssMySubsf.setText(prop.getMySubsfactoryFeedUrl());
     }
 
-    public void setDataAggiornamento(String data) {
+    void setDataAggiornamento(String data) {
         jlDataAggiornamento.setText(data);
     }
 
-    public String getDataAggiornamento() {
+    String getDataAggiornamento() {
         return jlDataAggiornamento.getText();
     }
 
