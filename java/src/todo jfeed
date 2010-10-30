@@ -1,23 +1,20 @@
 IMPLEMENTARE
 download di myitasa automatico all'avvio partendo dall'ultima data salvata. LUCA
-finire mysubsfactory LUCA
 avvio automatico (x ultimo win-unix-mac)
 aggiungere versioning automatico all'applicazione
-vedere di creare 2http permanenti 1x itasa 1x subsf
+vedere di creare 1http permanente x itasa
 menu infomazioni di sistema
 backup e ripristino proprietà (file properties e rules.xml) 
 ricerca sottotitoli itasa
-rilnciare eventuali errori SWT dall'enhancedmainjf al mediator e quindi al manageexception.
 destinazione avanzata in mixed mode 
-multiutenza? 
-log4j?
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
 destinazione avanzata: bottone info su ciò che è presente nella tabella e quindi treemap.
 feed rss sotto thread
 destinazione avanzata: integrazione con qlk sito tipo tvrage per lo status e il giorno ed eventuale prelevo dell'ultima puntata trasmessa cioè numero stagione/puntata per ogni serie?
 far uscire all'avvio i tf previsti per il giorno in questione nella textpane
-creare una classe settings esclusivamente per itasa e global che iniziano a diventare 1po' troppi e quindi non rincitrullire, tipo itasaVO, globalVO (?) 
-
+implementare il tipo di download di mysubsfactory (come x myitasa)
+multiutenza? 
+log4j?
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'. PACKY
 

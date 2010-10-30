@@ -79,7 +79,7 @@ public class Kernel {
     private List listenerJFrame = new ArrayList();
     private Timer timer;
     private String lastItasa = null, lastMyItasa = null, lastSubsf = null,
-            lastEztv = null, lastBtchat = null;
+            lastEztv = null, lastBtchat = null, lastMySubsf = null;
     private TreeMap<KeyRule, ValueRule> mapRules;
     private ManageException error = ManageException.getIstance();
     private MyTextPaneEventListener mytpel;
@@ -478,11 +478,9 @@ public class Kernel {
         return status;
     }
 
-    /**
-     * Esegue la parte rss subsfactory
+    /**Esegue la parte rss subsfactory
      *
-     * @param first
-     *            primo lancio
+     * @param first primo lancio
      * @return true se ci sono nuovi feed, false altrimenti
      */
     private boolean runSubsfactory(boolean first) {
@@ -496,6 +494,16 @@ public class Kernel {
                         status = true;
                     lastSubsf = (String) subsf.get(0)[1];
                     fireTableRssEvent(subsf, SUBSF);
+                }
+            }
+            if (Lang.verifyTextNotNull(prop.getMySubsfactoryFeedUrl())) {
+                mysubsf = getFeedRss(prop.getMySubsfactoryFeedUrl(), lastMySubsf,
+                        MYSUBSF, false);
+                if ((mysubsf != null) && (mysubsf.size() > 0)) {
+                    if (!first)
+                        status = true;
+                    lastMySubsf = (String) mysubsf.get(0)[1];
+                    fireTableRssEvent(mysubsf, MYSUBSF);
                 }
             }
         }
