@@ -217,7 +217,6 @@ public class ApplicationSettings {
         torrentOption = true;
         applicationFirstTimeUsed = true;
         applicationLookAndFeel = "Synthetica Standard";
-
         try {
             propertiesCrypting("ITALIANSUBS", itasaOption);
             propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED",
@@ -235,7 +234,7 @@ public class ApplicationSettings {
     /** scrive solo l'ultima data dell'aggiornamento rss */
     public void writeOnlyLastDate() {
         try {
-            propertiesCrypting("DATE", lastDateTimeRefresh);
+            propertiesCrypting("LAST_DATETIME_REFRESH", lastDateTimeRefresh);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());

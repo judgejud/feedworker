@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import java.util.zip.ZipException;
 
 import org.apache.http.HttpEntity;
+
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
 import org.feedworker.util.Common;
@@ -17,6 +18,7 @@ import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.Samba;
 import org.feedworker.util.ValueRule;
+
 import org.jfacility.Io;
 import org.jfacility.Util;
 import org.jfacility.java.lang.Lang;
@@ -41,7 +43,6 @@ public class DownloadThread implements Runnable {
     private ManageException error = ManageException.getIstance();
     private TreeMap<KeyRule, ValueRule> mapRules;
     private List listenerTextPane = new ArrayList();
-    private static DownloadThread dt = null;
 
     DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als, boolean _itasa) {
         als = _als;
@@ -236,7 +237,6 @@ public class DownloadThread implements Runnable {
         String version = searchVersion(temp[pos]);
         String serieNum;
         pos = Common.searchPosSeries(temp);
-        String episodeNum = null;
         if (pos > -1) {
             serieNum = Common.searchNumberSeries(temp[pos]);
         } else {
