@@ -455,8 +455,8 @@ public class Kernel {
                 }
             }
             if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
-                if (prop.isAutoLoadDownloadMyItasa() && first)
-                    lastMyItasa = prop.getLastDateTimeRefresh();
+                //if (prop.isAutoLoadDownloadMyItasa() && first)
+                //    lastMyItasa = prop.getLastDateTimeRefresh();
                 feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
                         MYITASA, prop.isAutoDownloadMyItasa(), first);
                 if ((feedMyita != null) && (feedMyita.size() > 0)) {

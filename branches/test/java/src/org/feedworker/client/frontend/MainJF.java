@@ -163,21 +163,18 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         JMenuItem deleteCompletedTaskJMI = new JMenuItem(
                 " Delete completed task ");
         videoMoveJMI.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 proxy.synoMoveVideo();
             }
         });
         taskStatusJMI.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 proxy.synoStatus();
             }
         });
         deleteCompletedTaskJMI.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 proxy.synoClearFinish();
@@ -190,12 +187,9 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
 
         JMenu helpJM = new JMenu(" Help ");
         applicationJMB.add(helpJM);
-        // JMenuItem helpGeneralSettingsJMI = new
-        // JMenuItem(" General Settings ");
-        // JMenuItem helpItasaSettingsJMI = new JMenuItem(" Itasa Settings ");
-        JMenuItem helpSubtitleRoleJMI = new JMenuItem(" Subtitle Rule ");
-        helpSubtitleRoleJMI.addActionListener(new ActionListener() {
 
+        JMenuItem helpSubtitleRoleJMI = new JMenuItem(" Regola Sottotitolo ");
+        helpSubtitleRoleJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(getParent(), showRuleHelpPopup(),
@@ -204,8 +198,15 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
             }
         });
         helpJM.add(helpSubtitleRoleJMI);
-        // helpJM.add(helpGeneralSettingsJMI);
-        // helpJM.add(helpItasaSettingsJMI);
+
+        JMenuItem helpSystemInfoJMI = new JMenuItem(" Informazioni Sistema ");
+        helpSystemInfoJMI.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        helpJM.add(helpSystemInfoJMI);
         // Install the menu bar in the frame
         setJMenuBar(applicationJMB);
     }
