@@ -16,6 +16,7 @@ destinazione avanzata: bottone info su ciò che è presente nella tabella e quin
 feed rss sotto thread
 destinazione avanzata: integrazione con qlk sito tipo tvrage per lo status e il giorno ed eventuale prelevo dell'ultima puntata trasmessa cioè numero stagione/puntata per ogni serie?
 far uscire all'avvio i tf previsti per il giorno in questione nella textpane
+creare una classe settings esclusivamente per itasa e global che iniziano a diventare 1po' troppi e quindi non rincitrullire, tipo itasaVO, globalVO (?) 
 
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'. PACKY

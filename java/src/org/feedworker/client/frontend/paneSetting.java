@@ -43,6 +43,7 @@ public class paneSetting extends JPanel {
     private final Dimension TABBEDSIZE = new Dimension(1024, 540);
     private final Dimension INTERNALSETTINGS = new Dimension(500, 430);
     private final SoftBevelBorder SBBORDER = new SoftBevelBorder(BevelBorder.RAISED);
+    private final String[] timeout = new String[]{"3", "6", "9", "12", "15", "18"};
     private static paneSetting jpanel = null;
     private JTree jtSettings;
     private JPanel jpSettingGlobal, jpSettingItasa, jpSettingSubsf,jpSettingTorrent;
@@ -89,15 +90,15 @@ public class paneSetting extends JPanel {
         gbc.gridx = 1;
         gbc.weightx = 1;
         add(jpSettingGlobal, gbc);
-        if (prop.hasItasaOption()) {
+        if (prop.isItasaOption()) {
             initPanelSettingsItasa();
             add(jpSettingItasa, gbc);
         }
-        if (prop.hasSubsfactoryOption()) {
+        if (prop.isSubsfactoryOption()) {
             initPanelSettingsSubsf();
             add(jpSettingSubsf, gbc);
         }
-        if (prop.hasTorrentOption()) {
+        if (prop.isTorrentOption()) {
             initPanelSettingsTorrent();
             add(jpSettingTorrent, gbc);
         }
@@ -233,7 +234,6 @@ public class paneSetting extends JPanel {
         jbDestSub = new JButton("Seleziona");
         jbDestSub.setBorder(SBBORDER);
         jbDestSub.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent evt) {
                 jbDestSubMouseClicked();
@@ -320,9 +320,7 @@ public class paneSetting extends JPanel {
 
         gbc.gridx = 2;
         gbc.gridwidth = 1;
-        DefaultComboBoxModel dcbmT = new DefaultComboBoxModel(new String[]{
-                    "3", "6", "9", "12", "15", "18"});
-        jcbTimeout = new JComboBox(dcbmT);
+        jcbTimeout = new JComboBox(new DefaultComboBoxModel(timeout));
         jcbTimeout.setSelectedIndex(2);
         jpSettingGlobal.add(jcbTimeout, gbc);
 
@@ -336,15 +334,7 @@ public class paneSetting extends JPanel {
         gbc.gridx = 2;
         jcbRunIconized = new JCheckBox("Abilitato");
         jpSettingGlobal.add(jcbRunIconized, gbc);
-        /*
-         * gbc.gridx = 0; gbc.gridy = ++y; gbc.gridwidth = 2; JLabel jlFont =
-         * new JLabel("Font da usare"); jpSettingGlobal.add(jlFont, gbc);
-         *
-         * gbc.gridx = 2; DefaultComboBoxModel dcbmF = new
-         * DefaultComboBoxModel(Awt.getAvailableFont()); jcbFont = new
-         * JComboBox(dcbmF); jcbFont.setEnabled(false);
-         * jpSettingGlobal.add(jcbFont, gbc);
-         */
+        
         bgLocalSamba = new ButtonGroup();
         bgLocalSamba.add(jrbDirLocal);
         bgLocalSamba.add(jrbDirSamba);
@@ -392,11 +382,23 @@ public class paneSetting extends JPanel {
         gbc.gridx = 2;
         gbc.gridwidth = 1;
         jrbDownAuto = new JRadioButton("Automatico");
+        jrbDownAuto.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                settingItasaDownloadStartup();
+            }
+        });
         jpSettingItasa.add(jrbDownAuto, gbc);
 
         gbc.gridx = 3;
         jrbDownManual = new JRadioButton("Manuale");
         jrbDownManual.setSelected(true);
+        jrbDownManual.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                settingItasaDownloadStartup();
+            }
+        });
         jpSettingItasa.add(jrbDownManual, gbc);
 
         bgDownItasa = new ButtonGroup();
@@ -464,7 +466,6 @@ public class paneSetting extends JPanel {
         jbDestTorrent = new JButton("Seleziona");
         jbDestTorrent.setBorder(SBBORDER);
         jbDestTorrent.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent evt) {
                 jbDestTorrentMouseClicked();
@@ -510,40 +511,37 @@ public class paneSetting extends JPanel {
             if (evt.isAddedPath(i) && (temp.length() > 10)) {
                 String node = temp.substring(11, temp.length() - 1);
                 if (node.equalsIgnoreCase("General")) {
-                    if (prop.hasItasaOption()) {
+                    if (prop.isItasaOption())
                         jpSettingItasa.setVisible(false);
-                    }
-                    if (prop.hasSubsfactoryOption()) {
+                    if (prop.isSubsfactoryOption())
                         jpSettingSubsf.setVisible(false);
-                    }
-                    if (prop.hasTorrentOption()) {
+                    if (prop.isTorrentOption())
                         jpSettingTorrent.setVisible(false);
-                    }
                     jpSettingGlobal.setVisible(true);
                 } else if (node.equalsIgnoreCase("Itasa")) {
                     jpSettingGlobal.setVisible(false);
-                    if (prop.hasSubsfactoryOption()) {
+                    if (prop.isSubsfactoryOption()) {
                         jpSettingSubsf.setVisible(false);
                     }
-                    if (prop.hasTorrentOption()) {
+                    if (prop.isTorrentOption()) {
                         jpSettingTorrent.setVisible(false);
                     }
                     jpSettingItasa.setVisible(true);
                 } else if (node.equalsIgnoreCase("Subsfactory")) {
                     jpSettingGlobal.setVisible(false);
-                    if (prop.hasItasaOption()) {
+                    if (prop.isItasaOption()) {
                         jpSettingItasa.setVisible(false);
                     }
-                    if (prop.hasTorrentOption()) {
+                    if (prop.isTorrentOption()) {
                         jpSettingTorrent.setVisible(false);
                     }
                     jpSettingSubsf.setVisible(true);
                 } else if (node.equalsIgnoreCase("Torrent")) {
                     jpSettingGlobal.setVisible(false);
-                    if (prop.hasItasaOption()) {
+                    if (prop.isItasaOption()) {
                         jpSettingItasa.setVisible(false);
                     }
-                    if (prop.hasSubsfactoryOption()) {
+                    if (prop.isSubsfactoryOption()) {
                         jpSettingSubsf.setVisible(false);
                     }
                     jpSettingTorrent.setVisible(true);
@@ -575,15 +573,12 @@ public class paneSetting extends JPanel {
 
     public void settingsValue() {
         settingsGlobalValue();
-        if (prop.hasItasaOption()) {
+        if (prop.isItasaOption())
             settingsItasaValue();
-        }
-        if (prop.hasSubsfactoryOption()) {
+        if (prop.isSubsfactoryOption())
             settingsSubsfValue();
-        }
-        if (prop.hasTorrentOption()) {
+        if (prop.isTorrentOption())
             settingsTorrentValue();
-        }
     }
 
     /* Popola le impostazioni con il properties caricato */
@@ -611,6 +606,16 @@ public class paneSetting extends JPanel {
         jpfItasa.setText(prop.getItasaPassword());
         jrbDownAuto.setSelected(prop.isAutoDownloadMyItasa());
         jrbDownManual.setSelected(!prop.isAutoDownloadMyItasa());
+        settingItasaDownloadStartup();
+    }
+    private void settingItasaDownloadStartup(){
+        if (jrbDownManual.isSelected()){
+            jcbDownloadMyitasaStartup.setEnabled(false);
+            jcbDownloadMyitasaStartup.setSelected(false);
+        } else {
+            jcbDownloadMyitasaStartup.setEnabled(true);
+            jcbDownloadMyitasaStartup.setSelected(prop.isAutoDownloadMyItasa());
+        }
     }
 
     private void settingsTorrentValue() {
@@ -629,7 +634,7 @@ public class paneSetting extends JPanel {
         return jlDataAggiornamento.getText();
     }
 
-	private void saveSettings() {
+    private void saveSettings() {
         String previousLookAndFeel = prop.getApplicationLookAndFeel();
 
         proxy.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
@@ -640,9 +645,10 @@ public class paneSetting extends JPanel {
                 jcbAdvancedDest.isSelected(), jcbRunIconized.isSelected(),
                 jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
                 new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
+                jcbDownloadMyitasaStartup.isSelected(),
                 jtfRssSubsf.getText(), jtfRssMySubsf.getText(), jtfDestTorrent.getText());
 
-        if (previousLookAndFeel != jcbLookFeel.getSelectedItem()) {
+        if (!previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {
             int returnCode = JOptionPane.showConfirmDialog(this,
                     "Per applicare il nuovo Look & Feel è necessario riavviare "
                     + proxy.getNameApp()

@@ -20,14 +20,14 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
-import org.feedworker.client.FeedWorkerClient;
+
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.util.ResourceLocator;
 
 public class EnhancedMainJF extends MainJF {
-
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
     private final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon.png";
+
     private Image currentIcon;
     private Display display;
     private TrayItem trayIcon;
@@ -61,11 +61,10 @@ public class EnhancedMainJF extends MainJF {
             logJTP.appendAlert("La system tray non è disponibile.");
         } else {
             trayIcon = new TrayItem(tray, SWT.NONE);
-            trayIcon.setToolTipText(FeedWorkerClient.getApplication().getName());
+            trayIcon.setToolTipText(proxy.getApplicationName());
             trayIcon.setImage(currentIcon);
 
             trayIcon.addListener(SWT.Selection, new Listener() {
-
                 @Override
                 public void handleEvent(Event event) {
                     currentIcon.dispose();
@@ -86,7 +85,6 @@ public class EnhancedMainJF extends MainJF {
             trayMenuItem = new MenuItem(trayMenu, SWT.PUSH);
             trayMenuItem.setText("Close");
             trayMenuItem.addListener(SWT.Selection, new Listener() {
-
                 @Override
                 public void handleEvent(Event event) {
                     applicationClose();
@@ -121,8 +119,7 @@ public class EnhancedMainJF extends MainJF {
         }
     }
 
-    private String getAbsoluteResourcePath(String name)
-            throws URISyntaxException {
+    private String getAbsoluteResourcePath(String name) throws URISyntaxException {
         return new File(ResourceLocator.convertStringToURL(
                 ResourceLocator.getResourcePath() + name).toURI()).getAbsolutePath();
     }
@@ -136,7 +133,7 @@ public class EnhancedMainJF extends MainJF {
                 trayIcon.setToolTipText("Arrivato/i nuovo/i feed :-)");
                 trayIcon.setImage(currentIcon);
             } catch (URISyntaxException ex) {
-                logJTP.appendAlert(ex.getMessage());
+                proxy.printError(ex);
             }
         }
         if (evt.getDate() != null) {

@@ -9,10 +9,13 @@ import org.feedworker.client.frontend.ClassicSplashScreen;
 import org.feedworker.client.frontend.EnhancedMainJF;
 import org.feedworker.client.frontend.EnhancedSplashScreen;
 import org.feedworker.client.frontend.MainJF;
+import org.feedworker.client.frontend.NewerMainJF;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
+
 import org.jfacility.java.lang.JVM;
+
 import org.opensanskrit.application.AlreadyStartedApplicationException;
 import org.opensanskrit.application.Application;
 import org.opensanskrit.application.NotAvailableLookAndFeelException;
@@ -69,7 +72,7 @@ public class FeedWorkerClient {
             JOptionPane.showMessageDialog(null,
                     "E' necessario disporre di una versione della JVM >= 1.5",
                     feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
-            FeedWorkerClient.getApplication().shutdown();
+            feedWorker.shutdown();
         } else {
             try {
                 splash.updateStartupState("Finding other FeedWorker instance ...");
@@ -85,11 +88,11 @@ public class FeedWorkerClient {
                     public void run() {
                         MainJF jframe = null;
                         splash.updateStartupState("Loading GUI ...");
-                        if (jvm.isOrLater(16)) {
-                            jframe = new EnhancedMainJF();
-                        } else if (jvm.isOrLater(15)) {
+                        if (jvm.isOrLater(16))
+                            jframe = new NewerMainJF();
+                            //jframe = new EnhancedMainJF();
+                        else if (jvm.isOrLater(15))
                             jframe = new MainJF();
-                        }
                         splash.updateStartupState("Loading xml");
                         K.loadXml();
                         splash.updateStartupState("Initializing RSS...");
@@ -111,7 +114,7 @@ public class FeedWorkerClient {
                 JOptionPane.showMessageDialog(null,
                         "C'è già la stessa applicazione avviata.",
                         feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
-                FeedWorkerClient.getApplication().shutdown();
+                feedWorker.shutdown();
             }
         }
     }

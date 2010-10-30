@@ -1,5 +1,4 @@
 package org.feedworker.util;
-
 //IMPORT JAVA
 import java.io.File;
 import java.io.IOException;
@@ -14,59 +13,54 @@ import java.util.logging.SimpleFormatter;
  */
 public class Logging {
 
-	private static Logging log = null;
+    private static Logging log = null;
+    private Logger logger;
 
-	private Logger logger;
+    /** Costruttore privato */
+    private Logging() {
+        logger = Logger.getLogger("log");
+        int limit = 100000; // 100k
+        File f = new File("feedworker.log");
+        FileHandler fh = null;
+        try {
+            fh = new FileHandler(f.getAbsolutePath(), limit, 2);
+        } catch (IOException ex) {
+        } catch (SecurityException ex) {
+        }
+        logger.addHandler(fh);
+        logger.setLevel(Level.SEVERE);
+        fh.setFormatter(new SimpleFormatter());
+    }
 
-	/** Costruttore privato */
-	private Logging() {
-		logger = Logger.getLogger("log");
-		int limit = 100000; // 100k
-		File f = new File("feedworker.log");
-		FileHandler fh = null;
-		try {
-			fh = new FileHandler(f.getAbsolutePath(), limit, 2);
-		} catch (IOException ex) {
-		} catch (SecurityException ex) {
-		}
-		logger.addHandler(fh);
-		logger.setLevel(Level.SEVERE);
-		fh.setFormatter(new SimpleFormatter());
-	}
+    /**Restituisce l'istanza corrente della classe
+     *
+     * @return istanza di Logging
+     */
+    public static Logging getIstance() {
+        if (log == null)
+            log = new Logging();
+        return log;
+    }
 
-	/**
-	 * Restituisce l'istanza corrente della classe
-	 * 
-	 * @return istanza di Logging
-	 */
-	public static Logging getIstance() {
-		if (log == null)
-			log = new Logging();
-		return log;
-	}
+    /**Stampa il nome della classe che genera l'errore
+     *
+     * @param c classe
+     */
+    public void printClass(Class c) {
+        logger.log(Level.SEVERE, "{0}\n", c.getName());
+    }
 
-	/**
-	 * Stampa il nome della classe che genera l'errore
-	 * 
-	 * @param c
-	 *            classe
-	 */
-	public void printClass(Class c) {
-		logger.severe(c.getName() + "\n");
-	}
-
-	/**
-	 * Stampa il messaggio d'errore e lo stacktrace connesso.
-	 * 
-	 * @param e
-	 *            eccezione da stampare
-	 */
-	public void printError(Exception e) {
-		StackTraceElement[] ste = e.getStackTrace();
-		StringBuffer sb = new StringBuffer();
-		sb.append(e.getMessage() + "\n");
-		for (int i = 0; i < ste.length; i++)
-			sb.append(ste[i].toString() + "\n");
-		logger.severe(sb.toString());
-	}
+    /**Stampa il messaggio d'errore e lo stacktrace connesso.
+     *
+     * @param e eccezione da stampare
+     */
+    public void printError(Exception e) {
+        StackTraceElement[] ste = e.getStackTrace();
+        StringBuilder sb = new StringBuilder();
+        sb.append(e.getMessage()).append("\n");
+        for (int i = 0; i < ste.length; i++) {
+            sb.append(ste[i].toString()).append("\n");
+        }
+        logger.severe(sb.toString());
+    }
 }

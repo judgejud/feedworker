@@ -55,15 +55,15 @@ public class ManageException {
         printError(ex, c);
     }
 
-    /**
-     * Analizza l'errore feedexception
+    public void launch(Exception e) {
+        printError(e, null);
+    }
+
+    /**Analizza l'errore feedexception
      *
-     * @param ex
-     *            Feedexception
-     * @param c
-     *            classe di provenienza
-     * @param text
-     *            eventuale testo da stampare
+     * @param ex Feedexception
+     * @param c classe di provenienza
+     * @param text eventuale testo da stampare
      */
     public void launch(FeedException ex, Class c, String text) {
         String msg = ex.getMessage();
@@ -263,8 +263,11 @@ public class ManageException {
         String error01 = "Invalid XML: Error on line 1: The markup in the document "
                 + "following the root element must be well-formed.";
         String error02 = "Invalid XML: Error on line 1: Content is not allowed in prolog.";
+        String error03 = "Invalid XML: Error on line 6: The element type \"hr\" must be "
+                + "terminated by the matching end-tag \"</hr>\".";
         String msg = ex.getMessage();
-        if (msg.equalsIgnoreCase(error01) || msg.equalsIgnoreCase(error02))
+        if (msg.equalsIgnoreCase(error01) || msg.equalsIgnoreCase(error02)  ||
+                msg.equalsIgnoreCase(error03))
             printAlert("Non posso analizzare il feed XML " + text);
         else
             printError(ex, c);

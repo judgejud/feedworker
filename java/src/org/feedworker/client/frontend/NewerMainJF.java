@@ -12,18 +12,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 
-import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
-import org.feedworker.util.Common;
 
 /**
  * Jframe per versioni java 6 e superiori
  * 
  * @author luca judge
  */
-public class NewerMainJF extends MainJF {
-
-    private final String INCOMING_FEED_ICON = "IncomingFeedIcon2.png";
+public class NewerMainJF extends MainJF {    
     // VARIABLES PRIVATE
     private SystemTray tray;
     private TrayIcon trayIcon;
@@ -38,13 +34,12 @@ public class NewerMainJF extends MainJF {
     /** inizializza la system tray */
     private void initSysTray() {
         if (SystemTray.isSupported()) {
-            iconRss = FeedWorkerClient.getApplication().getIcon();
-            iconSub = Common.getResourceIcon(INCOMING_FEED_ICON);
+            iconRss = proxy.getApplicationIcon();
+            iconSub = proxy.getIncomingFeedIcon();
             PopupMenu popup = new PopupMenu();
-            MenuItem defaultItem = new MenuItem(" Close "
-                    + FeedWorkerClient.getApplication().getName());
-            defaultItem.addActionListener(new ActionListener() {
 
+            MenuItem defaultItem = new MenuItem(" Close " + proxy.getApplicationName());
+            defaultItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     applicationClose();
@@ -54,19 +49,18 @@ public class NewerMainJF extends MainJF {
             // get the SystemTray instance
             tray = SystemTray.getSystemTray();
             // load an image
-            trayIcon = new TrayIcon(iconRss, FeedWorkerClient.getApplication().getName(), popup);
+            trayIcon = new TrayIcon(iconRss, proxy.getApplicationName(), popup);
             trayIcon.addMouseListener(new MouseAdapter() {
-
                 @Override
                 public void mouseClicked(MouseEvent evt) {
                     try {
                         tray.remove(trayIcon);
                         if (trayIcon.getImage().equals(iconSub)) {
-                            trayIcon.setToolTip(FeedWorkerClient.getApplication().getName());
+                            trayIcon.setToolTip(proxy.getApplicationName());
                             trayIcon.setImage(iconRss);
                         }
                     } catch (Exception e) {
-                        logJTP.appendError(e.getMessage());
+                        proxy.printError(e);
                     }
                     setVisible(true);
                 }
@@ -88,7 +82,7 @@ public class NewerMainJF extends MainJF {
     @Override
     public void objReceived(MyJFrameEvent evt) {
         if ((evt.isIcontray()) && (!this.isVisible())) {
-            trayIcon.setToolTip("jRss2Sub Nuovi Feed");
+            trayIcon.setToolTip("FeedWorker - ci sono nuovi feed :)");
             trayIcon.setImage(iconSub);
         }
         if (evt.getDate() != null) {
@@ -105,4 +99,3 @@ public class NewerMainJF extends MainJF {
         }
     }
 } // end class
-

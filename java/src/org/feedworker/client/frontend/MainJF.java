@@ -22,9 +22,9 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import org.feedworker.client.ApplicationSettings;
-import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.client.frontend.events.MyJFrameEventListener;
+
 import org.jfacility.java.lang.MySystem;
 
 /**Gui base per java 1.5
@@ -50,10 +50,8 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setPreferredSize(SCREEN_SIZE);
         this.setMinimumSize(SCREEN_SIZE);
-        this.setTitle(FeedWorkerClient.getApplication().getName() + " build "
-                + FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + FeedWorkerClient.getApplication().getAuthor());
-        this.setIconImage(FeedWorkerClient.getApplication().getIcon());
+        this.setTitle(proxy.getTitle());
+        this.setIconImage(proxy.getApplicationIcon());
         initializeMenuBar();
         initializeComponents();
         initListeners();
@@ -67,15 +65,15 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         this.add(mainJTP, BorderLayout.CENTER);
         settingsJP = paneSetting.getPanel();
 
-        if (prop.hasItasaOption()) {
+        if (prop.isItasaOption()) {
             itasaJP = ItasaJP.getPanel();
             mainJTP.addTab("Itasa", itasaJP);
         }
-        if (prop.hasSubsfactoryOption()) {
+        if (prop.isSubsfactoryOption()) {
             subsfactoryJP = SubsfactoryJP.getPanel();
             mainJTP.addTab("Subsfactory", subsfactoryJP);
         }
-        if (prop.hasTorrentOption()) {
+        if (prop.isTorrentOption()) {
             torrentJP = TorrentJP.getPanel();
             mainJTP.addTab("Torrent", torrentJP);
         }
@@ -278,23 +276,18 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         }
     }
 
-    /**
-     * risponde all'evento di cambiare lo stato (abilitato/disabilitato) dei
+    /**risponde all'evento di cambiare lo stato (abilitato/disabilitato) dei
      * bottoni
      *
-     * @param e
-     *            stato
+     * @param e stato
      */
     protected void changeEnabledButton(boolean e) {
-        if (prop.hasItasaOption()) {
+        if (prop.isItasaOption())
             itasaJP.setButtonEnabled(e);
-        }
-        if (prop.hasSubsfactoryOption()) {
+        if (prop.isSubsfactoryOption())
             subsfactoryJP.setEnableButton(e);
-        }
-        if (prop.hasTorrentOption()) {
+        if (prop.isTorrentOption())
             torrentJP.setButtonEnabled(e);
-        }
     }
 
     /** inizializza i listener per l'ascolto */
