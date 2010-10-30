@@ -23,12 +23,12 @@ public class ApplicationSettings {
             subtitleDestinationFolder, refreshInterval, lastDateTimeRefresh,
             applicationLookAndFeel, torrentDestinationFolder,
             cifsShareLocation, cifsSharePath, cifsShareUsername,
-            cifsSharePassword, cifsShareDomain, subsfactoryFeedURL,
+            cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, mySubsfactoryFeedUrl,
             httpTimeout;
     private boolean subsfactoryOption, torrentOption, itasaOption,
             autoDownloadMyItasa, enableAudioAdvisor, applicationFirstTimeUsed,
             localFolder, enableIconizedRun, enableRunAtStartup,
-            enableCustomDestinationFolder;
+            enableCustomDestinationFolder, autoLoadDownloadMyItasa;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -50,16 +50,16 @@ public class ApplicationSettings {
                 setItasaPassword(getDecryptedValue("ITASA_PASSWORD"));
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
                 setSubtitleDestinationFolder(getDecryptedValue("SUBTITLE_DESTINATION_FOLDER"));
-                setSubfactoryOption(Boolean.parseBoolean(getDecryptedValue("SUBSFACTORY")));
+                setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
                 setRefreshInterval(getDecryptedValue("REFRESH_INTERVAL"));
-                setAutoDownloadMyItasa(Boolean.parseBoolean(getDecryptedValue("IS_AUTO_DOWNLOAD_MYITASA")));
+                setAutoDownloadMyItasa(getBooleanDecryptedValue("IS_AUTO_DOWNLOAD_MYITASA"));
                 setLastDateTimeRefresh(getDecryptedValue("LAST_DATETIME_REFRESH"));
                 setApplicationLookAndFeel(getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
-                setEnableAudioAdvisor(Boolean.parseBoolean(getDecryptedValue("ENABLE_AUDIO_ADVISOR")));
-                setTorrentOption(Boolean.parseBoolean(getDecryptedValue("TORRENT")));
-                applicationFirstTimeUsed = Boolean.parseBoolean(getDecryptedValue("IS_APPLICATION_FIRST_TIME_USED"));
-                setItasaOption(Boolean.parseBoolean(getDecryptedValue("ITALIANSUBS")));
-                localFolder(Boolean.parseBoolean(getDecryptedValue("IS_LOCAL_FOLDER")));
+                setEnableAudioAdvisor(getBooleanDecryptedValue("ENABLE_AUDIO_ADVISOR"));
+                setTorrentOption(getBooleanDecryptedValue("TORRENT"));
+                applicationFirstTimeUsed = getBooleanDecryptedValue("IS_APPLICATION_FIRST_TIME_USED");
+                setItasaOption(getBooleanDecryptedValue("ITALIANSUBS"));
+                setLocalFolder(getBooleanDecryptedValue("IS_LOCAL_FOLDER"));
                 setTorrentDestinationFolder(getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
                 setCifsSharePath(getDecryptedValue("CIFS_SHARE_PATH"));
                 setCifsShareDomain(getDecryptedValue("CIFS_SHARE_DOMAIN"));
@@ -67,8 +67,10 @@ public class ApplicationSettings {
                 setCifsSharePassword(getDecryptedValue("CIFS_SHARE_PASSWORD"));
                 setCifsShareUsername(getDecryptedValue("CIFS_SHARE_USERNAME"));
                 setHttpTimeout(getDecryptedValue("HTTP_TIMEOUT"));
-                setEnableCustomDestinationFolder(Boolean.parseBoolean(getDecryptedValue("ENABLE_CUSTOM_DESTINATION_FOLDER")));
-                setEnableIconizedRun(Boolean.parseBoolean(getDecryptedValue("ENABLE_ICONIZED_RUN")));
+                setEnableCustomDestinationFolder(getBooleanDecryptedValue("ENABLE_CUSTOM_DESTINATION_FOLDER"));
+                setEnableIconizedRun(getBooleanDecryptedValue("ENABLE_ICONIZED_RUN"));
+                setAutoLoadDownloadMyItasa(getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
+                setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
             } else {
                 loadDefaultSettings();
                 storeSettings();
@@ -80,8 +82,7 @@ public class ApplicationSettings {
         }
     }
 
-    /**
-     * Restituisce l'istanza statica della classe
+    /**Restituisce l'istanza statica della classe
      *
      * @return istanza property
      */
@@ -104,6 +105,10 @@ public class ApplicationSettings {
             error.launch(e, getClass(), null);
         }
         return null;
+    }
+
+    private boolean getBooleanDecryptedValue(String property){
+        return Boolean.parseBoolean(getDecryptedValue(property));
     }
 
     /** Scrive i settaggi su file */
@@ -142,6 +147,7 @@ public class ApplicationSettings {
             propertiesCrypting("ITASA_USERNAME", itasaUsername);
             propertiesCrypting("ITASA_PASSWORD", itasaPassword);
             propertiesCrypting("IS_AUTO_DOWNLOAD_MYITASA", autoDownloadMyItasa);
+            propertiesCrypting("IS_AUTO_LOAD_DOWNLOAD_MYITASA", autoLoadDownloadMyItasa);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -153,6 +159,7 @@ public class ApplicationSettings {
     void writeSubsfactorySettings() {
         try {
             propertiesCrypting("SUBSFACTORY_FEED_URL", subsfactoryFeedURL);
+            propertiesCrypting("MYSUBSFACTORY_FEED_URL", mySubsfactoryFeedUrl);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -245,7 +252,7 @@ public class ApplicationSettings {
         this.enableAudioAdvisor = enableAudioAdvisor;
     }
 
-    public boolean hasItasaOption() {
+    public boolean isItasaOption() {
         return itasaOption;
     }
 
@@ -253,7 +260,7 @@ public class ApplicationSettings {
         this.itasaOption = hasItasaOption;
     }
 
-    public boolean hasTorrentOption() {
+    public boolean isTorrentOption() {
         return torrentOption;
     }
 
@@ -345,12 +352,12 @@ public class ApplicationSettings {
         this.subtitleDestinationFolder = subtitleDestinationFolder;
     }
 
-    public boolean hasSubsfactoryOption() {
+    public boolean isSubsfactoryOption() {
         return subsfactoryOption;
     }
 
-    private void setSubfactoryOption(boolean hasSubsfactoryOption) {
-        this.subsfactoryOption = hasSubsfactoryOption;
+    private void setSubfactoryOption(boolean subsfactoryOption) {
+        this.subsfactoryOption = subsfactoryOption;
     }
 
     public String getSettingsFilename() {
@@ -421,7 +428,7 @@ public class ApplicationSettings {
         return localFolder;
     }
 
-    public void localFolder(boolean isLocalFolder) {
+    public void setLocalFolder(boolean isLocalFolder) {
         this.localFolder = isLocalFolder;
     }
 
@@ -457,5 +464,20 @@ public class ApplicationSettings {
     public void setEnableRunAtStartup(boolean enableRunAtStartup) {
         this.enableRunAtStartup = enableRunAtStartup;
     }
-}// end class
 
+    public boolean isAutoLoadDownloadMyItasa() {
+        return autoLoadDownloadMyItasa;
+    }
+
+    public void setAutoLoadDownloadMyItasa(boolean autoLoadDownloadMyItasa) {
+        this.autoLoadDownloadMyItasa = autoLoadDownloadMyItasa;
+    }
+
+    public String getMySubsfactoryFeedUrl() {
+        return mySubsfactoryFeedUrl;
+    }
+
+    public void setMySubsfactoryFeedUrl(String mySubsfactoryFeedUrl) {
+        this.mySubsfactoryFeedUrl = mySubsfactoryFeedUrl;
+    }
+}// end class

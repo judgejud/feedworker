@@ -2,6 +2,7 @@ package org.feedworker.client.frontend;
 
 //IMPORT JAVA
 import java.awt.Color;
+import java.awt.Image;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -25,10 +26,12 @@ import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
 import org.feedworker.client.frontend.events.TableRssEventListener;
 import org.feedworker.client.frontend.events.TableXmlEventListener;
+import org.feedworker.util.Common;
 import org.feedworker.util.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.ValueRule;
+
 import org.jfacility.Awt;
 import org.jfacility.java.lang.Lang;
 import org.opensanskrit.application.UnableRestartApplicationException;
@@ -41,8 +44,10 @@ import com.sun.syndication.io.FeedException;
  * @author luca
  */
 public class Mediator {
+    private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
 
     private static Mediator proxy = null;
+
     private Kernel core = Kernel.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private List listenerTextPane = new ArrayList();
@@ -231,13 +236,13 @@ public class Mediator {
     DefaultMutableTreeNode getTreeNode() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
         root.add(new DefaultMutableTreeNode("General"));
-        if (prop.hasItasaOption()) {
+        if (prop.isItasaOption()) {
             root.add(new DefaultMutableTreeNode("Itasa"));
         }
-        if (prop.hasSubsfactoryOption()) {
+        if (prop.isSubsfactoryOption()) {
             root.add(new DefaultMutableTreeNode("Subsfactory"));
         }
-        if (prop.hasTorrentOption()) {
+        if (prop.isTorrentOption()) {
             root.add(new DefaultMutableTreeNode("Torrent"));
         }
         return root;
@@ -364,8 +369,7 @@ public class Mediator {
         core.synoStatus();
     }
 
-    /**
-     * verifica impostazioni torrent
+    /**verifica impostazioni torrent
      *
      * @return booleano che le impostazioni sono ok
      */
@@ -377,31 +381,30 @@ public class Mediator {
         return true;
     }
 
-    /**
-     * verifica impostazioni subsf
+    /**verifica impostazioni subsf
      *
      * @return booleano che le impostazioni sono ok
      */
-    boolean checkSaveSubsf(String text) {
+    boolean checkSaveSubsf(String subsf, String mySubsf) {
         boolean check = true;
-        if (Lang.verifyTextNotNull(text)) {
+        if (!Lang.verifyTextNotNull(subsf) && !Lang.verifyTextNotNull(mySubsf))
+            printAlert("Avviso: Non immettendo link RSS Subsfactory non potrai usare i feed"
+                    + " Subsfactory");
+        else {
             try {
-                new URL(text);
-                check = testRss(text, "subsfactory");
+                if (Lang.verifyTextNotNull(subsf))
+                    check = testRss(subsf, "subsfactory");
+                if (check && Lang.verifyTextNotNull(mySubsf))
+                        check = testRss(mySubsf, "mysubsfactory");
             } catch (MalformedURLException e) {
                 error.launch(e, getClass(), "subsfactory");
                 check = false;
             }
-        } else {
-            printAlert("Avviso: Non immettendo link RSS Subsfactory non potrai usare i feed"
-                    + " Subsfactory");
         }
         return check;
     }
 
-    // TODO sistemare il controllo itasa
-    /**
-     * verifica impostazioni itasa
+    /**verifica impostazioni itasa
      *
      * @return booleano che le impostazioni sono ok
      */
@@ -413,9 +416,8 @@ public class Mediator {
                 printAlert("Avviso: Non immettendo link RSS itasa e/o myitasa non potrai "
                         + "usare i feed italiansubs");
             } else {
-                if (Lang.verifyTextNotNull(itasa)) {
+                if (Lang.verifyTextNotNull(itasa))
                     check = testRss(itasa, "itasa");
-                }
                 if (check) {
                     if (Lang.verifyTextNotNull(myitasa)) {
                         check = testRss(myitasa, "myitasa");
@@ -475,6 +477,7 @@ public class Mediator {
             String time, String laf, boolean audio, String timeout,
             boolean advancedDest, boolean runIconized, String itasa,
             String myitasa, String user, String pwd, boolean autoMyitasa,
+            boolean autoLoadMyItasa,
             String subsf, String mySubsf, String torrent) {
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
@@ -484,22 +487,20 @@ public class Mediator {
         if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                 sambaUser, sambaPwd)) {
             save = true;
-            if (prop.hasItasaOption() && save) {
+            if (prop.isItasaOption() && save)
                 save = checkSaveItasa(itasa, myitasa, user, pwd);
-            }
-            if (prop.hasSubsfactoryOption() && save) {
-                save = checkSaveSubsf(subsf);
-            }
-            if (prop.hasTorrentOption() && save) {
+            if (prop.isSubsfactoryOption() && save)
+                save = checkSaveSubsf(subsf, mySubsf);
+            if (prop.isTorrentOption() && save)
                 checkSaveTorrent(torrent);
-            }
         }
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                     sambaUser, sambaPwd, time, laf, audio, timeout,
                     advancedDest, runIconized);
-            setPropItasa(itasa, myitasa, user, pwd, autoMyitasa);
+            setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
             prop.setSubsfactoryFeedURL(subsf);
+            prop.setMySubsfactoryFeedUrl(mySubsf);
             prop.setTorrentDestinationFolder(torrent);
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
@@ -520,11 +521,6 @@ public class Mediator {
                         && !oldMin.equalsIgnoreCase(prop.getRefreshInterval())) {
                     restartRss();
                 }
-                /*
-                 * if ((Lang.verifyTextNotNull(oldTor)) &
-                 * (!oldTor.equalsIgnoreCase(prop.getRssTorrent()))){
-                 * jtTorrent.removeAllRows(); core.runTorrent(); }
-                 */
             }
             fireNewTextPaneEvent(
                     "Impostazioni salvate in " + prop.getSettingsFilename(),
@@ -537,7 +533,7 @@ public class Mediator {
             String sambaUser, String sambaPwd, String time, String laf,
             boolean audio, String timeout, boolean advancedDest,
             boolean runIconized) {
-        prop.localFolder(dirLocal);
+        prop.setLocalFolder(dirLocal);
         prop.setSubtitleDestinationFolder(destSub);
         prop.setRefreshInterval(time);
         prop.setApplicationLookAndFeel(laf);
@@ -553,12 +549,13 @@ public class Mediator {
     }
 
     private void setPropItasa(String itasa, String myitasa, String user,
-            String pwd, boolean auto) {
+            String pwd, boolean auto, boolean autoload) {
         prop.setItasaFeedURL(itasa);
         prop.setMyitasaFeedURL(myitasa);
         prop.setItasaUsername(user);
         prop.setItasaPassword(pwd);
         prop.setAutoDownloadMyItasa(auto);
+        prop.setAutoLoadDownloadMyItasa(autoload);
     }
 
     void bruteRefresh() {
@@ -616,6 +613,10 @@ public class Mediator {
 
     void printError(URISyntaxException e) {
         ManageException.getIstance().launch(e, null);
+    }
+
+    void printError(Exception e) {
+        ManageException.getIstance().launch(e);
     }
 
     void printError(SWTException e) {
@@ -684,5 +685,23 @@ public class Mediator {
 
     ApplicationSettings getSettings(){
         return ApplicationSettings.getIstance();
+    }
+
+    Image getIncomingFeedIcon(){
+        return Common.getResourceIcon(INCOMING_FEED_ICON_FILE_NAME);
+    }
+
+    Image getApplicationIcon(){
+        return FeedWorkerClient.getApplication().getIcon();
+    }
+
+    String getApplicationName(){
+        return FeedWorkerClient.getApplication().getName();
+    }
+
+    String getTitle(){
+        return getApplicationName() + " build "
+                + FeedWorkerClient.getApplication().getBuildNumber() + " by "
+                + FeedWorkerClient.getApplication().getAuthor();
     }
 }
