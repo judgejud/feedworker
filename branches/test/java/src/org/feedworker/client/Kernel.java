@@ -111,8 +111,7 @@ public class Kernel {
         t.start();
     }
 
-    /**
-     * effettua il download automatico di myitasa comprende le fasi anche di
+    /**effettua il download automatico di myitasa comprende le fasi anche di
      * estrazione zip e analizzazione percorso definitivo.
      *
      * @param link
@@ -303,21 +302,17 @@ public class Kernel {
         prop.writeOnlyLastDate();
     }
 
-    /**
-     * Restituisce l'arraylist contenente i feed rss
+    /**Restituisce l'arraylist contenente i feed rss
      *
-     * @param urlRss
-     *            url rss da analizzare
-     * @param data
-     *            data da confrontare
-     * @param from
-     *            provenienza
-     * @param download
-     *            download automatico
+     * @param urlRss url rss da analizzare
+     * @param data data da confrontare
+     * @param from provenienza
+     * @param download download automatico
+     * @param first
      * @return arraylist di feed(array di oggetti)
      */
     private ArrayList<Object[]> getFeedRss(String urlRss, String data,
-            String from, boolean download) {
+            String from, boolean download, boolean first) {
         RssParser rss = null;
         ArrayList<Object[]> matrice = null;
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
@@ -350,24 +345,25 @@ public class Kernel {
                                     fireNewTextPaneEvent(
                                             "Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_SUBSF);
+                                } else if (from.equals(MYSUBSF)) {
+                                    fireNewTextPaneEvent(
+                                            "Nuovo/i feed " + from,
+                                            MyTextPaneEvent.FEED_MYSUBSF);
                                 } else if (from.equals(EZTV)) {
                                     fireNewTextPaneEvent(
                                             "Nuovo/i feed " + from,
-                                            MyTextPaneEvent.FEED_TORRENT1);
+                                            MyTextPaneEvent.FEED_EZTV);
                                 } else if (from.equals(BTCHAT)) {
                                     fireNewTextPaneEvent(
                                             "Nuovo/i feed " + from,
-                                            MyTextPaneEvent.FEED_TORRENT2);
+                                            MyTextPaneEvent.FEED_BTCHAT);
                                 }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2]))
-                                    && download) {
+                            if ((isNotStagione((String) matrice.get(i)[2])) && download)
                                 downItasaAuto(matrice.get(i)[0]);
-                            }
-                        } else {
+                        } else //if confronta after
                             matrice.remove(i);
-                        }
                     }
                 }
             }
@@ -407,21 +403,16 @@ public class Kernel {
         timer = new Timer();
         try {
             timer.scheduleAtFixedRate(new TimerTask() {
-
                 @Override
                 public void run() {
                     boolean icontray = false;
-                    // String data = prop.getLastDate();
                     prop.setLastDateTimeRefresh(Common.actualTime());
-                    if (runItasa(false)) {
+                    if (runItasa(false))
                         icontray = true;
-                    }
-                    if (runSubsfactory(false)) {
+                    if (runSubsfactory(false))
                         icontray = true;
-                    }
-                    if (runTorrent(false)) {
+                    if (runTorrent(false))
                         icontray = true;
-                    }
                     if ((icontray) && (prop.isEnabledAudioAdvisor())) {
                         try {
                             AudioPlay.playWav();
@@ -454,7 +445,7 @@ public class Kernel {
             ArrayList<Object[]> feedIta, feedMyita;
             if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
                 feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA,
-                        false);
+                        false, first);
                 if ((feedIta != null) && (feedIta.size() > 0)) {
                     if (!first) {
                         status = true;
@@ -464,8 +455,10 @@ public class Kernel {
                 }
             }
             if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
+                if (prop.isAutoLoadDownloadMyItasa() && first)
+                    lastMyItasa = prop.getLastDateTimeRefresh();
                 feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
-                        MYITASA, prop.isAutoDownloadMyItasa());
+                        MYITASA, prop.isAutoDownloadMyItasa(), first);
                 if ((feedMyita != null) && (feedMyita.size() > 0)) {
                     if (!first) {
                         status = true;
@@ -488,7 +481,7 @@ public class Kernel {
         if (prop.isSubsfactoryOption()) {
             ArrayList<Object[]> subsf, mysubsf;
             if (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL())) {
-                subsf = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf, SUBSF, false);
+                subsf = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf, SUBSF, false, first);
                 if ((subsf != null) && (subsf.size() > 0)) {
                     if (!first)
                         status = true;
@@ -498,7 +491,7 @@ public class Kernel {
             }
             if (Lang.verifyTextNotNull(prop.getMySubsfactoryFeedUrl())) {
                 mysubsf = getFeedRss(prop.getMySubsfactoryFeedUrl(), lastMySubsf,
-                        MYSUBSF, false);
+                        MYSUBSF, false, first);
                 if ((mysubsf != null) && (mysubsf.size() > 0)) {
                     if (!first)
                         status = true;
@@ -521,8 +514,8 @@ public class Kernel {
         boolean status = false;
         if (prop.isTorrentOption()) {
             ArrayList<Object[]> feedEz, feedBt;
-            feedEz = getFeedRss(RSS_TORRENT_EZTV, lastEztv, EZTV, false);
-            feedBt = getFeedRss(RSS_TORRENT_BTCHAT, lastBtchat, BTCHAT, false);
+            feedEz = getFeedRss(RSS_TORRENT_EZTV, lastEztv, EZTV, false, first);
+            feedBt = getFeedRss(RSS_TORRENT_BTCHAT, lastBtchat, BTCHAT, false, first);
             if ((feedEz != null) && (feedEz.size() > 0)) {
                 if (!first) {
                     status = true;
@@ -900,8 +893,7 @@ public class Kernel {
         }
     }
 
-    /**
-     * Permette alla classe di registrarsi per l'evento textpane
+    /**Permette alla classe di registrarsi per l'evento textpane
      *
      * @param listener
      *            evento textpane
@@ -911,8 +903,7 @@ public class Kernel {
         listenerTextPane.add(listener);
     }
 
-    /**
-     * Permette alla classe di de-registrarsi per l'evento textpane
+    /**Permette alla classe di de-registrarsi per l'evento textpane
      *
      * @param listener
      *            evento textpane
