@@ -26,8 +26,8 @@ public class LogJTP extends JTextPane implements MyTextPaneEventListener {
     // PRIVATE
     private StyledDocument mysd;
     private Style styleOK, styleError, styleAlert, styleSub, styleTorrent,
-            styleFeedItasa, styleFeedMyItasa, styleFeedSubsf,
-            styleFeedTorrent1, styleFeedTorrent2, styleSynology;
+            styleFeedItasa, styleFeedMyItasa, styleFeedSubsf, styleFeedMySubsf,
+            styleFeedEztv, styleFeedBtchat, styleSynology;
 
     /**
      * Costruttore Inizializza la myjtextpane
@@ -50,13 +50,15 @@ public class LogJTP extends JTextPane implements MyTextPaneEventListener {
         styleFeedItasa = mysd.addStyle("StyleFeedItasa", null);
         styleFeedMyItasa = mysd.addStyle("StyleFeedMyItasa", null);
         styleFeedSubsf = mysd.addStyle("StyleFeedSubsf", null);
-        styleFeedTorrent1 = mysd.addStyle("StyleFeedTorrent1", null);
-        styleFeedTorrent2 = mysd.addStyle("StyleFeedTorrent2", null);
+        styleFeedMySubsf = mysd.addStyle("StyleFeedMySubsf", null);
+        styleFeedEztv = mysd.addStyle("StyleFeedEztv", null);
+        styleFeedBtchat = mysd.addStyle("StyleFeedBtchat", null);
         styleSub = mysd.addStyle("StyleSub", null);
         styleTorrent = mysd.addStyle("StyleTorrent", null);
         styleSynology = mysd.addStyle("StyleSynology", null);
         // Italic
         StyleConstants.setItalic(styleFeedMyItasa, true);
+        StyleConstants.setItalic(styleFeedMySubsf, true);
         // Bold
         // StyleConstants.setBold(style, false);
         // Font family
@@ -66,8 +68,9 @@ public class LogJTP extends JTextPane implements MyTextPaneEventListener {
         StyleConstants.setFontFamily(styleFeedItasa, "SansSerif");
         StyleConstants.setFontFamily(styleFeedMyItasa, "SansSerif");
         StyleConstants.setFontFamily(styleFeedSubsf, "SansSerif");
-        StyleConstants.setFontFamily(styleFeedTorrent1, "SansSerif");
-        StyleConstants.setFontFamily(styleFeedTorrent2, "SansSerif");
+        StyleConstants.setFontFamily(styleFeedMySubsf, "SansSerif");
+        StyleConstants.setFontFamily(styleFeedEztv, "SansSerif");
+        StyleConstants.setFontFamily(styleFeedBtchat, "SansSerif");
         StyleConstants.setFontFamily(styleSub, "SansSerif");
         StyleConstants.setFontFamily(styleTorrent, "SansSerif");
         StyleConstants.setFontFamily(styleSynology, "SansSerif");
@@ -78,8 +81,9 @@ public class LogJTP extends JTextPane implements MyTextPaneEventListener {
         StyleConstants.setFontSize(styleFeedItasa, dim);
         StyleConstants.setFontSize(styleFeedMyItasa, dim);
         StyleConstants.setFontSize(styleFeedSubsf, dim);
-        StyleConstants.setFontSize(styleFeedTorrent1, dim);
-        StyleConstants.setFontSize(styleFeedTorrent2, dim);
+        StyleConstants.setFontSize(styleFeedMySubsf, dim);
+        StyleConstants.setFontSize(styleFeedEztv, dim);
+        StyleConstants.setFontSize(styleFeedBtchat, dim);
         StyleConstants.setFontSize(styleSub, dim);
         StyleConstants.setFontSize(styleTorrent, dim);
         StyleConstants.setFontSize(styleSynology, dim);
@@ -90,8 +94,9 @@ public class LogJTP extends JTextPane implements MyTextPaneEventListener {
         StyleConstants.setForeground(styleFeedItasa, Color.cyan);
         StyleConstants.setForeground(styleFeedMyItasa, Color.cyan);
         StyleConstants.setForeground(styleFeedSubsf, ORANGE);
-        StyleConstants.setForeground(styleFeedTorrent1, HELIOTROPE);
-        StyleConstants.setForeground(styleFeedTorrent2, Color.gray);
+        StyleConstants.setForeground(styleFeedMySubsf, ORANGE);
+        StyleConstants.setForeground(styleFeedEztv, HELIOTROPE);
+        StyleConstants.setForeground(styleFeedBtchat, Color.gray);
         StyleConstants.setForeground(styleSub, Color.white);
         StyleConstants.setForeground(styleTorrent, Color.magenta);
         StyleConstants.setForeground(styleSynology, GOLD);
@@ -157,14 +162,18 @@ public class LogJTP extends JTextPane implements MyTextPaneEventListener {
         append(msg, styleFeedSubsf);
     }
 
+    private void appendFeedMySubsf(String msg) {
+        append(msg, styleFeedMySubsf);
+    }
+
     /**
      * Aggiunge alla textpane il testo con stile FEED TORRENT1
      *
      * @param msg
      *            testo da aggiungere
      */
-    private void appendFeedTorrent1(String msg) {
-        append(msg, styleFeedTorrent1);
+    private void appendFeedEztv(String msg) {
+        append(msg, styleFeedEztv);
     }
 
     /**
@@ -173,8 +182,8 @@ public class LogJTP extends JTextPane implements MyTextPaneEventListener {
      * @param msg
      *            testo da aggiungere
      */
-    private void appendFeedTorrent2(String msg) {
-        append(msg, styleFeedTorrent2);
+    private void appendFeedBtchat(String msg) {
+        append(msg, styleFeedBtchat);
     }
 
     /**
@@ -242,11 +251,11 @@ public class LogJTP extends JTextPane implements MyTextPaneEventListener {
         } else if (evt.getType().equals(MyTextPaneEvent.FEED_SUBSF)) {
             appendFeedSubsf(evt.getMsg());
         } else if (evt.getType().equals(MyTextPaneEvent.FEED_MYSUBSF)) {
-            appendFeedSubsf(evt.getMsg());
+            appendFeedMySubsf(evt.getMsg());
         } else if (evt.getType().equals(MyTextPaneEvent.FEED_EZTV)) {
-            appendFeedTorrent1(evt.getMsg());
+            appendFeedEztv(evt.getMsg());
         } else if (evt.getType().equals(MyTextPaneEvent.FEED_BTCHAT)) {
-            appendFeedTorrent2(evt.getMsg());
+            appendFeedBtchat(evt.getMsg());
         } else if (evt.getType().equals(MyTextPaneEvent.SYNOLOGY)) {
             appendSynology(evt.getMsg());
         }
