@@ -22,7 +22,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import jcifs.smb.SmbException;
 
-import org.eclipse.swt.widgets.Display;
+//import org.eclipse.swt.widgets.Display;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.client.frontend.events.MyJFrameEventListener;
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
@@ -39,8 +39,10 @@ import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.Samba;
 import org.feedworker.util.ValueRule;
-import org.jdom.JDOMException;
+
 import org.jfacility.java.lang.Lang;
+
+import org.jdom.JDOMException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
@@ -69,6 +71,8 @@ public class Kernel {
         Quality.FORM_1080p.toString(), Quality.BLURAY.toString(),
         Quality.DVDRIP.toString(), Quality.HR.toString(),
         Quality.DIFF.toString()};
+    public final static String[] daysOfWeek = new String[]{"", "Domenica", "Lunedì",
+        "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"};
     // PRIVATE STATIC VARIABLES
     private static Kernel core = null;
     // PRIVATE VARIABLES
@@ -240,23 +244,16 @@ public class Kernel {
         }
     }
 
-    /**
-     * testa la connessione a samba
+    /**testa la connessione a samba
      *
-     * @param ip
-     *            ip della macchina samba
-     * @param dir
-     *            directory condivisa
-     * @param dom
-     *            dominio
-     * @param user
-     *            utente
-     * @param pwd
-     *            password
+     * @param ip ip della macchina samba
+     * @param dir directory condivisa
+     * @param dom dominio
+     * @param user utente
+     * @param pwd password
      * @return true se positivo, false altrimenti
      */
-    public boolean testSamba(String ip, String dir, String dom, String user,
-            String pwd) {
+    public boolean testSamba(String ip, String dir, String dom, String user, String pwd) {
         boolean test = false;
         Samba.resetInstance();
         Samba s = Samba.getIstance(ip, dir, dom, user, pwd);
@@ -271,16 +268,16 @@ public class Kernel {
         return test;
     }
 
-    /**
-     * chiude l'applicazione salvando la data nel settings
+    /**chiude l'applicazione salvando la data nel settings
      *
      * @param data
      */
     public void closeApp(String data) {
+        if (!Lang.verifyTextNotNull(data))
+            data = Common.actualTime();
         prop.setLastDateTimeRefresh(data);
-        if (!prop.isApplicationFirstTimeUsed()) {
+        if (!prop.isApplicationFirstTimeUsed())
             prop.writeOnlyLastDate();
-        }
         System.exit(0);
     }
 
@@ -295,11 +292,6 @@ public class Kernel {
             prop.writeTorrentSettings();
         if (prop.isApplicationFirstTimeUsed())
             prop.writeApplicationFirstTimeUsedFalse();
-    }
-
-    /** Scrive l'ultima data d'aggiornamento nel file properties */
-    public void writeLastDate() {
-        prop.writeOnlyLastDate();
     }
 
     /**Restituisce l'arraylist contenente i feed rss
@@ -332,36 +324,30 @@ public class Kernel {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
                         if (confronta.before(Common.stringToDate(date_matrix))) {
                             if (continua) {
-                                if (from.equals(ITASA)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                if (from.equals(ITASA))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_ITASA);
-                                } else if (from.equals(MYITASA)
-                                        && !prop.isAutoDownloadMyItasa()) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(MYITASA)
+                                        && !prop.isAutoDownloadMyItasa()) 
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_MYITASA);
-                                } else if (from.equals(SUBSF)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(SUBSF))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_SUBSF);
-                                } else if (from.equals(MYSUBSF)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(MYSUBSF))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_MYSUBSF);
-                                } else if (from.equals(EZTV)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(EZTV))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_EZTV);
-                                } else if (from.equals(BTCHAT)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(BTCHAT))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_BTCHAT);
-                                }
                                 continua = false;
                             }
                             if ((isNotStagione((String) matrice.get(i)[2])) && download)
                                 downItasaAuto(matrice.get(i)[0]);
+                        } else if (first && from.equals(MYITASA)){ //non deve fare nulla
                         } else //if confronta after
                             matrice.remove(i);
                     }
@@ -384,10 +370,11 @@ public class Kernel {
     /** Esegue gli rss */
     public void runRss() {
         if (!prop.isApplicationFirstTimeUsed()) {
-            prop.setLastDateTimeRefresh(Common.actualTime());
+            String temp = Common.actualTime();
             runItasa(true);
             runSubsfactory(true);
             runTorrent(true);
+            prop.setLastDateTimeRefresh(temp);
             int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
             runTimer(delay);
         }
@@ -455,14 +442,14 @@ public class Kernel {
                 }
             }
             if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
-                //if (prop.isAutoLoadDownloadMyItasa() && first)
-                //    lastMyItasa = prop.getLastDateTimeRefresh();
+                if (first && prop.isAutoLoadDownloadMyItasa()){
+                    lastMyItasa = prop.getLastDateTimeRefresh();
+                }
                 feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
                         MYITASA, prop.isAutoDownloadMyItasa(), first);
                 if ((feedMyita != null) && (feedMyita.size() > 0)) {
-                    if (!first) {
+                    if (!first)
                         status = true;
-                    }
                     lastMyItasa = (String) feedMyita.get(0)[1];
                     fireTableRssEvent(feedMyita, MYITASA);
                 }
@@ -944,19 +931,24 @@ public class Kernel {
         listenerJFrame.remove(listener);
     }
 
-    private synchronized void fireNewJFrameEvent(boolean _icontray,
-            final String _data) {
-        final boolean icontray = _icontray;
-        final String data = _data;
-        /*
-         * Nota: E' stato necessario utilizzare il metodo syncExec perchè
+    private synchronized void fireNewJFrameEvent(boolean _icontray, final String _data) {
+        MyJFrameEvent event = new MyJFrameEvent(this, _icontray, _data);
+        Iterator listeners = listenerJFrame.iterator();
+        while (listeners.hasNext()) {
+            MyJFrameEventListener myel = (MyJFrameEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+        /* Nota: E' stato necessario utilizzare il metodo syncExec perchè
          * l'interazione con il thread UI di SWT che gestisce la SysTray può
          * avvenire solo in questo modo. In caso contrario l'azione su oggetti
          * SWT che vivono in uno specifico thread (UI thread) da un altro thread
          * come in questo caso causa una SWTException: Invalid Thread Access.
          */
-        Display.getDefault().syncExec(new Runnable() {
 
+        /*
+        final boolean icontray = _icontray;
+        final String data = _data;
+        Display.getDefault().syncExec(new Runnable() {
             @Override
             public void run() {
                 MyJFrameEvent event = new MyJFrameEvent(this, icontray, data);
@@ -967,5 +959,6 @@ public class Kernel {
                 }
             }
         });
+        */
     }
 }

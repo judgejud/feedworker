@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.zip.ZipException;
+import jcifs.smb.SmbException;
 
 import org.apache.http.HttpEntity;
 
@@ -116,11 +117,18 @@ public class DownloadThread implements Runnable {
                             if (dest == null) {
                                 dest = "";
                             }
-                            fireNewTextPaneEvent("Estratto " + al.get(i).getName()
-                                    + " nella cartella condivisa samba\\" + dest,
-                                    MyTextPaneEvent.SUB);
+                            String msg;
+                            if (newName==null)
+                                msg = "Estratto " + al.get(i).getName()
+                                    + " nella cartella condivisa samba\\" + dest ;
+                            else
+                                msg = "Estratto " + al.get(i).getName() + " e rinominato in "
+                                    + newName + " nella cartella condivisa samba\\" + dest ;
+                            fireNewTextPaneEvent(msg,MyTextPaneEvent.SUB);
                         }
                     }
+                } catch (SmbException ex) {
+                    error.launch(ex, getClass(), dest);
                 } catch (IOException ex) {
                     error.launch(ex, getClass(), dest);
                 }

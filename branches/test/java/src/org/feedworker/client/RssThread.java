@@ -30,6 +30,7 @@ public class RssThread implements Runnable{
     private ManageException error = ManageException.getIstance();
     private Kernel core = Kernel.getIstance();
     private List listenerTextPane = new ArrayList();
+    private ArrayList<Object[]> matrice = null;
 
     public RssThread(String urlRss, String data, String from, boolean download, boolean first) {
         this.urlRss = urlRss;
@@ -41,8 +42,7 @@ public class RssThread implements Runnable{
 
     @Override
     public void run() {
-        RssParser rss = null;
-        ArrayList<Object[]> matrice = null;
+        RssParser rss = null;        
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
         Http http = new Http(connection_Timeout);
         try {
@@ -60,37 +60,32 @@ public class RssThread implements Runnable{
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
                         if (confronta.before(Common.stringToDate(date_matrix))) {
                             if (continua) {
-                                if (from.equals(core.ITASA)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                if (from.equals(core.ITASA))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_ITASA);
-                                } else if (from.equals(core.MYITASA)
-                                        && !prop.isAutoDownloadMyItasa()) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(core.MYITASA)
+                                        && !prop.isAutoDownloadMyItasa())
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_MYITASA);
-                                } else if (from.equals(core.SUBSF)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(core.SUBSF))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_SUBSF);
-                                } else if (from.equals(core.EZTV)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(core.MYSUBSF))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
+                                            MyTextPaneEvent.FEED_MYSUBSF);
+                                else if (from.equals(core.EZTV))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_EZTV);
-                                } else if (from.equals(core.BTCHAT)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(core.BTCHAT))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             MyTextPaneEvent.FEED_BTCHAT);
-                                }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2]))
-                                    && download) {
+                            if ((isNotStagione((String) matrice.get(i)[2])) && download)
                                 downItasaAuto(matrice.get(i)[0]);
-                            }
-                        } else {
+                        } else if (first && from.equals(core.MYITASA)){ //non deve fare nulla
+                        } else //if confronta after
                             matrice.remove(i);
-                        }
                     }
                 }
             }
@@ -105,8 +100,10 @@ public class RssThread implements Runnable{
         } catch (IOException ex) {
             error.launch(ex, getClass(), from);
         }
-        //TODO: come restituire la matrice???
-        //return matrice;
+    }
+
+    ArrayList<Object[]> getMatriceRss(){
+        return matrice;
     }
 
     /**

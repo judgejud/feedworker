@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
@@ -203,7 +204,9 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         helpSystemInfoJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JOptionPane.showMessageDialog(getParent(), showSystemInfoPopup(),
+                        "Informazioni di Sistema",
+                        JOptionPane.PLAIN_MESSAGE);
             }
         });
         helpJM.add(helpSystemInfoJMI);
@@ -240,6 +243,14 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
                 + "\"differenziale\"");
         jtaHelp.append("\n\nPercorso: specificare il percorso dove desiderate che vi estragga il sub");
         jpanel.add(jtaHelp);
+        return jpanel;
+    }
+
+    private JPanel showSystemInfoPopup(){
+        JPanel jpanel = new JPanel();
+        JTable jtable = new JTable(proxy.getModelSystemInfo());
+        jpanel.add(jtable);
+        jpanel.setVisible(true);
         return jpanel;
     }
 

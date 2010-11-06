@@ -183,4 +183,8 @@ public class Common {
         out.close();
         is.close();
     }
+
+    public static int getDay(){
+        return new GregorianCalendar().get(Calendar.DAY_OF_WEEK);
+    }
 }

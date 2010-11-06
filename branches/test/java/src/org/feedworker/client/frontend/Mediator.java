@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import javax.swing.JTable;
+import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.eclipse.swt.SWTException;
@@ -37,6 +38,7 @@ import org.jfacility.java.lang.Lang;
 import org.opensanskrit.application.UnableRestartApplicationException;
 
 import com.sun.syndication.io.FeedException;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -156,8 +158,7 @@ public class Mediator {
         }
     }
 
-    /**
-     * verifica le tabelle se sono flaggate per i download e invoca il kernel
+    /**verifica le tabelle se sono flaggate per i download e invoca il kernel
      * coi link per il loro download
      *
      * @param jt1
@@ -228,8 +229,7 @@ public class Mediator {
         addMyJFrameEventListener(listener);
     }
 
-    /**
-     * Restituisce i nodi per la jtree Settings
+    /**Restituisce i nodi per la jtree Settings
      *
      * @return nodi jtree
      */
@@ -703,5 +703,15 @@ public class Mediator {
         return getApplicationName() + " build "
                 + FeedWorkerClient.getApplication().getBuildNumber() + " by "
                 + FeedWorkerClient.getApplication().getAuthor();
+    }
+
+    String[] getDaysOfWeek(){
+        return core.daysOfWeek;
+    }
+
+    TableModel getModelSystemInfo() {
+        DefaultTableModel dtm = new DefaultTableModel();
+        
+        return dtm;
     }
 }
