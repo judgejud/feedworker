@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+import javax.swing.JMenuItem;
 
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 
@@ -70,12 +71,16 @@ public class NewerMainJF extends MainJF {
 
     @Override
     public void windowClosing(WindowEvent we) {
-        setVisible(false);
-        try {
-            tray.add(trayIcon);
-        } catch (Exception e) {
-            logJTP.appendError(e.getMessage());
-            setVisible(true);
+        if (we.getSource() instanceof JMenuItem) {
+            super.windowClosing(we);
+        } else {
+            setVisible(false);
+            try {
+                tray.add(trayIcon);
+            } catch (Exception e) {
+                logJTP.appendError(e.getMessage());
+                setVisible(true);
+            }
         }
     }
 
@@ -85,17 +90,17 @@ public class NewerMainJF extends MainJF {
             trayIcon.setToolTip("FeedWorker - ci sono nuovi feed :)");
             trayIcon.setImage(iconSub);
         }
-        if (evt.getDate() != null) {
+
+        if (evt.getDate() != null)
             settingsJP.setDataAggiornamento(evt.getDate());
-        }
+
         if (evt.getOperaz() != null) {
-            if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ")) {
+            if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ"))
                 mainJTP.addTab("Destinazione avanzata", paneRules.getPanel());
-            } else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ")) {
+            else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ"))
                 mainJTP.remove(paneRules.getPanel());
-            } else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON")) {
+            else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON"))
                 changeEnabledButton(true);
-            }
         }
     }
 } // end class

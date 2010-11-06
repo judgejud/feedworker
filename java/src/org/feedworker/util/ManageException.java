@@ -287,10 +287,13 @@ public class ManageException {
         String msg = ex.getMessage();
         String error01 = "The system cannot find the file specified.";
         String error02 = "Cannot create a file when that file already exists.";
+        String error03 = "Access is denied.";
         if (msg.equals(error01)) {
-            printAlert("Samba non può spostare il file" + text);
+            printAlert("Samba non può spostare il file " + text);
         } else if (msg.equals(error02)) {
-            printAlert("Samba non può spostare un file che esiste" + text);
+            printAlert("Samba non può spostare un file che esiste " + text);
+        } else if (msg.equals(error03)) {
+            printAlert("Controllare i permessi della cartella samba " + text);
         } else {
             printError(ex, c);
         }

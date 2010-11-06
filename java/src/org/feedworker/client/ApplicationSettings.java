@@ -43,7 +43,7 @@ public class ApplicationSettings {
             if (SETTINGS_FILE.exists()) {
                 // Read properties file.
                 properties.load(new FileInputStream(SETTINGS_FILE));
-
+                
                 setItasaFeedURL(getDecryptedValue("ITASA_FEED_URL"));
                 setMyitasaFeedURL(getDecryptedValue("MYITASA_FEED_URL"));
                 setItasaUsername(getDecryptedValue("ITASA_USERNAME"));

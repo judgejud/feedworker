@@ -21,12 +21,11 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 class tableXml extends JTable implements TableXmlEventListener {
-
+    private Mediator proxy = Mediator.getIstance();
     private final String[] nameCols = {"Serie", "Stagione", "Versione",
         "Destinazione", "Stato", "Giorno", "Rename"};
-    private final String[] itemsCombo = Mediator.getIstance().getElemEnum();
-    private final String[] itemsComboSettimana = {"", "Domenica", "Lunedì",
-        "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"};
+    private final String[] itemsCombo = proxy.getElemEnum();
+    private final String[] itemsComboSettimana = proxy.getDaysOfWeek();
     private final String[] itemsComboStato = {"", "In corso", "Sospeso",
         "In attesa", "In arrivo", "Season Finale", "Series finale"};
     private final Font font = new Font("Arial", Font.PLAIN, 10);
