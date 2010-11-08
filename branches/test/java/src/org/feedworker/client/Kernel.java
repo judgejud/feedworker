@@ -47,14 +47,15 @@ import org.jdom.JDOMException;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 
-/**
- * Motore di Feedworker
+/**Motore di Feedworker
  * 
  * @author luca
  */
 public class Kernel {
+    // PUBLIC FINAL STATIC VARIABLES
+    public final static String[] daysOfWeek = new String[]{"", "Domenica", "Lunedì",
+        "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"};
     // PUBLIC FINAL VARIABLES
-
     public final String ITASA = "Itasa";
     public final String SUBSF = "Subsf";
     public final String EZTV = "Eztv";
@@ -68,19 +69,15 @@ public class Kernel {
     private final String SPLIT_POINT = "\\.";
     private final String[] QUALITY = new String[]{Quality.ALL.toString(),
         Quality.NORMAL.toString(), Quality.FORM_720p.toString(),
-        Quality.FORM_1080p.toString(), Quality.BLURAY.toString(),
+        Quality.FORM_1080p.toString(), Quality.FORM_1080i.toString(), Quality.BLURAY.toString(),
         Quality.DVDRIP.toString(), Quality.HR.toString(),
         Quality.DIFF.toString()};
-    public final static String[] daysOfWeek = new String[]{"", "Domenica", "Lunedì",
-        "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"};
     // PRIVATE STATIC VARIABLES
     private static Kernel core = null;
     // PRIVATE VARIABLES
     private ApplicationSettings prop = ApplicationSettings.getIstance();
-    private List listenerTableRss = new ArrayList();
-    private List listenerTableXml = new ArrayList();
-    private List listenerTextPane = new ArrayList();
-    private List listenerJFrame = new ArrayList();
+    private List listenerTableRss = new ArrayList(), listenerTableXml = new ArrayList(),
+            listenerTextPane = new ArrayList(), listenerJFrame = new ArrayList();
     private Timer timer;
     private String lastItasa = null, lastMyItasa = null, lastSubsf = null,
             lastEztv = null, lastBtchat = null, lastMySubsf = null;

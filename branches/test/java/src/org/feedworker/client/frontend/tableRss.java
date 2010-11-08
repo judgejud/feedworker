@@ -22,152 +22,156 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 class tableRss extends JTable implements TableRssEventListener {
-	// PRIVATE FINAL VARIABLE
-	private final String[] columnNames = { "link", "Data", "Sottotitolo",
-			"Select" };
-	private final int width = 500;
-	// PRIVATE VARIABLE
-	private int[] lastFeedSize = { 0, 0 };
-	private Mediator proxy = Mediator.getIstance();
+    // PRIVATE FINAL VARIABLE
 
-	/**
-	 * 
-	 * @param name
-	 */
-	public tableRss(String name) {
-		super();
-		setName(name);
-		DefaultTableModel dtm = new DefaultTableModel(null, columnNames) {
-			Class[] types = new Class[] { String.class, String.class,
-					String.class, Boolean.class };
+    private final String[] columnNames = {"link", "Data", "Sottotitolo",
+        "Select"};
+    private final int width = 500;
+    // PRIVATE VARIABLE
+    private int[] lastFeedSize = {0, 0};
+    private Mediator proxy = Mediator.getIstance();
 
-			@Override
-			public Class getColumnClass(int columnIndex) {
-				return types[columnIndex];
-			}
+    /**
+     *
+     * @param name
+     */
+    public tableRss(String name) {
+        super();
+        setName(name);
+        DefaultTableModel dtm = new DefaultTableModel(null, columnNames) {
 
-			@Override
-			public boolean isCellEditable(int rowIndex, int vColIndex) {
-				return false;
-			}
-		};
-		setModel(dtm);
+            Class[] types = new Class[]{String.class, String.class,
+                String.class, Boolean.class};
 
-		setRowSelectionAllowed(false);
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
 
-		getTableHeader().setReorderingAllowed(false);
+            @Override
+            public boolean isCellEditable(int rowIndex, int vColIndex) {
+                return false;
+            }
+        };
+        setModel(dtm);
 
-		Swing.setTableDimensionLockColumn(this, 0, -1);
-		Swing.setTableDimensionLockColumn(this, 1, 110);
-		Swing.setTableDimensionLockColumn(this, 2, 330);
+        setRowSelectionAllowed(false);
 
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent evt) {
-				if (getSelectedColumn() >= 2) {
-					int row = getSelectedRow();
-					if (Boolean.parseBoolean(getValueAt(row, 3).toString()) == true)
-						setValueAt(false, row, 3);
-					else
-						setValueAt(true, row, 3);
-				}
-			}
-		});
-	}
+        getTableHeader().setReorderingAllowed(false);
 
-	@Override
-	public void objReceived(TableRssEvent evt) {
-		if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
-			DefaultTableModel dtm = (DefaultTableModel) getModel();
-			String titleCol = (String) this.getColumnModel().getColumn(2)
-					.getHeaderValue();
-			String dateCol = (String) this.getColumnModel().getColumn(1)
-					.getHeaderValue();
-			int size = evt.getObjs().size();
-			lastFeedSize[1] = lastFeedSize[0];
-			lastFeedSize[0] = size;
-			int lenght = dtm.getRowCount() + size;
-			this.setPreferredSize(new Dimension(width, (16 * lenght)));
-			for (int i = 0; i < size; i++)
-				dtm.insertRow(i, evt.getObjs().get(i));
-			this.getColumn(titleCol).setCellRenderer(new JLabelTitleRenderer());
-			this.getColumn(dateCol).setCellRenderer(
-					new JLabelDateRenderer(lastFeedSize[0], lastFeedSize[1]));
-		}
-	}
+        Swing.setTableDimensionLockColumn(this, 0, -1);
+        Swing.setTableDimensionLockColumn(this, 1, 110);
+        Swing.setTableDimensionLockColumn(this, 2, 330);
 
-	public void setTitleDescriptionColumn(String _name) {
-		this.getColumnModel().getColumn(2).setHeaderValue(_name);
-	}
+        addMouseListener(new MouseAdapter() {
 
-	public void removeAllRows() {
-		DefaultTableModel dtm = (DefaultTableModel) getModel();
-		int size = dtm.getRowCount();
-		for (int i = 0; i < size; i++) {
-			dtm.removeRow(0);
-		}
-	}
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                if (getSelectedColumn() >= 2) {
+                    int row = getSelectedRow();
+                    if (Boolean.parseBoolean(getValueAt(row, 3).toString()) == true) {
+                        setValueAt(false, row, 3);
+                    } else {
+                        setValueAt(true, row, 3);
+                    }
+                }
+            }
+        });
+    }
 
-	class JLabelDateRenderer extends JLabel implements TableCellRenderer {
+    @Override
+    public void objReceived(TableRssEvent evt) {
+        if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
+            DefaultTableModel dtm = (DefaultTableModel) getModel();
+            String titleCol = (String) this.getColumnModel().getColumn(2).getHeaderValue();
+            String dateCol = (String) this.getColumnModel().getColumn(1).getHeaderValue();
+            int size = evt.getObjs().size();
+            lastFeedSize[1] = lastFeedSize[0];
+            lastFeedSize[0] = size;
+            int lenght = dtm.getRowCount() + size;
+            this.setPreferredSize(new Dimension(width, (16 * lenght)));
+            for (int i = 0; i < size; i++) {
+                dtm.insertRow(i, evt.getObjs().get(i));
+            }
+            this.getColumn(titleCol).setCellRenderer(new JLabelTitleRenderer());
+            this.getColumn(dateCol).setCellRenderer(
+                    new JLabelDateRenderer(lastFeedSize[0], lastFeedSize[1]));
+        }
+    }
 
-		private final Font font = new Font("Arial", Font.PLAIN, 10);
+    public void setTitleDescriptionColumn(String _name) {
+        this.getColumnModel().getColumn(2).setHeaderValue(_name);
+    }
 
-		private int rowsize0, rowsize1;
+    public void removeAllRows() {
+        DefaultTableModel dtm = (DefaultTableModel) getModel();
+        int size = dtm.getRowCount();
+        for (int i = 0; i < size; i++) {
+            dtm.removeRow(0);
+        }
+    }
 
-		public JLabelDateRenderer(int rowsize0, int rowsize1) {
-			this.rowsize0 = rowsize0;
-			this.rowsize1 = rowsize1;
-		}
+    class JLabelDateRenderer extends JLabel implements TableCellRenderer {
 
-		@Override
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column) {
-			// imposta il testo della cella
-			String text = value.toString();
-			setText(text);
-			setFont(font);
-			setOpaque(true);
-			if (row < rowsize0)
-				setBackground(Color.orange);
-			else if (row >= rowsize0 && row < rowsize0 + rowsize1)
-				setBackground(Color.lightGray);
-			else
-				setBackground(Color.white);
-			this.repaint();
-			return this;
-		}
-	} // end class JLabelRenderer
+        private final Font font = new Font("Arial", Font.PLAIN, 10);
+        private int rowsize0, rowsize1;
 
-	/**
-	 * Classe che restituisce la jlabel della cella tabella con determinati
-	 * colori e font di testo ed eventuale tooltip se testo lungo
-	 */
-	class JLabelTitleRenderer extends JLabel implements TableCellRenderer {
+        public JLabelDateRenderer(int rowsize0, int rowsize1) {
+            this.rowsize0 = rowsize0;
+            this.rowsize1 = rowsize1;
+        }
 
-		private final Font font = new Font("Arial", Font.PLAIN, 10);
+        @Override
+        public Component getTableCellRendererComponent(JTable table,
+                Object value, boolean isSelected, boolean hasFocus, int row,
+                int column) {
+            // imposta il testo della cella
+            String text = value.toString();
+            setText(text);
+            setFont(font);
+            setOpaque(true);
+            if (row < rowsize0) {
+                setBackground(Color.orange);
+            } else if (row >= rowsize0 && row < rowsize0 + rowsize1) {
+                setBackground(Color.lightGray);
+            } else {
+                setBackground(Color.white);
+            }
+            this.repaint();
+            return this;
+        }
+    } // end class JLabelRenderer
 
-		@Override
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column) {
-			// imposta il testo della cella
-			String text = value.toString();
-			setText(text);
-                        setToolTipText(Swing.getTextToolTip(table, column, this, text));
-			// imposta il font della cella
-			setFont(font);
+    /**
+     * Classe che restituisce la jlabel della cella tabella con determinati
+     * colori e font di testo ed eventuale tooltip se testo lungo
+     */
+    class JLabelTitleRenderer extends JLabel implements TableCellRenderer {
 
-			setBackground(proxy.searchVersion(text));
-			Color back = getBackground();
-			if (back.equals(Color.blue) || back.equals(Color.red)
-					|| back.equals(new Color(183, 65, 14)))
-				setForeground(Color.white);
-			else
-				setForeground(Color.black);
-			setOpaque(true);
-			this.repaint();
-			return this;
-		}
-	} // end class JLabelRenderer
+        private final Font font = new Font("Arial", Font.PLAIN, 10);
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table,
+                Object value, boolean isSelected, boolean hasFocus, int row,
+                int column) {
+            // imposta il testo della cella
+            String text = value.toString();
+            setText(text);
+            setToolTipText(Swing.getTextToolTip(table, column, this, text));
+            // imposta il font della cella
+            setFont(font);
+
+            setBackground(proxy.searchVersion(text));
+            Color back = getBackground();
+            if (back.equals(Color.blue) || back.equals(Color.red)
+                    || back.equals(new Color(183, 65, 14))) {
+                setForeground(Color.white);
+            } else {
+                setForeground(Color.black);
+            }
+            setOpaque(true);
+            this.repaint();
+            return this;
+        }
+    } // end class JLabelRenderer
 }

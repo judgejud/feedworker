@@ -38,7 +38,7 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-public class paneSetting extends JPanel {
+class paneSetting extends JPanel {
 
     private final Dimension TABBEDSIZE = new Dimension(1024, 540);
     private final Dimension INTERNALSETTINGS = new Dimension(500, 430);
@@ -529,21 +529,17 @@ public class paneSetting extends JPanel {
                     jpSettingItasa.setVisible(true);
                 } else if (node.equalsIgnoreCase("Subsfactory")) {
                     jpSettingGlobal.setVisible(false);
-                    if (prop.isItasaOption()) {
+                    if (prop.isItasaOption())
                         jpSettingItasa.setVisible(false);
-                    }
-                    if (prop.isTorrentOption()) {
+                    if (prop.isTorrentOption())
                         jpSettingTorrent.setVisible(false);
-                    }
                     jpSettingSubsf.setVisible(true);
                 } else if (node.equalsIgnoreCase("Torrent")) {
                     jpSettingGlobal.setVisible(false);
-                    if (prop.isItasaOption()) {
+                    if (prop.isItasaOption())
                         jpSettingItasa.setVisible(false);
-                    }
-                    if (prop.isSubsfactoryOption()) {
+                    if (prop.isSubsfactoryOption())
                         jpSettingSubsf.setVisible(false);
-                    }
                     jpSettingTorrent.setVisible(true);
                 }
             }
@@ -614,7 +610,7 @@ public class paneSetting extends JPanel {
             jcbDownloadMyitasaStartup.setSelected(false);
         } else {
             jcbDownloadMyitasaStartup.setEnabled(true);
-            jcbDownloadMyitasaStartup.setSelected(prop.isAutoDownloadMyItasa());
+            jcbDownloadMyitasaStartup.setSelected(prop.isAutoLoadDownloadMyItasa());
         }
     }
 

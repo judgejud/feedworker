@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
+
 import javax.swing.JMenuItem;
 
 import org.feedworker.client.frontend.events.MyJFrameEvent;
@@ -39,7 +40,7 @@ public class NewerMainJF extends MainJF {
             iconSub = proxy.getIncomingFeedIcon();
             PopupMenu popup = new PopupMenu();
 
-            MenuItem defaultItem = new MenuItem(" Close " + proxy.getApplicationName());
+            MenuItem defaultItem = new MenuItem(" Chiudi " + proxy.getApplicationName());
             defaultItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
