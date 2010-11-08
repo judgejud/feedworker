@@ -17,7 +17,7 @@ import org.feedworker.util.Common;
  * 
  * @author luca
  */
-public class LogJTP extends JTextPane implements MyTextPaneEventListener {
+class LogJTP extends JTextPane implements MyTextPaneEventListener {
     // PRIVATE FINAL
 
     private final Color GOLD = new Color(255, 215, 0);

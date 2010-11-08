@@ -67,7 +67,8 @@ public class ApplicationSettings {
                 setCifsSharePassword(getDecryptedValue("CIFS_SHARE_PASSWORD"));
                 setCifsShareUsername(getDecryptedValue("CIFS_SHARE_USERNAME"));
                 setHttpTimeout(getDecryptedValue("HTTP_TIMEOUT"));
-                setEnableCustomDestinationFolder(getBooleanDecryptedValue("ENABLE_CUSTOM_DESTINATION_FOLDER"));
+                setEnableCustomDestinationFolder(
+                        getBooleanDecryptedValue("ENABLE_CUSTOM_DESTINATION_FOLDER"));
                 setEnableIconizedRun(getBooleanDecryptedValue("ENABLE_ICONIZED_RUN"));
                 setAutoLoadDownloadMyItasa(getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
                 setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));

@@ -39,6 +39,7 @@ import org.opensanskrit.application.UnableRestartApplicationException;
 
 import com.sun.syndication.io.FeedException;
 import javax.swing.table.DefaultTableModel;
+import org.jfacility.java.lang.MySystem;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -236,6 +237,7 @@ public class Mediator {
     DefaultMutableTreeNode getTreeNode() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
         root.add(new DefaultMutableTreeNode("General"));
+        //root.add(new DefaultMutableTreeNode("Tabs"));
         if (prop.isItasaOption()) {
             root.add(new DefaultMutableTreeNode("Itasa"));
         }
@@ -597,17 +599,18 @@ public class Mediator {
         Color col = Color.cyan;
         String[] temp = text.split(" ");
         String version = temp[temp.length - 1].toLowerCase();
-        if (version.equals(Quality.FORM_1080p.toString())) {
+        if (version.equals(Quality.FORM_1080p.toString()))
             col = Color.blue;
-        } else if (version.equals(Quality.FORM_720p.toString())) {
+        else if (version.equals(Quality.FORM_1080i.toString()))
+            col = Color.orange;
+        else if (version.equals(Quality.FORM_720p.toString()))
             col = Color.red;
-        } else if (version.equals(Quality.DVDRIP.toString())) {
+        else if (version.equals(Quality.DVDRIP.toString()))
             col = new Color(183, 65, 14);
-        } else if (version.equals(Quality.HR.toString())) {
+        else if (version.equals(Quality.HR.toString()))
             col = Color.green;
-        } else if (version.equals(Quality.BLURAY.toString())) {
+        else if (version.equals(Quality.BLURAY.toString()))
             col = Color.magenta;
-        }
         return col;
     }
 
@@ -710,8 +713,29 @@ public class Mediator {
     }
 
     TableModel getModelSystemInfo() {
-        DefaultTableModel dtm = new DefaultTableModel();
-        
+        DefaultTableModel dtm = new DefaultTableModel(null, new String[]{"Informazione", "Valore"}) {
+
+            Class[] types = new Class[]{String.class, String.class};
+
+            @Override
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
+            }
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int vColIndex) {
+                return false;
+            }
+        };
+        dtm.addRow(new String[]{"Java version", MySystem.getJavaVersion()});
+        dtm.addRow(new String[]{"Java vendor", MySystem.getJavaVendor()});
+        dtm.addRow(new String[]{"Java Home", MySystem.getJavaHome()});
+        dtm.addRow(new String[]{"Sistema Operativo", MySystem.getOsName()});
+        dtm.addRow(new String[]{"Versione SO", MySystem.getOsVersion()});
+        dtm.addRow(new String[]{"Architettura SO", MySystem.getOsArchitecture()});
+        dtm.addRow(new String[]{"Directory attuale", MySystem.getUserDir()});
+        dtm.addRow(new String[]{"File regole", "rules.xml"});
+        dtm.addRow(new String[]{"File impostazioni", "settings.properties"});
         return dtm;
     }
 }

@@ -273,15 +273,11 @@ public class ManageException {
             printError(ex, c);
     }
 
-    /**
-     * Analizza l'errore SmbException
+    /** Analizza l'errore SmbException
      *
-     * @param ex
-     *            SmbException
-     * @param c
-     *            classe di provenienza
-     * @param text
-     *            eventuale testo da stampare
+     * @param ex SmbException
+     * @param c classe di provenienza
+     * @param text eventuale testo da stampare
      */
     public void launch(SmbException ex, Class c, String text) {
         String msg = ex.getMessage();

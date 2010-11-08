@@ -1,10 +1,9 @@
 IMPLEMENTARE
 *feed rss sotto thread LUCA
-*menu infomazioni di sistema LUCA
-far uscire all'avvio i tf previsti per il giorno in questione nella textpane
-aggiungere versioning automatico all'applicazione
+*far uscire all'avvio i tf previsti per il giorno in questione nella textpane LUCA
 vedere di creare 1http permanente x itasa
-backup e ripristino proprietà (file properties e rules.xml) 
+backup e ripristino proprietà (file properties e rules.xml)
+aggiungere versioning automatico all'applicazione
 ricerca sottotitoli itasa
 destinazione avanzata in mixed mode 
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
@@ -12,14 +11,15 @@ destinazione avanzata: bottone info su ciò che è presente nella tabella e quin
 destinazione avanzata: integrazione con qlk sito tipo tvrage per lo status e il giorno ed eventuale prelevo dell'ultima puntata trasmessa cioè numero stagione/puntata per ogni serie?
 implementare il tipo di download di mysubsfactory (come x myitasa)
 avvio automatico (win-unix-mac)
+impostazioni dei tabs 
 multiutenza?
 log4j?
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'. PACKY
 
 VERIFICARE LE IMPLEMENTAZIONI
-download di myitasa automatico all'avvio partendo dall'ultima data salvata
 sistemare "Timeout di lettura null" al primo avvio
 avvio ridotto ad icona (java5)
 autoriavvio con java home (e quindi win, linux, mac)
 splashscreen (java 1.5 e jar)
+1080i
