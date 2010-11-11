@@ -19,6 +19,8 @@ import java.util.TreeMap;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 import jcifs.smb.SmbException;
 
@@ -46,6 +48,7 @@ import org.jdom.JDOMException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.xml.sax.SAXException;
 
 /**Motore di Feedworker
  * 
@@ -96,13 +99,9 @@ public class Kernel {
         }
         return core;
     }
-
-    /**
-     * Scarica lo zip, estrae i sub e invoca l'analizzatore del path di
-     * destinazione
+    /**Scarica lo zip, estrae i sub e invoca l'analizzatore del path di  destinazione
      *
-     * @param als
-     *            arraylist di link
+     * @param als arraylist di link
      * @param itasa
      */
     public void downloadSub(ArrayList<String> als, boolean itasa) {
@@ -367,6 +366,7 @@ public class Kernel {
     /** Esegue gli rss */
     public void runRss() {
         if (!prop.isApplicationFirstTimeUsed()) {
+            //searchDay();
             String temp = Common.actualTime();
             runItasa(true);
             runSubsfactory(true);
@@ -798,6 +798,29 @@ public class Kernel {
 
     public void setDownloadThreadListener(MyTextPaneEventListener listener) {
         mytpel = listener;
+    }
+
+    //TODO
+    protected void searchDay(){
+        if (prop.isEnabledCustomDestinationFolder()){
+            try {
+                String result = XPathReader.queryDay(daysOfWeek[Common.getDay()]);
+                String msg;
+                if (result.equalsIgnoreCase(""))
+                    msg = "Non ci sono serial tv previsti per oggi";
+                else
+                    msg = "Serial tv previsti per oggi: " + result;
+                fireNewTextPaneEvent(msg, MyTextPaneEvent.DAY_SERIAL);
+            } catch (ParserConfigurationException ex) {
+                error.launch(ex, getClass());
+            } catch (SAXException ex) {
+                error.launch(ex, getClass());
+            } catch (IOException ex) {
+                error.launch(ex, getClass());
+            } catch (XPathExpressionException ex) {
+                error.launch(ex, getClass());
+            }
+        }
     }
 
     /**

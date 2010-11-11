@@ -97,11 +97,8 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
                     + "devi configurare le impostazioni presenti nella specifica sezione");
         } else {
             settingsJP.settingsValue();
-            logJTP.appendOK("Ciao " + prop.getItasaUsername());
-            logJTP.appendOK("Impostazioni caricate da "
-                    + prop.getSettingsFilename());
+            logJTP.appendOK("Ciao " + prop.getItasaUsername()+ ", impostazioni caricate.");
         }
-
         pack();
     }
 

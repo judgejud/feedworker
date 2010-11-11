@@ -6,8 +6,8 @@ import java.net.URISyntaxException;
 import javax.swing.JOptionPane;
 
 import org.feedworker.client.frontend.ClassicSplashScreen;
-import org.feedworker.client.frontend.EnhancedMainJF;
 import org.feedworker.client.frontend.EnhancedSplashScreen;
+import org.feedworker.client.frontend.EnhancedMainJF;
 import org.feedworker.client.frontend.MainJF;
 import org.feedworker.client.frontend.NewerMainJF;
 import org.feedworker.util.Common;
@@ -97,6 +97,7 @@ public class FeedWorkerClient {
                         K.loadXml();
                         splash.updateStartupState("Initializing RSS...");
                         K.runRss();
+                        K.searchDay();
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
                             splash.close();
                             jframe.setVisible(true);
