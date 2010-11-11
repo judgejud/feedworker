@@ -14,14 +14,19 @@ import java.util.zip.ZipException;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
 
 import jcifs.smb.SmbException;
 
 import org.eclipse.swt.SWTException;
+
 import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
+
 import org.jdom.JDOMException;
+import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
@@ -273,6 +278,14 @@ public class ManageException {
             printError(ex, c);
     }
 
+    public void launch(ParserConfigurationException ex, Class c){
+        printError(ex, c);
+    }
+
+    public void launch(SAXException ex, Class c){
+        printError(ex, c);
+    }
+
     /** Analizza l'errore SmbException
      *
      * @param ex SmbException
@@ -349,13 +362,14 @@ public class ManageException {
         printError(ex, c);
     }
 
-    /**
-     * Analizza l'errore ZipException
+    public void launch(XPathExpressionException ex, Class c){
+        printError(ex, c);
+    }
+
+    /** Analizza l'errore ZipException
      *
-     * @param ex
-     *            ZipException
-     * @param c
-     *            classe di provenienza
+     * @param ex ZipException
+     * @param c  classe di provenienza
      */
     public void launch(ZipException ex, Class c) {
         printError(ex, c);

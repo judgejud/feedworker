@@ -735,7 +735,7 @@ public class Mediator {
         dtm.addRow(new String[]{"Architettura SO", MySystem.getOsArchitecture()});
         dtm.addRow(new String[]{"Directory attuale", MySystem.getUserDir()});
         dtm.addRow(new String[]{"File regole", "rules.xml"});
-        dtm.addRow(new String[]{"File impostazioni", "settings.properties"});
+        dtm.addRow(new String[]{"File impostazioni", prop.getSettingsFilename()});
         return dtm;
     }
 }

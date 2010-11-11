@@ -21,17 +21,14 @@ class LogJTP extends JTextPane implements MyTextPaneEventListener {
     // PRIVATE FINAL
 
     private final Color GOLD = new Color(255, 215, 0);
-    private final Color ORANGE = new Color(255, 165, 0);
     private final Color HELIOTROPE = new Color(223, 115, 255);
     // PRIVATE
     private StyledDocument mysd;
     private Style styleOK, styleError, styleAlert, styleSub, styleTorrent,
             styleFeedItasa, styleFeedMyItasa, styleFeedSubsf, styleFeedMySubsf,
-            styleFeedEztv, styleFeedBtchat, styleSynology;
-
-    /**
-     * Costruttore Inizializza la myjtextpane
-     */
+            styleFeedEztv, styleFeedBtchat, styleSynology, styleDaySerial;
+    
+    /**Costruttore Inizializza la myjtextpane */
     public LogJTP() {
         super();
         this.setEditable(false);
@@ -56,6 +53,7 @@ class LogJTP extends JTextPane implements MyTextPaneEventListener {
         styleSub = mysd.addStyle("StyleSub", null);
         styleTorrent = mysd.addStyle("StyleTorrent", null);
         styleSynology = mysd.addStyle("StyleSynology", null);
+        styleDaySerial = mysd.addStyle("StyleDaySerial", null);
         // Italic
         StyleConstants.setItalic(styleFeedMyItasa, true);
         StyleConstants.setItalic(styleFeedMySubsf, true);
@@ -74,6 +72,7 @@ class LogJTP extends JTextPane implements MyTextPaneEventListener {
         StyleConstants.setFontFamily(styleSub, "SansSerif");
         StyleConstants.setFontFamily(styleTorrent, "SansSerif");
         StyleConstants.setFontFamily(styleSynology, "SansSerif");
+        StyleConstants.setFontFamily(styleDaySerial, "SansSerif");
         // Font size
         StyleConstants.setFontSize(styleOK, dim);
         StyleConstants.setFontSize(styleError, dim);
@@ -87,26 +86,26 @@ class LogJTP extends JTextPane implements MyTextPaneEventListener {
         StyleConstants.setFontSize(styleSub, dim);
         StyleConstants.setFontSize(styleTorrent, dim);
         StyleConstants.setFontSize(styleSynology, dim);
+        StyleConstants.setFontSize(styleDaySerial, dim);
         // Foreground color
         StyleConstants.setForeground(styleOK, Color.green);
         StyleConstants.setForeground(styleError, Color.red);
         StyleConstants.setForeground(styleAlert, Color.yellow);
         StyleConstants.setForeground(styleFeedItasa, Color.cyan);
         StyleConstants.setForeground(styleFeedMyItasa, Color.cyan);
-        StyleConstants.setForeground(styleFeedSubsf, ORANGE);
-        StyleConstants.setForeground(styleFeedMySubsf, ORANGE);
+        StyleConstants.setForeground(styleFeedSubsf, Color.orange);
+        StyleConstants.setForeground(styleFeedMySubsf, Color.orange);
         StyleConstants.setForeground(styleFeedEztv, HELIOTROPE);
         StyleConstants.setForeground(styleFeedBtchat, Color.gray);
         StyleConstants.setForeground(styleSub, Color.white);
         StyleConstants.setForeground(styleTorrent, Color.magenta);
         StyleConstants.setForeground(styleSynology, GOLD);
+        StyleConstants.setForeground(styleDaySerial, Color.pink);
     }
 
-    /**
-     * Aggiunge alla textpane il testo con stile OK
+    /**Aggiunge alla textpane il testo con stile OK
      *
-     * @param msg
-     *            testo da aggiungere
+     * @param msg testo da aggiungere
      */
     public void appendOK(String msg) {
         append(msg, styleOK);
@@ -206,14 +205,17 @@ class LogJTP extends JTextPane implements MyTextPaneEventListener {
         append(msg, styleTorrent);
     }
 
-    /**
-     * Aggiunge alla textpane il testo con stile VIDEO
+    /**Aggiunge alla textpane il testo con stile VIDEO
      *
      * @param msg
      *            testo da aggiungere
      */
     private void appendSynology(String msg) {
         append(msg, styleSynology);
+    }
+
+    private void appendDaySerial(String msg) {
+        append(msg, styleDaySerial);
     }
 
     /**
@@ -254,10 +256,12 @@ class LogJTP extends JTextPane implements MyTextPaneEventListener {
             appendFeedMySubsf(evt.getMsg());
         } else if (evt.getType().equals(MyTextPaneEvent.FEED_EZTV)) {
             appendFeedEztv(evt.getMsg());
-        } else if (evt.getType().equals(MyTextPaneEvent.FEED_BTCHAT)) {
+        } else if (evt.getType().equals(MyTextPaneEvent.FEED_BTCHAT))
             appendFeedBtchat(evt.getMsg());
-        } else if (evt.getType().equals(MyTextPaneEvent.SYNOLOGY)) {
+        else if (evt.getType().equals(MyTextPaneEvent.SYNOLOGY))
             appendSynology(evt.getMsg());
-        }
+        else if (evt.getType().equals(MyTextPaneEvent.DAY_SERIAL))
+            appendDaySerial(evt.getMsg());
+        
     }
 }// end class

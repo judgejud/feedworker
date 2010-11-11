@@ -18,6 +18,7 @@ public class MyTextPaneEvent extends EventObject {
     public static final String FEED_BTCHAT = "F_BTCHAT";
     public static final String SUB = "SUB";
     public static final String SYNOLOGY = "SYNOLOGY";
+    public static final String DAY_SERIAL = "DAY_SERIAL";
 
     private String msg;
     private String type;
