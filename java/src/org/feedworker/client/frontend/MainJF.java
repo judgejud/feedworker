@@ -145,7 +145,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         jmiBackup.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                proxy.invokeBackup(MainJF.this);
             }
         });
         fileJM.add(jmiBackup);
