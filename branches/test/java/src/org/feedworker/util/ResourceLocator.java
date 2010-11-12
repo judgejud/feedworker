@@ -30,7 +30,7 @@ public class ResourceLocator {
      */
     public static void setWorkspace() {
         curDir = MySystem.getFileUserDir().toURI().getPath();
-        System.out.println(curDir);
+        //System.out.println(curDir);
     }
 
     /**
