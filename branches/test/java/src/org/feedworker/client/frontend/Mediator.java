@@ -38,8 +38,12 @@ import org.jfacility.java.lang.Lang;
 import org.opensanskrit.application.UnableRestartApplicationException;
 
 import com.sun.syndication.io.FeedException;
+import java.awt.Component;
+import java.io.File;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import org.jfacility.java.lang.MySystem;
+import org.jfacility.javax.swing.Swing;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -48,6 +52,7 @@ import org.jfacility.java.lang.MySystem;
  */
 public class Mediator {
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
+    private final FileNameExtensionFilter fnfeZIP = new FileNameExtensionFilter("ZIP file", "zip");
 
     private static Mediator proxy = null;
 
@@ -714,14 +719,11 @@ public class Mediator {
 
     TableModel getModelSystemInfo() {
         DefaultTableModel dtm = new DefaultTableModel(null, new String[]{"Informazione", "Valore"}) {
-
             Class[] types = new Class[]{String.class, String.class};
-
             @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
-
             @Override
             public boolean isCellEditable(int rowIndex, int vColIndex) {
                 return false;
@@ -741,5 +743,12 @@ public class Mediator {
 
     void printDay(int day) {
         core.searchDay(day);
+    }
+
+    void invokeBackup(Component parent) {
+        String name = Swing.getFile(parent, "Creare il file zip per il backup",
+                fnfeZIP, new File(MySystem.getUserDir() + File.separator));
+        if (name!=null)
+            core.backup(name);
     }
 }

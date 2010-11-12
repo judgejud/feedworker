@@ -48,6 +48,7 @@ import org.jdom.JDOMException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.jfacility.Util;
 import org.xml.sax.SAXException;
 
 /**Motore di Feedworker
@@ -798,6 +799,28 @@ public class Kernel {
 
     public void setDownloadThreadListener(MyTextPaneEventListener listener) {
         mytpel = listener;
+    }
+
+    public void backup(String name) {
+        ArrayList<File> files = new ArrayList<File>();
+        File r = new File("rules.xml");
+        File s = new File("settings.properties");
+        if (r.exists())
+            files.add(r);
+        if (s.exists())
+            files.add(s);
+        if (files.size()>0){
+            if (!name.substring(name.length()-4).toLowerCase().equalsIgnoreCase(".zip"))
+                name += ".zip";
+            File f = new File(name);
+            try {
+                Util.createZip(files, f);
+                fireNewTextPaneEvent("backup effettuato: " + f.getName(),MyTextPaneEvent.OK);
+            } catch (IOException ex) {
+                error.launch(ex, getClass());
+            }
+        } else
+            printAlert("Non posso fare il backup poichè non ci sono files da backuppare.");
     }
 
     //TODO
