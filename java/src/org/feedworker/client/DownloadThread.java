@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.zip.ZipException;
+
 import jcifs.smb.SmbException;
 
 import org.apache.http.HttpEntity;
@@ -172,11 +173,8 @@ public class DownloadThread implements Runnable {
         Http http = new Http(connection_Timeout);
         ArrayList<File> alf = new ArrayList<File>();
         try {
-            if (itasa) {
-                http.connectItasa(prop.getItasaUsername(),
-                        prop.getItasaPassword());
-            }
-
+            if (itasa)
+                http.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
             for (int i = 0; i < als.size(); i++) {
                 HttpEntity entity = http.requestGetEntity(als.get(i), itasa);
                 if (entity != null) {
@@ -186,9 +184,8 @@ public class DownloadThread implements Runnable {
                         File f = File.createTempFile(n.substring(0, l - 4), n.substring(l - 4));
                         Common.downloadSingle(entity.getContent(), f);
                         alf.addAll(extract(f));
-                    } else {
-                        printAlert("Sessione scaduta");
-                    }
+                    } else
+                        fireNewTextPaneEvent("Sessione scaduta", MyTextPaneEvent.ALERT);
                 }
             } //end for
         } catch (StringIndexOutOfBoundsException ex) {
@@ -315,13 +312,5 @@ public class DownloadThread implements Runnable {
             MyTextPaneEventListener myel = (MyTextPaneEventListener) listeners.next();
             myel.objReceived(event);
         }
-    }
-
-    /**Stampa il messaggio di alert invocando il metodo fire opportuno
-     *
-     * @param msg testo da stampare
-     */
-    private void printAlert(String msg) {
-        fireNewTextPaneEvent(msg, MyTextPaneEvent.ALERT);
     }
 }

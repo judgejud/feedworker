@@ -707,9 +707,11 @@ public class Mediator {
         return FeedWorkerClient.getApplication().getName();
     }
 
+    //TODO: ripristinare col getbuildernumber
     String getTitle(){
         return getApplicationName() + " build "
-                + FeedWorkerClient.getApplication().getBuildNumber() + " by "
+                //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
+                + "193 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 

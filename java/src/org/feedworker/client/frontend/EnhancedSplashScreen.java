@@ -23,13 +23,13 @@ public class EnhancedSplashScreen extends ClassicSplashScreen {
     public void start() {
         this.splash = SplashScreen.getSplashScreen();
         if (splash == null) {
-            System.out.println("SplashScreen.getSplashScreen() returned null");
+            //System.out.println("SplashScreen.getSplashScreen() returned null");
             return;
         }
 
         graphics2D = splash.createGraphics();
         if (graphics2D == null) {
-            System.out.println("g is null");
+            //System.out.println("g is null");
             return;
         }
 

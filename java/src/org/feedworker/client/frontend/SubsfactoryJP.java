@@ -101,6 +101,7 @@ class SubsfactoryJP extends AbstractJP {
         if (jbDown.isEnabled()) {
             proxy.downloadSub(jtSubsf, jtMySubsf, false);
             proxy.cleanSelect(jtSubsf);
+            proxy.cleanSelect(jtMySubsf);
         }
     }
 
