@@ -738,4 +738,8 @@ public class Mediator {
         dtm.addRow(new String[]{"File impostazioni", prop.getSettingsFilename()});
         return dtm;
     }
+
+    void printDay(int day) {
+        core.searchDay(day);
+    }
 }

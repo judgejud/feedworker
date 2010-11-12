@@ -97,7 +97,7 @@ public class FeedWorkerClient {
                         K.loadXml();
                         splash.updateStartupState("Initializing RSS...");
                         K.runRss();
-                        K.searchDay();
+                        K.searchDay(0);
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
                             splash.close();
                             jframe.setVisible(true);

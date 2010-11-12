@@ -1,8 +1,8 @@
 IMPLEMENTARE
 *feed rss sotto thread LUCA
-*far uscire all'avvio i tf previsti per il giorno in questione nella textpane LUCA
-vedere di creare 1http permanente x itasa
-backup e ripristino proprietà (file properties e rules.xml)
+*backup proprietà (file properties e rules.xml) LUCA
+*vedere di creare 1http permanente x itasa LUCA
+ripristino proprietà (file properties e rules.xml)
 aggiungere versioning automatico all'applicazione
 ricerca sottotitoli itasa
 destinazione avanzata in mixed mode 

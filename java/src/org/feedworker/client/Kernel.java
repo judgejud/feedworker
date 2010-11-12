@@ -801,15 +801,34 @@ public class Kernel {
     }
 
     //TODO
-    protected void searchDay(){
+    public void searchDay(int temp){
         if (prop.isEnabledCustomDestinationFolder()){
+            int day = Common.getDay() + temp;
+            if (day==0)
+                day = 7;
+            else if (day==8)
+                day = 1;
             try {
-                String result = XPathReader.queryDay(daysOfWeek[Common.getDay()]);
+                String result = XPathReader.queryDay(daysOfWeek[day]);
                 String msg;
-                if (result.equalsIgnoreCase(""))
-                    msg = "Non ci sono serial tv previsti per oggi";
-                else
-                    msg = "Serial tv previsti per oggi: " + result;
+                if (result.equalsIgnoreCase("")){
+                    msg = "Non ci sono serial tv previsti per ";
+                    if (temp==0)
+                        msg += "oggi";
+                    else if(temp == 1)
+                        msg += "domani";
+                    else if(temp == -1)
+                        msg += "ieri";
+                } else {
+                    msg = "Serial tv previsti per ";
+                    if (temp==0)
+                        msg += "oggi: ";
+                    else if(temp == 1)
+                        msg += "domani: ";
+                    else if(temp == -1)
+                        msg += "ieri: ";
+                    msg +=  result;
+                }
                 fireNewTextPaneEvent(msg, MyTextPaneEvent.DAY_SERIAL);
             } catch (ParserConfigurationException ex) {
                 error.launch(ex, getClass());
