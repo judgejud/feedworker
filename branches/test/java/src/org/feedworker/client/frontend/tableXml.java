@@ -117,7 +117,11 @@ class tableXml extends JTable implements TableXmlEventListener {
         public Component getTableCellRendererComponent(JTable table,
                 Object value, boolean isSelected, boolean hasFocus, int row,
                 int column) {
-            String text = value.toString();
+            String text;
+            if (value!=null)
+                text = value.toString();
+            else
+                text = "";
             setText(text);
             setToolTipText(Swing.getTextToolTip(table, column, this, text));
             setFont(font);

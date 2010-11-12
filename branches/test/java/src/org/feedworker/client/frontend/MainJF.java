@@ -141,9 +141,17 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         });
         fileJM.add(restartJMI);
 
+        JMenuItem jmiBackup = new JMenuItem(" Backup impostazioni ");
+        jmiBackup.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        fileJM.add(jmiBackup);
+
         JMenuItem closeJMI = new JMenuItem(" Esci ");
         closeJMI.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 WindowEvent we = new WindowEvent(MainJF.this,
@@ -153,6 +161,38 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
             }
         });
         fileJM.add(closeJMI);
+
+        if (prop.isEnabledCustomDestinationFolder()){
+            JMenu jmSerial = new JMenu(" Serial tv ");
+            applicationJMB.add(jmSerial);
+
+            JMenuItem jmiPrintToday = new JMenuItem(" Stampa oggi ");
+            JMenuItem jmiPrintTomorrow = new JMenuItem(" Stampa domani ");
+            JMenuItem jmiPrintYesterday = new JMenuItem(" Stampa ieri ");
+
+            jmiPrintToday.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    proxy.printDay(0);
+                }
+            });
+            jmiPrintTomorrow.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    proxy.printDay(1);
+                }
+            });
+            jmiPrintYesterday.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    proxy.printDay(-1);
+                }
+            });
+
+            jmSerial.add(jmiPrintToday);
+            jmSerial.add(jmiPrintTomorrow);
+            jmSerial.add(jmiPrintYesterday);
+        }
 
         JMenu nasJM = new JMenu(" NAS ");
         JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
@@ -210,8 +250,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         setJMenuBar(applicationJMB);
     }
 
-    /**
-     * inizializza il pannello per l'help regola sub
+    /**inizializza il pannello per l'help regola sub
      *
      * @return pannello helprolesub
      */
