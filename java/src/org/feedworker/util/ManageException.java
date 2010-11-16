@@ -270,9 +270,11 @@ public class ManageException {
         String error02 = "Invalid XML: Error on line 1: Content is not allowed in prolog.";
         String error03 = "Invalid XML: Error on line 6: The element type \"hr\" must be "
                 + "terminated by the matching end-tag \"</hr>\".";
+        String error04 = "Invalid XML: Error on line 22: Open quote is expected for attribute "
+                + "\"{1}\" associated with an  element type  \"FRAMEBORDER\".";
         String msg = ex.getMessage();
-        if (msg.equalsIgnoreCase(error01) || msg.equalsIgnoreCase(error02)  ||
-                msg.equalsIgnoreCase(error03))
+        if (msg.equalsIgnoreCase(error01) || msg.equalsIgnoreCase(error02) ||
+                msg.equalsIgnoreCase(error03) || msg.equalsIgnoreCase(error04))
             printAlert("Non posso analizzare il feed XML " + text);
         else
             printError(ex, c);

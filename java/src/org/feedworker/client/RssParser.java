@@ -15,6 +15,7 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
+import org.jfacility.java.lang.Lang;
 
 /**
  * 
@@ -59,13 +60,17 @@ public class RssParser {
         List rawEntryList = feed.getEntries();
         ArrayList<Object[]> structuredEntryList = new ArrayList<Object[]>();
         for (int i = 0; i < rawEntryList.size(); i++) {
-            Object[] structuredEntry = new Object[5];
             SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
-            structuredEntry[0] = rawEntry.getLink();
-            structuredEntry[1] = Common.dateToString(rawEntry.getPublishedDate());
-            structuredEntry[2] = rawEntry.getTitle();
-            structuredEntry[3] = false;
-            structuredEntryList.add(structuredEntry);
+            String temp = rawEntry.getTitle();
+            System.out.println(temp);
+            if (Lang.verifyTextNotNull(temp) && !temp.equalsIgnoreCase(" ")){
+                Object[] structuredEntry = new Object[5];
+                structuredEntry[0] = rawEntry.getLink();
+                structuredEntry[1] = Common.dateToString(rawEntry.getPublishedDate());
+                structuredEntry[2] = temp;
+                structuredEntry[3] = false;
+                structuredEntryList.add(structuredEntry);
+            }
         }
         return structuredEntryList;
     }
