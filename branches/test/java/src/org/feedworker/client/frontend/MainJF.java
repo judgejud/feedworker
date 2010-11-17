@@ -286,7 +286,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         JTable jtable = new JTable(proxy.getModelSystemInfo());
         jtable.setRowSelectionAllowed(false);
         jtable.getTableHeader().setReorderingAllowed(false);
-        jtable.setPreferredSize(new Dimension(400,145));
+        jtable.setPreferredSize(new Dimension(500,145));
         Swing.setTableDimensionLockColumn(jtable, 0, 120);
         jpanel.add(jtable);
         jpanel.setVisible(true);

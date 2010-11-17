@@ -39,7 +39,7 @@ public class FeedWorkerClient {
     public static void main(String args[]) {
         ResourceLocator.setWorkspace();
         
-        feedWorker = Application.getInstance();
+        feedWorker = Application.getInstance(true);
         feedWorkerSettings = ApplicationSettings.getIstance();
 
         feedWorker.setName("FeedWorker");
