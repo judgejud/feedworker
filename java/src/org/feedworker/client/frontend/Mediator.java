@@ -687,8 +687,9 @@ public class Mediator {
         return FeedWorkerClient.getApplication().getName();
     }
 
-    Object[] getAvailableLAF() {
-        return FeedWorkerClient.getApplication().getAvailableLookAndFeel().toArray();
+    String[] getAvailableLAF() {
+        return FeedWorkerClient.getApplication().getIstanceLAF().getAvailableLafs();
+        //return FeedWorkerClient.getApplication().getAvailableLookAndFeel().toArray();
     }
 
     ApplicationSettings getSettings(){
@@ -711,7 +712,7 @@ public class Mediator {
     String getTitle(){
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "202 by "
+                + "203 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 

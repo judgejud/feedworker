@@ -62,9 +62,14 @@ public class FeedWorkerClient {
         K = Kernel.getIstance();
         splash.updateStartupState("Setting Look & Feel ...");
         try {
-        feedWorker.setLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
+            feedWorker.getIstanceLAF().addSyntheticaStandard();
+            feedWorker.getIstanceLAF().addSyntheticaFree();
+            feedWorker.getIstanceLAF().addSyntheticaNotFree();
+            feedWorker.getIstanceLAF().addOtherLAF();
+            feedWorker.getIstanceLAF().setLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
+            //feedWorker.setLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
         } catch (NotAvailableLookAndFeelException e) {
-            feedWorker.setLookAndFeel();
+            feedWorker.getIstanceLAF().setLookAndFeel();
         }
         splash.updateStartupState("Checking JVM ...");
 
