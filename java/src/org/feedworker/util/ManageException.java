@@ -96,26 +96,21 @@ public class ManageException {
         printError(ex, c);
     }
 
-    /**
-     * Analizza l'errore IllegalArgumentException
+    /**Analizza l'errore IllegalArgumentException
      *
-     * @param ex
-     *            IllegalArgumentException
-     * @param c
-     *            classe di provenienza
+     * @param ex IllegalArgumentException
+     * @param c classe di provenienza
      */
     public void launch(IllegalArgumentException ex, Class c) {
-        printAlert("il link inserito non corrisponde a feed RSS");
+        String msg = ex.getMessage();
+        String error01 = "Name may not be null";
         printError(ex, c);
     }
 
-    /**
-     * Analizza l'errore IllegalStateException
+    /**Analizza l'errore IllegalStateException
      *
-     * @param ex
-     *            IllegalStateException
-     * @param c
-     *            classe di provenienza
+     * @param ex IllegalStateException
+     * @param c classe di provenienza
      */
     public void launch(IllegalStateException ex, Class c) {
         String msg = ex.getMessage();

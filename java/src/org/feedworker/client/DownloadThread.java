@@ -188,6 +188,9 @@ public class DownloadThread implements Runnable {
                         fireNewTextPaneEvent("Sessione scaduta", MyTextPaneEvent.ALERT);
                 }
             } //end for
+
+        } catch (IllegalArgumentException ex) {
+            error.launch(ex, this.getClass());
         } catch (StringIndexOutOfBoundsException ex) {
             error.launch(ex, this.getClass(), itasa);
         } catch (IOException ex) {
