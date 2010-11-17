@@ -62,7 +62,6 @@ public class RssParser {
         for (int i = 0; i < rawEntryList.size(); i++) {
             SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
             String temp = rawEntry.getTitle();
-            System.out.println(temp);
             if (Lang.verifyTextNotNull(temp) && !temp.equalsIgnoreCase(" ")){
                 Object[] structuredEntry = new Object[5];
                 structuredEntry[0] = rawEntry.getLink();
