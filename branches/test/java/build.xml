@@ -54,17 +54,17 @@
 			<striplinebreaks />
 		</filterchain>
 	</loadfile>
-	
+
 	<buildnumber file="build.number" />
-	
+
 	<property name="version.build" value="${build.number}" />
 
 	<property name="version.number" value="${version.major}.${version.minor}.${version.revision}.${version.build}" />
-	
+
 	<tstamp>
 		<format property="build.date" pattern="yyyy-MM-dd HH:mm:ss" />
 	</tstamp>
-	
+
 	<property name="build.date" value="${build.date}" />
 
 	<propertyfile file="${src}/org/feedworker/config/version.properties">
@@ -144,7 +144,6 @@
 			<attribute name="Implementation-Version" value="${version.number}" />
 			<attribute name="Built-Date" value="${build.date}" />
 			<attribute name="SplashScreen-Image" value="org/feedworker/resource/SplashImage.png" />
-			<!-- plugins that serialize own classes have to be put in the classpath -->
 			<attribute name="Class-Path" value="${class-path}" />
 		</manifest>
 
