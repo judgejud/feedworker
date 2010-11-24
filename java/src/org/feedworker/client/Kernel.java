@@ -30,7 +30,7 @@ import org.feedworker.client.frontend.events.MyJFrameEventListener;
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
 import org.feedworker.client.frontend.events.TableRssEvent;
-import org.feedworker.client.frontend.events.TableRssEventListener;
+import org.feedworker.client.frontend.events.TableRssEventsListener;
 import org.feedworker.client.frontend.events.TableXmlEvent;
 import org.feedworker.client.frontend.events.TableXmlEventListener;
 import org.feedworker.util.AudioPlay;
@@ -882,7 +882,7 @@ public class Kernel {
      *            evento tablerss
      */
     public synchronized void addTableRssEventListener(
-            TableRssEventListener listener) {
+            TableRssEventsListener listener) {
         listenerTableRss.add(listener);
     }
 
@@ -893,7 +893,7 @@ public class Kernel {
      *            evento tablerss
      */
     public synchronized void removeTableRssEventListener(
-            TableRssEventListener listener) {
+            TableRssEventsListener listener) {
         listenerTableRss.remove(listener);
     }
 
@@ -902,7 +902,7 @@ public class Kernel {
         TableRssEvent event = new TableRssEvent(this, alObj, source);
         Iterator listeners = listenerTableRss.iterator();
         while (listeners.hasNext()) {
-            TableRssEventListener myel = (TableRssEventListener) listeners.next();
+            TableRssEventsListener myel = (TableRssEventsListener) listeners.next();
             if (myel != null) {
                 myel.objReceived(event);
             }

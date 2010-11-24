@@ -14,14 +14,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import org.feedworker.client.frontend.events.TableRssEvent;
-import org.feedworker.client.frontend.events.TableRssEventListener;
+import org.feedworker.client.frontend.events.TableRssEventsListener;
 import org.jfacility.javax.swing.Swing;
 
 /**
  * 
  * @author luca
  */
-class tableRss extends JTable implements TableRssEventListener {
+class jtRss extends JTable implements TableRssEventsListener {
     // PRIVATE FINAL VARIABLE
 
     private final String[] columnNames = {"link", "Data", "Sottotitolo",
@@ -35,7 +35,7 @@ class tableRss extends JTable implements TableRssEventListener {
      *
      * @param name
      */
-    public tableRss(String name) {
+    public jtRss(String name) {
         super();
         setName(name);
         DefaultTableModel dtm = new DefaultTableModel(null, columnNames) {

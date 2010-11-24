@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 class TorrentJP extends AbstractJP {
 	private static TorrentJP jpanel = null;
 	private JButton jbDown, jbCopyLinks, jbClean, jbFireNas;
-	private tableRss jtTorrent1, jtTorrent2;
+	private jtRss jtTorrent1, jtTorrent2;
 
 	private TorrentJP() {
 		super();
@@ -33,14 +33,14 @@ class TorrentJP extends AbstractJP {
 
 	@Override
 	void initializePanel() {
-		jtTorrent1 = new tableRss(proxy.getEztv());
+		jtTorrent1 = new jtRss(proxy.getEztv());
 		jtTorrent1.setTitleDescriptionColumn("Descrizione Torrent EZTV");
 		JScrollPane jsp1 = new JScrollPane(jtTorrent1);
 		jsp1.setPreferredSize(TABLE_SCROLL_SIZE);
 		jsp1.setAutoscrolls(true);
 		add(jsp1, BorderLayout.WEST);
 
-		jtTorrent2 = new tableRss(proxy.getBtchat());
+		jtTorrent2 = new jtRss(proxy.getBtchat());
 		jtTorrent2.setTitleDescriptionColumn("Descrizione Torrent BTCHAT");
 		JScrollPane jsp2 = new JScrollPane(jtTorrent2);
 		jsp2.setPreferredSize(TABLE_SCROLL_SIZE);
