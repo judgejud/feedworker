@@ -20,7 +20,7 @@ class SubsfactoryJP extends AbstractJP {
 
     private static SubsfactoryJP jpanel = null;
     private JButton jbDown, jbClean;
-    private tableRss jtSubsf, jtMySubsf;
+    private jtRss jtSubsf, jtMySubsf;
 
     private SubsfactoryJP() {
         super();
@@ -39,8 +39,8 @@ class SubsfactoryJP extends AbstractJP {
 
     @Override
     void initializePanel() {
-        jtSubsf = new tableRss(proxy.getSubsf());
-        jtMySubsf = new tableRss(proxy.getMySubsf());
+        jtSubsf = new jtRss(proxy.getSubsf());
+        jtMySubsf = new jtRss(proxy.getMySubsf());
 
         JPanel jp = new JPanel();
         add(jp, BorderLayout.CENTER);

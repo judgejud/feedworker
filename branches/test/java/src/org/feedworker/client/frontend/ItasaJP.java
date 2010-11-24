@@ -17,7 +17,7 @@ class ItasaJP extends AbstractJP {
 
 	private static ItasaJP jpanel = null;
 	private JButton jbAllItasa, jbDown, jbClean, jbAllMyItasa;
-	private tableRss jtItasa, jtMyItasa;
+	private jtRss jtItasa, jtMyItasa;
 
 	/** Costruttore privato */
 	private ItasaJP() {
@@ -42,13 +42,13 @@ class ItasaJP extends AbstractJP {
 
 	@Override
 	void initializePanel() {
-		jtItasa = new tableRss(proxy.getItasa());
+		jtItasa = new jtRss(proxy.getItasa());
 		jtItasa.setTitleDescriptionColumn("Sottotitolo Itasa");
 		JScrollPane jScrollTable1 = new JScrollPane(jtItasa);
 		jScrollTable1.setPreferredSize(TABLE_SCROLL_SIZE);
 		jScrollTable1.setAutoscrolls(true);
 
-		jtMyItasa = new tableRss(proxy.getMyItasa());
+		jtMyItasa = new jtRss(proxy.getMyItasa());
 		jtMyItasa.setTitleDescriptionColumn("Sottotitolo MyItasa");
 		JScrollPane jScrollTable2 = new JScrollPane(jtMyItasa);
 		jScrollTable2.setPreferredSize(TABLE_SCROLL_SIZE);
@@ -132,7 +132,7 @@ class ItasaJP extends AbstractJP {
 		}
 	}
 
-	private void selectAll(tableRss jt) {
+	private void selectAll(jtRss jt) {
 		for (int i = 0; i < jt.getRowCount(); i++)
 			jt.setValueAt(true, i, 3);
 	}

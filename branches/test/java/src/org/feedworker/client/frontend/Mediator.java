@@ -25,7 +25,7 @@ import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.client.frontend.events.MyJFrameEventListener;
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
-import org.feedworker.client.frontend.events.TableRssEventListener;
+import org.feedworker.client.frontend.events.TableRssEventsListener;
 import org.feedworker.client.frontend.events.TableXmlEventListener;
 import org.feedworker.util.Common;
 import org.feedworker.util.KeyRule;
@@ -214,7 +214,7 @@ public class Mediator {
         core.closeApp(date);
     }
 
-    void setTableRssListener(TableRssEventListener listener) {
+    void setTableRssListener(TableRssEventsListener listener) {
         core.addTableRssEventListener(listener);
     }
 
@@ -287,7 +287,7 @@ public class Mediator {
         return core.testSamba(ip, dir, dir, user, pwd);
     }
 
-    void saveRules(tableXml jtable) {
+    void saveRules(jtXml jtable) {
         boolean _break = false;
         TreeMap<KeyRule, ValueRule> temp = new TreeMap<KeyRule, ValueRule>();
         for (int i = 0; i < jtable.getRowCount(); i++) {

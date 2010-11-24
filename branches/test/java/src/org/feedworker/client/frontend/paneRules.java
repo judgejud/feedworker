@@ -22,7 +22,7 @@ import org.jfacility.javax.swing.Swing;
 class paneRules extends AbstractJP {
 
     private static paneRules jpanel = null;
-    private tableXml jtable;
+    private jtXml jtable;
 
     public static paneRules getPanel() {
         if (jpanel == null) {
@@ -39,7 +39,7 @@ class paneRules extends AbstractJP {
 
     @Override
     void initializePanel() {
-        jtable = new tableXml();
+        jtable = new jtXml();
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         // jScrollTable1.setPreferredSize(new Dimension(650, 460));
         jScrollTable1.setAutoscrolls(true);
