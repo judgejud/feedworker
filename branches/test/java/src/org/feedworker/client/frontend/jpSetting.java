@@ -38,13 +38,13 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-class paneSetting extends JPanel {
+class jpSetting extends JPanel {
 
     private final Dimension TABBEDSIZE = new Dimension(1024, 540);
     private final Dimension INTERNALSETTINGS = new Dimension(500, 430);
     private final SoftBevelBorder SBBORDER = new SoftBevelBorder(BevelBorder.RAISED);
     private final String[] timeout = new String[]{"3", "6", "9", "12", "15", "18"};
-    private static paneSetting jpanel = null;
+    private static jpSetting jpanel = null;
     private JTree jtSettings;
     private JPanel jpSettingGlobal, jpSettingItasa, jpSettingSubsf,jpSettingTorrent;
     private JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
@@ -62,16 +62,16 @@ class paneSetting extends JPanel {
     private Mediator proxy = Mediator.getIstance();
     private ApplicationSettings prop;
 
-    private paneSetting() {
+    private jpSetting() {
         super(new GridBagLayout());
         setPreferredSize(TABBEDSIZE);
         prop = proxy.getSettings();
         initSettings();
     }
 
-    public static paneSetting getPanel() {
+    public static jpSetting getPanel() {
         if (jpanel == null) {
-            jpanel = new paneSetting();
+            jpanel = new jpSetting();
         }
         return jpanel;
     }

@@ -19,19 +19,19 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-class paneRules extends AbstractJP {
+class jpSubtitleDest extends AbstractJP {
 
-    private static paneRules jpanel = null;
-    private jtXml jtable;
+    private static jpSubtitleDest jpanel = null;
+    private jtSubtitleDest jtable;
 
-    public static paneRules getPanel() {
+    public static jpSubtitleDest getPanel() {
         if (jpanel == null) {
-            jpanel = new paneRules();
+            jpanel = new jpSubtitleDest();
         }
         return jpanel;
     }
 
-    private paneRules() {
+    private jpSubtitleDest() {
         super();
         initializePanel();
         initializeButtons();
@@ -39,9 +39,8 @@ class paneRules extends AbstractJP {
 
     @Override
     void initializePanel() {
-        jtable = new jtXml();
+        jtable = new jtSubtitleDest();
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
-        // jScrollTable1.setPreferredSize(new Dimension(650, 460));
         jScrollTable1.setAutoscrolls(true);
         add(jScrollTable1, BorderLayout.CENTER);
         setVisible(true);

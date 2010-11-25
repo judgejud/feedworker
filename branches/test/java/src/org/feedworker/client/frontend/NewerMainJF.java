@@ -97,9 +97,9 @@ public class NewerMainJF extends MainJF {
 
         if (evt.getOperaz() != null) {
             if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ"))
-                mainJTP.addTab("Destinazione avanzata", paneRules.getPanel());
+                mainJTP.addTab("Destinazione avanzata", jpSubtitleDest.getPanel());
             else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ"))
-                mainJTP.remove(paneRules.getPanel());
+                mainJTP.remove(jpSubtitleDest.getPanel());
             else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON"))
                 changeEnabledButton(true);
         }
