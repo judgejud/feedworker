@@ -35,7 +35,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
 
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
-    protected paneSetting settingsJP;
+    protected jpSetting settingsJP;
     protected JTabbedPane mainJTP;
     protected LogJTP logJTP;
     protected Mediator proxy = Mediator.getIstance();
@@ -63,7 +63,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         mainJTP = new JTabbedPane();
         mainJTP.setPreferredSize(TAB_SIZE);
         this.add(mainJTP, BorderLayout.CENTER);
-        settingsJP = paneSetting.getPanel();
+        settingsJP = jpSetting.getPanel();
 
         if (prop.isItasaOption()) {
             itasaJP = ItasaJP.getPanel();
@@ -77,9 +77,9 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
             torrentJP = TorrentJP.getPanel();
             mainJTP.addTab("Torrent", torrentJP);
         }
-        if (prop.isEnabledCustomDestinationFolder()) {
-            mainJTP.addTab("Subtitle Destination", paneRules.getPanel());
-        }
+        if (prop.isEnabledCustomDestinationFolder())
+            mainJTP.addTab("Subtitle Destination", jpSubtitleDest.getPanel());
+        mainJTP.addTab("Calendar", jpCalendar.getPanel());
         mainJTP.addTab("Settings", settingsJP);
 
         logJTP = new LogJTP();
@@ -318,9 +318,9 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         }
         if (evt.getOperaz() != null) {
             if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ")) {
-                mainJTP.addTab("Destinazione avanzata", paneRules.getPanel());
+                mainJTP.addTab("Destinazione avanzata", jpSubtitleDest.getPanel());
             } else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ")) {
-                mainJTP.remove(paneRules.getPanel());
+                mainJTP.remove(jpSubtitleDest.getPanel());
             } else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON")) {
                 changeEnabledButton(true);
             }

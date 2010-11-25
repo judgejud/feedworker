@@ -20,7 +20,7 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-class jtXml extends JTable implements TableXmlEventListener {
+class jtSubtitleDest extends JTable implements TableXmlEventListener {
     private Mediator proxy = Mediator.getIstance();
     private final String[] nameCols = {"Serie", "Stagione", "Versione",
         "Destinazione", "Stato", "Giorno", "Rename"};
@@ -31,7 +31,7 @@ class jtXml extends JTable implements TableXmlEventListener {
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
     /** Costruttore */
-    public jtXml() {
+    public jtSubtitleDest() {
         super();
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
 

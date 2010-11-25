@@ -287,7 +287,7 @@ public class Mediator {
         return core.testSamba(ip, dir, dir, user, pwd);
     }
 
-    void saveRules(jtXml jtable) {
+    void saveRules(jtSubtitleDest jtable) {
         boolean _break = false;
         TreeMap<KeyRule, ValueRule> temp = new TreeMap<KeyRule, ValueRule>();
         for (int i = 0; i < jtable.getRowCount(); i++) {
