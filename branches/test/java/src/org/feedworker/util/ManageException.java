@@ -30,6 +30,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * Stampa nella textpane i messaggi d'errore se è un messaggio d'errore "rosso"
@@ -121,6 +122,8 @@ public class ManageException {
             printError(ex, c);
         }
     }
+
+
 
     public void launch(IOException ex, Class c) {
         printError(ex, c);
@@ -267,9 +270,11 @@ public class ManageException {
                 + "terminated by the matching end-tag \"</hr>\".";
         String error04 = "Invalid XML: Error on line 22: Open quote is expected for attribute "
                 + "\"{1}\" associated with an  element type  \"FRAMEBORDER\".";
+        String error05 = "Invalid XML: Error on line 196: Content is not allowed in trailing section.";
         String msg = ex.getMessage();
         if (msg.equalsIgnoreCase(error01) || msg.equalsIgnoreCase(error02) ||
-                msg.equalsIgnoreCase(error03) || msg.equalsIgnoreCase(error04))
+                msg.equalsIgnoreCase(error03) || msg.equalsIgnoreCase(error04) ||
+                msg.equalsIgnoreCase(error05))
             printAlert("Non posso analizzare il feed XML " + text);
         else
             printError(ex, c);
@@ -321,9 +326,8 @@ public class ManageException {
         if (flag_itasa && msg.equals(error01)) {
             printAlert("Bisogna essere registrati ad italiansubs per scaricare i sottotitoli. "
                     + "Controlla username e/o password");
-        } else {
+        } else
             printError(ex, c);
-        }
     }
 
     public void launch(SWTException ex, Class c){
@@ -339,7 +343,10 @@ public class ManageException {
      *            classe di provenienza
      */
     public void launch(UnsupportedAudioFileException ex, Class c) {
-        String msg = ex.getMessage();
+        printError(ex, c);
+    }
+
+    public void launch(UnsupportedEncodingException ex, Class c) {
         printError(ex, c);
     }
 

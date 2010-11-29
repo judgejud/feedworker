@@ -16,13 +16,13 @@ import javax.swing.JScrollPane;
  * 
  * @author luca
  */
-class SubsfactoryJP extends AbstractJP {
+class jpSubsfactory extends jpAbstract {
 
-    private static SubsfactoryJP jpanel = null;
+    private static jpSubsfactory jpanel = null;
     private JButton jbDown, jbClean;
     private jtRss jtSubsf, jtMySubsf;
 
-    private SubsfactoryJP() {
+    private jpSubsfactory() {
         super();
         initializePanel();
         initializeButtons();
@@ -30,9 +30,9 @@ class SubsfactoryJP extends AbstractJP {
         proxy.setTableRssListener(jtMySubsf);
     }
 
-    public static SubsfactoryJP getPanel() {
+    public static jpSubsfactory getPanel() {
         if (jpanel == null) {
-            jpanel = new SubsfactoryJP();
+            jpanel = new jpSubsfactory();
         }
         return jpanel;
     }

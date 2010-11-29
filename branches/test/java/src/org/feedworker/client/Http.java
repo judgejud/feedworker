@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -70,7 +72,8 @@ class Http {
      * @param user
      * @param pwd
      */
-    void connectItasa(String user, String pwd) throws IOException {
+    void connectItasa(String user, String pwd) throws UnsupportedEncodingException,
+            ClientProtocolException, IOException {
         //getValuesItasaForm();
         itasaLogonPOST(user, pwd);
     }
@@ -81,8 +84,8 @@ class Http {
      * @param username
      * @param password
      */
-    private void itasaLogonPOST(String username, String password)
-            throws IOException {
+    private void itasaLogonPOST(String username, String password) throws
+            UnsupportedEncodingException, ClientProtocolException, IOException {
         HttpPost post = new HttpPost(ADDRESS_ITASA);
         // parametri presi dall'html form action del sito
         List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
@@ -96,11 +99,13 @@ class Http {
         //lnvp.add(new BasicNameValuePair("return", returnVal));
         //lnvp.add(new BasicNameValuePair(val, "1"));
         post.setEntity(new UrlEncodedFormEntity(lnvp, HTTP.UTF_8));
+        //per vedere la stringa che manda in POST
+        //BufferedReader br = new BufferedReader(new InputStreamReader(post.getEntity().getContent()));
+        //System.out.println(br.readLine());
         response = client.execute(post);
         entity = response.getEntity();
-        if (entity != null) {
+        if (entity != null)
             entity.consumeContent();
-        }
         getCookiesItasa();
     } // end doPost
 
@@ -110,9 +115,8 @@ class Http {
         int temp = 0;
         while (lenght == -1) {
             ++temp;
-            if (entity != null) {
+            if (entity != null)
                 entity.consumeContent();
-            }
             client.setCookieStore(cookies);
             get = new HttpGet(link);
             response = client.execute(get);

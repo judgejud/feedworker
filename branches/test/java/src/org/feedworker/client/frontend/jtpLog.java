@@ -17,7 +17,7 @@ import org.feedworker.util.Common;
  * 
  * @author luca
  */
-class LogJTP extends JTextPane implements MyTextPaneEventListener {
+class jtpLog extends JTextPane implements MyTextPaneEventListener {
     // PRIVATE FINAL
 
     private final Color GOLD = new Color(255, 215, 0);
@@ -29,7 +29,7 @@ class LogJTP extends JTextPane implements MyTextPaneEventListener {
             styleFeedEztv, styleFeedBtchat, styleSynology, styleDaySerial;
     
     /**Costruttore Inizializza la myjtextpane */
-    public LogJTP() {
+    public jtpLog() {
         super();
         this.setEditable(false);
         this.setBackground(Color.black);

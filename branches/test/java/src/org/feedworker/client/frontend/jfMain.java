@@ -31,21 +31,21 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca judge
  */
-public class MainJF extends JFrame implements WindowListener, MyJFrameEventListener {
+public class jfMain extends JFrame implements WindowListener, MyJFrameEventListener {
 
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
     protected jpSetting settingsJP;
     protected JTabbedPane mainJTP;
-    protected LogJTP logJTP;
+    protected jtpLog logJTP;
     protected Mediator proxy = Mediator.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
-    private ItasaJP itasaJP;
-    private TorrentJP torrentJP;
-    private SubsfactoryJP subsfactoryJP;
+    private jpItasa itasaJP;
+    private jpTorrent torrentJP;
+    private jpSubsfactory subsfactoryJP;
 
     /** Costruttore */
-    public MainJF() {
+    public jfMain() {
         super();
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setPreferredSize(SCREEN_SIZE);
@@ -66,15 +66,15 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         settingsJP = jpSetting.getPanel();
 
         if (prop.isItasaOption()) {
-            itasaJP = ItasaJP.getPanel();
+            itasaJP = jpItasa.getPanel();
             mainJTP.addTab("Itasa", itasaJP);
         }
         if (prop.isSubsfactoryOption()) {
-            subsfactoryJP = SubsfactoryJP.getPanel();
+            subsfactoryJP = jpSubsfactory.getPanel();
             mainJTP.addTab("Subsfactory", subsfactoryJP);
         }
         if (prop.isTorrentOption()) {
-            torrentJP = TorrentJP.getPanel();
+            torrentJP = jpTorrent.getPanel();
             mainJTP.addTab("Torrent", torrentJP);
         }
         if (prop.isEnabledCustomDestinationFolder())
@@ -82,7 +82,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         mainJTP.addTab("Calendar", jpCalendar.getPanel());
         mainJTP.addTab("Settings", settingsJP);
 
-        logJTP = new LogJTP();
+        logJTP = new jtpLog();
         JScrollPane jScrollText1 = new JScrollPane(logJTP);
         jScrollText1.setPreferredSize(new Dimension(1000, 140));
         add(jScrollText1, BorderLayout.SOUTH);
@@ -145,7 +145,7 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         jmiBackup.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                proxy.invokeBackup(MainJF.this);
+                proxy.invokeBackup(jfMain.this);
             }
         });
         fileJM.add(jmiBackup);
@@ -154,10 +154,10 @@ public class MainJF extends JFrame implements WindowListener, MyJFrameEventListe
         closeJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                WindowEvent we = new WindowEvent(MainJF.this,
+                WindowEvent we = new WindowEvent(jfMain.this,
                         WindowEvent.WINDOW_CLOSING);
                 we.setSource(new JMenuItem());
-                MainJF.this.dispatchEvent(we);
+                jfMain.this.dispatchEvent(we);
             }
         });
         fileJM.add(closeJMI);

@@ -2,6 +2,7 @@ package org.feedworker.client;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.zip.ZipException;
 import jcifs.smb.SmbException;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 
 import org.feedworker.client.frontend.events.MyTextPaneEvent;
 import org.feedworker.client.frontend.events.MyTextPaneEventListener;
@@ -45,11 +47,20 @@ public class DownloadThread implements Runnable {
     private ManageException error = ManageException.getIstance();
     private TreeMap<KeyRule, ValueRule> mapRules;
     private List listenerTextPane = new ArrayList();
+    private Http httpItasa;
 
     DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als, boolean _itasa) {
         als = _als;
         itasa = _itasa;
         mapRules = map;
+    }
+
+    DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als,
+            boolean _itasa, Http _http) {
+        als = _als;
+        itasa = _itasa;
+        mapRules = map;
+        httpItasa = _http;
     }
 
     /**Estrae lo zip e restituisce l'arraylist di file contenuti nello zip
@@ -188,7 +199,10 @@ public class DownloadThread implements Runnable {
                         fireNewTextPaneEvent("Sessione scaduta", MyTextPaneEvent.ALERT);
                 }
             } //end for
-
+        } catch (UnsupportedEncodingException ex) {
+            error.launch(ex, this.getClass());
+        } catch (ClientProtocolException ex) {
+            error.launch(ex, this.getClass());
         } catch (IllegalArgumentException ex) {
             error.launch(ex, this.getClass());
         } catch (StringIndexOutOfBoundsException ex) {

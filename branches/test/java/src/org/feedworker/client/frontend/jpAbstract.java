@@ -19,7 +19,7 @@ import javax.swing.border.SoftBevelBorder;
  * 
  * @author luca
  */
-abstract class AbstractJP extends JPanel {
+abstract class jpAbstract extends JPanel {
 	private final Dimension TAB_SIZE = new Dimension(1024, 540);
 	private final Dimension ACTION_PANEL_SIZE = new Dimension(1000, 30);
 	protected final SoftBevelBorder BORDER = new SoftBevelBorder(
@@ -30,7 +30,7 @@ abstract class AbstractJP extends JPanel {
 	protected Mediator proxy = Mediator.getIstance();
 
 	/** Costruttore protetto, per essere invocato dai figli tramite ereditarietà */
-	protected AbstractJP() {
+	protected jpAbstract() {
 		super(new BorderLayout());
 		setPreferredSize(TAB_SIZE);
 		actionJP = new JPanel(new GridBagLayout());

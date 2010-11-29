@@ -13,14 +13,14 @@ import javax.swing.JScrollPane;
  * 
  * @author luca
  */
-class ItasaJP extends AbstractJP {
+class jpItasa extends jpAbstract {
 
-	private static ItasaJP jpanel = null;
+	private static jpItasa jpanel = null;
 	private JButton jbAllItasa, jbDown, jbClean, jbAllMyItasa;
 	private jtRss jtItasa, jtMyItasa;
 
 	/** Costruttore privato */
-	private ItasaJP() {
+	private jpItasa() {
 		super();
 		initializePanel();
 		initializeButtons();
@@ -33,9 +33,9 @@ class ItasaJP extends AbstractJP {
 	 * 
 	 * @return pannello itasa
 	 */
-	public static ItasaJP getPanel() {
+	public static jpItasa getPanel() {
 		if (jpanel == null) {
-			jpanel = new ItasaJP();
+			jpanel = new jpItasa();
 		}
 		return jpanel;
 	}
