@@ -6,12 +6,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author luca
  */
-class jpCalendar extends AbstractJP{
+class jpCalendar extends jpAbstract{
 
     private static jpCalendar jpanel = null;
     private jtCalendar jtable;
@@ -53,7 +54,6 @@ class jpCalendar extends AbstractJP{
         jbRemoveRow.setToolTipText("Rimuovi riga/serie selezionata dalla tabella");
         jbRemoveRow.setBorder(BORDER);
         jbRemoveRow.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent evt) {
                 jbRemoveRowMouseClicked();
@@ -70,6 +70,16 @@ class jpCalendar extends AbstractJP{
             }
         });
 
+        JButton jbRefresh = new JButton(" Aggiorna informazioni ");
+        jbRefresh.setToolTipText("Aggiorna le informazioni sulle serie");
+        jbRefresh.setBorder(BORDER);
+        jbRefresh.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbRefreshCalendarMouseClicked();
+            }
+        });
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -81,19 +91,28 @@ class jpCalendar extends AbstractJP{
         actionJP.add(jbRemoveRow, gbc);
         gbc.gridx = 2;
         actionJP.add(jbSaveCalendar, gbc);
+        gbc.gridx = 3;
+        actionJP.add(jbRefresh, gbc);
 
         add(actionJP, BorderLayout.NORTH);
     }
 
     private void jbAddRowMouseClicked() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        DefaultTableModel dtm = (DefaultTableModel) jtable.getModel();
+        dtm.insertRow(0, new Object[]{null, null, null, null, null, null, null, null, null});
     }
 
     private void jbRemoveRowMouseClicked() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        int row = jtable.getSelectedRow();
+        if (row > -1)
+            ((DefaultTableModel) jtable.getModel()).removeRow(row);
     }
 
     private void jbSaveCalendarMouseClicked() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        
+    }
+
+    private void jbRefreshCalendarMouseClicked() {
+
     }
 }

@@ -18,9 +18,9 @@ import org.feedworker.util.Common;
  * 
  * @author luca
  */
-public class ClassicSplashScreen {
+public class SplashScreenClassic {
 
-    protected static ClassicSplashScreen splashscreen = null;
+    protected static SplashScreenClassic splashscreen = null;
     protected Graphics2D graphics2D;
     protected int steps;
     protected int stepCounter = 0;
@@ -29,15 +29,15 @@ public class ClassicSplashScreen {
     private JWindow splashJW;
     private final Image splashImage = Common.getResourceImage("SplashImage.png");
 
-    protected ClassicSplashScreen(int steps) {
+    protected SplashScreenClassic(int steps) {
         this.steps = steps;
         this.width = splashImage.getWidth(null);
         this.height = splashImage.getHeight(null);
     }
 
-    public static ClassicSplashScreen getInstance(int steps) {
+    public static SplashScreenClassic getInstance(int steps) {
         if (splashscreen == null) {
-            splashscreen = new ClassicSplashScreen(steps);
+            splashscreen = new SplashScreenClassic(steps);
         }
         return splashscreen;
     }

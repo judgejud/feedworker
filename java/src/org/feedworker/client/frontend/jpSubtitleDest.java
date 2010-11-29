@@ -19,7 +19,7 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-class jpSubtitleDest extends AbstractJP {
+class jpSubtitleDest extends jpAbstract {
 
     private static jpSubtitleDest jpanel = null;
     private jtSubtitleDest jtable;
@@ -126,9 +126,8 @@ class jpSubtitleDest extends AbstractJP {
 
     private void jbRemoveRowMouseClicked() {
         int row = jtable.getSelectedRow();
-        if (row > -1) {
+        if (row > -1)
             ((DefaultTableModel) jtable.getModel()).removeRow(row);
-        }
     }
 
     private void jbAddDirMouseClicked() {

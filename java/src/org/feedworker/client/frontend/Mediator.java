@@ -628,7 +628,7 @@ public class Mediator {
     }
 
     void printError(SWTException e) {
-        ManageException.getIstance().launch(e, EnhancedMainJF.class);
+        ManageException.getIstance().launch(e, jfMainEnhanced.class);
     }
 
     private void printAlert(String msg) {

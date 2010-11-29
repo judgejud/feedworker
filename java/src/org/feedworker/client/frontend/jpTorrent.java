@@ -12,12 +12,12 @@ import javax.swing.JScrollPane;
  * 
  * @author luca
  */
-class TorrentJP extends AbstractJP {
-	private static TorrentJP jpanel = null;
+class jpTorrent extends jpAbstract {
+	private static jpTorrent jpanel = null;
 	private JButton jbDown, jbCopyLinks, jbClean, jbFireNas;
 	private jtRss jtTorrent1, jtTorrent2;
 
-	private TorrentJP() {
+	private jpTorrent() {
 		super();
 		initializePanel();
 		initializeButtons();
@@ -25,9 +25,9 @@ class TorrentJP extends AbstractJP {
 		proxy.setTableRssListener(jtTorrent2);
 	}
 
-	static TorrentJP getPanel() {
+	static jpTorrent getPanel() {
 		if (jpanel == null)
-			jpanel = new TorrentJP();
+			jpanel = new jpTorrent();
 		return jpanel;
 	}
 

@@ -16,7 +16,6 @@ class jtCalendar extends JTable implements TableCalendarEventListener{
     private final String[] nameCols = {"Serie", "Stato", "Giorno", "Last Episode", "Data",
                             "Titolo", "Next Episode", "Data", "Titolo"};
     private final Font font = new Font("Arial", Font.PLAIN, 10);
-    private Mediator proxy = Mediator.getIstance();
 
     public jtCalendar(){
         super();
@@ -30,9 +29,17 @@ class jtCalendar extends JTable implements TableCalendarEventListener{
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
+            @Override
+            public boolean isCellEditable(int rowIndex, int vColIndex) {
+                if (vColIndex==0)
+                    return true;
+                else
+                    return false;
+            }
         };
         setModel(dtm);
-
+        setRowSelectionAllowed(false);
+        getTableHeader().setReorderingAllowed(false);
         setFont(font);
         Swing.tableSorter(this);
     }

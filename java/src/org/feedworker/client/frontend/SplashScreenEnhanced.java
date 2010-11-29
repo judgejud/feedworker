@@ -4,17 +4,17 @@ import java.awt.Color;
 import java.awt.SplashScreen;
 import java.awt.geom.Rectangle2D;
 
-public class EnhancedSplashScreen extends ClassicSplashScreen {
+public class SplashScreenEnhanced extends SplashScreenClassic {
 
     private SplashScreen splash;
 
-    private EnhancedSplashScreen(int steps) {
+    private SplashScreenEnhanced(int steps) {
         super(steps);
     }
 
-    public static ClassicSplashScreen getInstance(int steps) {
+    public static SplashScreenClassic getInstance(int steps) {
         if (splashscreen == null) {
-            splashscreen = new EnhancedSplashScreen(steps);
+            splashscreen = new SplashScreenEnhanced(steps);
         }
         return splashscreen;
     }

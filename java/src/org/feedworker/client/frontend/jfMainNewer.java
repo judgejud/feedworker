@@ -21,14 +21,14 @@ import org.feedworker.client.frontend.events.MyJFrameEvent;
  * 
  * @author luca judge
  */
-public class NewerMainJF extends MainJF {    
+public class jfMainNewer extends jfMain {
     // VARIABLES PRIVATE
     private SystemTray tray;
     private TrayIcon trayIcon;
     private Image iconRss, iconSub;
 
     /** Costruttore */
-    public NewerMainJF() {
+    public jfMainNewer() {
         super();
         initSysTray();
     }

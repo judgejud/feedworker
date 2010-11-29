@@ -5,11 +5,11 @@ import java.net.URISyntaxException;
 
 import javax.swing.JOptionPane;
 
-import org.feedworker.client.frontend.ClassicSplashScreen;
-import org.feedworker.client.frontend.EnhancedSplashScreen;
-import org.feedworker.client.frontend.EnhancedMainJF;
-import org.feedworker.client.frontend.MainJF;
-import org.feedworker.client.frontend.NewerMainJF;
+import org.feedworker.client.frontend.SplashScreenClassic;
+import org.feedworker.client.frontend.SplashScreenEnhanced;
+import org.feedworker.client.frontend.jfMainEnhanced;
+import org.feedworker.client.frontend.jfMain;
+import org.feedworker.client.frontend.jfMainNewer;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
@@ -48,12 +48,12 @@ public class FeedWorkerClient {
         feedWorker.enableSingleInstance(true);
 
         final JVM jvm = new JVM();
-        final ClassicSplashScreen splash;
+        final SplashScreenClassic splash;
 
         if (jvm.isOrLater(16)) {
-            splash = EnhancedSplashScreen.getInstance(12);
+            splash = SplashScreenEnhanced.getInstance(12);
         } else {
-            splash = ClassicSplashScreen.getInstance(12);
+            splash = SplashScreenClassic.getInstance(12);
         }
         splash.start();
         splash.updateStartupState("Inizializzazione Feedworker");
@@ -91,13 +91,13 @@ public class FeedWorkerClient {
                 EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        MainJF jframe = null;
+                        jfMain jframe = null;
                         splash.updateStartupState("Loading GUI ...");
                         if (jvm.isOrLater(16))
-                            jframe = new NewerMainJF();
+                            jframe = new jfMainNewer();
                             //jframe = new EnhancedMainJF();
                         else if (jvm.isOrLater(15))
-                            jframe = new MainJF();
+                            jframe = new jfMain();
                         splash.updateStartupState("Loading xml");
                         K.loadXml();
                         splash.updateStartupState("Initializing RSS...");

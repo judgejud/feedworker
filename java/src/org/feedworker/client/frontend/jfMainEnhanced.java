@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.TrayItem;
 import org.feedworker.client.frontend.events.MyJFrameEvent;
 import org.feedworker.util.ResourceLocator;
 
-public class EnhancedMainJF extends MainJF {
+public class jfMainEnhanced extends jfMain {
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
     private final String APPLICATION_ICON_FILE_NAME = "ApplicationIcon.png";
 
@@ -35,7 +35,7 @@ public class EnhancedMainJF extends MainJF {
     private Menu trayMenu;
     private MenuItem trayMenuItem;
 
-    public EnhancedMainJF() {
+    public jfMainEnhanced() {
         super();
     }
 
