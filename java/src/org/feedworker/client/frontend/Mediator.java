@@ -754,4 +754,8 @@ public class Mediator {
         if (name!=null)
             core.backup(name);
     }
+
+    void searchTV(String tv) {
+        core.searchTV(tv);
+    }
 }

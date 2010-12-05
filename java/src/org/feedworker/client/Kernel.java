@@ -823,6 +823,10 @@ public class Kernel {
             printAlert("Non posso fare il backup poichè non ci sono files da backuppare.");
     }
 
+    public void searchTV(String tv) {
+        
+    }
+
     //TODO
     public void searchDay(int temp){
         if (prop.isEnabledCustomDestinationFolder()){
