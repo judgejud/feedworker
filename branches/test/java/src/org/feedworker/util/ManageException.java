@@ -263,18 +263,10 @@ public class ManageException {
      * @param c classe di provenienza
      */
     public void launch(ParsingFeedException ex, Class c, String text) {
-        String error01 = "Invalid XML: Error on line 1: The markup in the document "
-                + "following the root element must be well-formed.";
-        String error02 = "Invalid XML: Error on line 1: Content is not allowed in prolog.";
-        String error03 = "Invalid XML: Error on line 6: The element type \"hr\" must be "
-                + "terminated by the matching end-tag \"</hr>\".";
-        String error04 = "Invalid XML: Error on line 22: Open quote is expected for attribute "
-                + "\"{1}\" associated with an  element type  \"FRAMEBORDER\".";
-        String error05 = "Invalid XML: Error on line 196: Content is not allowed in trailing section.";
+        String error01 = "Invalid XML: Error on line";
         String msg = ex.getMessage();
-        if (msg.equalsIgnoreCase(error01) || msg.equalsIgnoreCase(error02) ||
-                msg.equalsIgnoreCase(error03) || msg.equalsIgnoreCase(error04) ||
-                msg.equalsIgnoreCase(error05))
+        if ((msg.length()>=error01.length()) &&
+                ((msg.substring(0, error01.length())).equalsIgnoreCase(error01)))
             printAlert("Non posso analizzare il feed XML " + text);
         else
             printError(ex, c);
