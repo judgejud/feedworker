@@ -5,8 +5,10 @@ import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+import org.jfacility.java.lang.Lang;
 
 /**
  *
@@ -98,8 +100,15 @@ class jpCalendar extends jpAbstract{
     }
 
     private void jbAddRowMouseClicked() {
-        DefaultTableModel dtm = (DefaultTableModel) jtable.getModel();
-        dtm.insertRow(0, new Object[]{null, null, null, null, null, null, null, null, null});
+        String tv = JOptionPane.showInputDialog(null,"Inserire nome serie tv");
+        if (Lang.verifyTextNotNull(tv)){
+            System.out.println(tv);
+            proxy.searchTV(tv);
+            /*
+            DefaultTableModel dtm = (DefaultTableModel) jtable.getModel();
+            dtm.insertRow(0, new Object[]{null, null, null, null, null, null, null, null, null});
+             */
+        }
     }
 
     private void jbRemoveRowMouseClicked() {

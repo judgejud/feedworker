@@ -12,8 +12,8 @@ import org.jfacility.javax.swing.Swing;
  *
  * @author luca
  */
-class jtCalendar extends JTable implements TableCalendarEventListener{    
-    private final String[] nameCols = {"Serie", "Stato", "Giorno", "Last Episode", "Data",
+class jtCalendar extends JTable implements TableCalendarEventListener{
+    private final String[] nameCols = {"ID","Serie", "Stato", "Giorno", "Last Episode", "Data",
                             "Titolo", "Next Episode", "Data", "Titolo"};
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
