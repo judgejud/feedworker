@@ -824,8 +824,8 @@ public class Kernel {
         try {
             ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv);
             if (array!=null){
-                fireNewJFrameEventOperation(SEARCH_TV);
                 fireTableEvent(array,SEARCH_TV);
+                fireNewJFrameEventOperation(SEARCH_TV);
             }
         } catch (JDOMException ex) {
             error.launch(ex, null);
@@ -906,14 +906,15 @@ public class Kernel {
         listenerTable.remove(listener);
     }
 
-    private synchronized void fireTableEvent(ArrayList<Object[]> alObj,
-            String source) {
+    private synchronized void fireTableEvent(ArrayList<Object[]> alObj, String source) {
         TableEvent event = new TableEvent(this, alObj, source);
         Iterator listeners = listenerTable.iterator();
         while (listeners.hasNext()) {
             TableEventListener myel = (TableEventListener) listeners.next();
             if (myel != null)
                 myel.objReceived(event);
+            else
+                System.out.println("myel table null" + source);
         }
     }
 

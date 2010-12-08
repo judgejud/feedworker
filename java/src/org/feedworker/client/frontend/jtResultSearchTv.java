@@ -21,6 +21,7 @@ public class jtResultSearchTv extends JTable implements TableEventListener{
     public jtResultSearchTv(String name){
         super();
         setName(name);
+        setPreferredSize(new Dimension(600, 290));
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
             Class[] types = new Class[]{String.class, String.class, String.class,
                 String.class, String.class, String.class};
@@ -34,17 +35,18 @@ public class jtResultSearchTv extends JTable implements TableEventListener{
             }
         };
         setModel(dtm);
-        //setRowSelectionAllowed(false);
         getTableHeader().setReorderingAllowed(false);
         setFont(font);
         Swing.tableSorter(this);
-        setPreferredSize(new Dimension(500,350));
+        Swing.setTableDimensionLockColumn(this, 0, 40);
+        Swing.setTableDimensionLockColumn(this, 0, 80);
     }
 
     @Override
     public void objReceived(TableEvent evt) {
         if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
             DefaultTableModel dtm = (DefaultTableModel) getModel();
+            dtm.setRowCount(0);
             int size = evt.getArray().size();
             for (int i = 0; i < size; i++)
                 dtm.insertRow(i, evt.getArray().get(i));
