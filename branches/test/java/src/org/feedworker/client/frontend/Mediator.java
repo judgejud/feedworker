@@ -185,26 +185,21 @@ public class Mediator {
     /**verifica le tabelle se sono flaggate per i download e invoca il kernel
      * coi link per il loro download
      *
-     * @param jt1
-     *            tabella1
-     * @param jt2
-     *            tabella2
-     * @param itasa
-     *            tabelle itasa
+     * @param jt1 tabella1
+     * @param jt2 tabella2
+     * @param itasa tabelle itasa
      */
     void downloadSub(JTable jt1, JTable jt2, boolean itasa) {
         ArrayList<String> alLinks = new ArrayList<String>();
         alLinks = addLinks(jt1);
-        if (jt2 != null) {
-            alLinks.addAll(addLinks(jt2));
-        }
-        if (alLinks.size() > 0) {
+        if (jt2 != null)
+            alLinks.addAll(addLinks(jt2));        
+        if (alLinks.size() > 0)
             core.downloadSub(alLinks, itasa);
-        } else {
+        else {
             String temp = "dalle tabelle";
-            if (!itasa) {
+            if (!itasa)
                 temp = "dalla tabella";
-            }
             printAlert("Selezionare almeno un rigo " + temp);
         }
     }
@@ -213,15 +208,13 @@ public class Mediator {
         if (Lang.verifyTextNotNull(prop.getTorrentDestinationFolder())) {
             ArrayList<String> alLinks = addLinks(jt1);
             alLinks.addAll(addLinks(jt2));
-            if (alLinks.size() > 0) {
+            if (alLinks.size() > 0)
                 core.downloadTorrent(alLinks);
-            } else {
+            else
                 printAlert("Selezionare almeno un rigo dalle tabelle");
-            }
-        } else {
+        } else
             printAlert("Non posso salvare perchè non hai specificato "
                     + "una cartella dove scaricare i file.torrent");
-        }
     }
 
     void runRss() {
@@ -241,7 +234,6 @@ public class Mediator {
         core.setDownloadThreadListener(listener);
         ManageException.getIstance().addMyTextPaneEventListener(listener);
         addMyTextPaneEventListener(listener);
-
     }
 
     void setFrameListener(JFrameEventIconDateListener listener) {
@@ -726,7 +718,7 @@ public class Mediator {
     String getTitle(){
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "211 by "
+                + "212 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 

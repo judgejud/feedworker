@@ -46,6 +46,7 @@ public class jfMain extends JFrame implements WindowListener,
     private jpItasa itasaJP;
     private jpTorrent torrentJP;
     private jpSubsfactory subsfactoryJP;
+    private jpResultSearchTv resultSearchTvJP = jpResultSearchTv.getPanel();
 
     /** Costruttore */
     public jfMain() {
@@ -334,7 +335,7 @@ public class jfMain extends JFrame implements WindowListener,
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getEnableButton()))
                 changeEnabledButton(true);
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getSearchTV()))
-                JOptionPane.showMessageDialog(getParent(), new jpResultSearchTv(),
+                JOptionPane.showMessageDialog(getParent(), resultSearchTvJP,
                         "Risultati ricerca", JOptionPane.PLAIN_MESSAGE);
         }
     }
