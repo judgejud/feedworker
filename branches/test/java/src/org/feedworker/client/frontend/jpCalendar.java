@@ -101,14 +101,8 @@ class jpCalendar extends jpAbstract{
 
     private void jbAddRowMouseClicked() {
         String tv = JOptionPane.showInputDialog(null,"Inserire nome serie tv");
-        if (Lang.verifyTextNotNull(tv)){
-            System.out.println(tv);
+        if (Lang.verifyTextNotNull(tv))
             proxy.searchTV(tv);
-            /*
-            DefaultTableModel dtm = (DefaultTableModel) jtable.getModel();
-            dtm.insertRow(0, new Object[]{null, null, null, null, null, null, null, null, null});
-             */
-        }
     }
 
     private void jbRemoveRowMouseClicked() {

@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import org.feedworker.client.frontend.events.MyTextPaneEvent;
-import org.feedworker.client.frontend.events.MyTextPaneEventListener;
+import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.util.Common;
 import org.feedworker.util.ManageException;
 
@@ -18,7 +18,7 @@ import org.jfacility.java.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-/**
+/**TODO: terminare la trasformazione del feed rss sotto 3d
  *
  * @author luca
  */
@@ -62,23 +62,23 @@ public class RssThread implements Runnable{
                             if (continua) {
                                 if (from.equals(core.ITASA))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            MyTextPaneEvent.FEED_ITASA);
+                                            TextPaneEvent.FEED_ITASA);
                                 else if (from.equals(core.MYITASA)
                                         && !prop.isAutoDownloadMyItasa())
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            MyTextPaneEvent.FEED_MYITASA);
+                                            TextPaneEvent.FEED_MYITASA);
                                 else if (from.equals(core.SUBSF))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            MyTextPaneEvent.FEED_SUBSF);
+                                            TextPaneEvent.FEED_SUBSF);
                                 else if (from.equals(core.MYSUBSF))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            MyTextPaneEvent.FEED_MYSUBSF);
+                                            TextPaneEvent.FEED_MYSUBSF);
                                 else if (from.equals(core.EZTV))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            MyTextPaneEvent.FEED_EZTV);
+                                            TextPaneEvent.FEED_EZTV);
                                 else if (from.equals(core.BTCHAT))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            MyTextPaneEvent.FEED_BTCHAT);
+                                            TextPaneEvent.FEED_BTCHAT);
                                 continua = false;
                             }
                             if ((isNotStagione((String) matrice.get(i)[2])) && download)
@@ -152,7 +152,7 @@ public class RssThread implements Runnable{
      *            evento textpane
      */
     public synchronized void addMyTextPaneEventListener(
-            MyTextPaneEventListener listener) {
+            TextPaneEventListener listener) {
         listenerTextPane.add(listener);
     }
 
@@ -162,15 +162,15 @@ public class RssThread implements Runnable{
      *            evento textpane
      */
     public synchronized void removeMyTextPaneEventListener(
-            MyTextPaneEventListener listener) {
+            TextPaneEventListener listener) {
         listenerTextPane.remove(listener);
     }
 
     private synchronized void fireNewTextPaneEvent(String msg, String type) {
-        MyTextPaneEvent event = new MyTextPaneEvent(this, msg, type);
+        TextPaneEvent event = new TextPaneEvent(this, msg, type);
         Iterator listeners = listenerTextPane.iterator();
         while (listeners.hasNext()) {
-            MyTextPaneEventListener myel = (MyTextPaneEventListener) listeners.next();
+            TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
             myel.objReceived(event);
         }
     }

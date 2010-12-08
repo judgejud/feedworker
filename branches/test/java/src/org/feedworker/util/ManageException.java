@@ -22,8 +22,8 @@ import jcifs.smb.SmbException;
 import org.eclipse.swt.SWTException;
 
 import org.feedworker.client.frontend.Mediator;
-import org.feedworker.client.frontend.events.MyTextPaneEvent;
-import org.feedworker.client.frontend.events.MyTextPaneEventListener;
+import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.client.frontend.events.TextPaneEventListener;
 
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
@@ -372,32 +372,32 @@ public class ManageException {
     }
 
     private void printAlert(String msg) {
-        fireNewTextPaneEvent(msg, MyTextPaneEvent.ALERT);
+        fireNewTextPaneEvent(msg, TextPaneEvent.ALERT);
     }
 
     private void printError(Exception e, Class c) {
-        fireNewTextPaneEvent(e.getMessage(), MyTextPaneEvent.ERROR);
+        fireNewTextPaneEvent(e.getMessage(), TextPaneEvent.ERROR);
         Logging.getIstance().printClass(c);
         Logging.getIstance().printError(e);
     }
 
     // This methods allows classes to register for MyEvents
     public synchronized void addMyTextPaneEventListener(
-            MyTextPaneEventListener listener) {
+            TextPaneEventListener listener) {
         listenerTextPane.add(listener);
     }
 
     // This methods allows classes to unregister for MyEvents
     public synchronized void removeMyTextPaneEventListener(
-            MyTextPaneEventListener listener) {
+            TextPaneEventListener listener) {
         listenerTextPane.remove(listener);
     }
 
     private synchronized void fireNewTextPaneEvent(String msg, String type) {
-        MyTextPaneEvent event = new MyTextPaneEvent(this, msg, type);
+        TextPaneEvent event = new TextPaneEvent(this, msg, type);
         Iterator listeners = listenerTextPane.iterator();
         while (listeners.hasNext()) {
-            MyTextPaneEventListener myel = (MyTextPaneEventListener) listeners.next();
+            TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
             myel.objReceived(event);
         }
     }

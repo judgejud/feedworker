@@ -15,130 +15,129 @@ import javax.swing.JScrollPane;
  */
 class jpItasa extends jpAbstract {
 
-	private static jpItasa jpanel = null;
-	private JButton jbAllItasa, jbDown, jbClean, jbAllMyItasa;
-	private jtRss jtItasa, jtMyItasa;
+    private static jpItasa jpanel = null;
+    private JButton jbAllItasa, jbDown, jbClean, jbAllMyItasa;
+    private jtRss jtItasa, jtMyItasa;
 
-	/** Costruttore privato */
-	private jpItasa() {
-		super();
-		initializePanel();
-		initializeButtons();
-		proxy.setTableRssListener(jtItasa);
-		proxy.setTableRssListener(jtMyItasa);
-	}
+    /** Costruttore privato */
+    private jpItasa() {
+        super();
+        initializePanel();
+        initializeButtons();
+        proxy.setTableListener(jtItasa);
+        proxy.setTableListener(jtMyItasa);
+    }
 
-	/**
-	 * Restituisce l'istanza del pannello itasa
-	 * 
-	 * @return pannello itasa
-	 */
-	public static jpItasa getPanel() {
-		if (jpanel == null) {
-			jpanel = new jpItasa();
-		}
-		return jpanel;
-	}
+    /**
+     * Restituisce l'istanza del pannello itasa
+     *
+     * @return pannello itasa
+     */
+    public static jpItasa getPanel() {
+        if (jpanel == null)
+            jpanel = new jpItasa();
+        return jpanel;
+    }
 
-	@Override
-	void initializePanel() {
-		jtItasa = new jtRss(proxy.getItasa());
-		jtItasa.setTitleDescriptionColumn("Sottotitolo Itasa");
-		JScrollPane jScrollTable1 = new JScrollPane(jtItasa);
-		jScrollTable1.setPreferredSize(TABLE_SCROLL_SIZE);
-		jScrollTable1.setAutoscrolls(true);
+    @Override
+    void initializePanel() {
+        jtItasa = new jtRss(proxy.getItasa());
+        jtItasa.setTitleDescriptionColumn("Sottotitolo Itasa");
+        JScrollPane jScrollTable1 = new JScrollPane(jtItasa);
+        jScrollTable1.setPreferredSize(TABLE_SCROLL_SIZE);
+        jScrollTable1.setAutoscrolls(true);
 
-		jtMyItasa = new jtRss(proxy.getMyItasa());
-		jtMyItasa.setTitleDescriptionColumn("Sottotitolo MyItasa");
-		JScrollPane jScrollTable2 = new JScrollPane(jtMyItasa);
-		jScrollTable2.setPreferredSize(TABLE_SCROLL_SIZE);
-		jScrollTable2.setAutoscrolls(true);
+        jtMyItasa = new jtRss(proxy.getMyItasa());
+        jtMyItasa.setTitleDescriptionColumn("Sottotitolo MyItasa");
+        JScrollPane jScrollTable2 = new JScrollPane(jtMyItasa);
+        jScrollTable2.setPreferredSize(TABLE_SCROLL_SIZE);
+        jScrollTable2.setAutoscrolls(true);
 
-		add(jScrollTable1, BorderLayout.WEST);
-		add(jScrollTable2, BorderLayout.EAST);
+        add(jScrollTable1, BorderLayout.WEST);
+        add(jScrollTable2, BorderLayout.EAST);
 
-		setVisible(true);
-	}
+        setVisible(true);
+    }
 
-	@Override
-	void initializeButtons() {
-		jbAllItasa = new JButton(" Tutti Itasa ");
-		jbAllItasa.setToolTipText("Seleziona tutti i sub itasa");
-		jbAllItasa.setBorder(BORDER);
-		jbAllItasa.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent evt) {
-				selectAll(jtItasa);
-			}
-		});
+    @Override
+    void initializeButtons() {
+        jbAllItasa = new JButton(" Tutti Itasa ");
+        jbAllItasa.setToolTipText("Seleziona tutti i sub itasa");
+        jbAllItasa.setBorder(BORDER);
+        jbAllItasa.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                selectAll(jtItasa);
+            }
+        });
 
-		jbDown = new JButton(" Download ");
-		jbDown.setToolTipText("Scarica tutti i sub selezionati");
-		jbDown.setBorder(BORDER);
-		jbDown.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent evt) {
-				jbDownMouseClicked();
-			}
-		});
+        jbDown = new JButton(" Download ");
+        jbDown.setToolTipText("Scarica tutti i sub selezionati");
+        jbDown.setBorder(BORDER);
+        jbDown.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbDownMouseClicked();
+            }
+        });
 
-		jbClean = new JButton(" Pulisci ");
-		jbClean.setToolTipText("Pulisce le righe selezionate");
-		jbClean.setBorder(BORDER);
-		jbClean.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent evt) {
-				jbCleanMouseClicked();
-			}
-		});
+        jbClean = new JButton(" Pulisci ");
+        jbClean.setToolTipText("Pulisce le righe selezionate");
+        jbClean.setBorder(BORDER);
+        jbClean.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbCleanMouseClicked();
+            }
+        });
 
-		jbAllMyItasa = new JButton(" Tutti MyItasa ");
-		jbAllMyItasa.setToolTipText("Seleziona tutti i sub myItasa");
-		jbAllMyItasa.setBorder(BORDER);
-		jbAllMyItasa.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent evt) {
-				selectAll(jtMyItasa);
-			}
-		});
+        jbAllMyItasa = new JButton(" Tutti MyItasa ");
+        jbAllMyItasa.setToolTipText("Seleziona tutti i sub myItasa");
+        jbAllMyItasa.setBorder(BORDER);
+        jbAllMyItasa.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                selectAll(jtMyItasa);
+            }
+        });
 
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.insets = BUTTON_SPACE_INSETS;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		actionJP.add(jbAllItasa, gbc);
-		gbc.gridx = 1;
-		actionJP.add(jbDown, gbc);
-		gbc.gridx = 2;
-		actionJP.add(jbClean, gbc);
-		gbc.gridx = 3;
-		actionJP.add(jbAllMyItasa, gbc);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = BUTTON_SPACE_INSETS;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        actionJP.add(jbAllItasa, gbc);
+        gbc.gridx = 1;
+        actionJP.add(jbDown, gbc);
+        gbc.gridx = 2;
+        actionJP.add(jbClean, gbc);
+        gbc.gridx = 3;
+        actionJP.add(jbAllMyItasa, gbc);
 
-		add(actionJP, BorderLayout.NORTH);
-	}
+        add(actionJP, BorderLayout.NORTH);
+    }
 
-	public void setButtonEnabled(boolean e) {
-		jbDown.setEnabled(e);
-		jbClean.setEnabled(e);
-		jbAllItasa.setEnabled(e);
-		jbAllMyItasa.setEnabled(e);
-	}
+    public void setButtonEnabled(boolean e) {
+        jbDown.setEnabled(e);
+        jbClean.setEnabled(e);
+        jbAllItasa.setEnabled(e);
+        jbAllMyItasa.setEnabled(e);
+    }
 
-	private void jbDownMouseClicked() {
-		if (jbDown.isEnabled()) {
-			proxy.downloadSub(jtItasa, jtMyItasa, true);
-			jbCleanMouseClicked();
-		}
-	}
+    private void jbDownMouseClicked() {
+        if (jbDown.isEnabled()) {
+            proxy.downloadSub(jtItasa, jtMyItasa, true);
+            jbCleanMouseClicked();
+        }
+    }
 
-	private void selectAll(jtRss jt) {
-		for (int i = 0; i < jt.getRowCount(); i++)
-			jt.setValueAt(true, i, 3);
-	}
+    private void selectAll(jtRss jt) {
+        for (int i = 0; i < jt.getRowCount(); i++)
+            jt.setValueAt(true, i, 3);
+    }
 
-	private void jbCleanMouseClicked() {
-		proxy.cleanSelect(jtItasa);
-		proxy.cleanSelect(jtMyItasa);
-	}
+    private void jbCleanMouseClicked() {
+        proxy.cleanSelect(jtItasa);
+        proxy.cleanSelect(jtMyItasa);
+    }
 }

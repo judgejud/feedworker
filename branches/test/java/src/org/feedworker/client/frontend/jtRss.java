@@ -13,15 +13,15 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import org.feedworker.client.frontend.events.TableRssEvent;
-import org.feedworker.client.frontend.events.TableRssEventsListener;
+import org.feedworker.client.frontend.events.TableEvent;
+import org.feedworker.client.frontend.events.TableEventListener;
 import org.jfacility.javax.swing.Swing;
 
 /**
  * 
  * @author luca
  */
-class jtRss extends JTable implements TableRssEventsListener {
+class jtRss extends JTable implements TableEventListener {
     // PRIVATE FINAL VARIABLE
 
     private final String[] columnNames = {"link", "Data", "Sottotitolo",
@@ -80,19 +80,18 @@ class jtRss extends JTable implements TableRssEventsListener {
     }
 
     @Override
-    public void objReceived(TableRssEvent evt) {
+    public void objReceived(TableEvent evt) {
         if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
             DefaultTableModel dtm = (DefaultTableModel) getModel();
             String titleCol = (String) this.getColumnModel().getColumn(2).getHeaderValue();
             String dateCol = (String) this.getColumnModel().getColumn(1).getHeaderValue();
-            int size = evt.getObjs().size();
+            int size = evt.getArray().size();
             lastFeedSize[1] = lastFeedSize[0];
             lastFeedSize[0] = size;
             int lenght = dtm.getRowCount() + size;
             this.setPreferredSize(new Dimension(width, (16 * lenght)));
-            for (int i = 0; i < size; i++) {
-                dtm.insertRow(i, evt.getObjs().get(i));
-            }
+            for (int i = 0; i < size; i++)
+                dtm.insertRow(i, evt.getArray().get(i));
             this.getColumn(titleCol).setCellRenderer(new JLabelTitleRenderer());
             this.getColumn(dateCol).setCellRenderer(
                     new JLabelDateRenderer(lastFeedSize[0], lastFeedSize[1]));

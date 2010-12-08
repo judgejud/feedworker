@@ -23,15 +23,18 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import org.feedworker.client.ApplicationSettings;
-import org.feedworker.client.frontend.events.MyJFrameEvent;
-import org.feedworker.client.frontend.events.MyJFrameEventListener;
+import org.feedworker.client.frontend.events.JFrameEventIconDate;
+import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
+import org.feedworker.client.frontend.events.JFrameEventOperation;
+import org.feedworker.client.frontend.events.JFrameEventOperationListener;
 import org.jfacility.javax.swing.Swing;
 
 /**Gui base per java 1.5
  * 
  * @author luca judge
  */
-public class jfMain extends JFrame implements WindowListener, MyJFrameEventListener {
+public class jfMain extends JFrame implements WindowListener, 
+                        JFrameEventIconDateListener, JFrameEventOperationListener {
 
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
@@ -86,8 +89,6 @@ public class jfMain extends JFrame implements WindowListener, MyJFrameEventListe
         JScrollPane jScrollText1 = new JScrollPane(logJTP);
         jScrollText1.setPreferredSize(new Dimension(1000, 140));
         add(jScrollText1, BorderLayout.SOUTH);
-
-        //logJTP.appendOK("Versione java in uso: " + MySystem.getJavaVersion());
 
         if (prop.isApplicationFirstTimeUsed()) {
             mainJTP.setSelectedComponent(settingsJP);
@@ -229,7 +230,7 @@ public class jfMain extends JFrame implements WindowListener, MyJFrameEventListe
         helpSubtitleRoleJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(getParent(), showRuleHelpPopup(),
+                JOptionPane.showMessageDialog(getParent(), createPopupRuleHelp(),
                         "Come creare le regole per i sottotitoli",
                         JOptionPane.PLAIN_MESSAGE);
             }
@@ -240,7 +241,7 @@ public class jfMain extends JFrame implements WindowListener, MyJFrameEventListe
         helpSystemInfoJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(getParent(), showSystemInfoPopup(),
+                JOptionPane.showMessageDialog(getParent(), createPopupSystemInfo(),
                         "Informazioni di Sistema",
                         JOptionPane.PLAIN_MESSAGE);
             }
@@ -254,7 +255,7 @@ public class jfMain extends JFrame implements WindowListener, MyJFrameEventListe
      *
      * @return pannello helprolesub
      */
-    private JPanel showRuleHelpPopup() {
+    private JPanel createPopupRuleHelp() {
         Dimension dim = new Dimension(550, 300);
         JPanel jpanel = new JPanel();
         jpanel.setPreferredSize(dim);
@@ -281,7 +282,7 @@ public class jfMain extends JFrame implements WindowListener, MyJFrameEventListe
         return jpanel;
     }
 
-    private JPanel showSystemInfoPopup(){
+    private JPanel createPopupSystemInfo(){
         JPanel jpanel = new JPanel();
         JTable jtable = new JTable(proxy.getModelSystemInfo());
         jtable.setRowSelectionAllowed(false);
@@ -289,6 +290,13 @@ public class jfMain extends JFrame implements WindowListener, MyJFrameEventListe
         jtable.setPreferredSize(new Dimension(500,145));
         Swing.setTableDimensionLockColumn(jtable, 0, 120);
         jpanel.add(jtable);
+        jpanel.setVisible(true);
+        return jpanel;
+    }
+
+    private JPanel createPopupSearchTV(){
+        JPanel jpanel = new JPanel();
+
         jpanel.setVisible(true);
         return jpanel;
     }
@@ -305,25 +313,29 @@ public class jfMain extends JFrame implements WindowListener, MyJFrameEventListe
         int returnCode = JOptionPane.showConfirmDialog(this,
                 "Sei sicuro di uscire?", "Info", JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
-        if (returnCode == 1) {
+        if (returnCode == 1)
             return;
-        }
         applicationClose();
     }
 
     @Override
-    public void objReceived(MyJFrameEvent evt) {
-        if (evt.getDate() != null) {
+    public void objReceived(JFrameEventIconDate evt) {
+        if (evt.getDate() != null)
             settingsJP.setDataAggiornamento(evt.getDate());
-        }
+    }
+
+    @Override
+    public void objReceived(JFrameEventOperation evt) {
         if (evt.getOperaz() != null) {
-            if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ")) {
+            if (evt.getOperaz().equalsIgnoreCase(proxy.getAddPaneDestSub()))
                 mainJTP.addTab("Destinazione avanzata", jpSubtitleDest.getPanel());
-            } else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ")) {
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getRemovePaneDestSub()))
                 mainJTP.remove(jpSubtitleDest.getPanel());
-            } else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON")) {
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getEnableButton()))
                 changeEnabledButton(true);
-            }
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getSearchTV()))
+                JOptionPane.showMessageDialog(getParent(), new jpResultSearchTv(),
+                        "Risultati ricerca", JOptionPane.PLAIN_MESSAGE);
         }
     }
 
@@ -349,26 +361,15 @@ public class jfMain extends JFrame implements WindowListener, MyJFrameEventListe
     }
 
     @Override
-    public void windowOpened(WindowEvent e) {
-    }
-
+    public void windowOpened(WindowEvent e) {}
     @Override
-    public void windowClosed(WindowEvent e) {
-    }
-
+    public void windowClosed(WindowEvent e) {}
     @Override
-    public void windowIconified(WindowEvent e) {
-    }
-
+    public void windowIconified(WindowEvent e) {}
     @Override
-    public void windowDeiconified(WindowEvent e) {
-    }
-
+    public void windowDeiconified(WindowEvent e) {}
     @Override
-    public void windowActivated(WindowEvent e) {
-    }
-
+    public void windowActivated(WindowEvent e) {}
     @Override
-    public void windowDeactivated(WindowEvent e) {
-    }
+    public void windowDeactivated(WindowEvent e) {}
 } // end class

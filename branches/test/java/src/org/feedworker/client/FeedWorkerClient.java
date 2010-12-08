@@ -16,9 +16,9 @@ import org.feedworker.util.ResourceLocator;
 
 import org.jfacility.java.lang.JVM;
 
-import org.opensanskrit.application.AlreadyStartedApplicationException;
+import org.opensanskrit.exception.AlreadyStartedApplicationException;
 import org.opensanskrit.application.Application;
-import org.opensanskrit.application.NotAvailableLookAndFeelException;
+import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 
 /**
  * Client
