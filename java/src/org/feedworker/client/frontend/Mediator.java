@@ -2,7 +2,9 @@ package org.feedworker.client.frontend;
 
 //IMPORT JAVA
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -11,22 +13,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.eclipse.swt.SWTException;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.Kernel;
 import org.feedworker.client.RssParser;
-import org.feedworker.client.frontend.events.MyJFrameEvent;
-import org.feedworker.client.frontend.events.MyJFrameEventListener;
-import org.feedworker.client.frontend.events.MyTextPaneEvent;
-import org.feedworker.client.frontend.events.MyTextPaneEventListener;
-import org.feedworker.client.frontend.events.TableRssEventsListener;
-import org.feedworker.client.frontend.events.TableXmlEventListener;
+import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
+import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.client.frontend.events.TextPaneEventListener;
+import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.util.Common;
 import org.feedworker.util.KeyRule;
 import org.feedworker.util.ManageException;
@@ -35,16 +37,14 @@ import org.feedworker.util.ValueRule;
 
 import org.jfacility.Awt;
 import org.jfacility.java.lang.Lang;
-import org.opensanskrit.application.UnableRestartApplicationException;
-
-import com.sun.syndication.io.FeedException;
-import java.awt.Component;
-import java.io.File;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
 import org.jfacility.java.lang.MySystem;
 import org.jfacility.javax.swing.Swing;
+import org.opensanskrit.exception.UnableRestartApplicationException;
 
+import com.sun.syndication.io.FeedException;
+import org.eclipse.swt.SWTException;
+import org.feedworker.client.frontend.events.JFrameEventOperation;
+import org.feedworker.client.frontend.events.JFrameEventOperationListener;
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
  * 
@@ -52,6 +52,9 @@ import org.jfacility.javax.swing.Swing;
  */
 public class Mediator {
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
+    private final String ADD_PANE_DEST_SUB = "addPaneDestSub";
+    private final String REMOVE_PANE_DEST_SUB = "removePaneDestSub";
+    private final String ENABLE_BUTTON = "enableButton";
     private final FileNameExtensionFilter fnfeZIP = new FileNameExtensionFilter("ZIP file", "zip");
 
     private static Mediator proxy = null;
@@ -59,8 +62,10 @@ public class Mediator {
     private Kernel core = Kernel.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private List listenerTextPane = new ArrayList();
-    private List listenerJFrame = new ArrayList();
+    private List listenerJFrameO = new ArrayList();
     private ManageException error = ManageException.getIstance();
+    private TreeSet<String> setTv = new TreeSet<String>();
+
 
     /**
      * Restituisce l'istanza attiva del Mediator se non esiste la crea
@@ -68,14 +73,12 @@ public class Mediator {
      * @return Mediator
      */
     public static Mediator getIstance() {
-        if (proxy == null) {
+        if (proxy == null)
             proxy = new Mediator();
-        }
         return proxy;
     }
 
-    /**
-     * Restituisce il testo itasa
+    /**Restituisce il testo itasa
      *
      * @return itasa
      */
@@ -83,8 +86,7 @@ public class Mediator {
         return core.ITASA;
     }
 
-    /**
-     * Restituisce il testo myitasa
+    /**Restituisce il testo myitasa
      *
      * @return myitasa
      */
@@ -92,8 +94,7 @@ public class Mediator {
         return core.MYITASA;
     }
 
-    /**
-     * Restituisce il testo subsfactory
+    /**Restituisce il testo subsfactory
      *
      * @return subsfactory
      */
@@ -114,8 +115,7 @@ public class Mediator {
         return core.EZTV;
     }
 
-    /**
-     * Restituisce il testo btchat
+    /**Restituisce il testo btchat
      *
      * @return btchat
      */
@@ -123,16 +123,34 @@ public class Mediator {
         return core.BTCHAT;
     }
 
-    /**
-     * Pulisce la tabella specificata dai check
+    String getSubtitleDest(){
+        return core.SUBTITLE_DEST;
+    }
+
+    String getSearchTV(){
+        return core.SEARCH_TV;
+    }
+
+    String getAddPaneDestSub(){
+        return ADD_PANE_DEST_SUB;
+    }
+
+    String getRemovePaneDestSub(){
+        return REMOVE_PANE_DEST_SUB;
+    }
+
+    String getEnableButton(){
+        return ENABLE_BUTTON;
+    }    
+
+    /**Pulisce la tabella specificata dai check
      *
      * @param jt
      *            tabella
      */
     void cleanSelect(JTable jt) {
-        for (int i = 0; i < jt.getRowCount(); i++) {
+        for (int i = 0; i < jt.getRowCount(); i++)
             jt.setValueAt(false, i, 3);
-        }
     }
 
     /**
@@ -160,7 +178,7 @@ public class Mediator {
         if (!text.equalsIgnoreCase("")) {
             Awt.setClipboard(text);
             fireNewTextPaneEvent("link copiati nella clipboard",
-                    MyTextPaneEvent.OK);
+                    TextPaneEvent.OK);
         }
     }
 
@@ -214,15 +232,11 @@ public class Mediator {
         core.closeApp(date);
     }
 
-    void setTableRssListener(TableRssEventsListener listener) {
-        core.addTableRssEventListener(listener);
+    void setTableListener(TableEventListener listener) {
+        core.addTableEventListener(listener);
     }
 
-    void setTableXmlListener(TableXmlEventListener listener) {
-        core.addTableXmlEventListener(listener);
-    }
-
-    void setTextPaneListener(MyTextPaneEventListener listener) {
+    void setTextPaneListener(TextPaneEventListener listener) {
         core.addMyTextPaneEventListener(listener);
         core.setDownloadThreadListener(listener);
         ManageException.getIstance().addMyTextPaneEventListener(listener);
@@ -230,9 +244,10 @@ public class Mediator {
 
     }
 
-    void setFrameListener(MyJFrameEventListener listener) {
-        core.addMyJFrameEventListener(listener);
-        addMyJFrameEventListener(listener);
+    void setFrameListener(JFrameEventIconDateListener listener) {
+        core.addJFrameEventIconDateListener(listener);
+        core.addJFrameEventOperationListener(listener);
+        addJFrameEventOperationListener(listener);
     }
 
     /**Restituisce i nodi per la jtree Settings
@@ -242,16 +257,13 @@ public class Mediator {
     DefaultMutableTreeNode getTreeNode() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
         root.add(new DefaultMutableTreeNode("General"));
-        //root.add(new DefaultMutableTreeNode("Tabs"));
-        if (prop.isItasaOption()) {
+        //root.add(new DefaultMutableTreeNode("Tab"));
+        if (prop.isItasaOption())
             root.add(new DefaultMutableTreeNode("Itasa"));
-        }
-        if (prop.isSubsfactoryOption()) {
+        if (prop.isSubsfactoryOption())
             root.add(new DefaultMutableTreeNode("Subsfactory"));
-        }
-        if (prop.isTorrentOption()) {
+        if (prop.isTorrentOption())
             root.add(new DefaultMutableTreeNode("Torrent"));
-        }
         return root;
     }
 
@@ -514,24 +526,21 @@ public class Mediator {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio del client.");
             }
             if (oldAD != prop.isEnabledCustomDestinationFolder()) {
-                if (prop.isEnabledCustomDestinationFolder()) {
-                    fireNewJFrameEvent("ADD_PANE_RULEZ");
-                } else {
-                    fireNewJFrameEvent("REMOVE_PANE_RULEZ");
-                }
+                if (prop.isEnabledCustomDestinationFolder())
+                    fireNewJFrameEventOperation(ADD_PANE_DEST_SUB);
+                else
+                    fireNewJFrameEventOperation(REMOVE_PANE_DEST_SUB);
             }
             if (!prop.isApplicationFirstTimeUsed() && first) {
-                fireNewJFrameEvent("ENABLED_BUTTON");
+                fireNewJFrameEventOperation(ENABLE_BUTTON);
                 runRss();
             } else {
-                if (Lang.verifyTextNotNull(oldMin)
-                        && !oldMin.equalsIgnoreCase(prop.getRefreshInterval())) {
+                if (Lang.verifyTextNotNull(oldMin) &&
+                        !oldMin.equalsIgnoreCase(prop.getRefreshInterval()))
                     restartRss();
-                }
             }
-            fireNewTextPaneEvent(
-                    "Impostazioni salvate in " + prop.getSettingsFilename(),
-                    MyTextPaneEvent.OK);
+            fireNewTextPaneEvent("Impostazioni salvate in " + prop.getSettingsFilename(),
+                    TextPaneEvent.OK);
         }
     }
 
@@ -632,45 +641,51 @@ public class Mediator {
     }
 
     private void printAlert(String msg) {
-        fireNewTextPaneEvent(msg, MyTextPaneEvent.ALERT);
+        fireNewTextPaneEvent(msg, TextPaneEvent.ALERT);
     }
 
     // This methods allows classes to register for MyEvents
     public synchronized void addMyTextPaneEventListener(
-            MyTextPaneEventListener listener) {
+            TextPaneEventListener listener) {
         listenerTextPane.add(listener);
     }
 
     // This methods allows classes to unregister for MyEvents
     public synchronized void removeMyTextPaneEventListener(
-            MyTextPaneEventListener listener) {
+            TextPaneEventListener listener) {
         listenerTextPane.remove(listener);
     }
 
     private synchronized void fireNewTextPaneEvent(String msg, String type) {
-        MyTextPaneEvent event = new MyTextPaneEvent(this, msg, type);
+        TextPaneEvent event = new TextPaneEvent(this, msg, type);
         Iterator listeners = listenerTextPane.iterator();
         while (listeners.hasNext()) {
-            MyTextPaneEventListener myel = (MyTextPaneEventListener) listeners.next();
+            TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
             myel.objReceived(event);
         }
     }
 
-    public synchronized void addMyJFrameEventListener(
-            MyJFrameEventListener listener) {
-        listenerJFrame.add(listener);
+    /**Permette alla classe di registrarsi per l'evento jframe
+     *
+     * @param listener evento jframe
+     */
+    public synchronized void addJFrameEventOperationListener(JFrameEventIconDateListener listener){
+        listenerJFrameO.add(listener);
     }
 
-    public synchronized void removeMyJFrameEventListener(
-            MyJFrameEventListener listener) {
-        listenerJFrame.remove(listener);
+    /**Permette alla classe di de-registrarsi per l'evento jframe
+     *
+     * @param listener evento jframe
+     */
+    public synchronized void removeJFrameEventOperationListener(JFrameEventIconDateListener listener){
+        listenerJFrameO.remove(listener);
     }
 
-    private synchronized void fireNewJFrameEvent(String oper) {
-        MyJFrameEvent event = new MyJFrameEvent(this, oper);
-        Iterator listeners = listenerJFrame.iterator();
+    private synchronized void fireNewJFrameEventOperation(String oper) {
+        JFrameEventOperation event = new JFrameEventOperation(this, oper);
+        Iterator listeners = listenerJFrameO.iterator();
         while (listeners.hasNext()) {
-            MyJFrameEventListener myel = (MyJFrameEventListener) listeners.next();
+            JFrameEventOperationListener myel = (JFrameEventOperationListener) listeners.next();
             myel.objReceived(event);
         }
     }
@@ -689,7 +704,6 @@ public class Mediator {
 
     String[] getAvailableLAF() {
         return FeedWorkerClient.getApplication().getIstanceLAF().getAvailableLafs();
-        //return FeedWorkerClient.getApplication().getAvailableLookAndFeel().toArray();
     }
 
     ApplicationSettings getSettings(){
@@ -712,7 +726,7 @@ public class Mediator {
     String getTitle(){
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "204 by "
+                + "211 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 

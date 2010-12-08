@@ -26,8 +26,8 @@ class jpSubsfactory extends jpAbstract {
         super();
         initializePanel();
         initializeButtons();
-        proxy.setTableRssListener(jtSubsf);
-        proxy.setTableRssListener(jtMySubsf);
+        proxy.setTableListener(jtSubsf);
+        proxy.setTableListener(jtMySubsf);
     }
 
     public static jpSubsfactory getPanel() {

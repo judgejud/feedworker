@@ -13,8 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JMenuItem;
-
-import org.feedworker.client.frontend.events.MyJFrameEvent;
+import org.feedworker.client.frontend.events.JFrameEventIconDate;
 
 /**
  * Jframe per versioni java 6 e superiori
@@ -86,22 +85,12 @@ public class jfMainNewer extends jfMain {
     }
 
     @Override
-    public void objReceived(MyJFrameEvent evt) {
+    public void objReceived(JFrameEventIconDate evt) {
         if ((evt.isIcontray()) && (!this.isVisible())) {
             trayIcon.setToolTip("FeedWorker - ci sono nuovi feed :)");
             trayIcon.setImage(iconSub);
         }
-
         if (evt.getDate() != null)
             settingsJP.setDataAggiornamento(evt.getDate());
-
-        if (evt.getOperaz() != null) {
-            if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ"))
-                mainJTP.addTab("Destinazione avanzata", jpSubtitleDest.getPanel());
-            else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ"))
-                mainJTP.remove(jpSubtitleDest.getPanel());
-            else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON"))
-                changeEnabledButton(true);
-        }
     }
 } // end class

@@ -39,12 +39,12 @@ class jpSubtitleDest extends jpAbstract {
 
     @Override
     void initializePanel() {
-        jtable = new jtSubtitleDest();
+        jtable = new jtSubtitleDest(proxy.getSubtitleDest());
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
         add(jScrollTable1, BorderLayout.CENTER);
         setVisible(true);
-        proxy.setTableXmlListener(jtable);
+        proxy.setTableListener(jtable);
     }
 
     @Override

@@ -11,8 +11,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-import org.feedworker.client.frontend.events.TableXmlEvent;
-import org.feedworker.client.frontend.events.TableXmlEventListener;
+import org.feedworker.client.frontend.events.TableEvent;
+import org.feedworker.client.frontend.events.TableEventListener;
 import org.jfacility.javax.swing.ComboBoxEditor;
 import org.jfacility.javax.swing.Swing;
 
@@ -20,7 +20,7 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-class jtSubtitleDest extends JTable implements TableXmlEventListener {
+class jtSubtitleDest extends JTable implements TableEventListener {
     private Mediator proxy = Mediator.getIstance();
     private final String[] nameCols = {"Serie", "Stagione", "Versione",
         "Destinazione", "Stato", "Giorno", "Rename"};
@@ -31,8 +31,9 @@ class jtSubtitleDest extends JTable implements TableXmlEventListener {
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
     /** Costruttore */
-    public jtSubtitleDest() {
+    public jtSubtitleDest(String name) {
         super();
+        setName(name);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
 
             Class[] types = new Class[]{String.class, Integer.class,
@@ -76,18 +77,16 @@ class jtSubtitleDest extends JTable implements TableXmlEventListener {
     }
 
     @Override
-    public void objReceived(TableXmlEvent evt) {
-        DefaultTableModel dtm = (DefaultTableModel) getModel();
-        int size = evt.getObj().size();
-        for (int i = 0; i < size; i++) {
-            dtm.insertRow(i, evt.getObj().get(i));
+    public void objReceived(TableEvent evt) {
+        if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
+            DefaultTableModel dtm = (DefaultTableModel) getModel();
+            int size = evt.getArray().size();
+            for (int i = 0; i < size; i++)
+                dtm.insertRow(i, evt.getArray().get(i));
         }
-        repaint();
-        validate();
     }
 
     class MyComboBoxRenderer extends JComboBox implements TableCellRenderer {
-
         private final Font font = new Font("Arial", Font.PLAIN, 10);
 
         public MyComboBoxRenderer(String[] items) {

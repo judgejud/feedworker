@@ -1,47 +1,44 @@
 package org.feedworker.client.frontend;
 
+import java.awt.Dimension;
 import java.awt.Font;
+
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import org.feedworker.client.frontend.events.TableEvent;
 import org.feedworker.client.frontend.events.TableEventListener;
-import org.jfacility.javax.swing.Swing;
 
+import org.jfacility.javax.swing.Swing;
 /**
  *
  * @author luca
  */
-class jtCalendar extends JTable implements TableEventListener{
-    private final String[] nameCols = {"ID","Serie", "Stato", "Giorno", "Last Episode", "Data",
-                            "Titolo", "Next Episode", "Data", "Titolo"};
+public class jtResultSearchTv extends JTable implements TableEventListener{
+    private final String[] nameCols = {"ID","Serie", "Link", "Stagione", "Status", "Giorno"};
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
-    public jtCalendar(){
+    public jtResultSearchTv(String name){
         super();
+        setName(name);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
-
             Class[] types = new Class[]{String.class, String.class, String.class,
-                String.class, String.class, String.class, String.class,
-                String.class, String.class};
-
+                String.class, String.class, String.class};
             @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
             @Override
             public boolean isCellEditable(int rowIndex, int vColIndex) {
-                if (vColIndex==0)
-                    return true;
-                else
-                    return false;
+                return false;
             }
         };
         setModel(dtm);
-        setRowSelectionAllowed(false);
+        //setRowSelectionAllowed(false);
         getTableHeader().setReorderingAllowed(false);
         setFont(font);
         Swing.tableSorter(this);
+        setPreferredSize(new Dimension(500,350));
     }
 
     @Override

@@ -14,8 +14,8 @@ import jcifs.smb.SmbException;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 
-import org.feedworker.client.frontend.events.MyTextPaneEvent;
-import org.feedworker.client.frontend.events.MyTextPaneEventListener;
+import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.util.Common;
 import org.feedworker.util.KeyRule;
 import org.feedworker.util.ManageException;
@@ -85,7 +85,7 @@ public class DownloadThread implements Runnable {
                 error.launch(ex, getClass(), null);
             }
         } else {
-            fireNewTextPaneEvent("Scaricato: " + f.getName(), MyTextPaneEvent.OK);
+            fireNewTextPaneEvent("Scaricato: " + f.getName(), TextPaneEvent.OK);
         }
         //return Zip.getAlFile();
         return alf;
@@ -136,7 +136,7 @@ public class DownloadThread implements Runnable {
                             else
                                 msg = "Estratto " + al.get(i).getName() + " e rinominato in "
                                     + newName + " nella cartella condivisa samba\\" + dest ;
-                            fireNewTextPaneEvent(msg,MyTextPaneEvent.SUB);
+                            fireNewTextPaneEvent(msg,TextPaneEvent.SUB);
                         }
                     }
                 } catch (SmbException ex) {
@@ -168,7 +168,7 @@ public class DownloadThread implements Runnable {
                                 msg += " e rinominato in " + newName;
                             }
                             msg += " nel seguente percorso: " + dest;
-                            fireNewTextPaneEvent(msg, MyTextPaneEvent.SUB);
+                            fireNewTextPaneEvent(msg, TextPaneEvent.SUB);
                         } catch (IOException ex) {
                             error.launch(ex, getClass());
                         }
@@ -196,7 +196,7 @@ public class DownloadThread implements Runnable {
                         Common.downloadSingle(entity.getContent(), f);
                         alf.addAll(extract(f));
                     } else
-                        fireNewTextPaneEvent("Sessione scaduta", MyTextPaneEvent.ALERT);
+                        fireNewTextPaneEvent("Sessione scaduta", TextPaneEvent.ALERT);
                 }
             } //end for
         } catch (UnsupportedEncodingException ex) {
@@ -308,7 +308,7 @@ public class DownloadThread implements Runnable {
      * @param listener evento textpane
      */
     public synchronized void addMyTextPaneEventListener(
-            MyTextPaneEventListener listener) {
+            TextPaneEventListener listener) {
         listenerTextPane.add(listener);
     }
 
@@ -318,15 +318,15 @@ public class DownloadThread implements Runnable {
      * @param listener evento textpane
      */
     public synchronized void removeMyTextPaneEventListener(
-            MyTextPaneEventListener listener) {
+            TextPaneEventListener listener) {
         listenerTextPane.remove(listener);
     }
 
     private synchronized void fireNewTextPaneEvent(String msg, String type) {
-        MyTextPaneEvent event = new MyTextPaneEvent(this, msg, type);
+        TextPaneEvent event = new TextPaneEvent(this, msg, type);
         Iterator listeners = listenerTextPane.iterator();
         while (listeners.hasNext()) {
-            MyTextPaneEventListener myel = (MyTextPaneEventListener) listeners.next();
+            TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
             myel.objReceived(event);
         }
     }

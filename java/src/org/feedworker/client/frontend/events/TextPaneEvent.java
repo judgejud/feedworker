@@ -5,7 +5,7 @@ import java.util.EventObject;
  * 
  * @author luca
  */
-public class MyTextPaneEvent extends EventObject {
+public class TextPaneEvent extends EventObject {
     public static final String ERROR = "ERROR";
     public static final String TORRENT = "TORRENT";
     public static final String OK = "OK";
@@ -23,7 +23,7 @@ public class MyTextPaneEvent extends EventObject {
     private String msg;
     private String type;
 
-    public MyTextPaneEvent(Object source, String _msg, String _type) {
+    public TextPaneEvent(Object source, String _msg, String _type) {
         super(source);
         msg = _msg;
         type = _type;

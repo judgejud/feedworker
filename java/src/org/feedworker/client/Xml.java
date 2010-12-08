@@ -65,17 +65,12 @@ class Xml {
         document = new Document(root);
     }
 
-    /**
-     * Aggiunge regola
+    /**Aggiunge regola
      *
-     * @param _name
-     *            nome serie
-     * @param _season
-     *            stagione
-     * @param _version
-     *            versione
-     * @param _path
-     *            percorso
+     * @param _name nome serie
+     * @param _season stagione
+     * @param _version versione
+     * @param _path percorso
      */
     private void addRule(String _name, String _season, String _version,
             String _path, String _status, String _day, boolean _rename) {
@@ -141,9 +136,8 @@ class Xml {
             // Creo un SAXBuilder e con esso costruisco un document
             document = new SAXBuilder().build(FILE_NAME);
             int size = document.getRootElement().getChildren().size();
-            if (size > 0) {
+            if (size > 0)
                 map = readingDocument();
-            }
         } else if (old.exists()){
             // Creo un SAXBuilder e con esso costruisco un document
             document = new SAXBuilder().build(old);
@@ -168,8 +162,7 @@ class Xml {
             String path = rule.getChild(PATH_TAG).getText();
             boolean rename = false;
             try{
-                rename = Boolean.parseBoolean(rule.getChild(
-                    RENAME_TAG).getText());
+                rename = Boolean.parseBoolean(rule.getChild(RENAME_TAG).getText());
             } catch (NullPointerException npe) {}
             String status, day;
             try {

@@ -20,26 +20,27 @@ import javax.swing.border.SoftBevelBorder;
  * @author luca
  */
 abstract class jpAbstract extends JPanel {
-	private final Dimension TAB_SIZE = new Dimension(1024, 540);
-	private final Dimension ACTION_PANEL_SIZE = new Dimension(1000, 30);
-	protected final SoftBevelBorder BORDER = new SoftBevelBorder(
-			BevelBorder.RAISED);
-	protected final Insets BUTTON_SPACE_INSETS = new Insets(0, 2, 0, 2);
-	protected final Dimension TABLE_SCROLL_SIZE = new Dimension(500, 460);
-	protected JPanel actionJP;
-	protected Mediator proxy = Mediator.getIstance();
 
-	/** Costruttore protetto, per essere invocato dai figli tramite ereditarietà */
-	protected jpAbstract() {
-		super(new BorderLayout());
-		setPreferredSize(TAB_SIZE);
-		actionJP = new JPanel(new GridBagLayout());
-		actionJP.setPreferredSize(ACTION_PANEL_SIZE);
-	}
+    private final Dimension TAB_SIZE = new Dimension(1024, 540);
+    private final Dimension ACTION_PANEL_SIZE = new Dimension(1000, 30);
+    protected final SoftBevelBorder BORDER = new SoftBevelBorder(BevelBorder.RAISED);
+    protected final Insets BUTTON_SPACE_INSETS = new Insets(0, 2, 0, 2);
+    protected final Dimension TABLE_SCROLL_SIZE = new Dimension(500, 460);
 
-	/** inizializza il pannello */
-	abstract void initializePanel();
+    protected JPanel actionJP;
+    protected Mediator proxy = Mediator.getIstance();
 
-	/** inizializza i bottoni del pannello nord */
-	abstract void initializeButtons();
+    /** Costruttore protetto, per essere invocato dai figli tramite ereditarietà */
+    protected jpAbstract() {
+        super(new BorderLayout());
+        setPreferredSize(TAB_SIZE);
+        actionJP = new JPanel(new GridBagLayout());
+        actionJP.setPreferredSize(ACTION_PANEL_SIZE);
+    }
+
+    /** inizializza il pannello */
+    abstract void initializePanel();
+
+    /** inizializza i bottoni del pannello nord */
+    abstract void initializeButtons();
 }

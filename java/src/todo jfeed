@@ -1,23 +1,26 @@
 IMPLEMENTARE
-feed rss sotto thread
-vedere di creare 1http permanente x itasa
-trovare 1modo per rendere visibile la pwd itasa
-sistemare il mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
-ripristino proprietà (file properties e rules.xml)
-aggiungere versioning automatico all'applicazione
-ricerca sottotitoli itasa
-destinazione avanzata in mixed mode 
+-Calendario integrazione con qlk sito tipo tvrage che recupera ultima puntata trasmessa e prossima da trassmettere (numero, data e titolo)
+-feed rss sotto thread
+-vedere di creare 1http permanente x itasa
+-trovare 1modo per rendere visibile la pwd itasa
+-sistemare il mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
+-ripristino proprietà (file properties e rules.xml)
+-ricerca sottotitoli itasa
+-destinazione avanzata in mixed mode 
+-destinazione avanzata: se la disabilito per poi riabilitarla, non companiono gli item se ci sono nel file, ma al riavvio si(quindi far riavviare? o far ricaricare?)
+-fare in modo che col tasto dx sulle destinazioni esca la possibilità di poter aprire la cartella.
+-implementare il tipo di download di mysubsfactory (come x myitasa)
+
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
 destinazione avanzata: bottone info su ciò che è presente nella tabella e quindi treemap.
-destinazione avanzata: integrazione con qlk sito tipo tvrage per lo status e il giorno ed eventuale prelevo dell'ultima puntata trasmessa cioè numero stagione/puntata per ogni serie?
 avvio automatico all'avvio OS (win-unix-mac)
-fare in modo che col tasto dx sulle destinazioni esca la possibilità di poter aprire la cartella.
-fare nuova tabella con serie che recupera ultima puntata trasmessa e prossima da trassmettere (numero, data e titolo)
 multiutenza?
 properties sotto jfacility? 
-implementare il tipo di download di mysubsfactory (come x myitasa)
 impostazioni dei tabs
 log4j?
+aggiungere versioning automatico all'applicazione
+OS & FW: decidere per il debug_flag se passarlo da commandline.
+esiste evento "arresta sistema"? e come intercettarlo??? 
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'.
 

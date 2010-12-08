@@ -6,6 +6,8 @@ import java.net.URISyntaxException;
 
 import javax.swing.JMenuItem;
 
+import org.feedworker.util.ResourceLocator;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.PaintEvent;
@@ -20,9 +22,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
-
-import org.feedworker.client.frontend.events.MyJFrameEvent;
-import org.feedworker.util.ResourceLocator;
+import org.feedworker.client.frontend.events.JFrameEventIconDate;
 
 public class jfMainEnhanced extends jfMain {
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
@@ -125,7 +125,7 @@ public class jfMainEnhanced extends jfMain {
     }
 
     @Override
-    public void objReceived(MyJFrameEvent evt) {
+    public void objReceived(JFrameEventIconDate evt) {
         if ((evt.isIcontray()) && (!this.isVisible())) {
             try {
                 currentIcon = new Image(display,
@@ -136,17 +136,7 @@ public class jfMainEnhanced extends jfMain {
                 proxy.printError(ex);
             }
         }
-        if (evt.getDate() != null) {
-            settingsJP.setDataAggiornamento(evt.getDate());
-        }
-        if (evt.getOperaz() != null) {
-            if (evt.getOperaz().equalsIgnoreCase("ADD_PANE_RULEZ")) {
-                mainJTP.addTab("Destinazione avanzata", jpSubtitleDest.getPanel());
-            } else if (evt.getOperaz().equalsIgnoreCase("REMOVE_PANE_RULEZ")) {
-                mainJTP.remove(jpSubtitleDest.getPanel());
-            } else if (evt.getOperaz().equalsIgnoreCase("ENABLED_BUTTON")) {
-                changeEnabledButton(true);
-            }
-        }
+        if (evt.getDate() != null)
+            settingsJP.setDataAggiornamento(evt.getDate());        
     }
 }
