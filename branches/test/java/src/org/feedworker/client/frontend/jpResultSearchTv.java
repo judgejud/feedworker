@@ -30,4 +30,5 @@ class jpResultSearchTv extends JPanel{
         proxy.setTableListener(table);
         setVisible(true);
     }
+
 }

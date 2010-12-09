@@ -46,7 +46,8 @@ public class jfMain extends JFrame implements WindowListener,
     private jpItasa itasaJP;
     private jpTorrent torrentJP;
     private jpSubsfactory subsfactoryJP;
-    private jpResultSearchTv resultSearchTvJP = jpResultSearchTv.getPanel();
+    //private jpResultSearchTv resultSearchTvJP = jpResultSearchTv.getPanel();
+    private jdResultSearchTv resultSearchTvJD = jdResultSearchTv.getDialog();
 
     /** Costruttore */
     public jfMain() {
@@ -295,13 +296,6 @@ public class jfMain extends JFrame implements WindowListener,
         return jpanel;
     }
 
-    private JPanel createPopupSearchTV(){
-        JPanel jpanel = new JPanel();
-
-        jpanel.setVisible(true);
-        return jpanel;
-    }
-
     /** chiude l'applicazione */
     protected void applicationClose() {
         String temp = settingsJP.getDataAggiornamento();
@@ -335,8 +329,10 @@ public class jfMain extends JFrame implements WindowListener,
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getEnableButton()))
                 changeEnabledButton(true);
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getSearchTV()))
-                JOptionPane.showMessageDialog(getParent(), resultSearchTvJP,
-                        "Risultati ricerca", JOptionPane.PLAIN_MESSAGE);
+                //TODO Sistemare con un popup + decente
+                //JOptionPane.showConfirmDialog(getParent(), resultSearchTvJP,
+                 //       "Risultati ricerca", JOptionPane.OK_CANCEL_OPTION);
+                resultSearchTvJD.setVisible(true);
         }
     }
 
