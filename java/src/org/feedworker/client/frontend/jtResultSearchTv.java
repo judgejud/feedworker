@@ -21,7 +21,7 @@ public class jtResultSearchTv extends JTable implements TableEventListener{
     public jtResultSearchTv(String name){
         super();
         setName(name);
-        setPreferredSize(new Dimension(600, 290));
+        //setPreferredSize(new Dimension(650, 290));
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
             Class[] types = new Class[]{String.class, String.class, String.class,
                 String.class, String.class, String.class};
@@ -39,7 +39,8 @@ public class jtResultSearchTv extends JTable implements TableEventListener{
         setFont(font);
         Swing.tableSorter(this);
         Swing.setTableDimensionLockColumn(this, 0, 40);
-        Swing.setTableDimensionLockColumn(this, 0, 80);
+        Swing.setTableDimensionLockColumn(this, 3, 70);
+        Swing.setTableDimensionLockColumn(this, 5, 70);
     }
 
     @Override
