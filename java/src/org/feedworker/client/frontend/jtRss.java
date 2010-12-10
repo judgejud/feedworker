@@ -24,8 +24,7 @@ import org.jfacility.javax.swing.Swing;
 class jtRss extends JTable implements TableEventListener {
     // PRIVATE FINAL VARIABLE
 
-    private final String[] columnNames = {"link", "Data", "Sottotitolo",
-        "Select"};
+    private final String[] columnNames = {"link", "Data", "Sottotitolo", "Select"};
     private final int width = 500;
     // PRIVATE VARIABLE
     private int[] lastFeedSize = {0, 0};
@@ -39,41 +38,33 @@ class jtRss extends JTable implements TableEventListener {
         super();
         setName(name);
         DefaultTableModel dtm = new DefaultTableModel(null, columnNames) {
-
             Class[] types = new Class[]{String.class, String.class,
                 String.class, Boolean.class};
-
             @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
-
             @Override
             public boolean isCellEditable(int rowIndex, int vColIndex) {
                 return false;
             }
         };
         setModel(dtm);
-
         setRowSelectionAllowed(false);
-
         getTableHeader().setReorderingAllowed(false);
-
         Swing.setTableDimensionLockColumn(this, 0, -1);
         Swing.setTableDimensionLockColumn(this, 1, 110);
         Swing.setTableDimensionLockColumn(this, 2, 330);
 
         addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (getSelectedColumn() >= 2) {
                     int row = getSelectedRow();
-                    if (Boolean.parseBoolean(getValueAt(row, 3).toString()) == true) {
+                    if (Boolean.parseBoolean(getValueAt(row, 3).toString()) == true)
                         setValueAt(false, row, 3);
-                    } else {
+                    else
                         setValueAt(true, row, 3);
-                    }
                 }
             }
         });
