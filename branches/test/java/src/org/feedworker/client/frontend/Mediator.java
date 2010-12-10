@@ -764,4 +764,8 @@ public class Mediator {
     void searchTV(String tv) {
         core.searchTV(tv);
     }
+
+    void searchIdTv(Object id) {
+        core.searchIdTv(id);
+    }
 }

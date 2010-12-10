@@ -834,6 +834,10 @@ public class Kernel {
         }
     }
 
+    public void searchIdTv(Object id) {
+
+    }
+
     //TODO
     public void searchDay(int temp){
         if (prop.isEnabledCustomDestinationFolder()){

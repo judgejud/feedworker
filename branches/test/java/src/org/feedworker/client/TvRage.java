@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -36,11 +37,15 @@ class TvRage {
                 Element rule = (Element) iterator.next();
                 String id = rule.getChild(TAG_SHOW_ID).getText();
                 String name = rule.getChild(TAG_NAME).getText();
-                String link = rule.getChild(TAG_LINK).getText();
                 String season = rule.getChild(TAG_SEASON).getText();
                 String status = rule.getChild(TAG_STATUS).getText();
-                String airday = rule.getChild(TAG_AIRDAY).getText();
-                Object[] temp = {id, name, link, season, status, airday};
+                String airday;
+                try{
+                    airday = rule.getChild(TAG_AIRDAY).getText();
+                } catch(NullPointerException e){
+                    airday ="";
+                }
+                Object[] temp = {id, name, season, status, airday};
                 matrix.add(temp);
             }
         }

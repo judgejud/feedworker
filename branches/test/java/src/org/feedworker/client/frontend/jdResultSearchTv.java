@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -29,6 +30,8 @@ class jdResultSearchTv extends JDialog implements ActionListener{
     private jdResultSearchTv(){
         setTitle("Risultati ricerca serie tv");
         setModal(true);
+        setPreferredSize(new Dimension(550,350));
+        setLocation(100, 100);
         getContentPane().setLayout(new BorderLayout());
         table = new jtResultSearchTv(proxy.getSearchTV());
         JScrollPane jScrollTable1 = new JScrollPane(table);
@@ -45,7 +48,12 @@ class jdResultSearchTv extends JDialog implements ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void actionPerformed(ActionEvent ae) {
+        if(ae.getSource() == jbAdd){
+            int row = table.getSelectedRow();
+            if (row>-1)
+                proxy.searchIdTv(table.getValueAt(row, 0));
+        }
+        dispose();
     }
 }

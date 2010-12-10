@@ -1,10 +1,14 @@
 package org.feedworker.client.frontend;
 
-import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 
+import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import org.feedworker.client.frontend.events.TableEvent;
 import org.feedworker.client.frontend.events.TableEventListener;
@@ -15,16 +19,15 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class jtResultSearchTv extends JTable implements TableEventListener{
-    private final String[] nameCols = {"ID","Serie", "Link", "Stagione", "Status", "Giorno"};
+    private final String[] nameCols = {"ID","Serie", "Stagione", "Status", "Giorno"};
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
     public jtResultSearchTv(String name){
         super();
         setName(name);
-        //setPreferredSize(new Dimension(650, 290));
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
-            Class[] types = new Class[]{String.class, String.class, String.class,
-                String.class, String.class, String.class};
+            Class[] types = new Class[]{Integer.class, String.class, String.class,
+                String.class, String.class};
             @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
@@ -36,11 +39,14 @@ public class jtResultSearchTv extends JTable implements TableEventListener{
         };
         setModel(dtm);
         getTableHeader().setReorderingAllowed(false);
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setFont(font);
         Swing.tableSorter(this);
-        Swing.setTableDimensionLockColumn(this, 0, 40);
-        Swing.setTableDimensionLockColumn(this, 3, 70);
-        Swing.setTableDimensionLockColumn(this, 5, 70);
+        Swing.setTableDimensionLockColumn(this, 0, 45);
+        Swing.setTableDimensionLockColumn(this, 2, 80);
+        Swing.setTableDimensionLockColumn(this, 3, 90);
+        Swing.setTableDimensionLockColumn(this, 4, 70);
+        this.getColumn(nameCols[1]).setCellRenderer(new JLabelCellTextRenderer());
     }
 
     @Override
@@ -50,7 +56,28 @@ public class jtResultSearchTv extends JTable implements TableEventListener{
             dtm.setRowCount(0);
             int size = evt.getArray().size();
             for (int i = 0; i < size; i++)
-                dtm.insertRow(i, evt.getArray().get(i));
+                dtm.insertRow(i, evt.getArray().get(i));            
         }
     }
+
+    class JLabelCellTextRenderer extends JLabel implements TableCellRenderer {
+        private final Font font = new Font("Arial", Font.PLAIN, 10);
+        @Override
+        public Component getTableCellRendererComponent(JTable table,
+                Object value, boolean isSelected, boolean hasFocus, int row,
+                int column) {
+            if (isSelected)
+                setBackground(Color.cyan);
+            else
+                setBackground(Color.white);
+
+            String text = value.toString();
+            setText(text);
+            setToolTipText(Swing.getTextToolTip(table, column, this, text));
+            setFont(font);
+            setOpaque(true);
+            this.repaint();
+            return this;
+        }
+    } // end class JLabelRenderer
 }
