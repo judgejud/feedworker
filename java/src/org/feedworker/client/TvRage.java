@@ -50,7 +50,7 @@ class TvRage {
                 String status = item.getChild(TAG_STATUS).getText();
                 String airday;
                 try{
-                    airday = item.getChild(TAG_AIRDAY).getText();
+                    airday = convertDayIngToIta(item.getChild(TAG_AIRDAY).getText());
                 } catch(NullPointerException e){
                     airday ="";
                 }
@@ -61,13 +61,15 @@ class TvRage {
         return matrix;
     }
 
-    String[] readingEpisodeList_byID(String id, String season) throws JDOMException, IOException{
+    Object[] readingEpisodeList_byID(String id, String season) throws JDOMException, IOException{
         document = new SAXBuilder().build(new URL(EPISODE_LIST + id));
         List seasons = ((Element) document.getRootElement().getChildren().get(2)).getChildren();
         int last = Lang.stringToInt(season)-1;
         Iterator iter = ((Element) seasons.get(last)).getChildren().iterator();
         Date now = Common.actualDate();
-        String[] values = new String[10];
+        Object[] values = null;
+        if (iter.hasNext())
+            values = new Object[10];
         while (iter.hasNext()){
             Element item = (Element) iter.next();
             String airDate = item.getChild(TAG_AIRDATE).getText();
@@ -83,16 +85,34 @@ class TvRage {
             String seasonNum = item.getChild(TAG_SEASON_NUM).getText();
             String title = item.getChild(TAG_TITLE).getText();
             if (d.before(now)){
-                values[4] = seasonNum;
+                values[4] = season + "x" + seasonNum;
                 values[5] = title;
                 values[6] = airDate;
             } else {
-                values[7] = seasonNum;
+                values[7] = season + "x" + seasonNum;
                 values[8] = title;
                 values[9] = airDate;
                 break;
             }
         }
         return values;
+    }
+
+    private String convertDayIngToIta(String ing){
+        if (ing.toLowerCase().equalsIgnoreCase("sunday"))
+            return "Domenica";
+        else if(ing.toLowerCase().equalsIgnoreCase("monday"))
+            return "Lunedì";
+        else if(ing.toLowerCase().equalsIgnoreCase("tuesday"))
+            return "Martedì";
+        else if(ing.toLowerCase().equalsIgnoreCase("wednesday"))
+            return "Mercoledì";
+        else if(ing.toLowerCase().equalsIgnoreCase("thursday"))
+            return "Giovedì";
+        else if(ing.toLowerCase().equalsIgnoreCase("friday"))
+            return "Venerdì";
+        else if(ing.toLowerCase().equalsIgnoreCase("saturday"))
+            return "Sabato";
+        return "";
     }
 }

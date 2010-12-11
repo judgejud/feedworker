@@ -33,10 +33,11 @@ class jpCalendar extends jpAbstract{
 
     @Override
     void initializePanel() {
-        jtable = new jtCalendar();
+        jtable = new jtCalendar(proxy.getNameTableCalendar());
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
         add(jScrollTable1, BorderLayout.CENTER);
+        proxy.setTableListener(jtable);
         setVisible(true);
     }
 

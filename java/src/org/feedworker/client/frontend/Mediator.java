@@ -123,8 +123,12 @@ public class Mediator {
         return core.BTCHAT;
     }
 
-    String getSubtitleDest(){
+    String getNameTableSubtitleDest(){
         return core.SUBTITLE_DEST;
+    }
+
+    String getNameTableCalendar(){
+        return core.CALENDAR;
     }
 
     String getSearchTV(){

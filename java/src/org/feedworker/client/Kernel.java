@@ -62,6 +62,7 @@ public class Kernel {
     public final String MYSUBSF = "MySubsf";
     public final String SEARCH_TV = "SearchTV";
     public final String SUBTITLE_DEST = "SubtitleDest";
+    public final String CALENDAR = "Calendar";
 
     // PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
@@ -837,7 +838,14 @@ public class Kernel {
     public void searchIdTv(Object[] show) {
         TvRage t = new TvRage();
         try {
-            t.readingEpisodeList_byID(show[0].toString(), show[2].toString());
+            Object[] array = t.readingEpisodeList_byID(show[0].toString(), show[2].toString());
+            array[0] = show[0];
+            array[1] = show[1];
+            array[2] = show[3];
+            array[3] = show[4];
+            ArrayList<Object[]> al = new ArrayList<Object[]>();
+            al.add(array);
+            fireTableEvent(al, CALENDAR);
         } catch (JDOMException ex) {
             error.launch(ex, null);
         } catch (IOException ex) {
