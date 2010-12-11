@@ -249,8 +249,36 @@ public class jfMain extends JFrame implements WindowListener,
             }
         });
         helpJM.add(helpSystemInfoJMI);
+
+        JMenuItem jmiHelpInfoFeedColor = new JMenuItem(" Legenda Colori Feed ");
+        jmiHelpInfoFeedColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(getParent(), createInfoFeedColor(),
+                        "Legenda Colori",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+        helpJM.add(jmiHelpInfoFeedColor);
         // Install the menu bar in the frame
         setJMenuBar(applicationJMB);
+    }
+
+    private JPanel createInfoFeedColor(){
+        JPanel jpanel = new JPanel();
+        Dimension dim = new Dimension(300, 200);
+        jpanel.setPreferredSize(dim);
+        jpanel.setVisible(true);
+        JTextArea jtaHelp = new JTextArea();
+        jtaHelp.setPreferredSize(dim);
+        jtaHelp.append("Colore ciano: versione dei sub normale");
+        jtaHelp.append("\nColore rosso: versione dei sub 720p");
+        jtaHelp.append("\nColore marrone: versione dei sub dvdrip");
+        jtaHelp.append("\nColore viola: versione dei sub bluray");
+        //jtaHelp.append("\nColore ciano: versione dei sub normale");
+        //jtaHelp.append("\nColore ciano: versione dei sub normale");
+        jpanel.add(jtaHelp);
+        return jpanel;
     }
 
     /**inizializza il pannello per l'help regola sub
@@ -258,8 +286,8 @@ public class jfMain extends JFrame implements WindowListener,
      * @return pannello helprolesub
      */
     private JPanel createPopupRuleHelp() {
-        Dimension dim = new Dimension(550, 300);
         JPanel jpanel = new JPanel();
+        Dimension dim = new Dimension(550, 300);
         jpanel.setPreferredSize(dim);
         jpanel.setVisible(true);
         JTextArea jtaHelp = new JTextArea();

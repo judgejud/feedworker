@@ -57,6 +57,7 @@ class jtpLog extends JTextPane implements TextPaneEventListener {
         // Italic
         StyleConstants.setItalic(styleFeedMyItasa, true);
         StyleConstants.setItalic(styleFeedMySubsf, true);
+        StyleConstants.setItalic(styleFeedBtchat, true);
         // Bold
         // StyleConstants.setBold(style, false);
         // Font family
@@ -93,9 +94,9 @@ class jtpLog extends JTextPane implements TextPaneEventListener {
         StyleConstants.setForeground(styleAlert, Color.yellow);
         StyleConstants.setForeground(styleFeedItasa, Color.cyan);
         StyleConstants.setForeground(styleFeedMyItasa, Color.cyan);
-        StyleConstants.setForeground(styleFeedSubsf, Color.orange);
-        StyleConstants.setForeground(styleFeedMySubsf, Color.orange);
-        StyleConstants.setForeground(styleFeedEztv, HELIOTROPE);
+        StyleConstants.setForeground(styleFeedSubsf, HELIOTROPE);
+        StyleConstants.setForeground(styleFeedMySubsf, HELIOTROPE);
+        StyleConstants.setForeground(styleFeedEztv, Color.gray);
         StyleConstants.setForeground(styleFeedBtchat, Color.gray);
         StyleConstants.setForeground(styleSub, Color.white);
         StyleConstants.setForeground(styleTorrent, Color.magenta);
@@ -236,32 +237,31 @@ class jtpLog extends JTextPane implements TextPaneEventListener {
 
     @Override
     public void objReceived(TextPaneEvent evt) {
-        if (evt.getType().equals(TextPaneEvent.ERROR)) {
+        if (evt.getType().equals(TextPaneEvent.ERROR))
             appendError(evt.getMsg());
-        } else if (evt.getType().equals(TextPaneEvent.OK)) {
+        else if (evt.getType().equals(TextPaneEvent.OK))
             appendOK(evt.getMsg());
-        } else if (evt.getType().equals(TextPaneEvent.SUB)) {
+        else if (evt.getType().equals(TextPaneEvent.SUB))
             appendSub(evt.getMsg());
-        } else if (evt.getType().equals(TextPaneEvent.ALERT)) {
+        else if (evt.getType().equals(TextPaneEvent.ALERT))
             appendAlert(evt.getMsg());
-        } else if (evt.getType().equals(TextPaneEvent.TORRENT)) {
+        else if (evt.getType().equals(TextPaneEvent.TORRENT))
             appendTorrent(evt.getMsg());
-        } else if (evt.getType().equals(TextPaneEvent.FEED_ITASA)) {
+        else if (evt.getType().equals(TextPaneEvent.FEED_ITASA))
             appendFeedItasa(evt.getMsg());
-        } else if (evt.getType().equals(TextPaneEvent.FEED_MYITASA)) {
+        else if (evt.getType().equals(TextPaneEvent.FEED_MYITASA))
             appendFeedMyItasa(evt.getMsg());
-        } else if (evt.getType().equals(TextPaneEvent.FEED_SUBSF)) {
+        else if (evt.getType().equals(TextPaneEvent.FEED_SUBSF))
             appendFeedSubsf(evt.getMsg());
-        } else if (evt.getType().equals(TextPaneEvent.FEED_MYSUBSF)) {
+        else if (evt.getType().equals(TextPaneEvent.FEED_MYSUBSF))
             appendFeedMySubsf(evt.getMsg());
-        } else if (evt.getType().equals(TextPaneEvent.FEED_EZTV)) {
+        else if (evt.getType().equals(TextPaneEvent.FEED_EZTV))
             appendFeedEztv(evt.getMsg());
-        } else if (evt.getType().equals(TextPaneEvent.FEED_BTCHAT))
+        else if (evt.getType().equals(TextPaneEvent.FEED_BTCHAT))
             appendFeedBtchat(evt.getMsg());
         else if (evt.getType().equals(TextPaneEvent.SYNOLOGY))
             appendSynology(evt.getMsg());
         else if (evt.getType().equals(TextPaneEvent.DAY_SERIAL))
             appendDaySerial(evt.getMsg());
-        
     }
 }// end class
