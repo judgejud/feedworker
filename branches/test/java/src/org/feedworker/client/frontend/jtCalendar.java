@@ -13,17 +13,18 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 class jtCalendar extends JTable implements TableEventListener{
-    private final String[] nameCols = {"ID","Serie", "Stato", "Giorno", "Last Episode", "Data",
-                            "Titolo", "Next Episode", "Data", "Titolo"};
+    private final String[] nameCols = {"ID","Serie", "Stato", "Giorno", "Last Ep", 
+                            "Titolo", "Data", "Next Ep", "Titolo", "Data" };
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
-    public jtCalendar(){
+    public jtCalendar(String nome){
         super();
+        setName(nome);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
 
             Class[] types = new Class[]{String.class, String.class, String.class,
                 String.class, String.class, String.class, String.class,
-                String.class, String.class};
+                String.class, String.class, String.class};
 
             @Override
             public Class getColumnClass(int columnIndex) {
@@ -31,10 +32,7 @@ class jtCalendar extends JTable implements TableEventListener{
             }
             @Override
             public boolean isCellEditable(int rowIndex, int vColIndex) {
-                if (vColIndex==0)
-                    return true;
-                else
-                    return false;
+                return false;
             }
         };
         setModel(dtm);
@@ -42,6 +40,13 @@ class jtCalendar extends JTable implements TableEventListener{
         getTableHeader().setReorderingAllowed(false);
         setFont(font);
         Swing.tableSorter(this);
+        Swing.setTableDimensionLockColumn(this, 0, 40);
+        Swing.setTableDimensionLockColumn(this, 2, 100);
+        Swing.setTableDimensionLockColumn(this, 3, 70);
+        Swing.setTableDimensionLockColumn(this, 4, 70);
+        Swing.setTableDimensionLockColumn(this, 6, 65);
+        Swing.setTableDimensionLockColumn(this, 7, 75);
+        Swing.setTableDimensionLockColumn(this, 9, 65);
     }
 
     @Override

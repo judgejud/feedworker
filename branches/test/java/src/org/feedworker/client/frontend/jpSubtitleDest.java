@@ -25,9 +25,8 @@ class jpSubtitleDest extends jpAbstract {
     private jtSubtitleDest jtable;
 
     public static jpSubtitleDest getPanel() {
-        if (jpanel == null) {
+        if (jpanel == null)
             jpanel = new jpSubtitleDest();
-        }
         return jpanel;
     }
 
@@ -39,7 +38,7 @@ class jpSubtitleDest extends jpAbstract {
 
     @Override
     void initializePanel() {
-        jtable = new jtSubtitleDest(proxy.getSubtitleDest());
+        jtable = new jtSubtitleDest(proxy.getNameTableSubtitleDest());
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
         add(jScrollTable1, BorderLayout.CENTER);

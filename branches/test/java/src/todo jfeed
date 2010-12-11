@@ -22,6 +22,7 @@ aggiungere versioning automatico all'applicazione
 OS & FW: decidere per il debug_flag se passarlo da commandline.
 esiste evento "arresta sistema"? e come intercettarlo??? 
 terminare legenda colori
+pulsante check login itasa
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'.
 
