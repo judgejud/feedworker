@@ -46,6 +46,10 @@ public class Common {
         return calendarToString(new GregorianCalendar());
     }
 
+    public static Date actualDate(){
+        return new GregorianCalendar().getTime();
+    }
+
     /**
      * Trasforma una stringa in una data
      *
@@ -57,6 +61,12 @@ public class Common {
     public static Date stringToDate(String s) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss",
                 Locale.ITALY);
+        Date d = sdf.parse(s);
+        return d;
+    }
+
+    public static Date stringAmericanToDate(String s) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
         Date d = sdf.parse(s);
         return d;
     }

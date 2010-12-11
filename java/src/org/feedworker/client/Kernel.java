@@ -834,8 +834,15 @@ public class Kernel {
         }
     }
 
-    public void searchIdTv(Object[] id) {
+    public void searchIdTv(Object[] show) {
         TvRage t = new TvRage();
+        try {
+            t.readingEpisodeList_byID(show[0].toString(), show[2].toString());
+        } catch (JDOMException ex) {
+            error.launch(ex, null);
+        } catch (IOException ex) {
+            error.launch(ex, null);
+        }
     }
 
     //TODO
