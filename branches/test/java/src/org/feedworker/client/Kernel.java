@@ -819,7 +819,7 @@ public class Kernel {
             printAlert("Non posso fare il backup poichè non ci sono files da backuppare.");
     }
 
-    public void searchTV(String tv) {
+    public void detailedSearchShow(String tv) {
         TvRage t = new TvRage();
         try {
             ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv);
@@ -834,8 +834,8 @@ public class Kernel {
         }
     }
 
-    public void searchIdTv(Object id) {
-
+    public void searchIdTv(Object[] id) {
+        TvRage t = new TvRage();
     }
 
     //TODO

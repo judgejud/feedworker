@@ -51,8 +51,12 @@ class jdResultSearchTv extends JDialog implements ActionListener{
     public void actionPerformed(ActionEvent ae) {
         if(ae.getSource() == jbAdd){
             int row = table.getSelectedRow();
-            if (row>-1)
-                proxy.searchIdTv(table.getValueAt(row, 0));
+            if (row>-1){
+                Object[] obj = new Object[5];
+                for (int i=0; i<5; i++)
+                    obj[i]=table.getValueAt(row, i);
+                proxy.searchIdTv(obj);
+            }
         }
         dispose();
     }

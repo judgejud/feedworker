@@ -17,9 +17,9 @@ import org.jdom.input.SAXBuilder;
 class TvRage {
     private final String DETAILED_SEARCH = "http://services.tvrage.com/feeds/full_search.php?show=";
     private final String EPISODE_LIST = "http://services.tvrage.com/feeds/episode_list.php?sid=";
+    private final String SHOW_INFO = "http://services.tvrage.com/feeds/showinfo.php?sid=";
     private final String TAG_SHOW_ID = "showid";
     private final String TAG_NAME = "name";
-    private final String TAG_LINK = "link";
     private final String TAG_SEASON = "seasons";
     private final String TAG_STATUS = "status";
     private final String TAG_AIRDAY = "airday";
@@ -57,7 +57,9 @@ class TvRage {
         int size = document.getRootElement().getChildren().size();
         Iterator iterator = document.getRootElement().getChildren().iterator();
         while (iterator.hasNext()) {
-
+            Element rule = (Element) iterator.next();
         }
     }
+
+
 }

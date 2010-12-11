@@ -1,6 +1,5 @@
 package org.feedworker.client.frontend;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 
@@ -66,11 +65,13 @@ public class jtResultSearchTv extends JTable implements TableEventListener{
         public Component getTableCellRendererComponent(JTable table,
                 Object value, boolean isSelected, boolean hasFocus, int row,
                 int column) {
-            if (isSelected)
-                setBackground(Color.cyan);
-            else
-                setBackground(Color.white);
-
+            if (isSelected){
+                setForeground(table.getSelectionForeground());
+                setBackground(table.getSelectionBackground());
+            } else{
+                setForeground(table.getForeground());
+                setBackground(table.getBackground());
+            }
             String text = value.toString();
             setText(text);
             setToolTipText(Swing.getTextToolTip(table, column, this, text));
