@@ -65,7 +65,13 @@ class TvRage {
         document = new SAXBuilder().build(new URL(EPISODE_LIST + id));
         List seasons = ((Element) document.getRootElement().getChildren().get(2)).getChildren();
         int last = Lang.stringToInt(season)-1;
-        Iterator iter = ((Element) seasons.get(last)).getChildren().iterator();
+        Iterator iter = null;
+        try{
+            iter = ((Element) seasons.get(last)).getChildren().iterator();
+        } catch(IndexOutOfBoundsException e){
+            iter = ((Element) seasons.get(--last)).getChildren().iterator();
+            season = Lang.intToString(last+1);
+        }
         Date yesterday = Common.yesterdayDate();
         Object[] values = null;
         if (iter.hasNext())
