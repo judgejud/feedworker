@@ -1,7 +1,7 @@
 IMPLEMENTARE
-*finire la delete nella dest sub
 -Calendario integrazione con qlk sito tipo tvrage che recupera ultima puntata trasmessa e prossima da trassmettere (numero, data e titolo)
 *se risultato ricerca = 1 fare direttamente la fire al calendar
+*aggiungere nuova ricerca alla jdialog
 *implementare un import da myitasa/subtitle dest
 -feed rss sotto thread
 -vedere di creare 1http permanente x itasa
@@ -14,6 +14,8 @@ IMPLEMENTARE
 -fare in modo che col tasto dx sulle destinazioni esca la possibilità di poter aprire la cartella.
 -implementare il tipo di download di mysubsfactory (come x myitasa)
 
+pulsante check login itasa
+terminare legenda colori
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
 destinazione avanzata: bottone info su ciò che è presente nella tabella e quindi treemap.
 avvio automatico all'avvio OS (win-unix-mac)
@@ -24,15 +26,12 @@ log4j?
 aggiungere versioning automatico all'applicazione
 OS & FW: decidere per il debug_flag se passarlo da commandline.
 esiste evento "arresta sistema"? e come intercettarlo??? 
-terminare legenda colori
-pulsante check login itasa
 
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'.
 
 VERIFICARE LE IMPLEMENTAZIONI
-sistemare "Timeout di lettura null" al primo avvio
-avvio ridotto ad icona (java5)
 autoriavvio con java home (win, mac)
-splashscreen (java 1.5)
 1080i
+splashscreen (java5)
+avvio ridotto ad icona (java5)

@@ -102,7 +102,7 @@ class Xml {
         rename.setText(Boolean.toString(_rename));
 
         Element delete = new Element(TAG_RULE_DELETE);
-        rename.setText(Boolean.toString(_delete));
+        delete.setText(Boolean.toString(_delete));
 
         rule.addContent(name);
         rule.addContent(season);
