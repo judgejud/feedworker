@@ -4,12 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-import org.jfacility.java.lang.Lang;
 
+import org.jfacility.java.lang.Lang;
 /**
  *
  * @author luca
@@ -63,16 +64,6 @@ class jpCalendar extends jpAbstract{
             }
         });
 
-        JButton jbSaveCalendar = new JButton(" Salva Serie ");
-        jbSaveCalendar.setToolTipText("Salva Serie della tabella");
-        jbSaveCalendar.setBorder(BORDER);
-        jbSaveCalendar.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                jbSaveCalendarMouseClicked();
-            }
-        });
-
         JButton jbRefresh = new JButton(" Aggiorna informazioni ");
         jbRefresh.setToolTipText("Aggiorna le informazioni sulle serie");
         jbRefresh.setBorder(BORDER);
@@ -93,8 +84,6 @@ class jpCalendar extends jpAbstract{
         gbc.gridx = 1;
         actionJP.add(jbRemoveRow, gbc);
         gbc.gridx = 2;
-        actionJP.add(jbSaveCalendar, gbc);
-        gbc.gridx = 3;
         actionJP.add(jbRefresh, gbc);
 
         add(actionJP, BorderLayout.NORTH);
@@ -110,10 +99,6 @@ class jpCalendar extends jpAbstract{
         int row = jtable.getSelectedRow();
         if (row > -1)
             ((DefaultTableModel) jtable.getModel()).removeRow(row);
-    }
-
-    private void jbSaveCalendarMouseClicked() {
-        
     }
 
     private void jbRefreshCalendarMouseClicked() {

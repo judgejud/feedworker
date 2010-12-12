@@ -19,8 +19,6 @@ import java.util.TreeMap;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 
 import jcifs.smb.SmbException;
 
@@ -43,16 +41,14 @@ import org.jdom.JDOMException;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 
-import org.xml.sax.SAXException;
-
 /**Motore di Feedworker
  * 
  * @author luca
  */
 public class Kernel {
     // PUBLIC FINAL STATIC VARIABLES
-    public final static String[] daysOfWeek = new String[]{"", "Domenica", "Lunedì",
-        "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"};
+    //public final static String[] daysOfWeek = new String[]{"", "Domenica", "Lunedì",
+    //    "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"};
     // PUBLIC FINAL VARIABLES
     public final String ITASA = "Itasa";
     public final String SUBSF = "Subsf";
@@ -557,9 +553,9 @@ public class Kernel {
             while (it.hasNext()) {
                 KeyRule key = (KeyRule) it.next();
                 ValueRule value = mapRules.get(key);
-                matrix.add(new Object[]{key.getName(), key.getSeason(),
-                            key.getQuality(), value.getPath(), value.getStatus(),
-                            value.getDay(), Boolean.valueOf(value.isRename())});
+                matrix.add(new Object[]{key.getName(), key.getSeason(), key.getQuality(),
+                    value.getPath(), Boolean.valueOf(value.isRename()),
+                    Boolean.valueOf(value.isDelete())});
             }
         }
         return matrix;
@@ -570,7 +566,7 @@ public class Kernel {
         if (prop.isEnabledCustomDestinationFolder()) {
             Xml x = new Xml();
             try {
-                mapRules = x.initializeReader();
+                mapRules = x.initializeReaderRule();
                 if (mapRules != null)
                     fireTableEvent(convertTreemapToArraylist(),SUBTITLE_DEST);
             } catch (JDOMException ex) {
@@ -853,7 +849,8 @@ public class Kernel {
         }
     }
 
-    //TODO
+    //TODO:
+    /*
     public void searchDay(int temp){
         if (prop.isEnabledCustomDestinationFolder()){
             int day = Common.getDay() + temp;
@@ -894,6 +891,7 @@ public class Kernel {
             }
         }
     }
+    */
 
     /**
      * Stampa il messaggio di alert invocando il metodo fire opportuno

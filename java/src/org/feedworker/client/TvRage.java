@@ -66,7 +66,7 @@ class TvRage {
         List seasons = ((Element) document.getRootElement().getChildren().get(2)).getChildren();
         int last = Lang.stringToInt(season)-1;
         Iterator iter = ((Element) seasons.get(last)).getChildren().iterator();
-        Date now = Common.actualDate();
+        Date yesterday = Common.yesterdayDate();
         Object[] values = null;
         if (iter.hasNext())
             values = new Object[10];
@@ -79,12 +79,12 @@ class TvRage {
             } catch (ParseException ex) {
             }
             if (airDate.equalsIgnoreCase("0000-00-00")){
-                d = now;
+                d = yesterday;
                 airDate = "";
             }
             String seasonNum = item.getChild(TAG_SEASON_NUM).getText();
             String title = item.getChild(TAG_TITLE).getText();
-            if (d.before(now)){
+            if (d.before(yesterday)){
                 values[4] = season + "x" + seasonNum;
                 values[5] = title;
                 values[6] = airDate;

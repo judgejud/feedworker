@@ -52,7 +52,6 @@ class jpSubtitleDest extends jpAbstract {
         jbAddRow.setToolTipText("Aggiungi riga alla tabella");
         jbAddRow.setBorder(BORDER);
         jbAddRow.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent evt) {
                 jbAddRowMouseClicked();
@@ -63,7 +62,6 @@ class jpSubtitleDest extends jpAbstract {
         jbRemoveRow.setToolTipText("Rimuovi riga selezionata dalla tabella");
         jbRemoveRow.setBorder(BORDER);
         jbRemoveRow.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent evt) {
                 jbRemoveRowMouseClicked();
@@ -74,7 +72,6 @@ class jpSubtitleDest extends jpAbstract {
         jbSaveRole.setToolTipText("Salva impostazioni");
         jbSaveRole.setBorder(BORDER);
         jbSaveRole.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent evt) {
                 jbSaveRoleMouseClicked();
@@ -85,7 +82,6 @@ class jpSubtitleDest extends jpAbstract {
         jbAddDir.setToolTipText("");
         jbAddDir.setBorder(BORDER);
         jbAddDir.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent evt) {
                 jbAddDirMouseClicked();

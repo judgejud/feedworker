@@ -5,31 +5,26 @@ package org.feedworker.util;
  * @author luca
  */
 public class ValueRule {
-	private String path;
-	private String day;
-	private String status;
-	private boolean rename;
 
-	public ValueRule(String path, String day, String status, boolean rename) {
-		this.path = path;
-		this.day = day;
-		this.status = status;
-		this.rename = rename;
-	}
+    private String path;
+    private boolean rename;
+    private boolean delete;
 
-	public String getDay() {
-		return day;
-	}
+    public ValueRule(String path, boolean ren, boolean del) {
+        this.path = path;
+        this.rename = ren;
+        this.delete = del;
+    }
 
-	public String getPath() {
-		return path;
-	}
+    public String getPath() {
+        return path;
+    }
 
-	public boolean isRename() {
-		return rename;
-	}
+    public boolean isRename() {
+        return rename;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public boolean isDelete() {
+        return delete;
+    }
 }

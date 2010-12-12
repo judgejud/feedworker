@@ -26,6 +26,7 @@ import org.jfacility.javax.swing.Swing;
  * @author luca judge
  */
 public class Common {
+    private static int day_millisec = 86400000;
 
     /**Converte una jav.util.Date in formato stringa
      *
@@ -48,6 +49,18 @@ public class Common {
 
     public static Date actualDate(){
         return new GregorianCalendar().getTime();
+    }
+    
+    public static Date tomorrowDate(){
+        GregorianCalendar g = new GregorianCalendar();
+        g.setTimeInMillis(System.currentTimeMillis() + day_millisec);
+        return g.getTime();
+    }
+
+    public static Date yesterdayDate(){
+        GregorianCalendar g = new GregorianCalendar();
+        g.setTimeInMillis(System.currentTimeMillis() - day_millisec);
+        return g.getTime();
     }
 
     /**

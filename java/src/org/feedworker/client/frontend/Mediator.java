@@ -298,14 +298,14 @@ public class Mediator {
     void saveRules(jtSubtitleDest jtable) {
         boolean _break = false;
         TreeMap<KeyRule, ValueRule> temp = new TreeMap<KeyRule, ValueRule>();
-        for (int i = 0; i < jtable.getRowCount(); i++) {
-            String name = ((String) jtable.getValueAt(i, 0));
-            String season = jtable.getValueAt(i, 1).toString();
-            String quality = (String) jtable.getValueAt(i, 2);
-            String path = (String) jtable.getValueAt(i, 3);
-            String status = (String) jtable.getValueAt(i, 4);
-            String day = (String) jtable.getValueAt(i, 5);
-            boolean rename = Boolean.parseBoolean(jtable.getValueAt(i, 6).toString());
+        for (int r = 0; r < jtable.getRowCount(); r++) {
+            int c = -1;
+            String name = ((String) jtable.getValueAt(r, ++c));
+            String season = jtable.getValueAt(r, ++c).toString();
+            String quality = (String) jtable.getValueAt(r, ++c);
+            String path = (String) jtable.getValueAt(r, ++c);
+            boolean rename = Boolean.parseBoolean(jtable.getValueAt(r, ++c).toString());
+            boolean delete = Boolean.parseBoolean(jtable.getValueAt(r, ++c).toString());
 
             if (Lang.verifyTextNotNull(name)) {
                 if (Lang.verifyTextNotNull(path)) {
@@ -314,36 +314,34 @@ public class Mediator {
                             int s = Lang.stringToInt(season);
                             season = Lang.intToString(s);
                         } else {
-                            printAlert("Riga: " + i
+                            printAlert("Riga: " + r
                                     + " immettere un numero alla stagione");
                             _break = true;
                             break;
                         }
                         KeyRule key = new KeyRule(name, season, quality);
-                        ValueRule value = new ValueRule(path, day, status,
-                                rename);
+                        ValueRule value = new ValueRule(path, rename, delete);
                         if (!temp.containsKey(key)) {
                             temp.put(key, value);
                         } else {
-                            printAlert("Riga: "
-                                    + i
+                            printAlert("Riga: " + r
                                     + " trovato duplicato, si prega di correggerlo");
                             _break = true;
                             break;
                         }
                     } catch (NumberFormatException ex) {
-                        error.launch(ex, getClass(), Lang.intToString(i));
+                        error.launch(ex, getClass(), Lang.intToString(r));
                         _break = true;
                         break;
                     }
                 } else {
-                    printAlert("Riga: " + i
+                    printAlert("Riga: " + r
                             + " immettere la destinazione per la regola/sub");
                     _break = true;
                     break;
                 }
             } else {
-                printAlert("Riga: " + i
+                printAlert("Riga: " + r
                         + " immettere il nome della regola/sub/serie");
                 _break = true;
                 break;
@@ -722,12 +720,8 @@ public class Mediator {
     String getTitle(){
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "216 by "
+                + "218 by "
                 + FeedWorkerClient.getApplication().getAuthor();
-    }
-
-    String[] getDaysOfWeek(){
-        return core.daysOfWeek;
     }
 
     TableModel getModelSystemInfo() {
@@ -753,11 +747,12 @@ public class Mediator {
         dtm.addRow(new String[]{"File impostazioni", prop.getSettingsFilename()});
         return dtm;
     }
-
+    //TODO: ripristinare 1volta implementato salvataggio calendar
+/*
     void printDay(int day) {
         core.searchDay(day);
     }
-
+*/
     void invokeBackup(Component parent) {
         String name = Swing.getFile(parent, "Creare il file zip per il backup",
                 fnfeZIP, new File(MySystem.getUserDir() + File.separator));

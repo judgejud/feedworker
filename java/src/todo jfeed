@@ -1,5 +1,8 @@
 IMPLEMENTARE
+*finire la delete nella dest sub
 -Calendario integrazione con qlk sito tipo tvrage che recupera ultima puntata trasmessa e prossima da trassmettere (numero, data e titolo)
+*se risultato ricerca = 1 fare direttamente la fire al calendar
+*implementare un import da myitasa/subtitle dest
 -feed rss sotto thread
 -vedere di creare 1http permanente x itasa
 -trovare 1modo per rendere visibile la pwd itasa
@@ -23,7 +26,10 @@ OS & FW: decidere per il debug_flag se passarlo da commandline.
 esiste evento "arresta sistema"? e come intercettarlo??? 
 terminare legenda colori
 pulsante check login itasa
+
 ERRORI DA SISTEMARE:
+*jtable calendar & subtitledest: se attivo il sorter su una colonna diversa da serie ASC e faccio la remove della riga selezionata, NON RIMUOVE quella effettivamente selezionata, ma la corrispondente nel rigo del dtm; 
+*ricerca DEXTER in calendar
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'.
 
 VERIFICARE LE IMPLEMENTAZIONI

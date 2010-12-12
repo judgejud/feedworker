@@ -102,7 +102,8 @@ public class FeedWorkerClient {
                         K.loadXml();
                         splash.updateStartupState("Initializing RSS...");
                         K.runRss();
-                        K.searchDay(0);
+                        //TODO: ripristinare 1volta implementato salvataggio calendar.xml
+//                        K.searchDay(0);
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
                             splash.close();
                             jframe.setVisible(true);
