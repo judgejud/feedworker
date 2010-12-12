@@ -172,23 +172,23 @@ public class jfMain extends JFrame implements WindowListener,
             JMenuItem jmiPrintToday = new JMenuItem(" Stampa oggi ");
             JMenuItem jmiPrintTomorrow = new JMenuItem(" Stampa domani ");
             JMenuItem jmiPrintYesterday = new JMenuItem(" Stampa ieri ");
-
+            //TODO: ripristinare 1volta implementato salvataggio calendar.xml
             jmiPrintToday.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    proxy.printDay(0);
+                    //proxy.printDay(0);
                 }
             });
             jmiPrintTomorrow.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    proxy.printDay(1);
+                    //proxy.printDay(1);
                 }
             });
             jmiPrintYesterday.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    proxy.printDay(-1);
+                    //proxy.printDay(-1);
                 }
             });
 

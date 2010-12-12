@@ -36,7 +36,6 @@ class jtCalendar extends JTable implements TableEventListener{
             }
         };
         setModel(dtm);
-        setRowSelectionAllowed(false);
         getTableHeader().setReorderingAllowed(false);
         setFont(font);
         Swing.tableSorter(this);

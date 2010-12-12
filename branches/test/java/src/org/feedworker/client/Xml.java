@@ -25,15 +25,15 @@ import org.jdom.output.XMLOutputter;
 class Xml {
     // VARIABLES PRIVATE FINAL
 
-    private final File FILE_NAME = new File("rules.xml");
-    private final String RULE_TAG = "RULE";
-    private final String NAME_TAG = "NAME";
-    private final String SEASON_TAG = "SEASON";
-    private final String QUALITY_TAG = "QUALITY";
-    private final String PATH_TAG = "PATH";
-    private final String DAY_TAG = "DAY";
-    private final String STATUS_TAG = "STATUS";
-    private final String RENAME_TAG = "RENAME";
+    private final File FILE_RULE = new File("rules.xml");
+    private final File FILE_CALENDAR = new File("calendar.xml");
+    private final String TAG_RULE_ROOT = "RULE";
+    private final String TAG_RULE_NAME = "NAME";
+    private final String TAG_RULE_SEASON = "SEASON";
+    private final String TAG_RULE_QUALITY = "QUALITY";
+    private final String TAG_RULE_PATH = "PATH";
+    private final String TAG_RULE_RENAME = "RENAME";
+    private final String TAG_RULE_DELETE = "DELETE";
     // VARIABLES PRIVATE
     private Element root;
     private Document document;
@@ -52,10 +52,9 @@ class Xml {
                 KeyRule key = (KeyRule) it.next();
                 ValueRule value = map.get(key);
                 addRule(key.getName(), key.getSeason(), key.getQuality(),
-                        value.getPath(), value.getStatus(), value.getDay(),
-                        value.isRename());
+                        value.getPath(), value.isRename(), value.isDelete());
             }
-            write();
+            write(FILE_RULE);
         }
     }
 
@@ -73,77 +72,73 @@ class Xml {
      * @param _path percorso
      */
     private void addRule(String _name, String _season, String _version,
-            String _path, String _status, String _day, boolean _rename) {
-        Element role = new Element(RULE_TAG);
-        Element name = new Element(NAME_TAG);
+            String _path, boolean _rename, boolean _delete) {
+        Element rule = new Element(TAG_RULE_ROOT);
+        Element name = new Element(TAG_RULE_NAME);
         name.setText(_name);
 
-        Element season = new Element(SEASON_TAG);
+        Element season = new Element(TAG_RULE_SEASON);
         season.setText(_season);
 
-        Element quality = new Element(QUALITY_TAG);
+        Element quality = new Element(TAG_RULE_QUALITY);
         quality.setText(_version);
 
-        Element path = new Element(PATH_TAG);
+        Element path = new Element(TAG_RULE_PATH);
         path.setText(_path);
 
-        Element status = new Element(STATUS_TAG);
-        status.setText(_status);
-
-        Element day = new Element(DAY_TAG);
-        day.setText(_day);
-
-        Element rename = new Element(RENAME_TAG);
+        Element rename = new Element(TAG_RULE_RENAME);
         rename.setText(Boolean.toString(_rename));
 
-        role.addContent(name);
-        role.addContent(season);
-        role.addContent(quality);
-        role.addContent(path);
-        role.addContent(status);
-        role.addContent(day);
-        role.addContent(rename);
-        root.addContent(role);
+        Element delete = new Element(TAG_RULE_DELETE);
+        rename.setText(Boolean.toString(_delete));
+
+        rule.addContent(name);
+        rule.addContent(season);
+        rule.addContent(quality);
+        rule.addContent(path);
+        rule.addContent(rename);
+        rule.addContent(delete);
+        root.addContent(rule);
     }
 
-    /**
-     * Scrive l'xml
+    /**Scrive l'xml
      *
      * @throws IOException
      */
-    private void write() throws IOException {
+    private void write(File f) throws IOException {
         // Creazione dell'oggetto XMLOutputter
         XMLOutputter outputter = new XMLOutputter();
         // Imposto il formato dell'outputter come "bel formato"
         outputter.setFormat(Format.getPrettyFormat());
         // Produco l'output sul file xml.foo
-        outputter.output(document, new FileOutputStream(FILE_NAME));
+        outputter.output(document, new FileOutputStream(f));
     }
 
-    /**
-     * Inizializza la lettura dell'xml e restituisce la map ordinata come
+    private int initializeDocument(File f) throws JDOMException, IOException{
+        // Creo un SAXBuilder e con esso costruisco un document
+        document = new SAXBuilder().build(f);
+        return document.getRootElement().getChildren().size();
+    }
+
+    /**Inizializza la lettura dell'xml e restituisce la map ordinata come
      * treemap
      *
      * @return treemap
      * @throws JDOMException
      * @throws IOException
      */
-    public TreeMap<KeyRule, ValueRule> initializeReader() throws JDOMException,
+    public TreeMap<KeyRule, ValueRule> initializeReaderRule() throws JDOMException,
             IOException {
         TreeMap<KeyRule, ValueRule> map = null;
         File old = new File("roles.xml");
-        if (FILE_NAME.exists()) {
-            // Creo un SAXBuilder e con esso costruisco un document
-            document = new SAXBuilder().build(FILE_NAME);
-            int size = document.getRootElement().getChildren().size();
+        if (FILE_RULE.exists()) {
+            int size = initializeDocument(FILE_RULE);
             if (size > 0)
-                map = readingDocument();
+                map = readingDocumentRule();
         } else if (old.exists()){
-            // Creo un SAXBuilder e con esso costruisco un document
-            document = new SAXBuilder().build(old);
-            int size = document.getRootElement().getChildren().size();
+            int size = initializeDocument(old);
             if (size > 0) {
-                map = readingDocument();
+                map = readingDocumentRule();
                 writeMap(map);
                 old.delete();
             }
@@ -151,32 +146,21 @@ class Xml {
         return map;
     }
 
-    private TreeMap<KeyRule, ValueRule> readingDocument(){
+    private TreeMap<KeyRule, ValueRule> readingDocumentRule(){
         TreeMap<KeyRule, ValueRule> map = new TreeMap<KeyRule, ValueRule>();
         Iterator iterator = document.getRootElement().getChildren().iterator();
         while (iterator.hasNext()) {
             Element rule = (Element) iterator.next();
-            String name = rule.getChild(NAME_TAG).getText();
-            String season = rule.getChild(SEASON_TAG).getText();
-            String quality = rule.getChild(QUALITY_TAG).getText();
-            String path = rule.getChild(PATH_TAG).getText();
-            boolean rename = false;
+            String name = rule.getChild(TAG_RULE_NAME).getText();
+            String season = rule.getChild(TAG_RULE_SEASON).getText();
+            String quality = rule.getChild(TAG_RULE_QUALITY).getText();
+            String path = rule.getChild(TAG_RULE_PATH).getText();
+            boolean rename = false, delete = false;
             try{
-                rename = Boolean.parseBoolean(rule.getChild(RENAME_TAG).getText());
+                rename = Boolean.parseBoolean(rule.getChild(TAG_RULE_RENAME).getText());
+                delete = Boolean.parseBoolean(rule.getChild(TAG_RULE_DELETE).getText());
             } catch (NullPointerException npe) {}
-            String status, day;
-            try {
-                status = rule.getChild(STATUS_TAG).getText();
-            } catch (NullPointerException npe) {
-                status = "";
-            }
-            try {
-                day = rule.getChild(DAY_TAG).getText();
-            } catch (NullPointerException npe) {
-                day = "";
-            }
-            map.put(new KeyRule(name, season, quality),
-                    new ValueRule(path, day, status, rename));
+            map.put(new KeyRule(name, season, quality), new ValueRule(path, rename, delete));
         }
         return map;
     }
