@@ -32,10 +32,8 @@ class jtSubtitleDest extends JTable implements TableEventListener {
         super();
         setName(name);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
-
             Class[] types = new Class[]{String.class, Integer.class,
                 String.class, String.class, Boolean.class, Boolean.class};
-
             @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];

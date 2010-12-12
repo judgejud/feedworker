@@ -34,6 +34,18 @@ class Xml {
     private final String TAG_RULE_PATH = "PATH";
     private final String TAG_RULE_RENAME = "RENAME";
     private final String TAG_RULE_DELETE = "DELETE";
+    private final String TAG_CALENDAR_ROOT = "SHOW";
+    private final String TAG_CALENDAR_ID_TVRAGE = "ID_TVRAGE";
+    private final String TAG_CALENDAR_NAME = "SHOW";
+    private final String TAG_CALENDAR_DAY = "DAY";
+    private final String TAG_CALENDAR_STATUS = "STATUS";
+    private final String TAG_CALENDAR_LAST_EPISODE = "LAST_EPISODE";
+    private final String TAG_CALENDAR_LAST_TITLE = "LAST_TITLE";
+    private final String TAG_CALENDAR_LAST_DATE = "LAST_DATE";
+    private final String TAG_CALENDAR_NEXT_EPISODE = "NEXT_EPISODE";
+    private final String TAG_CALENDAR_NEXT_TITLE = "NEXT_TITLE";
+    private final String TAG_CALENDAR_NEXT_DATE = "NEXT_DATE";
+
     // VARIABLES PRIVATE
     private Element root;
     private Document document;
