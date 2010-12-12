@@ -33,7 +33,7 @@ import org.jfacility.java.lang.Lang;
  */
 public class DownloadThread implements Runnable {
 
-    private final String CMD_DELETE = "delete";
+    //private final String CMD_DELETE = "delete";
     private final String SPLIT_SUB = ".sub";
     private final String SPLIT_POINT = "\\.";
     private final String[] QUALITY = new String[]{Quality.ALL.toString(),
@@ -112,12 +112,14 @@ public class DownloadThread implements Runnable {
                             prop.getCifsSharePassword());
                     for (int i = 0; i < al.size(); i++) {
                         File filesub = al.get(i);
-                        String namesub = al.get(i).getName();
+                        String namesub = filesub.getName();
                         KeyRule key = parsingNamefile(namesub, SPLIT_SUB);
-                        dest = mapPath(key);
-                        if (dest != null && dest.toLowerCase().equals(CMD_DELETE)) {
+                        if (mapRules.get(key).isDelete()){
                             filesub.delete();
+                            fireNewTextPaneEvent(namesub + " cancellato per la regola DELETE",
+                                    TextPaneEvent.ALERT);
                         } else {
+                            dest = mapPath(key);
                             try{
                                 newName = rename(key, namesub);
                             } catch (NullPointerException e){}
@@ -148,14 +150,15 @@ public class DownloadThread implements Runnable {
                 for (int i = 0; i < al.size(); i++) {
                     File filesub = al.get(i);
                     String namesub = filesub.getName();
-                    KeyRule key = parsingNamefile(namesub, SPLIT_SUB);
-                    String dest = mapPath(key);
-                    if (dest != null && dest.toLowerCase().equals(CMD_DELETE)) {
+                    KeyRule key = parsingNamefile(namesub, SPLIT_SUB);                    
+                    if (mapRules.get(key).isDelete()){
                         filesub.delete();
+                        fireNewTextPaneEvent(namesub + " cancellato per la regola DELETE",
+                                TextPaneEvent.ALERT);
                     } else {
-                        if (dest == null) {
+                        String dest = mapPath(key);
+                        if (dest == null)
                             dest = prop.getSubtitleDestinationFolder();
-                        }
                         try{
                             newName = rename(key, namesub);
                         } catch (NullPointerException e){}
@@ -237,9 +240,8 @@ public class DownloadThread implements Runnable {
      * @return path di destinazione
      */
     private String mapPath(KeyRule key) {
-        if (key != null && mapRules != null) {
+        if (key != null && mapRules != null)
             return mapRules.get(key).getPath();
-        }
         return null;
     }
 

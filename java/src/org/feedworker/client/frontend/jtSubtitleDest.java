@@ -2,7 +2,9 @@ package org.feedworker.client.frontend;
 
 //IMPORT JAVA
 import java.awt.Component;
-import java.awt.Font;
+import java.awt.Font;import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -50,13 +52,13 @@ class jtSubtitleDest extends JTable implements TableEventListener {
         Swing.setTableDimensionLockColumn(this, ++c, 75); //rename
         Swing.setTableDimensionLockColumn(this, ++c, 65); //delete
 
-        setComboColumn(2, itemsCombo);
+        setComboBoxColumn(2, itemsCombo);
 
         setFont(font);
         Swing.tableSorter(this);
     }
 
-    private void setComboColumn(int num, String[] items) {
+    private void setComboBoxColumn(int num, String[] items) {
         // Set the combobox editor on column
         TableColumn col = getColumnModel().getColumn(num);
         col.setCellEditor(new ComboBoxEditor(items));
