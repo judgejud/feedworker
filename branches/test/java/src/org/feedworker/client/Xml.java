@@ -56,7 +56,7 @@ class Xml {
      * @param map
      * @throws IOException
      */
-    public void writeMap(TreeMap<KeyRule, ValueRule> map) throws IOException {
+    void writeMap(TreeMap<KeyRule, ValueRule> map) throws IOException {
         if (map.size() > 0) {
             Iterator it = map.keySet().iterator();
             initializeWriter();
@@ -111,6 +111,55 @@ class Xml {
         rule.addContent(rename);
         rule.addContent(delete);
         root.addContent(rule);
+    }
+
+    void addShowTV(Object[] array) throws IOException {
+        int i=-1;
+        initializeWriter();
+
+        Element calendar = new Element(TAG_CALENDAR_ROOT);
+        Element id_tvrage = new Element(TAG_CALENDAR_ID_TVRAGE);
+        id_tvrage.setText(array[++i].toString());
+        calendar.addContent(id_tvrage);
+
+        Element name = new Element(TAG_CALENDAR_NAME);
+        name.setText(array[++i].toString());
+        calendar.addContent(name);
+
+        Element status = new Element(TAG_CALENDAR_STATUS);
+        status.setText(array[++i].toString());
+        calendar.addContent(status);
+
+        Element day = new Element(TAG_CALENDAR_DAY);
+        day.setText(array[++i].toString());
+        calendar.addContent(day);
+
+        Element lastEpisode = new Element(TAG_CALENDAR_LAST_EPISODE);
+        lastEpisode.setText(array[++i].toString());
+        calendar.addContent(lastEpisode);
+
+        Element lastTitle = new Element(TAG_CALENDAR_LAST_TITLE);
+        lastTitle.setText(array[++i].toString());
+        calendar.addContent(lastTitle);
+
+        Element lastDate = new Element(TAG_CALENDAR_LAST_DATE);
+        lastDate.setText(array[++i].toString());
+        calendar.addContent(lastDate);
+
+        Element nextEpisode = new Element(TAG_CALENDAR_NEXT_EPISODE);
+        nextEpisode.setText(array[++i].toString());
+        calendar.addContent(nextEpisode);
+
+        Element nextTitle = new Element(TAG_CALENDAR_NEXT_TITLE);
+        nextTitle.setText(array[++i].toString());
+        calendar.addContent(nextTitle);
+
+        Element nextDate = new Element(TAG_CALENDAR_NEXT_DATE);
+        nextDate.setText(array[++i].toString());
+        calendar.addContent(nextDate);
+
+        root.addContent(calendar);
+        write(FILE_CALENDAR);
     }
 
     /**Scrive l'xml
@@ -170,6 +219,8 @@ class Xml {
             boolean rename = false, delete = false;
             try{
                 rename = Boolean.parseBoolean(rule.getChild(TAG_RULE_RENAME).getText());
+            } catch (NullPointerException npe) {}
+            try{
                 delete = Boolean.parseBoolean(rule.getChild(TAG_RULE_DELETE).getText());
             } catch (NullPointerException npe) {}
             map.put(new KeyRule(name, season, quality), new ValueRule(path, rename, delete));

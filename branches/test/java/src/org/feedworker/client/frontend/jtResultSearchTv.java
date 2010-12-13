@@ -5,7 +5,6 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -38,7 +37,6 @@ public class jtResultSearchTv extends JTable implements TableEventListener{
         };
         setModel(dtm);
         getTableHeader().setReorderingAllowed(false);
-        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setFont(font);
         Swing.tableSorter(this);
         Swing.setTableDimensionLockColumn(this, 0, 45);
