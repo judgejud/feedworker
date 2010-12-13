@@ -836,16 +836,19 @@ public class Kernel {
         }
     }
 
-    public void searchIdTv(Object[] show) {
+    public void searchIdTv(ArrayList<Object[]> from) {
         TvRage t = new TvRage();
         try {
-            Object[] array = t.readingEpisodeList_byID(show[0].toString(), show[2].toString());
-            array[0] = show[0];
-            array[1] = show[1];
-            array[2] = show[3];
-            array[3] = show[4];
             ArrayList<Object[]> al = new ArrayList<Object[]>();
-            al.add(array);
+            for (int i=0; i<from.size(); i++){
+                Object[] show = from.get(i);
+                Object[] array = t.readingEpisodeList_byID(show[0].toString(), show[2].toString());
+                array[0] = show[0];
+                array[1] = show[1];
+                array[2] = show[3];
+                array[3] = show[4];
+                al.add(array);
+            }
             fireTableEvent(al, CALENDAR);
         } catch (JDOMException ex) {
             error.launch(ex, null);

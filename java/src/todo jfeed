@@ -1,5 +1,5 @@
 IMPLEMENTARE
--Calendario integrazione con qlk sito tipo tvrage che recupera ultima puntata trasmessa e prossima da trassmettere (numero, data e titolo)
+-Calendario integrazione con qlk sito tipo tvrage che recupera ultima puntata trasmessa e prossima da trasmettere (numero, data e titolo)
 *salvare i dati nell'xml
 *implementare un import da myitasa/subtitle dest
 -feed rss sotto thread

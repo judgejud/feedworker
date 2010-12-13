@@ -779,7 +779,7 @@ public class Mediator {
         core.detailedSearchShow(tv);
     }
 
-    void searchIdTv(Object[] id) {
+    void searchIdTv(ArrayList<Object[]> id) {
         core.searchIdTv(id);
     }
 }
