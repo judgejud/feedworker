@@ -4,11 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
 
+import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import org.jfacility.java.lang.Lang;
 
 /**
  *
@@ -20,6 +22,7 @@ class jdResultSearchTv extends JDialog implements ActionListener{
     private jtResultSearchTv table;
     private JButton jbAdd = new JButton(" Aggiunge ");
     private JButton jbCancel = new JButton(" Annulla ");
+    private JButton jbSearch = new JButton(" Nuova Ricerca");
 
     public static jdResultSearchTv getDialog(){
         if (dialog==null)
@@ -40,8 +43,10 @@ class jdResultSearchTv extends JDialog implements ActionListener{
         JPanel pane = new JPanel();
         jbAdd.addActionListener(this);
         jbCancel.addActionListener(this);
+        jbSearch.addActionListener(this);
         pane.add(jbAdd);
         pane.add(jbCancel);
+        pane.add(jbSearch);
         getContentPane().add(pane, BorderLayout.SOUTH);
         proxy.setTableListener(table);
         pack();
@@ -57,7 +62,13 @@ class jdResultSearchTv extends JDialog implements ActionListener{
                     obj[i]=table.getValueAt(row, i);
                 proxy.searchIdTv(obj);
             }
-        }
-        dispose();
+            dispose();
+        } else if(ae.getSource() == jbSearch){
+            dispose();
+            String tv = JOptionPane.showInputDialog(null,"Inserire nome serie tv");
+            if (Lang.verifyTextNotNull(tv))
+                proxy.searchTV(tv);
+        } else if(ae.getSource() == jbCancel)
+            dispose();
     }
 }

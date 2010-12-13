@@ -1,7 +1,6 @@
 IMPLEMENTARE
 -Calendario integrazione con qlk sito tipo tvrage che recupera ultima puntata trasmessa e prossima da trassmettere (numero, data e titolo)
-*se risultato ricerca = 1 fare direttamente la fire al calendar
-*aggiungere nuova ricerca alla jdialog
+*salvare i dati nell'xml
 *implementare un import da myitasa/subtitle dest
 -feed rss sotto thread
 -vedere di creare 1http permanente x itasa
@@ -26,6 +25,7 @@ log4j?
 aggiungere versioning automatico all'applicazione
 OS & FW: decidere per il debug_flag se passarlo da commandline.
 esiste evento "arresta sistema"? e come intercettarlo??? 
+jframe statica? 
 
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'.

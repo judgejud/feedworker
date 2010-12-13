@@ -59,6 +59,8 @@ public class Kernel {
     public final String SEARCH_TV = "SearchTV";
     public final String SUBTITLE_DEST = "SubtitleDest";
     public final String CALENDAR = "Calendar";
+    public final String FOCUS = "Focus";
+
 
     // PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
@@ -823,6 +825,9 @@ public class Kernel {
             if (array!=null){
                 fireTableEvent(array,SEARCH_TV);
                 fireNewJFrameEventOperation(SEARCH_TV);
+            } else {
+                printAlert("La ricerca di " + tv + " non ha prodotto risultati");
+                fireNewJFrameEventOperation(FOCUS);
             }
         } catch (JDOMException ex) {
             error.launch(ex, null);
