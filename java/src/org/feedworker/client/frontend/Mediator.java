@@ -143,6 +143,10 @@ public class Mediator {
         return REMOVE_PANE_DEST_SUB;
     }
 
+    String getFocus(){
+        return core.FOCUS;
+    }
+
     String getEnableButton(){
         return ENABLE_BUTTON;
     }    

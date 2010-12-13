@@ -357,10 +357,9 @@ public class jfMain extends JFrame implements WindowListener,
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getEnableButton()))
                 changeEnabledButton(true);
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getSearchTV()))
-                //TODO Sistemare con un popup + decente
-                //JOptionPane.showConfirmDialog(getParent(), resultSearchTvJP,
-                 //       "Risultati ricerca", JOptionPane.OK_CANCEL_OPTION);
                 resultSearchTvJD.setVisible(true);
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getFocus()))
+                requestFocus();
         }
     }
 
