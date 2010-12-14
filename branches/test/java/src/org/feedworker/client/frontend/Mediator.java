@@ -135,19 +135,27 @@ public class Mediator {
         return core.SEARCH_TV;
     }
 
-    String getAddPaneDestSub(){
+    String getOperationAddPaneDestSub(){
         return ADD_PANE_DEST_SUB;
     }
 
-    String getRemovePaneDestSub(){
+    String getOperationRemovePaneDestSub(){
         return REMOVE_PANE_DEST_SUB;
     }
 
-    String getFocus(){
-        return core.FOCUS;
+    String getOperationFocus(){
+        return core.OPERATION_FOCUS;
     }
 
-    String getEnableButton(){
+    String getOperationImportShow(){
+        return core.OPERATION_IMPORT_SHOW;
+    }
+
+    String getOperationImportIncrement(){
+        return core.OPERATION_IMPORT_INCREMENT;
+    }
+
+    String getOperationEnableButton(){
         return ENABLE_BUTTON;
     }    
 
@@ -781,5 +789,9 @@ public class Mediator {
 
     void searchIdTv(ArrayList<Object[]> id) {
         core.searchIdTv(id);
+    }
+
+    void importFromSubDest() {
+        core.importTvFromDestSub();
     }
 }

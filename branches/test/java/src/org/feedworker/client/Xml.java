@@ -4,6 +4,7 @@ package org.feedworker.client;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -24,9 +25,6 @@ import org.jdom.output.XMLOutputter;
  */
 class Xml {
     // VARIABLES PRIVATE FINAL
-
-    private final File FILE_RULE = new File("rules.xml");
-    private final File FILE_CALENDAR = new File("calendar.xml");
     private final String TAG_RULE_ROOT = "RULE";
     private final String TAG_RULE_NAME = "NAME";
     private final String TAG_RULE_SEASON = "SEASON";
@@ -49,7 +47,15 @@ class Xml {
     // VARIABLES PRIVATE
     private Element root;
     private Document document;
+    private File file;
 
+    public Xml(File f, boolean read) throws JDOMException, IOException{
+        file = f;
+        if (file.exists() && read)
+            document = new SAXBuilder().build(file);
+        else
+            initializeWriter();
+    }
     /**
      * Scrive le regole su file xml
      *
@@ -59,21 +65,14 @@ class Xml {
     void writeMap(TreeMap<KeyRule, ValueRule> map) throws IOException {
         if (map.size() > 0) {
             Iterator it = map.keySet().iterator();
-            initializeWriter();
             while (it.hasNext()) {
                 KeyRule key = (KeyRule) it.next();
                 ValueRule value = map.get(key);
                 addRule(key.getName(), key.getSeason(), key.getQuality(),
                         value.getPath(), value.isRename(), value.isDelete());
             }
-            write(FILE_RULE);
+            write();
         }
-    }
-
-    /** inizializza il documento */
-    private void initializeWriter() {
-        root = new Element("ROOT");
-        document = new Document(root);
     }
 
     /**Aggiunge regola
@@ -113,11 +112,17 @@ class Xml {
         root.addContent(rule);
     }
 
-    void addShowTV(Object[] array) throws IOException {
-        int i=-1;
-        initializeWriter();
-
+    void addShowTV(Object[] array){
+        root.addContent(createShow(array));
+    }
+    
+    void removeShowTv(Object[] array){
+        root.removeContent(createShow(array));
+    }
+    
+    private Element createShow(Object[] array){
         Element calendar = new Element(TAG_CALENDAR_ROOT);
+        int i=-1;
         Element id_tvrage = new Element(TAG_CALENDAR_ID_TVRAGE);
         id_tvrage.setText(array[++i].toString());
         calendar.addContent(id_tvrage);
@@ -135,50 +140,75 @@ class Xml {
         calendar.addContent(day);
 
         Element lastEpisode = new Element(TAG_CALENDAR_LAST_EPISODE);
-        lastEpisode.setText(array[++i].toString());
+        lastEpisode.setText(checkNPE(array[++i]));
         calendar.addContent(lastEpisode);
 
         Element lastTitle = new Element(TAG_CALENDAR_LAST_TITLE);
-        lastTitle.setText(array[++i].toString());
+        lastTitle.setText(checkNPE(array[++i]));
         calendar.addContent(lastTitle);
 
         Element lastDate = new Element(TAG_CALENDAR_LAST_DATE);
-        lastDate.setText(array[++i].toString());
+        lastDate.setText(checkNPE(array[++i]));
         calendar.addContent(lastDate);
 
         Element nextEpisode = new Element(TAG_CALENDAR_NEXT_EPISODE);
-        nextEpisode.setText(array[++i].toString());
+        nextEpisode.setText(checkNPE(array[++i]));
         calendar.addContent(nextEpisode);
 
         Element nextTitle = new Element(TAG_CALENDAR_NEXT_TITLE);
-        nextTitle.setText(array[++i].toString());
+        nextTitle.setText(checkNPE(array[++i]));
         calendar.addContent(nextTitle);
 
         Element nextDate = new Element(TAG_CALENDAR_NEXT_DATE);
-        nextDate.setText(array[++i].toString());
+        nextDate.setText(checkNPE(array[++i]));
         calendar.addContent(nextDate);
+        
+        return calendar;
+    }
 
-        root.addContent(calendar);
-        write(FILE_CALENDAR);
+    void readingDocumentCalendar() throws JDOMException, IOException{
+        ArrayList<Object[]> al = new ArrayList<Object[]>();
+        if (sizeDocument() > 0){
+            Iterator iter = iteratorDocument();
+            while (iter.hasNext()) {
+                Element calendar = (Element) iter.next();
+
+            }
+        }
+    }
+
+    private String checkNPE(Object obj){
+        try{
+            return obj.toString();
+        } catch (NullPointerException e){
+            return "";
+        }
     }
 
     /**Scrive l'xml
      *
      * @throws IOException
      */
-    private void write(File f) throws IOException {
+    void write() throws IOException {
         // Creazione dell'oggetto XMLOutputter
         XMLOutputter outputter = new XMLOutputter();
         // Imposto il formato dell'outputter come "bel formato"
         outputter.setFormat(Format.getPrettyFormat());
         // Produco l'output sul file xml.foo
-        outputter.output(document, new FileOutputStream(f));
+        outputter.output(document, new FileOutputStream(file));
     }
 
-    private int initializeDocument(File f) throws JDOMException, IOException{
-        // Creo un SAXBuilder e con esso costruisco un document
-        document = new SAXBuilder().build(f);
+    private int sizeDocument(){
         return document.getRootElement().getChildren().size();
+    }
+    
+    private Iterator iteratorDocument(){
+        return document.getRootElement().getChildren().iterator();
+    }
+
+    private void initializeWriter(){
+        root = new Element("ROOT");
+        document = new Document(root);
     }
 
     /**Inizializza la lettura dell'xml e restituisce la map ordinata come
@@ -188,43 +218,33 @@ class Xml {
      * @throws JDOMException
      * @throws IOException
      */
-    public TreeMap<KeyRule, ValueRule> initializeReaderRule() throws JDOMException,
-            IOException {
+    public ArrayList initializeReaderRule() throws JDOMException, IOException {
+        ArrayList global = new ArrayList();
         TreeMap<KeyRule, ValueRule> map = null;
-        File old = new File("roles.xml");
-        if (FILE_RULE.exists()) {
-            int size = initializeDocument(FILE_RULE);
-            if (size > 0)
-                map = readingDocumentRule();
-        } else if (old.exists()){
-            int size = initializeDocument(old);
-            if (size > 0) {
-                map = readingDocumentRule();
-                writeMap(map);
-                old.delete();
+        ArrayList<Object[]> matrix = null;
+        if (sizeDocument() > 0){
+            map = new TreeMap<KeyRule, ValueRule>();
+            matrix = new ArrayList<Object[]>();
+            Iterator iter = iteratorDocument();
+            while (iter.hasNext()) {
+                Element rule = (Element) iter.next();
+                String name = rule.getChild(TAG_RULE_NAME).getText();
+                String season = rule.getChild(TAG_RULE_SEASON).getText();
+                String quality = rule.getChild(TAG_RULE_QUALITY).getText();
+                String path = rule.getChild(TAG_RULE_PATH).getText();
+                boolean rename = false, delete = false;
+                try{
+                    rename = Boolean.parseBoolean(rule.getChild(TAG_RULE_RENAME).getText());
+                } catch (NullPointerException npe) {}
+                try{
+                    delete = Boolean.parseBoolean(rule.getChild(TAG_RULE_DELETE).getText());
+                } catch (NullPointerException npe) {}
+                map.put(new KeyRule(name, season, quality), new ValueRule(path, rename, delete));
+                matrix.add(new Object[]{name, season, quality, path, rename,delete});
             }
         }
-        return map;
-    }
-
-    private TreeMap<KeyRule, ValueRule> readingDocumentRule(){
-        TreeMap<KeyRule, ValueRule> map = new TreeMap<KeyRule, ValueRule>();
-        Iterator iterator = document.getRootElement().getChildren().iterator();
-        while (iterator.hasNext()) {
-            Element rule = (Element) iterator.next();
-            String name = rule.getChild(TAG_RULE_NAME).getText();
-            String season = rule.getChild(TAG_RULE_SEASON).getText();
-            String quality = rule.getChild(TAG_RULE_QUALITY).getText();
-            String path = rule.getChild(TAG_RULE_PATH).getText();
-            boolean rename = false, delete = false;
-            try{
-                rename = Boolean.parseBoolean(rule.getChild(TAG_RULE_RENAME).getText());
-            } catch (NullPointerException npe) {}
-            try{
-                delete = Boolean.parseBoolean(rule.getChild(TAG_RULE_DELETE).getText());
-            } catch (NullPointerException npe) {}
-            map.put(new KeyRule(name, season, quality), new ValueRule(path, rename, delete));
-        }
-        return map;
+        global.add(map);
+        global.add(matrix);
+        return global;
     }
 }

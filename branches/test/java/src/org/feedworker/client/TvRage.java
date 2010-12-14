@@ -34,7 +34,8 @@ class TvRage {
 
     private Document document;
 
-    ArrayList<Object[]> readingDetailedSearch_byShow(String show) throws JDOMException, IOException{
+    ArrayList<Object[]> readingDetailedSearch_byShow(String show, boolean stop)
+                throws JDOMException, IOException{
         document = new SAXBuilder().build(new URL(DETAILED_SEARCH + show));
         List children = document.getRootElement().getChildren();
         int size = children.size();
@@ -56,6 +57,8 @@ class TvRage {
                 }
                 Object[] temp = {id, name, season, status, airday};
                 matrix.add(temp);
+                if (stop)
+                    break;
             }
         }
         return matrix;
@@ -64,14 +67,15 @@ class TvRage {
     Object[] readingEpisodeList_byID(String id, String season) throws JDOMException, IOException{
         document = new SAXBuilder().build(new URL(EPISODE_LIST + id));
         List seasons = ((Element) document.getRootElement().getChildren().get(2)).getChildren();
-        int last = Lang.stringToInt(season)-1;
-        Iterator iter = null;
-        try{
-            iter = ((Element) seasons.get(last)).getChildren().iterator();
-        } catch(IndexOutOfBoundsException e){
-            iter = ((Element) seasons.get(--last)).getChildren().iterator();
-            season = Lang.intToString(last+1);
+        int last = Lang.stringToInt(season);        
+        List temp = null;
+        while (temp==null){
+            try{
+                temp = ((Element) seasons.get(--last)).getChildren();
+            } catch(IndexOutOfBoundsException e){}
         }
+        season = Lang.intToString(last+1);
+        Iterator iter = temp.iterator();
         Date yesterday = Common.yesterdayDate();
         Object[] values = null;
         if (iter.hasNext())

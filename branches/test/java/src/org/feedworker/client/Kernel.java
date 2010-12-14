@@ -59,9 +59,9 @@ public class Kernel {
     public final String SEARCH_TV = "SearchTV";
     public final String SUBTITLE_DEST = "SubtitleDest";
     public final String CALENDAR = "Calendar";
-    public final String FOCUS = "Focus";
-
-
+    public final String OPERATION_FOCUS = "Focus";
+    public final String OPERATION_IMPORT_SHOW = "ImportShow";
+    public final String OPERATION_IMPORT_INCREMENT = "ImportIncrement";
     // PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
@@ -72,6 +72,8 @@ public class Kernel {
         Quality.FORM_1080p.toString(), Quality.FORM_1080i.toString(), Quality.BLURAY.toString(),
         Quality.DVDRIP.toString(), Quality.HR.toString(),
         Quality.DIFF.toString()};
+    private final File FILE_RULE = new File("rules.xml");
+    private final File FILE_CALENDAR = new File("calendar.xml");
     // PRIVATE STATIC VARIABLES
     private static Kernel core = null;
     // PRIVATE VARIABLES
@@ -84,7 +86,7 @@ public class Kernel {
     private TreeMap<KeyRule, ValueRule> mapRules;
     private ManageException error = ManageException.getIstance();
     private TextPaneEventListener mytpel;
-
+    private Xml xmlCalendar, xmlSubDest;
     /**
      * Restituisce l'istanza corrente del kernel
      *
@@ -534,43 +536,25 @@ public class Kernel {
      */
     public void saveMap(TreeMap<KeyRule, ValueRule> temp) {
         try {
-            new Xml().writeMap(temp);
+            new Xml(FILE_RULE, false).writeMap(temp);
             mapRules = temp;
             fireNewTextPaneEvent("Regola/e memorizzate", TextPaneEvent.OK);
+        } catch (JDOMException ex) {
+            error.launch(ex, getClass());
         } catch (IOException ex) {
             error.launch(ex, getClass(), null);
         }
     }
 
-    /**
-     * converte la treemap delle regole in arraylist di String[]
-     *
-     * @return arraylist regole
-     */
-    private ArrayList<Object[]> convertTreemapToArraylist() {
-        ArrayList<Object[]> matrix = null;
-        if (mapRules.size() > 0) {
-            Iterator it = mapRules.keySet().iterator();
-            matrix = new ArrayList<Object[]>();
-            while (it.hasNext()) {
-                KeyRule key = (KeyRule) it.next();
-                ValueRule value = mapRules.get(key);
-                matrix.add(new Object[]{key.getName(), key.getSeason(), key.getQuality(),
-                    value.getPath(), Boolean.valueOf(value.isRename()),
-                    Boolean.valueOf(value.isDelete())});
-            }
-        }
-        return matrix;
-    }
-
-    /** Carica l'xml delle regole */
+    /** Carica gli xml*/
     public void loadXml() {
         if (prop.isEnabledCustomDestinationFolder()) {
-            Xml x = new Xml();
             try {
-                mapRules = x.initializeReaderRule();
+                xmlSubDest = new Xml(FILE_RULE, true);
+                ArrayList temp = xmlSubDest.initializeReaderRule();
+                mapRules = (TreeMap<KeyRule, ValueRule>) temp.get(0);
                 if (mapRules != null)
-                    fireTableEvent(convertTreemapToArraylist(),SUBTITLE_DEST);
+                    fireTableEvent((ArrayList<Object[]>) temp.get(1),SUBTITLE_DEST);
             } catch (JDOMException ex) {
                 error.launch(ex, getClass());
             } catch (IOException ex) {
@@ -821,13 +805,13 @@ public class Kernel {
     public void detailedSearchShow(String tv) {
         TvRage t = new TvRage();
         try {
-            ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv);
+            ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv, false);
             if (array!=null){
                 fireTableEvent(array,SEARCH_TV);
-                fireNewJFrameEventOperation(SEARCH_TV);
+                fireJFrameEventOperation(SEARCH_TV);
             } else {
                 printAlert("La ricerca di " + tv + " non ha prodotto risultati");
-                fireNewJFrameEventOperation(FOCUS);
+                fireJFrameEventOperation(OPERATION_FOCUS);
             }
         } catch (JDOMException ex) {
             error.launch(ex, null);
@@ -848,8 +832,44 @@ public class Kernel {
                 array[2] = show[3];
                 array[3] = show[4];
                 al.add(array);
+                xmlCalendar.addShowTV(array);
             }
+            xmlCalendar.write();
             fireTableEvent(al, CALENDAR);
+        } catch (JDOMException ex) {
+            error.launch(ex, null);
+        } catch (IOException ex) {
+            error.launch(ex, null);
+        }
+    }
+
+    public void importTvFromDestSub(){
+        Iterator<KeyRule> iter = mapRules.keySet().iterator();
+        String oldName = "";
+        ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
+        TvRage t = new TvRage();
+        try {
+            fireJFrameEventOperation(OPERATION_IMPORT_SHOW, mapRules.size());
+            while (iter.hasNext()){
+                String name = iter.next().getName();
+                if (!name.toLowerCase().equalsIgnoreCase(oldName.toLowerCase())){
+                    ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(name, true);
+                    if (temp!=null){
+                        Object[] show = temp.get(0);
+                        Object[] array = t.readingEpisodeList_byID(show[0].toString(), show[2].toString());
+                        array[0] = show[0];
+                        array[1] = show[1];
+                        array[2] = show[3];
+                        array[3] = show[4];
+                        alObjs.add(array);
+                        xmlCalendar.addShowTV(array);
+                    }
+                    oldName = name;
+                }
+                fireJFrameEventOperation(OPERATION_IMPORT_INCREMENT);
+            }
+            xmlCalendar.write();
+            fireTableEvent(alObjs, CALENDAR);
         } catch (JDOMException ex) {
             error.launch(ex, null);
         } catch (IOException ex) {
@@ -1004,8 +1024,17 @@ public class Kernel {
         listenerJFrameO.remove(listener);
     }
 
-    private synchronized void fireNewJFrameEventOperation(String oper) {
+    private synchronized void fireJFrameEventOperation(String oper) {
         JFrameEventOperation event = new JFrameEventOperation(this, oper);
+        Iterator listeners = listenerJFrameO.iterator();
+        while (listeners.hasNext()) {
+            JFrameEventOperationListener myel = (JFrameEventOperationListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+
+    private synchronized void fireJFrameEventOperation(String oper, int max) {
+        JFrameEventOperation event = new JFrameEventOperation(this, oper, max);
         Iterator listeners = listenerJFrameO.iterator();
         while (listeners.hasNext()) {
             JFrameEventOperationListener myel = (JFrameEventOperationListener) listeners.next();

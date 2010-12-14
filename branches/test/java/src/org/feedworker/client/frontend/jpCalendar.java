@@ -74,6 +74,16 @@ class jpCalendar extends jpAbstract{
             }
         });
 
+        JButton jbImport = new JButton(" Importa ");
+        jbImport.setToolTipText("Importa dai nomi serie di subtitle destination");
+        jbImport.setBorder(BORDER);
+        jbImport.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                proxy.importFromSubDest();
+            }
+        });
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -85,7 +95,9 @@ class jpCalendar extends jpAbstract{
         actionJP.add(jbRemoveRow, gbc);
         gbc.gridx = 2;
         actionJP.add(jbRefresh, gbc);
-
+        gbc.gridx = 3;
+        actionJP.add(jbImport, gbc);
+        
         add(actionJP, BorderLayout.NORTH);
     }
 

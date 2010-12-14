@@ -46,8 +46,8 @@ public class jfMain extends JFrame implements WindowListener,
     private jpItasa itasaJP;
     private jpTorrent torrentJP;
     private jpSubsfactory subsfactoryJP;
-    //private jpResultSearchTv resultSearchTvJP = jpResultSearchTv.getPanel();
     private jdResultSearchTv resultSearchTvJD = jdResultSearchTv.getDialog();
+    private jdProgressBarImport progressBar;
 
     /** Costruttore */
     public jfMain() {
@@ -350,16 +350,20 @@ public class jfMain extends JFrame implements WindowListener,
     @Override
     public void objReceived(JFrameEventOperation evt) {
         if (evt.getOperaz() != null) {
-            if (evt.getOperaz().equalsIgnoreCase(proxy.getAddPaneDestSub()))
+            if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationAddPaneDestSub()))
                 mainJTP.addTab("Destinazione avanzata", jpSubtitleDest.getPanel());
-            else if (evt.getOperaz().equalsIgnoreCase(proxy.getRemovePaneDestSub()))
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationRemovePaneDestSub()))
                 mainJTP.remove(jpSubtitleDest.getPanel());
-            else if (evt.getOperaz().equalsIgnoreCase(proxy.getEnableButton()))
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationEnableButton()))
                 changeEnabledButton(true);
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getSearchTV()))
                 resultSearchTvJD.setVisible(true);
-            else if (evt.getOperaz().equalsIgnoreCase(proxy.getFocus()))
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationFocus()))
                 requestFocus();
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportShow()))
+                progressBar = new jdProgressBarImport(evt.getMax());
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportIncrement()))
+                progressBar.incrementValue();
         }
     }
 
