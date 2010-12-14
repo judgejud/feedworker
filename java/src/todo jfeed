@@ -1,11 +1,12 @@
 IMPLEMENTARE
 -Calendario integrazione con qlk sito tipo tvrage che recupera ultima puntata trasmessa e prossima da trasmettere (numero, data e titolo)
-*salvare i dati nell'xml
-*implementare un import da myitasa/subtitle dest
+*salvare i dati nell'xml (fare caricamento/rimozione)
+*fare aggiornamento
+*implementare progress bar x import
+*trovare un modo per il quale l'import una volta fatto si disabiliti
 -feed rss sotto thread
 -vedere di creare 1http permanente x itasa
 -trovare 1modo per rendere visibile la pwd itasa
--sistemare il mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
 -ripristino proprietà (file properties e rules.xml)
 -ricerca sottotitoli itasa
 -destinazione avanzata in mixed mode 
@@ -14,18 +15,25 @@ IMPLEMENTARE
 -implementare il tipo di download di mysubsfactory (come x myitasa)
 
 pulsante check login itasa
+pulsante di copia info sistema
 terminare legenda colori
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
 destinazione avanzata: bottone info su ciò che è presente nella tabella e quindi treemap.
-avvio automatico all'avvio OS (win-unix-mac)
+fare caricamento xml sotto thread
+avvio automatico all'avvio OS (win-unix-mac)?
 multiutenza?
 properties sotto jfacility? 
-impostazioni dei tabs
+impostazioni dei tabs?
 log4j?
 aggiungere versioning automatico all'applicazione
 OS & FW: decidere per il debug_flag se passarlo da commandline.
 esiste evento "arresta sistema"? e come intercettarlo??? 
 jframe statica? 
+feature proxy? 
+
+CORREZIONI:
+-riavvio che non salva l'ultima data aggiornamento prima del riavvio
+-sistemare il mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
 
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'.
