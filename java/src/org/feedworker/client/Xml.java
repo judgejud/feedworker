@@ -117,54 +117,54 @@ class Xml {
         root.addContent(createShow(array));
     }
     
-    void removeShowTv(Object[] array){
-        root.removeContent(createShow(array));
+    void removeShowTv(int row){
+        root.getChildren().remove(row);
     }
     
     private Element createShow(Object[] array){
-        Element calendar = new Element(TAG_CALENDAR_ROOT);
+        //Element calendar = new Element(TAG_CALENDAR_ROOT);
         int i=-1;
         Element id_tvrage = new Element(TAG_CALENDAR_ID_TVRAGE);
         id_tvrage.setText(array[++i].toString());
-        calendar.addContent(id_tvrage);
+        //calendar.addContent(id_tvrage);
 
         Element name = new Element(TAG_CALENDAR_NAME);
         name.setText(array[++i].toString());
-        calendar.addContent(name);
+        id_tvrage.addContent(name);
 
         Element status = new Element(TAG_CALENDAR_STATUS);
         status.setText(array[++i].toString());
-        calendar.addContent(status);
+        id_tvrage.addContent(status);
 
         Element day = new Element(TAG_CALENDAR_DAY);
         day.setText(array[++i].toString());
-        calendar.addContent(day);
+        id_tvrage.addContent(day);
 
         Element lastEpisode = new Element(TAG_CALENDAR_LAST_EPISODE);
         lastEpisode.setText(checkNPE(array[++i]));
-        calendar.addContent(lastEpisode);
+        id_tvrage.addContent(lastEpisode);
 
         Element lastTitle = new Element(TAG_CALENDAR_LAST_TITLE);
         lastTitle.setText(checkNPE(array[++i]));
-        calendar.addContent(lastTitle);
+        id_tvrage.addContent(lastTitle);
 
         Element lastDate = new Element(TAG_CALENDAR_LAST_DATE);
         lastDate.setText(checkNPE(array[++i]));
-        calendar.addContent(lastDate);
+        id_tvrage.addContent(lastDate);
 
         Element nextEpisode = new Element(TAG_CALENDAR_NEXT_EPISODE);
         nextEpisode.setText(checkNPE(array[++i]));
-        calendar.addContent(nextEpisode);
+        id_tvrage.addContent(nextEpisode);
 
         Element nextTitle = new Element(TAG_CALENDAR_NEXT_TITLE);
         nextTitle.setText(checkNPE(array[++i]));
-        calendar.addContent(nextTitle);
+        id_tvrage.addContent(nextTitle);
 
         Element nextDate = new Element(TAG_CALENDAR_NEXT_DATE);
         nextDate.setText(checkNPE(array[++i]));
-        calendar.addContent(nextDate);
+        id_tvrage.addContent(nextDate);
         
-        return calendar;
+        return id_tvrage;
     }
 
     ArrayList<Object[]> readingDocumentCalendar() throws JDOMException, IOException{
@@ -172,19 +172,19 @@ class Xml {
         if (sizeDocument() > 0){
             Iterator iter = iteratorDocument();
             while (iter.hasNext()) {
-                Element calendar = (Element) iter.next();
+                Element idTvRage = (Element) iter.next();
                 Object[] obj = new Object[10];
                 int i=-1;
-                obj[++i]=calendar.getChild(TAG_CALENDAR_ID_TVRAGE).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_NAME).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_STATUS).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_DAY).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_EPISODE).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_TITLE).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_DATE).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_EPISODE).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_TITLE).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_DATE).getText();
+                obj[++i]=idTvRage.getText();
+                obj[++i]=idTvRage.getChild(TAG_CALENDAR_NAME).getText();
+                obj[++i]=idTvRage.getChild(TAG_CALENDAR_STATUS).getText();
+                obj[++i]=idTvRage.getChild(TAG_CALENDAR_DAY).getText();
+                obj[++i]=idTvRage.getChild(TAG_CALENDAR_LAST_EPISODE).getText();
+                obj[++i]=idTvRage.getChild(TAG_CALENDAR_LAST_TITLE).getText();
+                obj[++i]=idTvRage.getChild(TAG_CALENDAR_LAST_DATE).getText();
+                obj[++i]=idTvRage.getChild(TAG_CALENDAR_NEXT_EPISODE).getText();
+                obj[++i]=idTvRage.getChild(TAG_CALENDAR_NEXT_TITLE).getText();
+                obj[++i]=idTvRage.getChild(TAG_CALENDAR_NEXT_DATE).getText();
                 al.add(obj);
             }            
         }

@@ -857,10 +857,10 @@ public class Kernel {
         }
     }
     
-    public void removeShowTv(Object[] from) {
+    public void removeShowTv(int row) {
         TvRage t = new TvRage();
         try {
-            xmlCalendar.removeShowTv(from);
+            xmlCalendar.removeShowTv(row);
             xmlCalendar.write();
         } catch (IOException ex) {
             error.launch(ex, null);
