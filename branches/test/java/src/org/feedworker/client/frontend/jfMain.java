@@ -20,7 +20,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import org.feedworker.client.ApplicationSettings;
@@ -363,8 +362,10 @@ public class jfMain extends JFrame implements WindowListener,
                 requestFocus();
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportShow())){
                 progressBar = new jdProgressBarImport(evt.getMax());
-            } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportIncrement()))
-                progressBar.run();
+            } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportIncrement())){
+                Thread t = new Thread(progressBar, "Thread progressBar");
+                t.start();
+            }
         }
     }
 
