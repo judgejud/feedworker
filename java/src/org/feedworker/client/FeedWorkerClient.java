@@ -67,7 +67,6 @@ public class FeedWorkerClient {
             feedWorker.getIstanceLAF().addSyntheticaNotFree();
             feedWorker.getIstanceLAF().addOtherLAF();
             feedWorker.getIstanceLAF().setLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
-            //feedWorker.setLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
         } catch (NotAvailableLookAndFeelException e) {
             feedWorker.getIstanceLAF().setLookAndFeel();
         }

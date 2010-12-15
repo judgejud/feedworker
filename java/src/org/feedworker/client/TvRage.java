@@ -38,9 +38,8 @@ class TvRage {
                 throws JDOMException, IOException{
         document = new SAXBuilder().build(new URL(DETAILED_SEARCH + show));
         List children = document.getRootElement().getChildren();
-        int size = children.size();
         ArrayList<Object[]> matrix = null;
-        if (size>0){
+        if (children.size()>0){
             matrix = new ArrayList<Object[]>();
             Iterator iterator = children.iterator();
             while (iterator.hasNext()) {

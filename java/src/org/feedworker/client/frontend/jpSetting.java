@@ -652,10 +652,9 @@ class jpSetting extends JPanel {
                     + ". \nPremi Si per riavviare, No altrimenti",
                     "Info", JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
-            if (returnCode == 1) {
+            if (returnCode == 1)
                 return;
-            }
-            proxy.restartApplication();
+            proxy.restartApplication(jlDataAggiornamento.getText());
         }
     }
 }
