@@ -139,7 +139,7 @@ public class jfMain extends JFrame implements WindowListener,
         restartJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                proxy.restartApplication();
+                proxy.restartApplication(settingsJP.getDataAggiornamento());
             }
         });
         fileJM.add(restartJMI);

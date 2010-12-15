@@ -51,9 +51,10 @@ class Xml {
 
     public Xml(File f, boolean read) throws JDOMException, IOException{
         file = f;
-        if (file.exists() && read)
+        if (file.exists() && read){
             document = new SAXBuilder().build(file);
-        else
+            root = document.getRootElement();
+        } else
             initializeWriter();
     }
     /**
@@ -166,15 +167,28 @@ class Xml {
         return calendar;
     }
 
-    void readingDocumentCalendar() throws JDOMException, IOException{
+    ArrayList<Object[]> readingDocumentCalendar() throws JDOMException, IOException{
         ArrayList<Object[]> al = new ArrayList<Object[]>();
         if (sizeDocument() > 0){
             Iterator iter = iteratorDocument();
             while (iter.hasNext()) {
                 Element calendar = (Element) iter.next();
-
-            }
+                Object[] obj = new Object[10];
+                int i=-1;
+                obj[++i]=calendar.getChild(TAG_CALENDAR_ID_TVRAGE).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_NAME).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_STATUS).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_DAY).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_EPISODE).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_TITLE).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_DATE).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_EPISODE).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_TITLE).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_DATE).getText();
+                al.add(obj);
+            }            
         }
+        return al;
     }
 
     private String checkNPE(Object obj){

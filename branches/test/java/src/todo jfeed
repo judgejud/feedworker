@@ -1,25 +1,28 @@
 IMPLEMENTARE
--Calendario integrazione con qlk sito tipo tvrage che recupera ultima puntata trasmessa e prossima da trasmettere (numero, data e titolo)
-*salvare i dati nell'xml (fare caricamento/rimozione)
+-Calendario
+*salvare i dati nell'xml (fare rimozione)
 *fare aggiornamento
-*implementare progress bar x import
+*sistemare la data
+*implementare progress bar x import (thread separato?)
 *trovare un modo per il quale l'import una volta fatto si disabiliti
+*evidare doppioni di id tramite treeset? 
 -feed rss sotto thread
 -vedere di creare 1http permanente x itasa
 -trovare 1modo per rendere visibile la pwd itasa
--ripristino proprietà (file properties e rules.xml)
+-ripristino proprietà (file properties e rules.xml e calendar.xml)
 -ricerca sottotitoli itasa
 -destinazione avanzata in mixed mode 
 -destinazione avanzata: se la disabilito per poi riabilitarla, non companiono gli item se ci sono nel file, ma al riavvio si(quindi far riavviare? o far ricaricare?)
 -fare in modo che col tasto dx sulle destinazioni esca la possibilità di poter aprire la cartella.
 -implementare il tipo di download di mysubsfactory (come x myitasa)
-
 pulsante check login itasa
 pulsante di copia info sistema
+impedire il funzionamento a vendor java diverse da sun.
+fare caricamento xml sotto thread
+
 terminare legenda colori
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
-destinazione avanzata: bottone info su ciò che è presente nella tabella e quindi treemap.
-fare caricamento xml sotto thread
+calendar: bottone info su ciò che è presente nella tabella?
 avvio automatico all'avvio OS (win-unix-mac)?
 multiutenza?
 properties sotto jfacility? 
@@ -32,14 +35,14 @@ jframe statica?
 feature proxy? 
 
 CORREZIONI:
--riavvio che non salva l'ultima data aggiornamento prima del riavvio
 -sistemare il mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
 
 ERRORI DA SISTEMARE:
 alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'.
 
 VERIFICARE LE IMPLEMENTAZIONI
-autoriavvio con java home (win, mac)
+riavvio che non salva l'ultima data aggiornamento prima del riavvio
+riavvio con java home (win, mac)
 1080i
 splashscreen (java5)
 avvio ridotto ad icona (java5)

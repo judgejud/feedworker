@@ -20,8 +20,6 @@ import java.util.TreeMap;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import jcifs.smb.SmbException;
-
 //import org.eclipse.swt.widgets.Display;
 import org.feedworker.client.frontend.events.*;
 import org.feedworker.util.AudioPlay;
@@ -35,9 +33,10 @@ import org.feedworker.util.ValueRule;
 
 import org.jfacility.java.lang.Lang;
 import org.jfacility.Util;
+import org.opensanskrit.exception.UnableRestartApplicationException;
 
 import org.jdom.JDOMException;
-
+import jcifs.smb.SmbException;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 
@@ -267,13 +266,20 @@ public class Kernel {
      *
      * @param data
      */
-    public void closeApp(String data) {
+    public void closeApp(String data, boolean restart) {
         if (!Lang.verifyTextNotNull(data))
             data = Common.actualTime();
         prop.setLastDateTimeRefresh(data);
         if (!prop.isApplicationFirstTimeUsed())
             prop.writeOnlyLastDate();
-        System.exit(0);
+        if (restart){
+            try {
+                FeedWorkerClient.getApplication().restart();
+            } catch (UnableRestartApplicationException ex) {
+                error.launch(ex);
+            }
+        } else
+            System.exit(0);
     }
 
     /** Scrive le proprietà dell'applicazione nel file properties */
@@ -561,6 +567,14 @@ public class Kernel {
                 error.launch(ex, getClass(), null);
             }
         }
+        try {
+            xmlCalendar = new Xml(FILE_CALENDAR, true);
+            fireTableEvent(xmlCalendar.readingDocumentCalendar(),CALENDAR);
+        } catch (JDOMException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass(), null);
+        }
     }
 
     /**
@@ -842,6 +856,16 @@ public class Kernel {
             error.launch(ex, null);
         }
     }
+    
+    public void removeShowTv(Object[] from) {
+        TvRage t = new TvRage();
+        try {
+            xmlCalendar.removeShowTv(from);
+            xmlCalendar.write();
+        } catch (IOException ex) {
+            error.launch(ex, null);
+        }
+    }
 
     public void importTvFromDestSub(){
         Iterator<KeyRule> iter = mapRules.keySet().iterator();
@@ -855,6 +879,7 @@ public class Kernel {
                 if (!name.toLowerCase().equalsIgnoreCase(oldName.toLowerCase())){
                     ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(name, true);
                     if (temp!=null){
+                        
                         Object[] show = temp.get(0);
                         Object[] array = t.readingEpisodeList_byID(show[0].toString(), show[2].toString());
                         array[0] = show[0];

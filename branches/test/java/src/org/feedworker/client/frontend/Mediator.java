@@ -39,12 +39,12 @@ import org.jfacility.Awt;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.MySystem;
 import org.jfacility.javax.swing.Swing;
-import org.opensanskrit.exception.UnableRestartApplicationException;
 
 import com.sun.syndication.io.FeedException;
 import org.eclipse.swt.SWTException;
 import org.feedworker.client.frontend.events.JFrameEventOperation;
 import org.feedworker.client.frontend.events.JFrameEventOperationListener;
+import org.jfacility.java.lang.JVM;
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
  * 
@@ -238,7 +238,7 @@ public class Mediator {
     }
 
     void closeApp(String date) {
-        core.closeApp(date);
+        core.closeApp(date, false);
     }
 
     void setTableListener(TableEventListener listener) {
@@ -707,12 +707,8 @@ public class Mediator {
         }
     }
 
-    void restartApplication() {
-        try {
-            FeedWorkerClient.getApplication().restart();
-        } catch (UnableRestartApplicationException e) {
-            e.printStackTrace();
-        }
+    void restartApplication(String date) {
+        core.closeApp(date, true);
     }
 
     String getNameApp() {
@@ -759,9 +755,9 @@ public class Mediator {
                 return false;
             }
         };
-        dtm.addRow(new String[]{"Java version", MySystem.getJavaVersion()});
-        dtm.addRow(new String[]{"Java vendor", MySystem.getJavaVendor()});
-        dtm.addRow(new String[]{"Java Home", MySystem.getJavaHome()});
+        dtm.addRow(new String[]{"Java version", JVM.getVersion()});
+        dtm.addRow(new String[]{"Java vendor", JVM.getVendor()});
+        dtm.addRow(new String[]{"Java Home", JVM.getHome()});
         dtm.addRow(new String[]{"Sistema Operativo", MySystem.getOsName()});
         dtm.addRow(new String[]{"Versione SO", MySystem.getOsVersion()});
         dtm.addRow(new String[]{"Architettura SO", MySystem.getOsArchitecture()});
@@ -793,5 +789,9 @@ public class Mediator {
 
     void importFromSubDest() {
         core.importTvFromDestSub();
+    }
+
+    void removeCalendar(Object[] value) {
+        core.removeShowTv(value);
     }
 }
