@@ -109,12 +109,10 @@ class jpCalendar extends jpAbstract{
 
     private void jbRemoveRowMouseClicked() {
         int row = jtable.getSelectedRow();
+        System.out.println(row);
         if (row > -1){
             row = jtable.convertRowIndexToModel(row);
-            Object[] value = new Object[10];
-            for (int i=0; i<10; i++)
-                value[i] = jtable.getValueAt(row, i);
-            proxy.removeCalendar(value);
+            proxy.removeCalendar(row);
             ((DefaultTableModel) jtable.getModel()).removeRow(row);
         }
     }
