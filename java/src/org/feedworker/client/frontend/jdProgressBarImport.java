@@ -28,11 +28,10 @@ class jdProgressBarImport extends JDialog implements Runnable{
     }
 
     void incrementValue(){
-        bar.setValue(++count);
     }
 
     @Override
     public void run() {
-        incrementValue();
+        bar.setValue(++count);
     }
 }
