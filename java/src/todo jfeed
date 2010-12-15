@@ -1,24 +1,23 @@
 IMPLEMENTARE
 -Calendario
-*salvare i dati nell'xml (fare rimozione)
 *fare aggiornamento
 *sistemare la data
-*implementare progress bar x import (thread separato?)
+*implementare progress bar x import su thread separato
 *trovare un modo per il quale l'import una volta fatto si disabiliti
 *evidare doppioni di id tramite treeset? 
 -feed rss sotto thread
--vedere di creare 1http permanente x itasa
 -trovare 1modo per rendere visibile la pwd itasa
 -ripristino proprietà (file properties e rules.xml e calendar.xml)
--ricerca sottotitoli itasa
 -destinazione avanzata in mixed mode 
 -destinazione avanzata: se la disabilito per poi riabilitarla, non companiono gli item se ci sono nel file, ma al riavvio si(quindi far riavviare? o far ricaricare?)
 -fare in modo che col tasto dx sulle destinazioni esca la possibilità di poter aprire la cartella.
 -implementare il tipo di download di mysubsfactory (come x myitasa)
-pulsante check login itasa
-pulsante di copia info sistema
-impedire il funzionamento a vendor java diverse da sun.
-fare caricamento xml sotto thread
+-pulsante check login itasa
+-pulsante di copia info sistema
+-impedire il funzionamento a vendor java diverse da sun.
+-fare caricamento xml sotto thread
+-vedere di creare 1http permanente x itasa
+-ricerca sottotitoli itasa
 
 terminare legenda colori
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.

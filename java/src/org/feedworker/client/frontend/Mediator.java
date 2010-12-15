@@ -791,7 +791,11 @@ public class Mediator {
         core.importTvFromDestSub();
     }
 
-    void removeCalendar(int value) {
+    void removeSingleShowCalendar(int value) {
         core.removeShowTv(value);
+    }
+    
+    void removeAllShowCalendar() {
+        core.removeAllShowTv();
     }
 }
