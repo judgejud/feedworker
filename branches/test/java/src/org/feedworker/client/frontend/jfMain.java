@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import org.feedworker.client.ApplicationSettings;
@@ -348,7 +349,7 @@ public class jfMain extends JFrame implements WindowListener,
     }
 
     @Override
-    public void objReceived(JFrameEventOperation evt) {
+    public void objReceived(final JFrameEventOperation evt) {
         if (evt.getOperaz() != null) {
             if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationAddPaneDestSub()))
                 mainJTP.addTab("Destinazione avanzata", jpSubtitleDest.getPanel());
@@ -360,10 +361,10 @@ public class jfMain extends JFrame implements WindowListener,
                 resultSearchTvJD.setVisible(true);
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationFocus()))
                 requestFocus();
-            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportShow()))
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportShow())){
                 progressBar = new jdProgressBarImport(evt.getMax());
-            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportIncrement()))
-                progressBar.incrementValue();
+            } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportIncrement()))
+                progressBar.run();
         }
     }
 

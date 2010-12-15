@@ -861,7 +861,15 @@ public class Kernel {
         TvRage t = new TvRage();
         try {
             xmlCalendar.removeShowTv(row);
-            xmlCalendar.write();
+        } catch (IOException ex) {
+            error.launch(ex, null);
+        }
+    }
+    
+    public void removeAllShowTv() {
+        TvRage t = new TvRage();
+        try {
+            xmlCalendar.removeAllShowTv();
         } catch (IOException ex) {
             error.launch(ex, null);
         }
@@ -879,7 +887,6 @@ public class Kernel {
                 if (!name.toLowerCase().equalsIgnoreCase(oldName.toLowerCase())){
                     ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(name, true);
                     if (temp!=null){
-                        
                         Object[] show = temp.get(0);
                         Object[] array = t.readingEpisodeList_byID(show[0].toString(), show[2].toString());
                         array[0] = show[0];

@@ -44,7 +44,7 @@ class jpCalendar extends jpAbstract{
 
     @Override
     void initializeButtons() {
-        JButton jbAddRow = new JButton(" Aggiungi Serie ");
+        JButton jbAddRow = new JButton(" + ");
         jbAddRow.setToolTipText("Aggiungi riga/serie alla tabella");
         jbAddRow.setBorder(BORDER);
         jbAddRow.addMouseListener(new MouseAdapter() {
@@ -54,7 +54,7 @@ class jpCalendar extends jpAbstract{
             }
         });
 
-        JButton jbRemoveRow = new JButton(" Rimuove Serie ");
+        JButton jbRemoveRow = new JButton(" - ");
         jbRemoveRow.setToolTipText("Rimuovi riga/serie selezionata dalla tabella");
         jbRemoveRow.setBorder(BORDER);
         jbRemoveRow.addMouseListener(new MouseAdapter() {
@@ -63,8 +63,18 @@ class jpCalendar extends jpAbstract{
                 jbRemoveRowMouseClicked();
             }
         });
+        
+        JButton jbRemoveAll = new JButton(" Remove All ");
+        jbRemoveAll.setToolTipText("Rimuove tutte le serie dalla tabella");
+        jbRemoveAll.setBorder(BORDER);
+        jbRemoveAll.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbRemoveAllRows();
+            }
+        });
 
-        JButton jbRefresh = new JButton(" Aggiorna informazioni ");
+        JButton jbRefresh = new JButton(" Aggiorna ");
         jbRefresh.setToolTipText("Aggiorna le informazioni sulle serie");
         jbRefresh.setBorder(BORDER);
         jbRefresh.addMouseListener(new MouseAdapter() {
@@ -90,12 +100,15 @@ class jpCalendar extends jpAbstract{
         gbc.insets = BUTTON_SPACE_INSETS;
         gbc.anchor = GridBagConstraints.NORTHWEST;
 
+        int x=1;
         actionJP.add(jbAddRow, gbc);
-        gbc.gridx = 1;
+        gbc.gridx = x++;
         actionJP.add(jbRemoveRow, gbc);
-        gbc.gridx = 2;
+        gbc.gridx = x++;
+        actionJP.add(jbRemoveAll, gbc);
+        gbc.gridx = x++;
         actionJP.add(jbRefresh, gbc);
-        gbc.gridx = 3;
+        gbc.gridx = x++;
         actionJP.add(jbImport, gbc);
         
         add(actionJP, BorderLayout.NORTH);
@@ -112,9 +125,14 @@ class jpCalendar extends jpAbstract{
         System.out.println(row);
         if (row > -1){
             row = jtable.convertRowIndexToModel(row);
-            proxy.removeCalendar(row);
+            proxy.removeSingleShowCalendar(row);
             ((DefaultTableModel) jtable.getModel()).removeRow(row);
         }
+    }
+    
+    private void jbRemoveAllRows(){
+        proxy.removeAllShowCalendar();
+        ((DefaultTableModel) jtable.getModel()).setRowCount(0);
     }
 
     private void jbRefreshCalendarMouseClicked() {
