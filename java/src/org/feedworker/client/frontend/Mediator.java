@@ -21,30 +21,29 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.eclipse.swt.SWTException;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.Kernel;
 import org.feedworker.client.RssParser;
 import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
+import org.feedworker.client.frontend.events.JFrameEventOperation;
+import org.feedworker.client.frontend.events.JFrameEventOperationListener;
+import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
-import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.util.Common;
 import org.feedworker.util.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.ValueRule;
-
 import org.jfacility.Awt;
+import org.jfacility.java.lang.JVM;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.MySystem;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
-import org.eclipse.swt.SWTException;
-import org.feedworker.client.frontend.events.JFrameEventOperation;
-import org.feedworker.client.frontend.events.JFrameEventOperationListener;
-import org.jfacility.java.lang.JVM;
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
  * 

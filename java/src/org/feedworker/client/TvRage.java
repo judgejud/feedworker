@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import org.feedworker.util.Common;
 
+import org.feedworker.util.Common;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
