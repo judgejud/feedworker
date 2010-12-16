@@ -2,6 +2,7 @@ package org.feedworker.util;
 
 //IMPORT JAVA
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
@@ -20,17 +21,14 @@ import javax.xml.xpath.XPathExpressionException;
 import jcifs.smb.SmbException;
 
 import org.eclipse.swt.SWTException;
-
 import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
-
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Stampa nella textpane i messaggi d'errore se è un messaggio d'errore "rosso"

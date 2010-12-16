@@ -7,17 +7,14 @@ import javax.swing.JOptionPane;
 
 import org.feedworker.client.frontend.SplashScreenClassic;
 import org.feedworker.client.frontend.SplashScreenEnhanced;
-import org.feedworker.client.frontend.jfMainEnhanced;
 import org.feedworker.client.frontend.jfMain;
 import org.feedworker.client.frontend.jfMainNewer;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
-
 import org.jfacility.java.lang.JVM;
-
-import org.opensanskrit.exception.AlreadyStartedApplicationException;
 import org.opensanskrit.application.Application;
+import org.opensanskrit.exception.AlreadyStartedApplicationException;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 
 /**

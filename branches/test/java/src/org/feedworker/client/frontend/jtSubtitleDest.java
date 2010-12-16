@@ -2,9 +2,7 @@ package org.feedworker.client.frontend;
 
 //IMPORT JAVA
 import java.awt.Component;
-import java.awt.Font;import javax.swing.DefaultCellEditor;
-import javax.swing.JCheckBox;
-;
+import java.awt.Font;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;

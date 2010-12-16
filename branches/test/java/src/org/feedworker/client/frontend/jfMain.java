@@ -361,10 +361,9 @@ public class jfMain extends JFrame implements WindowListener,
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationFocus()))
                 requestFocus();
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportShow())){
-                progressBar = new jdProgressBarImport(evt.getMax());
+                progressBar = new jdProgressBarImport(this, 100);
             } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportIncrement())){
-                Thread t = new Thread(progressBar, "Thread progressBar");
-                t.start();
+            	progressBar.setProgress(evt.getMax());
             }
         }
     }

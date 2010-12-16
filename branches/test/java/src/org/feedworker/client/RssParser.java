@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.feedworker.util.Common;
+import org.jfacility.java.lang.Lang;
 
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
@@ -15,7 +16,6 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
-import org.jfacility.java.lang.Lang;
 
 /**
  * 

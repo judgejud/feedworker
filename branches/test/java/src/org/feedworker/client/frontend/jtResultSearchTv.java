@@ -10,7 +10,6 @@ import javax.swing.table.TableCellRenderer;
 
 import org.feedworker.client.frontend.events.TableEvent;
 import org.feedworker.client.frontend.events.TableEventListener;
-
 import org.jfacility.javax.swing.Swing;
 /**
  *

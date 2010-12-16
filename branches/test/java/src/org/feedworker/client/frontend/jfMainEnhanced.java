@@ -6,8 +6,6 @@ import java.net.URISyntaxException;
 
 import javax.swing.JMenuItem;
 
-import org.feedworker.util.ResourceLocator;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.PaintEvent;
@@ -23,6 +21,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.feedworker.client.frontend.events.JFrameEventIconDate;
+import org.feedworker.util.ResourceLocator;
 
 public class jfMainEnhanced extends jfMain {
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
