@@ -1171,23 +1171,5 @@ public class Kernel implements PropertyChangeListener {
 					.next();
 			myel.objReceived(event);
 		}
-		/*
-		 * Nota: E' stato necessario utilizzare il metodo syncExec perchè
-		 * l'interazione con il thread UI di SWT che gestisce la SysTray può
-		 * avvenire solo in questo modo. In caso contrario l'azione su oggetti
-		 * SWT che vivono in uno specifico thread (UI thread) da un altro thread
-		 * come in questo caso causa una SWTException: Invalid Thread Access.
-		 */
-
-		/*
-		 * final boolean icontray = _icontray; final String data = _data;
-		 * Display.getDefault().syncExec(new Runnable() {
-		 * 
-		 * @Override public void run() { MyJFrameEvent event = new
-		 * MyJFrameEvent(this, icontray, data); Iterator listeners =
-		 * listenerJFrame.iterator(); while (listeners.hasNext()) {
-		 * MyJFrameEventListener myel = (MyJFrameEventListener)
-		 * listeners.next(); myel.objReceived(event); } } });
-		 */
 	}
 }

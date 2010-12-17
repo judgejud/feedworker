@@ -59,10 +59,11 @@ public class FeedWorkerClient {
         K = Kernel.getIstance();
         splash.updateStartupState("Setting Look & Feel ...");
         try {
-            feedWorker.getIstanceLAF().addSyntheticaStandard();
-            feedWorker.getIstanceLAF().addSyntheticaFree();
-            feedWorker.getIstanceLAF().addSyntheticaNotFree();
-            feedWorker.getIstanceLAF().addOtherLAF();
+            feedWorker.getIstanceLAF().addJavaLAF();        	
+        	feedWorker.getIstanceLAF().addJTattooLAF();
+            feedWorker.getIstanceLAF().addSyntheticaStandardLAF();
+            feedWorker.getIstanceLAF().addSyntheticaFreeLAF();
+            feedWorker.getIstanceLAF().addSyntheticaNotFreeLAF();
             feedWorker.getIstanceLAF().setLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
         } catch (NotAvailableLookAndFeelException e) {
             feedWorker.getIstanceLAF().setLookAndFeel();
@@ -91,17 +92,16 @@ public class FeedWorkerClient {
                         splash.updateStartupState("Loading GUI ...");
                         if (jvm.isOrLater(16))
                             jframe = new jfMainNewer();
-                            //jframe = new EnhancedMainJF();
                         else if (jvm.isOrLater(15))
                             jframe = new jfMain();
-                        splash.updateStartupState("Loading xml");
+                        splash.updateStartupState("Loading xml ...");
                         K.loadXml();
                         splash.updateStartupState("Initializing RSS...");
                         K.runRss();
                         //TODO: ripristinare 1volta implementato salvataggio calendar.xml
 //                        K.searchDay(0);
+                        splash.close();
                         if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
-                            splash.close();
                             jframe.setVisible(true);
                         } else {
                             try {
