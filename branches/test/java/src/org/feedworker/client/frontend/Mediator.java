@@ -715,7 +715,7 @@ public class Mediator {
     }
 
     String[] getAvailableLAF() {
-        return FeedWorkerClient.getApplication().getIstanceLAF().getAvailableLafs();
+        return FeedWorkerClient.getApplication().getIstanceLAF().getAvailableLAF();
     }
 
     ApplicationSettings getSettings(){

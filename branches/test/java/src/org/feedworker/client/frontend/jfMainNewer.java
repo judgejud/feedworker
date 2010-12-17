@@ -23,21 +23,27 @@ import org.feedworker.client.frontend.events.JFrameEventIconDate;
  */
 public class jfMainNewer extends jfMain {
     // VARIABLES PRIVATE
-    private SystemTray tray;
-    private TrayIcon trayIcon;
-    private Image iconRss, iconSub;
+    //private SystemTray tray;
+    //private TrayIcon trayIcon;
+	private EnhancedSystemTray systemTray;
+    //private Image iconRss, iconSub;
 
     /** Costruttore */
     public jfMainNewer() {
         super();
-        initSysTray();
     }
 
     /** inizializza la system tray */
     private void initSysTray() {
         if (SystemTray.isSupported()) {
-            iconRss = proxy.getApplicationIcon();
+        	systemTray = new EnhancedSystemTray(this, proxy);
+            
+        	/*
+        	iconRss = proxy.getApplicationIcon();
             iconSub = proxy.getIncomingFeedIcon();
+            */
+        	
+            /*
             PopupMenu popup = new PopupMenu();
 
             MenuItem defaultItem = new MenuItem(" Chiudi " + proxy.getApplicationName());
@@ -49,6 +55,9 @@ public class jfMainNewer extends jfMain {
             });
             popup.add(defaultItem);
             // get the SystemTray instance
+             */
+            
+        	/*
             tray = SystemTray.getSystemTray();
             // load an image
             trayIcon = new TrayIcon(iconRss, proxy.getApplicationName(), popup);
@@ -67,6 +76,7 @@ public class jfMainNewer extends jfMain {
                     setVisible(true);
                 }
             });
+            */
         }
     }
 
@@ -77,7 +87,8 @@ public class jfMainNewer extends jfMain {
         } else {
             setVisible(false);
             try {
-                tray.add(trayIcon);
+                //tray.add(trayIcon);
+            	initSysTray();
             } catch (Exception e) {
                 logJTP.appendError(e.getMessage());
                 setVisible(true);
@@ -88,8 +99,9 @@ public class jfMainNewer extends jfMain {
     @Override
     public void objReceived(JFrameEventIconDate evt) {
         if ((evt.isIcontray()) && (!this.isVisible())) {
-            trayIcon.setToolTip("FeedWorker - ci sono nuovi feed :)");
-            trayIcon.setImage(iconSub);
+        	systemTray.notifyIncomingFeed();
+            //trayIcon.setToolTip("FeedWorker - ci sono nuovi feed :)");
+            //trayIcon.setImage(iconSub);
         }
         if (evt.getDate() != null)
             settingsJP.setDataAggiornamento(evt.getDate());
