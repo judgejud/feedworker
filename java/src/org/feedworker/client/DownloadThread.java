@@ -45,14 +45,15 @@ public class DownloadThread implements Runnable {
     private ManageException error = ManageException.getIstance();
     private TreeMap<KeyRule, ValueRule> mapRules;
     private List listenerTextPane = new ArrayList();
-    private Http httpItasa;
+    //private Http httpItasa;
 
     DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als, boolean _itasa) {
         als = _als;
         itasa = _itasa;
         mapRules = map;
     }
-
+    
+/*da usare con le nuove api itasa quando saranno rilasciate.
     DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als,
             boolean _itasa, Http _http) {
         als = _als;
@@ -60,7 +61,7 @@ public class DownloadThread implements Runnable {
         mapRules = map;
         httpItasa = _http;
     }
-
+*/
     /**Estrae lo zip e restituisce l'arraylist di file contenuti nello zip
      *
      * @param f file zip di riferimento da estrarre

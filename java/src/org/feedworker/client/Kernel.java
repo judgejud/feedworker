@@ -359,38 +359,28 @@ public class Kernel implements PropertyChangeListener {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
                         if (confronta.before(Common.stringToDate(date_matrix))) {
                             if (continua) {
-                                if (from.equals(ITASA)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                if (from.equals(ITASA))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_ITASA);
-                                } else if (from.equals(MYITASA)
-                                        && !prop.isAutoDownloadMyItasa()) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(MYITASA) && !prop.isAutoDownloadMyItasa())
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_MYITASA);
-                                } else if (from.equals(SUBSF)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(SUBSF))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_SUBSF);
-                                } else if (from.equals(MYSUBSF)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(MYSUBSF))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_MYSUBSF);
-                                } else if (from.equals(EZTV)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(EZTV))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_EZTV);
-                                } else if (from.equals(BTCHAT)) {
-                                    fireNewTextPaneEvent(
-                                            "Nuovo/i feed " + from,
+                                else if (from.equals(BTCHAT))
+                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_BTCHAT);
-                                }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2]))
-                                    && download) {
-                                downItasaAuto(matrice.get(i)[0]);
-                            }
+                            if ((isNotStagione((String) matrice.get(i)[2])) && download)
+                                downItasaAuto(matrice.get(i)[0]);                            
                         } else if (first && from.equals(MYITASA)) { // non deve
                             // fare
                             // nulla
@@ -438,7 +428,7 @@ public class Kernel implements PropertyChangeListener {
     private void runTimer(int delay) {
         timer = new Timer();
         try {
-            timer.scheduleAtFixedRate(new TimerTask()  {
+            timer.scheduleAtFixedRate(new TimerTask()   {
 
                 @Override
                 public void run() {
@@ -857,10 +847,12 @@ public class Kernel implements PropertyChangeListener {
 
     public void backup(String name) {
         ArrayList<File> files = new ArrayList<File>();
-        File r = new File("rules.xml");
         File s = new File("settings.properties");
-        if (r.exists()) {
-            files.add(r);
+        if (FILE_RULE.exists()) {
+            files.add(FILE_RULE);
+        }
+        if (FILE_CALENDAR.exists()) {
+            files.add(FILE_RULE);
         }
         if (s.exists()) {
             files.add(s);
@@ -944,6 +936,7 @@ public class Kernel implements PropertyChangeListener {
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
+
         @Override
         public ArrayList<Object[]> doInBackground() {
             int progress = 0;
@@ -997,8 +990,9 @@ public class Kernel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         int progress = importTask.getProgress();
-        if ("progress".equals(evt.getPropertyName()))
+        if ("progress".equals(evt.getPropertyName())) {
             fireJFrameEventOperation(OPERATION_IMPORT_INCREMENT, progress);
+        }
         if (importTask.isDone()) {
             try {
                 fireTableEvent(importTask.get(), CALENDAR);

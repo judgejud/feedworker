@@ -21,7 +21,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.eclipse.swt.SWTException;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.Kernel;
@@ -652,10 +651,6 @@ public class Mediator {
         ManageException.getIstance().launch(e);
     }
 
-    void printError(SWTException e) {
-        ManageException.getIstance().launch(e, jfMainEnhanced.class);
-    }
-
     private void printAlert(String msg) {
         fireNewTextPaneEvent(msg, TextPaneEvent.ALERT);
     }
@@ -680,6 +675,7 @@ public class Mediator {
             myel.objReceived(event);
         }
     }
+    
 
     /**Permette alla classe di registrarsi per l'evento jframe
      *
