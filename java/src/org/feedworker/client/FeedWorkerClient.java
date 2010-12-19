@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import org.feedworker.client.frontend.SplashScreenClassic;
 import org.feedworker.client.frontend.SplashScreenEnhanced;
 import org.feedworker.client.frontend.jfMain;
-import org.feedworker.client.frontend.jfMainNewer;
+import org.feedworker.client.frontend.jfMainEnhanced;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
@@ -96,7 +96,7 @@ public class FeedWorkerClient {
                         jfMain jframe = null;
                         splash.updateStartupState("Loading GUI ...");
                         if (jvm.isOrLater(16))
-                            jframe = new jfMainNewer();
+                            jframe = new jfMainEnhanced();
                         else if (jvm.isOrLater(15))
                             jframe = new jfMain();
                         splash.updateStartupState("Loading xml ...");
