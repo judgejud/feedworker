@@ -50,8 +50,8 @@ class jpSetting extends JPanel {
     private JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
     private JLabel jlDataAggiornamento;
     private JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
-    private JCheckBox jcbAudio, jcbAdvancedDest, jcbRunIconized,
-            jcbRunAtStartup, jcbDownloadMyitasaStartup;
+    private JCheckBox jcbAudio, jcbAdvancedDownload, jcbRunIconized,
+            jcbDownloadMyitasaStartup;
     private JButton jbDestSub, jbSaveSettings, jbAnnullaSettings,
             jbDestTorrent;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
@@ -210,12 +210,12 @@ class jpSetting extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = ++y;
         gbc.gridwidth = 2;
-        jpSettingGlobal.add(new JLabel("Directory personalizzate"), gbc);
+        jpSettingGlobal.add(new JLabel("Download avanzato"), gbc);
 
         gbc.gridx = 2;
         gbc.gridwidth = 1;
-        jcbAdvancedDest = new JCheckBox("Abilitato");
-        jpSettingGlobal.add(jcbAdvancedDest, gbc);
+        jcbAdvancedDownload = new JCheckBox("Abilitato");
+        jpSettingGlobal.add(jcbAdvancedDownload, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = ++y;
@@ -591,7 +591,7 @@ class jpSetting extends JPanel {
         jtfSambaUser.setText(prop.getCifsShareUsername());
         jpfSamba.setText(prop.getCifsSharePassword());
         jcbTimeout.setSelectedItem(prop.getHttpTimeout());
-        jcbAdvancedDest.setSelected(prop.isEnabledCustomDestinationFolder());
+        jcbAdvancedDownload.setSelected(prop.isEnabledCustomDestinationFolder());
         jcbRunIconized.setSelected(prop.isEnabledIconizedRun());
     }
 
@@ -639,7 +639,7 @@ class jpSetting extends JPanel {
                 jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
                 jcbMinuti.getSelectedItem().toString(), jcbLookFeel.getSelectedItem().toString(),
                 jcbAudio.isSelected(), jcbTimeout.getSelectedItem().toString(),
-                jcbAdvancedDest.isSelected(), jcbRunIconized.isSelected(),
+                jcbAdvancedDownload.isSelected(), jcbRunIconized.isSelected(),
                 jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
                 new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
                 jcbDownloadMyitasaStartup.isSelected(),
