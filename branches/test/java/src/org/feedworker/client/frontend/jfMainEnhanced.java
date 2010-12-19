@@ -29,9 +29,9 @@ public class jfMainEnhanced extends jfMain {
 
     @Override
     public void windowClosing(WindowEvent we) {
-        if (we.getSource() instanceof JMenuItem) {
+        if (we.getSource() instanceof JMenuItem)
             super.windowClosing(we);
-        } else {
+        else {
             setVisible(false);
             try {
             	initSysTray();
