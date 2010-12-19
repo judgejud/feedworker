@@ -60,7 +60,7 @@ public class FeedWorkerClient {
         splash.updateStartupState("Setting Look & Feel ...");
         try {
             feedWorker.getIstanceLAF().addJavaLAF();        	
-        	feedWorker.getIstanceLAF().addJTattooLAF();
+            feedWorker.getIstanceLAF().addJTattooLAF();
             feedWorker.getIstanceLAF().addSyntheticaStandardLAF();
             feedWorker.getIstanceLAF().addSyntheticaFreeLAF();
             feedWorker.getIstanceLAF().addSyntheticaNotFreeLAF();
@@ -101,9 +101,9 @@ public class FeedWorkerClient {
                         //TODO: ripristinare 1volta implementato salvataggio calendar.xml
 //                        K.searchDay(0);
                         splash.close();
-                        if (!ApplicationSettings.getIstance().isEnabledIconizedRun()) {
+                        if (!ApplicationSettings.getIstance().isEnabledIconizedRun())
                             jframe.setVisible(true);
-                        } else {
+                        else {
                             try {
                                 jframe.initializeSysTray();
                             } catch (URISyntaxException ex) {

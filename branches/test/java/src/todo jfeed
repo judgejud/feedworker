@@ -2,7 +2,6 @@ IMPLEMENTARE
 -Calendario
 *fare aggiornamento
 *sistemare la data
-*implementare progress bar x import su thread separato
 *trovare un modo per il quale l'import una volta fatto si disabiliti
 *evidare doppioni di id tramite treeset? 
 -feed rss sotto thread

@@ -5,47 +5,40 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 
-import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JWindow;
-
 import org.jfacility.Awt;
 
 /**
  *
  * @author luca
  */
-class jdProgressBarImport extends JWindow {
+class jwProgressBarImport extends JWindow {
+
     private JProgressBar bar;
-    private int count = 0;
-    private int max;
     private Frame owner;
 
-    public jdProgressBarImport(Frame owner, int max){
-    	super(owner);
-    	this.owner = owner;
-    	this.max = max;
-    	owner.setEnabled(false);
-        setPreferredSize(new Dimension(300,20));
-        Awt.centerComponent(owner, this);
+    public jwProgressBarImport(Frame owner) {
+        super(owner);
+        this.owner = owner;
+        owner.setEnabled(false);
+        setPreferredSize(new Dimension(300, 20));
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        bar = new JProgressBar(0, max);
+        bar = new JProgressBar(0, 100);
         bar.setValue(0);
         bar.setStringPainted(true);
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(bar);
         pack();
+        Awt.centerComponent(owner, this);
         setVisible(true);
     }
 
-    void setProgress(int progress){
+    void setProgress(int progress) {
         bar.setValue(progress);
-        
         if (progress == bar.getMaximum()) {
-        	this.setVisible(false);
-        	JOptionPane.showMessageDialog(this, "Importazione terminata con successo!");
-        	owner.setEnabled(true);
-        	dispose();
+            owner.setEnabled(true);
+            dispose();
         }
     }
 }
