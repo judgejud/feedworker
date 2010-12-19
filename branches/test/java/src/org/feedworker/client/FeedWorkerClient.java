@@ -1,21 +1,20 @@
 package org.feedworker.client;
 
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.net.URISyntaxException;
 
 import javax.swing.JOptionPane;
 
-import org.feedworker.client.frontend.SplashScreenClassic;
-import org.feedworker.client.frontend.SplashScreenEnhanced;
 import org.feedworker.client.frontend.jfMain;
 import org.feedworker.client.frontend.jfMainEnhanced;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
-
 import org.jfacility.java.lang.JVM;
-
 import org.opensanskrit.application.Application;
+import org.opensanskrit.application.EnhancedSplashScreen;
+import org.opensanskrit.application.SplashScreen;
 import org.opensanskrit.exception.AlreadyStartedApplicationException;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 
@@ -38,12 +37,13 @@ public class FeedWorkerClient {
 
     public static void main(String args[]) {
         final JVM jvm = new JVM();
-        final SplashScreenClassic splash;
+        final SplashScreen splash;
+        final Image splashImage = Common.getResourceImage("SplashImage.png");
 
         if (jvm.isOrLater(16))
-            splash = SplashScreenEnhanced.getInstance(iteration);
+            splash = EnhancedSplashScreen.getInstance(iteration, splashImage);
         else
-            splash = SplashScreenClassic.getInstance(iteration);
+            splash = SplashScreen.getInstance(iteration, splashImage);
         splash.start();
         splash.updateStartupState("Inizializzazione Feedworker");
         ResourceLocator.setWorkspace();
