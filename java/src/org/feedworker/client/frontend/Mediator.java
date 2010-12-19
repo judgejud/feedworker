@@ -36,7 +36,7 @@ import org.feedworker.util.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.ValueRule;
-import org.jfacility.Awt;
+import org.jfacility.java.awt.AWT;
 import org.jfacility.java.lang.JVM;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.MySystem;
@@ -190,7 +190,7 @@ public class Mediator {
             }
         }
         if (!text.equalsIgnoreCase("")) {
-            Awt.setClipboard(text);
+            AWT.setClipboard(text);
             fireNewTextPaneEvent("link copiati nella clipboard",
                     TextPaneEvent.OK);
         }
