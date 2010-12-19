@@ -28,12 +28,22 @@ public class FeedWorkerClient {
     private static Kernel K;
     private static Application feedWorker;
     private static ApplicationSettings feedWorkerSettings;
+    private static int iteration = 11;
 
     public static Application getApplication() {
         return feedWorker;
     }
 
     public static void main(String args[]) {
+        final JVM jvm = new JVM();
+        final SplashScreenClassic splash;
+
+        if (jvm.isOrLater(16))
+            splash = SplashScreenEnhanced.getInstance(iteration);
+        else
+            splash = SplashScreenClassic.getInstance(iteration);
+        splash.start();
+        splash.updateStartupState("Inizializzazione Feedworker");
         ResourceLocator.setWorkspace();
         
         feedWorker = Application.getInstance(true);
@@ -43,18 +53,7 @@ public class FeedWorkerClient {
         feedWorker.setAuthor("Luka Judge");
         feedWorker.setIcon(Common.getResourceIcon(ICON_FILENAME));
         feedWorker.enableSingleInstance(true);
-
-        final JVM jvm = new JVM();
-        final SplashScreenClassic splash;
-
-        if (jvm.isOrLater(16)) {
-            splash = SplashScreenEnhanced.getInstance(12);
-        } else {
-            splash = SplashScreenClassic.getInstance(12);
-        }
-        splash.start();
-        splash.updateStartupState("Inizializzazione Feedworker");
-        splash.updateStartupState("Setting Workspace ...");
+        
         splash.updateStartupState("Preparing Kernel instance ...");
         K = Kernel.getIstance();
         splash.updateStartupState("Setting Look & Feel ...");
@@ -69,8 +68,12 @@ public class FeedWorkerClient {
             feedWorker.getIstanceLAF().setLookAndFeel();
         }
         splash.updateStartupState("Checking JVM ...");
-
-        if (!jvm.isOrLater(15)) {
+        if (!JVM.isVendorSun()){
+            JOptionPane.showMessageDialog(null,
+                    "E' necessario disporre di JavaVendor della Sun e non altre come openJDK",
+                    feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
+            feedWorker.shutdown();
+        } else if (!jvm.isOrLater(15)) {
             JOptionPane.showMessageDialog(null,
                     "E' necessario disporre di una versione della JVM >= 1.5",
                     feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
