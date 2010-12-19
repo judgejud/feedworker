@@ -28,6 +28,13 @@ class jdProgressBarImport extends JDialog {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(bar);
         pack();
+        
+		/* Non è chiaro il motivo ma se la jdialog è resa visibile in un thread a parte
+		 * allora l'attività di aggiornamento sullo stato di avanzamento della progress bar
+		 * sarà visibile.
+		 * Se non si utilizza un thread a parte per rendere visibile la jdialog allora
+		 * il fatto che la jdialog è modale blocca tutte le attività.
+		 */
 
         Thread t = new Thread(new Runnable()  {
             @Override
