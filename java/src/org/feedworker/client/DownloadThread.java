@@ -112,11 +112,7 @@ public class DownloadThread implements Runnable {
                         File filesub = al.get(i);
                         String namesub = filesub.getName();
                         KeyRule key = parsingNamefile(namesub, SPLIT_SUB);
-                        if (mapRules.get(key).isDelete()){
-                            filesub.delete();
-                            fireNewTextPaneEvent(namesub + " cancellato per la regola DELETE",
-                                    TextPaneEvent.ALERT);
-                        } else {
+                        if (!deleteFile(key, filesub, namesub)){
                             dest = mapPath(key);
                             try{
                                 newName = rename(key, namesub);
@@ -126,9 +122,8 @@ public class DownloadThread implements Runnable {
                                 String oldName = dest + File.separator + filesub.getName();
                                 s.moveFile(oldName, dest, newName);
                             }
-                            if (dest == null) {
+                            if (dest == null)
                                 dest = "";
-                            }
                             String msg;
                             if (newName==null)
                                 msg = "Estratto " + al.get(i).getName()
@@ -148,12 +143,8 @@ public class DownloadThread implements Runnable {
                 for (int i = 0; i < al.size(); i++) {
                     File filesub = al.get(i);
                     String namesub = filesub.getName();
-                    KeyRule key = parsingNamefile(namesub, SPLIT_SUB);                    
-                    if (mapRules.get(key).isDelete()){
-                        filesub.delete();
-                        fireNewTextPaneEvent(namesub + " cancellato per la regola DELETE",
-                                TextPaneEvent.ALERT);
-                    } else {
+                    KeyRule key = parsingNamefile(namesub, SPLIT_SUB);
+                    if (!deleteFile(key, filesub, namesub)){
                         String dest = mapPath(key);
                         if (dest == null)
                             dest = prop.getSubtitleDestinationFolder();
@@ -177,6 +168,16 @@ public class DownloadThread implements Runnable {
                 }
             }
         }
+    }
+    
+    private boolean deleteFile(KeyRule key, File filesub, String namesub){
+        if (prop.isEnabledCustomDestinationFolder() && mapRules.get(key).isDelete()){
+            filesub.delete();
+            fireNewTextPaneEvent(namesub + " cancellato per la regola DELETE",
+                    TextPaneEvent.ALERT);
+            return true;
+        }
+        return false;
     }
 
     @Override
