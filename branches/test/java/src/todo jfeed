@@ -6,14 +6,13 @@ IMPLEMENTARE
 *evidare doppioni di id tramite treeset? 
 -feed rss sotto thread
 -trovare 1modo per rendere visibile la pwd itasa
--ripristino proprietà (file properties e rules.xml e calendar.xml)
+-ripristino files backuppati
 -destinazione avanzata in mixed mode 
 -destinazione avanzata: se la disabilito per poi riabilitarla, non companiono gli item se ci sono nel file, ma al riavvio si(quindi far riavviare? o far ricaricare?)
 -fare in modo che col tasto dx sulle destinazioni esca la possibilità di poter aprire la cartella.
 -implementare il tipo di download di mysubsfactory (come x myitasa)
 -pulsante check login itasa
 -pulsante di copia info sistema
--impedire il funzionamento a vendor java diverse da sun.
 -fare caricamento xml sotto thread
 -vedere di creare 1http permanente x itasa
 -ricerca sottotitoli itasa
@@ -35,10 +34,8 @@ feature proxy?
 CORREZIONI:
 -sistemare il mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
 
-ERRORI DA SISTEMARE:
-alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'.
-
 VERIFICARE LE IMPLEMENTAZIONI
+impedire il funzionamento a vendor java diverse da sun.
 riavvio che non salva l'ultima data aggiornamento prima del riavvio
 riavvio con java home (win, mac)
 1080i

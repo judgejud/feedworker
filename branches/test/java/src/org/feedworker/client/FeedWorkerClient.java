@@ -12,7 +12,9 @@ import org.feedworker.client.frontend.jfMainNewer;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
+
 import org.jfacility.java.lang.JVM;
+
 import org.opensanskrit.application.Application;
 import org.opensanskrit.exception.AlreadyStartedApplicationException;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
@@ -113,9 +115,8 @@ public class FeedWorkerClient {
                                 ex.printStackTrace();
                             }
                         }
-                    }
-                });
-
+                    }//end run
+                }); //end runnable EventQueue.invokeLater
             } catch (AlreadyStartedApplicationException e) {
                 JOptionPane.showMessageDialog(null,
                         "C'è già la stessa applicazione avviata.",

@@ -20,10 +20,10 @@ import javax.xml.xpath.XPathExpressionException;
 
 import jcifs.smb.SmbException;
 
-import org.eclipse.swt.SWTException;
 import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
+
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
@@ -318,10 +318,6 @@ public class ManageException {
                     + "Controlla username e/o password");
         } else
             printError(ex, c);
-    }
-
-    public void launch(SWTException ex, Class c){
-        printError(ex, c);
     }
 
     /**
