@@ -50,10 +50,9 @@ import com.sun.syndication.io.FeedException;
  */
 public class Mediator {
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
-    private final String ADD_PANE_DEST_SUB = "addPaneDestSub";
-    private final String REMOVE_PANE_DEST_SUB = "removePaneDestSub";
     private final String ENABLE_BUTTON = "enableButton";
-    private final FileNameExtensionFilter fnfeZIP = new FileNameExtensionFilter("ZIP file", "zip");
+    private final FileNameExtensionFilter fnfeZIP = 
+            new FileNameExtensionFilter("ZIP file", "zip");
 
     private static Mediator proxy = null;
 
@@ -131,14 +130,6 @@ public class Mediator {
 
     String getSearchTV(){
         return core.SEARCH_TV;
-    }
-
-    String getOperationAddPaneDestSub(){
-        return ADD_PANE_DEST_SUB;
-    }
-
-    String getOperationRemovePaneDestSub(){
-        return REMOVE_PANE_DEST_SUB;
     }
 
     String getOperationFocus(){
@@ -541,10 +532,7 @@ public class Mediator {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio del client.");
             }
             if (oldAD != prop.isEnabledCustomDestinationFolder()) {
-                if (prop.isEnabledCustomDestinationFolder())
-                    fireNewJFrameEventOperation(ADD_PANE_DEST_SUB);
-                else
-                    fireNewJFrameEventOperation(REMOVE_PANE_DEST_SUB);
+                ///TODO Riorganizzare
             }
             if (!prop.isApplicationFirstTimeUsed() && first) {
                 fireNewJFrameEventOperation(ENABLE_BUTTON);

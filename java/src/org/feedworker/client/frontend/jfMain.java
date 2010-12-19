@@ -35,7 +35,8 @@ import org.jfacility.javax.swing.Swing;
  * @author luca judge
  */
 public class jfMain extends JFrame implements WindowListener, 
-                        JFrameEventIconDateListener, JFrameEventOperationListener {
+                                            JFrameEventIconDateListener, 
+                                            JFrameEventOperationListener {
 
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
@@ -83,8 +84,7 @@ public class jfMain extends JFrame implements WindowListener,
             torrentJP = jpTorrent.getPanel();
             mainJTP.addTab("Torrent", torrentJP);
         }
-        if (prop.isEnabledCustomDestinationFolder())
-            mainJTP.addTab("Subtitle Destination", jpSubtitleDest.getPanel());
+        mainJTP.addTab("Subtitle Destination", jpSubtitleDest.getPanel());
         mainJTP.addTab("Calendar", jpCalendar.getPanel());
         mainJTP.addTab("Settings", settingsJP);
 
@@ -351,11 +351,7 @@ public class jfMain extends JFrame implements WindowListener,
     @Override
     public void objReceived(final JFrameEventOperation evt) {
         if (evt.getOperaz() != null) {
-            if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationAddPaneDestSub()))
-                mainJTP.addTab("Destinazione avanzata", jpSubtitleDest.getPanel());
-            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationRemovePaneDestSub()))
-                mainJTP.remove(jpSubtitleDest.getPanel());
-            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationEnableButton()))
+            if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationEnableButton()))
                 changeEnabledButton(true);
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getSearchTV()))
                 resultSearchTvJD.setVisible(true);

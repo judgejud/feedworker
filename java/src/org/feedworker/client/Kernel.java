@@ -603,20 +603,16 @@ public class Kernel implements PropertyChangeListener {
 
     /** Carica gli xml */
     public void loadXml() {
-        if (prop.isEnabledCustomDestinationFolder()) {
-            try {
-                xmlSubDest = new Xml(FILE_RULE, true);
-                ArrayList temp = xmlSubDest.initializeReaderRule();
-                mapRules = (TreeMap<KeyRule, ValueRule>) temp.get(0);
-                if (mapRules != null) {
-                    fireTableEvent((ArrayList<Object[]>) temp.get(1),
-                            SUBTITLE_DEST);
-                }
-            } catch (JDOMException ex) {
-                error.launch(ex, getClass());
-            } catch (IOException ex) {
-                error.launch(ex, getClass(), null);
-            }
+        try {
+            xmlSubDest = new Xml(FILE_RULE, true);
+            ArrayList temp = xmlSubDest.initializeReaderRule();
+            mapRules = (TreeMap<KeyRule, ValueRule>) temp.get(0);
+            if (mapRules != null)
+                fireTableEvent((ArrayList<Object[]>) temp.get(1), SUBTITLE_DEST);
+        } catch (JDOMException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass(), null);
         }
         try {
             xmlCalendar = new Xml(FILE_CALENDAR, true);
