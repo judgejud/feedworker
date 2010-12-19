@@ -9,6 +9,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JWindow;
 
+import org.jfacility.Awt;
+
 /**
  *
  * @author luca
@@ -25,7 +27,7 @@ class jdProgressBarImport extends JWindow {
     	this.max = max;
     	owner.setEnabled(false);
         setPreferredSize(new Dimension(300,20));
-        setLocation(300, 300);
+        Awt.centerComponent(owner, this);
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         bar = new JProgressBar(0, max);
         bar.setValue(0);
@@ -46,11 +48,4 @@ class jdProgressBarImport extends JWindow {
         	dispose();
         }
     }
-
-    /*
-    @Override
-    public void run() {
-    	incrementValue();
-    }
-    */
 }

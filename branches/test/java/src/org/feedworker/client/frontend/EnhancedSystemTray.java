@@ -131,7 +131,7 @@ public class EnhancedSystemTray {
 			public void actionPerformed(ActionEvent e) {
 				WindowEvent we = new WindowEvent(windowMenu, WindowEvent.WINDOW_CLOSING);
 				we.setSource(exitItem);
-				((jfMainNewer)owner).windowClosing(we);
+				//((jfMainNewer)owner).windowClosing(we);
 			}
 		});
 		m.add(exitItem);
