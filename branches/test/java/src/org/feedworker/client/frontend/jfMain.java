@@ -27,7 +27,7 @@ import org.feedworker.client.frontend.events.JFrameEventIconDate;
 import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
 import org.feedworker.client.frontend.events.JFrameEventOperation;
 import org.feedworker.client.frontend.events.JFrameEventOperationListener;
-import org.jfacility.Awt;
+import org.jfacility.java.awt.AWT;
 import org.jfacility.javax.swing.Swing;
 
 /**Gui base per java 1.5
@@ -363,7 +363,7 @@ public class jfMain extends JFrame implements WindowListener,
                 requestFocus();
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportShow())){
                 progressBar = new jwProgressBarImport(this);
-                Awt.centerComponent(this, progressBar);
+                AWT.centerComponent(progressBar, this);
             } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportIncrement())){
             	progressBar.setProgress(evt.getMax());
             }
