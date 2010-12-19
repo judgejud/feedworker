@@ -49,7 +49,7 @@ public class jfMain extends JFrame implements WindowListener,
     private jpTorrent torrentJP;
     private jpSubsfactory subsfactoryJP;
     private jdResultSearchTv resultSearchTvJD = jdResultSearchTv.getDialog();
-    private jwProgressBarImport progressBar;
+    private jdProgressBarImport progressBar;
 
     /** Costruttore */
     public jfMain() {
@@ -358,7 +358,7 @@ public class jfMain extends JFrame implements WindowListener,
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationFocus()))
                 requestFocus();
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportShow())){
-                progressBar = new jwProgressBarImport(this);
+                progressBar = new jdProgressBarImport(this);
                 AWT.centerComponent(progressBar, this);
             } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportIncrement())){
             	progressBar.setProgress(evt.getMax());
