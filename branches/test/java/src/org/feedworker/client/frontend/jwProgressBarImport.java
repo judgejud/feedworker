@@ -30,7 +30,6 @@ class jwProgressBarImport extends JWindow {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(bar);
         pack();
-        Awt.centerComponent(owner, this);
         setVisible(true);
     }
 
