@@ -166,37 +166,35 @@ public class jfMain extends JFrame implements WindowListener,
         });
         fileJM.add(closeJMI);
 
-        if (prop.isEnabledCustomDestinationFolder()){
-            JMenu jmSerial = new JMenu(" Serial tv ");
-            applicationJMB.add(jmSerial);
+        JMenu jmSerial = new JMenu(" Serial tv ");
+        applicationJMB.add(jmSerial);
 
-            JMenuItem jmiPrintToday = new JMenuItem(" Stampa oggi ");
-            JMenuItem jmiPrintTomorrow = new JMenuItem(" Stampa domani ");
-            JMenuItem jmiPrintYesterday = new JMenuItem(" Stampa ieri ");
-            //TODO: ripristinare 1volta implementato salvataggio calendar.xml
-            jmiPrintToday.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //proxy.printDay(0);
-                }
-            });
-            jmiPrintTomorrow.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //proxy.printDay(1);
-                }
-            });
-            jmiPrintYesterday.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //proxy.printDay(-1);
-                }
-            });
+        JMenuItem jmiPrintToday = new JMenuItem(" Stampa oggi ");
+        JMenuItem jmiPrintTomorrow = new JMenuItem(" Stampa domani ");
+        JMenuItem jmiPrintYesterday = new JMenuItem(" Stampa ieri ");
+        //TODO: ripristinare 1volta implementato salvataggio calendar.xml
+        jmiPrintToday.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //proxy.printDay(0);
+            }
+        });
+        jmiPrintTomorrow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //proxy.printDay(1);
+            }
+        });
+        jmiPrintYesterday.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //proxy.printDay(-1);
+            }
+        });
 
-            jmSerial.add(jmiPrintToday);
-            jmSerial.add(jmiPrintTomorrow);
-            jmSerial.add(jmiPrintYesterday);
-        }
+        jmSerial.add(jmiPrintToday);
+        jmSerial.add(jmiPrintTomorrow);
+        jmSerial.add(jmiPrintYesterday);
 
         JMenu nasJM = new JMenu(" NAS ");
         JMenuItem videoMoveJMI = new JMenuItem(" Video move ");

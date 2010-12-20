@@ -20,8 +20,10 @@ import org.jfacility.java.lang.Lang;
  * @author luca
  */
 class TvRage {
-    private final String DETAILED_SEARCH = "http://services.tvrage.com/feeds/full_search.php?show=";
-    private final String EPISODE_LIST = "http://services.tvrage.com/feeds/episode_list.php?sid=";
+    private final String DETAILED_SEARCH = 
+            "http://services.tvrage.com/feeds/full_search.php?show=";
+    private final String EPISODE_LIST = 
+            "http://services.tvrage.com/feeds/episode_list.php?sid=";
     private final String TAG_SHOW_ID = "showid";
     private final String TAG_NAME = "name";
     private final String TAG_SEASON = "seasons";
@@ -62,9 +64,11 @@ class TvRage {
         return matrix;
     }
 
-    Object[] readingEpisodeList_byID(String id, String season) throws JDOMException, IOException{
+    Object[] readingEpisodeList_byID(String id, String season) throws 
+            JDOMException, IOException{
         document = new SAXBuilder().build(new URL(EPISODE_LIST + id));
-        List seasons = ((Element) document.getRootElement().getChildren().get(2)).getChildren();
+        List seasons = ((Element) document.getRootElement().getChildren().get(2))
+                .getChildren();
         int last = Lang.stringToInt(season);        
         List temp = null;
         while (temp==null){
@@ -84,9 +88,9 @@ class TvRage {
             Date d = null;
             try {
                 d = Common.stringAmericanToDate(airDate);
-            } catch (ParseException ex) {
-            }
-            if (airDate.equalsIgnoreCase("0000-00-00")){
+            } catch (ParseException ex) {}
+            if (airDate.equalsIgnoreCase("0000-00-00") || 
+                    airDate.substring(5).equalsIgnoreCase("00-00")){
                 d = yesterday;
                 airDate = "";
             }

@@ -65,7 +65,7 @@ public class RssParser {
             if (Lang.verifyTextNotNull(temp) && !temp.equalsIgnoreCase(" ")){
                 Object[] structuredEntry = new Object[5];
                 structuredEntry[0] = rawEntry.getLink();
-                structuredEntry[1] = Common.dateToString(rawEntry.getPublishedDate());
+                structuredEntry[1] = Common.dateTimeString(rawEntry.getPublishedDate());
                 structuredEntry[2] = temp;
                 structuredEntry[3] = false;
                 structuredEntryList.add(structuredEntry);

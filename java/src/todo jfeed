@@ -6,8 +6,7 @@ IMPLEMENTARE
 -feed rss sotto thread
 -trovare 1modo per rendere visibile la pwd itasa
 -ripristino files backuppati
--destinazione avanzata in mixed mode 
--destinazione avanzata: se la disabilito per poi riabilitarla, non companiono gli item se ci sono nel file, ma al riavvio si(quindi far riavviare? o far ricaricare?)
+-destinazione avanzata in mixed mode
 -fare in modo che col tasto dx sulle destinazioni esca la possibilità di poter aprire la cartella.
 -implementare il tipo di download di mysubsfactory (come x myitasa)
 -pulsante check login itasa
@@ -16,7 +15,7 @@ IMPLEMENTARE
 -vedere di creare 1http permanente x itasa
 -ricerca sottotitoli itasa
 
-riorganizzare setting destinazione avanzata in download avanzato
+sistemare il download avanzato per jcifs (al rientro a taranto) 
 terminare legenda colori
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
 calendar: bottone info su ciò che è presente nella tabella?
@@ -27,8 +26,7 @@ impostazioni dei tabs?
 log4j?
 aggiungere versioning automatico all'applicazione
 OS & FW: decidere per il debug_flag se passarlo da commandline.
-esiste evento "arresta sistema"? e come intercettarlo??? 
-jframe statica? 
+esiste evento "arresta sistema"? e come intercettarlo???  
 feature proxy? 
 
 CORREZIONI:
