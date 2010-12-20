@@ -41,6 +41,7 @@ import org.opensanskrit.exception.UnableRestartApplicationException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import java.util.TreeSet;
 
 /**
  * Motore di Feedworker
@@ -1128,32 +1129,29 @@ public class Kernel implements PropertyChangeListener {
             int progress = 0;
             //int increment = 100 / mapRules.size();
             Iterator<KeyRule> iter = mapRules.keySet().iterator();
-            String oldName = "";
             ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
             TvRage t = new TvRage();
-
+            TreeSet ts = new TreeSet();
             setProgress(progress);
             try {
                 while (iter.hasNext()) {
                     String name = iter.next().getName();
-//                    if (!name.toLowerCase().equalsIgnoreCase(oldName.toLowerCase())) {
-                        ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(name, true);
-                        if (temp != null) {
-                            Object[] show = temp.get(0);
+                    ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(name, true);
+                    if (temp != null) {
+                        Object[] show = temp.get(0);
+                        if (!ts.contains(show[0])){
                             Object[] array = t.readingEpisodeList_byID(
                                     show[0].toString(), show[2].toString());
                             array[0] = show[0];
                             array[1] = show[1];
                             array[2] = show[3];
                             array[3] = show[4];
-                            if (!name.toLowerCase().equalsIgnoreCase(oldName.toLowerCase())) {
-                                alObjs.add(array);
-                                xmlCalendar.addShowTV(array);
-                            }
+                            alObjs.add(array);
+                            ts.add(show[0]);
+                            xmlCalendar.addShowTV(array);
                         }
-                        oldName = name;
-                    
-                    //progress+=increment;                    
+                    }
+                    //progress+=increment;
                     setProgress(++progress);
                     System.out.println(name + " " + progress);
                 }
