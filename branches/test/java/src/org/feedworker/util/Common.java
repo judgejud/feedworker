@@ -8,9 +8,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -28,23 +28,12 @@ import org.jfacility.javax.swing.Swing;
 public class Common {
     private static int day_millisec = 86400000;
 
-    /**Converte una jav.util.Date in formato stringa
-     *
-     * @param d data
-     * @return gg/mm/aaaa - hh:mm:ss
-     */
-    public static String dateToString(Date d) {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(d);
-        return calendarToString(cal);
-    }
-
     /** Restituisce la data ed ora attuale
      *
      * @return Stringa gg/mm/aaaa - hh:mm:ss
      */
     public static String actualTime() {
-        return calendarToString(new GregorianCalendar());
+        return dateTimeString(actualDate());
     }
 
     public static Date actualDate(){
@@ -77,38 +66,16 @@ public class Common {
         Date d = sdf.parse(s);
         return d;
     }
+    
+    public static String dateTimeString(Date d){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY);
+        return sdf.format(d);
+    }
 
     public static Date stringAmericanToDate(String s) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
         Date d = sdf.parse(s);
         return d;
-    }
-
-    /**converte calendar in stringa
-     *
-     * @param cal
-     * @return
-     */
-    private static String calendarToString(Calendar cal) {
-        return cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH) + 1)
-                + "/" + cal.get(Calendar.YEAR) + " "
-                + addZero(cal.get(Calendar.HOUR_OF_DAY)) + ":"
-                + addZero(cal.get(Calendar.MINUTE)) + ":"
-                + addZero(cal.get(Calendar.SECOND));
-    }
-
-    /**Aggiunge lo zero ai numeri < 10
-     *
-     * @param n intero da controllare
-     * @return Stringa con/senza 0
-     */
-    private static String addZero(int n) {
-        String s = new String();
-        if (n < 10) {
-            s = "0";
-        }
-        s += String.valueOf(n);
-        return s;
     }
 
     /**
@@ -205,9 +172,5 @@ public class Common {
         out.flush();
         out.close();
         is.close();
-    }
-
-    public static int getDay(){
-        return new GregorianCalendar().get(Calendar.DAY_OF_WEEK);
     }
 }

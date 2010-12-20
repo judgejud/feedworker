@@ -22,7 +22,6 @@ import javax.swing.event.PopupMenuListener;
 
 public class EnhancedSystemTray {
 
-    
     private Image iconRss, iconSub;
     private static JWindow windowMenu;
     private EnhancedTrayIcon trayIcon;
@@ -36,13 +35,10 @@ public class EnhancedSystemTray {
         windowMenu = new JWindow((Frame) owner);
         windowMenu.setAlwaysOnTop(true);
 
-        initializeSystemTray();
-    }
-
-    private void initializeSystemTray() {
         trayIcon = new EnhancedTrayIcon(iconRss);
         trayIcon.setJPopuMenu(createJPopupMenu());
         trayIcon.setToolTip("FeedWorker");
+        
         try {
             SystemTray.getSystemTray().add(trayIcon);
         } catch (AWTException e) {
@@ -100,10 +96,10 @@ public class EnhancedSystemTray {
             return menu;
         }
 
-        public void setJPopuMenu(JPopupMenu menu) {
-            if (this.menu != null)
-                this.menu.removePopupMenuListener(popupListener);            
-            this.menu = menu;
+        public void setJPopuMenu(JPopupMenu jpm) {
+            if (menu != null)
+                menu.removePopupMenuListener(popupListener);            
+            menu = jpm;
             menu.addPopupMenuListener(popupListener);
         }
 
@@ -118,8 +114,6 @@ public class EnhancedSystemTray {
         }
         
         private PopupMenuListener popupListener = new PopupMenuListener()  {
-            @Override
-            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
             @Override
             public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
                 SwingUtilities.invokeLater(new Runnable()  {
@@ -138,6 +132,8 @@ public class EnhancedSystemTray {
                     }
                 });
             }
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
         };
     }
 }

@@ -14,7 +14,6 @@ import javax.swing.JProgressBar;
  */
 class jdProgressBarImport extends JDialog {
     private JProgressBar bar;
-    private int count = 0;
 
     public jdProgressBarImport(Frame owner, int max) {
         super(owner, "Importazione ...", ModalityType.DOCUMENT_MODAL);
@@ -23,9 +22,8 @@ class jdProgressBarImport extends JDialog {
         setUndecorated(true);
         setPreferredSize(new Dimension(300, 50));
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        bar = new JProgressBar(0, 100);
-        //System.out.println(count + " " + max);
-        //bar = new JProgressBar(0, max);
+        //bar = new JProgressBar(0, 100);
+        bar = new JProgressBar(0, max);
         bar.setValue(0);
         bar.setStringPainted(true);
         getContentPane().setLayout(new BorderLayout());
@@ -50,11 +48,7 @@ class jdProgressBarImport extends JDialog {
     }
 
     void setProgress(int progress) {
-        //bar.setValue(++count);
     	bar.setValue(progress);
-    	System.out.println(progress + " of " + bar.getMaximum());
-        //System.out.println(count + " " + bar.getMaximum());
-        //if (count == bar.getMaximum())
     	if (progress == bar.getMaximum())
             dispose();
     }

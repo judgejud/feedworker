@@ -591,7 +591,7 @@ class jpSetting extends JPanel {
         jtfSambaUser.setText(prop.getCifsShareUsername());
         jpfSamba.setText(prop.getCifsSharePassword());
         jcbTimeout.setSelectedItem(prop.getHttpTimeout());
-        jcbAdvancedDownload.setSelected(prop.isEnabledCustomDestinationFolder());
+        jcbAdvancedDownload.setSelected(prop.isEnabledAdvancedDownload());
         jcbRunIconized.setSelected(prop.isEnabledIconizedRun());
     }
 

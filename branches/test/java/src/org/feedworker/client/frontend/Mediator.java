@@ -500,14 +500,13 @@ public class Mediator {
     void saveSettings(boolean dirLocal, String destSub, String sambaDomain,
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
             String time, String laf, boolean audio, String timeout,
-            boolean advancedDest, boolean runIconized, String itasa,
+            boolean advancedDownload, boolean runIconized, String itasa,
             String myitasa, String user, String pwd, boolean autoMyitasa,
             boolean autoLoadMyItasa,
             String subsf, String mySubsf, String torrent) {
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
-        boolean oldAD = prop.isEnabledCustomDestinationFolder();
         boolean save = false;
         if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                 sambaUser, sambaPwd)) {
@@ -522,7 +521,7 @@ public class Mediator {
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                     sambaUser, sambaPwd, time, laf, audio, timeout,
-                    advancedDest, runIconized);
+                    advancedDownload, runIconized);
             setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
             prop.setSubsfactoryFeedURL(subsf);
             prop.setMySubsfactoryFeedUrl(mySubsf);
@@ -530,9 +529,6 @@ public class Mediator {
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio del client.");
-            }
-            if (oldAD != prop.isEnabledCustomDestinationFolder()) {
-                ///TODO Riorganizzare
             }
             if (!prop.isApplicationFirstTimeUsed() && first) {
                 fireNewJFrameEventOperation(ENABLE_BUTTON);
@@ -550,7 +546,7 @@ public class Mediator {
     private void setPropGlobal(boolean dirLocal, String destSub,
             String sambaDomain, String sambaIP, String sambaDir,
             String sambaUser, String sambaPwd, String time, String laf,
-            boolean audio, String timeout, boolean advancedDest,
+            boolean audio, String timeout, boolean advancedDownload,
             boolean runIconized) {
         prop.setLocalFolder(dirLocal);
         prop.setSubtitleDestinationFolder(destSub);
@@ -563,7 +559,7 @@ public class Mediator {
         prop.setCifsShareUsername(sambaUser);
         prop.setCifsSharePassword(sambaPwd);
         prop.setHttpTimeout(timeout);
-        prop.setEnableCustomDestinationFolder(advancedDest);
+        prop.setEnableAdvancedDownload(advancedDownload);
         prop.setEnableIconizedRun(runIconized);
     }
 
@@ -722,7 +718,7 @@ public class Mediator {
     String getTitle(){
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "245 by "
+                + "248 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -780,5 +776,9 @@ public class Mediator {
     
     void removeAllShowCalendar() {
         core.removeAllShowTv();
+    }
+
+    void refreshCalendar() {
+        core.refreshCalendar();
     }
 }

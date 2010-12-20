@@ -122,7 +122,6 @@ class jpCalendar extends jpAbstract{
 
     private void jbRemoveRowMouseClicked() {
         int row = jtable.getSelectedRow();
-        System.out.println(row);
         if (row > -1){
             row = jtable.convertRowIndexToModel(row);
             proxy.removeSingleShowCalendar(row, jtable.getValueAt(row, 0));
@@ -136,6 +135,6 @@ class jpCalendar extends jpAbstract{
     }
 
     private void jbRefreshCalendarMouseClicked() {
-
+        proxy.refreshCalendar();
     }
 }
