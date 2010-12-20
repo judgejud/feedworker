@@ -38,10 +38,12 @@ class XPathReader {
         return result;
     }
     
+    //TODO: trovare un modo affinchè xpath sia in grado di fare il confronto fra date
+    //e che prendi le date in bianco/vuote
     public static String[] queryDayID(String day) throws ParserConfigurationException, 
             SAXException, IOException, XPathExpressionException{
         
-        String query1 = "//SHOW[NEXT_DATE='" + day + "']/ID_TVRAGE/text()";
+        String query1 = "//SHOW[NEXT_DATE<'" + day + "']/ID_TVRAGE/text()";
         String query2 = "//SHOW[NEXT_DATE=' ']/ID_TVRAGE/text()";
         NodeList nodes1 = initializeXPath(query1);
         NodeList nodes2 = initializeXPath(query2);
