@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.feedworker.util.KeyRule;
 import org.feedworker.util.ValueRule;
@@ -171,8 +172,10 @@ class Xml {
         return calendar;
     }
 
-    ArrayList<Object[]> readingDocumentCalendar() throws JDOMException, IOException{
+    ArrayList readingDocumentCalendar() throws JDOMException, IOException{
+        ArrayList global = new ArrayList();
         ArrayList<Object[]> al = new ArrayList<Object[]>();
+        TreeSet ts = new TreeSet();
         if (sizeDocument() > 0){
             Iterator iter = iteratorDocument();
             while (iter.hasNext()) {
@@ -189,10 +192,13 @@ class Xml {
                 obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_EPISODE).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_TITLE).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_DATE).getText();
+                ts.add(obj[0]);
                 al.add(obj);
             }            
         }
-        return al;
+        global.add(ts);
+        global.add(al);
+        return global;
     }
 
     private String checkNPE(Object obj){

@@ -125,7 +125,7 @@ class jpCalendar extends jpAbstract{
         System.out.println(row);
         if (row > -1){
             row = jtable.convertRowIndexToModel(row);
-            proxy.removeSingleShowCalendar(row);
+            proxy.removeSingleShowCalendar(row, jtable.getValueAt(row, 0));
             ((DefaultTableModel) jtable.getModel()).removeRow(row);
         }
     }

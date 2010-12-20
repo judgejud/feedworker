@@ -1,9 +1,8 @@
 IMPLEMENTARE
 -Calendario
-*fare aggiornamento
+*fare aggiornamento (usando il Treeset o meglio l'id contenuto nel treeset)
 *sistemare la data
 *trovare un modo per il quale l'import una volta fatto si disabiliti
-*evidare doppioni di id tramite treeset? 
 -feed rss sotto thread
 -trovare 1modo per rendere visibile la pwd itasa
 -ripristino files backuppati
@@ -42,3 +41,4 @@ riavvio con java home (win, mac)
 1080i
 splashscreen (java5)
 avvio ridotto ad icona (java5)
+calendario: testare funzionamento treeset

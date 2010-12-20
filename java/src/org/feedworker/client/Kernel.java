@@ -95,6 +95,7 @@ public class Kernel implements PropertyChangeListener {
     private TextPaneEventListener mytpel;
     private Xml xmlCalendar, xmlSubDest;
     private ImportTask importTask;
+    private TreeSet tsIdCalendar;
 
     /**
      * Restituisce l'istanza corrente del kernel
@@ -620,7 +621,10 @@ public class Kernel implements PropertyChangeListener {
         }
         try {
             xmlCalendar = new Xml(FILE_CALENDAR, true);
-            fireTableEvent(xmlCalendar.readingDocumentCalendar(), CALENDAR);
+            ArrayList temp = xmlCalendar.readingDocumentCalendar();
+            tsIdCalendar = (TreeSet) temp.get(0);
+            if (tsIdCalendar.size()>0)
+                fireTableEvent((ArrayList<Object[]>) temp.get(1), CALENDAR);
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
@@ -899,14 +903,16 @@ public class Kernel implements PropertyChangeListener {
             ArrayList<Object[]> al = new ArrayList<Object[]>();
             for (int i = 0; i < from.size(); i++) {
                 Object[] show = from.get(i);
-                Object[] array = t.readingEpisodeList_byID(show[0].toString(),
-                        show[2].toString());
-                array[0] = show[0];
-                array[1] = show[1];
-                array[2] = show[3];
-                array[3] = show[4];
-                al.add(array);
-                xmlCalendar.addShowTV(array);
+                if (!tsIdCalendar.contains(show[0])){
+                    Object[] array = t.readingEpisodeList_byID(show[0].toString(),
+                            show[2].toString());
+                    array[0] = show[0];
+                    array[1] = show[1];
+                    array[2] = show[3];
+                    array[3] = show[4];
+                    al.add(array);
+                    xmlCalendar.addShowTV(array);
+                }
             }
             xmlCalendar.write();
             fireTableEvent(al, CALENDAR);
@@ -917,13 +923,14 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    public void removeShowTv(int row) {
+    public void removeShowTv(int row, Object id) {
         TvRage t = new TvRage();
         try {
             xmlCalendar.removeShowTv(row);
         } catch (IOException ex) {
             error.launch(ex, null);
         }
+        tsIdCalendar.remove(id);
     }
 
     public void removeAllShowTv() {
@@ -933,6 +940,7 @@ public class Kernel implements PropertyChangeListener {
         } catch (IOException ex) {
             error.launch(ex, null);
         }
+        tsIdCalendar = new TreeSet();
     }
 
     public void importTvFromDestSub() {
@@ -1160,6 +1168,7 @@ public class Kernel implements PropertyChangeListener {
                     //setProgress(100);
                     //System.out.println(progress);
                 //}
+                tsIdCalendar = ts;
                 xmlCalendar.write();
             } catch (JDOMException ex) {
                 error.launch(ex, null);

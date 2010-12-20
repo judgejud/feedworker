@@ -722,7 +722,7 @@ public class Mediator {
     String getTitle(){
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "226 by "
+                + "245 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -774,8 +774,8 @@ public class Mediator {
         core.importTvFromDestSub();
     }
 
-    void removeSingleShowCalendar(int value) {
-        core.removeShowTv(value);
+    void removeSingleShowCalendar(int value, Object id) {
+        core.removeShowTv(value, id);
     }
     
     void removeAllShowCalendar() {
