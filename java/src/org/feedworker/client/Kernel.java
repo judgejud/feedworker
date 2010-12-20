@@ -359,28 +359,30 @@ public class Kernel implements PropertyChangeListener {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
                         if (confronta.before(Common.stringToDate(date_matrix))) {
                             if (continua) {
-                                if (from.equals(ITASA))
+                                if (from.equals(ITASA)) {
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_ITASA);
-                                else if (from.equals(MYITASA) && !prop.isAutoDownloadMyItasa())
+                                } else if (from.equals(MYITASA) && !prop.isAutoDownloadMyItasa()) {
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_MYITASA);
-                                else if (from.equals(SUBSF))
+                                } else if (from.equals(SUBSF)) {
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_SUBSF);
-                                else if (from.equals(MYSUBSF))
+                                } else if (from.equals(MYSUBSF)) {
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_MYSUBSF);
-                                else if (from.equals(EZTV))
+                                } else if (from.equals(EZTV)) {
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_EZTV);
-                                else if (from.equals(BTCHAT))
+                                } else if (from.equals(BTCHAT)) {
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_BTCHAT);
+                                }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2])) && download)
-                                downItasaAuto(matrice.get(i)[0]);                            
+                            if ((isNotStagione((String) matrice.get(i)[2])) && download) {
+                                downItasaAuto(matrice.get(i)[0]);
+                            }
                         } else if (first && from.equals(MYITASA)) { // non deve
                             // fare
                             // nulla
@@ -428,7 +430,7 @@ public class Kernel implements PropertyChangeListener {
     private void runTimer(int delay) {
         timer = new Timer();
         try {
-            timer.scheduleAtFixedRate(new TimerTask()   {
+            timer.scheduleAtFixedRate(new TimerTask()     {
 
                 @Override
                 public void run() {
@@ -607,8 +609,9 @@ public class Kernel implements PropertyChangeListener {
             xmlSubDest = new Xml(FILE_RULE, true);
             ArrayList temp = xmlSubDest.initializeReaderRule();
             mapRules = (TreeMap<KeyRule, ValueRule>) temp.get(0);
-            if (mapRules != null)
+            if (mapRules != null) {
                 fireTableEvent((ArrayList<Object[]>) temp.get(1), SUBTITLE_DEST);
+            }
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
@@ -931,51 +934,6 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
-
-        @Override
-        public ArrayList<Object[]> doInBackground() {
-            int progress = 0;
-            int increment = 100 / mapRules.size();
-
-            Iterator<KeyRule> iter = mapRules.keySet().iterator();
-            String oldName = "";
-            ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
-            TvRage t = new TvRage();
-
-            setProgress(progress);
-            try {
-                while (iter.hasNext()) {
-                    String name = iter.next().getName();
-                    if (!name.toLowerCase().equalsIgnoreCase(oldName.toLowerCase())) {
-                        ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(name, true);
-                        if (temp != null) {
-                            Object[] show = temp.get(0);
-                            Object[] array = t.readingEpisodeList_byID(
-                                    show[0].toString(), show[2].toString());
-                            array[0] = show[0];
-                            array[1] = show[1];
-                            array[2] = show[3];
-                            array[3] = show[4];
-                            alObjs.add(array);
-                            xmlCalendar.addShowTV(array);
-                        }
-                        oldName = name;
-                    }
-                    progress += increment;
-                    setProgress(progress);
-                }
-                setProgress(100);
-                xmlCalendar.write();
-            } catch (JDOMException ex) {
-                error.launch(ex, null);
-            } catch (IOException ex) {
-                error.launch(ex, null);
-            }
-            return alObjs;
-        }
-    }
-
     public void importTvFromDestSub() {
         fireJFrameEventOperation(OPERATION_IMPORT_SHOW, mapRules.size());
         importTask = new ImportTask();
@@ -985,12 +943,12 @@ public class Kernel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        int progress = importTask.getProgress();
-        if ("progress".equals(evt.getPropertyName())) {
-            fireJFrameEventOperation(OPERATION_IMPORT_INCREMENT, progress);
-        }
-        if (importTask.isDone()) {
+        System.out.println(evt.getPropertyName());
+        if (evt.getPropertyName().equals("progress"))
+            fireJFrameEventOperation(OPERATION_IMPORT_INCREMENT);
+        else if (importTask.isDone()) {
             try {
+                System.out.println("fire");
                 fireTableEvent(importTask.get(), CALENDAR);
             } catch (Exception e) {
             }
@@ -999,7 +957,7 @@ public class Kernel implements PropertyChangeListener {
 
     // TODO:
 	/*
-     * public void searchDay(int temp){ if
+     * public void searchDay(int temp){ if6
      * (prop.isEnabledCustomDestinationFolder()){ int day = Common.getDay() +
      * temp; if (day==0) day = 7; else if (day==8) day = 1; try { String result
      * = XPathReader.queryDay(daysOfWeek[day]); String msg; if
@@ -1017,7 +975,7 @@ public class Kernel implements PropertyChangeListener {
     /**
      * Stampa il messaggio di alert invocando il metodo fire opportuno
      * 
-     * @param msg
+     * @param msg        System.out.println(evt.getPropertyName());
      *            testo da stampare
      */
     private void printAlert(String msg) {
@@ -1160,6 +1118,57 @@ public class Kernel implements PropertyChangeListener {
         while (listeners.hasNext()) {
             JFrameEventIconDateListener myel = (JFrameEventIconDateListener) listeners.next();
             myel.objReceived(event);
+        }
+    }
+
+    class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
+
+        @Override
+        public ArrayList<Object[]> doInBackground() {
+            int progress = 0;
+            //int increment = 100 / mapRules.size();
+            Iterator<KeyRule> iter = mapRules.keySet().iterator();
+            String oldName = "";
+            ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
+            TvRage t = new TvRage();
+
+            setProgress(progress);
+            try {
+                while (iter.hasNext()) {
+                    String name = iter.next().getName();
+//                    if (!name.toLowerCase().equalsIgnoreCase(oldName.toLowerCase())) {
+                        ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(name, true);
+                        if (temp != null) {
+                            Object[] show = temp.get(0);
+                            Object[] array = t.readingEpisodeList_byID(
+                                    show[0].toString(), show[2].toString());
+                            array[0] = show[0];
+                            array[1] = show[1];
+                            array[2] = show[3];
+                            array[3] = show[4];
+                            if (!name.toLowerCase().equalsIgnoreCase(oldName.toLowerCase())) {
+                                alObjs.add(array);
+                                xmlCalendar.addShowTV(array);
+                            }
+                        }
+                        oldName = name;
+                    
+                    //progress+=increment;                    
+                    setProgress(++progress);
+                    System.out.println(name + " " + progress);
+                }
+                
+                //if (progress < 100) {
+                    //setProgress(100);
+                    //System.out.println(progress);
+                //}
+                xmlCalendar.write();
+            } catch (JDOMException ex) {
+                error.launch(ex, null);
+            } catch (IOException ex) {
+                error.launch(ex, null);
+            }
+            return alObjs;
         }
     }
 }
