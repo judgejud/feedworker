@@ -23,16 +23,16 @@ class jdProgressBarImport extends JDialog {
         setUndecorated(true);
         setPreferredSize(new Dimension(300, 50));
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        //bar = new JProgressBar(0, 100);
-        System.out.println(count + " " + max);
-        bar = new JProgressBar(0, max);
+        bar = new JProgressBar(0, 100);
+        //System.out.println(count + " " + max);
+        //bar = new JProgressBar(0, max);
         bar.setValue(0);
         bar.setStringPainted(true);
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(bar);
         pack();
         
-        /* Non è chiaro il motivo ma se la jdialog è resa visibile in un thread a parte
+        /* Non è chiaro il motivo ma se la jdialog modale è resa visibile in un thread a parte
          * allora l'attività di aggiornamento sullo stato di avanzamento della progress bar
          * sarà visibile.
          * Se non si utilizza un thread a parte per rendere visibile la jdialog allora
@@ -49,10 +49,13 @@ class jdProgressBarImport extends JDialog {
         t.start();
     }
 
-    void setProgress() {
-        bar.setValue(++count);
-        System.out.println(count + " " + bar.getMaximum());
-        if (count == bar.getMaximum())
+    void setProgress(int progress) {
+        //bar.setValue(++count);
+    	bar.setValue(progress);
+    	System.out.println(progress + " of " + bar.getMaximum());
+        //System.out.println(count + " " + bar.getMaximum());
+        //if (count == bar.getMaximum())
+    	if (progress == bar.getMaximum())
             dispose();
     }
 }
