@@ -964,15 +964,6 @@ public class Kernel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("progress")) {
             fireJFrameEventOperation(OPERATION_IMPORT_INCREMENT, importTask.getProgress());
-
-            /* Per promemoria poi puoi togliere questo commento:
-             * il metodo isDone è true quando il task è terminato indipendentemente da come
-             * è finito (vedi documentazione).
-             * In altri termini isDone non restituisce true solo se il progress è arrivato a 100.
-             * Con questa correzione si fa il fire sulla tabella solo se il task è terminato
-             * ed ha effettivamente finito!!!
-             */
-
             if (importTask.isDone() /*&& importTask.getProgress() == 100*/) {
                 try {
                     fireTableEvent(importTask.get(), CALENDAR);
@@ -984,7 +975,7 @@ public class Kernel implements PropertyChangeListener {
     }
     
     public void refreshCalendar() {
-        String[] array = null;
+        TreeMap<Long, String> array=null;
         try {
             array = XPathReader.queryDayID(Common.dateString(Common.actualDate()));
         } catch (ParserConfigurationException ex) {
@@ -996,28 +987,49 @@ public class Kernel implements PropertyChangeListener {
         } catch (XPathExpressionException ex) {
             error.launch(ex, null);
         }
-        if (array!=null){
+        if (array.size()>0){
             
         }
     }
 
-    // TODO:
-	/*
-     * public void searchDay(int temp){ if6
-     * (prop.isEnabledCustomDestinationFolder()){ int day = Common.getDay() +
-     * temp; if (day==0) day = 7; else if (day==8) day = 1; try { String result
-     * = XPathReader.queryDay(daysOfWeek[day]); String msg; if
-     * (result.equalsIgnoreCase("")){ msg =
-     * "Non ci sono serial tv previsti per "; if (temp==0) msg += "oggi"; else
-     * if(temp == 1) msg += "domani"; else if(temp == -1) msg += "ieri"; } else
-     * { msg = "Serial tv previsti per "; if (temp==0) msg += "oggi: "; else
-     * if(temp == 1) msg += "domani: "; else if(temp == -1) msg += "ieri: "; msg
-     * += result; } fireNewTextPaneEvent(msg, TextPaneEvent.DAY_SERIAL); } catch
-     * (ParserConfigurationException ex) { error.launch(ex, getClass()); } catch
-     * (SAXException ex) { error.launch(ex, getClass()); } catch (IOException
-     * ex) { error.launch(ex, getClass()); } catch (XPathExpressionException ex)
-     * { error.launch(ex, getClass()); } } }
-     */
+     public void searchDay(int temp){
+         String day=null; 
+         if (temp==0)
+             day = Common.dateString(Common.actualDate());
+         else if (temp==-1)
+             day = Common.dateString(Common.yesterdayDate());
+         else if (temp==1)
+             day = Common.dateString(Common.tomorrowDate());
+         try {
+             String result = XPathReader.queryDayEquals(day); 
+             String msg; 
+             if (result.equalsIgnoreCase(""))
+                 msg = "Non ci sono serial tv previsti per " + getDay(temp);
+             else 
+                 msg = "Serial tv previsti per " + getDay(temp) + result; 
+             fireNewTextPaneEvent(msg, TextPaneEvent.DAY_SERIAL); 
+         } catch (ParserConfigurationException ex) { 
+             error.launch(ex, getClass()); 
+         } catch (SAXException ex) { 
+             error.launch(ex, getClass()); 
+         } catch (IOException ex) { 
+             error.launch(ex, getClass()); 
+         } catch (XPathExpressionException ex){ 
+             error.launch(ex, getClass()); } 
+     }      
+     
+    private String getDay(int temp){
+        String day = null;
+        if (temp==0) 
+            day = "oggi: "; 
+        else if(temp == 1) 
+            day = "domani: "; 
+        else if(temp == -1) 
+            day = "ieri: "; 
+        return day;
+     }
+         
+     
     /**
      * Stampa il messaggio di alert invocando il metodo fire opportuno
      * 
