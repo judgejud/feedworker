@@ -984,7 +984,21 @@ public class Kernel implements PropertyChangeListener {
     }
     
     public void refreshCalendar() {
-        //TODO
+        String[] array = null;
+        try {
+            array = XPathReader.queryDayID(Common.dateString(Common.actualDate()));
+        } catch (ParserConfigurationException ex) {
+            error.launch(ex, null);
+        } catch (SAXException ex) {
+            error.launch(ex, null);
+        } catch (IOException ex) {
+            error.launch(ex, null);
+        } catch (XPathExpressionException ex) {
+            error.launch(ex, null);
+        }
+        if (array!=null){
+            
+        }
     }
 
     // TODO:

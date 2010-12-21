@@ -71,7 +71,23 @@ public class Common {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY);
         return sdf.format(d);
     }
+    
+    /**Restituisce la data come stringa in formato yyyy-MM-dd
+     * 
+     * @param d
+     * @return 
+     */
+    public static String dateString(Date d){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
+        return sdf.format(d);
+    }
 
+    /**Converte una data di tipo stringa yyyy-MM-dd
+     * 
+     * @param s
+     * @return
+     * @throws ParseException 
+     */
     public static Date stringAmericanToDate(String s) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
         Date d = sdf.parse(s);
