@@ -68,7 +68,6 @@ class XPathReader {
     
     private static NodeList initializeXPathNode(String query) throws ParserConfigurationException, 
             SAXException, IOException, XPathExpressionException{
-        
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
         // Compile the XPath expression
@@ -81,13 +80,8 @@ class XPathReader {
             SAXException, IOException, XPathExpressionException{
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
-        
         XPathExpression expr = xpath.compile(query);
         // Run the query and get a nodeset && Cast the result to a DOM NodeList
         return ((Double) expr.evaluate(builder.parse(FILE_NAME), XPathConstants.NUMBER)).longValue();
-    }
-    
-    public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException{
-        queryDayID("2010-12-25");
     }
 }

@@ -24,6 +24,7 @@ class TvRage {
             "http://services.tvrage.com/feeds/full_search.php?show=";
     private final String EPISODE_LIST = 
             "http://services.tvrage.com/feeds/episode_list.php?sid=";
+    private final String SHOW_INFO = "http://services.tvrage.com/feeds/showinfo.php?sid=";
     private final String TAG_SHOW_ID = "showid";
     private final String TAG_NAME = "name";
     private final String TAG_SEASON = "seasons";
@@ -32,6 +33,7 @@ class TvRage {
     private final String TAG_AIRDATE = "airdate";
     private final String TAG_SEASON_NUM = "seasonnum";
     private final String TAG_TITLE = "title";
+    private final String TAG_SHOWNAME = "showname";
 
     private Document document;
 
@@ -109,7 +111,32 @@ class TvRage {
         }
         return values;
     }
-
+    
+    Object[] showInfo_byID(String id) throws JDOMException, IOException{
+        document = new SAXBuilder().build(new URL(SHOW_INFO + id));
+        List children = document.getContent();
+        Iterator iterator = children.iterator();
+        Object[] show = new Object[5];
+        show[0] = id;
+        while (iterator.hasNext()) {
+            Element item = (Element) iterator.next();
+            show[1] = item.getChild(TAG_SHOWNAME).getText();
+            show[2] = item.getChild(TAG_SEASON).getText();
+            show[3] = item.getChild(TAG_STATUS).getText();
+            try{
+                show[4] = convertDayIngToIta(item.getChild(TAG_AIRDAY).getText());
+            } catch(NullPointerException e){
+                show[4] ="";
+            }
+        }
+        return show;
+    }
+    
+    /**Trduce il giorno dall'inglese all'italiano
+     * 
+     * @param ing giorno inglese
+     * @return giorno italiano
+     */
     private String convertDayIngToIta(String ing){
         if (ing.toLowerCase().equalsIgnoreCase("sunday"))
             return "Domenica";

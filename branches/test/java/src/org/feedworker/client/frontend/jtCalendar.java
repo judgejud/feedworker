@@ -53,10 +53,18 @@ class jtCalendar extends JTable implements TableEventListener{
     public void objReceived(TableEvent evt) {
         if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
             DefaultTableModel dtm = (DefaultTableModel) getModel();
-            int size = evt.getArray().size();
-            int start = dtm.getRowCount();
-            for (int i = 0; i < size; i++)
-                dtm.insertRow(i+start, evt.getArray().get(i));
+            if (evt.isAddRows()){
+                int size = evt.getArray().size();
+                int start = dtm.getRowCount();
+                for (int i = 0; i < size; i++)
+                    dtm.insertRow(i+start, evt.getArray().get(i));
+            } else {
+                Long[] rows = (Long[]) evt.getArray().get(0);
+                for (int i = 0; i < rows.length; i++){
+                    int row = rows[i].intValue()-1;
+                    dtm.removeRow(convertRowIndexToModel(row));
+                }
+            }
         }
     }
 }

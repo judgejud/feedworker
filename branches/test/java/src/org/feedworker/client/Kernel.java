@@ -96,6 +96,7 @@ public class Kernel implements PropertyChangeListener {
     private TextPaneEventListener mytpel;
     private Xml xmlCalendar, xmlSubDest;
     private ImportTask importTask;
+    private RefreshTask refreshTask;
     private TreeSet tsIdCalendar;
 
     /**
@@ -962,13 +963,28 @@ public class Kernel implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("progress")) {
-            fireJFrameEventOperation(OPERATION_IMPORT_INCREMENT, importTask.getProgress());
-            if (importTask.isDone() /*&& importTask.getProgress() == 100*/) {
-                try {
-                    fireTableEvent(importTask.get(), CALENDAR);
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if (evt.getSource().getClass().getName().
+                equalsIgnoreCase("org.feedworker.client.Kernel$ImportTask")) {
+            if (evt.getPropertyName().equals("progress")) {
+                fireJFrameEventOperation(OPERATION_IMPORT_INCREMENT, importTask.getProgress());
+                if (importTask.isDone()) {
+                    try {
+                        fireTableEvent(importTask.get(), CALENDAR);
+                    } catch (Exception e) {
+                        error.launch(e);
+                    }
+                }
+            }
+        } else if (evt.getSource().getClass().getName().
+                equalsIgnoreCase("org.feedworker.client.Kernel$RefreshTask")) {
+            if (evt.getPropertyName().equals("progress")) {
+                fireJFrameEventOperation(OPERATION_IMPORT_INCREMENT, refreshTask.getProgress());
+                if (refreshTask.isDone()) {
+                    try {
+                        fireTableEvent(refreshTask.get(), CALENDAR);
+                    } catch (Exception e) {
+                        error.launch(e);
+                    }
                 }
             }
         }
@@ -988,7 +1004,13 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, null);
         }
         if (array.size()>0){
-            
+            ArrayList al = new ArrayList();
+            al.add(array.descendingKeySet().toArray(new Long[array.size()]));
+            fireTableEvent(al, CALENDAR, false);
+            fireJFrameEventOperation(OPERATION_IMPORT_SHOW, array.size());
+            refreshTask = new RefreshTask(array);
+            refreshTask.addPropertyChangeListener(this);
+            refreshTask.execute();
         }
     }
 
@@ -1067,11 +1089,17 @@ public class Kernel implements PropertyChangeListener {
         Iterator listeners = listenerTable.iterator();
         while (listeners.hasNext()) {
             TableEventListener myel = (TableEventListener) listeners.next();
-            if (myel != null) {
-                myel.objReceived(event);
-            } else {
-                System.out.println("myel table null" + source);
-            }
+            myel.objReceived(event);
+        }
+    }
+    
+    private synchronized void fireTableEvent(ArrayList<Object[]> alObj,
+            String source, boolean addRows) {
+        TableEvent event = new TableEvent(this, alObj, source, addRows);
+        Iterator listeners = listenerTable.iterator();
+        while (listeners.hasNext()) {
+            TableEventListener myel = (TableEventListener) listeners.next();
+            myel.objReceived(event);
         }
     }
 
@@ -1184,7 +1212,6 @@ public class Kernel implements PropertyChangeListener {
         @Override
         public ArrayList<Object[]> doInBackground() {
             int progress = 0;
-            //int increment = 100 / mapRules.size();
             Iterator<KeyRule> iter = mapRules.keySet().iterator();
             ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
             TvRage t = new TvRage();
@@ -1209,16 +1236,49 @@ public class Kernel implements PropertyChangeListener {
                             xmlCalendar.addShowTV(array);
                         }
                     }
-                    //progress += increment;
                     setProgress(++progress);
-                    //System.out.println(name + " " + progress);
                 }
-/*
-                if (progress < 100) {
-                    setProgress(100);
-                    System.out.println(100);
-                }  */
                 tsIdCalendar = ts;
+                xmlCalendar.write();
+            } catch (JDOMException ex) {
+                error.launch(ex, null);
+            } catch (IOException ex) {
+                error.launch(ex, null);
+            }
+            return alObjs;
+        }
+    }
+    
+    class RefreshTask extends SwingWorker<ArrayList<Object[]>, Void> {
+        private TreeMap<Long, String> tmRefresh;
+
+        public RefreshTask(TreeMap<Long, String> _tm) {
+            tmRefresh = _tm;
+        }
+        
+        @Override
+        public ArrayList<Object[]> doInBackground() {
+            int progress = 0;
+            Iterator<Long> iter = tmRefresh.descendingKeySet().iterator();
+            ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
+            TvRage t = new TvRage();
+            setProgress(progress);
+            try {
+                while (iter.hasNext()) {
+                    Long index = iter.next();
+                    String id = tmRefresh.get(index);
+                    Object[] show = t.showInfo_byID(id);
+                    Object[] array = t.readingEpisodeList_byID(
+                                    show[0].toString(), show[2].toString());
+                    array[0] = show[0];
+                    array[1] = show[1];
+                    array[2] = show[3];
+                    array[3] = show[4];
+                    alObjs.add(array);
+                    xmlCalendar.removeShowTv(index.intValue());
+                    xmlCalendar.addShowTV(array);
+                    setProgress(++progress);
+                }
                 xmlCalendar.write();
             } catch (JDOMException ex) {
                 error.launch(ex, null);
