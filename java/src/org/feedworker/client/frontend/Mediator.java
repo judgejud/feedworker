@@ -718,7 +718,7 @@ public class Mediator {
     String getTitle(){
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "248 by "
+                + "254 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -745,12 +745,11 @@ public class Mediator {
         dtm.addRow(new String[]{"File impostazioni", prop.getSettingsFilename()});
         return dtm;
     }
-    //TODO: ripristinare 1volta implementato salvataggio calendar
-/*
+
     void printDay(int day) {
         core.searchDay(day);
     }
-*/
+
     void invokeBackup(Component parent) {
         String name = Swing.getFile(parent, "Creare il file zip per il backup",
                 fnfeZIP, new File(MySystem.getUserDir() + File.separator));

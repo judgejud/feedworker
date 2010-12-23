@@ -80,7 +80,7 @@ class jpCalendar extends jpAbstract{
         jbRefresh.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                jbRefreshCalendarMouseClicked();
+                proxy.refreshCalendar();
             }
         });
 
@@ -132,9 +132,5 @@ class jpCalendar extends jpAbstract{
     private void jbRemoveAllRows(){
         proxy.removeAllShowCalendar();
         ((DefaultTableModel) jtable.getModel()).setRowCount(0);
-    }
-
-    private void jbRefreshCalendarMouseClicked() {
-        proxy.refreshCalendar();
     }
 }
