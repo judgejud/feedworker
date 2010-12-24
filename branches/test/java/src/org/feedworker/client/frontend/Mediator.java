@@ -235,7 +235,7 @@ public class Mediator {
     }
 
     void setTextPaneListener(TextPaneEventListener listener) {
-        core.addMyTextPaneEventListener(listener);
+        core.addTextPaneEventListener(listener);
         core.setDownloadThreadListener(listener);
         ManageException.getIstance().addMyTextPaneEventListener(listener);
         addMyTextPaneEventListener(listener);
