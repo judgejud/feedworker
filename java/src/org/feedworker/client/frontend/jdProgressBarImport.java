@@ -16,13 +16,12 @@ class jdProgressBarImport extends JDialog {
     private JProgressBar bar;
 
     public jdProgressBarImport(Frame owner, int max) {
-        super(owner, "Importazione ...", ModalityType.DOCUMENT_MODAL);
+        super(owner, "Operazione in corso...", ModalityType.DOCUMENT_MODAL);
         setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
         setResizable(false);
         setUndecorated(true);
         setPreferredSize(new Dimension(300, 50));
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        //bar = new JProgressBar(0, 100);
         bar = new JProgressBar(0, max);
         bar.setValue(0);
         bar.setStringPainted(true);

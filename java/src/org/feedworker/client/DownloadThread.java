@@ -196,7 +196,7 @@ public class DownloadThread implements Runnable {
                         String n = http.getNameFile();
                         int l = n.length();
                         File f = File.createTempFile(n.substring(0, l - 4), n.substring(l - 4));
-                        Common.downloadSingle(entity.getContent(), f);
+                        Io.downloadSingle(entity.getContent(), f);
                         alf.addAll(extract(f));
                     } else
                         fireNewTextPaneEvent("Sessione scaduta", TextPaneEvent.ALERT);

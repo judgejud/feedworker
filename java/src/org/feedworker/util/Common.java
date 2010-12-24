@@ -2,13 +2,6 @@ package org.feedworker.util;
 
 //IMPORT JAVA
 import java.awt.Image;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,50 +45,64 @@ public class Common {
         return g.getTime();
     }
 
-    /**
-     * Trasforma una stringa in una data
+    /**Trasforma una stringa data ora in una data
      *
-     * @param s
-     *            stringa dd/MM/yyyy HH:mm:ss
+     * @param s stringa dd/MM/yyyy HH:mm:ss
      * @return data nel tipo Date
      * @throws ParseException
      */
-    public static Date stringToDate(String s) throws ParseException {
+    public static Date stringDateTime(String s) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss",
                 Locale.ITALY);
-        Date d = sdf.parse(s);
-        return d;
+        return sdf.parse(s);
     }
     
+    /**Converte una data in stringa data ora
+     * 
+     * @param d data
+     * @return stringa dd/MM/yyyy HH:mm:ss
+     */
     public static String dateTimeString(Date d){
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY);
         return sdf.format(d);
     }
     
-    /**Restituisce la data come stringa in formato yyyy-MM-dd
+    /**Trasforma una stringa data in una data
+     *
+     * @param s stringa dd/MM/yyyy
+     * @return data nel tipo Date
+     * @throws ParseException
+     */
+    public static Date stringDate(String s) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
+        return sdf.parse(s);
+    }
+    
+    /**Converte una data in stringa data
      * 
-     * @param d
-     * @return 
+     * @param d data
+     * @return stringa dd/MM/yyyy
      */
     public static String dateString(Date d){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
-        return sdf.format(d);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
+        if (d==null)
+            return null;
+        else
+            return sdf.format(d);
     }
-
-    /**Converte una data di tipo stringa yyyy-MM-dd
+    
+    /**Converte una stringa yyyy-MM-dd in data
      * 
-     * @param s
+     * @param s stringa data americana yyyy-MM-dd
      * @return
      * @throws ParseException 
      */
     public static Date stringAmericanToDate(String s) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
-        Date d = sdf.parse(s);
-        return d;
+        return sdf.parse(s);
     }
 
-    /**
-     * Restituisce l'icona per la systemtraybar
+    /**Restituisce l'icona per la systemtraybar
      *
      * @param name
      * @return icona
@@ -165,28 +172,5 @@ public class Common {
             }
         }
         return pos;
-    }
-
-    /**
-     * Effettua il download dell'inputStream sotto forma di file
-     *
-     * @param is
-     *            http content-stream
-     * @param f
-     *            file di riferimento su cui mandare il flusso di inputstream
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public static void downloadSingle(InputStream is, File f)
-            throws FileNotFoundException, IOException {
-        OutputStream out = new FileOutputStream(f);
-        byte buf[] = new byte[1024];
-        int len;
-        while ((len = is.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        out.flush();
-        out.close();
-        is.close();
     }
 }

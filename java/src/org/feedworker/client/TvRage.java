@@ -72,14 +72,14 @@ class TvRage {
         List seasons = ((Element) document.getRootElement().getChildren().get(2))
                 .getChildren();
         int last = Lang.stringToInt(season);        
-        List temp = null;
-        while (temp==null){
+        List tempList = null;
+        while (tempList==null){
             try{
-                temp = ((Element) seasons.get(--last)).getChildren();
+                tempList = ((Element) seasons.get(--last)).getChildren();
             } catch(IndexOutOfBoundsException e){}
         }
         season = Lang.intToString(last+1);
-        Iterator iter = temp.iterator();
+        Iterator iter = tempList.iterator();
         Date yesterday = Common.yesterdayDate();
         Object[] values = null;
         if (iter.hasNext())
@@ -87,25 +87,26 @@ class TvRage {
         while (iter.hasNext()){
             Element item = (Element) iter.next();
             String airDate = item.getChild(TAG_AIRDATE).getText();
-            Date d = null;
+            Date d = null, tempDate = null;
             try {
-                d = Common.stringAmericanToDate(airDate);
+                tempDate = Common.stringAmericanToDate(airDate);
+                d = tempDate;
             } catch (ParseException ex) {}
             if (airDate.equalsIgnoreCase("0000-00-00") || 
                     airDate.substring(5).equalsIgnoreCase("00-00")){
-                d = yesterday;
-                airDate = "";
+                tempDate = yesterday;
+                d = null;
             }
             String seasonNum = item.getChild(TAG_SEASON_NUM).getText();
             String title = item.getChild(TAG_TITLE).getText();
-            if (d.before(yesterday)){
+            if (tempDate.before(yesterday)){
                 values[4] = season + "x" + seasonNum;
                 values[5] = title;
-                values[6] = airDate;
+                values[6] = d;
             } else {
                 values[7] = season + "x" + seasonNum;
                 values[8] = title;
-                values[9] = airDate;
+                values[9] = d;
                 break;
             }
         }

@@ -38,6 +38,7 @@ import org.feedworker.util.Quality;
 import org.feedworker.util.Samba;
 import org.feedworker.util.ValueRule;
 
+import org.jfacility.Io;
 import org.jfacility.Util;
 import org.jfacility.java.lang.Lang;
 import org.opensanskrit.exception.UnableRestartApplicationException;
@@ -157,7 +158,7 @@ public class Kernel implements PropertyChangeListener {
                 if (is != null) {
                     File f = new File(prop.getTorrentDestinationFolder()
                             + File.separator + http.getNameFile());
-                    Common.downloadSingle(is, f);
+                    Io.downloadSingle(is, f);
                     fireNewTextPaneEvent("Scaricato: " + http.getNameFile(),
                             TextPaneEvent.TORRENT);
                 } else {
@@ -352,16 +353,16 @@ public class Kernel implements PropertyChangeListener {
             InputStream ist = http.getStreamRss(urlRss);
             if (ist != null) {
                 File ft = File.createTempFile("rss", ".xml");
-                Common.downloadSingle(ist, ft);
+                Io.downloadSingle(ist, ft);
                 rss = new RssParser(ft);
                 matrice = rss.read();
                 ft.delete();
                 boolean continua = true;
                 if (data != null) {
-                    Date confronta = Common.stringToDate(data);
+                    Date confronta = Common.stringDateTime(data);
                     for (int i = matrice.size() - 1; i >= 0; i--) {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
-                        if (confronta.before(Common.stringToDate(date_matrix))) {
+                        if (confronta.before(Common.stringDateTime(date_matrix))) {
                             if (continua) {
                                 if (from.equals(ITASA)) {
                                     fireNewTextPaneEvent(
@@ -1004,10 +1005,10 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, null);
         }
         if (array.size()>0){
+            fireJFrameEventOperation(OPERATION_IMPORT_SHOW, array.size());
             ArrayList al = new ArrayList();
             al.add(array.descendingKeySet().toArray(new Long[array.size()]));
             fireTableEvent(al, CALENDAR, false);
-            fireJFrameEventOperation(OPERATION_IMPORT_SHOW, array.size());
             refreshTask = new RefreshTask(array);
             refreshTask.addPropertyChangeListener(this);
             refreshTask.execute();
@@ -1024,12 +1025,14 @@ public class Kernel implements PropertyChangeListener {
              day = Common.dateString(Common.tomorrowDate());
          try {
              String result = XPathReader.queryDayEquals(day); 
-             String msg; 
-             if (result.equalsIgnoreCase(""))
-                 msg = "Non ci sono serial tv previsti per " + getDay(temp);
-             else 
-                 msg = "Serial tv previsti per " + getDay(temp) + result; 
-             fireNewTextPaneEvent(msg, TextPaneEvent.DAY_SERIAL); 
+             if (result!=null){
+                 String msg; 
+                 if (result.equalsIgnoreCase(""))
+                     msg = "Non ci sono serial tv previsti per " + getDay(temp);
+                 else 
+                     msg = "Serial tv previsti per " + getDay(temp) + result; 
+                 fireNewTextPaneEvent(msg, TextPaneEvent.DAY_SERIAL); 
+             }
          } catch (ParserConfigurationException ex) { 
              error.launch(ex, getClass()); 
          } catch (SAXException ex) { 
@@ -1055,8 +1058,7 @@ public class Kernel implements PropertyChangeListener {
     /**
      * Stampa il messaggio di alert invocando il metodo fire opportuno
      * 
-     * @param msg
-     *            System.out.println(evt.getPropertyName()); testo da stampare
+     * @param msg testo da stampare
      */
     private void printAlert(String msg) {
         fireNewTextPaneEvent(msg, TextPaneEvent.ALERT);
@@ -1275,7 +1277,7 @@ public class Kernel implements PropertyChangeListener {
                     array[2] = show[3];
                     array[3] = show[4];
                     alObjs.add(array);
-                    xmlCalendar.removeShowTv(index.intValue());
+                    xmlCalendar.removeShowTv(index.intValue()-1);
                     xmlCalendar.addShowTV(array);
                     setProgress(++progress);
                 }
