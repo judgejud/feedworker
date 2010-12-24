@@ -17,6 +17,7 @@ import org.jfacility.java.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.jfacility.Io;
 /**TODO: terminare la trasformazione del feed rss sotto 3d
  *
  * @author luca
@@ -48,16 +49,16 @@ public class RssThread implements Runnable{
             InputStream ist = http.getStreamRss(urlRss);
             if (ist != null) {
                 File ft = File.createTempFile("rss", ".xml");
-                Common.downloadSingle(ist, ft);
+                Io.downloadSingle(ist, ft);
                 rss = new RssParser(ft);
                 matrice = rss.read();
                 ft.delete();
                 boolean continua = true;
                 if (data != null) {
-                    Date confronta = Common.stringToDate(data);
+                    Date confronta = Common.stringDateTime(data);
                     for (int i = matrice.size() - 1; i >= 0; i--) {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
-                        if (confronta.before(Common.stringToDate(date_matrix))) {
+                        if (confronta.before(Common.stringDateTime(date_matrix))) {
                             if (continua) {
                                 if (from.equals(core.ITASA))
                                     fireNewTextPaneEvent("Nuovo/i feed " + from,

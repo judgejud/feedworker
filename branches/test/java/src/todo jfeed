@@ -1,16 +1,12 @@
 IMPLEMENTARE
--Calendario
-*fare aggiornamento (usando il Treeset o meglio l'id contenuto nel treeset)
-*sistemare la data
-*trovare un modo per il quale l'import una volta fatto si disabiliti
+-fare in modo che col tasto dx sulle destinazioni esca la possibilità di poter aprire la cartella.
+-pulsante di copia info sistema
 -feed rss sotto thread
 -trovare 1modo per rendere visibile la pwd itasa
 -ripristino files backuppati
 -destinazione avanzata in mixed mode
--fare in modo che col tasto dx sulle destinazioni esca la possibilità di poter aprire la cartella.
 -implementare il tipo di download di mysubsfactory (come x myitasa)
 -pulsante check login itasa
--pulsante di copia info sistema
 -fare caricamento xml sotto thread
 -vedere di creare 1http permanente x itasa
 -ricerca sottotitoli itasa
@@ -18,20 +14,21 @@ IMPLEMENTARE
 sistemare il download avanzato per jcifs (al rientro a taranto) 
 terminare legenda colori
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
+aggiungere versioning automatico all'applicazione
+
+PUNTI INTERROGATIVI
+feature proxy? 
+esiste evento "arresta sistema"? e come intercettarlo???  
+OS & FW: decidere per il debug_flag se passarlo da commandline.
+log4j?
 calendar: bottone info su ciò che è presente nella tabella?
 avvio automatico all'avvio OS (win-unix-mac)?
 multiutenza?
 properties sotto jfacility? 
 impostazioni dei tabs?
-log4j?
-aggiungere versioning automatico all'applicazione
-OS & FW: decidere per il debug_flag se passarlo da commandline.
-esiste evento "arresta sistema"? e come intercettarlo???  
-feature proxy? 
 
 CORREZIONI:
--sistemare il mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
-
+-mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
 VERIFICARE LE IMPLEMENTAZIONI
 impedire il funzionamento a vendor java diverse da sun.
 riavvio che non salva l'ultima data aggiornamento prima del riavvio
@@ -39,4 +36,3 @@ riavvio con java home (win, mac)
 1080i
 splashscreen (java5)
 avvio ridotto ad icona (java5)
-calendario: testare funzionamento treeset

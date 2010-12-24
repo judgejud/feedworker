@@ -4,13 +4,17 @@ package org.feedworker.client;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.feedworker.util.Common;
 import org.feedworker.util.KeyRule;
 import org.feedworker.util.ValueRule;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -18,8 +22,7 @@ import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-/**
- * Scrive e legge su/da file xml le regole di destinazione
+/**Scrive e legge su/da file xml le regole di destinazione
  * 
  * @author luca
  */
@@ -154,7 +157,8 @@ class Xml {
         calendar.addContent(lastTitle);
 
         Element lastDate = new Element(TAG_CALENDAR_LAST_DATE);
-        lastDate.setText(checkNPE(array[++i]));
+        String d1 = Common.dateString((Date) array[++i]);
+        lastDate.setText(checkNPE(d1));
         calendar.addContent(lastDate);
 
         Element nextEpisode = new Element(TAG_CALENDAR_NEXT_EPISODE);
@@ -166,7 +170,8 @@ class Xml {
         calendar.addContent(nextTitle);
 
         Element nextDate = new Element(TAG_CALENDAR_NEXT_DATE);
-        nextDate.setText(checkNPE(array[++i]));
+        String d2 = Common.dateString((Date) array[++i]);
+        nextDate.setText(checkNPE(d2));
         calendar.addContent(nextDate);
         
         return calendar;
@@ -188,10 +193,20 @@ class Xml {
                 obj[++i]=calendar.getChild(TAG_CALENDAR_DAY).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_EPISODE).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_TITLE).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_DATE).getText();
+                String s1 = calendar.getChild(TAG_CALENDAR_LAST_DATE).getText();
+                Date d1 = null;
+                try {
+                    d1 = Common.stringDate(s1);
+                } catch (ParseException ex) {}
+                obj[++i]= d1;
                 obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_EPISODE).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_TITLE).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_DATE).getText();
+                String s2 = calendar.getChild(TAG_CALENDAR_NEXT_DATE).getText();
+                Date d2 = null;
+                try {
+                    d2 = Common.stringDate(s2);
+                } catch (ParseException ex) {}
+                obj[++i]= d2;
                 ts.add(obj[0]);
                 al.add(obj);
             }            

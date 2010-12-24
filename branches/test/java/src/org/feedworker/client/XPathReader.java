@@ -28,17 +28,19 @@ class XPathReader {
 
     public static String queryDayEquals(String day) throws ParserConfigurationException, 
             SAXException, IOException, XPathExpressionException{
-                
-        String query = "//SHOW[NEXT_DATE='" + day + "']/SHOW/text()";
-        NodeList nodes = initializeXPathNode(query);
-        
-        int len = nodes.getLength();
-        String result = "";
-        if (len>0)
-        result += nodes.item(0).getNodeValue();
-        for (int i=1; i<len; i++)
-            result += ", " + nodes.item(i).getNodeValue();
-        return result;
+        if (FILE_NAME.exists()){
+            String query = "//SHOW[NEXT_DATE='" + day + "']/SHOW/text()";
+            NodeList nodes = initializeXPathNode(query);
+
+            int len = nodes.getLength();
+            String result = "";
+            if (len>0)
+            result += nodes.item(0).getNodeValue();
+            for (int i=1; i<len; i++)
+                result += ", " + nodes.item(i).getNodeValue();
+            return result;
+        } else
+            return null;
     }
     
     public static TreeMap<Long, String> queryDayID(String day) throws 

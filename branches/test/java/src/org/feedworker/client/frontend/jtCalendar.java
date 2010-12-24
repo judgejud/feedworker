@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend;
 
 import java.awt.Font;
+import java.util.Date;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -24,8 +25,8 @@ class jtCalendar extends JTable implements TableEventListener{
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
 
             Class[] types = new Class[]{String.class, String.class, String.class,
-                String.class, String.class, String.class, String.class,
-                String.class, String.class, String.class};
+                String.class, String.class, String.class, Date.class,
+                String.class, String.class, Date.class};
 
             @Override
             public Class getColumnClass(int columnIndex) {
