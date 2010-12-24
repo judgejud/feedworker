@@ -11,7 +11,7 @@ IMPLEMENTARE
 -vedere di creare 1http permanente x itasa
 -ricerca sottotitoli itasa
 
-sistemare il download avanzato per jcifs (al rientro a taranto) 
+avviso riavvio
 terminare legenda colori
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
 aggiungere versioning automatico all'applicazione
@@ -29,6 +29,7 @@ impostazioni dei tabs?
 
 CORREZIONI:
 -mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
+
 VERIFICARE LE IMPLEMENTAZIONI
 impedire il funzionamento a vendor java diverse da sun.
 riavvio che non salva l'ultima data aggiornamento prima del riavvio

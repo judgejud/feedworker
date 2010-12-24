@@ -288,28 +288,25 @@ public class Kernel implements PropertyChangeListener {
         return test;
     }
 
-    /**
-     * chiude l'applicazione salvando la data nel settings
+    /**chiude/restarta l'applicazione salvando la data nel settings
      * 
-     * @param data
+     * @param data data da salvare
+     * @param restart effettuare il riavvio dell'applicazione
      */
     public void closeApp(String data, boolean restart) {
-        if (!Lang.verifyTextNotNull(data)) {
+        if (!Lang.verifyTextNotNull(data))
             data = Common.actualTime();
-        }
         prop.setLastDateTimeRefresh(data);
-        if (!prop.isApplicationFirstTimeUsed()) {
+        if (!prop.isApplicationFirstTimeUsed())
             prop.writeOnlyLastDate();
-        }
         if (restart) {
             try {
                 FeedWorkerClient.getApplication().restart();
             } catch (UnableRestartApplicationException ex) {
                 error.launch(ex);
             }
-        } else {
+        } else
             System.exit(0);
-        }
     }
 
     /** Scrive le proprietà dell'applicazione nel file properties */
@@ -665,6 +662,7 @@ public class Kernel implements PropertyChangeListener {
         return check;
     }
 
+    /**Effettua l'aggiornamento dei feed forzato*/
     public void bruteRefreshRSS() {
         fireNewTextPaneEvent("Timer in fase di reinizializzazione.",
                 TextPaneEvent.OK);
@@ -835,7 +833,7 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    /** Pulisce i task completati */
+    /** Pulisce i task completati del synology*/
     public void synoClearFinish() {
         Http http = new Http();
         String url = "http://" + prop.getCifsShareLocation()
@@ -861,22 +859,22 @@ public class Kernel implements PropertyChangeListener {
         mytpel = listener;
     }
 
+    /**Effettua il backup dei settings vari
+     * 
+     * @param name nome file
+     */
     public void backup(String name) {
         ArrayList<File> files = new ArrayList<File>();
         File s = new File("settings.properties");
-        if (FILE_RULE.exists()) {
+        if (FILE_RULE.exists())
             files.add(FILE_RULE);
-        }
-        if (FILE_CALENDAR.exists()) {
+        if (FILE_CALENDAR.exists())
             files.add(FILE_RULE);
-        }
-        if (s.exists()) {
+        if (s.exists())
             files.add(s);
-        }
         if (files.size() > 0) {
-            if (!name.substring(name.length() - 4).toLowerCase().equalsIgnoreCase(".zip")) {
+            if (!name.substring(name.length() - 4).toLowerCase().equalsIgnoreCase(".zip"))
                 name += ".zip";
-            }
             File f = new File(name);
             try {
                 Util.createZip(files, f);
@@ -1111,7 +1109,7 @@ public class Kernel implements PropertyChangeListener {
      * @param listener
      *            evento textpane
      */
-    public synchronized void addMyTextPaneEventListener(
+    public synchronized void addTextPaneEventListener(
             TextPaneEventListener listener) {
         listenerTextPane.add(listener);
     }
@@ -1122,7 +1120,7 @@ public class Kernel implements PropertyChangeListener {
      * @param listener
      *            evento textpane
      */
-    public synchronized void removeMyTextPaneEventListener(
+    public synchronized void removeTextPaneEventListener(
             TextPaneEventListener listener) {
         listenerTextPane.remove(listener);
     }

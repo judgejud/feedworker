@@ -114,10 +114,13 @@ public class DownloadThread implements Runnable {
                         String namesub = filesub.getName();
                         KeyRule key = parsingNamefile(namesub, SPLIT_SUB);
                         if (!deleteFile(key, filesub, namesub)){
-                            dest = mapPath(key);
-                            try{
-                                newName = rename(key, namesub);
-                            } catch (NullPointerException e){}
+                            dest = returnPath(key);
+                            if (prop.isEnabledAdvancedDownload()){
+                                try{
+                                    newName = rename(key, namesub);
+                                } catch (NullPointerException e){}
+                            } else 
+                                dest = null;
                             s.moveFromLocal(filesub, dest);
                             if (newName != null) {
                                 String oldName = dest + File.separator + filesub.getName();
@@ -146,7 +149,7 @@ public class DownloadThread implements Runnable {
                     String namesub = filesub.getName();
                     KeyRule key = parsingNamefile(namesub, SPLIT_SUB);
                     if (!deleteFile(key, filesub, namesub)){
-                        String dest = mapPath(key);
+                        String dest = returnPath(key);
                         if (dest == null || !prop.isEnabledAdvancedDownload())
                             dest = prop.getSubtitleDestinationFolder();
                         try{
@@ -239,7 +242,7 @@ public class DownloadThread implements Runnable {
      * @param key chiave di ricerca
      * @return path di destinazione
      */
-    private String mapPath(KeyRule key) {
+    private String returnPath(KeyRule key) {
         if (key != null && mapRules != null)
             return mapRules.get(key).getPath();
         return null;
