@@ -11,7 +11,7 @@ import java.util.Locale;
 import javax.swing.ImageIcon;
 
 import org.jfacility.java.lang.Lang;
-import org.jfacility.java.lang.MySystem;
+import org.jfacility.java.lang.OS;
 import org.jfacility.javax.swing.Swing;
 
 /**Classe Utility di conversioni varie e raccolta di metodi comuni
@@ -110,9 +110,8 @@ public class Common {
     public static Image getResourceIcon(String name) {
         ImageIcon icon = new ImageIcon(
                 ResourceLocator.convertStringToURL(getResourcePath(name)));
-        if (MySystem.isWindows()) {
+        if (OS.isWindows())
             icon = Swing.scaleImage(icon, 16, 16);
-        }
         return icon.getImage();
     }
 

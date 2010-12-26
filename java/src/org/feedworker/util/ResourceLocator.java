@@ -3,7 +3,7 @@ package org.feedworker.util;
 //IMPORT JAVA
 import java.net.URL;
 
-import org.jfacility.java.lang.MySystem;
+import org.jfacility.java.lang.SystemProperty;
 
 /**
  * Classe Locazione Risorse
@@ -30,7 +30,7 @@ public class ResourceLocator {
      *
      */
     public static void setWorkspace() {
-        curDir = MySystem.getFileUserDir().toURI().getPath();
+        curDir = SystemProperty.getFileUserDir().toURI().getPath();
         //System.out.println(curDir);
     }
 
