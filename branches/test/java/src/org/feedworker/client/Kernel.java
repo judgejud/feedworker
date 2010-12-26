@@ -47,6 +47,7 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 
 import org.jdom.JDOMException;
+import org.jfacility.java.lang.SystemFileManager;
 import org.xml.sax.SAXException;
 
 /**
@@ -1055,7 +1056,18 @@ public class Kernel implements PropertyChangeListener {
             day = "ieri: "; 
         return day;
      }
-         
+    
+    public void openFolder(String dir) {
+        if (prop.isLocalFolder()){
+            try {
+                SystemFileManager.openExplorer(new File(dir));
+            } catch (IOException ex) {
+                error.launch(ex, this.getClass());
+            }
+        } else {
+            
+        }
+    }
      
     /**
      * Stampa il messaggio di alert invocando il metodo fire opportuno
@@ -1212,7 +1224,6 @@ public class Kernel implements PropertyChangeListener {
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
-
         @Override
         public ArrayList<Object[]> doInBackground() {
             int progress = 0;

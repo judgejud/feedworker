@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -119,15 +121,19 @@ class jpSubtitleDest extends jpAbstract {
             @Override
             public void mouseClicked(MouseEvent e){
 		// Left mouse click
-		if (SwingUtilities.isLeftMouseButton(e)){}
-		// Right mouse click
-		else if (SwingUtilities.isRightMouseButton(e)){
+		if (SwingUtilities.isRightMouseButton(e)){
                     // get the coordinates of the mouse click
-                    Point p = e.getPoint();
+                    final Point p = e.getPoint();
                     if (jtable.columnAtPoint(p)==3){
                         JPopupMenu popupMenu = new JPopupMenu();
-                        JMenuItem menuItem = new JMenuItem("Apri cartella");
-                        popupMenu.add(menuItem);
+                        JMenuItem jmiOpenFolder = new JMenuItem("Apri cartella");
+                        jmiOpenFolder.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                jmiOpenFolderClicked(p);
+                            }
+                        });
+                        popupMenu.add(jmiOpenFolder);
                         popupMenu.show(e.getComponent(), e.getX(), e.getY());
                     }
 		}
@@ -160,5 +166,10 @@ class jpSubtitleDest extends jpAbstract {
                 dtm.setValueAt(dir, row, 3);
             }
         }
+    }
+    
+    private void jmiOpenFolderClicked(Point p){
+        int row = jtable.rowAtPoint(p);
+        proxy.openFolder(jtable.getValueAt(row, 3).toString());
     }
 }
