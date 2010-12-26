@@ -37,9 +37,8 @@ import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.ValueRule;
 import org.jfacility.java.awt.AWT;
-import org.jfacility.java.lang.JVM;
 import org.jfacility.java.lang.Lang;
-import org.jfacility.java.lang.MySystem;
+import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
@@ -182,8 +181,7 @@ public class Mediator {
         }
         if (!text.equalsIgnoreCase("")) {
             AWT.setClipboard(text);
-            fireNewTextPaneEvent("link copiati nella clipboard",
-                    TextPaneEvent.OK);
+            fireTextPaneEvent("link copiati nella clipboard", TextPaneEvent.OK);
         }
     }
 
@@ -226,6 +224,10 @@ public class Mediator {
         core.runRss();
     }
 
+    /**chiama nel kernel la chiusura applicazione
+     * 
+     * @param date 
+     */
     void closeApp(String date) {
         core.closeApp(date, false);
     }
@@ -238,7 +240,7 @@ public class Mediator {
         core.addTextPaneEventListener(listener);
         core.setDownloadThreadListener(listener);
         ManageException.getIstance().addMyTextPaneEventListener(listener);
-        addMyTextPaneEventListener(listener);
+        addTextPaneEventListener(listener);
     }
 
     void setFrameListener(JFrameEventIconDateListener listener) {
@@ -531,14 +533,14 @@ public class Mediator {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio del client.");
             }
             if (!prop.isApplicationFirstTimeUsed() && first) {
-                fireNewJFrameEventOperation(ENABLE_BUTTON);
+                fireJFrameEventOperation(ENABLE_BUTTON);
                 runRss();
             } else {
                 if (Lang.verifyTextNotNull(oldMin) &&
                         !oldMin.equalsIgnoreCase(prop.getRefreshInterval()))
                     restartRss();
             }
-            fireNewTextPaneEvent("Impostazioni salvate in " + prop.getSettingsFilename(),
+            fireTextPaneEvent("Impostazioni salvate in " + prop.getSettingsFilename(),
                     TextPaneEvent.OK);
         }
     }
@@ -636,22 +638,22 @@ public class Mediator {
     }
 
     private void printAlert(String msg) {
-        fireNewTextPaneEvent(msg, TextPaneEvent.ALERT);
+        fireTextPaneEvent(msg, TextPaneEvent.ALERT);
     }
 
     // This methods allows classes to register for MyEvents
-    public synchronized void addMyTextPaneEventListener(
+    public synchronized void addTextPaneEventListener(
             TextPaneEventListener listener) {
         listenerTextPane.add(listener);
     }
 
     // This methods allows classes to unregister for MyEvents
-    public synchronized void removeMyTextPaneEventListener(
+    public synchronized void removeTextPaneEventListener(
             TextPaneEventListener listener) {
         listenerTextPane.remove(listener);
     }
 
-    private synchronized void fireNewTextPaneEvent(String msg, String type) {
+    private synchronized void fireTextPaneEvent(String msg, String type) {
         TextPaneEvent event = new TextPaneEvent(this, msg, type);
         Iterator listeners = listenerTextPane.iterator();
         while (listeners.hasNext()) {
@@ -677,7 +679,7 @@ public class Mediator {
         listenerJFrameO.remove(listener);
     }
 
-    private synchronized void fireNewJFrameEventOperation(String oper) {
+    private synchronized void fireJFrameEventOperation(String oper) {
         JFrameEventOperation event = new JFrameEventOperation(this, oper);
         Iterator listeners = listenerJFrameO.iterator();
         while (listeners.hasNext()) {
@@ -734,13 +736,13 @@ public class Mediator {
                 return false;
             }
         };
-        dtm.addRow(new String[]{"Java version", JVM.getVersion()});
-        dtm.addRow(new String[]{"Java vendor", JVM.getVendor()});
-        dtm.addRow(new String[]{"Java Home", JVM.getHome()});
-        dtm.addRow(new String[]{"Sistema Operativo", MySystem.getOsName()});
-        dtm.addRow(new String[]{"Versione SO", MySystem.getOsVersion()});
-        dtm.addRow(new String[]{"Architettura SO", MySystem.getOsArchitecture()});
-        dtm.addRow(new String[]{"Directory attuale", MySystem.getUserDir()});
+        dtm.addRow(new String[]{"Java version", SystemProperty.getVersion()});
+        dtm.addRow(new String[]{"Java vendor", SystemProperty.getVendor()});
+        dtm.addRow(new String[]{"Java Home", SystemProperty.getHome()});
+        dtm.addRow(new String[]{"Sistema Operativo", SystemProperty.getOsName()});
+        dtm.addRow(new String[]{"Versione SO", SystemProperty.getOsVersion()});
+        dtm.addRow(new String[]{"Architettura SO", SystemProperty.getOsArchitecture()});
+        dtm.addRow(new String[]{"Directory attuale", SystemProperty.getUserDir()});
         dtm.addRow(new String[]{"File regole", "rules.xml"});
         dtm.addRow(new String[]{"File impostazioni", prop.getSettingsFilename()});
         return dtm;
@@ -752,7 +754,7 @@ public class Mediator {
 
     void invokeBackup(Component parent) {
         String name = Swing.getFile(parent, "Creare il file zip per il backup",
-                fnfeZIP, new File(MySystem.getUserDir() + File.separator));
+                fnfeZIP, new File(SystemProperty.getUserDir() + File.separator));
         if (name!=null)
             core.backup(name);
     }

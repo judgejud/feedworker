@@ -888,6 +888,10 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
+    /**
+     * 
+     * @param tv 
+     */
     public void detailedSearchShow(String tv) {
         TvRage t = new TvRage();
         try {
@@ -922,7 +926,7 @@ public class Kernel implements PropertyChangeListener {
                     array[3] = show[4];
                     al.add(array);
                     xmlCalendar.addShowTV(array);
-                } //todo fare else printalert? 
+                }
             }
             xmlCalendar.write();
             fireTableEvent(al, CALENDAR);

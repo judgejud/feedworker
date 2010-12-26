@@ -4,12 +4,16 @@ package org.feedworker.client.frontend;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import org.jfacility.javax.swing.Swing;
@@ -34,6 +38,8 @@ class jpSubtitleDest extends jpAbstract {
         super();
         initializePanel();
         initializeButtons();
+        initListeners();
+        setVisible(true);
     }
 
     @Override
@@ -42,8 +48,6 @@ class jpSubtitleDest extends jpAbstract {
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
         add(jScrollTable1, BorderLayout.CENTER);
-        setVisible(true);
-        proxy.setTableListener(jtable);
     }
 
     @Override
@@ -108,6 +112,28 @@ class jpSubtitleDest extends jpAbstract {
         actionJP.add(jlTemp, gbc);
 
         add(actionJP, BorderLayout.NORTH);
+    }
+    
+    private void initListeners(){
+        jtable.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mouseClicked(MouseEvent e){
+		// Left mouse click
+		if (SwingUtilities.isLeftMouseButton(e)){}
+		// Right mouse click
+		else if (SwingUtilities.isRightMouseButton(e)){
+                    // get the coordinates of the mouse click
+                    Point p = e.getPoint();
+                    if (jtable.columnAtPoint(p)==3){
+                        JPopupMenu popupMenu = new JPopupMenu();
+                        JMenuItem menuItem = new JMenuItem("Apri cartella");
+                        popupMenu.add(menuItem);
+                        popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                    }
+		}
+            }
+        });
+        proxy.setTableListener(jtable);
     }
 
     private void jbAddRowMouseClicked() {
