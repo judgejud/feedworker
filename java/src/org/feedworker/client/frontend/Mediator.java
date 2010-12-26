@@ -782,4 +782,8 @@ public class Mediator {
     void refreshCalendar() {
         core.refreshCalendar();
     }
+
+    void openFolder(String dir) {
+        core.openFolder(dir);
+    }
 }
