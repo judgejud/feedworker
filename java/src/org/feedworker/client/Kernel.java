@@ -1064,9 +1064,8 @@ public class Kernel implements PropertyChangeListener {
             } catch (IOException ex) {
                 error.launch(ex, this.getClass());
             }
-        } else {
-            
-        }
+        } else 
+            printAlert("apertura di cartella samba non implementata");
     }
      
     /**

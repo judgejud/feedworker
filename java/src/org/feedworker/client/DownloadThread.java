@@ -175,7 +175,7 @@ public class DownloadThread implements Runnable {
     }
     
     private boolean deleteFile(KeyRule key, File filesub, String namesub){
-        if (prop.isEnabledAdvancedDownload() && mapRules.get(key).isDelete()){
+        if (prop.isEnabledAdvancedDownload() && key!=null && mapRules.get(key).isDelete()){
             filesub.delete();
             fireNewTextPaneEvent(namesub + " cancellato per la regola DELETE",
                     TextPaneEvent.ALERT);
