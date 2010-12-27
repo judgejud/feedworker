@@ -1,4 +1,4 @@
-package org.feedworker.client;
+package org.feedworker.core.xml;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ import org.xml.sax.SAXException;
  *
  * @author luca
  */
-class XPathReader {
+public class XPathReader {
     
     private static final File FILE_NAME = new File("calendar.xml");
     private static DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

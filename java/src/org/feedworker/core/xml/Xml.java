@@ -1,4 +1,4 @@
-package org.feedworker.client;
+package org.feedworker.core.xml;
 
 //IMPORT JAVA
 import java.io.File;
@@ -18,7 +18,6 @@ import org.feedworker.util.ValueRule;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
@@ -26,7 +25,7 @@ import org.jdom.output.XMLOutputter;
  * 
  * @author luca
  */
-class Xml {
+public class Xml extends AbstractXML{
     // VARIABLES PRIVATE FINAL
     private final String TAG_RULE_ROOT = "RULE";
     private final String TAG_RULE_NAME = "NAME";
@@ -49,13 +48,12 @@ class Xml {
 
     // VARIABLES PRIVATE
     private Element root;
-    private Document document;
     private File file;
 
     public Xml(File f, boolean read) throws JDOMException, IOException{
         file = f;
         if (file.exists() && read){
-            document = new SAXBuilder().build(file);
+            buildFile(file);
             root = document.getRootElement();
         } else
             initializeWriter();
@@ -66,7 +64,7 @@ class Xml {
      * @param map
      * @throws IOException
      */
-    void writeMap(TreeMap<KeyRule, ValueRule> map) throws IOException {
+    public void writeMap(TreeMap<KeyRule, ValueRule> map) throws IOException {
         if (map.size() > 0) {
             Iterator it = map.keySet().iterator();
             while (it.hasNext()) {
@@ -116,16 +114,16 @@ class Xml {
         root.addContent(rule);
     }
 
-    void addShowTV(Object[] array){
+    public void addShowTV(Object[] array){
         root.addContent(createShow(array));
     }
     
-    void removeShowTv(int row) throws IOException{
+    public void removeShowTv(int row) throws IOException{
         root.getChildren().remove(row);
         write();
     }
     
-    void removeAllShowTv() throws IOException{
+    public void removeAllShowTv() throws IOException{
         root.removeContent();
         write();
     }
@@ -177,12 +175,12 @@ class Xml {
         return calendar;
     }
 
-    ArrayList readingDocumentCalendar() throws JDOMException, IOException{
+    public ArrayList readingDocumentCalendar() throws JDOMException, IOException{
         ArrayList global = new ArrayList();
         ArrayList<Object[]> al = new ArrayList<Object[]>();
         TreeSet ts = new TreeSet();
-        if (sizeDocument() > 0){
-            Iterator iter = iteratorDocument();
+        if (sizeRootChildren() > 0){
+            Iterator iter = iteratorRootChildren();
             while (iter.hasNext()) {
                 Element calendar = (Element) iter.next();
                 Object[] obj = new Object[10];
@@ -228,21 +226,13 @@ class Xml {
      *
      * @throws IOException
      */
-    void write() throws IOException {
+    public void write() throws IOException {
         // Creazione dell'oggetto XMLOutputter
         XMLOutputter outputter = new XMLOutputter();
         // Imposto il formato dell'outputter come "bel formato"
         outputter.setFormat(Format.getPrettyFormat());
         // Produco l'output sul file xml.foo
         outputter.output(document, new FileOutputStream(file));
-    }
-
-    private int sizeDocument(){
-        return document.getRootElement().getChildren().size();
-    }
-    
-    private Iterator iteratorDocument(){
-        return document.getRootElement().getChildren().iterator();
     }
 
     private void initializeWriter(){
@@ -261,10 +251,10 @@ class Xml {
         ArrayList global = new ArrayList();
         TreeMap<KeyRule, ValueRule> map = null;
         ArrayList<Object[]> matrix = null;
-        if (sizeDocument() > 0){
+        if (sizeRootChildren() > 0){
             map = new TreeMap<KeyRule, ValueRule>();
             matrix = new ArrayList<Object[]>();
-            Iterator iter = iteratorDocument();
+            Iterator iter = iteratorRootChildren();
             while (iter.hasNext()) {
                 Element rule = (Element) iter.next();
                 String name = rule.getChild(TAG_RULE_NAME).getText();
