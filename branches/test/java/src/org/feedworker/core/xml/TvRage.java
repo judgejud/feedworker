@@ -1,7 +1,6 @@
-package org.feedworker.client;
+package org.feedworker.core.xml;
 
 import java.io.IOException;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,17 +8,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.feedworker.util.Common;
-import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 import org.jfacility.java.lang.Lang;
 
 /**
  *
  * @author luca
  */
-class TvRage {
+public class TvRage extends AbstractXML{
     private final String DETAILED_SEARCH = 
             "http://services.tvrage.com/feeds/full_search.php?show=";
     private final String EPISODE_LIST = 
@@ -35,16 +32,13 @@ class TvRage {
     private final String TAG_TITLE = "title";
     private final String TAG_SHOWNAME = "showname";
 
-    private Document document;
-
-    ArrayList<Object[]> readingDetailedSearch_byShow(String show, boolean stop)
+    public ArrayList<Object[]> readingDetailedSearch_byShow(String show, boolean stop)
                 throws JDOMException, IOException{
-        document = new SAXBuilder().build(new URL(DETAILED_SEARCH + show));
-        List children = document.getRootElement().getChildren();
+        buildUrl(DETAILED_SEARCH + show);
         ArrayList<Object[]> matrix = null;
-        if (children.size()>0){
+        if (sizeRootChildren()>0){
             matrix = new ArrayList<Object[]>();
-            Iterator iterator = children.iterator();
+            Iterator iterator = iteratorRootChildren();
             while (iterator.hasNext()) {
                 Element item = (Element) iterator.next();
                 String id = item.getChild(TAG_SHOW_ID).getText();
@@ -66,9 +60,9 @@ class TvRage {
         return matrix;
     }
 
-    Object[] readingEpisodeList_byID(String id, String season) throws 
+    public Object[] readingEpisodeList_byID(String id, String season) throws 
             JDOMException, IOException{
-        document = new SAXBuilder().build(new URL(EPISODE_LIST + id));
+        buildUrl(EPISODE_LIST + id);
         List seasons = ((Element) document.getRootElement().getChildren().get(2))
                 .getChildren();
         int last = Lang.stringToInt(season);        
@@ -113,10 +107,9 @@ class TvRage {
         return values;
     }
     
-    Object[] showInfo_byID(String id) throws JDOMException, IOException{
-        document = new SAXBuilder().build(new URL(SHOW_INFO + id));
-        List children = document.getContent();
-        Iterator iterator = children.iterator();
+    public Object[] showInfo_byID(String id) throws JDOMException, IOException{
+        buildUrl(SHOW_INFO + id);
+        Iterator iterator = document.getContent().iterator();
         Object[] show = new Object[5];
         show[0] = id;
         while (iterator.hasNext()) {

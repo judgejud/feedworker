@@ -45,6 +45,9 @@ import org.opensanskrit.exception.UnableRestartApplicationException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.feedworker.core.xml.TvRage;
+import org.feedworker.core.xml.XPathReader;
+import org.feedworker.core.xml.Xml;
 
 import org.jdom.JDOMException;
 import org.jfacility.java.lang.SystemFileManager;
@@ -896,8 +899,7 @@ public class Kernel implements PropertyChangeListener {
     public void detailedSearchShow(String tv) {
         TvRage t = new TvRage();
         try {
-            ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv,
-                    false);
+            ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv, false);
             if (array != null) {
                 fireTableEvent(array, SEARCH_TV);
                 fireJFrameEventOperation(SEARCH_TV);
