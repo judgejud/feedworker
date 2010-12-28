@@ -22,8 +22,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
-import org.feedworker.client.Kernel;
-import org.feedworker.client.RssParser;
+import org.feedworker.core.Kernel;
+import org.feedworker.core.RssParser;
 import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
 import org.feedworker.client.frontend.events.JFrameEventOperation;
 import org.feedworker.client.frontend.events.JFrameEventOperationListener;

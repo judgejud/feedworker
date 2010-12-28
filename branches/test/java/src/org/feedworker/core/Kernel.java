@@ -1,4 +1,4 @@
-package org.feedworker.client;
+package org.feedworker.core;
 
 //IMPORT JAVA
 import java.beans.PropertyChangeEvent;

@@ -1,4 +1,5 @@
-package org.feedworker.client;
+
+package org.feedworker.core;
 
 //IMPORT JAVA
 import java.io.BufferedReader;
@@ -229,7 +230,7 @@ class Http {
         return search;
     }
 
-    private void getAttachement(Header[] head, String from) {
+    private void getAttachement(Header[] head, String from) throws IndexOutOfBoundsException {
         int i;
         for (i = 0; i < head.length; i++) {
             if (head[i].getName().equalsIgnoreCase("Content-Disposition")) {

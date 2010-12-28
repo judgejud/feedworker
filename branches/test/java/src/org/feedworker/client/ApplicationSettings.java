@@ -159,7 +159,7 @@ public class ApplicationSettings {
         }
     }// end write
 
-    void writeSubsfactorySettings() {
+    public void writeSubsfactorySettings() {
         try {
             propertiesCrypting("SUBSFACTORY_FEED_URL", subsfactoryFeedURL);
             propertiesCrypting("MYSUBSFACTORY_FEED_URL", mySubsfactoryFeedUrl);
@@ -171,7 +171,7 @@ public class ApplicationSettings {
         }
     }
 
-    void writeTorrentSettings() {
+    public void writeTorrentSettings() {
         try {
             propertiesCrypting("TORRENT_DESTINATION_FOLDER",
                     torrentDestinationFolder);
@@ -183,7 +183,7 @@ public class ApplicationSettings {
         }
     }
 
-    void writeApplicationFirstTimeUsedFalse() {
+    public void writeApplicationFirstTimeUsedFalse() {
         applicationFirstTimeUsed = false;
         try {
             propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED",
