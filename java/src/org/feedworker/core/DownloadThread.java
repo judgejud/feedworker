@@ -1,4 +1,4 @@
-package org.feedworker.client;
+package org.feedworker.core;
 
 import java.io.File;
 import java.io.IOException;

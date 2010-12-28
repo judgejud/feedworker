@@ -20,13 +20,6 @@ import org.jfacility.java.lang.Lang;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 import org.feedworker.client.ApplicationSettings;
-import org.feedworker.client.ApplicationSettings;
-import org.feedworker.client.Http;
-import org.feedworker.client.Http;
-import org.feedworker.client.Kernel;
-import org.feedworker.client.Kernel;
-import org.feedworker.client.RssParser;
-import org.feedworker.client.RssParser;
 
 
 /**TODO: terminare la trasformazione del feed rss sotto 3d

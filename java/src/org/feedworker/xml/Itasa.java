@@ -22,6 +22,10 @@ public class Itasa extends AbstractXML{
     private final String TAG_SHOW_PLOT = "plot";
     private final String TAG_SHOW_BANNER = "banner";
     private final String TAG_SHOW_NAME = "name";
+    private final String TAG_SHOW_ID_TVDB = "id_tvdb";
+    private final String TAG_SHOW_ID_TVRAGE = "id_tvrage";
+    
+    
     
     private final String URL_SHOW_SINGLE = "http://api.italiansubs.net/api/rest/show/show/?";
     private final String URL_SHOW_LIST = "http://api.italiansubs.net/api/rest/show/shows/?";
@@ -30,7 +34,7 @@ public class Itasa extends AbstractXML{
     
     private String status, error;
     
-    void showSingleAll(int id) throws JDOMException, IOException{
+    public void showSingleAll(int id) throws JDOMException, IOException{
         ArrayList params = new ArrayList();
         params.add(API_KEY);
         params.add("show_id=" + id);
@@ -44,6 +48,9 @@ public class Itasa extends AbstractXML{
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
                 String name = item.getChild(TAG_SHOW_NAME).getText();
+                String tvdb = item.getChild(TAG_SHOW_ID_TVDB).getText();
+                String tvrage = item.getChild(TAG_SHOW_ID_TVRAGE).getText();
+                
                 String plot = item.getChild(TAG_SHOW_PLOT).getText();
                 String banner = item.getChild(TAG_SHOW_BANNER).getText();
                 
@@ -67,7 +74,7 @@ public class Itasa extends AbstractXML{
         }
     }
     
-    void showList(int limit, int offset) throws JDOMException, IOException {
+    public void showList(int limit, int offset) throws JDOMException, IOException {
         ArrayList params = new ArrayList();
         params.add(API_KEY);
         if (limit>0)
