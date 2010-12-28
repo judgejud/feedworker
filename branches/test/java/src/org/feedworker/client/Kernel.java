@@ -45,9 +45,11 @@ import org.opensanskrit.exception.UnableRestartApplicationException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import org.feedworker.core.xml.TvRage;
-import org.feedworker.core.xml.XPathReader;
-import org.feedworker.core.xml.Xml;
+import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.FeedWorkerClient;
+import org.feedworker.xml.TvRage;
+import org.feedworker.xml.XPathReader;
+import org.feedworker.xml.Xml;
 
 import org.jdom.JDOMException;
 import org.jfacility.java.lang.SystemFileManager;
@@ -319,6 +321,7 @@ public class Kernel implements PropertyChangeListener {
         if (prop.isItasaOption()) {
             prop.writeItasaSettings();
         }
+
         if (prop.isSubsfactoryOption()) {
             prop.writeSubsfactorySettings();
         }
@@ -397,11 +400,9 @@ public class Kernel implements PropertyChangeListener {
                                     && download) {
                                 downItasaAuto(matrice.get(i)[0]);
                             }
-                        } else if (first && from.equals(MYITASA)) { // non deve
-                            // fare
-                            // nulla
-                        } else // if confronta after
-                        {
+                        } else if (first && from.equals(MYITASA)) { 
+                            // non deve fare nulla
+                        } else {// if confronta after
                             matrice.remove(i);
                         }
                     }

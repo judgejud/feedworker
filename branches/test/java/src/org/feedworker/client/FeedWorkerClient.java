@@ -1,5 +1,6 @@
 package org.feedworker.client;
 
+
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.net.URISyntaxException;

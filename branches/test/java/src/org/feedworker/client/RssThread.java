@@ -13,11 +13,18 @@ import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.util.Common;
 import org.feedworker.util.ManageException;
+
+import org.jfacility.Io;
 import org.jfacility.java.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import org.jfacility.Io;
+import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.Http;
+import org.feedworker.client.Kernel;
+import org.feedworker.client.RssParser;
+
+
 /**TODO: terminare la trasformazione del feed rss sotto 3d
  *
  * @author luca
