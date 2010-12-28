@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -60,8 +59,6 @@ public class Mediator {
     private List listenerTextPane = new ArrayList();
     private List listenerJFrameO = new ArrayList();
     private ManageException error = ManageException.getIstance();
-    private TreeSet<String> setTv = new TreeSet<String>();
-
 
     /**
      * Restituisce l'istanza attiva del Mediator se non esiste la crea

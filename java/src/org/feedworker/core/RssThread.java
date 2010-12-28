@@ -1,4 +1,4 @@
-package org.feedworker.client;
+package org.feedworker.core;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,8 +20,12 @@ import org.jfacility.java.lang.Lang;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.Http;
 import org.feedworker.client.Http;
 import org.feedworker.client.Kernel;
+import org.feedworker.client.Kernel;
+import org.feedworker.client.RssParser;
 import org.feedworker.client.RssParser;
 
 

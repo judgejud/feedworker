@@ -82,7 +82,8 @@ public class Itasa extends AbstractXML{
             Iterator iter =  ((Element)temp.getChildren().get(0)).getChildren().iterator();
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
-                System.out.println(item.getName());
+                String name = item.getChild(TAG_SHOW_NAME).getText();
+                System.out.println(name);
                 
             }
         } else 
