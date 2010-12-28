@@ -156,6 +156,7 @@ public class ManageException {
             printAlert("Il sistema non trova il seguente percorso " + text);
         } else if (msg.equals(error04)) {
             printAlert("Timeout di lettura " + text);
+            ex.printStackTrace();
         } else if (msg.equals(error05) || msg.equals(error06)
                 || msg.equals(error07) || msg.equals(error08)) {
             printAlert("Connessione con " + msg
@@ -301,16 +302,16 @@ public class ManageException {
     }
 
     /**
-     * Analizza l'errore StringIndexOutOfBoundsException
+     * Analizza l'errore IndexOutOfBoundsException
      *
      * @param ex
-     *            StringIndexOutOfBoundsException
+     *            IndexOutOfBoundsException
      * @param c
      *            classe di provenienza
      * @param text
      *            eventuale testo da stampare
      */
-    public void launch(StringIndexOutOfBoundsException ex, Class c, boolean flag_itasa) {
+    public void launch(IndexOutOfBoundsException ex, Class c, boolean flag_itasa) {
         String msg = ex.getMessage();
         String error01 = "String index out of range: -1";
         if (flag_itasa && msg.equals(error01)) {
