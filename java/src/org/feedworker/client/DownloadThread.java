@@ -13,6 +13,7 @@ import jcifs.smb.SmbException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
+import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.util.Common;
