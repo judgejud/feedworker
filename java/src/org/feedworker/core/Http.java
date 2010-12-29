@@ -111,7 +111,7 @@ class Http {
     } // end doPost
 
     HttpEntity requestGetEntity(String link, boolean itasa)
-            throws StringIndexOutOfBoundsException, IOException {
+            throws IndexOutOfBoundsException, IOException {
         long lenght = -1;
         int temp = 0;
         while (lenght == -1) {

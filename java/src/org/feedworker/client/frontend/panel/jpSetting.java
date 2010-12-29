@@ -1,7 +1,7 @@
 /*TODO: vedere se riesce ad ereditare da paneAbstract,
 senza però fare danni con i panel dei setting che vanno posizionati EAST
  */
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.panel;
 
 //IMPORT JAVA
 import java.awt.Color;
@@ -32,13 +32,14 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.frontend.Mediator;
 import org.jfacility.javax.swing.Swing;
 
 /**
  * 
  * @author luca
  */
-class jpSetting extends JPanel {
+public class jpSetting extends JPanel {
 
     private final Dimension TABBEDSIZE = new Dimension(1024, 540);
     private final Dimension INTERNALSETTINGS = new Dimension(500, 430);
@@ -567,7 +568,7 @@ class jpSetting extends JPanel {
         }
     }
 
-    void settingsValue() {
+    public void settingsValue() {
         settingsGlobalValue();
         if (prop.isItasaOption())
             settingsItasaValue();
@@ -623,11 +624,11 @@ class jpSetting extends JPanel {
         jtfRssMySubsf.setText(prop.getMySubsfactoryFeedUrl());
     }
 
-    void setDataAggiornamento(String data) {
+    public void setDataAggiornamento(String data) {
         jlDataAggiornamento.setText(data);
     }
 
-    String getDataAggiornamento() {
+    public String getDataAggiornamento() {
         return jlDataAggiornamento.getText();
     }
 

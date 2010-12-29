@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.table;
 
 import java.awt.Component;
 import java.awt.Font;

@@ -1,4 +1,6 @@
-package org.feedworker.util;
+package org.feedworker.object;
+
+import org.feedworker.util.Quality;
 
 /**
  * 

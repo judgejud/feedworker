@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.table;
 
 //IMPORT JAVA
 import java.awt.Component;
@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
+import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.TableEvent;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.jfacility.javax.swing.ComboBoxEditor;
@@ -19,7 +20,7 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-class jtSubtitleDest extends JTable implements TableEventListener {    
+public class jtSubtitleDest extends JTable implements TableEventListener {    
     private Mediator proxy = Mediator.getIstance();
     private final String[] nameCols = {"Serie", "Stagione", "Versione",
         "Destinazione",  "Rename", "Delete"};

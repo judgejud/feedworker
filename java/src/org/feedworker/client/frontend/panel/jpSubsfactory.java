@@ -1,5 +1,6 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.panel;
 
+import org.feedworker.client.frontend.table.jtRss;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -16,7 +17,7 @@ import javax.swing.JScrollPane;
  * 
  * @author luca
  */
-class jpSubsfactory extends jpAbstract {
+public class jpSubsfactory extends jpAbstract {
 
     private static jpSubsfactory jpanel = null;
     private JButton jbDown, jbClean;

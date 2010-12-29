@@ -1,4 +1,4 @@
-package org.feedworker.util;
+package org.feedworker.object;
 
 /**
  * 

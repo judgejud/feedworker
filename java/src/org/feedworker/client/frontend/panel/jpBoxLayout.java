@@ -1,5 +1,5 @@
 //http://www.ibm.com/developerworks/java/tutorials/j-springswing/section5.html
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.panel;
 
 import java.awt.Component;
 import java.util.Iterator;

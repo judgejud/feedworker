@@ -27,6 +27,13 @@ import org.feedworker.client.frontend.events.JFrameEventIconDate;
 import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
 import org.feedworker.client.frontend.events.JFrameEventOperation;
 import org.feedworker.client.frontend.events.JFrameEventOperationListener;
+import org.feedworker.client.frontend.panel.jpItasa;
+import org.feedworker.client.frontend.panel.jpSubsfactory;
+import org.feedworker.client.frontend.panel.jpTorrent;
+import org.feedworker.client.frontend.panel.jpSubtitleDest;
+import org.feedworker.client.frontend.panel.jpCalendar;
+import org.feedworker.client.frontend.panel.jpSetting;
+
 import org.jfacility.java.awt.AWT;
 import org.jfacility.javax.swing.Swing;
 

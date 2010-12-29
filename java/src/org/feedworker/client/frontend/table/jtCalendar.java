@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.table;
 
 import java.awt.Font;
 import java.util.Date;
@@ -14,7 +14,7 @@ import org.jfacility.javax.swing.Swing;
  *
  * @author luca
  */
-class jtCalendar extends JTable implements TableEventListener{
+public class jtCalendar extends JTable implements TableEventListener{
     private final String[] nameCols = {"ID","Serie", "Stato", "Giorno", "Last Ep", 
                             "Titolo", "Data", "Next Ep", "Titolo", "Data" };
     private final Font font = new Font("Arial", Font.PLAIN, 10);

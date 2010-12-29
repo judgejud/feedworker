@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.panel;
 
 //IMPORT JAVA
 import java.awt.BorderLayout;
@@ -19,13 +19,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import org.jfacility.javax.swing.Swing;
+import org.feedworker.client.frontend.table.jtSubtitleDest;
 
 /**
  * 
  * 
  * @author luca
  */
-class jpSubtitleDest extends jpAbstract {
+public class jpSubtitleDest extends jpAbstract {
 
     private static jpSubtitleDest jpanel = null;
     private jtSubtitleDest jtable;
@@ -148,6 +149,7 @@ class jpSubtitleDest extends jpAbstract {
     }
 
     private void jbSaveRoleMouseClicked() {
+        //TODO passare il model
         proxy.saveRules(jtable);
     }
 

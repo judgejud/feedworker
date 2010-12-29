@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -8,11 +8,12 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
+import org.feedworker.client.frontend.table.jtRss;
 /**
  * 
  * @author luca
  */
-class jpTorrent extends jpAbstract {
+public class jpTorrent extends jpAbstract {
 
     private static jpTorrent jpanel = null;
     private JButton jbDown, jbCopyLinks, jbClean, jbFireNas;
@@ -26,7 +27,7 @@ class jpTorrent extends jpAbstract {
         proxy.setTableListener(jtTorrent2);
     }
 
-    static jpTorrent getPanel() {
+    public static jpTorrent getPanel() {
         if (jpanel == null) {
             jpanel = new jpTorrent();
         }
@@ -111,7 +112,7 @@ class jpTorrent extends jpAbstract {
         add(actionJP, BorderLayout.NORTH);
     }
 
-    void setButtonEnabled(boolean e) {
+    public void setButtonEnabled(boolean e) {
         jbDown.setEnabled(e);
         jbClean.setEnabled(e);
         jbCopyLinks.setEnabled(e);

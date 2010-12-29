@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -8,12 +8,13 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
+import org.feedworker.client.frontend.table.jtRss;
 /**
  * Pannello Itasa
  * 
  * @author luca
  */
-class jpItasa extends jpAbstract {
+public class jpItasa extends jpAbstract {
 
     private static jpItasa jpanel = null;
     private JButton jbAllItasa, jbDown, jbClean, jbAllMyItasa;

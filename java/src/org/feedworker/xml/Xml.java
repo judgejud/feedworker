@@ -12,8 +12,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.feedworker.util.Common;
-import org.feedworker.util.KeyRule;
-import org.feedworker.util.ValueRule;
+import org.feedworker.object.KeyRule;
+import org.feedworker.object.ValueRule;
 
 import org.jdom.Document;
 import org.jdom.Element;
