@@ -33,6 +33,7 @@ import org.feedworker.client.frontend.panel.jpTorrent;
 import org.feedworker.client.frontend.panel.jpSubtitleDest;
 import org.feedworker.client.frontend.panel.jpCalendar;
 import org.feedworker.client.frontend.panel.jpSetting;
+import org.feedworker.client.frontend.panel.jpStatusBar;
 
 import org.jfacility.java.awt.AWT;
 import org.jfacility.javax.swing.Swing;
@@ -57,6 +58,7 @@ public class jfMain extends JFrame implements WindowListener,
     private jpSubsfactory subsfactoryJP;
     private jdResultSearchTv resultSearchTvJD = jdResultSearchTv.getDialog();
     private jdProgressBarImport progressBar;
+    private jpStatusBar statusBar;
 
     /** Costruttore */
     public jfMain() {
@@ -96,9 +98,10 @@ public class jfMain extends JFrame implements WindowListener,
         mainJTP.addTab("Settings", settingsJP);
 
         logJTP = new jtpLog();
-        JScrollPane jScrollText1 = new JScrollPane(logJTP);
-        jScrollText1.setPreferredSize(new Dimension(1000, 140));
-        add(jScrollText1, BorderLayout.SOUTH);
+        mainJTP.addTab("Log", new JScrollPane(logJTP));
+        
+        statusBar = new jpStatusBar();
+        add(statusBar, BorderLayout.SOUTH);
 
         if (prop.isApplicationFirstTimeUsed()) {
             mainJTP.setSelectedComponent(settingsJP);
@@ -147,7 +150,8 @@ public class jfMain extends JFrame implements WindowListener,
         restartJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                proxy.restartApplication(settingsJP.getDataAggiornamento());
+                if (requestClose("riavviare"))
+                    proxy.restartApplication(settingsJP.getDataAggiornamento());
             }
         });
         fileJM.add(restartJMI);
@@ -335,15 +339,20 @@ public class jfMain extends JFrame implements WindowListener,
         this.dispose();
         proxy.closeApp(temp);
     }
+    
+    private boolean requestClose(String oper){
+        int returnCode = JOptionPane.showConfirmDialog(this,
+                "Sei sicuro di "+oper+"?", "Info", JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (returnCode == 1)
+            return false;
+        return true;
+    }
 
     @Override
     public void windowClosing(WindowEvent e) {
-        int returnCode = JOptionPane.showConfirmDialog(this,
-                "Sei sicuro di uscire?", "Info", JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
-        if (returnCode == 1)
-            return;
-        applicationClose();
+        if (requestClose("uscire"))
+            applicationClose();
     }
 
     @Override

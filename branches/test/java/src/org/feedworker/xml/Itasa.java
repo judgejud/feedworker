@@ -3,6 +3,9 @@ package org.feedworker.xml;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import org.feedworker.object.Show;
+
 import org.jdom.Element;
 import org.jdom.JDOMException;
 
@@ -25,6 +28,7 @@ public class Itasa extends AbstractXML{
     private final String TAG_SHOW_ID = "id";
     private final String TAG_SHOW_ID_TVDB = "id_tvdb";
     private final String TAG_SHOW_ID_TVRAGE = "id_tvrage";
+    private final String TAG_SHOW_FOLDER_THUMB = "folder_thumb";
     
     
     
@@ -90,20 +94,16 @@ public class Itasa extends AbstractXML{
             Iterator iter =  ((Element)temp.getChildren().get(0)).getChildren().iterator();
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
+                
                 String id = item.getChild(TAG_SHOW_ID).getText();
                 String name = item.getChild(TAG_SHOW_NAME).getText();
                 String tvdb = item.getChild(TAG_SHOW_ID_TVDB).getText();
                 String tvrage = item.getChild(TAG_SHOW_ID_TVRAGE).getText();
                 String plot = item.getChild(TAG_SHOW_PLOT).getText();
                 String banner = item.getChild(TAG_SHOW_BANNER).getText();
-                String icon = item.getChild(TAG_SHOW_BANNER).getText();
-                System.out.println(name);
-                System.out.println(id);
-                System.out.println(tvdb);
-                System.out.println(tvrage);
-                System.out.println(plot);
-                System.out.println(banner);
-                System.out.println(name);
+                String icon = item.getChild(TAG_SHOW_FOLDER_THUMB).getText();
+                
+                Show s = new Show(name, id, tvdb, tvrage, plot, banner, icon);
                 
             }
         } else 

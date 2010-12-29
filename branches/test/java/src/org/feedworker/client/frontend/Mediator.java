@@ -36,6 +36,7 @@ import org.feedworker.object.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.object.ValueRule;
+
 import org.jfacility.java.awt.AWT;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemProperty;
@@ -718,7 +719,7 @@ public class Mediator {
     String getTitle(){
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "255 by "
+                + "267 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
