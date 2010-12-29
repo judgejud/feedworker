@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend;
 
 //IMPORT JAVA
+import org.feedworker.client.frontend.table.jtSubtitleDest;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
@@ -31,10 +32,10 @@ import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.util.Common;
-import org.feedworker.util.KeyRule;
+import org.feedworker.object.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
-import org.feedworker.util.ValueRule;
+import org.feedworker.object.ValueRule;
 import org.jfacility.java.awt.AWT;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemProperty;
@@ -75,7 +76,7 @@ public class Mediator {
      *
      * @return itasa
      */
-    String getItasa() {
+    public String getItasa() {
         return core.ITASA;
     }
 
@@ -83,7 +84,7 @@ public class Mediator {
      *
      * @return myitasa
      */
-    String getMyItasa() {
+    public String getMyItasa() {
         return core.MYITASA;
     }
 
@@ -91,11 +92,11 @@ public class Mediator {
      *
      * @return subsfactory
      */
-    String getSubsf() {
+    public String getSubsf() {
         return core.SUBSF;
     }
 
-    String getMySubsf() {
+    public String getMySubsf() {
         return core.MYSUBSF;
     }
 
@@ -104,7 +105,7 @@ public class Mediator {
      *
      * @return eztv
      */
-    String getEztv() {
+    public String getEztv() {
         return core.EZTV;
     }
 
@@ -112,15 +113,15 @@ public class Mediator {
      *
      * @return btchat
      */
-    String getBtchat() {
+    public String getBtchat() {
         return core.BTCHAT;
     }
 
-    String getNameTableSubtitleDest(){
+    public String getNameTableSubtitleDest(){
         return core.SUBTITLE_DEST;
     }
 
-    String getNameTableCalendar(){
+    public String getNameTableCalendar(){
         return core.CALENDAR;
     }
 
@@ -149,7 +150,7 @@ public class Mediator {
      * @param jt
      *            tabella
      */
-    void cleanSelect(JTable jt) {
+    public void cleanSelect(JTable jt) {
         for (int i = 0; i < jt.getRowCount(); i++)
             jt.setValueAt(false, i, 3);
     }
@@ -162,7 +163,7 @@ public class Mediator {
      * @param jt2
      *            tabella2
      */
-    void copyLinkTorrent(JTable jt1, JTable jt2) {
+    public void copyLinkTorrent(JTable jt1, JTable jt2) {
         String text = "";
         for (int i = 0; i < jt1.getRowCount(); i++) {
             if (jt1.getValueAt(i, 3) == Boolean.TRUE) {
@@ -189,7 +190,7 @@ public class Mediator {
      * @param jt2 tabella2
      * @param itasa tabelle itasa
      */
-    void downloadSub(JTable jt1, JTable jt2, boolean itasa) {
+    public void downloadSub(JTable jt1, JTable jt2, boolean itasa) {
         ArrayList<String> alLinks = new ArrayList<String>();
         alLinks = addLinks(jt1);
         if (jt2 != null)
@@ -204,7 +205,7 @@ public class Mediator {
         }
     }
 
-    void downloadTorrent(JTable jt1, JTable jt2) {
+    public void downloadTorrent(JTable jt1, JTable jt2) {
         if (Lang.verifyTextNotNull(prop.getTorrentDestinationFolder())) {
             ArrayList<String> alLinks = addLinks(jt1);
             alLinks.addAll(addLinks(jt2));
@@ -229,7 +230,7 @@ public class Mediator {
         core.closeApp(date, false);
     }
 
-    void setTableListener(TableEventListener listener) {
+    public void setTableListener(TableEventListener listener) {
         core.addTableEventListener(listener);
     }
 
@@ -250,7 +251,7 @@ public class Mediator {
      *
      * @return nodi jtree
      */
-    DefaultMutableTreeNode getTreeNode() {
+    public DefaultMutableTreeNode getTreeNode() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
         root.add(new DefaultMutableTreeNode("General"));
         //root.add(new DefaultMutableTreeNode("Tab"));
@@ -295,7 +296,7 @@ public class Mediator {
         return core.testSamba(ip, dir, dir, user, pwd);
     }
 
-    void saveRules(jtSubtitleDest jtable) {
+    public void saveRules(jtSubtitleDest jtable) {
         boolean _break = false;
         TreeMap<KeyRule, ValueRule> temp = new TreeMap<KeyRule, ValueRule>();
         for (int r = 0; r < jtable.getRowCount(); r++) {
@@ -381,7 +382,7 @@ public class Mediator {
         return alLinks;
     }
 
-    String[] getElemEnum() {
+    public String[] getElemEnum() {
         return core.getQuality();
     }
 
@@ -496,7 +497,7 @@ public class Mediator {
         return check;
     }
 
-    void saveSettings(boolean dirLocal, String destSub, String sambaDomain,
+    public void saveSettings(boolean dirLocal, String destSub, String sambaDomain,
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
             String time, String laf, boolean audio, String timeout,
             boolean advancedDownload, boolean runIconized, String itasa,
@@ -584,7 +585,7 @@ public class Mediator {
      * @param jt2
      *            tabella2
      */
-    void fireTorrentToNas(JTable jt1, JTable jt2) {
+    public void fireTorrentToNas(JTable jt1, JTable jt2) {
         ArrayList<String> al = new ArrayList<String>();
         for (int i = 0; i < jt1.getRowCount(); i++) {
             if (jt1.getValueAt(i, 3) == Boolean.TRUE) {
@@ -607,7 +608,7 @@ public class Mediator {
         core.synoClearFinish();
     }
 
-    Color searchVersion(String text) {
+    public Color searchVersion(String text) {
         Color col = Color.cyan;
         String[] temp = text.split(" ");
         String version = temp[temp.length - 1].toLowerCase();
@@ -685,19 +686,19 @@ public class Mediator {
         }
     }
 
-    void restartApplication(String date) {
+    public void restartApplication(String date) {
         core.closeApp(date, true);
     }
 
-    String getNameApp() {
+    public String getNameApp() {
         return FeedWorkerClient.getApplication().getName();
     }
 
-    String[] getAvailableLAF() {
+    public String[] getAvailableLAF() {
         return FeedWorkerClient.getApplication().getIstanceLAF().getAvailableLAF();
     }
 
-    ApplicationSettings getSettings(){
+    public ApplicationSettings getSettings(){
         return ApplicationSettings.getIstance();
     }
 
@@ -756,7 +757,7 @@ public class Mediator {
             core.backup(name);
     }
 
-    void searchTV(String tv) {
+    public void searchTV(String tv) {
         core.detailedSearchShow(tv);
     }
 
@@ -764,23 +765,23 @@ public class Mediator {
         core.searchIdTv(id);
     }
 
-    void importFromSubDest() {
+    public void importFromSubDest() {
         core.importTvFromDestSub();
     }
 
-    void removeSingleShowCalendar(int value, Object id) {
+    public void removeSingleShowCalendar(int value, Object id) {
         core.removeShowTv(value, id);
     }
     
-    void removeAllShowCalendar() {
+    public void removeAllShowCalendar() {
         core.removeAllShowTv();
     }
 
-    void refreshCalendar() {
+    public void refreshCalendar() {
         core.refreshCalendar();
     }
 
-    void openFolder(String dir) {
+    public void openFolder(String dir) {
         core.openFolder(dir);
     }
 }

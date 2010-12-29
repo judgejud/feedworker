@@ -1,5 +1,6 @@
 package org.feedworker.client.frontend;
 
+import org.feedworker.client.frontend.table.jtResultSearchTv;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;

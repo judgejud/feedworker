@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -10,12 +10,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
+import org.feedworker.client.frontend.table.jtCalendar;
 import org.jfacility.java.lang.Lang;
 /**
  *
  * @author luca
  */
-class jpCalendar extends jpAbstract{
+public class jpCalendar extends jpAbstract{
 
     private static jpCalendar jpanel = null;
     private jtCalendar jtable;

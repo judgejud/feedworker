@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.table;
 
 //IMPORT JAVA
 import java.awt.Color;
@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import org.feedworker.client.frontend.Mediator;
 
 import org.feedworker.client.frontend.events.TableEvent;
 import org.feedworker.client.frontend.events.TableEventListener;
@@ -21,7 +22,7 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-class jtRss extends JTable implements TableEventListener {
+public class jtRss extends JTable implements TableEventListener {
     // PRIVATE FINAL VARIABLE
 
     private final String[] columnNames = {"link", "Data", "Sottotitolo", "Select"};

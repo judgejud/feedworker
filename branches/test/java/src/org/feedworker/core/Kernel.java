@@ -32,11 +32,11 @@ import org.feedworker.client.frontend.events.*;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
 import org.feedworker.util.ExtensionFilter;
-import org.feedworker.util.KeyRule;
+import org.feedworker.object.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.Samba;
-import org.feedworker.util.ValueRule;
+import org.feedworker.object.ValueRule;
 
 import org.jfacility.Io;
 import org.jfacility.Util;
