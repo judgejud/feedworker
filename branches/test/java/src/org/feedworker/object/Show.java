@@ -1,11 +1,14 @@
 package org.feedworker.object;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author luca
  */
 public class Show {
     private String name, id, id_tvdb, id_tvrage, plot, banner, icon;
+    private ArrayList<String> genres;
 
     public Show(String name, String id, String id_tvdb, String id_tvrage) {
         this.name = name;
@@ -15,7 +18,7 @@ public class Show {
     }
 
     public Show(String name, String id, String id_tvdb, String id_tvrage, 
-                String plot, String banner, String icon) {
+                String plot, String banner, String icon, ArrayList<String> genres) {
         this.name = name;
         this.id = id;
         this.id_tvdb = id_tvdb;
@@ -23,14 +26,15 @@ public class Show {
         this.plot = plot;
         this.banner = banner;
         this.icon = icon;
+        this.genres = genres;
     }
     
     public String[] toArrayMinimal(){
         return new String[]{id, id_tvdb, id_tvrage, name};
     }
     
-    public String[] toArray(){
-        return new String[]{id, id_tvdb, id_tvrage, name, plot, banner, icon};
+    public Object[] toArray(){
+        return new Object[]{id, id_tvdb, id_tvrage, name, plot, banner, icon, genres};
     }
     
     

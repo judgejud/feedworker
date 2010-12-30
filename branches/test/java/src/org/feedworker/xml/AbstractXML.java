@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.Iterator;
 
 import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
@@ -30,5 +31,21 @@ class AbstractXML {
     
     protected Iterator iteratorRootChildren(){
         return document.getRootElement().getChildren().iterator();
+    }
+    
+    protected String checkNPE(Object obj){
+        try{
+            return obj.toString();
+        } catch (NullPointerException e){
+            return "";
+        }
+    }
+    
+    protected String checkNPE(Element obj){
+        try{
+            return obj.getText();
+        } catch (NullPointerException e){
+            return "";
+        }
     }
 }

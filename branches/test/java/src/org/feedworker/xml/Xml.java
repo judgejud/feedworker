@@ -214,14 +214,6 @@ public class Xml extends AbstractXML{
         return global;
     }
 
-    private String checkNPE(Object obj){
-        try{
-            return obj.toString();
-        } catch (NullPointerException e){
-            return "";
-        }
-    }
-
     /**Scrive l'xml
      *
      * @throws IOException
