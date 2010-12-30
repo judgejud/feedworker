@@ -72,6 +72,14 @@ public class Mediator {
             proxy = new Mediator();
         return proxy;
     }
+    
+    //TODO: ripristinare col getbuildernumber
+    String getTitle(){
+        return getApplicationName() + " build "
+                //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
+                + "268 by "
+                + FeedWorkerClient.getApplication().getAuthor();
+    }
 
     /**Restituisce il testo itasa
      *
@@ -713,14 +721,6 @@ public class Mediator {
 
     String getApplicationName(){
         return FeedWorkerClient.getApplication().getName();
-    }
-
-    //TODO: ripristinare col getbuildernumber
-    String getTitle(){
-        return getApplicationName() + " build "
-                //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "267 by "
-                + FeedWorkerClient.getApplication().getAuthor();
     }
 
     TableModel getModelSystemInfo() {

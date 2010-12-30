@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend;
 
 //IMPORT JAVA
+import org.jfacility.javax.swing.DialogProgressBar;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -57,7 +58,7 @@ public class jfMain extends JFrame implements WindowListener,
     private jpTorrent torrentJP;
     private jpSubsfactory subsfactoryJP;
     private jdResultSearchTv resultSearchTvJD = jdResultSearchTv.getDialog();
-    private jdProgressBarImport progressBar;
+    private DialogProgressBar progressBar;
     private jpStatusBar statusBar;
 
     /** Costruttore */
@@ -99,6 +100,8 @@ public class jfMain extends JFrame implements WindowListener,
 
         logJTP = new jtpLog();
         mainJTP.addTab("Log", new JScrollPane(logJTP));
+        int i = mainJTP.getTabCount()-1;
+        //mainJTP.setTabComponentAt(i, new ButtonTabComponent(mainJTP));
         
         statusBar = new jpStatusBar();
         add(statusBar, BorderLayout.SOUTH);
@@ -371,7 +374,7 @@ public class jfMain extends JFrame implements WindowListener,
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationFocus()))
                 requestFocus();
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportShow())){
-                progressBar = new jdProgressBarImport(this, evt.getMax());
+                progressBar = new DialogProgressBar(this, "Operazione in corso...", evt.getMax());
                 AWT.centerComponent(progressBar, this);
             } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportIncrement())){
             	progressBar.setProgress(evt.getMax());
