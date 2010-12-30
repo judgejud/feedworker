@@ -33,6 +33,7 @@ import org.feedworker.client.frontend.panel.jpSubsfactory;
 import org.feedworker.client.frontend.panel.jpTorrent;
 import org.feedworker.client.frontend.panel.jpSubtitleDest;
 import org.feedworker.client.frontend.panel.jpCalendar;
+import org.feedworker.client.frontend.panel.jpLog;
 import org.feedworker.client.frontend.panel.jpSetting;
 import org.feedworker.client.frontend.panel.jpStatusBar;
 
@@ -98,8 +99,9 @@ public class jfMain extends JFrame implements WindowListener,
         mainJTP.addTab("Calendar", jpCalendar.getPanel());
         mainJTP.addTab("Settings", settingsJP);
 
-        logJTP = new jtpLog();
-        mainJTP.addTab("Log", new JScrollPane(logJTP));
+        //logJTP = new jtpLog();
+        //mainJTP.addTab("Log", new JScrollPane(logJTP));
+        mainJTP.addTab("Log", new jpLog());
         int i = mainJTP.getTabCount()-1;
         //mainJTP.setTabComponentAt(i, new ButtonTabComponent(mainJTP));
         
@@ -109,12 +111,12 @@ public class jfMain extends JFrame implements WindowListener,
         if (prop.isApplicationFirstTimeUsed()) {
             mainJTP.setSelectedComponent(settingsJP);
             changeEnabledButton(false);
-            logJTP.appendOK("Benvenuto al primo utilizzo.");
-            logJTP.appendAlert("Per poter usare il client, "
-                    + "devi configurare le impostazioni presenti nella specifica sezione");
+            //logJTP.appendOK("Benvenuto al primo utilizzo.");
+            //logJTP.appendAlert("Per poter usare il client, "
+              //      + "devi configurare le impostazioni presenti nella specifica sezione");
         } else {
             settingsJP.settingsValue();
-            logJTP.appendOK("Ciao " + prop.getItasaUsername()+ ", impostazioni caricate.");
+            //logJTP.appendOK("Ciao " + prop.getItasaUsername()+ ", impostazioni caricate.");
         }
         pack();
     }
@@ -399,7 +401,7 @@ public class jfMain extends JFrame implements WindowListener,
     /** inizializza i listener per l'ascolto */
     private void initListeners() {
         addWindowListener(this);
-        proxy.setTextPaneListener(logJTP);
+        //proxy.setTextPaneListener(logJTP);
         proxy.setFrameListener(this);
     }
 

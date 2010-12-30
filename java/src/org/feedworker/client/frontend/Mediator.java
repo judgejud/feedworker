@@ -243,7 +243,7 @@ public class Mediator {
         core.addTableEventListener(listener);
     }
 
-    void setTextPaneListener(TextPaneEventListener listener) {
+    public void setTextPaneListener(TextPaneEventListener listener) {
         core.addTextPaneEventListener(listener);
         core.setDownloadThreadListener(listener);
         ManageException.getIstance().addMyTextPaneEventListener(listener);
