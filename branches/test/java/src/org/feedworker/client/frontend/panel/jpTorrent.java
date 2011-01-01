@@ -41,14 +41,17 @@ public class jpTorrent extends jpAbstract {
         JScrollPane jsp1 = new JScrollPane(jtTorrent1);
         jsp1.setPreferredSize(TABLE_SCROLL_SIZE);
         jsp1.setAutoscrolls(true);
-        add(jsp1, BorderLayout.WEST);
 
         jtTorrent2 = new jtRss(proxy.getBtchat());
         jtTorrent2.setTitleDescriptionColumn("Descrizione Torrent BTCHAT");
         JScrollPane jsp2 = new JScrollPane(jtTorrent2);
         jsp2.setPreferredSize(TABLE_SCROLL_SIZE);
         jsp2.setAutoscrolls(true);
-        add(jsp2, BorderLayout.EAST);
+        
+        jpCenter.add(jsp1);
+        jpCenter.add(RIGID_AREA);
+        jpCenter.add(jsp2);
+        add(jpCenter, BorderLayout.CENTER);
     }
 
     @Override
@@ -102,14 +105,14 @@ public class jpTorrent extends jpAbstract {
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = BUTTON_SPACE_INSETS;
-        actionJP.add(jbDown, gbc);
+        jpAction.add(jbDown, gbc);
         gbc.gridx = 1;
-        actionJP.add(jbCopyLinks, gbc);
+        jpAction.add(jbCopyLinks, gbc);
         gbc.gridx = 2;
-        actionJP.add(jbClean, gbc);
+        jpAction.add(jbClean, gbc);
         gbc.gridx = 3;
-        actionJP.add(jbFireNas, gbc);
-        add(actionJP, BorderLayout.NORTH);
+        jpAction.add(jbFireNas, gbc);
+        add(jpAction, BorderLayout.NORTH);
     }
 
     public void setButtonEnabled(boolean e) {

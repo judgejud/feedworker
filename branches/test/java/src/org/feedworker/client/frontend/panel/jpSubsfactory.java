@@ -2,15 +2,11 @@ package org.feedworker.client.frontend.panel;
 
 import org.feedworker.client.frontend.table.jtRss;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
@@ -43,23 +39,20 @@ public class jpSubsfactory extends jpAbstract {
         jtSubsf = new jtRss(proxy.getSubsf());
         jtMySubsf = new jtRss(proxy.getMySubsf());
 
-        JPanel jp = new JPanel();
-        add(jp, BorderLayout.CENTER);
-        jp.setLayout(new BoxLayout(jp, BoxLayout.X_AXIS));
-
         JScrollPane jScrollTable1 = new JScrollPane(jtSubsf);
         jScrollTable1.setMinimumSize(TABLE_SCROLL_SIZE);
         jScrollTable1.setPreferredSize(TABLE_SCROLL_SIZE);
         jScrollTable1.setAutoscrolls(true);
-        jp.add(jScrollTable1);
-
-        jp.add(Box.createRigidArea(new Dimension(5, 0)));
-
+        
         JScrollPane jScrollTable2 = new JScrollPane(jtMySubsf);
         jScrollTable2.setMinimumSize(TABLE_SCROLL_SIZE);
         jScrollTable2.setPreferredSize(TABLE_SCROLL_SIZE);
         jScrollTable2.setAutoscrolls(true);
-        jp.add(jScrollTable2);
+        
+        jpCenter.add(jScrollTable1);
+        jpCenter.add(RIGID_AREA);
+        jpCenter.add(jScrollTable2);
+        add(jpCenter, BorderLayout.CENTER);
 
         setVisible(true);
     }
@@ -92,10 +85,10 @@ public class jpSubsfactory extends jpAbstract {
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.insets = BUTTON_SPACE_INSETS;
-        actionJP.add(jbDown, gbc);
+        jpAction.add(jbDown, gbc);
         gbc.gridx = 1;
-        actionJP.add(jbClean, gbc);
-        add(actionJP, BorderLayout.NORTH);
+        jpAction.add(jbClean, gbc);
+        add(jpAction, BorderLayout.NORTH);
     }
 
     private void jbDownMouseClicked() {

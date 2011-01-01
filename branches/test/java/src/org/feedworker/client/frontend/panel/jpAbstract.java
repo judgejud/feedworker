@@ -5,9 +5,12 @@ package org.feedworker.client.frontend.panel;
 
 //IMPORT JAVA
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
@@ -27,16 +30,19 @@ abstract class jpAbstract extends JPanel {
     protected final SoftBevelBorder BORDER = new SoftBevelBorder(BevelBorder.RAISED);
     protected final Insets BUTTON_SPACE_INSETS = new Insets(0, 2, 0, 2);
     protected final Dimension TABLE_SCROLL_SIZE = new Dimension(500, 460);
+    protected final Component RIGID_AREA = Box.createRigidArea(new Dimension(5,0));
 
-    protected JPanel actionJP;
+    protected JPanel jpAction, jpCenter;
     protected Mediator proxy = Mediator.getIstance();
 
     /** Costruttore protetto, per essere invocato dai figli tramite ereditarietà */
     protected jpAbstract() {
         super(new BorderLayout());
         setPreferredSize(TAB_SIZE);
-        actionJP = new JPanel(new GridBagLayout());
-        actionJP.setPreferredSize(ACTION_PANEL_SIZE);
+        jpCenter = new JPanel();
+        jpCenter.setLayout(new BoxLayout(jpCenter, BoxLayout.X_AXIS));
+        jpAction = new JPanel(new GridBagLayout());
+        jpAction.setPreferredSize(ACTION_PANEL_SIZE);
     }
 
     /** inizializza il pannello */

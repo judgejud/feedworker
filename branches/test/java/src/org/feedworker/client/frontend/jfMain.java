@@ -17,7 +17,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -375,10 +374,10 @@ public class jfMain extends JFrame implements WindowListener,
                 resultSearchTvJD.setVisible(true);
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationFocus()))
                 requestFocus();
-            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportShow())){
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationProgressShow())){
                 progressBar = new DialogProgressBar(this, "Operazione in corso...", evt.getMax());
                 AWT.centerComponent(progressBar, this);
-            } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationImportIncrement())){
+            } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationProgressIncrement())){
             	progressBar.setProgress(evt.getMax());
             }
         }
