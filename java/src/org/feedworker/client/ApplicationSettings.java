@@ -12,7 +12,6 @@ import org.feedworker.util.ResourceLocator;
 import org.jfacility.javax.crypto.DesEncrypter;
 
 public class ApplicationSettings {
-
     private static ApplicationSettings instance = null;
     private final String SETTINGS_FILENAME = ResourceLocator.getWorkspace()
             + "settings.properties";

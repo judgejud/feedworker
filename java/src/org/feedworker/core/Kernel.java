@@ -28,31 +28,30 @@ import javax.xml.xpath.XPathExpressionException;
 
 import jcifs.smb.SmbException;
 
+import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.*;
+import org.feedworker.object.KeyRule;
+import org.feedworker.object.ValueRule;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
 import org.feedworker.util.ExtensionFilter;
-import org.feedworker.object.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
 import org.feedworker.util.Samba;
-import org.feedworker.object.ValueRule;
-
-import org.jfacility.Io;
-import org.jfacility.Util;
-import org.jfacility.java.lang.Lang;
-import org.opensanskrit.exception.UnableRestartApplicationException;
-
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.ParsingFeedException;
-import org.feedworker.client.ApplicationSettings;
-import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.xml.TvRage;
 import org.feedworker.xml.XPathReader;
 import org.feedworker.xml.Xml;
 
-import org.jdom.JDOMException;
+import org.jfacility.Io;
+import org.jfacility.Util;
+import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemFileManager;
+import org.opensanskrit.exception.UnableRestartApplicationException;
+
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.ParsingFeedException;
+import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
 /**
@@ -73,8 +72,8 @@ public class Kernel implements PropertyChangeListener {
     public final String SUBTITLE_DEST = "SubtitleDest";
     public final String CALENDAR = "Calendar";
     public final String OPERATION_FOCUS = "Focus";
-    public final String OPERATION_IMPORT_SHOW = "ImportShow";
-    public final String OPERATION_IMPORT_INCREMENT = "ImportIncrement";
+    public final String OPERATION_PROGRESS_SHOW = "ProgressShow";
+    public final String OPERATION_PROGRESS_INCREMENT = "ProgressIncrement";
     // PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
@@ -962,7 +961,7 @@ public class Kernel implements PropertyChangeListener {
     }
 
     public void importTvFromDestSub() {
-        fireJFrameEventOperation(OPERATION_IMPORT_SHOW, mapRules.size());
+        fireJFrameEventOperation(OPERATION_PROGRESS_SHOW, mapRules.size());
         importTask = new ImportTask();
         importTask.addPropertyChangeListener(this);
         importTask.execute();
@@ -971,9 +970,9 @@ public class Kernel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getSource().getClass().getName().
-                equalsIgnoreCase("org.feedworker.client.Kernel$ImportTask")) {
+                equalsIgnoreCase(this.getClass().getName()+"$ImportTask")) {
             if (evt.getPropertyName().equals("progress")) {
-                fireJFrameEventOperation(OPERATION_IMPORT_INCREMENT, importTask.getProgress());
+                fireJFrameEventOperation(OPERATION_PROGRESS_INCREMENT, importTask.getProgress());
                 if (importTask.isDone()) {
                     try {
                         fireTableEvent(importTask.get(), CALENDAR);
@@ -983,9 +982,9 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
         } else if (evt.getSource().getClass().getName().
-                equalsIgnoreCase("org.feedworker.client.Kernel$RefreshTask")) {
+                equalsIgnoreCase(this.getClass().getName()+"$RefreshTask")) {
             if (evt.getPropertyName().equals("progress")) {
-                fireJFrameEventOperation(OPERATION_IMPORT_INCREMENT, refreshTask.getProgress());
+                fireJFrameEventOperation(OPERATION_PROGRESS_INCREMENT, refreshTask.getProgress());
                 if (refreshTask.isDone()) {
                     try {
                         fireTableEvent(refreshTask.get(), CALENDAR);
@@ -1011,7 +1010,7 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, null);
         }
         if (array.size()>0){
-            fireJFrameEventOperation(OPERATION_IMPORT_SHOW, array.size());
+            fireJFrameEventOperation(OPERATION_PROGRESS_SHOW, array.size());
             ArrayList al = new ArrayList();
             al.add(array.descendingKeySet().toArray(new Long[array.size()]));
             fireTableEvent(al, CALENDAR, false);

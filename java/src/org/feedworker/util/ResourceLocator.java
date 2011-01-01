@@ -11,7 +11,6 @@ import org.jfacility.java.lang.SystemProperty;
  * @author Luca
  */
 public class ResourceLocator {
-
     private static String curDir;
     private final static String RESOURCES = "/org/feedworker/resource/";
 

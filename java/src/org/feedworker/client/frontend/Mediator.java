@@ -142,12 +142,12 @@ public class Mediator {
         return core.OPERATION_FOCUS;
     }
 
-    String getOperationImportShow(){
-        return core.OPERATION_IMPORT_SHOW;
+    String getOperationProgressShow(){
+        return core.OPERATION_PROGRESS_SHOW;
     }
 
-    String getOperationImportIncrement(){
-        return core.OPERATION_IMPORT_INCREMENT;
+    String getOperationProgressIncrement(){
+        return core.OPERATION_PROGRESS_INCREMENT;
     }
 
     String getOperationEnableButton(){

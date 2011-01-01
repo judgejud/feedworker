@@ -102,17 +102,17 @@ public class jpCalendar extends jpAbstract{
         gbc.anchor = GridBagConstraints.NORTHWEST;
 
         int x=1;
-        actionJP.add(jbAddRow, gbc);
+        jpAction.add(jbAddRow, gbc);
         gbc.gridx = x++;
-        actionJP.add(jbRemoveRow, gbc);
+        jpAction.add(jbRemoveRow, gbc);
         gbc.gridx = x++;
-        actionJP.add(jbRemoveAll, gbc);
+        jpAction.add(jbRemoveAll, gbc);
         gbc.gridx = x++;
-        actionJP.add(jbRefresh, gbc);
+        jpAction.add(jbRefresh, gbc);
         gbc.gridx = x++;
-        actionJP.add(jbImport, gbc);
+        jpAction.add(jbImport, gbc);
         
-        add(actionJP, BorderLayout.NORTH);
+        add(jpAction, BorderLayout.NORTH);
     }
 
     private void jbAddRowMouseClicked() {

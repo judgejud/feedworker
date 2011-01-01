@@ -104,17 +104,17 @@ public class jpSubtitleDest extends jpAbstract {
         gbc.insets = BUTTON_SPACE_INSETS;
         gbc.anchor = GridBagConstraints.NORTHWEST;
 
-        actionJP.add(jbAddRow, gbc);
+        jpAction.add(jbAddRow, gbc);
         gbc.gridx = 1;
-        actionJP.add(jbRemoveRow, gbc);
+        jpAction.add(jbRemoveRow, gbc);
         gbc.gridx = 2;
-        actionJP.add(jbSaveRole, gbc);
+        jpAction.add(jbSaveRole, gbc);
         gbc.gridx = 3;
-        actionJP.add(jbAddDir, gbc);
+        jpAction.add(jbAddDir, gbc);
         gbc.gridx = 4;
-        actionJP.add(jlTemp, gbc);
+        jpAction.add(jlTemp, gbc);
 
-        add(actionJP, BorderLayout.NORTH);
+        add(jpAction, BorderLayout.NORTH);
     }
     
     private void initListeners(){

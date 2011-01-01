@@ -54,8 +54,10 @@ public class jpItasa extends jpAbstract {
         jScrollTable2.setPreferredSize(TABLE_SCROLL_SIZE);
         jScrollTable2.setAutoscrolls(true);
 
-        add(jScrollTable1, BorderLayout.WEST);
-        add(jScrollTable2, BorderLayout.EAST);
+        jpCenter.add(jScrollTable1);
+        jpCenter.add(RIGID_AREA);
+        jpCenter.add(jScrollTable2);
+        add(jpCenter, BorderLayout.CENTER);
 
         setVisible(true);
     }
@@ -107,15 +109,15 @@ public class jpItasa extends jpAbstract {
         gbc.gridy = 0;
         gbc.insets = BUTTON_SPACE_INSETS;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        actionJP.add(jbAllItasa, gbc);
+        jpAction.add(jbAllItasa, gbc);
         gbc.gridx = 1;
-        actionJP.add(jbDown, gbc);
+        jpAction.add(jbDown, gbc);
         gbc.gridx = 2;
-        actionJP.add(jbClean, gbc);
+        jpAction.add(jbClean, gbc);
         gbc.gridx = 3;
-        actionJP.add(jbAllMyItasa, gbc);
+        jpAction.add(jbAllMyItasa, gbc);
 
-        add(actionJP, BorderLayout.NORTH);
+        add(jpAction, BorderLayout.NORTH);
     }
 
     public void setButtonEnabled(boolean e) {

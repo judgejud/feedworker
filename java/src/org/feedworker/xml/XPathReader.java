@@ -54,6 +54,7 @@ public class XPathReader {
             String temp = nodes.item(i).getNodeValue();
             String query1 = "count(//SHOW[ID_TVRAGE='" + temp +"']/preceding::ID_TVRAGE)+1";
             long number = (initializeXPathNumber(query1));
+            System.out.println(number);
             array.put(Long.valueOf(number), temp);
         }
         
@@ -63,6 +64,7 @@ public class XPathReader {
             String temp = nodes.item(i).getNodeValue();
             String query1 = "count(//SHOW[ID_TVRAGE='" + temp +"']/preceding::ID_TVRAGE)+1";
             long number = (initializeXPathNumber(query1));
+            System.out.println(number);
             array.put(Long.valueOf(number), temp);
         }
         return array;
