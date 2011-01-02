@@ -55,7 +55,7 @@ public class jtRss extends JTable implements TableEventListener {
         getTableHeader().setReorderingAllowed(false);
         Swing.setTableDimensionLockColumn(this, 0, -1);
         Swing.setTableDimensionLockColumn(this, 1, 110);
-        Swing.setTableDimensionLockColumn(this, 2, 330);
+        Swing.setTableDimensionLockColumn(this, 3, 50);
 
         addMouseListener(new MouseAdapter() {
             @Override

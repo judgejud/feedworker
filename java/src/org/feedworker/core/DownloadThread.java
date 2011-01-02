@@ -85,7 +85,7 @@ public class DownloadThread implements Runnable {
                 error.launch(ex, getClass(), null);
             }
         } else {
-            fireNewTextPaneEvent("Scaricato: " + f.getName(), TextPaneEvent.OK);
+            fireTextPaneEvent("Scaricato: " + f.getName(), TextPaneEvent.OK);
         }
         //return Zip.getAlFile();
         return alf;
@@ -136,7 +136,7 @@ public class DownloadThread implements Runnable {
                             else
                                 msg = "Estratto " + al.get(i).getName() + " e rinominato in "
                                     + newName + " nella cartella condivisa samba\\" + dest ;
-                            fireNewTextPaneEvent(msg,TextPaneEvent.SUB);
+                            fireTextPaneEvent(msg,TextPaneEvent.SUB);
                         }
                     }
                 } catch (SmbException ex) {
@@ -165,7 +165,7 @@ public class DownloadThread implements Runnable {
                                 msg += " e rinominato in " + newName;
                             }
                             msg += " nel seguente percorso: " + dest;
-                            fireNewTextPaneEvent(msg, TextPaneEvent.SUB);
+                            fireTextPaneEvent(msg, TextPaneEvent.SUB);
                         } catch (IOException ex) {
                             error.launch(ex, getClass());
                         }
@@ -178,7 +178,7 @@ public class DownloadThread implements Runnable {
     private boolean deleteFile(KeyRule key, File filesub, String namesub){
         if (prop.isEnabledAdvancedDownload() && key!=null && mapRules.get(key).isDelete()){
             filesub.delete();
-            fireNewTextPaneEvent(namesub + " cancellato per la regola DELETE",
+            fireTextPaneEvent(namesub + " cancellato per la regola DELETE",
                     TextPaneEvent.ALERT);
             return true;
         }
@@ -203,7 +203,7 @@ public class DownloadThread implements Runnable {
                         Io.downloadSingle(entity.getContent(), f);
                         alf.addAll(extract(f));
                     } else
-                        fireNewTextPaneEvent("Sessione scaduta", TextPaneEvent.ALERT);
+                        fireTextPaneEvent("Sessione scaduta", TextPaneEvent.ALERT);
                 }
             } //end for
         } catch (UnsupportedEncodingException ex) {
@@ -313,7 +313,7 @@ public class DownloadThread implements Runnable {
      *
      * @param listener evento textpane
      */
-    public synchronized void addMyTextPaneEventListener(
+    public synchronized void addTextPaneEventListener(
             TextPaneEventListener listener) {
         listenerTextPane.add(listener);
     }
@@ -328,7 +328,7 @@ public class DownloadThread implements Runnable {
         listenerTextPane.remove(listener);
     }
 
-    private synchronized void fireNewTextPaneEvent(String msg, String type) {
+    private synchronized void fireTextPaneEvent(String msg, String type) {
         TextPaneEvent event = new TextPaneEvent(this, msg, type);
         Iterator listeners = listenerTextPane.iterator();
         while (listeners.hasNext()) {

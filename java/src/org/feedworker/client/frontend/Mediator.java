@@ -43,19 +43,19 @@ import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
+
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
  * 
  * @author luca
  */
 public class Mediator {
+
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
     private final String ENABLE_BUTTON = "enableButton";
-    private final FileNameExtensionFilter fnfeZIP = 
+    private final FileNameExtensionFilter fnfeZIP =
             new FileNameExtensionFilter("ZIP file", "zip");
-
     private static Mediator proxy = null;
-
     private Kernel core = Kernel.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private List listenerTextPane = new ArrayList();
@@ -68,13 +68,14 @@ public class Mediator {
      * @return Mediator
      */
     public static Mediator getIstance() {
-        if (proxy == null)
+        if (proxy == null) {
             proxy = new Mediator();
+        }
         return proxy;
     }
-    
+
     //TODO: ripristinare col getbuildernumber
-    String getTitle(){
+    String getTitle() {
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
                 + "268 by "
@@ -126,33 +127,33 @@ public class Mediator {
         return core.BTCHAT;
     }
 
-    public String getNameTableSubtitleDest(){
+    public String getNameTableSubtitleDest() {
         return core.SUBTITLE_DEST;
     }
 
-    public String getNameTableCalendar(){
+    public String getNameTableCalendar() {
         return core.CALENDAR;
     }
 
-    String getSearchTV(){
+    String getSearchTV() {
         return core.SEARCH_TV;
     }
 
-    String getOperationFocus(){
+    String getOperationFocus() {
         return core.OPERATION_FOCUS;
     }
 
-    String getOperationProgressShow(){
+    String getOperationProgressShow() {
         return core.OPERATION_PROGRESS_SHOW;
     }
 
-    String getOperationProgressIncrement(){
+    String getOperationProgressIncrement() {
         return core.OPERATION_PROGRESS_INCREMENT;
     }
 
-    String getOperationEnableButton(){
+    String getOperationEnableButton() {
         return ENABLE_BUTTON;
-    }    
+    }
 
     /**Pulisce la tabella specificata dai check
      *
@@ -160,8 +161,9 @@ public class Mediator {
      *            tabella
      */
     public void cleanSelect(JTable jt) {
-        for (int i = 0; i < jt.getRowCount(); i++)
+        for (int i = 0; i < jt.getRowCount(); i++) {
             jt.setValueAt(false, i, 3);
+        }
     }
 
     /**
@@ -202,14 +204,16 @@ public class Mediator {
     public void downloadSub(JTable jt1, JTable jt2, boolean itasa) {
         ArrayList<String> alLinks = new ArrayList<String>();
         alLinks = addLinks(jt1);
-        if (jt2 != null)
-            alLinks.addAll(addLinks(jt2));        
-        if (alLinks.size() > 0)
+        if (jt2 != null) {
+            alLinks.addAll(addLinks(jt2));
+        }
+        if (alLinks.size() > 0) {
             core.downloadSub(alLinks, itasa);
-        else {
+        } else {
             String temp = "dalle tabelle";
-            if (!itasa)
+            if (!itasa) {
                 temp = "dalla tabella";
+            }
             printAlert("Selezionare almeno un rigo " + temp);
         }
     }
@@ -218,13 +222,15 @@ public class Mediator {
         if (Lang.verifyTextNotNull(prop.getTorrentDestinationFolder())) {
             ArrayList<String> alLinks = addLinks(jt1);
             alLinks.addAll(addLinks(jt2));
-            if (alLinks.size() > 0)
+            if (alLinks.size() > 0) {
                 core.downloadTorrent(alLinks);
-            else
+            } else {
                 printAlert("Selezionare almeno un rigo dalle tabelle");
-        } else
+            }
+        } else {
             printAlert("Non posso salvare perchè non hai specificato "
                     + "una cartella dove scaricare i file.torrent");
+        }
     }
 
     void runRss() {
@@ -264,12 +270,15 @@ public class Mediator {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
         root.add(new DefaultMutableTreeNode("General"));
         //root.add(new DefaultMutableTreeNode("Tab"));
-        if (prop.isItasaOption())
+        if (prop.isItasaOption()) {
             root.add(new DefaultMutableTreeNode("Itasa"));
-        if (prop.isSubsfactoryOption())
+        }
+        if (prop.isSubsfactoryOption()) {
             root.add(new DefaultMutableTreeNode("Subsfactory"));
-        if (prop.isTorrentOption())
+        }
+        if (prop.isTorrentOption()) {
             root.add(new DefaultMutableTreeNode("Torrent"));
+        }
         return root;
     }
 
@@ -315,15 +324,17 @@ public class Mediator {
             String quality = (String) jtable.getValueAt(r, ++c);
             String path = (String) jtable.getValueAt(r, ++c);
             boolean rename = false, delete = false;
-            try{
+            try {
                 rename = Boolean.parseBoolean(jtable.getValueAt(r, ++c).toString());
-            } catch (NullPointerException e){}
-            try{
+            } catch (NullPointerException e) {
+            }
+            try {
                 delete = Boolean.parseBoolean(jtable.getValueAt(r, ++c).toString());
-            } catch (NullPointerException e){}
-            if (rename && delete){
-                printAlert("Riga: " + r +
-                        " non possono coesistere entrambi i flag true di rename e delete");
+            } catch (NullPointerException e) {
+            }
+            if (rename && delete) {
+                printAlert("Riga: " + r
+                        + " non possono coesistere entrambi i flag true di rename e delete");
                 _break = true;
                 break;
             } else {
@@ -421,15 +432,17 @@ public class Mediator {
      */
     boolean checkSaveSubsf(String subsf, String mySubsf) {
         boolean check = true;
-        if (!Lang.verifyTextNotNull(subsf) && !Lang.verifyTextNotNull(mySubsf))
+        if (!Lang.verifyTextNotNull(subsf) && !Lang.verifyTextNotNull(mySubsf)) {
             printAlert("Avviso: Non immettendo link RSS Subsfactory non potrai usare i feed"
                     + " Subsfactory");
-        else {
+        } else {
             try {
-                if (Lang.verifyTextNotNull(subsf))
+                if (Lang.verifyTextNotNull(subsf)) {
                     check = testRss(subsf, "subsfactory");
-                if (check && Lang.verifyTextNotNull(mySubsf))
-                        check = testRss(mySubsf, "mysubsfactory");
+                }
+                if (check && Lang.verifyTextNotNull(mySubsf)) {
+                    check = testRss(mySubsf, "mysubsfactory");
+                }
             } catch (MalformedURLException e) {
                 error.launch(e, getClass(), "subsfactory");
                 check = false;
@@ -450,8 +463,9 @@ public class Mediator {
                 printAlert("Avviso: Non immettendo link RSS itasa e/o myitasa non potrai "
                         + "usare i feed italiansubs");
             } else {
-                if (Lang.verifyTextNotNull(itasa))
+                if (Lang.verifyTextNotNull(itasa)) {
                     check = testRss(itasa, "itasa");
+                }
                 if (check) {
                     if (Lang.verifyTextNotNull(myitasa)) {
                         check = testRss(myitasa, "myitasa");
@@ -520,12 +534,15 @@ public class Mediator {
         if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                 sambaUser, sambaPwd)) {
             save = true;
-            if (prop.isItasaOption() && save)
+            if (prop.isItasaOption() && save) {
                 save = checkSaveItasa(itasa, myitasa, user, pwd);
-            if (prop.isSubsfactoryOption() && save)
+            }
+            if (prop.isSubsfactoryOption() && save) {
                 save = checkSaveSubsf(subsf, mySubsf);
-            if (prop.isTorrentOption() && save)
+            }
+            if (prop.isTorrentOption() && save) {
                 checkSaveTorrent(torrent);
+            }
         }
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
@@ -543,9 +560,10 @@ public class Mediator {
                 fireJFrameEventOperation(ENABLE_BUTTON);
                 runRss();
             } else {
-                if (Lang.verifyTextNotNull(oldMin) &&
-                        !oldMin.equalsIgnoreCase(prop.getRefreshInterval()))
+                if (Lang.verifyTextNotNull(oldMin)
+                        && !oldMin.equalsIgnoreCase(prop.getRefreshInterval())) {
                     restartRss();
+                }
             }
             fireTextPaneEvent("Impostazioni salvate in " + prop.getSettingsFilename(),
                     TextPaneEvent.OK);
@@ -621,18 +639,19 @@ public class Mediator {
         Color col = Color.cyan;
         String[] temp = text.split(" ");
         String version = temp[temp.length - 1].toLowerCase();
-        if (version.equals(Quality.FORM_1080p.toString()))
+        if (version.equals(Quality.FORM_1080p.toString())) {
             col = Color.blue;
-        else if (version.equals(Quality.FORM_1080i.toString()))
+        } else if (version.equals(Quality.FORM_1080i.toString())) {
             col = Color.orange;
-        else if (version.equals(Quality.FORM_720p.toString()))
+        } else if (version.equals(Quality.FORM_720p.toString())) {
             col = Color.red;
-        else if (version.equals(Quality.DVDRIP.toString()))
+        } else if (version.equals(Quality.DVDRIP.toString())) {
             col = new Color(183, 65, 14);
-        else if (version.equals(Quality.HR.toString()))
+        } else if (version.equals(Quality.HR.toString())) {
             col = Color.green;
-        else if (version.equals(Quality.BLURAY.toString()))
+        } else if (version.equals(Quality.BLURAY.toString())) {
             col = Color.magenta;
+        }
         return col;
     }
 
@@ -668,13 +687,12 @@ public class Mediator {
             myel.objReceived(event);
         }
     }
-    
 
     /**Permette alla classe di registrarsi per l'evento jframe
      *
      * @param listener evento jframe
      */
-    public synchronized void addJFrameEventOperationListener(JFrameEventIconDateListener listener){
+    public synchronized void addJFrameEventOperationListener(JFrameEventIconDateListener listener) {
         listenerJFrameO.add(listener);
     }
 
@@ -682,7 +700,7 @@ public class Mediator {
      *
      * @param listener evento jframe
      */
-    public synchronized void removeJFrameEventOperationListener(JFrameEventIconDateListener listener){
+    public synchronized void removeJFrameEventOperationListener(JFrameEventIconDateListener listener) {
         listenerJFrameO.remove(listener);
     }
 
@@ -707,29 +725,32 @@ public class Mediator {
         return FeedWorkerClient.getApplication().getIstanceLAF().getAvailableLAF();
     }
 
-    public ApplicationSettings getSettings(){
+    public ApplicationSettings getSettings() {
         return ApplicationSettings.getIstance();
     }
 
-    Image getIncomingFeedIcon(){
+    Image getIncomingFeedIcon() {
         return Common.getResourceIcon(INCOMING_FEED_ICON_FILE_NAME);
     }
 
-    Image getApplicationIcon(){
+    Image getApplicationIcon() {
         return FeedWorkerClient.getApplication().getIcon();
     }
 
-    String getApplicationName(){
+    String getApplicationName() {
         return FeedWorkerClient.getApplication().getName();
     }
 
     TableModel getModelSystemInfo() {
-        DefaultTableModel dtm = new DefaultTableModel(null, new String[]{"Informazione", "Valore"}) {
+        DefaultTableModel dtm = new DefaultTableModel(null, new String[]{"Informazione", "Valore"})  {
+
             Class[] types = new Class[]{String.class, String.class};
+
             @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
+
             @Override
             public boolean isCellEditable(int rowIndex, int vColIndex) {
                 return false;
@@ -754,8 +775,9 @@ public class Mediator {
     void invokeBackup(Component parent) {
         String name = Swing.getFile(parent, "Creare il file zip per il backup",
                 fnfeZIP, new File(SystemProperty.getUserDir() + File.separator));
-        if (name!=null)
+        if (name != null) {
             core.backup(name);
+        }
     }
 
     public void searchTV(String tv) {
@@ -773,7 +795,7 @@ public class Mediator {
     public void removeSingleShowCalendar(int value, Object id) {
         core.removeShowTv(value, id);
     }
-    
+
     public void removeAllShowCalendar() {
         core.removeAllShowTv();
     }

@@ -241,6 +241,7 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
     @Override
     public void objReceived(TextPaneEvent evt) {
         if (flag_msg_normal){
+            System.out.println(evt.getType());
             if (evt.getType().equals(TextPaneEvent.OK))
                 appendOK(evt.getMsg());
             else if (evt.getType().equals(TextPaneEvent.SUB))
@@ -263,7 +264,7 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
                 appendSynology(evt.getMsg());
             else if (evt.getType().equals(TextPaneEvent.DAY_SERIAL))
                 appendDaySerial(evt.getMsg());
-        } else {
+        } else if (!flag_msg_normal){
             if (evt.getType().equals(TextPaneEvent.ERROR))
                 appendError(evt.getMsg());
             else if (evt.getType().equals(TextPaneEvent.ALERT))
