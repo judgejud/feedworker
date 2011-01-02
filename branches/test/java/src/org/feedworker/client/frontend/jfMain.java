@@ -51,12 +51,12 @@ public class jfMain extends JFrame implements WindowListener,
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
     protected jpSetting settingsJP;
     protected JTabbedPane mainJTP;
-    protected jtpLog logJTP;
     protected Mediator proxy = Mediator.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private jpItasa itasaJP;
     private jpTorrent torrentJP;
     private jpSubsfactory subsfactoryJP;
+    private jpLog logJP;
     private jdResultSearchTv resultSearchTvJD = jdResultSearchTv.getDialog();
     private DialogProgressBar progressBar;
     private jpStatusBar statusBar;
@@ -98,9 +98,8 @@ public class jfMain extends JFrame implements WindowListener,
         mainJTP.addTab("Calendar", jpCalendar.getPanel());
         mainJTP.addTab("Settings", settingsJP);
 
-        //logJTP = new jtpLog();
-        //mainJTP.addTab("Log", new JScrollPane(logJTP));
-        mainJTP.addTab("Log", new jpLog());
+        logJP = new jpLog();
+        mainJTP.addTab("Log", logJP);
         int i = mainJTP.getTabCount()-1;
         //mainJTP.setTabComponentAt(i, new ButtonTabComponent(mainJTP));
         
@@ -110,11 +109,13 @@ public class jfMain extends JFrame implements WindowListener,
         if (prop.isApplicationFirstTimeUsed()) {
             mainJTP.setSelectedComponent(settingsJP);
             changeEnabledButton(false);
+            //TODO
             //logJTP.appendOK("Benvenuto al primo utilizzo.");
             //logJTP.appendAlert("Per poter usare il client, "
               //      + "devi configurare le impostazioni presenti nella specifica sezione");
         } else {
             settingsJP.settingsValue();
+            //TODO
             //logJTP.appendOK("Ciao " + prop.getItasaUsername()+ ", impostazioni caricate.");
         }
         pack();
@@ -136,7 +137,7 @@ public class jfMain extends JFrame implements WindowListener,
         clearLogJMI.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                logJTP.setText(null);
+                logJP.cleanLogs();
             }
         });
         fileJM.add(clearLogJMI);
@@ -400,7 +401,6 @@ public class jfMain extends JFrame implements WindowListener,
     /** inizializza i listener per l'ascolto */
     private void initListeners() {
         addWindowListener(this);
-        //proxy.setTextPaneListener(logJTP);
         proxy.setFrameListener(this);
     }
 

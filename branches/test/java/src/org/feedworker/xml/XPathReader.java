@@ -26,8 +26,8 @@ public class XPathReader {
     private static DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     private static XPath xpath = XPathFactory.newInstance().newXPath();
 
-    public static String queryDayEquals(String day) throws ParserConfigurationException, 
-            SAXException, IOException, XPathExpressionException{
+    public static String queryDayEquals(String day) throws SAXException, 
+            ParserConfigurationException, IOException, XPathExpressionException{
         if (FILE_NAME.exists()){
             String query = "//SHOW[NEXT_DATE='" + day + "']/SHOW/text()";
             NodeList nodes = initializeXPathNode(query);
@@ -43,8 +43,17 @@ public class XPathReader {
             return null;
     }
     
-    public static TreeMap<Long, String> queryDayID(String day) throws 
-            ParserConfigurationException, SAXException, IOException, XPathExpressionException{
+    /**
+     * 
+     * @param day
+     * @return
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     * @throws XPathExpressionException 
+     */
+    public static TreeMap<Long, String> queryDayID(String day) throws SAXException,
+            ParserConfigurationException, IOException, XPathExpressionException{
         
         String query = "//SHOW[translate('" + day + "', '-', '') > "
                 + "translate(NEXT_DATE, '-', '')]/ID_TVRAGE/text()";
@@ -52,26 +61,28 @@ public class XPathReader {
         TreeMap<Long, String> array  = new TreeMap<Long, String>();
         for (int i=0; i<nodes.getLength(); i++){
             String temp = nodes.item(i).getNodeValue();
-            String query1 = "count(//SHOW[ID_TVRAGE='" + temp +"']/preceding::ID_TVRAGE)+1";
-            long number = (initializeXPathNumber(query1));
-            System.out.println(number);
-            array.put(Long.valueOf(number), temp);
+            String query1 = "count(//SHOW[ID_TVRAGE='" + temp + 
+                            "']/preceding::ID_TVRAGE)+1";
+            //long number = (initializeXPathNumber(query1));
+            array.put(initializeXPathNumber(query1), temp);
         }
         
         query = "//SHOW[NEXT_DATE[not(text())]]/ID_TVRAGE/text()";
         nodes = initializeXPathNode(query);
         for (int i=0; i<nodes.getLength(); i++){
             String temp = nodes.item(i).getNodeValue();
-            String query1 = "count(//SHOW[ID_TVRAGE='" + temp +"']/preceding::ID_TVRAGE)+1";
-            long number = (initializeXPathNumber(query1));
-            System.out.println(number);
-            array.put(Long.valueOf(number), temp);
+            String query1 = "count(//SHOW[ID_TVRAGE='" + temp + 
+                            "']/preceding::ID_TVRAGE)+1";
+            //long number = (initializeXPathNumber(query1));
+            //System.out.println(number);
+            //array.put(Long.valueOf(number), temp);
+            array.put(initializeXPathNumber(query1), temp);
         }
         return array;
     }
     
-    private static NodeList initializeXPathNode(String query) throws ParserConfigurationException, 
-            SAXException, IOException, XPathExpressionException{
+    private static NodeList initializeXPathNode(String query) throws SAXException, 
+            ParserConfigurationException, IOException, XPathExpressionException{
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
         // Compile the XPath expression
@@ -80,12 +91,13 @@ public class XPathReader {
         return (NodeList) expr.evaluate(builder.parse(FILE_NAME), XPathConstants.NODESET);
     }
     
-    private static long initializeXPathNumber(String query) throws ParserConfigurationException, 
-            SAXException, IOException, XPathExpressionException{
+    private static Long initializeXPathNumber(String query) throws SAXException, 
+            ParserConfigurationException, IOException, XPathExpressionException{
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
         XPathExpression expr = xpath.compile(query);
         // Run the query and get a nodeset && Cast the result to a DOM NodeList
-        return ((Double) expr.evaluate(builder.parse(FILE_NAME), XPathConstants.NUMBER)).longValue();
+        Double d = (Double) expr.evaluate(builder.parse(FILE_NAME), XPathConstants.NUMBER);
+        return d.longValue();
     }
 }

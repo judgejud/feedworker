@@ -16,26 +16,33 @@ public class jpLog extends jpAbstract{
     public jpLog(){
         super();
         initializePanel();
-        proxy.setTextPaneListener(logWest);
         proxy.setTextPaneListener(logEast);
+        proxy.setTextPaneListener(logWest);
         setVisible(true);
     }
 
     @Override
     void initializePanel() {
         logWest = new jtpLog(true);
-        logEast = new jtpLog(false);
         JScrollPane jspWest = new JScrollPane(logWest);
-        JScrollPane jspEast = new JScrollPane(logEast);
         jspWest.setPreferredSize(TABLE_SCROLL_SIZE);
         jspWest.setAutoscrolls(true);
+        jpCenter.add(jspWest);
+        
+        jpCenter.add(RIGID_AREA);
+        
+        logEast = new jtpLog(false);
+        JScrollPane jspEast = new JScrollPane(logEast);
         jspEast.setPreferredSize(TABLE_SCROLL_SIZE);
         jspEast.setAutoscrolls(true);
-        
-        jpCenter.add(jspWest);
-        jpCenter.add(RIGID_AREA);
         jpCenter.add(jspEast);
+        
         add(jpCenter, BorderLayout.CENTER);
+    }
+    
+    public void cleanLogs(){
+        logEast.setText(null);
+        logWest.setText(null);
     }
 
     @Override

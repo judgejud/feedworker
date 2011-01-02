@@ -41,6 +41,10 @@ public class jtCalendar extends JTable implements TableEventListener{
         getTableHeader().setReorderingAllowed(false);
         setFont(font);
         Swing.tableSorter(this);
+        lockColumns();
+    }
+    
+    private void lockColumns(){
         Swing.setTableDimensionLockColumn(this, 0, 40);
         Swing.setTableDimensionLockColumn(this, 2, 100);
         Swing.setTableDimensionLockColumn(this, 3, 70);
@@ -61,17 +65,13 @@ public class jtCalendar extends JTable implements TableEventListener{
                     dtm.insertRow(i+start, evt.getArray().get(i));
             } else {
                 Long[] rows = (Long[]) evt.getArray().get(0);
-                int[] remove = new int[rows.length];
-                for (int i=0; i<rows.length; i++)
-                    remove[i]= convertRowIndexToModel(rows[i].intValue()-1);
                 //TODO: capire che cazzo tiene per la remove che nn funziona come dovrebbe
                 for (int i = 0; i < rows.length; i++){
-                    //int row = convertRowIndexToModel(rows[i].intValue()-1);
-                    //System.out.println(row);
-                    //dtm.removeRow(row);
-                    dtm.removeRow(remove[i]);
-                    revalidate();
+                    int row = convertRowIndexToModel(rows[i].intValue()-1);
+                    dtm.removeRow(row);
+                    dtm.fireTableDataChanged();
                 }
+                lockColumns();
             }
         }
     }
