@@ -43,6 +43,7 @@ import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
+import org.feedworker.core.ManageListener;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -246,7 +247,7 @@ public class Mediator {
     }
 
     public void setTableListener(TableEventListener listener) {
-        core.addTableEventListener(listener);
+        ManageListener.addTableEventListener(listener);
     }
 
     public void setTextPaneListener(TextPaneEventListener listener) {

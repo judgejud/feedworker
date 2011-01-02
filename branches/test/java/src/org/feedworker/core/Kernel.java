@@ -498,7 +498,8 @@ public class Kernel implements PropertyChangeListener {
                         status = true;
                     }
                     lastItasa = (String) feedIta.get(0)[1];
-                    fireTableEvent(feedIta, ITASA);
+                    ManageListener.fireTableEvent(this, feedIta, ITASA);
+                    //fireTableEvent(feedIta, ITASA);
                 }
             }
             if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
@@ -512,7 +513,8 @@ public class Kernel implements PropertyChangeListener {
                         status = true;
                     }
                     lastMyItasa = (String) feedMyita.get(0)[1];
-                    fireTableEvent(feedMyita, MYITASA);
+                    ManageListener.fireTableEvent(this, feedMyita, MYITASA);
+                    //fireTableEvent(feedMyita, MYITASA);
                 }
             }
         }
@@ -538,7 +540,8 @@ public class Kernel implements PropertyChangeListener {
                         status = true;
                     }
                     lastSubsf = (String) subsf.get(0)[1];
-                    fireTableEvent(subsf, SUBSF);
+                    ManageListener.fireTableEvent(this, subsf, SUBSF);
+                    //fireTableEvent(subsf, SUBSF);
                 }
             }
             if (Lang.verifyTextNotNull(prop.getMySubsfactoryFeedUrl())) {
@@ -549,7 +552,8 @@ public class Kernel implements PropertyChangeListener {
                         status = true;
                     }
                     lastMySubsf = (String) mysubsf.get(0)[1];
-                    fireTableEvent(mysubsf, MYSUBSF);
+                    ManageListener.fireTableEvent(this, mysubsf, MYSUBSF);
+                    //fireTableEvent(mysubsf, MYSUBSF);
                 }
             }
         }
@@ -575,14 +579,16 @@ public class Kernel implements PropertyChangeListener {
                     status = true;
                 }
                 lastEztv = (String) feedEz.get(0)[1];
-                fireTableEvent(feedEz, EZTV);
+                ManageListener.fireTableEvent(this, feedEz, EZTV);
+                //fireTableEvent(feedEz, EZTV);
             }
             if ((feedBt != null) && (feedBt.size() > 0)) {
                 if (!first) {
                     status = true;
                 }
                 lastBtchat = (String) feedBt.get(0)[1];
-                fireTableEvent(feedBt, BTCHAT);
+                ManageListener.fireTableEvent(this, feedBt, BTCHAT);
+                //fireTableEvent(feedBt, BTCHAT);
             }
         }
         return status;
@@ -624,7 +630,9 @@ public class Kernel implements PropertyChangeListener {
             ArrayList temp = xmlSubDest.initializeReaderRule();
             mapRules = (TreeMap<KeyRule, ValueRule>) temp.get(0);
             if (mapRules != null) {
-                fireTableEvent((ArrayList<Object[]>) temp.get(1), SUBTITLE_DEST);
+                ManageListener.fireTableEvent(this, (ArrayList<Object[]>) temp.get(1), 
+                        SUBTITLE_DEST);
+                //fireTableEvent((ArrayList<Object[]>) temp.get(1), SUBTITLE_DEST);
             }
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
@@ -636,7 +644,9 @@ public class Kernel implements PropertyChangeListener {
             ArrayList temp = xmlCalendar.readingDocumentCalendar();
             tsIdCalendar = (TreeSet) temp.get(0);
             if (tsIdCalendar.size() > 0) {
-                fireTableEvent((ArrayList<Object[]>) temp.get(1), CALENDAR);
+                ManageListener.fireTableEvent(this, (ArrayList<Object[]>) temp.get(1), 
+                        CALENDAR);
+                //fireTableEvent((ArrayList<Object[]>) temp.get(1), CALENDAR);
             }
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
@@ -901,7 +911,8 @@ public class Kernel implements PropertyChangeListener {
         try {
             ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv, false);
             if (array != null) {
-                fireTableEvent(array, SEARCH_TV);
+                ManageListener.fireTableEvent(this, array, SEARCH_TV);
+                //fireTableEvent(array, SEARCH_TV);
                 fireJFrameEventOperation(SEARCH_TV);
             } else {
                 printAlert("La ricerca di " + tv + " non ha prodotto risultati");
@@ -932,7 +943,8 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
             xmlCalendar.write();
-            fireTableEvent(al, CALENDAR);
+            ManageListener.fireTableEvent(this, al, CALENDAR);
+            //fireTableEvent(al, CALENDAR);
         } catch (JDOMException ex) {
             error.launch(ex, null);
         } catch (IOException ex) {
@@ -975,7 +987,8 @@ public class Kernel implements PropertyChangeListener {
                 fireJFrameEventOperation(OPERATION_PROGRESS_INCREMENT, importTask.getProgress());
                 if (importTask.isDone()) {
                     try {
-                        fireTableEvent(importTask.get(), CALENDAR);
+                        ManageListener.fireTableEvent(this, importTask.get(), CALENDAR);
+                        //fireTableEvent(importTask.get(), CALENDAR);
                     } catch (Exception e) {
                         error.launch(e);
                     }
@@ -987,7 +1000,8 @@ public class Kernel implements PropertyChangeListener {
                 fireJFrameEventOperation(OPERATION_PROGRESS_INCREMENT, refreshTask.getProgress());
                 if (refreshTask.isDone()) {
                     try {
-                        fireTableEvent(refreshTask.get(), CALENDAR);
+                        ManageListener.fireTableEvent(this, refreshTask.get(), CALENDAR);
+                        //fireTableEvent(refreshTask.get(), CALENDAR);
                     } catch (Exception e) {
                         error.launch(e);
                     }
@@ -1013,7 +1027,8 @@ public class Kernel implements PropertyChangeListener {
             fireJFrameEventOperation(OPERATION_PROGRESS_SHOW, array.size());
             ArrayList al = new ArrayList();
             al.add(array.descendingKeySet().toArray(new Long[array.size()]));
-            fireTableEvent(al, CALENDAR, false);
+            ManageListener.fireTableEvent(this, al, CALENDAR, false);
+            //fireTableEvent(al, CALENDAR, false);
             refreshTask = new RefreshTask(array);
             refreshTask.addPropertyChangeListener(this);
             refreshTask.execute();
@@ -1085,16 +1100,18 @@ public class Kernel implements PropertyChangeListener {
      * @param listener
      *            evento tablerss
      */
+    /*
     public synchronized void addTableEventListener(TableEventListener listener) {
         listenerTable.add(listener);
     }
-
+*/
     /**
      * Permette alla classe di de-registrarsi per l'evento tablerss
      * 
      * @param listener
      *            evento tablerss
      */
+    /*
     public synchronized void removeTableEventListener(
             TableEventListener listener) {
         listenerTable.remove(listener);
@@ -1109,6 +1126,7 @@ public class Kernel implements PropertyChangeListener {
             myel.objReceived(event);
         }
     }
+
     
     private synchronized void fireTableEvent(ArrayList<Object[]> alObj,
             String source, boolean addRows) {
@@ -1119,7 +1137,7 @@ public class Kernel implements PropertyChangeListener {
             myel.objReceived(event);
         }
     }
-
+*/
     /**
      * Permette alla classe di registrarsi per l'evento textpane
      * 
