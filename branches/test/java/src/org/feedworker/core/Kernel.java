@@ -30,7 +30,6 @@ import jcifs.smb.SmbException;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.TextPaneEvent;
-import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.AudioPlay;
@@ -96,7 +95,6 @@ public class Kernel implements PropertyChangeListener {
             lastEztv = null, lastBtchat = null, lastMySubsf = null;
     private TreeMap<KeyRule, ValueRule> mapRules;
     private ManageException error = ManageException.getIstance();
-    private TextPaneEventListener mytpel;
     private Xml xmlCalendar, xmlSubDest;
     private ImportTask importTask;
     private RefreshTask refreshTask;
@@ -125,7 +123,6 @@ public class Kernel implements PropertyChangeListener {
     public void downloadSub(ArrayList<String> als, boolean itasa) {
         DownloadThread dt = new DownloadThread(mapRules, als, itasa);
         Thread t = new Thread(dt, "Thread download");
-        dt.addTextPaneEventListener(mytpel);
         t.start();
     }
 
@@ -141,7 +138,6 @@ public class Kernel implements PropertyChangeListener {
         als.add(link.toString());
         DownloadThread dt = new DownloadThread(mapRules, als, true);
         Thread t = new Thread(dt, "Thread download");
-        dt.addTextPaneEventListener(mytpel);
         t.start();
     }
 
@@ -851,10 +847,6 @@ public class Kernel implements PropertyChangeListener {
         } catch (IOException ex) {
             error.launch(ex, getClass(), null);
         }
-    }
-
-    public void setDownloadThreadListener(TextPaneEventListener listener) {
-        mytpel = listener;
     }
 
     /**Effettua il backup dei settings vari

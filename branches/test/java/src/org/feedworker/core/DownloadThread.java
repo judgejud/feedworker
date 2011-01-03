@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.zip.ZipException;
@@ -15,7 +14,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.TextPaneEvent;
-import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.util.Common;
 import org.feedworker.object.KeyRule;
 import org.feedworker.util.ManageException;
@@ -48,7 +46,8 @@ public class DownloadThread implements Runnable {
     private List listenerTextPane = new ArrayList();
     //private Http httpItasa;
 
-    DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als, boolean _itasa) {
+    DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als, 
+                                                                boolean _itasa) {
         als = _als;
         itasa = _itasa;
         mapRules = map;
@@ -85,7 +84,9 @@ public class DownloadThread implements Runnable {
                 error.launch(ex, getClass(), null);
             }
         } else {
-            fireTextPaneEvent("Scaricato: " + f.getName(), TextPaneEvent.OK);
+            //fireTextPaneEvent("Scaricato: " + f.getName(), TextPaneEvent.OK);
+            ManageListener.fireTextPaneEvent(this, "Scaricato: " + f.getName(), 
+                                                        TextPaneEvent.OK);
         }
         //return Zip.getAlFile();
         return alf;
@@ -136,7 +137,7 @@ public class DownloadThread implements Runnable {
                             else
                                 msg = "Estratto " + al.get(i).getName() + " e rinominato in "
                                     + newName + " nella cartella condivisa samba\\" + dest ;
-                            fireTextPaneEvent(msg,TextPaneEvent.SUB);
+                            printSub(msg);
                         }
                     }
                 } catch (SmbException ex) {
@@ -165,7 +166,7 @@ public class DownloadThread implements Runnable {
                                 msg += " e rinominato in " + newName;
                             }
                             msg += " nel seguente percorso: " + dest;
-                            fireTextPaneEvent(msg, TextPaneEvent.SUB);
+                            printSub(msg);
                         } catch (IOException ex) {
                             error.launch(ex, getClass());
                         }
@@ -176,10 +177,10 @@ public class DownloadThread implements Runnable {
     }
     
     private boolean deleteFile(KeyRule key, File filesub, String namesub){
-        if (prop.isEnabledAdvancedDownload() && key!=null && mapRules.get(key).isDelete()){
+        if (prop.isEnabledAdvancedDownload() && key!=null && 
+                                                mapRules.get(key).isDelete()){
             filesub.delete();
-            fireTextPaneEvent(namesub + " cancellato per la regola DELETE",
-                    TextPaneEvent.ALERT);
+            printAlert(namesub + " cancellato per la regola DELETE");
             return true;
         }
         return false;
@@ -203,7 +204,7 @@ public class DownloadThread implements Runnable {
                         Io.downloadSingle(entity.getContent(), f);
                         alf.addAll(extract(f));
                     } else
-                        fireTextPaneEvent("Sessione scaduta", TextPaneEvent.ALERT);
+                        printAlert("Sessione scaduta");
                 }
             } //end for
         } catch (UnsupportedEncodingException ex) {
@@ -308,32 +309,12 @@ public class DownloadThread implements Runnable {
         }
         return version;
     }
-
-    /**Permette alla classe di registrarsi per l'evento textpane
-     *
-     * @param listener evento textpane
-     */
-    public synchronized void addTextPaneEventListener(
-            TextPaneEventListener listener) {
-        listenerTextPane.add(listener);
+    
+    private void printAlert(String msg) {
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT);
     }
-
-    /**
-     * Permette alla classe di de-registrarsi per l'evento textpane
-     *
-     * @param listener evento textpane
-     */
-    public synchronized void removeMyTextPaneEventListener(
-            TextPaneEventListener listener) {
-        listenerTextPane.remove(listener);
-    }
-
-    private synchronized void fireTextPaneEvent(String msg, String type) {
-        TextPaneEvent event = new TextPaneEvent(this, msg, type);
-        Iterator listeners = listenerTextPane.iterator();
-        while (listeners.hasNext()) {
-            TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
-            myel.objReceived(event);
-        }
+    
+    private void printSub(String msg) {
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.SUB);
     }
 }

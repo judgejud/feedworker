@@ -74,7 +74,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "268 by "
+                + "274 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -248,7 +248,6 @@ public class Mediator {
 
     public void setTextPaneListener(TextPaneEventListener listener) {
         ManageListener.addTextPaneEventListener(listener);
-        core.setDownloadThreadListener(listener);
     }
 
     void setFrameIconDateListener(JFrameEventIconDateListener listener) {
