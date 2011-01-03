@@ -16,6 +16,11 @@ salvare i feed in modo da conservare i vecchi fino a numero da definire in input
 aggiungere versioning automatico all'applicazione
 status bar (fire msg)
 close tab e sua riapertura.
+calendario: togliere colonna status e implementare il background rosso x cancelled/ended e giallo x season finale.
+
+CORREZIONI:
+-mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
+calendario aggiornamento: far funzionare quella cazzo di remove row
 
 PUNTI INTERROGATIVI
 feature proxy? 
@@ -28,9 +33,6 @@ multiutenza?
 properties sotto jfacility? 
 impostazioni dei tabs?
 http://thetvdb.com/wiki/index.php?title=Programmers_API?
-
-CORREZIONI:
--mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
 
 VERIFICARE LE IMPLEMENTAZIONI
 impedire il funzionamento a vendor java diverse da sun.

@@ -176,7 +176,7 @@ class Http {
         return is;
     }
 
-    InputStream getStreamRss(String oldUrl) throws IOException {
+    InputStream getStreamRss(String oldUrl) throws IOException{
         get = new HttpGet(oldUrl);
         response = client.execute(get);
         return response.getEntity().getContent();

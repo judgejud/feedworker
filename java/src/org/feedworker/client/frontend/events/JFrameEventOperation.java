@@ -7,25 +7,26 @@ import java.util.EventObject;
  * @author luca
  */
 public class JFrameEventOperation extends EventObject {
-	private String operaz;
-	private int max;
 
-	public JFrameEventOperation(Object source, String oper) {
-		super(source);
-		operaz = oper;
-	}
+    private String operaz;
+    private int max;
 
-	public JFrameEventOperation(Object source, String oper, int num) {
-		super(source);
-		operaz = oper;
-		max = num;
-	}
+    public JFrameEventOperation(Object source, String oper) {
+        super(source);
+        operaz = oper;
+    }
 
-	public String getOperaz() {
-		return operaz;
-	}
+    public JFrameEventOperation(Object source, String oper, int num) {
+        super(source);
+        operaz = oper;
+        max = num;
+    }
 
-	public int getMax() {
-		return max;
-	}
+    public String getOperaz() {
+        return operaz;
+    }
+
+    public int getMax() {
+        return max;
+    }
 }
