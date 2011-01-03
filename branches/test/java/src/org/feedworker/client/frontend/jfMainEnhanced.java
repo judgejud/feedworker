@@ -36,7 +36,8 @@ public class jfMainEnhanced extends jfMain {
             try {
             	initSysTray();
             } catch (Exception e) {
-                logJTP.appendError(e.getMessage());
+                //TODO
+                //logJTP.appendError(e.getMessage());
                 setVisible(true);
             }
         }

@@ -7,9 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.zip.ZipException;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -20,9 +17,8 @@ import javax.xml.xpath.XPathExpressionException;
 
 import jcifs.smb.SmbException;
 
-import org.feedworker.client.frontend.Mediator;
+import org.feedworker.core.ManageListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
-import org.feedworker.client.frontend.events.TextPaneEventListener;
 
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
@@ -38,10 +34,7 @@ import com.sun.syndication.io.ParsingFeedException;
  */
 public class ManageException {
     // VARIABLES PRIVATE STATIC
-
     private static ManageException core = null;
-    // VARIABLES PRIVATE
-    private List listenerTextPane = new ArrayList();
 
     /**
      * restituisce l'istanza corrente
@@ -156,7 +149,6 @@ public class ManageException {
             printAlert("Il sistema non trova il seguente percorso " + text);
         } else if (msg.equals(error04)) {
             printAlert("Timeout di lettura " + text);
-            ex.printStackTrace();
         } else if (msg.equals(error05) || msg.equals(error06)
                 || msg.equals(error07) || msg.equals(error08)) {
             printAlert("Connessione con " + msg
@@ -215,7 +207,7 @@ public class ManageException {
     public void launch(MalformedURLException ex, Class c, String text) {
         String msg = ex.getMessage();
         String error01 = "no protocol:";
-        if (c.getName().equals(Mediator.class.getName())) {
+        if (c.getName().equals(org.feedworker.client.frontend.Mediator.class.getName())) {
             if (msg.substring(0, error01.length()).equals(error01)) {
                 printAlert("Link " + text
                         + " errato; immettere in questa forma http://www.");
@@ -300,7 +292,7 @@ public class ManageException {
             printError(ex, c);
         }
     }
-
+    
     /**
      * Analizza l'errore IndexOutOfBoundsException
      *
@@ -367,33 +359,12 @@ public class ManageException {
     }
 
     private void printAlert(String msg) {
-        fireNewTextPaneEvent(msg, TextPaneEvent.ALERT);
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT);
     }
 
     private void printError(Exception e, Class c) {
-        fireNewTextPaneEvent(e.getMessage(), TextPaneEvent.ERROR);
+        ManageListener.fireTextPaneEvent(this, e.getMessage(), TextPaneEvent.ERROR);
         Logging.getIstance().printClass(c);
         Logging.getIstance().printError(e);
-    }
-
-    // This methods allows classes to register for MyEvents
-    public synchronized void addMyTextPaneEventListener(
-            TextPaneEventListener listener) {
-        listenerTextPane.add(listener);
-    }
-
-    // This methods allows classes to unregister for MyEvents
-    public synchronized void removeMyTextPaneEventListener(
-            TextPaneEventListener listener) {
-        listenerTextPane.remove(listener);
-    }
-
-    private synchronized void fireNewTextPaneEvent(String msg, String type) {
-        TextPaneEvent event = new TextPaneEvent(this, msg, type);
-        Iterator listeners = listenerTextPane.iterator();
-        while (listeners.hasNext()) {
-            TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
-            myel.objReceived(event);
-        }
     }
 }

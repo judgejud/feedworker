@@ -401,7 +401,8 @@ public class jfMain extends JFrame implements WindowListener,
     /** inizializza i listener per l'ascolto */
     private void initListeners() {
         addWindowListener(this);
-        proxy.setFrameListener(this);
+        proxy.setFrameIconDateListener(this);
+        proxy.setFrameOperationListener(this);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package org.feedworker.client.frontend;
-
 //IMPORT JAVA
-import org.feedworker.client.frontend.table.jtSubtitleDest;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
@@ -11,8 +9,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.TreeMap;
 
 import javax.swing.JTable;
@@ -23,18 +19,19 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
-import org.feedworker.core.Kernel;
-import org.feedworker.core.RssParser;
 import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
-import org.feedworker.client.frontend.events.JFrameEventOperation;
 import org.feedworker.client.frontend.events.JFrameEventOperationListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
+import org.feedworker.client.frontend.table.jtSubtitleDest;
+import org.feedworker.core.Kernel;
+import org.feedworker.core.ManageListener;
+import org.feedworker.core.RssParser;
 import org.feedworker.util.Common;
-import org.feedworker.object.KeyRule;
 import org.feedworker.util.ManageException;
 import org.feedworker.util.Quality;
+import org.feedworker.object.KeyRule;
 import org.feedworker.object.ValueRule;
 
 import org.jfacility.java.awt.AWT;
@@ -43,7 +40,7 @@ import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
-import org.feedworker.core.ManageListener;
+
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -59,8 +56,6 @@ public class Mediator {
     private static Mediator proxy = null;
     private Kernel core = Kernel.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
-    private List listenerTextPane = new ArrayList();
-    private List listenerJFrameO = new ArrayList();
     private ManageException error = ManageException.getIstance();
 
     /**
@@ -191,7 +186,8 @@ public class Mediator {
         }
         if (!text.equalsIgnoreCase("")) {
             AWT.setClipboard(text);
-            fireTextPaneEvent("link copiati nella clipboard", TextPaneEvent.OK);
+            ManageListener.fireTextPaneEvent(this,"link copiati nella clipboard", 
+                                                                TextPaneEvent.OK);
         }
     }
 
@@ -251,16 +247,16 @@ public class Mediator {
     }
 
     public void setTextPaneListener(TextPaneEventListener listener) {
-        core.addTextPaneEventListener(listener);
+        ManageListener.addTextPaneEventListener(listener);
         core.setDownloadThreadListener(listener);
-        ManageException.getIstance().addMyTextPaneEventListener(listener);
-        addTextPaneEventListener(listener);
     }
 
-    void setFrameListener(JFrameEventIconDateListener listener) {
-        core.addJFrameEventIconDateListener(listener);
-        core.addJFrameEventOperationListener(listener);
-        addJFrameEventOperationListener(listener);
+    void setFrameIconDateListener(JFrameEventIconDateListener listener) {
+        ManageListener.addJFrameEventIconDateListener(listener);
+    }
+    
+    void setFrameOperationListener(JFrameEventOperationListener listener) {
+        ManageListener.addJFrameEventOperationListener(listener);
     }
 
     /**Restituisce i nodi per la jtree Settings
@@ -558,7 +554,7 @@ public class Mediator {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio del client.");
             }
             if (!prop.isApplicationFirstTimeUsed() && first) {
-                fireJFrameEventOperation(ENABLE_BUTTON);
+                ManageListener.fireJFrameEventOperation(this, ENABLE_BUTTON);
                 runRss();
             } else {
                 if (Lang.verifyTextNotNull(oldMin)
@@ -566,8 +562,9 @@ public class Mediator {
                     restartRss();
                 }
             }
-            fireTextPaneEvent("Impostazioni salvate in " + prop.getSettingsFilename(),
-                    TextPaneEvent.OK);
+            ManageListener.fireTextPaneEvent(this, 
+                            "Impostazioni salvate in " + prop.getSettingsFilename(),
+                                                                TextPaneEvent.OK);
         }
     }
 
@@ -665,16 +662,14 @@ public class Mediator {
     }
 
     private void printAlert(String msg) {
-        fireTextPaneEvent(msg, TextPaneEvent.ALERT);
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT);
     }
-
-    // This methods allows classes to register for MyEvents
+    /*
     public synchronized void addTextPaneEventListener(
             TextPaneEventListener listener) {
         listenerTextPane.add(listener);
     }
 
-    // This methods allows classes to unregister for MyEvents
     public synchronized void removeTextPaneEventListener(
             TextPaneEventListener listener) {
         listenerTextPane.remove(listener);
@@ -688,32 +683,7 @@ public class Mediator {
             myel.objReceived(event);
         }
     }
-
-    /**Permette alla classe di registrarsi per l'evento jframe
-     *
-     * @param listener evento jframe
-     */
-    public synchronized void addJFrameEventOperationListener(JFrameEventIconDateListener listener) {
-        listenerJFrameO.add(listener);
-    }
-
-    /**Permette alla classe di de-registrarsi per l'evento jframe
-     *
-     * @param listener evento jframe
-     */
-    public synchronized void removeJFrameEventOperationListener(JFrameEventIconDateListener listener) {
-        listenerJFrameO.remove(listener);
-    }
-
-    private synchronized void fireJFrameEventOperation(String oper) {
-        JFrameEventOperation event = new JFrameEventOperation(this, oper);
-        Iterator listeners = listenerJFrameO.iterator();
-        while (listeners.hasNext()) {
-            JFrameEventOperationListener myel = (JFrameEventOperationListener) listeners.next();
-            myel.objReceived(event);
-        }
-    }
-
+*/
     public void restartApplication(String date) {
         core.closeApp(date, true);
     }
