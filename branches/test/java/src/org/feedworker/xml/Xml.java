@@ -155,7 +155,7 @@ public class Xml extends AbstractXML{
         calendar.addContent(lastTitle);
 
         Element lastDate = new Element(TAG_CALENDAR_LAST_DATE);
-        String d1 = Common.dateString((Date) array[++i]);
+        String d1 = Common.dateStringAmerican((Date) array[++i]);
         lastDate.setText(checkNPE(d1));
         calendar.addContent(lastDate);
 
@@ -168,7 +168,7 @@ public class Xml extends AbstractXML{
         calendar.addContent(nextTitle);
 
         Element nextDate = new Element(TAG_CALENDAR_NEXT_DATE);
-        String d2 = Common.dateString((Date) array[++i]);
+        String d2 = Common.dateStringAmerican((Date) array[++i]);
         nextDate.setText(checkNPE(d2));
         calendar.addContent(nextDate);
         
@@ -194,7 +194,7 @@ public class Xml extends AbstractXML{
                 String s1 = calendar.getChild(TAG_CALENDAR_LAST_DATE).getText();
                 Date d1 = null;
                 try {
-                    d1 = Common.stringDate(s1);
+                    d1 = Common.stringAmericanToDate(s1);
                 } catch (ParseException ex) {}
                 obj[++i]= d1;
                 obj[++i]=calendar.getChild(TAG_CALENDAR_NEXT_EPISODE).getText();
@@ -202,7 +202,7 @@ public class Xml extends AbstractXML{
                 String s2 = calendar.getChild(TAG_CALENDAR_NEXT_DATE).getText();
                 Date d2 = null;
                 try {
-                    d2 = Common.stringDate(s2);
+                    d2 = Common.stringAmericanToDate(s2);
                 } catch (ParseException ex) {}
                 obj[++i]= d2;
                 ts.add(obj[0]);

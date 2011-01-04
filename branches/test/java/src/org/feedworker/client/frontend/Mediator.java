@@ -490,7 +490,8 @@ public class Mediator {
         boolean check = false;
         if (dirLocal) {
             if (!Lang.verifyTextNotNull(destSub)) {
-                printAlert("INPUT OBBLIGATORIO: La Destinazione Locale non può essere vuota.");
+                printAlert("INPUT OBBLIGATORIO: La Destinazione Locale non può "
+                                                                + "essere vuota.");
             } else {
                 check = true;
             }
@@ -550,7 +551,8 @@ public class Mediator {
             prop.setTorrentDestinationFolder(torrent);
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
-                printAlert("Il Look&Feel selezionato sarà disponibile al riavvio del client.");
+                printAlert("Il Look&Feel selezionato sarà disponibile al riavvio "
+                                                                + "del client.");
             }
             if (!prop.isApplicationFirstTimeUsed() && first) {
                 ManageListener.fireJFrameEventOperation(this, ENABLE_BUTTON);
@@ -663,26 +665,7 @@ public class Mediator {
     private void printAlert(String msg) {
         ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT);
     }
-    /*
-    public synchronized void addTextPaneEventListener(
-            TextPaneEventListener listener) {
-        listenerTextPane.add(listener);
-    }
 
-    public synchronized void removeTextPaneEventListener(
-            TextPaneEventListener listener) {
-        listenerTextPane.remove(listener);
-    }
-
-    private synchronized void fireTextPaneEvent(String msg, String type) {
-        TextPaneEvent event = new TextPaneEvent(this, msg, type);
-        Iterator listeners = listenerTextPane.iterator();
-        while (listeners.hasNext()) {
-            TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
-            myel.objReceived(event);
-        }
-    }
-*/
     public void restartApplication(String date) {
         core.closeApp(date, true);
     }
@@ -712,7 +695,8 @@ public class Mediator {
     }
 
     TableModel getModelSystemInfo() {
-        DefaultTableModel dtm = new DefaultTableModel(null, new String[]{"Informazione", "Valore"})  {
+        DefaultTableModel dtm = new DefaultTableModel(null, 
+                                        new String[]{"Informazione", "Valore"})  {
 
             Class[] types = new Class[]{String.class, String.class};
 
