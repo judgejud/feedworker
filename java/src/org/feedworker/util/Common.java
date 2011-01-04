@@ -20,6 +20,13 @@ import org.jfacility.javax.swing.Swing;
  */
 public class Common {
     private static int day_millisec = 86400000;
+    private static SimpleDateFormat sdfAmerican = 
+                                new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
+    private static SimpleDateFormat sdfItalian = 
+                                new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
+    private static SimpleDateFormat sdfDateTime = 
+                        new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY);
+    
 
     /** Restituisce la data ed ora attuale
      *
@@ -52,9 +59,7 @@ public class Common {
      * @throws ParseException
      */
     public static Date stringDateTime(String s) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss",
-                Locale.ITALY);
-        return sdf.parse(s);
+        return sdfDateTime.parse(s);
     }
     
     /**Converte una data in stringa data ora
@@ -63,8 +68,7 @@ public class Common {
      * @return stringa dd/MM/yyyy HH:mm:ss
      */
     public static String dateTimeString(Date d){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ITALY);
-        return sdf.format(d);
+        return sdfDateTime.format(d);
     }
     
     /**Trasforma una stringa data in una data
@@ -74,8 +78,7 @@ public class Common {
      * @throws ParseException
      */
     public static Date stringDate(String s) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
-        return sdf.parse(s);
+        return sdfItalian.parse(s);
     }
     
     /**Converte una data in stringa data
@@ -84,11 +87,22 @@ public class Common {
      * @return stringa dd/MM/yyyy
      */
     public static String dateString(Date d){
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ITALY);
         if (d==null)
             return null;
         else
-            return sdf.format(d);
+            return sdfItalian.format(d);
+    }
+    
+    /**Converte una data in stringa data
+     * 
+     * @param d data
+     * @return stringa dd/MM/yyyy
+     */
+    public static String dateStringAmerican(Date d){
+        if (d==null)
+            return null;
+        else
+            return sdfAmerican.format(d);
     }
     
     /**Converte una stringa yyyy-MM-dd in data
@@ -98,8 +112,11 @@ public class Common {
      * @throws ParseException 
      */
     public static Date stringAmericanToDate(String s) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALY);
-        return sdf.parse(s);
+        return sdfAmerican.parse(s);
+    }
+    
+    public static String stringToAmerican(String s) throws ParseException {
+        return dateStringAmerican(stringDate(s));
     }
 
     /**Restituisce l'icona per la systemtraybar
