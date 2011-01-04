@@ -3,15 +3,8 @@ package org.feedworker.core;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.feedworker.client.frontend.events.JFrameEventIconDate;
-import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
-import org.feedworker.client.frontend.events.JFrameEventOperation;
-import org.feedworker.client.frontend.events.JFrameEventOperationListener;
 
-import org.feedworker.client.frontend.events.TableEvent;
-import org.feedworker.client.frontend.events.TableEventListener;
-import org.feedworker.client.frontend.events.TextPaneEvent;
-import org.feedworker.client.frontend.events.TextPaneEventListener;
+import org.feedworker.client.frontend.events.*;
 
 /**
  *
@@ -43,27 +36,7 @@ public class ManageListener {
                                                 TextPaneEventListener listener) {
         listenerTextPane.add(listener);
     }
-/*
-    public static synchronized void removeJFrameEventOperationListener(
-                                            JFrameEventOperationListener listener) {
-        listenerJFrameO.remove(listener);
-    }
 
-    public static synchronized void removeJFrameEventIconDateListener(
-                                            JFrameEventIconDateListener listener) {
-        listenerJFrameID.remove(listener);
-    }
-    
-    public static synchronized void removeTableEventListener(
-                                                    TableEventListener listener) {
-        listenerTable.remove(listener);
-    }
-     
-    public static synchronized void removeMyTextPaneEventListener(
-                                                    TextPaneEventListener listener) {
-        listenerTP.remove(listener);
-    }
-*/
     public static synchronized void fireTableEvent(Object from, ArrayList<Object[]> alObj, 
             String dest) {
         TableEvent event = new TableEvent(from, alObj, dest);
@@ -121,3 +94,9 @@ public class ManageListener {
         }
     }
 }
+/*
+    public static synchronized void removeMyTextPaneEventListener(
+                                                    TextPaneEventListener listener) {
+        listenerTP.remove(listener);
+    }
+*/
