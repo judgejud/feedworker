@@ -157,7 +157,6 @@ public class Kernel implements PropertyChangeListener {
                     File f = new File(prop.getTorrentDestinationFolder()
                             + File.separator + http.getNameFile());
                     Io.downloadSingle(is, f);
-                    //fireTextPaneEvent("Scaricato: " + http.getNameFile(),
                     ManageListener.fireTextPaneEvent(this, "Scaricato: " + http.getNameFile(),
                             TextPaneEvent.TORRENT);
                 } else {
@@ -362,33 +361,27 @@ public class Kernel implements PropertyChangeListener {
                         if (confronta.before(Common.stringDateTime(date_matrix))) {
                             if (continua) {
                                 if (from.equals(ITASA)) {
-                                    //fireTextPaneEvent(
                                     ManageListener.fireTextPaneEvent(this, 
                                             "Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_ITASA);
                                 } else if (from.equals(MYITASA)
                                         && !prop.isAutoDownloadMyItasa()) {
-                                    //fireTextPaneEvent(
                                     ManageListener.fireTextPaneEvent(this, 
                                             "Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_MYITASA);
                                 } else if (from.equals(SUBSF)) {
-                                    //fireTextPaneEvent(
                                     ManageListener.fireTextPaneEvent(this, 
                                             "Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_SUBSF);
                                 } else if (from.equals(MYSUBSF)) {
-                                    //fireTextPaneEvent(
                                     ManageListener.fireTextPaneEvent(this, 
                                             "Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_MYSUBSF);
                                 } else if (from.equals(EZTV)) {
-                                    //fireTextPaneEvent(
                                     ManageListener.fireTextPaneEvent(this, 
                                             "Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_EZTV);
                                 } else if (from.equals(BTCHAT)) {
-                                    //fireTextPaneEvent(
                                     ManageListener.fireTextPaneEvent(this, 
                                             "Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_BTCHAT);
@@ -688,15 +681,15 @@ public class Kernel implements PropertyChangeListener {
     private String getSynoId(InputStream is) {
         String id = null;
         /*
-         * JSONValue value = JSONParser.parse(jSon); JSONArray arr =
-         * value.isArray(); for (int i = 0; i < arr.size(); i++) { JSONObject
-         * obj = arr.get(I).isObject(); if (obj != null)
-         * recordList.add(getProductAsRecord(obj, false)); }
-         * record.setAttribute("id", JSONUtil.getLong("id", prodObj));
-         * record.setAttribute("code", JSONUtil.getString("code", prodObj));
-         * record.setAttribute("name", JSONUtil.getString("name", prodObj));
-         * record.setAttribute("creationDate", JSONUtil.getDate("creationDate",
-         * prodObj));
+         JSONValue value = JSONParser.parse(jSon); JSONArray arr =
+         value.isArray(); for (int i = 0; i < arr.size(); i++) { JSONObject
+         obj = arr.get(I).isObject(); if (obj != null)
+         recordList.add(getProductAsRecord(obj, false)); }
+         record.setAttribute("id", JSONUtil.getLong("id", prodObj));
+         record.setAttribute("code", JSONUtil.getString("code", prodObj));
+         record.setAttribute("name", JSONUtil.getString("name", prodObj));
+         record.setAttribute("creationDate", JSONUtil.getDate("creationDate",
+         prodObj));
          */
         return id;
     }
@@ -1023,7 +1016,6 @@ public class Kernel implements PropertyChangeListener {
                      msg = "Non ci sono serial tv previsti per " + getDay(temp) + ".";
                  else 
                      msg = "Serial tv previsti per " + getDay(temp) + ": " + result; 
-                 //fireTextPaneEvent(msg, TextPaneEvent.DAY_SERIAL); 
                  ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.DAY_SERIAL);
              }
          } catch (ParserConfigurationException ex) { 
@@ -1075,27 +1067,6 @@ public class Kernel implements PropertyChangeListener {
         ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK);
     }
 
-/*
-    public synchronized void addTextPaneEventListener(
-            TextPaneEventListener listener) {
-        listenerTextPane.add(listener);
-    }
-
-
-    public synchronized void removeTextPaneEventListener(
-            TextPaneEventListener listener) {
-        listenerTextPane.remove(listener);
-    }
-
-    private synchronized void fireTextPaneEvent(String msg, String type) {
-        TextPaneEvent event = new TextPaneEvent(this, msg, type);
-        Iterator listeners = listenerTextPane.iterator();
-        while (listeners.hasNext()) {
-            TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
-            myel.objReceived(event);
-        }
-    }
-*/
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
         @Override
         public ArrayList<Object[]> doInBackground() {
