@@ -454,7 +454,7 @@ public class Kernel implements PropertyChangeListener {
                     }
                     if ((icontray) && (prop.isEnabledAdvisorAudioRss())) {
                         try {
-                            AudioPlay.playWav();
+                            AudioPlay.playFeedWav();
                         } catch (UnsupportedAudioFileException ex) {
                             error.launch(ex, getClass());
                         } catch (LineUnavailableException ex) {
@@ -967,7 +967,12 @@ public class Kernel implements PropertyChangeListener {
                         refreshTask.getProgress());
                 if (refreshTask.isDone()) {
                     try {
-                        ManageListener.fireTableEvent(this, refreshTask.get(), CALENDAR);
+                        xmlCalendar = new Xml(FILE_CALENDAR, true);
+                        ArrayList temp = xmlCalendar.readingDocumentCalendar();
+                        tsIdCalendar = (TreeSet) temp.get(0);
+                        if (tsIdCalendar.size() > 0)
+                            ManageListener.fireTableEvent(this, (ArrayList<Object[]>) temp.get(1), 
+                                                                    CALENDAR);
                     } catch (Exception e) {
                         error.launch(e);
                     }
@@ -993,7 +998,6 @@ public class Kernel implements PropertyChangeListener {
             ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW, array.size());
             ArrayList al = new ArrayList();
             al.add(array.descendingKeySet().toArray(new Long[array.size()]));
-            ManageListener.fireTableEvent(this, al, CALENDAR, false);
             refreshTask = new RefreshTask(array);
             refreshTask.addPropertyChangeListener(this);
             refreshTask.execute();
@@ -1108,15 +1112,15 @@ public class Kernel implements PropertyChangeListener {
         }
     }
     
-    class RefreshTask extends SwingWorker<ArrayList<Object[]>, Void> {
+    class RefreshTask extends SwingWorker<Void, Void> {
         private TreeMap<Long, String> tmRefresh;
 
         public RefreshTask(TreeMap<Long, String> _tm) {
             tmRefresh = _tm;
         }
-        
+
         @Override
-        public ArrayList<Object[]> doInBackground() {
+        public Void doInBackground() {
             int progress = 0;
             Iterator<Long> iter = tmRefresh.descendingKeySet().iterator();
             ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
@@ -1144,7 +1148,7 @@ public class Kernel implements PropertyChangeListener {
             } catch (IOException ex) {
                 error.launch(ex, null);
             }
-            return alObjs;
+            return null;
         }
     }
 }

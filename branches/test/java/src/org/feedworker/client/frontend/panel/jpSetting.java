@@ -55,7 +55,7 @@ public class jpSetting extends JPanel {
             jbDestTorrent;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf,
-            jtfDestTorrent, jtfItasaUser, jtfRssMySubsf;
+            jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp;
     private JPasswordField jpfSamba, jpfItasa;
     private ButtonGroup bgLocalSamba, bgDownItasa;
     private Mediator proxy = Mediator.getIstance();
@@ -477,6 +477,20 @@ public class jpSetting extends JPanel {
         gbc.gridx = 2;
         jcbMail = new JCheckBox("Abilitato");
         jpSettingAlert.add(jcbMail, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = ++y;
+        jpSettingAlert.add(new JLabel("mail TO"), gbc);
+        gbc.gridx = 2;
+        jtfMailTo = new JTextField(25);
+        jpSettingAlert.add(jtfMailTo, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = ++y;
+        jpSettingAlert.add(new JLabel("SMTP server"), gbc);
+        gbc.gridx = 2;
+        jtfMailSmtp = new JTextField(25);
+        jpSettingAlert.add(jtfMailSmtp, gbc);
         
     }
 

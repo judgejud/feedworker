@@ -58,21 +58,10 @@ public class jtCalendar extends JTable implements TableEventListener{
     public void objReceived(TableEvent evt) {
         if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
             DefaultTableModel dtm = (DefaultTableModel) getModel();
-            if (evt.isAddRows()){
-                int size = evt.getArray().size();
-                int start = dtm.getRowCount();
-                for (int i = 0; i < size; i++)
-                    dtm.insertRow(i+start, evt.getArray().get(i));
-            } else {
-                Long[] rows = (Long[]) evt.getArray().get(0);
-                //TODO: capire che cazzo tiene per la remove che nn funziona come dovrebbe
-                for (int i = 0; i < rows.length; i++){
-                    int row = convertRowIndexToModel(rows[i].intValue()-1);
-                    dtm.removeRow(row);
-                    dtm.fireTableDataChanged();
-                }
-                lockColumns();
-            }
+            int size = evt.getArray().size();
+            int start = dtm.getRowCount();
+            for (int i = 0; i < size; i++)
+                dtm.insertRow(i+start, evt.getArray().get(i));
         }
     }
 }

@@ -136,8 +136,10 @@ public class jpCalendar extends jpAbstract{
     }
     
     private void jbRefreshCalendarMouseClick() {
-        if (jtable.getRowCount()>0)
+        if (jtable.getRowCount()>0){
+            ((DefaultTableModel) jtable.getModel()).setRowCount(0);
             proxy.refreshCalendar();
+        }
     }
     
     private void jbImportCalendarMouseClick() {
