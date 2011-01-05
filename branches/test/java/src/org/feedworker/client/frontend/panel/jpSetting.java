@@ -4,8 +4,10 @@ senza però fare danni con i panel dei setting che vanno posizionati EAST
 package org.feedworker.client.frontend.panel;
 
 //IMPORT JAVA
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -22,14 +24,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.Mediator;
@@ -46,13 +44,13 @@ public class jpSetting extends JPanel {
     private final SoftBevelBorder SBBORDER = new SoftBevelBorder(BevelBorder.RAISED);
     private final String[] timeout = new String[]{"3", "6", "9", "12", "15", "18"};
     private static jpSetting jpanel = null;
-    private JTree jtSettings;
-    private JPanel jpSettingGlobal, jpSettingItasa, jpSettingSubsf,jpSettingTorrent;
+    private JPanel jpSettingGlobal, jpSettingItasa, jpSettingSubsf, jpSettingTorrent,
+                    jpSettingAlert, jpButton;
     private JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
     private JLabel jlDataAggiornamento;
     private JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
-    private JCheckBox jcbAudio, jcbAdvancedDownload, jcbRunIconized,
-            jcbDownloadMyitasaStartup;
+    private JCheckBox jcbAudioRss, jcbAudioSub, jcbAdvancedDownload, jcbRunIconized,
+            jcbDownloadMyitasaStartup, jcbMail;
     private JButton jbDestSub, jbSaveSettings, jbAnnullaSettings,
             jbDestTorrent;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
@@ -62,12 +60,15 @@ public class jpSetting extends JPanel {
     private ButtonGroup bgLocalSamba, bgDownItasa;
     private Mediator proxy = Mediator.getIstance();
     private ApplicationSettings prop;
+    private JTabbedPane jtpSettings;
 
+    
     private jpSetting() {
-        super(new GridBagLayout());
+        super(new BorderLayout());
         setPreferredSize(TABBEDSIZE);
         prop = proxy.getSettings();
         initSettings();
+        initPaneButton();
     }
 
     public static jpSetting getPanel() {
@@ -76,34 +77,30 @@ public class jpSetting extends JPanel {
         }
         return jpanel;
     }
-
+    
     private void initSettings() {
-        initTree();
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 0;
-        add(jtSettings, gbc);
-
+        jtpSettings = new JTabbedPane();
         initPanelSettingsGlobal();
-        gbc.gridwidth = 2;
-        gbc.gridx = 1;
-        gbc.weightx = 1;
-        add(jpSettingGlobal, gbc);
+        jtpSettings.addTab("General", jpSettingGlobal);
         if (prop.isItasaOption()) {
             initPanelSettingsItasa();
-            add(jpSettingItasa, gbc);
+            jtpSettings.addTab("ItalianSubs", jpSettingItasa);
         }
         if (prop.isSubsfactoryOption()) {
             initPanelSettingsSubsf();
-            add(jpSettingSubsf, gbc);
+            jtpSettings.addTab("Subsfactory", jpSettingSubsf);
         }
         if (prop.isTorrentOption()) {
             initPanelSettingsTorrent();
-            add(jpSettingTorrent, gbc);
+            jtpSettings.addTab("Torrent", jpSettingTorrent);
         }
+        initPanelSettingsAlert();
+        jtpSettings.addTab("Alert", jpSettingAlert);
+        
+        this.add(jtpSettings, BorderLayout.CENTER);
+    }
 
+    private void initPaneButton() {
         jbSaveSettings = new JButton("Salva");
         jbSaveSettings.setBorder(SBBORDER);
         jbAnnullaSettings = new JButton("Annulla");
@@ -121,52 +118,28 @@ public class jpSetting extends JPanel {
             }
         });
 
-        gbc.anchor = GridBagConstraints.SOUTHEAST;
-        gbc.gridwidth = 1;
-        gbc.weightx = 1;
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        add(jbAnnullaSettings, gbc);
-        gbc.anchor = GridBagConstraints.SOUTHWEST;
-        gbc.gridx = 2;
-        add(jbSaveSettings, gbc);
-        setVisible(true);
+        jpButton = new JPanel(new FlowLayout());
+        jpButton.add(jbAnnullaSettings);
+        jpButton.add(jbSaveSettings);
+        this.add(jpButton, BorderLayout.SOUTH);
     }
-
-    private void initTree() {
-        jtSettings = new JTree(proxy.getTreeNode());
-        jtSettings.setBackground(this.getBackground());
-        jtSettings.setOpaque(false);
-        jtSettings.setEditable(false);
-        jtSettings.setBorder(SBBORDER);
-        jtSettings.setPreferredSize(new Dimension(150, 430));
-        jtSettings.getSelectionModel().setSelectionMode(
-                TreeSelectionModel.SINGLE_TREE_SELECTION);
-        jtSettings.setSelectionRow(1);
-
-        jtSettings.addTreeSelectionListener(new TreeSelectionListener() {
-
-            @Override
-            public void valueChanged(TreeSelectionEvent evt) {
-                valueChangedEventTreeNodeSelect(evt);
-            }
-        });
-        jtSettings.setVisible(true);
+    
+    private GridBagConstraints initGbc(){
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(2, 1, 2, 1);
+        return gbc;
     }
 
     private void initPanelSettingsGlobal() {
         jpSettingGlobal = new JPanel(new GridBagLayout());
         jpSettingGlobal.setPreferredSize(INTERNALSETTINGS);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        int y = -1;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(2, 1, 2, 1);
-        gbc.gridheight = 2;
-
+        GridBagConstraints gbc = initGbc();
+        int y = 0;
         jpSettingGlobal.add(new JLabel("Aggiorna RSS"), gbc);
 
         gbc.gridx = 2;
@@ -309,14 +282,6 @@ public class jpSetting extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = ++y;
-        jpSettingGlobal.add(new JLabel("Avviso audio rss"), gbc);
-
-        gbc.gridx = 2;
-        jcbAudio = new JCheckBox("Abilitato");
-        jpSettingGlobal.add(jcbAudio, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
         jpSettingGlobal.add(new JLabel("Timeout"), gbc);
 
         gbc.gridx = 2;
@@ -345,14 +310,8 @@ public class jpSetting extends JPanel {
     private void initPanelSettingsItasa() {
         jpSettingItasa = new JPanel(new GridBagLayout());
         jpSettingItasa.setPreferredSize(INTERNALSETTINGS);
-        int y = -1;
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(2, 1, 2, 1);
+        GridBagConstraints gbc = initGbc();
+        int y = 0;
 
         JLabel jlItasa = new JLabel("RSS Itasa:");
         jlItasa.setForeground(Color.magenta);
@@ -445,14 +404,8 @@ public class jpSetting extends JPanel {
     private void initPanelSettingsTorrent() {
         jpSettingTorrent = new JPanel(new GridBagLayout());
         jpSettingTorrent.setPreferredSize(INTERNALSETTINGS);
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        int y = -1;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(2, 1, 2, 1);
+        GridBagConstraints gbc = initGbc();
+        int y = 0;
 
         jpSettingTorrent.add(new JLabel("Destinazione Torrent"), gbc);
 
@@ -482,70 +435,50 @@ public class jpSetting extends JPanel {
         jpSettingSubsf = new JPanel(new GridBagLayout());
         jpSettingSubsf.setVisible(false);
         jpSettingSubsf.setPreferredSize(INTERNALSETTINGS);
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(2, 1, 2, 1);
+        GridBagConstraints gbc = initGbc();
+        int y = 0;
         jpSettingSubsf.add(new JLabel("Indirizzo RSS Subsfactory: "), gbc);
 
-        gbc.gridx = 1;
+        gbc.gridx = 2;
         jtfRssSubsf = new JTextField(25);
         jpSettingSubsf.add(jtfRssSubsf, gbc);
         
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = ++y;
         jpSettingSubsf.add(new JLabel("Indirizzo RSS Subsf personalizzato: "), gbc);
 
-        gbc.gridx = 1;
+        gbc.gridx = 2;
         jtfRssMySubsf = new JTextField(25);
         jpSettingSubsf.add(jtfRssMySubsf, gbc);
     }
-
-    private void valueChangedEventTreeNodeSelect(TreeSelectionEvent evt) {
-        // Get all nodes whose selection status has changed
-        TreePath[] paths = evt.getPaths();
-        // Iterate through all affected nodes
-        for (int i = 0; i < paths.length; i++) {
-            String temp = paths[i].toString();
-            if (evt.isAddedPath(i) && (temp.length() > 10)) {
-                String node = temp.substring(11, temp.length() - 1);
-                if (node.equalsIgnoreCase("General")) {
-                    if (prop.isItasaOption())
-                        jpSettingItasa.setVisible(false);
-                    if (prop.isSubsfactoryOption())
-                        jpSettingSubsf.setVisible(false);
-                    if (prop.isTorrentOption())
-                        jpSettingTorrent.setVisible(false);
-                    jpSettingGlobal.setVisible(true);
-                } else if (node.equalsIgnoreCase("Itasa")) {
-                    jpSettingGlobal.setVisible(false);
-                    if (prop.isSubsfactoryOption()) {
-                        jpSettingSubsf.setVisible(false);
-                    }
-                    if (prop.isTorrentOption()) {
-                        jpSettingTorrent.setVisible(false);
-                    }
-                    jpSettingItasa.setVisible(true);
-                } else if (node.equalsIgnoreCase("Subsfactory")) {
-                    jpSettingGlobal.setVisible(false);
-                    if (prop.isItasaOption())
-                        jpSettingItasa.setVisible(false);
-                    if (prop.isTorrentOption())
-                        jpSettingTorrent.setVisible(false);
-                    jpSettingSubsf.setVisible(true);
-                } else if (node.equalsIgnoreCase("Torrent")) {
-                    jpSettingGlobal.setVisible(false);
-                    if (prop.isItasaOption())
-                        jpSettingItasa.setVisible(false);
-                    if (prop.isSubsfactoryOption())
-                        jpSettingSubsf.setVisible(false);
-                    jpSettingTorrent.setVisible(true);
-                }
-            }
-        }
-    } // end valueChangedEventTreeNodeSelect
+    
+    private void initPanelSettingsAlert(){
+        jpSettingAlert = new JPanel(new GridBagLayout());
+        jpSettingAlert.setPreferredSize(INTERNALSETTINGS);
+        jpSettingAlert.setVisible(false);
+        GridBagConstraints gbc = initGbc();
+        int y = 0;
+        
+        jpSettingAlert.add(new JLabel("Avviso audio rss"), gbc);
+        gbc.gridx = 2;
+        jcbAudioRss = new JCheckBox("Abilitato");
+        jpSettingAlert.add(jcbAudioRss, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = ++y;
+        jpSettingAlert.add(new JLabel("Avviso audio sub"), gbc);
+        gbc.gridx = 2;
+        jcbAudioSub = new JCheckBox("Abilitato");
+        jpSettingAlert.add(jcbAudioSub, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = ++y;
+        jpSettingAlert.add(new JLabel("Avviso sub mail"), gbc);
+        gbc.gridx = 2;
+        jcbMail = new JCheckBox("Abilitato");
+        jpSettingAlert.add(jcbMail, gbc);
+        
+    }
 
     /** Evento click select cartella */
     private void jbDestSubMouseClicked() {
@@ -570,6 +503,7 @@ public class jpSetting extends JPanel {
 
     public void settingsValue() {
         settingsGlobalValue();
+        settingsAlert();
         if (prop.isItasaOption())
             settingsItasaValue();
         if (prop.isSubsfactoryOption())
@@ -583,7 +517,6 @@ public class jpSetting extends JPanel {
         jtfDestSub.setText(prop.getSubtitleDestinationFolder());
         jcbMinuti.setSelectedItem(prop.getRefreshInterval());
         jcbLookFeel.setSelectedItem(prop.getApplicationLookAndFeel());
-        jcbAudio.setSelected(prop.isEnabledAudioAdvisor());
         jrbDirLocal.setSelected(prop.isLocalFolder());
         jrbDirSamba.setSelected(!prop.isLocalFolder());
         jtfSambaDomain.setText(prop.getCifsShareDomain());
@@ -623,6 +556,12 @@ public class jpSetting extends JPanel {
         jtfRssSubsf.setText(prop.getSubsfactoryFeedURL());
         jtfRssMySubsf.setText(prop.getMySubsfactoryFeedUrl());
     }
+    
+    private void settingsAlert(){
+        jcbAudioRss.setSelected(prop.isEnabledAdvisorAudioRss());
+        jcbAudioSub.setSelected(prop.isEnabledAdvisorAudioSub());
+        jcbMail.setSelected(prop.isEnabledAdvisorMail());
+    }
 
     public void setDataAggiornamento(String data) {
         jlDataAggiornamento.setText(data);
@@ -639,12 +578,13 @@ public class jpSetting extends JPanel {
                 jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(), 
                 jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
                 jcbMinuti.getSelectedItem().toString(), jcbLookFeel.getSelectedItem().toString(),
-                jcbAudio.isSelected(), jcbTimeout.getSelectedItem().toString(),
+                jcbTimeout.getSelectedItem().toString(),
                 jcbAdvancedDownload.isSelected(), jcbRunIconized.isSelected(),
                 jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
                 new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
-                jcbDownloadMyitasaStartup.isSelected(),
-                jtfRssSubsf.getText(), jtfRssMySubsf.getText(), jtfDestTorrent.getText());
+                jcbDownloadMyitasaStartup.isSelected(), jtfRssSubsf.getText(), 
+                jtfRssMySubsf.getText(), jtfDestTorrent.getText(), jcbAudioRss.isSelected(), 
+                jcbAudioSub.isSelected(), jcbMail.isSelected());
 
         if (!previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {
             int returnCode = JOptionPane.showConfirmDialog(this,

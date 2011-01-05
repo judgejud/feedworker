@@ -258,26 +258,6 @@ public class Mediator {
         ManageListener.addJFrameEventOperationListener(listener);
     }
 
-    /**Restituisce i nodi per la jtree Settings
-     *
-     * @return nodi jtree
-     */
-    public DefaultMutableTreeNode getTreeNode() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
-        root.add(new DefaultMutableTreeNode("General"));
-        //root.add(new DefaultMutableTreeNode("Tab"));
-        if (prop.isItasaOption()) {
-            root.add(new DefaultMutableTreeNode("Itasa"));
-        }
-        if (prop.isSubsfactoryOption()) {
-            root.add(new DefaultMutableTreeNode("Subsfactory"));
-        }
-        if (prop.isTorrentOption()) {
-            root.add(new DefaultMutableTreeNode("Torrent"));
-        }
-        return root;
-    }
-
     void restartRss() {
         core.stopAndRestartTimer();
     }
@@ -519,11 +499,11 @@ public class Mediator {
 
     public void saveSettings(boolean dirLocal, String destSub, String sambaDomain,
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
-            String time, String laf, boolean audio, String timeout,
+            String time, String laf, String timeout,
             boolean advancedDownload, boolean runIconized, String itasa,
             String myitasa, String user, String pwd, boolean autoMyitasa,
-            boolean autoLoadMyItasa,
-            String subsf, String mySubsf, String torrent) {
+            boolean autoLoadMyItasa, String subsf, String mySubsf, String torrent,
+            boolean audioRss, boolean audioSub, boolean mail) {
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -543,12 +523,13 @@ public class Mediator {
         }
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
-                    sambaUser, sambaPwd, time, laf, audio, timeout,
+                    sambaUser, sambaPwd, time, laf, timeout, 
                     advancedDownload, runIconized);
             setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
             prop.setSubsfactoryFeedURL(subsf);
             prop.setMySubsfactoryFeedUrl(mySubsf);
             prop.setTorrentDestinationFolder(torrent);
+            setPropAdvisor(audioRss, audioSub, mail);
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio "
@@ -572,13 +553,12 @@ public class Mediator {
     private void setPropGlobal(boolean dirLocal, String destSub,
             String sambaDomain, String sambaIP, String sambaDir,
             String sambaUser, String sambaPwd, String time, String laf,
-            boolean audio, String timeout, boolean advancedDownload,
+            String timeout, boolean advancedDownload,
             boolean runIconized) {
         prop.setLocalFolder(dirLocal);
         prop.setSubtitleDestinationFolder(destSub);
         prop.setRefreshInterval(time);
         prop.setApplicationLookAndFeel(laf);
-        prop.setEnableAudioAdvisor(audio);
         prop.setCifsShareDomain(sambaDomain);
         prop.setCifsShareLocation(sambaIP);
         prop.setCifsSharePath(sambaDir);
@@ -597,6 +577,12 @@ public class Mediator {
         prop.setItasaPassword(pwd);
         prop.setAutoDownloadMyItasa(auto);
         prop.setAutoLoadDownloadMyItasa(autoload);
+    }
+    
+    private void setPropAdvisor(boolean audioRss, boolean audioSub, boolean mail){
+        prop.setEnableAdvisorAudioRss(audioRss);
+        prop.setEnableAdvisorAudioSub(audioSub);
+        prop.setEnableAdvisorMail(mail);
     }
 
     void bruteRefresh() {

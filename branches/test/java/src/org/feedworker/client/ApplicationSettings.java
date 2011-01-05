@@ -27,9 +27,10 @@ public class ApplicationSettings {
             cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, mySubsfactoryFeedUrl,
             httpTimeout;
     private boolean subsfactoryOption, torrentOption, itasaOption,
-            autoDownloadMyItasa, enableAudioAdvisor, applicationFirstTimeUsed,
-            localFolder, enableIconizedRun, enableRunAtStartup,
-            enableAdvancedDownload, autoLoadDownloadMyItasa;
+            autoDownloadMyItasa, enableAdvisorAudioRss, enableAdvisorAudioSub, 
+            applicationFirstTimeUsed, localFolder, enableIconizedRun, 
+            enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
+            enableAdvisorMail;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -56,7 +57,8 @@ public class ApplicationSettings {
                 setAutoDownloadMyItasa(getBooleanDecryptedValue("IS_AUTO_DOWNLOAD_MYITASA"));
                 setLastDateTimeRefresh(getDecryptedValue("LAST_DATETIME_REFRESH"));
                 setApplicationLookAndFeel(getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
-                setEnableAudioAdvisor(getBooleanDecryptedValue("ENABLE_AUDIO_ADVISOR"));
+                setEnableAdvisorAudioRss(getBooleanDecryptedValue("ENABLE_ADVISOR_AUDIO_RSS"));
+                setEnableAdvisorAudioSub(getBooleanDecryptedValue("ENABLE_ADVISOR_AUDIO_SUB"));
                 setTorrentOption(getBooleanDecryptedValue("TORRENT"));
                 applicationFirstTimeUsed = 
                         getBooleanDecryptedValue("IS_APPLICATION_FIRST_TIME_USED");
@@ -74,6 +76,7 @@ public class ApplicationSettings {
                 setAutoLoadDownloadMyItasa(
                         getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
                 setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
+                setEnableAdvisorMail(getBooleanDecryptedValue("ENABLE_ADVISOR_MAIL"));
             } else {
                 loadDefaultSettings();
                 storeSettings();
@@ -122,7 +125,6 @@ public class ApplicationSettings {
             propertiesCrypting("REFRESH_INTERVAL", refreshInterval);
             propertiesCrypting("APPLICATION_LOOK_AND_FEEL",
                     applicationLookAndFeel);
-            propertiesCrypting("ENABLE_AUDIO_ADVISOR", enableAudioAdvisor);
             propertiesCrypting("IS_LOCAL_FOLDER", localFolder);
             propertiesCrypting("CIFS_SHARE_PATH", cifsSharePath);
             propertiesCrypting("CIFS_SHARE_DOMAIN", cifsShareDomain);
@@ -132,7 +134,6 @@ public class ApplicationSettings {
             propertiesCrypting("HTTP_TIMEOUT", httpTimeout);
             propertiesCrypting("ENABLE_ADVANCED_DOWNLOAD",enableAdvancedDownload);
             propertiesCrypting("ENABLE_ICONIZED_RUN", enableIconizedRun);
-
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -181,6 +182,20 @@ public class ApplicationSettings {
             error.launch(e, getClass(), null);
         }
     }
+    
+    /** Scrive i settaggi su file */
+    public void writeAdvisorSettings() {
+        try {
+            propertiesCrypting("ENABLE_ADVISOR_AUDIO_RSS", enableAdvisorAudioRss);
+            propertiesCrypting("ENABLE_ADVISOR_AUDIO_SUB", enableAdvisorAudioSub);
+            propertiesCrypting("ENABLE_ADVISOR_MAIL", enableAdvisorMail);
+            storeSettings();
+        } catch (GeneralSecurityException e) {
+            error.launch(e, getClass());
+        } catch (IOException e) {
+            error.launch(e, getClass(), null);
+        }
+    }// end write
 
     public void writeApplicationFirstTimeUsedFalse() {
         applicationFirstTimeUsed = false;
@@ -245,12 +260,27 @@ public class ApplicationSettings {
         }
     }// end writeOnlyLastDate
 
-    public boolean isEnabledAudioAdvisor() {
-        return enableAudioAdvisor;
+    public boolean isEnabledAdvisorAudioRss() {
+        return enableAdvisorAudioRss;
     }
 
-    public void setEnableAudioAdvisor(boolean enableAudioAdvisor) {
-        this.enableAudioAdvisor = enableAudioAdvisor;
+    public void setEnableAdvisorAudioRss(boolean enableAdvisor) {
+        enableAdvisorAudioRss = enableAdvisor;
+    }
+    public boolean isEnabledAdvisorAudioSub() {
+        return enableAdvisorAudioSub;
+    }
+
+    public void setEnableAdvisorAudioSub(boolean enableAdvisor) {
+        enableAdvisorAudioSub = enableAdvisor;
+    }
+    
+    public boolean isEnabledAdvisorMail() {
+        return enableAdvisorMail;
+    }
+
+    public void setEnableAdvisorMail(boolean enableAdvisor) {
+        enableAdvisorMail = enableAdvisor;
     }
 
     public boolean isItasaOption() {

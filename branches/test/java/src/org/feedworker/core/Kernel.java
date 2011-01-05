@@ -313,7 +313,6 @@ public class Kernel implements PropertyChangeListener {
         if (prop.isItasaOption()) {
             prop.writeItasaSettings();
         }
-
         if (prop.isSubsfactoryOption()) {
             prop.writeSubsfactorySettings();
         }
@@ -323,6 +322,7 @@ public class Kernel implements PropertyChangeListener {
         if (prop.isApplicationFirstTimeUsed()) {
             prop.writeApplicationFirstTimeUsedFalse();
         }
+        prop.writeAdvisorSettings();
     }
 
     /**
@@ -452,7 +452,7 @@ public class Kernel implements PropertyChangeListener {
                     if (runTorrent(false)) {
                         icontray = true;
                     }
-                    if ((icontray) && (prop.isEnabledAudioAdvisor())) {
+                    if ((icontray) && (prop.isEnabledAdvisorAudioRss())) {
                         try {
                             AudioPlay.playWav();
                         } catch (UnsupportedAudioFileException ex) {
