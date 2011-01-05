@@ -17,6 +17,7 @@ status bar (fire msg)
 close tab e sua riapertura.
 calendario: togliere colonna status e implementare il background rosso x cancelled/ended e giallo x season finale.
 javamail: avviso mail sub scaricato
+audio: avviso sub estratto
 
 CORREZIONI:
 -mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.

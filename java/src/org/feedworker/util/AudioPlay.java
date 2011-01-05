@@ -21,9 +21,14 @@ public class AudioPlay {
      * @throws LineUnavailableException
      * @throws IOException
      */
-    public static void playWav() throws UnsupportedAudioFileException,
+    public static void playFeedWav() throws UnsupportedAudioFileException,
             LineUnavailableException, IOException {
-        play("beam2.wav");
+        play("feed.wav");
+    } // playwav
+    
+    public static void playSubWav() throws UnsupportedAudioFileException,
+            LineUnavailableException, IOException {
+        play("sub.wav");
     } // playwav
 
     /**

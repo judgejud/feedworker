@@ -15,7 +15,6 @@ import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
@@ -74,7 +73,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "274 by "
+                + "278 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 

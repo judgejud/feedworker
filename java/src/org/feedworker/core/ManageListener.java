@@ -47,16 +47,6 @@ public class ManageListener {
         }
     }
     
-    public static synchronized void fireTableEvent(Object from, ArrayList<Object[]> alObj,
-            String dest, boolean addRows) {
-        TableEvent event = new TableEvent(from, alObj, dest, addRows);
-        Iterator listeners = listenerTable.iterator();
-        while (listeners.hasNext()) {
-            TableEventListener myel = (TableEventListener) listeners.next();
-            myel.objReceived(event);
-        }
-    }
-    
     public static synchronized void fireJFrameEventIconData(Object from, boolean _icontray,
                                                             final String _data) {
         JFrameEventIconDate event = new JFrameEventIconDate(from, _icontray, _data);
