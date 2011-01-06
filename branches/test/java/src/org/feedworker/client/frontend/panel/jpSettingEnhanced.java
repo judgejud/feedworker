@@ -29,9 +29,9 @@ import org.jdesktop.swingx.JXTaskPaneContainer;
  * 
  * @author luca
  */
-public class jpSetting extends jpAbstract {
+public class jpSettingEnhanced extends jpAbstract {
     private final String[] timeout = new String[]{"3", "6", "9", "12", "15", "18"};
-    private static jpSetting jpanel = null;
+    private static jpSettingEnhanced jpanel = null;
     private JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
     private JLabel jlDataAggiornamento;
     private JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
@@ -46,16 +46,16 @@ public class jpSetting extends jpAbstract {
     private ButtonGroup bgLocalSamba, bgDownItasa;
     private ApplicationSettings prop;
     
-    private jpSetting() {
+    private jpSettingEnhanced() {
         super();
         prop = proxy.getSettings();
         initializePanel();
         initializeButtons();
     }
 
-    public static jpSetting getPanel() {
+    public static jpSettingEnhanced getPanel() {
         if (jpanel == null) {
-            jpanel = new jpSetting();
+            jpanel = new jpSettingEnhanced();
         }
         return jpanel;
     }
