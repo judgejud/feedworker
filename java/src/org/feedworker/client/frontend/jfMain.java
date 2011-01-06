@@ -32,6 +32,7 @@ import org.feedworker.client.frontend.panel.jpSubtitleDest;
 import org.feedworker.client.frontend.panel.jpCalendar;
 import org.feedworker.client.frontend.panel.jpLog;
 import org.feedworker.client.frontend.panel.jpSetting;
+import org.feedworker.client.frontend.panel.jpSettingEnhanced;
 import org.feedworker.client.frontend.panel.jpStatusBar;
 
 import org.jfacility.java.awt.AWT;
@@ -48,7 +49,8 @@ public class jfMain extends JFrame implements WindowListener,
 
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
-    protected jpSetting settingsJP;
+    protected jpSettingEnhanced settingsJP;
+    //protected jpSetting settingsJP;
     protected JTabbedPane mainJTP;
     protected Mediator proxy = Mediator.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
@@ -78,9 +80,7 @@ public class jfMain extends JFrame implements WindowListener,
         this.setLayout(new BorderLayout());
         mainJTP = new JTabbedPane();
         mainJTP.setPreferredSize(TAB_SIZE);
-        this.add(mainJTP, BorderLayout.CENTER);
-        settingsJP = jpSetting.getPanel();
-
+        this.add(mainJTP, BorderLayout.CENTER);        
         itasaJP = jpItasa.getPanel();
         mainJTP.addTab("Itasa", itasaJP);
 
@@ -94,11 +94,14 @@ public class jfMain extends JFrame implements WindowListener,
         }
         mainJTP.addTab("Subtitle Destination", jpSubtitleDest.getPanel());
         mainJTP.addTab("Calendar", jpCalendar.getPanel());
+        
+        settingsJP = jpSettingEnhanced.getPanel();
+        //settingsJP = jpSetting.getPanel();
         mainJTP.addTab("Settings", settingsJP);
 
         logJP = new jpLog();
         mainJTP.addTab("Log", logJP);
-        int i = mainJTP.getTabCount()-1;
+        //int i = mainJTP.getTabCount()-1;
         //mainJTP.setTabComponentAt(i, new ButtonTabComponent(mainJTP));
         
         statusBar = new jpStatusBar();

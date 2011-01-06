@@ -39,6 +39,7 @@ import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
+import org.feedworker.client.frontend.events.StatusBarEventListener;
 
 
 /**
@@ -71,9 +72,9 @@ public class Mediator {
 
     //TODO: ripristinare col getbuildernumber
     String getTitle() {
-        return getApplicationName() + " build "
+        return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "279 by "
+                + "281 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -247,6 +248,10 @@ public class Mediator {
 
     public void setTextPaneListener(TextPaneEventListener listener) {
         ManageListener.addTextPaneEventListener(listener);
+    }
+    
+    public void setStatusBarListener(StatusBarEventListener listener) {
+        ManageListener.addStatusBarEventListener(listener);
     }
 
     void setFrameIconDateListener(JFrameEventIconDateListener listener) {

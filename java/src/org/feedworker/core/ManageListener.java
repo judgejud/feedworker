@@ -16,6 +16,7 @@ public class ManageListener {
     private static List listenerJFrameO = new ArrayList();
     private static List listenerJFrameID = new ArrayList();
     private static List listenerTextPane = new ArrayList();
+    private static List listenerStatusBar = new ArrayList();
 
     public static synchronized void addTableEventListener(
                                                     TableEventListener listener) {
@@ -35,6 +36,11 @@ public class ManageListener {
     public static synchronized void addTextPaneEventListener(
                                                 TextPaneEventListener listener) {
         listenerTextPane.add(listener);
+    }
+    
+    public static synchronized void addStatusBarEventListener(
+                                                StatusBarEventListener listener) {
+        listenerStatusBar.add(listener);
     }
 
     public static synchronized void fireTableEvent(Object from, ArrayList<Object[]> alObj, 
@@ -80,6 +86,16 @@ public class ManageListener {
         Iterator listeners = listenerTextPane.iterator();
         while (listeners.hasNext()) {
             TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+        fireStatusBarEvent(from, msg);
+    }
+    
+    private static synchronized void fireStatusBarEvent(Object from, String msg) {
+        StatusBarEvent event = new StatusBarEvent(from, msg);
+        Iterator listeners = listenerStatusBar.iterator();
+        while (listeners.hasNext()) {
+            StatusBarEventListener myel = (StatusBarEventListener) listeners.next();
             myel.objReceived(event);
         }
     }

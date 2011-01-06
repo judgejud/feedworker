@@ -62,7 +62,6 @@ public class jpSettingEnhanced extends jpAbstract {
     
     @Override
     void initializePanel() {
-        
         JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
         tpcWest.add(initTaskPaneGeneral());
         tpcWest.add(initTaskPaneSamba());
@@ -124,6 +123,7 @@ public class jpSettingEnhanced extends jpAbstract {
     private JXTaskPane initTaskPaneGeneral() {
         JXTaskPane task = new JXTaskPane();
         task.setTitle("General setting");
+        task.setCollapsed(true);
         
         JPanel temp = new JPanel();
         temp.add(new JLabel("Aggiorna RSS"));
@@ -195,6 +195,7 @@ public class jpSettingEnhanced extends jpAbstract {
     private JXTaskPane initTaskPaneSamba(){
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Samba/jcifs setting");
+        task.setCollapsed(true);
         
         JLabel jlDomain = new JLabel("Samba Dominio");
         jlDomain.setForeground(Color.blue);
@@ -239,6 +240,7 @@ public class jpSettingEnhanced extends jpAbstract {
     private JXTaskPane initTaskPaneItalianSubs() {
         JXTaskPane task = new JXTaskPane();
         task.setTitle("ItalianSubs setting");
+        task.setCollapsed(true);
 
         JLabel jlItasa = new JLabel("RSS Itasa");
         jlItasa.setForeground(Color.magenta);
@@ -307,6 +309,7 @@ public class jpSettingEnhanced extends jpAbstract {
     private JXTaskPane initTaskPaneTorrent() {
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Torrent setting");
+        task.setCollapsed(true);
         
         jbDestTorrent = new JButton("Destinazione Torrent");
         jbDestTorrent.setBorder(BORDER);
@@ -327,6 +330,7 @@ public class jpSettingEnhanced extends jpAbstract {
     private JXTaskPane initTaskPaneSubsfactory() {
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Subsfactory setting");
+        task.setCollapsed(true);
         
         task.add(new JLabel("Indirizzo RSS Subsfactory"));
         jtfRssSubsf = new JTextField(25);
@@ -341,6 +345,7 @@ public class jpSettingEnhanced extends jpAbstract {
     private JXTaskPane initTaskPaneAlert(){
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Alert setting");
+        task.setCollapsed(true);
         
         jcbAudioRss = new JCheckBox("Avviso audio rss");
         task.add(jcbAudioRss);
