@@ -15,13 +15,13 @@ salvare i feed in modo da conservare i vecchi fino a numero da definire in input
 aggiungere versioning automatico all'applicazione
 status bar (fire msg)
 close tab e sua riapertura.
-calendario: togliere colonna status e implementare il background rosso x cancelled/ended e giallo x season finale.
+calendario: togliere colonna status e implementare il background  rosso x cancelled/ended e season finale.
+calendario: implementare ricerca per day ieri anche nella data last episode
 javamail: avviso mail sub scaricato
 audio: avviso sub estratto
 
 CORREZIONI:
 -mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
-calendario aggiornamento: far funzionare quella cazzo di remove row
 
 PUNTI INTERROGATIVI
 feature proxy? 

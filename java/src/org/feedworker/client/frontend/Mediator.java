@@ -73,7 +73,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " build "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "278 by "
+                + "279 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -502,7 +502,8 @@ public class Mediator {
             boolean advancedDownload, boolean runIconized, String itasa,
             String myitasa, String user, String pwd, boolean autoMyitasa,
             boolean autoLoadMyItasa, String subsf, String mySubsf, String torrent,
-            boolean audioRss, boolean audioSub, boolean mail) {
+            boolean audioRss, boolean audioSub, boolean mail, String mailTO, 
+            String smtp) {
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -510,7 +511,7 @@ public class Mediator {
         if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                 sambaUser, sambaPwd)) {
             save = true;
-            if (prop.isItasaOption() && save) {
+            if (save) {
                 save = checkSaveItasa(itasa, myitasa, user, pwd);
             }
             if (prop.isSubsfactoryOption() && save) {
@@ -528,7 +529,7 @@ public class Mediator {
             prop.setSubsfactoryFeedURL(subsf);
             prop.setMySubsfactoryFeedUrl(mySubsf);
             prop.setTorrentDestinationFolder(torrent);
-            setPropAdvisor(audioRss, audioSub, mail);
+            setPropAdvisor(audioRss, audioSub, mail, mailTO, smtp);
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio "
@@ -578,10 +579,13 @@ public class Mediator {
         prop.setAutoLoadDownloadMyItasa(autoload);
     }
     
-    private void setPropAdvisor(boolean audioRss, boolean audioSub, boolean mail){
+    private void setPropAdvisor(boolean audioRss, boolean audioSub, boolean mail,
+                                String mailTO, String smtp){
         prop.setEnableAdvisorAudioRss(audioRss);
         prop.setEnableAdvisorAudioSub(audioSub);
         prop.setEnableAdvisorMail(mail);
+        prop.setMailTO(mailTO);
+        prop.setMailSmtp(smtp);
     }
 
     void bruteRefresh() {

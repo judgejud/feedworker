@@ -310,19 +310,14 @@ public class Kernel implements PropertyChangeListener {
     /** Scrive le proprietà dell'applicazione nel file properties */
     public void writeProp() {
         prop.writeGeneralSettings();
-        if (prop.isItasaOption()) {
-            prop.writeItasaSettings();
-        }
-        if (prop.isSubsfactoryOption()) {
-            prop.writeSubsfactorySettings();
-        }
-        if (prop.isTorrentOption()) {
-            prop.writeTorrentSettings();
-        }
-        if (prop.isApplicationFirstTimeUsed()) {
-            prop.writeApplicationFirstTimeUsedFalse();
-        }
+        prop.writeItasaSettings();
         prop.writeAdvisorSettings();
+        if (prop.isSubsfactoryOption())
+            prop.writeSubsfactorySettings();
+        if (prop.isTorrentOption())
+            prop.writeTorrentSettings();
+        if (prop.isApplicationFirstTimeUsed())
+            prop.writeApplicationFirstTimeUsedFalse();
     }
 
     /**
@@ -481,32 +476,30 @@ public class Kernel implements PropertyChangeListener {
      */
     private boolean runItasa(boolean first) {
         boolean status = false;
-        if (prop.isItasaOption()) {
-            ArrayList<Object[]> feedIta, feedMyita;
-            if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
-                feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA,
-                        false, first);
-                if ((feedIta != null) && (feedIta.size() > 0)) {
-                    if (!first) {
-                        status = true;
-                    }
-                    lastItasa = (String) feedIta.get(0)[1];
-                    ManageListener.fireTableEvent(this, feedIta, ITASA);
+        ArrayList<Object[]> feedIta, feedMyita;
+        if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
+            feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA,
+                    false, first);
+            if ((feedIta != null) && (feedIta.size() > 0)) {
+                if (!first) {
+                    status = true;
                 }
+                lastItasa = (String) feedIta.get(0)[1];
+                ManageListener.fireTableEvent(this, feedIta, ITASA);
             }
-            if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
-                if (first && prop.isAutoLoadDownloadMyItasa()) {
-                    lastMyItasa = prop.getLastDateTimeRefresh();
+        }
+        if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
+            if (first && prop.isAutoLoadDownloadMyItasa()) {
+                lastMyItasa = prop.getLastDateTimeRefresh();
+            }
+            feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
+                    MYITASA, prop.isAutoDownloadMyItasa(), first);
+            if ((feedMyita != null) && (feedMyita.size() > 0)) {
+                if (!first) {
+                    status = true;
                 }
-                feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
-                        MYITASA, prop.isAutoDownloadMyItasa(), first);
-                if ((feedMyita != null) && (feedMyita.size() > 0)) {
-                    if (!first) {
-                        status = true;
-                    }
-                    lastMyItasa = (String) feedMyita.get(0)[1];
-                    ManageListener.fireTableEvent(this, feedMyita, MYITASA);
-                }
+                lastMyItasa = (String) feedMyita.get(0)[1];
+                ManageListener.fireTableEvent(this, feedMyita, MYITASA);
             }
         }
         return status;

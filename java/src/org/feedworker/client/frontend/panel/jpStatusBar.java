@@ -6,22 +6,26 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.SystemColor;
+
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.feedworker.client.frontend.events.StatusBarEvent;
+import org.feedworker.client.frontend.events.StatusBarEventListener;
 /**
  *
  * @author luca
  */
-public class jpStatusBar extends JPanel {
+public class jpStatusBar extends JPanel implements StatusBarEventListener{
+    private JLabel jlText = new JLabel(new AngledLinesWindowsCornerIcon());
 
     public jpStatusBar() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(10, 23));
 
         JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.SOUTH);
+        rightPanel.add(jlText, BorderLayout.SOUTH);
         rightPanel.setOpaque(false);
 
         add(rightPanel, BorderLayout.EAST);
@@ -55,6 +59,11 @@ public class jpStatusBar extends JPanel {
         g.setColor(new Color(221, 221, 220));
         g.drawLine(0, y, getWidth(), y);
 
+    }
+
+    @Override
+    public void objReceived(StatusBarEvent evt) {
+        jlText.setText(evt.getText());
     }
 }
 

@@ -1,7 +1,5 @@
 package org.feedworker.client.frontend;
-
 //IMPORT JAVA
-import org.jfacility.javax.swing.DialogProgressBar;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -37,6 +35,7 @@ import org.feedworker.client.frontend.panel.jpSetting;
 import org.feedworker.client.frontend.panel.jpStatusBar;
 
 import org.jfacility.java.awt.AWT;
+import org.jfacility.javax.swing.DialogProgressBar;
 import org.jfacility.javax.swing.Swing;
 
 /**Gui base per java 1.5
@@ -82,10 +81,9 @@ public class jfMain extends JFrame implements WindowListener,
         this.add(mainJTP, BorderLayout.CENTER);
         settingsJP = jpSetting.getPanel();
 
-        if (prop.isItasaOption()) {
-            itasaJP = jpItasa.getPanel();
-            mainJTP.addTab("Itasa", itasaJP);
-        }
+        itasaJP = jpItasa.getPanel();
+        mainJTP.addTab("Itasa", itasaJP);
+
         if (prop.isSubsfactoryOption()) {
             subsfactoryJP = jpSubsfactory.getPanel();
             mainJTP.addTab("Subsfactory", subsfactoryJP);
@@ -390,8 +388,7 @@ public class jfMain extends JFrame implements WindowListener,
      * @param e stato
      */
     protected void changeEnabledButton(boolean e) {
-        if (prop.isItasaOption())
-            itasaJP.setButtonEnabled(e);
+        itasaJP.setButtonEnabled(e);
         if (prop.isSubsfactoryOption())
             subsfactoryJP.setEnableButton(e);
         if (prop.isTorrentOption())
