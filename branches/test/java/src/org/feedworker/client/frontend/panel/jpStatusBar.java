@@ -10,6 +10,7 @@ import java.awt.SystemColor;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import org.feedworker.client.frontend.Mediator;
 
 import org.feedworker.client.frontend.events.StatusBarEvent;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
@@ -18,18 +19,24 @@ import org.feedworker.client.frontend.events.StatusBarEventListener;
  * @author luca
  */
 public class jpStatusBar extends JPanel implements StatusBarEventListener{
-    private JLabel jlText = new JLabel(new AngledLinesWindowsCornerIcon());
+    private JLabel jlText = new JLabel();
 
     public jpStatusBar() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(10, 23));
 
+        JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.add(jlText, BorderLayout.SOUTH);
+        leftPanel.setOpaque(false);
+        
         JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.add(jlText, BorderLayout.SOUTH);
+        rightPanel.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.SOUTH);
         rightPanel.setOpaque(false);
 
+        add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.EAST);
         setBackground(SystemColor.control);
+        Mediator.getIstance().setStatusBarListener(this);
     }
 
     @Override
