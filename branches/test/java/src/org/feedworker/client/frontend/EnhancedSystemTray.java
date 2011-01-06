@@ -48,9 +48,6 @@ public class EnhancedSystemTray {
 
     private JPopupMenu createJPopupMenu() {
         JPopupMenu m = new JPopupMenu();
-        //JMenu submenu = new JMenu("SubMenuTest");
-        //submenu.add(new JMenuItem("SubMenuItem1"));
-        //m.add(submenu);
         final JMenuItem exitItem = new JMenuItem("Esci");
         exitItem.addActionListener(new ActionListener()  {
             @Override

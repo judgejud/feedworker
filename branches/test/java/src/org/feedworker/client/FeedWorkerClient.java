@@ -1,7 +1,5 @@
 package org.feedworker.client;
 
-
-import org.feedworker.core.Kernel;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.net.URISyntaxException;
@@ -10,10 +8,13 @@ import javax.swing.JOptionPane;
 
 import org.feedworker.client.frontend.jfMain;
 import org.feedworker.client.frontend.jfMainEnhanced;
+import org.feedworker.core.Kernel;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
+
 import org.jfacility.java.lang.JVM;
+
 import org.opensanskrit.application.Application;
 import org.opensanskrit.application.EnhancedSplashScreen;
 import org.opensanskrit.application.SplashScreen;

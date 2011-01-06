@@ -25,8 +25,8 @@ public class ApplicationSettings {
             applicationLookAndFeel, torrentDestinationFolder,
             cifsShareLocation, cifsSharePath, cifsShareUsername,
             cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, mySubsfactoryFeedUrl,
-            httpTimeout;
-    private boolean subsfactoryOption, torrentOption, itasaOption,
+            httpTimeout, mailTO, mailSMTP;
+    private boolean subsfactoryOption, torrentOption, 
             autoDownloadMyItasa, enableAdvisorAudioRss, enableAdvisorAudioSub, 
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
@@ -62,7 +62,6 @@ public class ApplicationSettings {
                 setTorrentOption(getBooleanDecryptedValue("TORRENT"));
                 applicationFirstTimeUsed = 
                         getBooleanDecryptedValue("IS_APPLICATION_FIRST_TIME_USED");
-                setItasaOption(getBooleanDecryptedValue("ITALIANSUBS"));
                 setLocalFolder(getBooleanDecryptedValue("IS_LOCAL_FOLDER"));
                 setTorrentDestinationFolder(getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
                 setCifsSharePath(getDecryptedValue("CIFS_SHARE_PATH"));
@@ -77,6 +76,9 @@ public class ApplicationSettings {
                         getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
                 setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
                 setEnableAdvisorMail(getBooleanDecryptedValue("ENABLE_ADVISOR_MAIL"));
+                setMailTO(getDecryptedValue("MAIL_TO"));
+                setMailSmtp(getDecryptedValue("MAIL_SMTP"));
+                
             } else {
                 loadDefaultSettings();
                 storeSettings();
@@ -121,10 +123,10 @@ public class ApplicationSettings {
     public void writeGeneralSettings() {
         try {
             propertiesCrypting("SUBTITLE_DESTINATION_FOLDER",
-                    subtitleDestinationFolder);
+                                                    subtitleDestinationFolder);
             propertiesCrypting("REFRESH_INTERVAL", refreshInterval);
             propertiesCrypting("APPLICATION_LOOK_AND_FEEL",
-                    applicationLookAndFeel);
+                                                        applicationLookAndFeel);
             propertiesCrypting("IS_LOCAL_FOLDER", localFolder);
             propertiesCrypting("CIFS_SHARE_PATH", cifsSharePath);
             propertiesCrypting("CIFS_SHARE_DOMAIN", cifsShareDomain);
@@ -189,6 +191,9 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_ADVISOR_AUDIO_RSS", enableAdvisorAudioRss);
             propertiesCrypting("ENABLE_ADVISOR_AUDIO_SUB", enableAdvisorAudioSub);
             propertiesCrypting("ENABLE_ADVISOR_MAIL", enableAdvisorMail);
+            propertiesCrypting("ENABLE_ADVISOR_MAIL", enableAdvisorMail);
+            propertiesCrypting("MAIL_TO", mailTO);
+            propertiesCrypting("MAIL_SMTP", mailSMTP);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -211,16 +216,15 @@ public class ApplicationSettings {
     }
 
     private void propertiesCrypting(String property, boolean value)
-            throws GeneralSecurityException, IOException {
+                                    throws GeneralSecurityException, IOException {
         properties.setProperty(propertyEncrypter.encrypt(property),
-                valueEncrypter.encrypt(Boolean.toString(value)));
+                                    valueEncrypter.encrypt(Boolean.toString(value)));
     }
 
     private void propertiesCrypting(String property, String value)
-            throws GeneralSecurityException, IOException {
-
+                                    throws GeneralSecurityException, IOException {
         properties.setProperty(propertyEncrypter.encrypt(property),
-                valueEncrypter.encrypt(value));
+                                                    valueEncrypter.encrypt(value));
     }
 
     // Write properties file.
@@ -229,13 +233,11 @@ public class ApplicationSettings {
     }
 
     private void loadDefaultSettings() {
-        itasaOption = true;
         subsfactoryOption = true;
         torrentOption = true;
         applicationFirstTimeUsed = true;
         applicationLookAndFeel = "Synthetica Standard";
         try {
-            propertiesCrypting("ITALIANSUBS", itasaOption);
             propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED",
                     applicationFirstTimeUsed);
             propertiesCrypting("TORRENT", torrentOption);
@@ -283,14 +285,6 @@ public class ApplicationSettings {
         enableAdvisorMail = enableAdvisor;
     }
 
-    public boolean isItasaOption() {
-        return itasaOption;
-    }
-
-    private void setItasaOption(boolean hasItasaOption) {
-        this.itasaOption = hasItasaOption;
-    }
-
     public boolean isTorrentOption() {
         return torrentOption;
     }
@@ -305,6 +299,22 @@ public class ApplicationSettings {
 
     public void setLastDateTimeRefresh(String lastDateTimeRefresh) {
         this.lastDateTimeRefresh = lastDateTimeRefresh;
+    }
+    
+    public String getMailTO() {
+        return mailTO;
+    }
+
+    public void setMailTO(String mail) {
+        this.mailTO = mail;
+    }
+    
+    public String getMailSmtp() {
+        return mailSMTP;
+    }
+
+    public void setMailSmtp(String smtp) {
+        this.mailSMTP = smtp;
     }
 
     public String getItasaUsername() {
