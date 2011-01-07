@@ -93,9 +93,10 @@ public class jfMain extends JFrame implements WindowListener,
         }
         mainJTP.addTab("Subtitle Destination", jpSubtitleDest.getPanel());
         mainJTP.addTab("Calendar", jpCalendar.getPanel());
-        
-        settingsJP = jpSettingEnhanced.getPanel();
-        //settingsJP = jpSetting.getPanel();
+        if (proxy.isJava6())
+            settingsJP = jpSettingEnhanced.getPanel();
+        else
+            settingsJP = jpSetting.getPanel();
         mainJTP.addTab("Settings", settingsJP);
 
         logJP = new jpLog();

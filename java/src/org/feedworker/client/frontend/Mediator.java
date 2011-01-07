@@ -20,6 +20,7 @@ import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
 import org.feedworker.client.frontend.events.JFrameEventOperationListener;
+import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
@@ -35,12 +36,11 @@ import org.feedworker.object.ValueRule;
 
 import org.jfacility.java.awt.AWT;
 import org.jfacility.java.lang.Lang;
+import org.jfacility.java.lang.JVM;
 import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
-import org.feedworker.client.frontend.events.StatusBarEventListener;
-
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -69,12 +69,16 @@ public class Mediator {
         }
         return proxy;
     }
+    
+    boolean isJava6(){
+        return new JVM().isOrLater(16);
+    }
 
     //TODO: ripristinare col getbuildernumber
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "281 by "
+                + "283 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
