@@ -49,8 +49,7 @@ public class jfMain extends JFrame implements WindowListener,
 
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
-    protected jpSettingEnhanced settingsJP;
-    //protected jpSetting settingsJP;
+    protected jpSetting settingsJP;
     protected JTabbedPane mainJTP;
     protected Mediator proxy = Mediator.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
