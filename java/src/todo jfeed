@@ -13,7 +13,6 @@ IMPLEMENTARE
 terminare legenda colori
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
 aggiungere versioning automatico all'applicazione
-status bar (fire msg)
 close tab e sua riapertura.
 calendario: togliere colonna status e implementare il background  rosso x cancelled/ended e season finale.
 calendario: implementare ricerca per day ieri anche nella data last episode
