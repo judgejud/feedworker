@@ -53,6 +53,7 @@ public class jpSetting extends jpAbstract {
    
     protected jpSetting() {
         super();
+        setName("Settings");
         prop = proxy.getSettings();
         initComponents();
         initializePanel();

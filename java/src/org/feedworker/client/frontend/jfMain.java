@@ -36,6 +36,7 @@ import org.feedworker.client.frontend.panel.jpSettingEnhanced;
 import org.feedworker.client.frontend.panel.jpStatusBar;
 
 import org.jfacility.java.awt.AWT;
+import org.jfacility.javax.swing.ButtonTabComponent;
 import org.jfacility.javax.swing.DialogProgressBar;
 import org.jfacility.javax.swing.Swing;
 
@@ -98,11 +99,10 @@ public class jfMain extends JFrame implements WindowListener,
         else
             settingsJP = jpSetting.getPanel();
         mainJTP.addTab("Settings", settingsJP);
-
+        mainJTP.setTabComponentAt(mainJTP.getTabCount()-1, new ButtonTabComponent(mainJTP));
         logJP = new jpLog();
         mainJTP.addTab("Log", logJP);
-        //int i = mainJTP.getTabCount()-1;
-        //mainJTP.setTabComponentAt(i, new ButtonTabComponent(mainJTP));
+        mainJTP.setTabComponentAt(mainJTP.getTabCount()-1, new ButtonTabComponent(mainJTP));
         
         statusBar = new jpStatusBar();
         add(statusBar, BorderLayout.SOUTH);
@@ -211,7 +211,28 @@ public class jfMain extends JFrame implements WindowListener,
         jmSerial.add(jmiPrintToday);
         jmSerial.add(jmiPrintTomorrow);
         jmSerial.add(jmiPrintYesterday);
+        
+        JMenu jmWindowTab = new JMenu(" Visualizza ");
+        applicationJMB.add(jmWindowTab);
+        
+        JMenuItem jmiWindowSetting = new JMenuItem(" Settings ");
+        JMenuItem jmiWindowLog = new JMenuItem(" Log ");
 
+        jmiWindowSetting.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(settingsJP);
+            }
+        });
+        jmiWindowLog.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(logJP);
+            }
+        });
+        jmWindowTab.add(jmiWindowSetting);
+        jmWindowTab.add(jmiWindowLog);        
+        
         JMenu nasJM = new JMenu(" NAS ");
         JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
         JMenuItem taskStatusJMI = new JMenuItem(" Task status ");
@@ -396,6 +417,13 @@ public class jfMain extends JFrame implements WindowListener,
             subsfactoryJP.setEnableButton(e);
         if (prop.isTorrentOption())
             torrentJP.setButtonEnabled(e);
+    }
+    
+    private void checkAddTab(JPanel pane){
+        if (!mainJTP.isAncestorOf(pane)){
+            mainJTP.addTab(pane.getName(), pane);
+            mainJTP.setTabComponentAt(mainJTP.getTabCount()-1, new ButtonTabComponent(mainJTP));
+        }
     }
 
     /** inizializza i listener per l'ascolto */

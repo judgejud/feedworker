@@ -23,6 +23,7 @@ public class jpCalendar extends jpAbstract{
 
     private jpCalendar(){
         super();
+        setName("Calendar");
         initializePanel();
         initializeButtons();
     }

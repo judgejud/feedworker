@@ -13,6 +13,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
 import org.feedworker.util.Common;
 
 import org.w3c.dom.NodeList;
@@ -33,7 +34,8 @@ public class XPathReader {
         if (FILE_NAME.exists()){
             try{
                 day = Common.stringToAmerican(day);
-                String query = "//SHOW[NEXT_DATE='" + day + "']/SHOW/text()";
+                String query = "//SHOW[NEXT_DATE='" + day + "' or LAST_DATE='" + day 
+                            + "']/SHOW/text()";
                 NodeList nodes = initializeXPathNode(query);
 
                 int len = nodes.getLength();
@@ -61,20 +63,15 @@ public class XPathReader {
      */
     public static TreeMap<Long, String> queryDayID(String day) throws SAXException,
             ParserConfigurationException, IOException, XPathExpressionException{
-        System.out.println(day);
         try{
             day = Common.stringToAmerican(day);
         } catch (ParseException e){}
-        System.out.println(day);
         String query = "//SHOW[translate('" + day + "', '-', '') > "
                 + "translate(NEXT_DATE, '-', '')]/ID_TVRAGE/text()";
-        System.out.println(query);
         NodeList nodes = initializeXPathNode(query);
         TreeMap<Long, String> array  = new TreeMap<Long, String>();
-        System.out.println(nodes.getLength());
         for (int i=0; i<nodes.getLength(); i++){
             String temp = nodes.item(i).getNodeValue();
-            System.out.println(temp);
             String query1 = "count(//SHOW[ID_TVRAGE='" + temp + 
                             "']/preceding::ID_TVRAGE)+1";
             array.put(initializeXPathNumber(query1), temp);

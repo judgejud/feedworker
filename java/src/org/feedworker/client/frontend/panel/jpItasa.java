@@ -23,6 +23,7 @@ public class jpItasa extends jpAbstract {
     /** Costruttore privato */
     private jpItasa() {
         super();
+        setName("Italiansubs");
         initializePanel();
         initializeButtons();
         proxy.setTableListener(jtItasa);

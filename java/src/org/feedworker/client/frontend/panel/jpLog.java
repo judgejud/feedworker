@@ -15,6 +15,7 @@ public class jpLog extends jpAbstract{
     
     public jpLog(){
         super();
+        setName("Log");
         initializePanel();
         proxy.setTextPaneListener(logEast);
         proxy.setTextPaneListener(logWest);
