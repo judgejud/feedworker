@@ -15,7 +15,7 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class jtCalendar extends JTable implements TableEventListener{
-    private final String[] nameCols = {"ID","Serie", "Stato", "Giorno", "Last Ep", 
+    private final String[] nameCols = {"ID tvrage","Serie", "Stato", "Giorno", "Last Ep", 
                             "Titolo", "Data", "Next Ep", "Titolo", "Data" };
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
@@ -45,7 +45,7 @@ public class jtCalendar extends JTable implements TableEventListener{
     }
     
     private void lockColumns(){
-        Swing.setTableDimensionLockColumn(this, 0, 40);
+        Swing.setTableDimensionLockColumn(this, 0, -1); //id tvrage
         Swing.setTableDimensionLockColumn(this, 2, 100);
         Swing.setTableDimensionLockColumn(this, 3, 70);
         Swing.setTableDimensionLockColumn(this, 4, 70);

@@ -61,7 +61,7 @@ public class TvRage extends AbstractXML{
     }
 
     public Object[] readingEpisodeList_byID(String id, String season) throws 
-            JDOMException, IOException{
+            JDOMException, IOException, IndexOutOfBoundsException{
         buildUrl(EPISODE_LIST + id);
         List seasons = ((Element) document.getRootElement().getChildren().get(2))
                 .getChildren();

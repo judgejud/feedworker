@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.SystemColor;
 
@@ -24,8 +25,9 @@ public class jpStatusBar extends JPanel implements StatusBarEventListener{
     public jpStatusBar() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(10, 23));
-
+        jlText.setFont(new Font("Arial", Font.BOLD, 12));
         JPanel leftPanel = new JPanel(new BorderLayout());
+        
         leftPanel.add(jlText, BorderLayout.SOUTH);
         leftPanel.setOpaque(false);
         

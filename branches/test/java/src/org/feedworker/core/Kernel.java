@@ -887,10 +887,11 @@ public class Kernel implements PropertyChangeListener {
     
     public void searchIdTv(ArrayList<Object[]> from) {
         TvRage t = new TvRage();
+        Object[] show = null;
         try {
             ArrayList<Object[]> al = new ArrayList<Object[]>();
             for (int i = 0; i < from.size(); i++) {
-                Object[] show = from.get(i);
+                show = from.get(i);
                 if (!tsIdCalendar.contains(show[0])) {
                     Object[] array = t.readingEpisodeList_byID(show[0].toString(),
                             show[2].toString());
@@ -908,6 +909,8 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, null);
         } catch (IOException ex) {
             error.launch(ex, null);
+        } catch (IndexOutOfBoundsException ex){
+            printAlert("XML " + show[1].toString() + " non valido");
         }
     }
 

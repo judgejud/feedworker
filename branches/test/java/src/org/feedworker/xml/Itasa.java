@@ -39,9 +39,10 @@ public class Itasa extends AbstractXML{
     private final String TAG_SHOW_ID_TVDB = "id_tvdb";
     private final String TAG_SHOW_ID_TVRAGE = "id_tvrage";
     private final String TAG_SHOW_FOLDER_THUMB = "folder_thumb";
-    private final String URL_SHOW_SINGLE = "http://api.italiansubs.net/api/rest/show/show/?";
-    private final String URL_SHOW_LIST = "http://api.italiansubs.net/api/rest/show/shows/?";
-    private final String URL_SHOW_SEARCH = "http://api.italiansubs.net/api/rest/show/search/?";
+    private final String URL_BASE = "http://api.italiansubs.net/api/rest";
+    private final String URL_SHOW_SINGLE = URL_BASE + "/show/show/?";
+    private final String URL_SHOW_LIST = URL_BASE + "/show/shows/?";
+    private final String URL_SHOW_SEARCH = URL_BASE + "/show/search/?";
     
     private String status, error;
     
