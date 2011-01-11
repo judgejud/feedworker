@@ -36,6 +36,8 @@ public class Xml extends AbstractXML{
     private final String TAG_RULE_DELETE = "DELETE";
     private final String TAG_CALENDAR_ROOT = "SHOW";
     private final String TAG_CALENDAR_ID_TVRAGE = "ID_TVRAGE";
+    private final String TAG_CALENDAR_ID_ITASA = "ID_ITASA";
+    private final String TAG_CALENDAR_ID_TVDB = "ID_TVDB";
     private final String TAG_CALENDAR_NAME = "SHOW";
     private final String TAG_CALENDAR_DAY = "DAY";
     private final String TAG_CALENDAR_STATUS = "STATUS";
@@ -134,6 +136,15 @@ public class Xml extends AbstractXML{
         Element id_tvrage = new Element(TAG_CALENDAR_ID_TVRAGE);
         id_tvrage.setText(array[++i].toString());
         calendar.addContent(id_tvrage);
+        
+        Element id_itasa = new Element(TAG_CALENDAR_ID_ITASA);
+        id_itasa.setText(checkNPE(array[++i]));
+        calendar.addContent(id_itasa);
+        
+        Element id_tvdb = new Element(TAG_CALENDAR_ID_TVDB);
+        id_tvdb.setText(checkNPE(array[++i]));
+        calendar.addContent(id_tvdb);
+        
         Element name = new Element(TAG_CALENDAR_NAME);
         name.setText(array[++i].toString());
         calendar.addContent(name);
@@ -183,9 +194,11 @@ public class Xml extends AbstractXML{
             Iterator iter = iteratorRootChildren();
             while (iter.hasNext()) {
                 Element calendar = (Element) iter.next();
-                Object[] obj = new Object[10];
+                Object[] obj = new Object[12];
                 int i=-1;
                 obj[++i]=calendar.getChild(TAG_CALENDAR_ID_TVRAGE).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_ID_ITASA).getText();
+                obj[++i]=calendar.getChild(TAG_CALENDAR_ID_TVDB).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_NAME).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_STATUS).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_DAY).getText();

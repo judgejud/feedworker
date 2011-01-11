@@ -39,6 +39,7 @@ public class jpSubtitleDest extends jpAbstract {
 
     private jpSubtitleDest() {
         super();
+        setName("Subtitle Destination");
         initializePanel();
         initializeButtons();
         initListeners();

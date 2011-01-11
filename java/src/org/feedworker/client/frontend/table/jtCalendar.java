@@ -15,8 +15,8 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class jtCalendar extends JTable implements TableEventListener{
-    private final String[] nameCols = {"ID tvrage","Serie", "Stato", "Giorno", "Last Ep", 
-                            "Titolo", "Data", "Next Ep", "Titolo", "Data" };
+    private final String[] nameCols = {"ID tvrage", "ID ITasa", "ID Tvdb", "Serie", "Stato", 
+                "Giorno", "Last Ep", "Titolo", "Data", "Next Ep", "Titolo", "Data" };
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
     public jtCalendar(String nome){
@@ -25,8 +25,9 @@ public class jtCalendar extends JTable implements TableEventListener{
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
 
             Class[] types = new Class[]{String.class, String.class, String.class,
-                String.class, String.class, String.class, Date.class,
-                String.class, String.class, Date.class};
+                            String.class, String.class, String.class, String.class, 
+                            String.class, Date.class, String.class, String.class, 
+                            Date.class};
 
             @Override
             public Class getColumnClass(int columnIndex) {
@@ -46,12 +47,14 @@ public class jtCalendar extends JTable implements TableEventListener{
     
     private void lockColumns(){
         Swing.setTableDimensionLockColumn(this, 0, -1); //id tvrage
-        Swing.setTableDimensionLockColumn(this, 2, 100);
-        Swing.setTableDimensionLockColumn(this, 3, 70);
-        Swing.setTableDimensionLockColumn(this, 4, 70);
-        Swing.setTableDimensionLockColumn(this, 6, 65);
-        Swing.setTableDimensionLockColumn(this, 7, 75);
-        Swing.setTableDimensionLockColumn(this, 9, 65);
+        Swing.setTableDimensionLockColumn(this, 1, -1); //id itasa
+        Swing.setTableDimensionLockColumn(this, 2, -1); //id tvdb
+        Swing.setTableDimensionLockColumn(this, 4, 100);
+        Swing.setTableDimensionLockColumn(this, 5, 70);
+        Swing.setTableDimensionLockColumn(this, 6, 70);
+        Swing.setTableDimensionLockColumn(this, 8, 65);
+        Swing.setTableDimensionLockColumn(this, 9, 75);
+        Swing.setTableDimensionLockColumn(this, 11, 65);
     }
 
     @Override

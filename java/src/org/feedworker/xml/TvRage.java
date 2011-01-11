@@ -77,7 +77,7 @@ public class TvRage extends AbstractXML{
         Date yesterday = Common.yesterdayDate();
         Object[] values = null;
         if (iter.hasNext())
-            values = new Object[10];
+            values = new Object[12];
         while (iter.hasNext()){
             Element item = (Element) iter.next();
             String airDate = item.getChild(TAG_AIRDATE).getText();
@@ -94,13 +94,13 @@ public class TvRage extends AbstractXML{
             String seasonNum = item.getChild(TAG_SEASON_NUM).getText();
             String title = item.getChild(TAG_TITLE).getText();
             if (tempDate.before(yesterday)){
-                values[4] = season + "x" + seasonNum;
-                values[5] = title;
-                values[6] = d;
+                values[6] = season + "x" + seasonNum;
+                values[7] = title;
+                values[8] = d;
             } else {
-                values[7] = season + "x" + seasonNum;
-                values[8] = title;
-                values[9] = d;
+                values[9] = season + "x" + seasonNum;
+                values[10] = title;
+                values[11] = d;
                 break;
             }
         }

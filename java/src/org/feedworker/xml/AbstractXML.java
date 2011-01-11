@@ -48,4 +48,12 @@ class AbstractXML {
             return "";
         }
     }
+    
+    protected Iterator getDescendantsZero(int level){
+        Element doc = document.getRootElement();
+        for (int i=0; i<level; i++){
+            doc = (Element) doc.getChildren().get(0);
+        }
+        return doc.getChildren().iterator();
+    }
 }

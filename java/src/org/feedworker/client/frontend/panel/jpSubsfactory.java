@@ -1,6 +1,5 @@
 package org.feedworker.client.frontend.panel;
 
-import org.feedworker.client.frontend.table.jtRss;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
@@ -9,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
+import org.feedworker.client.frontend.table.jtRss;
 /**
  * 
  * @author luca
@@ -21,6 +21,7 @@ public class jpSubsfactory extends jpAbstract {
 
     private jpSubsfactory() {
         super();
+        setName("Subsfactory");
         initializePanel();
         initializeButtons();
         proxy.setTableListener(jtSubsf);
