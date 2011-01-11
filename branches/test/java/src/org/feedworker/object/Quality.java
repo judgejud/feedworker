@@ -1,4 +1,4 @@
-package org.feedworker.util;
+package org.feedworker.object;
 
 /**
  * 
@@ -18,5 +18,11 @@ public enum Quality {
     @Override
     public String toString() {
         return quality.toLowerCase();
+    }
+    
+    public static String[] toArray(){
+        return new String[]{ALL.toString(), NORMAL.toString(), FORM_720p.toString(),
+                            FORM_1080p.toString(), BLURAY.toString(), DVDRIP.toString(), 
+                            HR.toString(), DIFF.toString()};
     }
 }

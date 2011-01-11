@@ -21,6 +21,7 @@ public class jpTorrent extends jpAbstract {
 
     private jpTorrent() {
         super();
+        setName("Torrent");
         initializePanel();
         initializeButtons();
         proxy.setTableListener(jtTorrent1);
@@ -68,7 +69,8 @@ public class jpTorrent extends jpAbstract {
         });
 
         jbCopyLinks = new JButton(" Copia links ");
-        jbCopyLinks.setToolTipText("Copia i link dei torrent selezionati nella clipboard");
+        jbCopyLinks.setToolTipText("Copia i link dei torrent selezionati nella "
+                                + "clipboard");
         jbCopyLinks.setBorder(BORDER);
         jbCopyLinks.addMouseListener(new MouseAdapter() {
             @Override
@@ -90,7 +92,8 @@ public class jpTorrent extends jpAbstract {
         });
 
         jbFireNas = new JButton(" invia Nas ");
-        jbFireNas.setToolTipText("invia i link dei torrent selezionati alla download station NAS");
+        jbFireNas.setToolTipText("invia i link dei torrent selezionati alla "
+                            + "download station NAS"); 
         jbFireNas.setBorder(BORDER);
         jbFireNas.addMouseListener(new MouseAdapter() {
             @Override

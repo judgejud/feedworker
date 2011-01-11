@@ -4,26 +4,26 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeMap;
 import java.util.zip.ZipException;
 
-import jcifs.smb.SmbException;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.util.Common;
 import org.feedworker.object.KeyRule;
 import org.feedworker.util.ManageException;
-import org.feedworker.util.Quality;
+import org.feedworker.object.Quality;
 import org.feedworker.util.Samba;
 import org.feedworker.object.ValueRule;
+
 import org.jfacility.Io;
 import org.jfacility.Util;
 import org.jfacility.java.lang.Lang;
 
+import jcifs.smb.SmbException;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 /**
  * 
  * @author luca
@@ -33,17 +33,12 @@ public class DownloadThread implements Runnable {
     //private final String CMD_DELETE = "delete";
     private final String SPLIT_SUB = ".sub";
     private final String SPLIT_POINT = "\\.";
-    private final String[] QUALITY = new String[]{Quality.ALL.toString(),
-        Quality.NORMAL.toString(), Quality.FORM_720p.toString(),
-        Quality.FORM_1080p.toString(), Quality.BLURAY.toString(),
-        Quality.DVDRIP.toString(), Quality.HR.toString(),
-        Quality.DIFF.toString()};
+    private final String[] QUALITY = Quality.toArray();
     private ArrayList<String> als;
     private boolean itasa;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
     private TreeMap<KeyRule, ValueRule> mapRules;
-    private List listenerTextPane = new ArrayList();
     //private Http httpItasa;
 
     DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als, 

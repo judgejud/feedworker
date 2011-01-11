@@ -36,7 +36,7 @@ import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
 import org.feedworker.util.ExtensionFilter;
 import org.feedworker.util.ManageException;
-import org.feedworker.util.Quality;
+import org.feedworker.object.Quality;
 import org.feedworker.util.Samba;
 import org.feedworker.xml.TvRage;
 import org.feedworker.xml.XPathReader;
@@ -50,6 +50,7 @@ import org.opensanskrit.exception.UnableRestartApplicationException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.feedworker.xml.Itasa;
 
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
@@ -79,11 +80,7 @@ public class Kernel implements PropertyChangeListener {
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
     private final String SPLIT_HDTV = ".hdtv";
     private final String SPLIT_POINT = "\\.";
-    private final String[] QUALITY = new String[]{Quality.ALL.toString(),
-        Quality.NORMAL.toString(), Quality.FORM_720p.toString(),
-        Quality.FORM_1080p.toString(), Quality.FORM_1080i.toString(),
-        Quality.BLURAY.toString(), Quality.DVDRIP.toString(),
-        Quality.HR.toString(), Quality.DIFF.toString()};
+    private final String[] QUALITY = Quality.toArray();
     private final File FILE_RULE = new File("rules.xml");
     private final File FILE_CALENDAR = new File("calendar.xml");
     // PRIVATE STATIC VARIABLES
@@ -137,7 +134,7 @@ public class Kernel implements PropertyChangeListener {
         ArrayList<String> als = new ArrayList<String>();
         als.add(link.toString());
         DownloadThread dt = new DownloadThread(mapRules, als, true);
-        Thread t = new Thread(dt, "Thread download");
+        Thread t = new Thread(dt, "AutoItasa");
         t.start();
     }
 
@@ -886,19 +883,15 @@ public class Kernel implements PropertyChangeListener {
     }
     
     public void searchIdTv(ArrayList<Object[]> from) {
-        TvRage t = new TvRage();
         Object[] show = null;
         try {
+            TvRage t = new TvRage();
+            Itasa it = new Itasa();
             ArrayList<Object[]> al = new ArrayList<Object[]>();
             for (int i = 0; i < from.size(); i++) {
                 show = from.get(i);
                 if (!tsIdCalendar.contains(show[0])) {
-                    Object[] array = t.readingEpisodeList_byID(show[0].toString(),
-                            show[2].toString());
-                    array[0] = show[0];
-                    array[1] = show[1];
-                    array[2] = show[3];
-                    array[3] = show[4];
+                    Object[] array = setArray(t, show, it);
                     al.add(array);
                     xmlCalendar.addShowTV(array);
                 }
@@ -912,6 +905,23 @@ public class Kernel implements PropertyChangeListener {
         } catch (IndexOutOfBoundsException ex){
             printAlert("XML " + show[1].toString() + " non valido");
         }
+    }
+    
+    private Object[] setArray(TvRage t, Object[] show, Itasa it) throws 
+                                                    JDOMException, IOException{
+        Object[] array = t.readingEpisodeList_byID(show[0].toString(),
+                            show[2].toString());
+        ArrayList<String> temp = it.searchIdSingleByTvrage(
+                                Integer.parseInt(show[0].toString()));
+        array[0] = show[0];
+        if (temp!=null){
+            array[1] = temp.get(0);
+            array[2] = temp.get(1);
+        }
+        array[3] = show[1];
+        array[4] = show[3];
+        array[5] = show[4];
+        return array;
     }
 
     public void removeShowTv(int row, Object id) {
@@ -1073,10 +1083,11 @@ public class Kernel implements PropertyChangeListener {
             int progress = 0;
             Iterator<KeyRule> iter = mapRules.keySet().iterator();
             ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
-            TvRage t = new TvRage();
             TreeSet ts = new TreeSet();
             setProgress(progress);
             try {
+                TvRage t = new TvRage();
+                Itasa it = new Itasa();
                 while (iter.hasNext()) {
                     String name = iter.next().getName();
                     ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(
@@ -1084,12 +1095,7 @@ public class Kernel implements PropertyChangeListener {
                     if (temp != null) {
                         Object[] show = temp.get(0);
                         if (!ts.contains(show[0])) {
-                            Object[] array = t.readingEpisodeList_byID(
-                                    show[0].toString(), show[2].toString());
-                            array[0] = show[0];
-                            array[1] = show[1];
-                            array[2] = show[3];
-                            array[3] = show[4];
+                            Object[] array = setArray(t, show, it);
                             alObjs.add(array);
                             ts.add(show[0]);
                             xmlCalendar.addShowTV(array);
@@ -1121,18 +1127,14 @@ public class Kernel implements PropertyChangeListener {
             Iterator<Long> iter = tmRefresh.descendingKeySet().iterator();
             ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
             TvRage t = new TvRage();
+            Itasa it = new Itasa();
             setProgress(progress);
             try {
                 while (iter.hasNext()) {
                     Long index = iter.next();
                     String id = tmRefresh.get(index);
                     Object[] show = t.showInfo_byID(id);
-                    Object[] array = t.readingEpisodeList_byID(
-                                    show[0].toString(), show[2].toString());
-                    array[0] = show[0];
-                    array[1] = show[1];
-                    array[2] = show[3];
-                    array[3] = show[4];
+                    Object[] array = setArray(t, show, it);
                     alObjs.add(array);
                     xmlCalendar.removeShowTv(index.intValue()-1);
                     xmlCalendar.addShowTV(array);

@@ -30,7 +30,7 @@ import org.feedworker.core.ManageListener;
 import org.feedworker.core.RssParser;
 import org.feedworker.util.Common;
 import org.feedworker.util.ManageException;
-import org.feedworker.util.Quality;
+import org.feedworker.object.Quality;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.ValueRule;
 
@@ -78,7 +78,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "283 by "
+                + "285 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 

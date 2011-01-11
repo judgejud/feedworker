@@ -1,7 +1,5 @@
 package org.feedworker.object;
 
-import org.feedworker.util.Quality;
-
 /**
  * 
  * @author luca

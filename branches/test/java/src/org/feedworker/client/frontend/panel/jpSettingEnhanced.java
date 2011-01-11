@@ -2,18 +2,10 @@ package org.feedworker.client.frontend.panel;
 //IMPORT JAVA
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
@@ -82,8 +74,8 @@ public class jpSettingEnhanced extends jpSetting {
         temp.add(jlDataAggiornamento);
         task.add(temp);
 
-        task.add(new JLabel("Destinazione Sub"));
         temp = new JPanel();
+        temp.add(new JLabel("Destinazione Sub"));
         temp.add(jrbDirLocal);
         temp.add(jrbDirSamba);
         task.add(temp);
@@ -98,8 +90,10 @@ public class jpSettingEnhanced extends jpSetting {
         task.add(temp);
         task.add(jtfDestSub);
         
-        task.add(new JLabel("Look&Feel"));
-        task.add(jcbLookFeel);
+        temp = new JPanel();
+        temp.add(new JLabel("Look&Feel"));
+        temp.add(jcbLookFeel);
+        task.add(temp);
 
         temp = new JPanel();
         temp.add(new JLabel("Timeout"));
