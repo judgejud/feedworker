@@ -31,9 +31,9 @@ public class Itasa extends AbstractXML{
     private final String TAG_ERROR = "error";
     private final String TAG_COUNT = "count";
     private final String TAG_SHOW_PLOT = "plot";
-    private final String TAG_SHOW_PLOT_LANG = "plot_lang";
+    private final String TAG_SHOW_GENRES = "genres";
+    private final String TAG_SHOW_GENRE = "genre";
     private final String TAG_SHOW_BANNER = "banner";
-    private final String TAG_SHOW_LASTUPDATE = "lastupdate";
     private final String TAG_SHOW_STARTED = "started";
     private final String TAG_SHOW_ENDED = "ended";
     private final String TAG_SHOW_COUNTRY = "country";
@@ -44,6 +44,9 @@ public class Itasa extends AbstractXML{
     private final String TAG_SHOW_ID_TVDB = "id_tvdb";
     private final String TAG_SHOW_ID_TVRAGE = "id_tvrage";
     private final String TAG_SHOW_FOLDER_THUMB = "folder_thumb";
+    private final String TAG_SHOW_ACTORS = "actors";
+    private final String TAG_SHOW_ACTOR_NAME = "name";
+    private final String TAG_SHOW_ACTOR_AS = "as";
     private final String URL_BASE = "http://api.italiansubs.net/api/rest";
     private final String URL_SHOW_SINGLE = URL_BASE + "/show/show/?";
     private final String URL_SHOW_LIST = URL_BASE + "/show/shows/?";
@@ -63,14 +66,34 @@ public class Itasa extends AbstractXML{
                 .getChildren().iterator();
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
-                String name = item.getChild(TAG_SHOW_NAME).getText();
+                //String name = item.getChild(TAG_SHOW_NAME).getText();
                 //String tvdb = item.getChild(TAG_SHOW_ID_TVDB).getText();
-                //String tvrage = item.getChild(TAG_SHOW_ID_TVRAGE).getText();
-                
+                String tvrage = item.getChild(TAG_SHOW_ID_TVRAGE).getText();
                 String plot = item.getChild(TAG_SHOW_PLOT).getText();
                 String banner = item.getChild(TAG_SHOW_BANNER).getText();
-                ArrayList actors = null;
-                if (flag_actors){}
+                String season  = item.getChild(TAG_SHOW_SEASON).getText();
+                String started  = item.getChild(TAG_SHOW_STARTED).getText();
+                String ended  = item.getChild(TAG_SHOW_ENDED).getText();
+                String country = item.getChild(TAG_SHOW_COUNTRY).getText();
+                String network = item.getChild(TAG_SHOW_NETWORK).getText();
+                ArrayList genres = new ArrayList();
+                Iterator it = ((Element)item.getChildren(TAG_SHOW_GENRES).get(0))
+                                    .getChildren().iterator();
+                while (it.hasNext()){
+                    genres.add(((Element) it.next()).getChildText(TAG_SHOW_ACTOR_NAME));
+                }
+                        
+                ArrayList<String[]> actors = null;
+                if (flag_actors){
+                    actors = new ArrayList<String[]>();
+                    it = ((Element)item.getChildren(TAG_SHOW_ACTORS).get(0))
+                                    .getChildren().iterator();
+                    while (it.hasNext()){
+                        Element temp = (Element) it.next();
+                        actors.add(new String[]{temp.getChildText(TAG_SHOW_ACTOR_NAME),
+                                                temp.getChildText(TAG_SHOW_ACTOR_AS)});
+                    }
+                }
                 
             }
         }
@@ -228,8 +251,8 @@ public class Itasa extends AbstractXML{
     public static void main (String[] args){
         Itasa i = new Itasa();
         try {
-            //i.showSingleAll(1363, false);
-            i.searchIdSingleByTvrage(24996);
+            i.showSingleAll(1363, true);
+            //i.searchIdSingleByTvrage(24996);
             //i.showList(5, 0, false);
         } catch (JDOMException ex) {
             ex.printStackTrace();

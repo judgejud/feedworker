@@ -36,7 +36,4 @@ public class Show {
     public Object[] toArray(){
         return new Object[]{id, id_tvdb, id_tvrage, name, plot, banner, icon, genres};
     }
-    
-    
-
 }
