@@ -412,7 +412,7 @@ public class jpSetting extends jpAbstract {
         jbCheckItasa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                //TODO
+                //TODO: implementare il test per la login ad itasa
             }
         });
         //TORRENT

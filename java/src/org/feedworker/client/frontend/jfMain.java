@@ -25,15 +25,7 @@ import org.feedworker.client.frontend.events.JFrameEventIconDate;
 import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
 import org.feedworker.client.frontend.events.JFrameEventOperation;
 import org.feedworker.client.frontend.events.JFrameEventOperationListener;
-import org.feedworker.client.frontend.panel.jpItasa;
-import org.feedworker.client.frontend.panel.jpSubsfactory;
-import org.feedworker.client.frontend.panel.jpTorrent;
-import org.feedworker.client.frontend.panel.jpSubtitleDest;
-import org.feedworker.client.frontend.panel.jpCalendar;
-import org.feedworker.client.frontend.panel.jpLog;
-import org.feedworker.client.frontend.panel.jpSetting;
-import org.feedworker.client.frontend.panel.jpSettingEnhanced;
-import org.feedworker.client.frontend.panel.jpStatusBar;
+import org.feedworker.client.frontend.panel.*;
 
 import org.jfacility.java.awt.AWT;
 import org.jfacility.javax.swing.ButtonTabComponent;
@@ -110,14 +102,12 @@ public class jfMain extends JFrame implements WindowListener,
         if (prop.isApplicationFirstTimeUsed()) {
             mainJTP.setSelectedComponent(settingsJP);
             changeEnabledButton(false);
-            //TODO
-            //logJTP.appendOK("Benvenuto al primo utilizzo.");
-            //logJTP.appendAlert("Per poter usare il client, "
-              //      + "devi configurare le impostazioni presenti nella specifica sezione");
+            proxy.printOk("Benvenuto al primo utilizzo.");
+            proxy.printAlert("Per poter usare il client, devi configurare le "
+                    + "impostazioni presenti nella specifica sezione");
         } else {
             settingsJP.settingsValue();
-            //TODO
-            //logJTP.appendOK("Ciao " + prop.getItasaUsername()+ ", impostazioni caricate.");
+            proxy.printOk("Ciao " + prop.getItasaUsername()+ ", impostazioni caricate.");
         }
         pack();
     }
