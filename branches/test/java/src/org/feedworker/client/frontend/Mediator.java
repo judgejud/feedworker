@@ -190,8 +190,7 @@ public class Mediator {
         }
         if (!text.equalsIgnoreCase("")) {
             AWT.setClipboard(text);
-            ManageListener.fireTextPaneEvent(this,"link copiati nella clipboard", 
-                                                                TextPaneEvent.OK);
+            printOk("link copiati nella clipboard");
         }
     }
 
@@ -553,9 +552,7 @@ public class Mediator {
                     restartRss();
                 }
             }
-            ManageListener.fireTextPaneEvent(this, 
-                            "Impostazioni salvate in " + prop.getSettingsFilename(),
-                                                                TextPaneEvent.OK);
+            printOk("Impostazioni salvate in " + prop.getSettingsFilename());
         }
     }
 
@@ -660,8 +657,12 @@ public class Mediator {
         ManageException.getIstance().launch(e);
     }
 
-    private void printAlert(String msg) {
+    void printAlert(String msg) {
         ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT);
+    }
+    
+    void printOk(String msg) {
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK);
     }
 
     public void restartApplication(String date) {

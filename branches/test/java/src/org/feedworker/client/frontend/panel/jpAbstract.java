@@ -1,22 +1,18 @@
-/**TODO: rivedere il concetto di abstract e soprattutto capir xkè ne viene permesso l'istanziamento
- * diretto in myjframe ad es.
- */
 package org.feedworker.client.frontend.panel;
-
 //IMPORT JAVA
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
-import org.feedworker.client.frontend.Mediator;
 
+import org.feedworker.client.frontend.Mediator;
 /**
  * Pannello Astratto che serve per far si che le classi pannello che ereditano
  * da questo astratto reimplementino i metodi

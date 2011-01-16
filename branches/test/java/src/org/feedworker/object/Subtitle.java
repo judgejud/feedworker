@@ -19,4 +19,8 @@ public class Subtitle {
         this.description = description;
         this.infoUrl = infoUrl;
     }
+    
+    public String[] toArraySingle(){
+        return new String[]{name, version, fileName, fileSize, description, infoUrl};
+    }
 }
