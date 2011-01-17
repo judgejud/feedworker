@@ -62,6 +62,8 @@ public class Itasa extends AbstractXML{
     private final String URL_SHOW_LIST = URL_BASE + "/show/shows/?";
     private final String URL_SHOW_SEARCH = URL_BASE + "/show/search/?";
     private final String URL_SUBTITILE_SINGLE = URL_BASE + "/subtitle/subtitle/?";
+    private final String URL_SUBTITILE_SHOW = URL_BASE + "/subtitle/subtitles/?";
+    private final String URL_SUBTITILE_SEARCH = URL_BASE + "/subtitle/search/?";
     
     private String status, error;
     
@@ -210,12 +212,37 @@ public class Itasa extends AbstractXML{
             String version = item.getChild(TAG_SUBTITILE_VERSION).getText();
             String filename  = item.getChild(TAG_SUBTITILE_FILENAME).getText();
             String filesize  = item.getChild(TAG_SUBTITILE_FILESIZE).getText();
+            String date = item.getChild(TAG_SUBTITILE_SUBMIT_DATE).getText();
             String description  = item.getChild(TAG_SUBTITILE_DESCRIPTION).getText();
             String infourl = item.getChild(TAG_SUBTITILE_INFOURL).getText();
-            sub = new Subtitle(null, null, null, name, version, filename, filesize, 
-                                description, infourl);
+            sub = new Subtitle(name, version, filename, filesize, date, description, 
+                            infourl);
         }
         return sub;
+    }
+    
+    public ArrayList<Subtitle> subtitleListByIdShow(int idShow) throws 
+                                                        JDOMException, IOException{
+        ArrayList params = new ArrayList();
+        params.add(API_KEY);
+        params.add(PARAM_SUBTITLE_ID + idShow);
+        buildUrl(composeUrl(URL_SUBTITILE_SHOW, params));
+        checkStatus();
+        ArrayList<Subtitle>  subs = null;
+        if (isStatusSuccess()){
+            subs = new ArrayList<Subtitle>();
+            Iterator iter = ((Element) document.getRootElement().getChildren().get(0))
+                .getChildren().iterator();
+            while (iter.hasNext()){
+                Element item = (Element) iter.next();
+                String id = item.getChild(TAG_SUBTITILE_NAME).getText();
+                String name = item.getChild(TAG_SUBTITILE_NAME).getText();
+                String version = item.getChild(TAG_SUBTITILE_VERSION).getText();
+                Subtitle sub = new Subtitle(id, name, version);
+                subs.add(sub);
+            }
+        }
+        return subs;
     }
     
     /**Compone la url compresa di parametri
@@ -286,20 +313,4 @@ public class Itasa extends AbstractXML{
             ex.printStackTrace();
         }
     }
-    /*
-    void showSearch() throws JDOMException, IOException{
-        ArrayList params = new ArrayList();
-        params.add(API_KEY);        
-        buildUrl(composeUrl(URL_SHOW_SEARCH, params));
-        checkStatus();
-        if (isStatusSuccess()){
-            Iterator iter = iteratorRootChildren();
-            while (iter.hasNext()){
-                Element item = (Element) iter.next();
-                System.out.println(item.getName());
-            }
-        } else 
-            System.out.println("show list: "+ error);
-    }
-*/  
 }

@@ -125,8 +125,10 @@ class Http {
             String url = null;
             if (itasa)
                 url = readInputStreamURL(entity.getContent(), TAG_ITASA, 2);
-            else
+            else{
                 url = readInputStreamURL(entity.getContent(), TAG_SUBSF, 8);
+                url = url.replaceAll("amp;", "");
+            }
             if (entity != null)
                 entity.consumeContent();
             if (url != null) {
