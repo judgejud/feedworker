@@ -88,7 +88,7 @@ public class ManageListener {
             TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
             myel.objReceived(event);
         }
-        if (!msg.substring(0, 7).equals("Timeout"))
+        if (msg!=null && !msg.substring(0, 7).equals("Timeout"))
             fireStatusBarEvent(from, msg);
     }
     
