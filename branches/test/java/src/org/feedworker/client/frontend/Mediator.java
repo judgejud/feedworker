@@ -650,11 +650,11 @@ public class Mediator {
     }
 
     void printError(URISyntaxException e) {
-        ManageException.getIstance().launch(e, null);
+        ManageException.getIstance().launch(e, this.getClass());
     }
 
     void printError(Exception e) {
-        ManageException.getIstance().launch(e);
+        ManageException.getIstance().launch(e, this.getClass());
     }
 
     void printAlert(String msg) {
