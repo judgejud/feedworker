@@ -37,10 +37,10 @@ import org.feedworker.client.frontend.panel.jpSubtitleDest;
 import org.feedworker.client.frontend.panel.jpTorrent;
 import org.jfacility.java.awt.AWT;
 import org.jfacility.javax.swing.ButtonTabComponent;
-import org.jfacility.javax.swing.DialogProgressBar;
-import org.jfacility.javax.swing.ProgressEvent;
-import org.jfacility.javax.swing.ProgressListener;
 import org.jfacility.javax.swing.Swing;
+import org.opensanskrit.widget.ProgressDialog;
+import org.opensanskrit.widget.ProgressEvent;
+import org.opensanskrit.widget.ProgressListener;
 
 /**
  * Gui base per java 1.5
@@ -61,7 +61,7 @@ public class jfMain extends JFrame implements WindowListener,
 	private jpSubsfactory subsfactoryJP;
 	private jpLog logJP;
 	private jdResultSearchTv resultSearchTvJD = jdResultSearchTv.getDialog();
-	private DialogProgressBar progressBar;
+	private ProgressDialog progressBar;
 	private jpStatusBar statusBar;
 
 	/** Costruttore */
@@ -406,7 +406,7 @@ public class jfMain extends JFrame implements WindowListener,
 				requestFocus();
 			else if (evt.getOperaz().equalsIgnoreCase(
 					proxy.getOperationProgressShow())) {
-				progressBar = new DialogProgressBar(this,
+				progressBar = new ProgressDialog(this,
 						"Operazione in corso...", evt.getMax());
 				AWT.centerComponent(progressBar, this);
 				progressBar.addProgressListener(new ProgressListener() {
