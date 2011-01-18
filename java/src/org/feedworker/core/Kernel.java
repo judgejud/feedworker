@@ -1088,7 +1088,7 @@ public class Kernel implements PropertyChangeListener {
             try {
                 TvRage t = new TvRage();
                 Itasa it = new Itasa();
-                while (iter.hasNext()) {
+                while (iter.hasNext() && !this.isCancelled()) {
                     String name = iter.next().getName();
                     ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(
                             name, true);
@@ -1148,5 +1148,9 @@ public class Kernel implements PropertyChangeListener {
             }
             return null;
         }
+    }
+    
+    public void stopImport() {
+    	importTask.cancel(true);
     }
 }
