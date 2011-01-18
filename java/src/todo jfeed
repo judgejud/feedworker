@@ -16,6 +16,7 @@ aggiungere versioning automatico all'applicazione
 calendario: togliere colonna status e implementare il background colorato x cancelled/ended e season finale.
 javamail: avviso mail sub scaricato
 audio: avviso sub estratto
+aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
 
 CORREZIONI:
 -mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.

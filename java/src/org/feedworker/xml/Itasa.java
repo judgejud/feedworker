@@ -48,14 +48,14 @@ public class Itasa extends AbstractXML{
     private final String TAG_SHOW_ACTORS = "actors";
     private final String TAG_SHOW_ACTOR_NAME = "name";
     private final String TAG_SHOW_ACTOR_AS = "as";
-    private final String TAG_SUBTITILE_ID = "id";
-    private final String TAG_SUBTITILE_NAME = "name";
-    private final String TAG_SUBTITILE_VERSION = "version";
-    private final String TAG_SUBTITILE_FILENAME = "filename";
-    private final String TAG_SUBTITILE_FILESIZE = "filesize";
-    private final String TAG_SUBTITILE_DESCRIPTION = "description";
-    private final String TAG_SUBTITILE_SUBMIT_DATE = "submit_date";
-    private final String TAG_SUBTITILE_INFOURL = "infourl";
+    private final String TAG_SUBTITLE_ID = "id";
+    private final String TAG_SUBTITLE_NAME = "name";
+    private final String TAG_SUBTITLE_VERSION = "version";
+    private final String TAG_SUBTITLE_FILENAME = "filename";
+    private final String TAG_SUBTITLE_FILESIZE = "filesize";
+    private final String TAG_SUBTITLE_DESCRIPTION = "description";
+    private final String TAG_SUBTITLE_SUBMIT_DATE = "submit_date";
+    private final String TAG_SUBTITLE_INFOURL = "infourl";
     
     private final String URL_BASE = "http://api.italiansubs.net/api/rest";
     private final String URL_SHOW_SINGLE = URL_BASE + "/show/show/?";
@@ -174,7 +174,6 @@ public class Itasa extends AbstractXML{
                 Element item = (Element) iter.next();
                 Show s;
                 String id = item.getChild(TAG_SHOW_ID).getText();
-                System.out.println(id);
                 String name = item.getChild(TAG_SHOW_NAME).getText();
                 String tvdb = checkNPE(item.getChild(TAG_SHOW_ID_TVDB));
                 String tvrage = checkNPE(item.getChild(TAG_SHOW_ID_TVRAGE));
@@ -208,13 +207,13 @@ public class Itasa extends AbstractXML{
             Iterator iter = ((Element) document.getRootElement().getChildren().get(0))
                 .getChildren().iterator();
             Element item = (Element) iter.next();
-            String name = item.getChild(TAG_SUBTITILE_NAME).getText();
-            String version = item.getChild(TAG_SUBTITILE_VERSION).getText();
-            String filename  = item.getChild(TAG_SUBTITILE_FILENAME).getText();
-            String filesize  = item.getChild(TAG_SUBTITILE_FILESIZE).getText();
-            String date = item.getChild(TAG_SUBTITILE_SUBMIT_DATE).getText();
-            String description  = item.getChild(TAG_SUBTITILE_DESCRIPTION).getText();
-            String infourl = item.getChild(TAG_SUBTITILE_INFOURL).getText();
+            String name = item.getChild(TAG_SUBTITLE_NAME).getText();
+            String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
+            String filename  = item.getChild(TAG_SUBTITLE_FILENAME).getText();
+            String filesize  = item.getChild(TAG_SUBTITLE_FILESIZE).getText();
+            String date = item.getChild(TAG_SUBTITLE_SUBMIT_DATE).getText();
+            String description  = item.getChild(TAG_SUBTITLE_DESCRIPTION).getText();
+            String infourl = item.getChild(TAG_SUBTITLE_INFOURL).getText();
             sub = new Subtitle(name, version, filename, filesize, date, description, 
                             infourl);
         }
@@ -235,14 +234,25 @@ public class Itasa extends AbstractXML{
                 .getChildren().iterator();
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
-                String id = item.getChild(TAG_SUBTITILE_NAME).getText();
-                String name = item.getChild(TAG_SUBTITILE_NAME).getText();
-                String version = item.getChild(TAG_SUBTITILE_VERSION).getText();
+                String id = item.getChild(TAG_SUBTITLE_ID).getText();
+                String name = item.getChild(TAG_SUBTITLE_NAME).getText();
+                String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
                 Subtitle sub = new Subtitle(id, name, version);
                 subs.add(sub);
             }
         }
         return subs;
+    }
+    
+    public ArrayList<Subtitle> searchSubtitleCompleted(String id) throws JDOMException, IOException{
+        //show_id=801&value=%completa%25&search_field[]=name&search_op=LIKE&order_by[name]=asc&limit=5
+        ArrayList params = new ArrayList();
+        params.add(API_KEY);
+        if (id!=null)
+            params.add(id);
+        params.add("value=%completa%25");
+        buildUrl(composeUrl(URL_SUBTITILE_SEARCH, params));
+        return null;
     }
     
     /**Compone la url compresa di parametri
