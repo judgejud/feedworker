@@ -760,4 +760,8 @@ public class Mediator {
     public void openFolder(String dir) {
         core.openFolder(dir);
     }
+    
+    public void stopImport() {
+    	core.stopImport();
+    }
 }
