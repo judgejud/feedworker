@@ -363,8 +363,8 @@ public class ManageException {
     }
 
     private void printError(Exception e, Class c) {
-        ManageListener.fireTextPaneEvent(this, e.getMessage(), TextPaneEvent.ERROR);
-        Logging.getIstance().printClass(c);
+        //ManageListener.fireTextPaneEvent(this, e.getMessage(), TextPaneEvent.ERROR);
+        //Logging.getIstance().printClass(c);
         Logging.getIstance().printError(e);
     }
 }
