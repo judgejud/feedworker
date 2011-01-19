@@ -1093,6 +1093,10 @@ public class Kernel implements PropertyChangeListener {
             printAlert("apertura di cartella samba non implementata");
         }
     }
+    
+    public void stopImport() {
+        importTask.cancel(true);
+    }
 
     /**
      * Stampa il messaggio di alert invocando il metodo fire opportuno
@@ -1186,9 +1190,5 @@ public class Kernel implements PropertyChangeListener {
             }
             return null;
         }
-    }
-
-    public void stopImport() {
-        importTask.cancel(true);
     }
 }

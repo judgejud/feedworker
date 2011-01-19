@@ -13,8 +13,6 @@ import java.util.TreeMap;
 
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
@@ -692,7 +690,7 @@ public class Mediator {
     String getApplicationName() {
         return FeedWorkerClient.getApplication().getName();
     }
-
+/*
     TableModel getModelSystemInfo() {
         DefaultTableModel dtm = new DefaultTableModel(null, 
                                         new String[]{"Informazione", "Valore"})  {
@@ -719,6 +717,14 @@ public class Mediator {
         dtm.addRow(new String[]{"File regole", "rules.xml"});
         dtm.addRow(new String[]{"File impostazioni", prop.getSettingsFilename()});
         return dtm;
+    }
+*/    
+    ArrayList<String[]> getPropertiesInfo(){
+        ArrayList<String[]> array = new ArrayList<String[]>();
+        array.add(new String[]{"File calendario", "calendar.xml"});
+        array.add(new String[]{"File impostazioni", prop.getSettingsFilename()});
+        array.add(new String[]{"File regole", "rules.xml"});
+        return array;
     }
 
     void printDay(int day) {

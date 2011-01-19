@@ -15,20 +15,26 @@ import org.jdom.JDOMException;
  * @author luca
  */
 public class Itasa extends AbstractXML{
+    private final String API_KEY = "apikey=436e566f3d09b217cf687fa5bad5effc";
+    
     private final String OPERATOR_AND = "&";
     private final String OPERATOR_EQUAL = "%3D";
-    private final String API_KEY = "apikey=436e566f3d09b217cf687fa5bad5effc";    
+    private final String OPERATOR_LIKE = "like";
+    
     private final String PARAM_FIELDS = "fields[]=";
     private final String PARAM_SEARCH_FIELD = "search_field[]=";
     private final String PARAM_SEARCH_OP = "search_op=";
     private final String PARAM_FIELDS_ALL = "fields[]=all";
     private final String PARAM_LIMIT = "limit=";
+    private final String PARAM_ORDERBY = "order_by";
     private final String PARAM_OFFSET = "offset=";
     private final String PARAM_SHOW_ID = "show_id=";
     private final String PARAM_SUBTITLE_ID = "subtitle_id=";
     private final String PARAM_VALUE = "value=";
+    
     private final String STATUS_SUCCESS = "success";
     private final String STATUS_FAIL = "fail";
+    
     private final String TAG_STATUS = "status";
     private final String TAG_ERROR = "error";
     private final String TAG_COUNT = "count";
@@ -104,7 +110,8 @@ public class Itasa extends AbstractXML{
             }
             show = new Show(plot, banner, season, country, network, started,
                                 ended, genres, actors);
-        }
+        } else
+            System.out.println("show single: "+ error);
         return show;
     }
     
@@ -136,7 +143,7 @@ public class Itasa extends AbstractXML{
                 list.add(item.getChild(TAG_SHOW_ID_TVDB).getText());
             }
         } else 
-            System.out.println("show list: "+ error);
+            System.out.println("search: "+ error);
         return list;
     }
 
@@ -216,7 +223,8 @@ public class Itasa extends AbstractXML{
             String infourl = item.getChild(TAG_SUBTITLE_INFOURL).getText();
             sub = new Subtitle(name, version, filename, filesize, date, description, 
                             infourl);
-        }
+        } else
+            System.out.println("subtitle list: "+ error);
         return sub;
     }
     
@@ -224,14 +232,16 @@ public class Itasa extends AbstractXML{
                                                         JDOMException, IOException{
         ArrayList params = new ArrayList();
         params.add(API_KEY);
-        params.add(PARAM_SUBTITLE_ID + idShow);
+        params.add(PARAM_SHOW_ID + idShow);
+        params.add(PARAM_FIELDS + TAG_SUBTITLE_ID);
+        params.add(PARAM_FIELDS + TAG_SUBTITLE_NAME);
+        params.add(PARAM_FIELDS + TAG_SUBTITLE_VERSION);
         buildUrl(composeUrl(URL_SUBTITILE_SHOW, params));
         checkStatus();
         ArrayList<Subtitle>  subs = null;
         if (isStatusSuccess()){
             subs = new ArrayList<Subtitle>();
-            Iterator iter = ((Element) document.getRootElement().getChildren().get(0))
-                .getChildren().iterator();
+            Iterator iter = getDescendantsZero(2);
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
                 String id = item.getChild(TAG_SUBTITLE_ID).getText();
@@ -240,19 +250,41 @@ public class Itasa extends AbstractXML{
                 Subtitle sub = new Subtitle(id, name, version);
                 subs.add(sub);
             }
-        }
+        } else
+            System.out.println("show list: "+ error);
         return subs;
     }
     
-    public ArrayList<Subtitle> searchSubtitleCompleted(String id) throws JDOMException, IOException{
-        //show_id=801&value=%completa%25&search_field[]=name&search_op=LIKE&order_by[name]=asc&limit=5
+    public ArrayList<Subtitle> searchSubtitleCompleted(String id, String order, 
+                            String limit) throws JDOMException, IOException{
+        //[name]=asc
         ArrayList params = new ArrayList();
         params.add(API_KEY);
         if (id!=null)
-            params.add(id);
-        params.add("value=%completa%25");
+            params.add(PARAM_SHOW_ID + id);
+        params.add(PARAM_VALUE + "%completa%25");
+        params.add(PARAM_SEARCH_FIELD + TAG_SUBTITLE_NAME);
+        params.add(PARAM_SEARCH_OP + OPERATOR_LIKE);
+        if (order!=null)
+            params.add(PARAM_ORDERBY+order);
+        if (limit!=null)
+            params.add(PARAM_LIMIT + limit);
         buildUrl(composeUrl(URL_SUBTITILE_SEARCH, params));
-        return null;
+        checkStatus();
+        ArrayList<Subtitle>  subs = null;
+        if (isStatusSuccess()){
+            subs = new ArrayList<Subtitle>();
+            Iterator iter = getDescendantsZero(1);
+            while (iter.hasNext()){
+                Element item = (Element) iter.next();
+                String idSub = item.getChild(TAG_SUBTITLE_ID).getText();
+                String name = item.getChild(TAG_SUBTITLE_NAME).getText();
+                String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
+                Subtitle sub = new Subtitle(idSub, name, version);
+                subs.add(sub);
+            }
+        }
+        return subs;
     }
     
     /**Compone la url compresa di parametri
@@ -311,10 +343,18 @@ public class Itasa extends AbstractXML{
         Itasa i = new Itasa();
         try {
             //Show s = i.showSingleAll(1363, true);
+            /*
             Subtitle s = i.subtitleSingle(20000);
             Object[] obj = s.toArraySingle();
             for (int n=0; n<obj.length; n++)
                 System.out.println(obj[n]);
+             */
+            ArrayList<Subtitle> a = i.subtitleListByIdShow(1363);
+            for (int m=0; m<a.size(); m++){
+                Object[] obj = a.get(m).toArrayIdNameVersion();
+                for (int n=0; n<obj.length; n++)
+                    System.out.println(obj[n]);
+            }
             //i.searchIdSingleByTvrage(24996);
             //i.showList(5, 0, false);
         } catch (JDOMException ex) {
