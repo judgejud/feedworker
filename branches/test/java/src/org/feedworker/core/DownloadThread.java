@@ -7,23 +7,21 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.zip.ZipException;
 
-import org.feedworker.client.ApplicationSettings;
-import org.feedworker.client.frontend.events.TextPaneEvent;
-import org.feedworker.util.Common;
-import org.feedworker.object.KeyRule;
-import org.feedworker.util.ManageException;
-import org.feedworker.object.Quality;
-import org.feedworker.util.Samba;
-import org.feedworker.object.ValueRule;
-
-import org.jfacility.Io;
-import org.jfacility.Util;
-import org.jfacility.java.lang.Lang;
-
 import jcifs.smb.SmbException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
+import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.object.KeyRule;
+import org.feedworker.object.Quality;
+import org.feedworker.object.ValueRule;
+import org.feedworker.util.Common;
+import org.feedworker.util.ManageException;
+import org.feedworker.util.Samba;
+import org.jfacility.Io;
+import org.jfacility.Util;
+import org.jfacility.java.lang.Lang;
 /**
  * 
  * @author luca

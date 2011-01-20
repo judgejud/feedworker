@@ -15,7 +15,6 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.feedworker.util.Common;
-
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 

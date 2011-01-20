@@ -12,8 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import org.feedworker.client.frontend.Mediator;
 
+import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.TableEvent;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.jfacility.javax.swing.Swing;

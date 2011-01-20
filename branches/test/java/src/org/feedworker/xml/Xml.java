@@ -11,10 +11,9 @@ import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.feedworker.util.Common;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.ValueRule;
-
+import org.feedworker.util.Common;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;

@@ -1,6 +1,5 @@
 package org.feedworker.client.frontend;
 
-import org.feedworker.client.frontend.table.jtResultSearchTv;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -13,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.feedworker.client.frontend.table.jtResultSearchTv;
 import org.jfacility.java.lang.Lang;
 
 /**

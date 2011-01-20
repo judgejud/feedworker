@@ -11,8 +11,8 @@ import java.awt.SystemColor;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import org.feedworker.client.frontend.Mediator;
 
+import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.StatusBarEvent;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
 /**
