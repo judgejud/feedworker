@@ -26,15 +26,14 @@ import org.feedworker.client.frontend.table.jtSubtitleDest;
 import org.feedworker.core.Kernel;
 import org.feedworker.core.ManageListener;
 import org.feedworker.core.RssParser;
+import org.feedworker.object.KeyRule;
+import org.feedworker.object.Quality;
+import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
 import org.feedworker.util.ManageException;
-import org.feedworker.object.Quality;
-import org.feedworker.object.KeyRule;
-import org.feedworker.object.ValueRule;
-
 import org.jfacility.java.awt.AWT;
-import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.JVM;
+import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 

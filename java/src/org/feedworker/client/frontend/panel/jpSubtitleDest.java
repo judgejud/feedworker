@@ -18,8 +18,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-import org.jfacility.javax.swing.Swing;
 import org.feedworker.client.frontend.table.jtSubtitleDest;
+import org.jfacility.javax.swing.Swing;
 
 /**
  * 

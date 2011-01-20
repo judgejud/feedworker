@@ -4,6 +4,7 @@ package org.feedworker.client.frontend.panel;
 import java.awt.Component;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 /**

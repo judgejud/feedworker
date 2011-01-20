@@ -9,17 +9,16 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.util.Common;
 import org.feedworker.util.ManageException;
-
 import org.jfacility.Io;
 import org.jfacility.java.lang.Lang;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import org.feedworker.client.ApplicationSettings;
 
 
 /**TODO: terminare la trasformazione del feed rss sotto 3d

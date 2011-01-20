@@ -12,14 +12,12 @@ import org.feedworker.core.Kernel;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
-
 import org.jfacility.java.lang.JVM;
-
 import org.opensanskrit.application.Application;
-import org.opensanskrit.application.EnhancedSplashScreen;
-import org.opensanskrit.application.SplashScreen;
 import org.opensanskrit.exception.AlreadyStartedApplicationException;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
+import org.opensanskrit.widget.EnhancedSplashScreen;
+import org.opensanskrit.widget.SplashScreen;
 
 /**
  * Client
