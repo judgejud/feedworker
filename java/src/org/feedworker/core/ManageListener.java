@@ -90,14 +90,15 @@ public class ManageListener {
         }
     }
 
-    public static synchronized void fireTextPaneEvent(Object from, String msg, String type) {
+    public static synchronized void fireTextPaneEvent(Object from, String msg, 
+            String type, boolean statusbar) {
         TextPaneEvent event = new TextPaneEvent(from, msg, type);
         Iterator listeners = listenerTextPane.iterator();
         while (listeners.hasNext()) {
             TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
             myel.objReceived(event);
         }
-        if (msg!=null && !msg.substring(0, 7).equals("Timeout"))
+        if (statusbar)
             fireStatusBarEvent(from, msg);
     }
     

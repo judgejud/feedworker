@@ -655,11 +655,11 @@ public class Mediator {
     }
 
     void printAlert(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT);
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT, true);
     }
     
     void printOk(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK);
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
     }
 
     public void restartApplication(String date) {

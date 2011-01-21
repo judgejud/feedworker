@@ -65,7 +65,7 @@ public class ManageException {
         String msg = ex.getMessage();
         String err01 = "Invalid XML: Error on line";
         if (msg.substring(0, err01.length()).equalsIgnoreCase(err01)) {
-            printAlert("Non posso analizzare il feed XML " + text);
+            printAlert("Non posso analizzare il feed XML " + text, false);
         } else {
             printError(ex, c);
         }
@@ -107,7 +107,7 @@ public class ManageException {
         String msg = ex.getMessage();
         String error01 = "Manager is shut down.";
         if (msg.equals(error01)) {
-            printAlert("Synology " + error01);
+            printAlert("Synology " + error01, true);
         } else {
             printError(ex, c);
         }
@@ -145,19 +145,19 @@ public class ManageException {
         String error08 = "ezrss.it";
 
         if (msg.equals(error01)) {
-            printAlert("Il sistema non trova il seguente percorso " + text);
+            printAlert("Il sistema non trova il seguente percorso " + text, true);
         } else if (msg.equals(error04)) {
-            printAlert("Timeout di lettura " + text);
+            printAlert("Timeout di lettura " + text, false);
         } else if (msg.equals(error05) || msg.equals(error06)
                 || msg.equals(error07) || msg.equals(error08)) {
             printAlert("Connessione con " + msg
-                    + " assente. verificare la connessione alla rete.");
+                    + " assente. verificare la connessione alla rete.", true);
         } else if (msg.length() < error02.length()) {
             printError(ex, c);
         } else if (msg.substring(0, error02.length()).equals(error02)) {
-            printAlert("Non posso collegarmi a " + text);
+            printAlert("Non posso collegarmi a " + text, false);
         } else if (msg.substring(0, error03.length()).equals(error03)) {
-            printAlert("Non posso collegarmi a " + text);
+            printAlert("Non posso collegarmi a " + text, false);
         } else {
             printError(ex, c);
         }
@@ -187,7 +187,7 @@ public class ManageException {
         String msg = ex.getMessage();
         String error01 = "Audio Device Unavailable";
         if (msg.equals(error01)) {
-            printAlert("Periferica audio non disponibile");
+            printAlert("Periferica audio non disponibile", true);
         } else {
             printError(ex, c);
         }
@@ -209,7 +209,7 @@ public class ManageException {
         if (c.getName().equals(org.feedworker.client.frontend.Mediator.class.getName())) {
             if (msg.substring(0, error01.length()).equals(error01)) {
                 printAlert("Link " + text
-                        + " errato; immettere in questa forma http://www.");
+                        + " errato; immettere in questa forma http://www.", true);
             } else {
                 printError(ex, c);
             }
@@ -232,7 +232,7 @@ public class ManageException {
         String msg = ex.getMessage();
         String error01 = "For input string:";
         if (msg.substring(0, error01.length()).equalsIgnoreCase(error01)) {
-            printAlert("Riga: " + text + " immettere un numero alla stagione");
+            printAlert("Riga: " + text + " immettere un numero alla stagione", true);
         } else {
             printError(ex, c);
         }
@@ -257,7 +257,7 @@ public class ManageException {
         String msg = ex.getMessage();
         if ((msg.length()>=error01.length()) &&
                 ((msg.substring(0, error01.length())).equalsIgnoreCase(error01)))
-            printAlert("Non posso analizzare il feed XML " + text);
+            printAlert("Non posso analizzare il feed XML " + text, false);
         else
             printError(ex, c);
     }
@@ -282,11 +282,11 @@ public class ManageException {
         String error02 = "Cannot create a file when that file already exists.";
         String error03 = "Access is denied.";
         if (msg.equals(error01)) {
-            printAlert("Samba non può spostare il file " + text);
+            printAlert("Samba non trova il file d'origine" + text, true);
         } else if (msg.equals(error02)) {
-            printAlert("Samba non può spostare un file che esiste " + text);
+            printAlert("Samba non può rinominare un file che esiste " + text, true);
         } else if (msg.equals(error03)) {
-            printAlert("Controllare i permessi della cartella samba " + text);
+            printAlert("Controllare i permessi della cartella samba " + text, true);
         } else {
             printError(ex, c);
         }
@@ -307,7 +307,7 @@ public class ManageException {
         String error01 = "String index out of range: -1";
         if (flag_itasa && msg.equals(error01)) {
             printAlert("Bisogna essere registrati ad italiansubs per scaricare i sottotitoli. "
-                    + "Controlla username e/o password");
+                    + "Controlla username e/o password", true);
         } else
             printError(ex, c);
     }
@@ -357,12 +357,12 @@ public class ManageException {
         printError(ex, c);
     }
 
-    private void printAlert(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT);
+    private void printAlert(String msg, boolean status) {
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT, status);
     }
 
     private void printError(Exception e, Class c) {
-        ManageListener.fireTextPaneEvent(this, e.getMessage(), TextPaneEvent.ERROR);
+        ManageListener.fireTextPaneEvent(this, e.getMessage(), TextPaneEvent.ERROR, true);
         Logging.getIstance().printClass(c);
         Logging.getIstance().printError(e);
     }
