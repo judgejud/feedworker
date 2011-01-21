@@ -154,7 +154,7 @@ public class Kernel implements PropertyChangeListener {
                     Io.downloadSingle(is, f);
                     ManageListener.fireTextPaneEvent(this,
                             "Scaricato: " + http.getNameFile(),
-                            TextPaneEvent.TORRENT);
+                            TextPaneEvent.TORRENT, true);
                 } else {
                     printAlert("Non posso gestire " + als.get(i).split(".")[1]);
                 }
@@ -363,28 +363,28 @@ public class Kernel implements PropertyChangeListener {
                                 if (from.equals(ITASA)) {
                                     ManageListener.fireTextPaneEvent(this,
                                             "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_ITASA);
+                                            TextPaneEvent.FEED_ITASA, true);
                                 } else if (from.equals(MYITASA)
                                         && !prop.isAutoDownloadMyItasa()) {
                                     ManageListener.fireTextPaneEvent(this,
                                             "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_MYITASA);
+                                            TextPaneEvent.FEED_MYITASA, true);
                                 } else if (from.equals(SUBSF)) {
                                     ManageListener.fireTextPaneEvent(this,
                                             "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_SUBSF);
+                                            TextPaneEvent.FEED_SUBSF,true);
                                 } else if (from.equals(MYSUBSF)) {
                                     ManageListener.fireTextPaneEvent(this,
                                             "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_MYSUBSF);
+                                            TextPaneEvent.FEED_MYSUBSF, true);
                                 } else if (from.equals(EZTV)) {
                                     ManageListener.fireTextPaneEvent(this,
                                             "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_EZTV);
+                                            TextPaneEvent.FEED_EZTV, true);
                                 } else if (from.equals(BTCHAT)) {
                                     ManageListener.fireTextPaneEvent(this,
                                             "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_BTCHAT);
+                                            TextPaneEvent.FEED_BTCHAT, true);
                                 }
                                 continua = false;
                             }
@@ -1053,7 +1053,7 @@ public class Kernel implements PropertyChangeListener {
                             + result;
                 }
                 ManageListener.fireTextPaneEvent(this, msg,
-                        TextPaneEvent.DAY_SERIAL);
+                        TextPaneEvent.DAY_SERIAL, true);
             }
         } catch (ParserConfigurationException ex) {
             error.launch(ex, getClass());
@@ -1101,15 +1101,15 @@ public class Kernel implements PropertyChangeListener {
      *            testo da stampare
      */
     private void printAlert(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT);
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT, true);
     }
 
     private void printSynology(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.SYNOLOGY);
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.SYNOLOGY, true);
     }
 
     private void printOk(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK);
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {

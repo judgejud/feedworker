@@ -77,9 +77,8 @@ public class DownloadThread implements Runnable {
                 error.launch(ex, getClass(), null);
             }
         } else {
-            //fireTextPaneEvent("Scaricato: " + f.getName(), TextPaneEvent.OK);
             ManageListener.fireTextPaneEvent(this, "Scaricato: " + f.getName(), 
-                                                        TextPaneEvent.OK);
+                                                        TextPaneEvent.OK, true);
         }
         //return Zip.getAlFile();
         return alf;
@@ -304,10 +303,10 @@ public class DownloadThread implements Runnable {
     }
     
     private void printAlert(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT);
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT, true);
     }
     
     private void printSub(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.SUB);
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.SUB, true);
     }
 }
