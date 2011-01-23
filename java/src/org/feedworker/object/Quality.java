@@ -6,8 +6,9 @@ package org.feedworker.object;
  */
 public enum Quality {
 
-    ALL("*"), NORMAL("normale"), FORM_720p("720p"), FORM_1080p("1080p"),
-    FORM_1080i("1080i"), BLURAY("bluray"), DVDRIP("dvdrip"), HR("hr"), DIFF("\\");
+    ALL("*"), NORMAL("normale"), _720p("720p"), _1080p("1080p"),
+    _1080i("1080i"), BLURAY("bluray"), DVDRIP("dvdrip"), HR("hr"), DIFF("\\"), 
+    WEB_DL("web-dl"), BRRIP("brrip"), BDRIP("bdrip");
 
     private String quality;
 
@@ -21,8 +22,9 @@ public enum Quality {
     }
     
     public static String[] toArray(){
-        return new String[]{ALL.toString(), NORMAL.toString(), FORM_720p.toString(),
-                            FORM_1080p.toString(), BLURAY.toString(), DVDRIP.toString(), 
-                            HR.toString(), DIFF.toString()};
+        return new String[]{ALL.toString(), NORMAL.toString(), _720p.toString(),
+                            _1080p.toString(), BLURAY.toString(), DVDRIP.toString(), 
+                            HR.toString(), BDRIP.toString(), BRRIP.toString(), 
+                            WEB_DL.toString(), DIFF.toString()};
     }
 }
