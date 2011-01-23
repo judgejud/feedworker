@@ -16,8 +16,8 @@ import org.jfacility.java.lang.JVM;
 import org.opensanskrit.application.Application;
 import org.opensanskrit.exception.AlreadyStartedApplicationException;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
-import org.opensanskrit.widget.EnhancedSplashScreen;
 import org.opensanskrit.widget.SplashScreen;
+import org.opensanskrit.widget.SplashableWindow;
 
 /**
  * Client
@@ -38,13 +38,10 @@ public class FeedWorkerClient {
 
     public static void main(String args[]) {
         final JVM jvm = new JVM();
-        final SplashScreen splash;
+        final SplashableWindow splash;
         final Image splashImage = Common.getResourceImage("SplashImage.png");
 
-        if (jvm.isOrLater(16))
-            splash = EnhancedSplashScreen.getInstance(iteration, splashImage);
-        else
-            splash = SplashScreen.getInstance(iteration, splashImage);
+        splash = SplashScreen.getInstance(iteration, splashImage);
         splash.start();
         splash.updateStartupState("Inizializzazione Feedworker");
         ResourceLocator.setWorkspace();
