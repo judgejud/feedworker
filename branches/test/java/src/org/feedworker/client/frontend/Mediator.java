@@ -31,6 +31,7 @@ import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
 import org.feedworker.util.ManageException;
+
 import org.jfacility.java.awt.AWT;
 import org.jfacility.java.lang.JVM;
 import org.jfacility.java.lang.Lang;
@@ -75,7 +76,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "288 by "
+                + "297 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -630,11 +631,11 @@ public class Mediator {
         Color col = Color.cyan;
         String[] temp = text.split(" ");
         String version = temp[temp.length - 1].toLowerCase();
-        if (version.equals(Quality.FORM_1080p.toString())) {
+        if (version.equals(Quality._1080p.toString())) {
             col = Color.blue;
-        } else if (version.equals(Quality.FORM_1080i.toString())) {
+        } else if (version.equals(Quality._1080i.toString())) {
             col = Color.orange;
-        } else if (version.equals(Quality.FORM_720p.toString())) {
+        } else if (version.equals(Quality._720p.toString())) {
             col = Color.red;
         } else if (version.equals(Quality.DVDRIP.toString())) {
             col = new Color(183, 65, 14);
@@ -642,6 +643,12 @@ public class Mediator {
             col = Color.green;
         } else if (version.equals(Quality.BLURAY.toString())) {
             col = Color.magenta;
+        } else if (version.equals(Quality.WEB_DL.toString())) {
+            col = Color.white;
+        } else if (version.equals(Quality.BRRIP.toString())) {
+            col = Color.black;
+        } else if (version.equals(Quality.BDRIP.toString())) {
+            col = Color.darkGray;
         }
         return col;
     }

@@ -404,7 +404,8 @@ public class jpSetting extends jpAbstract {
         bgDownItasa = new ButtonGroup();
         bgDownItasa.add(jrbDownAuto);
         bgDownItasa.add(jrbDownManual);
-        jcbDownloadMyitasaStartup = new JCheckBox("myItasa download automatico avvio");
+        jcbDownloadMyitasaStartup = new JCheckBox("download automatico dei nuovi "
+                                                    + "sub myItasa all'avvio");
         jtfItasaUser = new JTextField(20);
         jpfItasa = new JPasswordField(20);
         jbCheckItasa = new JButton("Check login");

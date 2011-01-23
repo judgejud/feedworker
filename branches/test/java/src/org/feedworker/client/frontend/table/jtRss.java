@@ -24,7 +24,7 @@ import org.jfacility.javax.swing.Swing;
  */
 public class jtRss extends JTable implements TableEventListener {
     // PRIVATE FINAL VARIABLE
-
+    private final Font font = new Font("Arial", Font.PLAIN, 10);
     private final String[] columnNames = {"link", "Data", "Sottotitolo", "Select"};
     private final int width = 500;
     // PRIVATE VARIABLE
@@ -103,8 +103,6 @@ public class jtRss extends JTable implements TableEventListener {
     }
 
     class JLabelDateRenderer extends JLabel implements TableCellRenderer {
-
-        private final Font font = new Font("Arial", Font.PLAIN, 10);
         private int rowsize0, rowsize1;
 
         public JLabelDateRenderer(int rowsize0, int rowsize1) {
@@ -138,9 +136,6 @@ public class jtRss extends JTable implements TableEventListener {
      * colori e font di testo ed eventuale tooltip se testo lungo
      */
     class JLabelTitleRenderer extends JLabel implements TableCellRenderer {
-
-        private final Font font = new Font("Arial", Font.PLAIN, 10);
-
         @Override
         public Component getTableCellRendererComponent(JTable table,
                 Object value, boolean isSelected, boolean hasFocus, int row,
@@ -154,8 +149,8 @@ public class jtRss extends JTable implements TableEventListener {
 
             setBackground(proxy.searchVersion(text));
             Color back = getBackground();
-            if (back.equals(Color.blue) || back.equals(Color.red)
-                    || back.equals(new Color(183, 65, 14))) {
+            if (back.equals(Color.blue) || back.equals(Color.red) || 
+                back.equals(Color.black) || back.equals(new Color(183, 65, 14))) {
                 setForeground(Color.white);
             } else {
                 setForeground(Color.black);

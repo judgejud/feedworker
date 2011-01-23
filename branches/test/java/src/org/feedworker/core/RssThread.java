@@ -1,51 +1,52 @@
 package org.feedworker.core;
 
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.ParsingFeedException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-
+import java.util.TreeMap;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.TextPaneEvent;
-import org.feedworker.client.frontend.events.TextPaneEventListener;
+import org.feedworker.object.KeyRule;
+import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
 import org.feedworker.util.ManageException;
 import org.jfacility.Io;
 import org.jfacility.java.lang.Lang;
-
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.ParsingFeedException;
-
 
 /**TODO: terminare la trasformazione del feed rss sotto 3d
  *
  * @author luca
  */
 public class RssThread implements Runnable{
-
-    private String urlRss, data, from;
-    private boolean download, first;
+    
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
     private Kernel core = Kernel.getIstance();
-    private List listenerTextPane = new ArrayList();
-    private ArrayList<Object[]> matrice = null;
+    private TreeMap<KeyRule, ValueRule> map;
 
-    public RssThread(String urlRss, String data, String from, boolean download, boolean first) {
-        this.urlRss = urlRss;
-        this.data = data;
-        this.from = from;
-        this.download = download;
-        this.first = first;
+    RssThread(TreeMap<KeyRule, ValueRule> map) {
+        this.map = map;
     }
+    
 
-    @Override
-    public void run() {
-        RssParser rss = null;        
+    /**Restituisce l'arraylist contenente i feed rss
+     * 
+     * @param urlRss url rss da analizzare
+     * @param data data da confrontare
+     * @param from provenienza
+     * @param download download automatico
+     * @param first
+     * @return arraylist di feed(array di oggetti)
+     */
+    private void getFeedRss(String urlRss, String data, String from, 
+                                            boolean download, boolean first) {
+        RssParser rss = null;
+        ArrayList<Object[]> matrice = null;
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
         Http http = new Http(connection_Timeout);
         try {
@@ -63,32 +64,43 @@ public class RssThread implements Runnable{
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
                         if (confronta.before(Common.stringDateTime(date_matrix))) {
                             if (continua) {
-                                if (from.equals(core.ITASA))
-                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_ITASA);
-                                else if (from.equals(core.MYITASA)
-                                        && !prop.isAutoDownloadMyItasa())
-                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_MYITASA);
-                                else if (from.equals(core.SUBSF))
-                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_SUBSF);
-                                else if (from.equals(core.MYSUBSF))
-                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_MYSUBSF);
-                                else if (from.equals(core.EZTV))
-                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_EZTV);
-                                else if (from.equals(core.BTCHAT))
-                                    fireNewTextPaneEvent("Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_BTCHAT);
+                                if (from.equals(core.ITASA)) {
+                                    ManageListener.fireTextPaneEvent(this,
+                                            "Nuovo/i feed " + from,
+                                            TextPaneEvent.FEED_ITASA, true);
+                                } else if (from.equals(core.MYITASA)
+                                        && !prop.isAutoDownloadMyItasa()) {
+                                    ManageListener.fireTextPaneEvent(this,
+                                            "Nuovo/i feed " + from,
+                                            TextPaneEvent.FEED_MYITASA, true);
+                                } else if (from.equals(core.SUBSF)) {
+                                    ManageListener.fireTextPaneEvent(this,
+                                            "Nuovo/i feed " + from,
+                                            TextPaneEvent.FEED_SUBSF,true);
+                                } else if (from.equals(core.MYSUBSF)) {
+                                    ManageListener.fireTextPaneEvent(this,
+                                            "Nuovo/i feed " + from,
+                                            TextPaneEvent.FEED_MYSUBSF, true);
+                                } else if (from.equals(core.EZTV)) {
+                                    ManageListener.fireTextPaneEvent(this,
+                                            "Nuovo/i feed " + from,
+                                            TextPaneEvent.FEED_EZTV, true);
+                                } else if (from.equals(core.BTCHAT)) {
+                                    ManageListener.fireTextPaneEvent(this,
+                                            "Nuovo/i feed " + from,
+                                            TextPaneEvent.FEED_BTCHAT, true);
+                                }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2])) && download)
+                            if ((isNotStagione((String) matrice.get(i)[2]))
+                                    && download) {
                                 downItasaAuto(matrice.get(i)[0]);
-                        } else if (first && from.equals(core.MYITASA)){ //non deve fare nulla
-                        } else //if confronta after
+                            }
+                        } else if (first && from.equals(core.MYITASA)) {
+                            // non deve fare nulla
+                        } else {// if confronta after
                             matrice.remove(i);
+                        }
                     }
                 }
             }
@@ -103,17 +115,13 @@ public class RssThread implements Runnable{
         } catch (IOException ex) {
             error.launch(ex, getClass(), from);
         }
-    }
 
-    ArrayList<Object[]> getMatriceRss(){
-        return matrice;
+        //return matrice; fare il fire 
     }
-
-    /**
-     * Verifica se il nome non presenta la parola "stagione"
-     *
-     * @param name
-     *            nome da controllare
+    
+    /**Verifica se il nome non presenta la parola "stagione"
+     * 
+     * @param name nome da controllare
      * @return risultato controllo
      */
     private boolean isNotStagione(String name) {
@@ -129,52 +137,24 @@ public class RssThread implements Runnable{
         }
         return check;
     }
-
+    
     /**
      * effettua il download automatico di myitasa comprende le fasi anche di
      * estrazione zip e analizzazione percorso definitivo.
-     *
+     * 
      * @param link
      *            link da analizzare
      */
     private void downItasaAuto(Object link) {
-        //TODO sistemare
         ArrayList<String> als = new ArrayList<String>();
         als.add(link.toString());
-        /*
-         DownloadThread dt = new DownloadThread(mapRules, als, true);
-        Thread t = new Thread(dt, "Thread download");
-        dt.addMyTextPaneEventListener(mytpel);
+        DownloadThread dt = new DownloadThread(map, als, true);
+        Thread t = new Thread(dt, "AutoItasa");
         t.start();
-         */
     }
-
-    /**Permette alla classe di registrarsi per l'evento textpane
-     *
-     * @param listener
-     *            evento textpane
-     */
-    public synchronized void addMyTextPaneEventListener(
-            TextPaneEventListener listener) {
-        listenerTextPane.add(listener);
-    }
-
-    /**Permette alla classe di de-registrarsi per l'evento textpane
-     *
-     * @param listener
-     *            evento textpane
-     */
-    public synchronized void removeMyTextPaneEventListener(
-            TextPaneEventListener listener) {
-        listenerTextPane.remove(listener);
-    }
-
-    private synchronized void fireNewTextPaneEvent(String msg, String type) {
-        TextPaneEvent event = new TextPaneEvent(this, msg, type);
-        Iterator listeners = listenerTextPane.iterator();
-        while (listeners.hasNext()) {
-            TextPaneEventListener myel = (TextPaneEventListener) listeners.next();
-            myel.objReceived(event);
-        }
+    
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

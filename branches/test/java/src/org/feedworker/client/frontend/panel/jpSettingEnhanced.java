@@ -60,7 +60,7 @@ public class jpSettingEnhanced extends jpSetting {
 
     private JXTaskPane initTaskPaneGeneral() {
         JXTaskPane task = new JXTaskPane();
-        task.setTitle("General setting");
+        task.setTitle("General");
         task.setCollapsed(true);
         
         JPanel temp = new JPanel();
@@ -108,7 +108,7 @@ public class jpSettingEnhanced extends jpSetting {
     
     private JXTaskPane initTaskPaneSamba(){
         JXTaskPane task = new JXTaskPane();
-        task.setTitle("Samba/jcifs setting");
+        task.setTitle("Samba/jcifs");
         task.setCollapsed(true);
         
         JLabel jlDomain = new JLabel("Samba Dominio");
@@ -146,7 +146,7 @@ public class jpSettingEnhanced extends jpSetting {
     /** inizializza il pannello dei settaggi itasa */
     private JXTaskPane initTaskPaneItalianSubs() {
         JXTaskPane task = new JXTaskPane();
-        task.setTitle("ItalianSubs setting");
+        task.setTitle("ItalianSubs");
         task.setCollapsed(true);
 
         JLabel jlItasa = new JLabel("RSS Itasa");
@@ -159,10 +159,11 @@ public class jpSettingEnhanced extends jpSetting {
         task.add(jlMyItasa);
         task.add(jtfRssMyItasa);
 
-        
-        task.add(new JLabel("myItasa download sub"));
-        task.add(jrbDownAuto);
-        task.add(jrbDownManual);
+        JPanel temp = new JPanel();
+        temp.add(new JLabel("myItasa download sub"));
+        temp.add(jrbDownAuto);
+        temp.add(jrbDownManual);
+        task.add(temp);
 
         task.add(jcbDownloadMyitasaStartup);
 
@@ -183,7 +184,7 @@ public class jpSettingEnhanced extends jpSetting {
     /** inizializzo il pannello settaggi torrent */
     private JXTaskPane initTaskPaneTorrent() {
         JXTaskPane task = new JXTaskPane();
-        task.setTitle("Torrent setting");
+        task.setTitle("Torrent");
         task.setCollapsed(true);
         
         task.add(jbDestTorrent);
@@ -195,7 +196,7 @@ public class jpSettingEnhanced extends jpSetting {
     /** inizializzo il pannello settaggi subsfactory */
     private JXTaskPane initTaskPaneSubsfactory() {
         JXTaskPane task = new JXTaskPane();
-        task.setTitle("Subsfactory setting");
+        task.setTitle("Subsfactory");
         task.setCollapsed(true);
         
         task.add(new JLabel("Indirizzo RSS Subsfactory"));
@@ -208,7 +209,7 @@ public class jpSettingEnhanced extends jpSetting {
     
     private JXTaskPane initTaskPaneAlert(){
         JXTaskPane task = new JXTaskPane();
-        task.setTitle("Alert setting");
+        task.setTitle("Alert");
         task.setCollapsed(true);
         
         task.add(jcbAudioRss);
