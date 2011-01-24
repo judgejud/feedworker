@@ -149,8 +149,9 @@ public class jtRss extends JTable implements TableEventListener {
 
             setBackground(proxy.searchVersion(text));
             Color back = getBackground();
-            if (back.equals(Color.blue) || back.equals(Color.red) || 
-                back.equals(Color.black) || back.equals(new Color(183, 65, 14))) {
+            if (back.equals(Color.blue) || back.equals(Color.red) 
+                || back.equals(Color.black) || back.equals(new Color(183, 65, 14)) 
+                || back.equals(Color.darkGray)) {        
                 setForeground(Color.white);
             } else {
                 setForeground(Color.black);
