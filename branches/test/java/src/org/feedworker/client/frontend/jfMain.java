@@ -28,14 +28,17 @@ import org.feedworker.client.frontend.events.JFrameEventOperationListener;
 import org.feedworker.client.frontend.panel.jpCalendar;
 import org.feedworker.client.frontend.panel.jpItasa;
 import org.feedworker.client.frontend.panel.jpLog;
+import org.feedworker.client.frontend.panel.jpSearchSubItasa;
 import org.feedworker.client.frontend.panel.jpSetting;
 import org.feedworker.client.frontend.panel.jpSettingEnhanced;
 import org.feedworker.client.frontend.panel.jpStatusBar;
 import org.feedworker.client.frontend.panel.jpSubsfactory;
 import org.feedworker.client.frontend.panel.jpSubtitleDest;
 import org.feedworker.client.frontend.panel.jpTorrent;
+
 import org.jfacility.java.awt.AWT;
 import org.jfacility.javax.swing.ButtonTabComponent;
+
 import org.opensanskrit.widget.ProgressDialog;
 import org.opensanskrit.widget.ProgressEvent;
 import org.opensanskrit.widget.ProgressListener;
@@ -59,9 +62,10 @@ public class jfMain extends JFrame implements WindowListener,
     private jpTorrent torrentJP;
     private jpSubsfactory subsfactoryJP;
     private jpLog logJP;
+    private jpSearchSubItasa jpSearch;
+    private jpStatusBar statusBar;
     private jdResultSearchTv resultSearchTvJD = jdResultSearchTv.getDialog();
     private ProgressDialog progressBar;
-    private jpStatusBar statusBar;
 
     /** Costruttore */
     public jfMain() {
@@ -84,6 +88,8 @@ public class jfMain extends JFrame implements WindowListener,
         this.add(mainJTP, BorderLayout.CENTER);
         itasaJP = jpItasa.getPanel();
         mainJTP.addTab("Itasa", itasaJP);
+        jpSearch = new jpSearchSubItasa();
+        mainJTP.addTab("Search sub itasa", jpSearch);
 
         if (prop.isSubsfactoryOption()) {
             subsfactoryJP = jpSubsfactory.getPanel();

@@ -13,7 +13,7 @@ import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
-import org.feedworker.util.ManageException;
+import org.feedworker.exception.ManageException;
 import org.feedworker.util.Samba;
 
 import org.jfacility.Io;

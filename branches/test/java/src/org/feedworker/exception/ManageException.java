@@ -1,4 +1,4 @@
-package org.feedworker.util;
+package org.feedworker.exception;
 
 //IMPORT JAVA
 import java.io.IOException;
@@ -24,6 +24,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.feedworker.util.Logging;
 
 /**
  * Stampa nella textpane i messaggi d'errore se è un messaggio d'errore "rosso"

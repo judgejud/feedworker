@@ -30,7 +30,6 @@ import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
-import org.feedworker.util.ManageException;
 
 import org.jfacility.java.awt.AWT;
 import org.jfacility.java.lang.JVM;
@@ -39,6 +38,7 @@ import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
+import org.feedworker.exception.ManageException;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.

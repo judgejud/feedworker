@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
 
-import org.feedworker.util.ManageException;
+import org.feedworker.exception.ManageException;
 import org.feedworker.util.ResourceLocator;
 import org.jfacility.javax.crypto.DesEncrypter;
 

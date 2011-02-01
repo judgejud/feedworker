@@ -14,7 +14,7 @@ import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
-import org.feedworker.util.ManageException;
+import org.feedworker.exception.ManageException;
 import org.jfacility.Io;
 import org.jfacility.java.lang.Lang;
 
