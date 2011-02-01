@@ -1,4 +1,4 @@
-package org.feedworker.util;
+package org.feedworker.exception;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

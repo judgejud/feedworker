@@ -30,24 +30,28 @@ import jcifs.smb.SmbException;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.exception.ItasaException;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
 import org.feedworker.util.ExtensionFilter;
-import org.feedworker.util.ManageException;
+import org.feedworker.exception.ManageException;
 import org.feedworker.util.Samba;
 import org.feedworker.xml.Itasa;
 import org.feedworker.xml.TvRage;
 import org.feedworker.xml.XPathReader;
 import org.feedworker.xml.Xml;
-import org.jdom.JDOMException;
+
 import org.jfacility.Io;
 import org.jfacility.Util;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemFileManager;
+
 import org.opensanskrit.exception.UnableRestartApplicationException;
+
+import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
@@ -87,7 +91,8 @@ public class Kernel implements PropertyChangeListener {
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Timer timer;
     private String lastItasa = null, lastMyItasa = null, lastSubsf = null,
-            lastEztv = null, lastBtchat = null, lastMySubsf = null;
+            lastEztv = null, lastBtchat = null, lastMySubsf = null, 
+            itasaAuthcode=null;
     private TreeMap<KeyRule, ValueRule> mapRules;
     private ManageException error = ManageException.getIstance();
     private Xml xmlCalendar, xmlSubDest;
@@ -928,8 +933,10 @@ public class Kernel implements PropertyChangeListener {
             throws JDOMException, IOException {
         Object[] array = t.readingEpisodeList_byID(show[0].toString(),
                 show[2].toString());
-        ArrayList<String> temp = it.searchIdSingleByTvrage(
-                                            Integer.parseInt(show[0].toString()));
+        ArrayList<String> temp = null;
+        try {
+            temp = it.searchIdSingleByTvrage(Integer.parseInt(show[0].toString()));
+        } catch (ItasaException ex) {}
         array[0] = show[0];
         if (temp != null) {
             array[1] = temp.get(0);

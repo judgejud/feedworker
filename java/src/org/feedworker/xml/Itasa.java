@@ -3,6 +3,7 @@ package org.feedworker.xml;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import org.feedworker.exception.ItasaException;
 
 import org.feedworker.object.Show;
 import org.feedworker.object.Subtitle;
@@ -31,6 +32,8 @@ public class Itasa extends AbstractXML{
     private final String PARAM_SHOW_ID = "show_id=";
     private final String PARAM_SUBTITLE_ID = "subtitle_id=";
     private final String PARAM_VALUE = "value=";
+    private final String PARAM_USERNAME = "username=";
+    private final String PARAM_PASSWORD = "password=";
     
     private final String STATUS_SUCCESS = "success";
     private final String STATUS_FAIL = "fail";
@@ -38,6 +41,7 @@ public class Itasa extends AbstractXML{
     private final String TAG_STATUS = "status";
     private final String TAG_ERROR = "error";
     private final String TAG_COUNT = "count";
+    private final String TAG_LOGIN_AUTHCODE = "authcode";
     private final String TAG_SHOW_PLOT = "plot";
     private final String TAG_SHOW_GENRES = "genres";
     private final String TAG_SHOW_BANNER = "banner";
@@ -64,6 +68,7 @@ public class Itasa extends AbstractXML{
     private final String TAG_SUBTITLE_INFOURL = "infourl";
     
     private final String URL_BASE = "http://api.italiansubs.net/api/rest";
+    private final String URL_LOGIN = URL_BASE + "/user/login/?";
     private final String URL_SHOW_SINGLE = URL_BASE + "/show/show/?";
     private final String URL_SHOW_LIST = URL_BASE + "/show/shows/?";
     private final String URL_SHOW_SEARCH = URL_BASE + "/show/search/?";
@@ -73,8 +78,8 @@ public class Itasa extends AbstractXML{
     
     private String status, error;
     
-    public Show showSingleAll(int id, boolean flag_actors) 
-                                                throws JDOMException, IOException{
+    public Show showSingleAll(int id, boolean flag_actors) throws JDOMException, 
+                                                    IOException, ItasaException{
         ArrayList params = new ArrayList();
         params.add(API_KEY);
         params.add(PARAM_SHOW_ID + id);
@@ -111,7 +116,7 @@ public class Itasa extends AbstractXML{
             show = new Show(plot, banner, season, country, network, started,
                                 ended, genres, actors);
         } else
-            System.out.println("show single: "+ error);
+            throw new ItasaException("show single: "+ error);
         return show;
     }
     
@@ -123,7 +128,7 @@ public class Itasa extends AbstractXML{
      * @throws IOException 
      */
     public ArrayList<String> searchIdSingleByTvrage(int tvrage) 
-                                                throws JDOMException, IOException{
+                                                throws JDOMException, IOException, ItasaException{
         ArrayList params = new ArrayList();
         params.add(API_KEY);
         params.add(PARAM_VALUE + tvrage);
@@ -143,20 +148,22 @@ public class Itasa extends AbstractXML{
                 list.add(item.getChild(TAG_SHOW_ID_TVDB).getText());
             }
         } else 
-            System.out.println("search: "+ error);
+            throw new ItasaException("search: "+ error);
         return list;
     }
 
-    public ArrayList<Show> showListNoLimit() throws JDOMException, IOException {
+    public ArrayList<Show> showListNoLimit() throws JDOMException, IOException, 
+                                                                ItasaException {
         return showList(0, 0, true);
     }
     
-    public ArrayList<Show> showListNameIdNoLimit() throws JDOMException, IOException {
+    public ArrayList<Show> showListNameIdNoLimit() throws JDOMException, 
+                                                    IOException, ItasaException {
         return showList(0, 0, false);
     }
         
     private ArrayList<Show> showList(int limit, int offset, boolean flag_all) throws 
-                                                    JDOMException, IOException {
+                                            JDOMException, IOException, ItasaException {
         ArrayList<Show> container = null;
         ArrayList params = new ArrayList();
         params.add(API_KEY);
@@ -199,11 +206,12 @@ public class Itasa extends AbstractXML{
                 container.add(s);
             }
         } else 
-            System.out.println("show list: "+ error);
+            throw new ItasaException("show list: "+ error);
         return container;
     }
     
-    public Subtitle subtitleSingle(int id) throws JDOMException, IOException{
+    public Subtitle subtitleSingle(int id) throws JDOMException, IOException, 
+                                                                    ItasaException{
         ArrayList params = new ArrayList();
         params.add(API_KEY);
         params.add(PARAM_SUBTITLE_ID + id);
@@ -224,12 +232,12 @@ public class Itasa extends AbstractXML{
             sub = new Subtitle(name, version, filename, filesize, date, description, 
                             infourl);
         } else
-            System.out.println("subtitle list: "+ error);
+            throw new ItasaException("subtitleSingle: "+ error);
         return sub;
     }
     
-    public ArrayList<Subtitle> subtitleListByIdShow(int idShow) throws 
-                                                        JDOMException, IOException{
+    public ArrayList<Subtitle> subtitleListByIdShow(int idShow) throws JDOMException, 
+                                                        IOException, ItasaException{
         ArrayList params = new ArrayList();
         params.add(API_KEY);
         params.add(PARAM_SHOW_ID + idShow);
@@ -251,12 +259,13 @@ public class Itasa extends AbstractXML{
                 subs.add(sub);
             }
         } else
-            System.out.println("show list: "+ error);
+            throw new ItasaException("subtitleListByIdShow: "+ error);
         return subs;
     }
     
     public ArrayList<Subtitle> searchSubtitleCompleted(String id, String order, 
-                            String limit) throws JDOMException, IOException{
+                                                    String limit) throws JDOMException, 
+                                                    IOException, ItasaException{
         //[name]=asc
         ArrayList params = new ArrayList();
         params.add(API_KEY);
@@ -283,8 +292,26 @@ public class Itasa extends AbstractXML{
                 Subtitle sub = new Subtitle(idSub, name, version);
                 subs.add(sub);
             }
-        }
+        } else
+            throw new ItasaException("searchSubtitleCompleted: "+ error);
         return subs;
+    }
+    
+    public String login(String user, String pwd) throws JDOMException, IOException, 
+                                                                    ItasaException{
+        ArrayList params = new ArrayList();
+        params.add(API_KEY);
+        params.add(PARAM_USERNAME + user);
+        params.add(PARAM_PASSWORD + pwd);
+        buildUrl(composeUrl(URL_LOGIN, params));
+        checkStatus();
+        String authcode = null;
+        if (isStatusSuccess()){
+            Element item = (Element) super.getDescendantsZero(0).next();
+            authcode = item.getChild(TAG_LOGIN_AUTHCODE).getText();
+        } else
+            throw new ItasaException("login: "+ error);
+        return authcode;
     }
     
     /**Compone la url compresa di parametri
@@ -349,18 +376,23 @@ public class Itasa extends AbstractXML{
             for (int n=0; n<obj.length; n++)
                 System.out.println(obj[n]);
              */
+            /*
             ArrayList<Subtitle> a = i.subtitleListByIdShow(1363);
             for (int m=0; m<a.size(); m++){
                 Object[] obj = a.get(m).toArrayIdNameVersion();
                 for (int n=0; n<obj.length; n++)
                     System.out.println(obj[n]);
             }
+            */
             //i.searchIdSingleByTvrage(24996);
             //i.showList(5, 0, false);
+            System.out.println(i.login("judge", "qwerty"));
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
             ex.printStackTrace();
+        } catch (ItasaException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 }
