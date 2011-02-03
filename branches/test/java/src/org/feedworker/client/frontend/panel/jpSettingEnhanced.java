@@ -22,9 +22,8 @@ public class jpSettingEnhanced extends jpSetting {
     }
 
     public static jpSettingEnhanced getPanel() {
-        if (jpanel == null) {
+        if (jpanel == null)
             jpanel = new jpSettingEnhanced();
-        }
         return jpanel;
     }
     
@@ -33,8 +32,10 @@ public class jpSettingEnhanced extends jpSetting {
         JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
         tpcWest.add(initTaskPaneGeneral());
         tpcWest.add(initTaskPaneSamba());
+        tpcWest.add(initTaskPaneVisibilePane());
         if (prop.isTorrentOption())
             tpcWest.add(initTaskPaneTorrent());
+        
         
         JXTaskPaneContainer tpcEast = new JXTaskPaneContainer();
         tpcEast.add(initTaskPaneItalianSubs());
@@ -223,6 +224,18 @@ public class jpSettingEnhanced extends jpSetting {
         
         task.add(new JLabel("SMTP server"));
         task.add(jtfMailSmtp);
+        return task;
+    }
+    
+    private JXTaskPane initTaskPaneVisibilePane(){
+        JXTaskPane task = new JXTaskPane();
+        task.setTitle("Visible Pane");
+        task.setCollapsed(true);
+        
+        task.add(jcbPaneSearchSubItasa);
+        task.add(jcbPaneSubDest);
+        task.add(jcbPaneSetting);
+        task.add(jcbPaneLog);
         return task;
     }
 }

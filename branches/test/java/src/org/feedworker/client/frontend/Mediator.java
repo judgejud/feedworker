@@ -779,4 +779,8 @@ public class Mediator {
     public void stopImport() {
     	core.stopImport();
     }
+
+    public void checkLoginItasa(String user, char[] password) {
+        System.out.println(password.toString());
+    }
 }
