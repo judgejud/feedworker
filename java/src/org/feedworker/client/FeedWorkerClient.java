@@ -93,10 +93,13 @@ public class FeedWorkerClient {
                     public void run() {
                         jfMain jframe = null;
                         splash.updateStartupState("Loading GUI ...");
+                        /*
                         if (jvm.isOrLater(16))
                             jframe = new jfMainEnhanced();
                         else if (jvm.isOrLater(15))
                             jframe = new jfMain();
+                        */
+                        jframe = new jfMain();
                         splash.updateStartupState("Loading xml ...");
                         K.loadXml();
                         splash.updateStartupState("Initializing RSS...");
@@ -107,7 +110,7 @@ public class FeedWorkerClient {
                             jframe.setVisible(true);
                         else {
                             try {
-                                jframe.initializeSysTray();
+                                jframe.initializeSystemTray();
                             } catch (URISyntaxException ex) {
                                 ex.printStackTrace();
                             }
