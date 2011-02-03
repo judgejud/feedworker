@@ -325,11 +325,10 @@ public class jfMain extends JFrame implements WindowListener,
 
         JMenuItem jmiHelpInfoFeedColor = new JMenuItem(" Legenda Colori Feed ");
         jmiHelpInfoFeedColor.addActionListener(new ActionListener()  {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(getParent(),
-                        createInfoFeedColor(), "Legenda Colori",
+                        createPopupInfoFeedColor(), "Legenda Colori",
                         JOptionPane.PLAIN_MESSAGE);
             }
         });
@@ -338,19 +337,23 @@ public class jfMain extends JFrame implements WindowListener,
         setJMenuBar(applicationJMB);
     }
 
-    private JPanel createInfoFeedColor() {
+    private JPanel createPopupInfoFeedColor() {
         JPanel jpanel = new JPanel();
         Dimension dim = new Dimension(300, 200);
         jpanel.setPreferredSize(dim);
         jpanel.setVisible(true);
         JTextArea jtaHelp = new JTextArea();
         jtaHelp.setPreferredSize(dim);
-        jtaHelp.append("Colore ciano: versione dei sub normale"
-                + "\nColore rosso: versione dei sub 720p"
-                + "\nColore marrone: versione dei sub dvdrip");
-        jtaHelp.append("\nColore viola: versione dei sub bluray");
-        // jtaHelp.append("\nColore ciano: versione dei sub normale");
-        // jtaHelp.append("\nColore ciano: versione dei sub normale");
+        jtaHelp.append("Colore ciano: sub per la versione normale"
+                + "\nColore rosso: sub per la versione 720"
+                + "\nColore blu: sub per la versione 1080p"
+                + "\nColore arancione: sub per la versione 1080i"
+                + "\nColore marrone: sub per la versione dvdrip"
+                + "\nColore bianco: sub per la versione WEB-DL"
+                + "\nColore verde: sub per la versione HR"
+                + "\nColore nero: sub per la versione BRRIP"
+                + "\nColore grigio: sub per la versione BDRIP"
+                + "\nColore viola: sub per la versione bluray");
         jpanel.add(jtaHelp);
         return jpanel;
     }
