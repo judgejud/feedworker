@@ -108,11 +108,11 @@ public class jfMain extends JFrame implements WindowListener,
         mainJTP.setTabComponentAt(mainJTP.getTabCount() - 1,
                                         new ButtonTabComponent(mainJTP));
         
-        if (proxy.isJava6()) {
+        if (proxy.isJava6())
             jpSettings = jpSettingEnhanced.getPanel();
-        } else {
+        else
             jpSettings = jpSetting.getPanel();
-        }
+
         mainJTP.addTab("Settings", jpSettings);
         mainJTP.setTabComponentAt(mainJTP.getTabCount() - 1,
                 new ButtonTabComponent(mainJTP));
@@ -140,11 +140,10 @@ public class jfMain extends JFrame implements WindowListener,
     }
 
     public void initializeSystemTray() throws URISyntaxException {
-        if (systemTray != null) {
+        if (systemTray != null)
             systemTray.showSystemTray();
-        } else {
+        else
             setVisible(true);
-        }
     }
 
     /** inizializza la barra di menù */
