@@ -25,14 +25,13 @@ public class EnhancedSystemTray {
         this.owner = owner;
         iconRss = proxy.getApplicationIcon();
         iconSub = proxy.getIncomingFeedIcon();
-
-        trayIcon = new TrayIcon(owner, iconRss);
-        trayIcon.setJPopuMenu(createJPopupMenu());
-        trayIcon.setToolTip("FeedWorker");
     }
 
     public void showSystemTray() {
         try {
+            trayIcon = new TrayIcon(owner, iconRss);
+            trayIcon.setJPopuMenu(createJPopupMenu());
+            trayIcon.setToolTip("FeedWorker");
             SystemTray.getSystemTray().add(trayIcon);
         } catch (AWTException e) {
             proxy.printError(e);
