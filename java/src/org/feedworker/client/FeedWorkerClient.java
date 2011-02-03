@@ -7,7 +7,6 @@ import java.net.URISyntaxException;
 import javax.swing.JOptionPane;
 
 import org.feedworker.client.frontend.jfMain;
-import org.feedworker.client.frontend.jfMainEnhanced;
 import org.feedworker.core.Kernel;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
@@ -37,9 +36,9 @@ public class FeedWorkerClient {
     }
 
     public static void main(String args[]) {
-        final JVM jvm = new JVM();
         final SplashableWindow splash;
         final Image splashImage = Common.getResourceImage("SplashImage.png");
+        JVM jvm = new JVM();
 
         splash = SplashScreen.getInstance(iteration, splashImage);
         splash.start();
@@ -93,12 +92,6 @@ public class FeedWorkerClient {
                     public void run() {
                         jfMain jframe = null;
                         splash.updateStartupState("Loading GUI ...");
-                        /*
-                        if (jvm.isOrLater(16))
-                            jframe = new jfMainEnhanced();
-                        else if (jvm.isOrLater(15))
-                            jframe = new jfMain();
-                        */
                         jframe = new jfMain();
                         splash.updateStartupState("Loading xml ...");
                         K.loadXml();
