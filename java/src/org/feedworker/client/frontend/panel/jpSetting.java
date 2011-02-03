@@ -35,12 +35,12 @@ public class jpSetting extends jpAbstract {
     private final String[] timeout = new String[]{"3", "6", "9", "12", "15", "18"};
     private final String[] minuti = new String[]{"3", "6", "10", "15", "20", "30", "45"};
     private static jpSetting jpanel = null;
-    //private JPanel jpSettingGlobal, jpSettingItasa, jpSettingSubsf, jpSettingAlert;
     protected JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
     protected JLabel jlDataAggiornamento;
     protected JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
     protected JCheckBox jcbAudioRss, jcbAudioSub, jcbAdvancedDownload, jcbRunIconized,
-            jcbDownloadMyitasaStartup, jcbMail;
+            jcbDownloadMyitasaStartup, jcbMail, jcbPaneSubDest, jcbPaneLog, 
+            jcbPaneSetting, jcbPaneSearchSubItasa;
     private JButton jbSaveSettings, jbAnnullaSettings;
     protected JButton jbDestSub, jbDestTorrent, jbCheckItasa;
     protected JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
@@ -72,13 +72,12 @@ public class jpSetting extends jpAbstract {
         JTabbedPane jtpSettings = new JTabbedPane(JTabbedPane.LEFT);
         jtpSettings.addTab("General", initPanelSettingsGlobal());
         jtpSettings.addTab("ItalianSubs", initPanelSettingsItasa());
-        if (prop.isSubsfactoryOption()) {
+        if (prop.isSubsfactoryOption())
             jtpSettings.addTab("Subsfactory", initPanelSettingsSubsf());
-        }
-        if (prop.isTorrentOption()) {
+        if (prop.isTorrentOption())
             jtpSettings.addTab("Torrent", initPanelSettingsTorrent());
-        }
         jtpSettings.addTab("Alert", initPanelSettingsAlert());
+        jtpSettings.addTab("Visible Panel", initPaneSettingsVisiblePanel());
        
         jpCenter.add(jtpSettings);
         add(jpCenter, BorderLayout.CENTER);
@@ -413,7 +412,8 @@ public class jpSetting extends jpAbstract {
         jbCheckItasa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                //TODO: implementare il test per la login ad itasa
+                proxy.checkLoginItasa(jtfItasaUser.getText(), 
+                        jpfItasa.getPassword());
             }
         });
         //TORRENT
@@ -435,6 +435,11 @@ public class jpSetting extends jpAbstract {
         jcbMail = new JCheckBox("Avviso sub mail");
         jtfMailTo = new JTextField(20);
         jtfMailSmtp = new JTextField(20);
+        //VISIBLE PANEL
+        jcbPaneSubDest = new JCheckBox("Subtitle Destination");
+        jcbPaneSetting = new JCheckBox("Settings");
+        jcbPaneLog = new JCheckBox("Log");
+        jcbPaneSearchSubItasa = new JCheckBox("Search Subtitle Itasa");
     }
    
     private JPanel initPanelSettingsAlert(){
@@ -465,6 +470,15 @@ public class jpSetting extends jpAbstract {
         jpSettingAlert.add(jtfMailSmtp, gbc);
         
         return jpSettingAlert;
+    }
+    
+    private JPanel initPaneSettingsVisiblePanel() {
+        JPanel jpSettingVP = new JPanel(new GridBagLayout());
+        jpSettingVP.setPreferredSize(INTERNALSETTINGS);
+        GridBagConstraints gbc = initGbc();
+        int y = 0;
+        
+        return jpSettingVP;
     }
 
     /** Evento click select cartella */
