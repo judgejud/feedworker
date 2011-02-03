@@ -26,6 +26,7 @@ import org.feedworker.client.frontend.table.jtSubtitleDest;
 import org.feedworker.core.Kernel;
 import org.feedworker.core.ManageListener;
 import org.feedworker.core.RssParser;
+import org.feedworker.exception.ManageException;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
@@ -38,7 +39,6 @@ import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
-import org.feedworker.exception.ManageException;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -76,7 +76,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "297 by "
+                + "302 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
