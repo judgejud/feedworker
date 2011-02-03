@@ -62,9 +62,8 @@ public class Mediator {
      * @return Mediator
      */
     public static Mediator getIstance() {
-        if (proxy == null) {
+        if (proxy == null)
             proxy = new Mediator();
-        }
         return proxy;
     }
     
@@ -76,7 +75,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "302 by "
+                + "303 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -667,6 +666,10 @@ public class Mediator {
     
     void printOk(String msg) {
         ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
+    }
+    
+    public void printStatusBar(String msg){
+        ManageListener.fireStatusBarEvent(this, msg);
     }
 
     public void restartApplication(String date) {

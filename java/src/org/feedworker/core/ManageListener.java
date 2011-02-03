@@ -102,7 +102,7 @@ public class ManageListener {
             fireStatusBarEvent(from, msg);
     }
     
-    private static synchronized void fireStatusBarEvent(Object from, String msg) {
+    public static synchronized void fireStatusBarEvent(Object from, String msg) {
         StatusBarEvent event = new StatusBarEvent(from, msg);
         Iterator listeners = listenerStatusBar.iterator();
         while (listeners.hasNext()) {

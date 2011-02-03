@@ -1,13 +1,21 @@
 package org.feedworker.client.frontend.table;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Date;
+import javax.swing.JLabel;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
+import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.TableEvent;
 import org.feedworker.client.frontend.events.TableEventListener;
+
 import org.jfacility.javax.swing.Swing;
 
 /**
@@ -15,8 +23,9 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class jtCalendar extends JTable implements TableEventListener{
-    private final String[] nameCols = {"ID tvrage", "ID ITasa", "ID Tvdb", "Serie", "Stato", 
-                "Giorno", "Last Ep", "Titolo", "Data", "Next Ep", "Titolo", "Data" };
+    private final String[] nameCols = {"ID tvrage", "ID Itasa", "ID Tvdb", "Serie", 
+                                        "Stato", "Giorno", "Last Ep", "Titolo", 
+                                        "Data", "Next Ep", "Titolo", "Data" };
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
     public jtCalendar(String nome){
@@ -43,6 +52,13 @@ public class jtCalendar extends JTable implements TableEventListener{
         setFont(font);
         Swing.tableSorter(this);
         lockColumns();
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                Mediator.getIstance().printStatusBar("righe selezionate: "+ 
+                                                        getSelectedRowCount());
+            }
+        });
     }
     
     private void lockColumns(){
@@ -60,11 +76,40 @@ public class jtCalendar extends JTable implements TableEventListener{
     @Override
     public void objReceived(TableEvent evt) {
         if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
+            String titleCol = (String) this.getColumnModel().getColumn(3).getHeaderValue();
             DefaultTableModel dtm = (DefaultTableModel) getModel();
             int size = evt.getArray().size();
             int start = dtm.getRowCount();
             for (int i = 0; i < size; i++)
                 dtm.insertRow(i+start, evt.getArray().get(i));
+            getColumn(titleCol).setCellRenderer(new ColorRenderer());
+        }
+    }
+    
+    class ColorRenderer extends JLabel implements TableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent (JTable table, Object value, 
+                        boolean isSelected, boolean hasFocus, int row, int column){
+            setText(value.toString());
+            setFont(font);
+            setOpaque(true);
+            
+            String text = (String) table.getValueAt(row, 4);
+            if(text.equalsIgnoreCase("final season") || 
+                    text.equalsIgnoreCase("canceled/ended"))
+                setBackground(Color.red);
+            else 
+                setBackground(table.getBackground());
+            Color back = getBackground();
+            if (isSelected){
+                setForeground(table.getSelectionForeground());
+                setBackground(table.getSelectionBackground());
+            } else {
+                setBackground(back);
+                setForeground(Color.black);
+            }
+            repaint();
+            return this;
         }
     }
 }
