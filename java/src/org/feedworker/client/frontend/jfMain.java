@@ -90,9 +90,6 @@ public class jfMain extends JFrame implements WindowListener,
         this.add(mainJTP, BorderLayout.CENTER);
         itasaJP = jpItasa.getPanel();
         mainJTP.addTab("Itasa", itasaJP);
-        jpSearch = new jpSearchSubItasa();
-        mainJTP.addTab("Search sub itasa", jpSearch);
-
         if (prop.isSubsfactoryOption()) {
             subsfactoryJP = jpSubsfactory.getPanel();
             mainJTP.addTab("Subsfactory", subsfactoryJP);
@@ -102,7 +99,10 @@ public class jfMain extends JFrame implements WindowListener,
             mainJTP.addTab("Torrent", torrentJP);
         }
         mainJTP.addTab("Calendar", jpCalendar.getPanel());
-        
+        jpSearch = new jpSearchSubItasa();
+        mainJTP.addTab("Search sub itasa", jpSearch);
+        mainJTP.setTabComponentAt(mainJTP.getTabCount() - 1,
+                                        new ButtonTabComponent(mainJTP));
         jpDestination = jpSubtitleDest.getPanel();
         mainJTP.addTab("Subtitle Destination", jpDestination);
         mainJTP.setTabComponentAt(mainJTP.getTabCount() - 1,

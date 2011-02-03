@@ -11,7 +11,9 @@ import org.feedworker.core.Kernel;
 import org.feedworker.util.Common;
 import org.feedworker.util.Logging;
 import org.feedworker.util.ResourceLocator;
+
 import org.jfacility.java.lang.JVM;
+
 import org.opensanskrit.application.Application;
 import org.opensanskrit.exception.AlreadyStartedApplicationException;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
@@ -53,19 +55,6 @@ public class FeedWorkerClient {
         feedWorker.setIcon(Common.getResourceIcon(ICON_FILENAME));
         feedWorker.enableSingleInstance(true);
         
-        splash.updateStartupState("Preparing Kernel instance ...");
-        K = Kernel.getIstance();
-        splash.updateStartupState("Setting Look & Feel ...");
-        try {
-            feedWorker.getIstanceLAF().addJavaLAF();        	
-            feedWorker.getIstanceLAF().addJTattooLAF();
-            feedWorker.getIstanceLAF().addSyntheticaStandardLAF();
-            feedWorker.getIstanceLAF().addSyntheticaFreeLAF();
-            feedWorker.getIstanceLAF().addSyntheticaNotFreeLAF();
-            feedWorker.getIstanceLAF().setLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
-        } catch (NotAvailableLookAndFeelException e) {
-            feedWorker.getIstanceLAF().setLookAndFeel();
-        }
         splash.updateStartupState("Checking JVM ...");
         if (!JVM.isVendorSun()){
             JOptionPane.showMessageDialog(null,
@@ -81,6 +70,20 @@ public class FeedWorkerClient {
             try {
                 splash.updateStartupState("Finding other FeedWorker instance ...");
                 feedWorker.start();
+                splash.updateStartupState("Preparing Kernel instance ...");
+                K = Kernel.getIstance();
+                splash.updateStartupState("Setting Look & Feel ...");
+                try {
+                    feedWorker.getIstanceLAF().addJavaLAF();        	
+                    feedWorker.getIstanceLAF().addJTattooLAF();
+                    feedWorker.getIstanceLAF().addSyntheticaStandardLAF();
+                    feedWorker.getIstanceLAF().addSyntheticaFreeLAF();
+                    feedWorker.getIstanceLAF().addSyntheticaNotFreeLAF();
+                    feedWorker.getIstanceLAF().setLookAndFeel(
+                                    feedWorkerSettings.getApplicationLookAndFeel());
+                } catch (NotAvailableLookAndFeelException e) {
+                    feedWorker.getIstanceLAF().setLookAndFeel();
+                }
                 splash.updateStartupState("Loading Application settings ...");
                 ApplicationSettings.getIstance();
                 splash.updateStartupState("Preparing Application logging ...");
