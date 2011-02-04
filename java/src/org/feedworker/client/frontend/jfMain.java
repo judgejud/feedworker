@@ -40,7 +40,7 @@ import org.jfacility.javax.swing.ButtonTabComponent;
 
 import org.opensanskrit.widget.ProgressDialog;
 import org.opensanskrit.widget.ProgressEvent;
-import org.opensanskrit.widget.ProgressListener;
+import org.opensanskrit.widget.interfaces.ProgressListener;
 import org.opensanskrit.widget.SystemInfoDialog;
 
 /**GUI
@@ -100,27 +100,23 @@ public class jfMain extends JFrame implements WindowListener,
         }
         mainJTP.addTab("Calendar", jpCalendar.getPanel());
         jpSearch = new jpSearchSubItasa();
-        mainJTP.addTab("Search sub itasa", jpSearch);
-        mainJTP.setTabComponentAt(mainJTP.getTabCount() - 1,
-                                        new ButtonTabComponent(mainJTP));
+        if (prop.isEnablePaneSearchSubItasa())
+            checkAddTab(jpSearch);
         jpDestination = jpSubtitleDest.getPanel();
-        mainJTP.addTab("Subtitle Destination", jpDestination);
-        mainJTP.setTabComponentAt(mainJTP.getTabCount() - 1,
-                                        new ButtonTabComponent(mainJTP));
-        
+        if (prop.isEnablePaneSubDestination())
+            checkAddTab(jpDestination);
+        /*
         if (proxy.isJava6())
             jpSettings = jpSettingEnhanced.getPanel();
         else
+         * 
+         */
             jpSettings = jpSetting.getPanel();
-
-        mainJTP.addTab("Settings", jpSettings);
-        mainJTP.setTabComponentAt(mainJTP.getTabCount() - 1,
-                new ButtonTabComponent(mainJTP));
-        
+        if (prop.isEnablePaneSetting())
+            checkAddTab(jpSettings);
         logJP = new jpLog();
-        mainJTP.addTab("Log", logJP);
-        mainJTP.setTabComponentAt(mainJTP.getTabCount() - 1,
-                new ButtonTabComponent(mainJTP));
+        if (prop.isEnablePaneLog())
+            checkAddTab(logJP);
 
         statusBar = new jpStatusBar();
         add(statusBar, BorderLayout.SOUTH);

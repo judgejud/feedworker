@@ -5,17 +5,17 @@ IMPLEMENTARE
 -destinazione avanzata in mixed mode
 -implementare il tipo di download di mysubsfactory (come x myitasa)
 -fare caricamento xml sotto thread
--pulsante check login itasa
+-pulsante check login itasa implementare il codice.
 -vedere di creare 1http permanente x itasa
 -ricerca sottotitoli itasa
 
-terminare legenda colori
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
 aggiungere versioning automatico all'applicazione
-calendario: togliere colonna status e implementare il background colorato x cancelled/ended e season finale.
+calendario: togliere colonna status e implementare colonna nascosta true/false per cancelled/ended e season finale.
 javamail: avviso mail sub scaricato
 audio: avviso sub estratto
 aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
+salvare lista tab visibili per lo startup del programma. 
 
 CORREZIONI:
 -mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
@@ -29,13 +29,10 @@ calendar: bottone info su ciò che è presente nella tabella?
 avvio automatico all'avvio OS (win-unix-mac)?
 multiutenza?
 properties sotto jfacility? 
-impostazioni dei tabs?
 http://thetvdb.com/wiki/index.php?title=Programmers_API?
-salvare lista tab visibili e non? 
 
 VERIFICARE LE IMPLEMENTAZIONI
 impedire il funzionamento a vendor java diverse da sun.
-riavvio che non salva l'ultima data aggiornamento prima del riavvio
 riavvio con java home (win, mac)
 1080i
 splashscreen (java5)

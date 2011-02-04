@@ -229,7 +229,7 @@ public class jpSettingEnhanced extends jpSetting {
     
     private JXTaskPane initTaskPaneVisibilePane(){
         JXTaskPane task = new JXTaskPane();
-        task.setTitle("Visible Pane");
+        task.setTitle("Visible Pane at Startup");
         task.setCollapsed(true);
         
         task.add(jcbPaneSearchSubItasa);

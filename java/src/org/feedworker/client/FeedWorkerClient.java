@@ -18,7 +18,7 @@ import org.opensanskrit.application.Application;
 import org.opensanskrit.exception.AlreadyStartedApplicationException;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 import org.opensanskrit.widget.SplashScreen;
-import org.opensanskrit.widget.SplashableWindow;
+import org.opensanskrit.widget.interfaces.SplashableWindow;
 
 /**
  * Client

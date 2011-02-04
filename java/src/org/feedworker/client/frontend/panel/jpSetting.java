@@ -507,6 +507,7 @@ public class jpSetting extends jpAbstract {
         settingsSambaValue();
         settingsAlertValue();
         settingsItasaValue();
+        settingsPaneVisibleValue();
         if (prop.isSubsfactoryOption())
             settingsSubsfactoryValue();
         if (prop.isTorrentOption())
@@ -567,6 +568,13 @@ public class jpSetting extends jpAbstract {
         jtfMailTo.setText(prop.getMailTO());
         jtfMailSmtp.setText(prop.getMailSmtp());
     }
+    
+    private void settingsPaneVisibleValue(){
+        jcbPaneLog.setSelected(prop.isEnablePaneLog());
+        jcbPaneSearchSubItasa.setSelected(prop.isEnablePaneSearchSubItasa());
+        jcbPaneSetting.setSelected(prop.isEnablePaneSetting());
+        jcbPaneSubDest.setSelected(prop.isEnablePaneSubDestination());
+    }
 
     public void setDataAggiornamento(String data) {
         jlDataAggiornamento.setText(data);
@@ -590,7 +598,9 @@ public class jpSetting extends jpAbstract {
                 jcbDownloadMyitasaStartup.isSelected(), jtfRssSubsf.getText(), 
                 jtfRssMySubsf.getText(), jtfDestTorrent.getText(), jcbAudioRss.isSelected(), 
                 jcbAudioSub.isSelected(), jcbMail.isSelected(), jtfMailTo.getText(),
-                jtfMailSmtp.getText());
+                jtfMailSmtp.getText(), jcbPaneLog.isSelected(), 
+                jcbPaneSearchSubItasa.isSelected(), jcbPaneSetting.isSelected(), 
+                jcbPaneSubDest.isSelected());
 
         if (!previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {
             int returnCode = JOptionPane.showConfirmDialog(this,

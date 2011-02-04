@@ -30,7 +30,8 @@ public class ApplicationSettings {
             autoDownloadMyItasa, enableAdvisorAudioRss, enableAdvisorAudioSub, 
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
-            enableAdvisorMail;
+            enableAdvisorMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
+            enablePaneSearchSubItasa;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -201,6 +202,21 @@ public class ApplicationSettings {
             error.launch(e, getClass(), null);
         }
     }// end write
+    
+    /** Scrive i settaggi su file */
+    public void writePaneVisibleSetting() {
+        try {
+            propertiesCrypting("ENABLE_PANE_LOG", enablePaneLog);
+            propertiesCrypting("ENABLE_PANE_SETTING", enablePaneSetting);
+            propertiesCrypting("ENABLE_PANE_SUB_DEST", enablePaneSubDestination);
+            propertiesCrypting("ENABLE_PANE_SEARCH_SUB_ITASA", enablePaneSearchSubItasa);
+            storeSettings();
+        } catch (GeneralSecurityException e) {
+            error.launch(e, getClass());
+        } catch (IOException e) {
+            error.launch(e, getClass(), null);
+        }
+    }// end write
 
     public void writeApplicationFirstTimeUsedFalse() {
         applicationFirstTimeUsed = false;
@@ -237,6 +253,8 @@ public class ApplicationSettings {
         torrentOption = true;
         applicationFirstTimeUsed = true;
         applicationLookAndFeel = "Synthetica Standard";
+        enablePaneLog = true;
+        enablePaneSetting = true;
         try {
             propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED",
                     applicationFirstTimeUsed);
@@ -519,5 +537,37 @@ public class ApplicationSettings {
 
     public void setMySubsfactoryFeedUrl(String mySubsfactoryFeedUrl) {
         this.mySubsfactoryFeedUrl = mySubsfactoryFeedUrl;
+    }
+
+    public boolean isEnablePaneLog() {
+        return enablePaneLog;
+    }
+
+    public void setEnablePaneLog(boolean enablePaneLog) {
+        this.enablePaneLog = enablePaneLog;
+    }
+
+    public boolean isEnablePaneSearchSubItasa() {
+        return enablePaneSearchSubItasa;
+    }
+
+    public void setEnablePaneSearchSubItasa(boolean enablePaneSearchSubItasa) {
+        this.enablePaneSearchSubItasa = enablePaneSearchSubItasa;
+    }
+
+    public boolean isEnablePaneSetting() {
+        return enablePaneSetting;
+    }
+
+    public void setEnablePaneSetting(boolean enablePaneSetting) {
+        this.enablePaneSetting = enablePaneSetting;
+    }
+
+    public boolean isEnablePaneSubDestination() {
+        return enablePaneSubDestination;
+    }
+
+    public void setEnablePaneSubDestination(boolean enablePaneSubDestination) {
+        this.enablePaneSubDestination = enablePaneSubDestination;
     }
 }// end class

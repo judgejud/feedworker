@@ -319,15 +319,13 @@ public class Kernel implements PropertyChangeListener {
         prop.writeGeneralSettings();
         prop.writeItasaSettings();
         prop.writeAdvisorSettings();
-        if (prop.isSubsfactoryOption()) {
+        prop.writePaneVisibleSetting();
+        if (prop.isSubsfactoryOption())
             prop.writeSubsfactorySettings();
-        }
-        if (prop.isTorrentOption()) {
+        if (prop.isTorrentOption())
             prop.writeTorrentSettings();
-        }
-        if (prop.isApplicationFirstTimeUsed()) {
+        if (prop.isApplicationFirstTimeUsed())
             prop.writeApplicationFirstTimeUsedFalse();
-        }
     }
 
     /**
@@ -1117,6 +1115,20 @@ public class Kernel implements PropertyChangeListener {
 
     private void printOk(String msg) {
         ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
+    }
+
+    public void checkLoginItasa(String user, String pwd) {
+        Itasa i = new Itasa();
+        try {
+            i.login(user, pwd);
+            printOk("CheckLogin itasa: ok");
+        } catch (JDOMException ex) {
+            error.launch(ex, this.getClass());
+        } catch (IOException ex) {
+            error.launch(ex, this.getClass());
+        } catch (ItasaException ex) {
+            printAlert("CheckLogin itasa: " + ex.getMessage());
+        }
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
