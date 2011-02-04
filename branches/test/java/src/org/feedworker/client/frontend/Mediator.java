@@ -508,7 +508,9 @@ public class Mediator {
             String myitasa, String user, String pwd, boolean autoMyitasa,
             boolean autoLoadMyItasa, String subsf, String mySubsf, String torrent,
             boolean audioRss, boolean audioSub, boolean mail, String mailTO, 
-            String smtp) {
+            String smtp, boolean paneLog, boolean paneSearch, boolean paneSetting,
+            boolean paneSubDest) {
+                
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -516,25 +518,22 @@ public class Mediator {
         if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                 sambaUser, sambaPwd)) {
             save = true;
-            if (save) {
+            if (save)
                 save = checkSaveItasa(itasa, myitasa, user, pwd);
-            }
-            if (prop.isSubsfactoryOption() && save) {
+            if (prop.isSubsfactoryOption() && save)
                 save = checkSaveSubsf(subsf, mySubsf);
-            }
-            if (prop.isTorrentOption() && save) {
+            if (prop.isTorrentOption() && save)
                 checkSaveTorrent(torrent);
-            }
         }
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                     sambaUser, sambaPwd, time, laf, timeout, 
                     advancedDownload, runIconized);
             setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
-            prop.setSubsfactoryFeedURL(subsf);
-            prop.setMySubsfactoryFeedUrl(mySubsf);
+            setPropSubsf(subsf, mySubsf);
             prop.setTorrentDestinationFolder(torrent);
             setPropAdvisor(audioRss, audioSub, mail, mailTO, smtp);
+            setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest);
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio "
@@ -582,6 +581,11 @@ public class Mediator {
         prop.setAutoLoadDownloadMyItasa(autoload);
     }
     
+    private void setPropSubsf(String subsf, String mySubsf){
+        prop.setSubsfactoryFeedURL(subsf);
+        prop.setMySubsfactoryFeedUrl(mySubsf);
+    }
+    
     private void setPropAdvisor(boolean audioRss, boolean audioSub, boolean mail,
                                 String mailTO, String smtp){
         prop.setEnableAdvisorAudioRss(audioRss);
@@ -589,6 +593,14 @@ public class Mediator {
         prop.setEnableAdvisorMail(mail);
         prop.setMailTO(mailTO);
         prop.setMailSmtp(smtp);
+    }
+    
+    private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
+                                    boolean subdest){
+        prop.setEnablePaneLog(log);
+        prop.setEnablePaneSearchSubItasa(search);
+        prop.setEnablePaneSetting(setting);
+        prop.setEnablePaneSubDestination(subdest);
     }
 
     void bruteRefresh() {
@@ -699,35 +711,7 @@ public class Mediator {
     String getApplicationName() {
         return FeedWorkerClient.getApplication().getName();
     }
-/*
-    TableModel getModelSystemInfo() {
-        DefaultTableModel dtm = new DefaultTableModel(null, 
-                                        new String[]{"Informazione", "Valore"})  {
 
-            Class[] types = new Class[]{String.class, String.class};
-
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-
-            @Override
-            public boolean isCellEditable(int rowIndex, int vColIndex) {
-                return false;
-            }
-        };
-        dtm.addRow(new String[]{"Java version", SystemProperty.getVersion()});
-        dtm.addRow(new String[]{"Java vendor", SystemProperty.getVendor()});
-        dtm.addRow(new String[]{"Java Home", SystemProperty.getHome()});
-        dtm.addRow(new String[]{"Sistema Operativo", SystemProperty.getOsName()});
-        dtm.addRow(new String[]{"Versione SO", SystemProperty.getOsVersion()});
-        dtm.addRow(new String[]{"Architettura SO", SystemProperty.getOsArchitecture()});
-        dtm.addRow(new String[]{"Directory attuale", SystemProperty.getUserDir()});
-        dtm.addRow(new String[]{"File regole", "rules.xml"});
-        dtm.addRow(new String[]{"File impostazioni", prop.getSettingsFilename()});
-        return dtm;
-    }
-*/    
     ArrayList<String[]> getPropertiesInfo(){
         ArrayList<String[]> array = new ArrayList<String[]>();
         array.add(new String[]{"File calendario", "calendar.xml"});
@@ -781,6 +765,6 @@ public class Mediator {
     }
 
     public void checkLoginItasa(String user, char[] password) {
-        System.out.println(password.toString());
+        core.checkLoginItasa(user,new String(password));
     }
 }

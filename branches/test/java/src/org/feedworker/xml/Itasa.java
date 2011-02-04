@@ -310,7 +310,7 @@ public class Itasa extends AbstractXML{
             Element item = (Element) super.getDescendantsZero(0).next();
             authcode = item.getChild(TAG_LOGIN_AUTHCODE).getText();
         } else
-            throw new ItasaException("login: "+ error);
+            throw new ItasaException(error);
         return authcode;
     }
     
