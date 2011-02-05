@@ -886,8 +886,8 @@ public class Kernel implements PropertyChangeListener {
     public void detailedSearchShow(String tv) {
         TvRage t = new TvRage();
         try {
-            ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv,
-                    false);
+            ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv, false, 
+                                                                            true);
             if (array != null) {
                 ManageListener.fireTableEvent(this, array, SEARCH_TV);
                 ManageListener.fireJFrameEventOperation(this, SEARCH_TV);
@@ -941,7 +941,7 @@ public class Kernel implements PropertyChangeListener {
             array[2] = temp.get(1);
         }
         array[3] = show[1];
-        array[4] = show[3];
+        array[4] = Common.getStatus((String) show[3]);
         array[5] = show[4];
         return array;
     }
@@ -1145,7 +1145,7 @@ public class Kernel implements PropertyChangeListener {
                 while (iter.hasNext() && !this.isCancelled()) {
                     String name = iter.next().getName();
                     ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(
-                            name, true);
+                            name, true, false);
                     if (temp != null) {
                         Object[] show = temp.get(0);
                         if (!ts.contains(show[0])) {

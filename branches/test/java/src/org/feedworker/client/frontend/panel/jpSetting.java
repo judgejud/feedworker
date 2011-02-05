@@ -286,7 +286,7 @@ public class jpSetting extends jpAbstract {
 
         gbc.gridx = 0;
         gbc.gridy = ++y;
-        gbc.gridwidth = 2;
+        gbc.gridwidth = 3;
         jpSettingItasa.add(jcbDownloadMyitasaStartup, gbc);
 
         gbc.gridx = 0;
@@ -477,7 +477,13 @@ public class jpSetting extends jpAbstract {
         jpSettingVP.setPreferredSize(INTERNALSETTINGS);
         GridBagConstraints gbc = initGbc();
         int y = 0;
-        
+        jpSettingVP.add(jcbPaneSearchSubItasa, gbc);
+        gbc.gridy = ++y;
+        jpSettingVP.add(jcbPaneSubDest, gbc);
+        gbc.gridy = ++y;
+        jpSettingVP.add(jcbPaneSetting, gbc);
+        gbc.gridy = ++y;
+        jpSettingVP.add(jcbPaneLog, gbc);
         return jpSettingVP;
     }
 

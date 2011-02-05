@@ -6,8 +6,8 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
-import javax.swing.JLabel;
 
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -34,7 +34,7 @@ public class jtCalendar extends JTable implements TableEventListener{
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
 
             Class[] types = new Class[]{String.class, String.class, String.class,
-                            String.class, String.class, String.class, String.class, 
+                            String.class, Boolean.class, String.class, String.class, 
                             String.class, Date.class, String.class, String.class, 
                             Date.class};
 
@@ -65,7 +65,7 @@ public class jtCalendar extends JTable implements TableEventListener{
         Swing.setTableDimensionLockColumn(this, 0, -1); //id tvrage
         Swing.setTableDimensionLockColumn(this, 1, -1); //id itasa
         Swing.setTableDimensionLockColumn(this, 2, -1); //id tvdb
-        Swing.setTableDimensionLockColumn(this, 4, 100);
+        Swing.setTableDimensionLockColumn(this, 4, -1); //stato
         Swing.setTableDimensionLockColumn(this, 5, 70);
         Swing.setTableDimensionLockColumn(this, 6, 70);
         Swing.setTableDimensionLockColumn(this, 8, 65);
@@ -93,10 +93,9 @@ public class jtCalendar extends JTable implements TableEventListener{
             setText(value.toString());
             setFont(font);
             setOpaque(true);
-            
-            String text = (String) table.getValueAt(row, 4);
-            if(text.equalsIgnoreCase("final season") || 
-                    text.equalsIgnoreCase("canceled/ended"))
+
+            Boolean flag = (Boolean)table.getValueAt(row, 4);
+            if (flag)
                 setBackground(Color.red);
             else 
                 setBackground(table.getBackground());

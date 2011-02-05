@@ -72,17 +72,28 @@ public class jpCalendar extends jpAbstract{
         jbRemoveAll.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                jbRemoveAllRows();
+                jbRemoveAllRowsMouseClick();
             }
         });
 
         JButton jbRefresh = new JButton(" Aggiorna ");
-        jbRefresh.setToolTipText("Aggiorna le informazioni sulle serie");
+        jbRefresh.setToolTipText("Aggiorna le informazioni sulle serie che hanno data "
+                + "prossima puntata bianca o minore odierna");
         jbRefresh.setBorder(BORDER);
         jbRefresh.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 jbRefreshCalendarMouseClick();
+            }
+        });
+        
+        JButton jbSingleRefresh = new JButton(" Aggiorna Singolo ");
+        jbSingleRefresh.setToolTipText("Aggiorna le informazioni sulla serie selezionata");
+        jbSingleRefresh.setBorder(BORDER);
+        jbSingleRefresh.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbRefreshSingleMouseClick();
             }
         });
 
@@ -111,6 +122,8 @@ public class jpCalendar extends jpAbstract{
         gbc.gridx = x++;
         jpAction.add(jbRefresh, gbc);
         gbc.gridx = x++;
+        jpAction.add(jbSingleRefresh, gbc);
+        gbc.gridx = x++;
         jpAction.add(jbImport, gbc);
         
         add(jpAction, BorderLayout.NORTH);
@@ -131,7 +144,7 @@ public class jpCalendar extends jpAbstract{
         }
     }
     
-    private void jbRemoveAllRows(){
+    private void jbRemoveAllRowsMouseClick(){
         proxy.removeAllShowCalendar();
         ((DefaultTableModel) jtable.getModel()).setRowCount(0);
     }
@@ -140,6 +153,14 @@ public class jpCalendar extends jpAbstract{
         if (jtable.getRowCount()>0){
             ((DefaultTableModel) jtable.getModel()).setRowCount(0);
             proxy.refreshCalendar();
+        }
+    }
+
+    private void jbRefreshSingleMouseClick(){
+        int row = jtable.getSelectedRow();
+        if (row > -1){
+            row = jtable.convertRowIndexToModel(row);
+            //TODO
         }
     }
     
