@@ -199,7 +199,7 @@ public class Xml extends AbstractXML{
                 obj[++i]=calendar.getChild(TAG_CALENDAR_ID_ITASA).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_ID_TVDB).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_NAME).getText();
-                obj[++i]=calendar.getChild(TAG_CALENDAR_STATUS).getText();
+                obj[++i]=Boolean.parseBoolean(calendar.getChild(TAG_CALENDAR_STATUS).getText());
                 obj[++i]=calendar.getChild(TAG_CALENDAR_DAY).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_EPISODE).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_TITLE).getText();

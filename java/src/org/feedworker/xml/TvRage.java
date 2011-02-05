@@ -17,11 +17,12 @@ import org.jfacility.java.lang.Lang;
  * @author luca
  */
 public class TvRage extends AbstractXML{
-    private final String DETAILED_SEARCH = 
-            "http://services.tvrage.com/feeds/full_search.php?show=";
-    private final String EPISODE_LIST = 
-            "http://services.tvrage.com/feeds/episode_list.php?sid=";
-    private final String SHOW_INFO = "http://services.tvrage.com/feeds/showinfo.php?sid=";
+    private final String URL_TVRAGE = "http://services.tvrage.com/feeds"; 
+    private final String URL_TVRAGE_DETAILED_SEARCH = URL_TVRAGE +
+                                                    "/full_search.php?show=";
+    private final String URL_TVRAGE_EPISODE_LIST = URL_TVRAGE + 
+                                                    "/episode_list.php?sid=";
+    private final String URL_TVRAGE_SHOW_INFO = URL_TVRAGE + "/showinfo.php?sid=";
     private final String TAG_SHOW_ID = "showid";
     private final String TAG_NAME = "name";
     private final String TAG_SEASON = "seasons";
@@ -32,9 +33,10 @@ public class TvRage extends AbstractXML{
     private final String TAG_TITLE = "title";
     private final String TAG_SHOWNAME = "showname";
 
-    public ArrayList<Object[]> readingDetailedSearch_byShow(String show, boolean stop)
+    public ArrayList<Object[]> readingDetailedSearch_byShow(String show, boolean stop, 
+                                                                    boolean statusString)
                 throws JDOMException, IOException{
-        buildUrl(DETAILED_SEARCH + show);
+        buildUrl(URL_TVRAGE_DETAILED_SEARCH + show);
         ArrayList<Object[]> matrix = null;
         if (sizeRootChildren()>0){
             matrix = new ArrayList<Object[]>();
@@ -49,9 +51,13 @@ public class TvRage extends AbstractXML{
                 try{
                     airday = convertDayIngToIta(item.getChild(TAG_AIRDAY).getText());
                 } catch(NullPointerException e){
-                    airday ="";
+                    airday = "";
                 }
-                Object[] temp = {id, name, season, status, airday};
+                Object[] temp;
+                if (statusString)
+                    temp = new Object[]{id, name, season, status, airday};
+                else
+                    temp = new Object[]{id, name, season, Common.getStatus(status), airday};
                 matrix.add(temp);
                 if (stop)
                     break;
@@ -62,7 +68,7 @@ public class TvRage extends AbstractXML{
 
     public Object[] readingEpisodeList_byID(String id, String season) throws 
             JDOMException, IOException, IndexOutOfBoundsException{
-        buildUrl(EPISODE_LIST + id);
+        buildUrl(URL_TVRAGE_EPISODE_LIST + id);
         List seasons = ((Element) document.getRootElement().getChildren().get(2))
                 .getChildren();
         int last = Lang.stringToInt(season);        
@@ -108,7 +114,7 @@ public class TvRage extends AbstractXML{
     }
     
     public Object[] showInfo_byID(String id) throws JDOMException, IOException{
-        buildUrl(SHOW_INFO + id);
+        buildUrl(URL_TVRAGE_SHOW_INFO + id);
         Iterator iterator = document.getContent().iterator();
         Object[] show = new Object[5];
         show[0] = id;

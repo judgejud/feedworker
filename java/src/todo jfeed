@@ -1,27 +1,24 @@
 IMPLEMENTARE
 -feed rss sotto thread
--trovare 1modo per rendere visibile la pwd itasa
 -ripristino files backuppati
 -destinazione avanzata in mixed mode
 -implementare il tipo di download di mysubsfactory (come x myitasa)
 -fare caricamento xml sotto thread
--pulsante check login itasa implementare il codice.
--vedere di creare 1http permanente x itasa
 -ricerca sottotitoli itasa
 
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
 aggiungere versioning automatico all'applicazione
 calendario: togliere colonna status e implementare colonna nascosta true/false per cancelled/ended e season finale.
+calendario: introdurre aggiornamento singolo
 javamail: avviso mail sub scaricato
 audio: avviso sub estratto
 aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
-salvare lista tab visibili per lo startup del programma. 
 
 CORREZIONI:
 -mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
 
 PUNTI INTERROGATIVI
-feature proxy? 
+feature proxy http? 
 esiste evento "arresta sistema"? e come intercettarlo???  
 OS & FW: decidere per il debug_flag se passarlo da commandline.
 log4j?
@@ -30,6 +27,7 @@ avvio automatico all'avvio OS (win-unix-mac)?
 multiutenza?
 properties sotto jfacility? 
 http://thetvdb.com/wiki/index.php?title=Programmers_API?
+trovare 1modo per rendere visibile la pwd itasa?
 
 VERIFICARE LE IMPLEMENTAZIONI
 impedire il funzionamento a vendor java diverse da sun.
