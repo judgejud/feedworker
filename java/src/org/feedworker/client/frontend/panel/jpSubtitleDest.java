@@ -2,7 +2,6 @@ package org.feedworker.client.frontend.panel;
 
 //IMPORT JAVA
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -11,7 +10,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -75,6 +73,16 @@ public class jpSubtitleDest extends jpAbstract {
                 jbRemoveRowMouseClicked();
             }
         });
+        
+        JButton jbRemoveAll = new JButton(" Remove All ");
+        jbRemoveAll.setToolTipText("Rimuove tutte le serie dalla tabella");
+        jbRemoveAll.setBorder(BORDER);
+        jbRemoveAll.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbRemoveAllRowsMouseClick();
+            }
+        });
 
         JButton jbSaveRole = new JButton(" Salva ");
         jbSaveRole.setToolTipText("Salva impostazioni");
@@ -96,24 +104,22 @@ public class jpSubtitleDest extends jpAbstract {
             }
         });
 
-        JLabel jlTemp = new JLabel();
-        jlTemp.setPreferredSize(new Dimension(700, 20));
-
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
+        int x = -1;
+        gbc.gridx = ++x;
         gbc.gridy = 0;
         gbc.insets = BUTTON_SPACE_INSETS;
         gbc.anchor = GridBagConstraints.NORTHWEST;
 
         jpAction.add(jbAddRow, gbc);
-        gbc.gridx = 1;
+        gbc.gridx = ++x;
         jpAction.add(jbRemoveRow, gbc);
-        gbc.gridx = 2;
+        gbc.gridx = ++x;
+        jpAction.add(jbRemoveAll, gbc);
+        gbc.gridx = ++x;
         jpAction.add(jbSaveRole, gbc);
-        gbc.gridx = 3;
+        gbc.gridx = ++x;
         jpAction.add(jbAddDir, gbc);
-        gbc.gridx = 4;
-        jpAction.add(jlTemp, gbc);
 
         add(jpAction, BorderLayout.NORTH);
     }
@@ -174,5 +180,9 @@ public class jpSubtitleDest extends jpAbstract {
     private void jmiOpenFolderClicked(Point p){
         int row = jtable.rowAtPoint(p);
         proxy.openFolder(jtable.getValueAt(row, 3).toString());
+    }
+    
+    private void jbRemoveAllRowsMouseClick(){
+        ((DefaultTableModel) jtable.getModel()).setRowCount(0);
     }
 }

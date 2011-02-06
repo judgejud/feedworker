@@ -75,7 +75,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "303 by "
+                + "309 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -382,8 +382,8 @@ public class Mediator {
         return alLinks;
     }
 
-    public String[] getElemEnum() {
-        return core.getQuality();
+    public String[] getQualityEnum() {
+        return Quality.toArray();
     }
 
     void synoMoveVideo() {

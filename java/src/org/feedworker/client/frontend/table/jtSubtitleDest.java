@@ -24,7 +24,7 @@ public class jtSubtitleDest extends JTable implements TableEventListener {
     private Mediator proxy = Mediator.getIstance();
     private final String[] nameCols = {"Serie", "Stagione", "Versione",
         "Destinazione",  "Rename", "Delete"};
-    private final String[] itemsCombo = proxy.getElemEnum();
+    private final String[] itemsCombo = proxy.getQualityEnum();
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
 

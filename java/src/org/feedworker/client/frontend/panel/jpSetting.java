@@ -98,8 +98,10 @@ public class jpSetting extends jpAbstract {
         jbAnnullaSettings.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
+                //TODO
             }
         });
+        jbAnnullaSettings.setEnabled(false);
 
         jpAction = new JPanel(new FlowLayout());
         jpAction.add(jbAnnullaSettings);
@@ -430,9 +432,12 @@ public class jpSetting extends jpAbstract {
         jtfRssSubsf = new JTextField(25);
         jtfRssMySubsf = new JTextField(25);
         //ALERT
+        //TODO
         jcbAudioRss = new JCheckBox("Avviso audio rss");
         jcbAudioSub = new JCheckBox("Avviso audio sub");
+        jcbAudioSub.setEnabled(false);
         jcbMail = new JCheckBox("Avviso sub mail");
+        jcbMail.setEnabled(false);
         jtfMailTo = new JTextField(20);
         jtfMailSmtp = new JTextField(20);
         //VISIBLE PANEL

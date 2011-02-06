@@ -10,6 +10,8 @@ public class jpSearchSubItasa extends JPanel{
     private JPanel jpParams;
     
     public jpSearchSubItasa(){
+        super();
+        setName("Search sub Itasa");
         initPaneParams();
     }
     
