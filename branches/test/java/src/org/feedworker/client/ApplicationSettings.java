@@ -52,26 +52,33 @@ public class ApplicationSettings {
                 setItasaUsername(getDecryptedValue("ITASA_USERNAME"));
                 setItasaPassword(getDecryptedValue("ITASA_PASSWORD"));
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
-                setSubtitleDestinationFolder(getDecryptedValue("SUBTITLE_DESTINATION_FOLDER"));
+                setSubtitleDestinationFolder(
+                                getDecryptedValue("SUBTITLE_DESTINATION_FOLDER"));
                 setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
                 setRefreshInterval(getDecryptedValue("REFRESH_INTERVAL"));
-                setAutoDownloadMyItasa(getBooleanDecryptedValue("IS_AUTO_DOWNLOAD_MYITASA"));
+                setAutoDownloadMyItasa(
+                            getBooleanDecryptedValue("IS_AUTO_DOWNLOAD_MYITASA"));
                 setLastDateTimeRefresh(getDecryptedValue("LAST_DATETIME_REFRESH"));
-                setApplicationLookAndFeel(getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
-                setEnableAdvisorAudioRss(getBooleanDecryptedValue("ENABLE_ADVISOR_AUDIO_RSS"));
-                setEnableAdvisorAudioSub(getBooleanDecryptedValue("ENABLE_ADVISOR_AUDIO_SUB"));
+                setApplicationLookAndFeel(
+                                    getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
+                setEnableAdvisorAudioRss(
+                            getBooleanDecryptedValue("ENABLE_ADVISOR_AUDIO_RSS"));
+                setEnableAdvisorAudioSub(
+                            getBooleanDecryptedValue("ENABLE_ADVISOR_AUDIO_SUB"));
                 setTorrentOption(getBooleanDecryptedValue("TORRENT"));
                 applicationFirstTimeUsed = 
                         getBooleanDecryptedValue("IS_APPLICATION_FIRST_TIME_USED");
                 setLocalFolder(getBooleanDecryptedValue("IS_LOCAL_FOLDER"));
-                setTorrentDestinationFolder(getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
+                setTorrentDestinationFolder(
+                                getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
                 setCifsSharePath(getDecryptedValue("CIFS_SHARE_PATH"));
                 setCifsShareDomain(getDecryptedValue("CIFS_SHARE_DOMAIN"));
                 setCifsShareLocation(getDecryptedValue("CIFS_SHARE_LOCATION"));
                 setCifsSharePassword(getDecryptedValue("CIFS_SHARE_PASSWORD"));
                 setCifsShareUsername(getDecryptedValue("CIFS_SHARE_USERNAME"));
                 setHttpTimeout(getDecryptedValue("HTTP_TIMEOUT"));
-                setEnableAdvancedDownload(getBooleanDecryptedValue("ENABLE_ADVANCED_DOWNLOAD"));
+                setEnableAdvancedDownload(
+                            getBooleanDecryptedValue("ENABLE_ADVANCED_DOWNLOAD"));
                 setEnableIconizedRun(getBooleanDecryptedValue("ENABLE_ICONIZED_RUN"));
                 setAutoLoadDownloadMyItasa(
                         getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
@@ -79,7 +86,12 @@ public class ApplicationSettings {
                 setEnableAdvisorMail(getBooleanDecryptedValue("ENABLE_ADVISOR_MAIL"));
                 setMailTO(getDecryptedValue("MAIL_TO"));
                 setMailSmtp(getDecryptedValue("MAIL_SMTP"));
-                
+                setEnablePaneLog(getBooleanDecryptedValue("ENABLE_PANE_LOG"));
+                setEnablePaneSearchSubItasa(
+                            getBooleanDecryptedValue("ENABLE_PANE_SEARCH_SUB_ITASA"));
+                setEnablePaneSetting(getBooleanDecryptedValue("ENABLE_PANE_SETTING"));
+                setEnablePaneSubDestination(
+                                    getBooleanDecryptedValue("ENABLE_PANE_SUB_DEST"));
             } else {
                 loadDefaultSettings();
                 storeSettings();

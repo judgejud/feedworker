@@ -23,8 +23,8 @@ public enum Quality {
     
     public static String[] toArray(){
         return new String[]{ALL.toString(), NORMAL.toString(), _720p.toString(),
-                            _1080p.toString(), BLURAY.toString(), DVDRIP.toString(), 
-                            HR.toString(), BDRIP.toString(), BRRIP.toString(), 
-                            WEB_DL.toString(), DIFF.toString()};
+                            _1080p.toString(), _1080i.toString(), BLURAY.toString(), 
+                            DVDRIP.toString(), HR.toString(), BDRIP.toString(), 
+                            BRRIP.toString(), WEB_DL.toString(), DIFF.toString()};
     }
 }

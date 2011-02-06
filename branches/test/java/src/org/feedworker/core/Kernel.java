@@ -672,15 +672,6 @@ public class Kernel implements PropertyChangeListener {
         printOk("Timer restart ok.");
     }
 
-    /**
-     * restituice l'array con le informazioni sulle versioni video
-     * 
-     * @return array versioni video
-     */
-    public String[] getQuality() {
-        return QUALITY;
-    }
-
     private String getSynoId(InputStream is) {
         String id = null;
         /*

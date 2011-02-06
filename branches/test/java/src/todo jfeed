@@ -8,7 +8,6 @@ IMPLEMENTARE
 
 salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
 aggiungere versioning automatico all'applicazione
-calendario: togliere colonna status e implementare colonna nascosta true/false per cancelled/ended e season finale.
 calendario: introdurre aggiornamento singolo
 javamail: avviso mail sub scaricato
 audio: avviso sub estratto
@@ -22,7 +21,6 @@ feature proxy http?
 esiste evento "arresta sistema"? e come intercettarlo???  
 OS & FW: decidere per il debug_flag se passarlo da commandline.
 log4j?
-calendar: bottone info su ciò che è presente nella tabella?
 avvio automatico all'avvio OS (win-unix-mac)?
 multiutenza?
 properties sotto jfacility? 
