@@ -14,16 +14,16 @@ import org.jdesktop.swingx.JXTaskPaneContainer;
  * 
  * @author luca
  */
-public class jpSettingEnhanced extends jpSetting {
-    private static jpSettingEnhanced jpanel = null;
+public class paneSettingEnhanced extends paneSetting {
+    private static paneSettingEnhanced jpanel = null;
     
-    private jpSettingEnhanced() {
+    private paneSettingEnhanced() {
         super();
     }
 
-    public static jpSettingEnhanced getPanel() {
+    public static paneSettingEnhanced getPanel() {
         if (jpanel == null)
-            jpanel = new jpSettingEnhanced();
+            jpanel = new paneSettingEnhanced();
         return jpanel;
     }
     

@@ -6,10 +6,10 @@ import javax.swing.JPanel;
  *
  * @author luca
  */
-public class jpSearchSubItasa extends JPanel{
+public class paneSearchSubItasa extends JPanel{
     private JPanel jpParams;
     
-    public jpSearchSubItasa(){
+    public paneSearchSubItasa(){
         super();
         setName("Search sub Itasa");
         initPaneParams();

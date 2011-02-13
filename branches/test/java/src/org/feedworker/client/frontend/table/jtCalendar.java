@@ -95,10 +95,13 @@ public class jtCalendar extends JTable implements TableEventListener{
             setOpaque(true);
 
             Boolean flag = (Boolean)table.getValueAt(row, 4);
-            if (flag)
+            if (flag){
                 setBackground(Color.red);
-            else 
+                setToolTipText("Series finale");
+            } else {
                 setBackground(table.getBackground());
+                setToolTipText(null);
+            }
             Color back = getBackground();
             if (isSelected){
                 setForeground(table.getSelectionForeground());

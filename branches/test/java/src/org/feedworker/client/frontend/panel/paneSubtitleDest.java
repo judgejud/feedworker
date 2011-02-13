@@ -24,18 +24,18 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-public class jpSubtitleDest extends jpAbstract {
+public class paneSubtitleDest extends paneAbstract {
 
-    private static jpSubtitleDest jpanel = null;
+    private static paneSubtitleDest jpanel = null;
     private jtSubtitleDest jtable;
 
-    public static jpSubtitleDest getPanel() {
+    public static paneSubtitleDest getPanel() {
         if (jpanel == null)
-            jpanel = new jpSubtitleDest();
+            jpanel = new paneSubtitleDest();
         return jpanel;
     }
 
-    private jpSubtitleDest() {
+    private paneSubtitleDest() {
         super();
         setName("Subtitle Destination");
         initializePanel();

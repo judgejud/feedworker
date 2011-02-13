@@ -19,10 +19,10 @@ import org.feedworker.client.frontend.events.StatusBarEventListener;
  *
  * @author luca
  */
-public class jpStatusBar extends JPanel implements StatusBarEventListener{
+public class paneStatusBar extends JPanel implements StatusBarEventListener{
     private JLabel jlText = new JLabel();
 
-    public jpStatusBar() {
+    public paneStatusBar() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(10, 23));
         jlText.setFont(new Font("Arial", Font.BOLD, 12));

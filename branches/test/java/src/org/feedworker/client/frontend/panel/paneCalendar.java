@@ -16,21 +16,21 @@ import org.jfacility.java.lang.Lang;
  *
  * @author luca
  */
-public class jpCalendar extends jpAbstract{
+public class paneCalendar extends paneAbstract{
 
-    private static jpCalendar jpanel = null;
+    private static paneCalendar jpanel = null;
     private jtCalendar jtable;
 
-    private jpCalendar(){
+    private paneCalendar(){
         super();
         setName("Calendar");
         initializePanel();
         initializeButtons();
     }
 
-    public static jpCalendar getPanel(){
+    public static paneCalendar getPanel(){
         if (jpanel==null)
-            jpanel = new jpCalendar();
+            jpanel = new paneCalendar();
         return jpanel;
     }
 
