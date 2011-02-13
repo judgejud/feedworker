@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
-import org.feedworker.client.frontend.table.jtRss;
+import org.feedworker.client.frontend.table.tableRss;
 /**
  * Pannello Itasa
  * 
@@ -18,7 +18,7 @@ public class paneItasa extends paneAbstract {
 
     private static paneItasa jpanel = null;
     private JButton jbAllItasa, jbDown, jbClean, jbAllMyItasa;
-    private jtRss jtItasa, jtMyItasa;
+    private tableRss jtItasa, jtMyItasa;
 
     /** Costruttore privato */
     private paneItasa() {
@@ -43,13 +43,13 @@ public class paneItasa extends paneAbstract {
 
     @Override
     void initializePanel() {
-        jtItasa = new jtRss(proxy.getItasa());
+        jtItasa = new tableRss(proxy.getItasa());
         jtItasa.setTitleDescriptionColumn("Sottotitolo Itasa");
         JScrollPane jScrollTable1 = new JScrollPane(jtItasa);
         jScrollTable1.setPreferredSize(TABLE_SCROLL_SIZE);
         jScrollTable1.setAutoscrolls(true);
 
-        jtMyItasa = new jtRss(proxy.getMyItasa());
+        jtMyItasa = new tableRss(proxy.getMyItasa());
         jtMyItasa.setTitleDescriptionColumn("Sottotitolo MyItasa");
         JScrollPane jScrollTable2 = new JScrollPane(jtMyItasa);
         jScrollTable2.setPreferredSize(TABLE_SCROLL_SIZE);
@@ -135,7 +135,7 @@ public class paneItasa extends paneAbstract {
         }
     }
 
-    private void selectAll(jtRss jt) {
+    private void selectAll(tableRss jt) {
         for (int i = 0; i < jt.getRowCount(); i++)
             jt.setValueAt(true, i, 3);
     }

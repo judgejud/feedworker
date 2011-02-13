@@ -15,11 +15,11 @@ import org.jfacility.javax.swing.Swing;
  *
  * @author luca
  */
-public class jtResultSearchTv extends JTable implements TableEventListener{
+public class tableResultSearchTv extends JTable implements TableEventListener{
     private final String[] nameCols = {"ID","Serie", "Stagione", "Status", "Giorno"};
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
-    public jtResultSearchTv(String name){
+    public tableResultSearchTv(String name){
         super();
         setName(name);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {

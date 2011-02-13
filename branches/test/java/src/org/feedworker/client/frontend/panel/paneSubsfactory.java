@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
-import org.feedworker.client.frontend.table.jtRss;
+import org.feedworker.client.frontend.table.tableRss;
 /**
  * 
  * @author luca
@@ -17,7 +17,7 @@ public class paneSubsfactory extends paneAbstract {
 
     private static paneSubsfactory jpanel = null;
     private JButton jbDown, jbClean;
-    private jtRss jtSubsf, jtMySubsf;
+    private tableRss jtSubsf, jtMySubsf;
 
     private paneSubsfactory() {
         super();
@@ -37,8 +37,8 @@ public class paneSubsfactory extends paneAbstract {
 
     @Override
     void initializePanel() {
-        jtSubsf = new jtRss(proxy.getSubsf());
-        jtMySubsf = new jtRss(proxy.getMySubsf());
+        jtSubsf = new tableRss(proxy.getSubsf());
+        jtMySubsf = new tableRss(proxy.getMySubsf());
 
         JScrollPane jScrollTable1 = new JScrollPane(jtSubsf);
         jScrollTable1.setMinimumSize(TABLE_SCROLL_SIZE);

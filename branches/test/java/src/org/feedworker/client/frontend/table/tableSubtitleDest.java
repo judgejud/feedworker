@@ -20,7 +20,7 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-public class jtSubtitleDest extends JTable implements TableEventListener {    
+public class tableSubtitleDest extends JTable implements TableEventListener {    
     private Mediator proxy = Mediator.getIstance();
     private final String[] nameCols = {"Serie", "Stagione", "Versione",
         "Destinazione",  "Rename", "Delete"};
@@ -29,7 +29,7 @@ public class jtSubtitleDest extends JTable implements TableEventListener {
 
 
     /** Costruttore */
-    public jtSubtitleDest(String name) {
+    public tableSubtitleDest(String name) {
         super();
         setName(name);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {

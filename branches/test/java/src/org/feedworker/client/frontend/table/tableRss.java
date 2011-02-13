@@ -22,7 +22,7 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-public class jtRss extends JTable implements TableEventListener {
+public class tableRss extends JTable implements TableEventListener {
     // PRIVATE FINAL VARIABLE
     private final Font font = new Font("Arial", Font.PLAIN, 10);
     private final String[] columnNames = {"link", "Data", "Sottotitolo", "Select"};
@@ -35,7 +35,7 @@ public class jtRss extends JTable implements TableEventListener {
      *
      * @param name
      */
-    public jtRss(String name) {
+    public tableRss(String name) {
         super();
         setName(name);
         DefaultTableModel dtm = new DefaultTableModel(null, columnNames) {
