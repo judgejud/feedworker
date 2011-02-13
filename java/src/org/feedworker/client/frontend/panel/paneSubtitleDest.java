@@ -16,7 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-import org.feedworker.client.frontend.table.jtSubtitleDest;
+import org.feedworker.client.frontend.table.tableSubtitleDest;
 import org.jfacility.javax.swing.Swing;
 
 /**
@@ -27,7 +27,7 @@ import org.jfacility.javax.swing.Swing;
 public class paneSubtitleDest extends paneAbstract {
 
     private static paneSubtitleDest jpanel = null;
-    private jtSubtitleDest jtable;
+    private tableSubtitleDest jtable;
 
     public static paneSubtitleDest getPanel() {
         if (jpanel == null)
@@ -46,7 +46,7 @@ public class paneSubtitleDest extends paneAbstract {
 
     @Override
     void initializePanel() {
-        jtable = new jtSubtitleDest(proxy.getNameTableSubtitleDest());
+        jtable = new tableSubtitleDest(proxy.getNameTableSubtitleDest());
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
         add(jScrollTable1, BorderLayout.CENTER);

@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
-import org.feedworker.client.frontend.table.jtRss;
+import org.feedworker.client.frontend.table.tableRss;
 /**
  * 
  * @author luca
@@ -17,7 +17,7 @@ public class paneTorrent extends paneAbstract {
 
     private static paneTorrent jpanel = null;
     private JButton jbDown, jbCopyLinks, jbClean, jbFireNas;
-    private jtRss jtTorrent1, jtTorrent2;
+    private tableRss jtTorrent1, jtTorrent2;
 
     private paneTorrent() {
         super();
@@ -37,13 +37,13 @@ public class paneTorrent extends paneAbstract {
 
     @Override
     void initializePanel() {
-        jtTorrent1 = new jtRss(proxy.getEztv());
+        jtTorrent1 = new tableRss(proxy.getEztv());
         jtTorrent1.setTitleDescriptionColumn("Descrizione Torrent EZTV");
         JScrollPane jsp1 = new JScrollPane(jtTorrent1);
         jsp1.setPreferredSize(TABLE_SCROLL_SIZE);
         jsp1.setAutoscrolls(true);
 
-        jtTorrent2 = new jtRss(proxy.getBtchat());
+        jtTorrent2 = new tableRss(proxy.getBtchat());
         jtTorrent2.setTitleDescriptionColumn("Descrizione Torrent BTCHAT");
         JScrollPane jsp2 = new JScrollPane(jtTorrent2);
         jsp2.setPreferredSize(TABLE_SCROLL_SIZE);

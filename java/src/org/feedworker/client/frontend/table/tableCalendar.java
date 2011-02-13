@@ -22,13 +22,13 @@ import org.jfacility.javax.swing.Swing;
  *
  * @author luca
  */
-public class jtCalendar extends JTable implements TableEventListener{
+public class tableCalendar extends JTable implements TableEventListener{
     private final String[] nameCols = {"ID tvrage", "ID Itasa", "ID Tvdb", "Serie", 
                                         "Stato", "Giorno", "Last Ep", "Titolo", 
                                         "Data", "Next Ep", "Titolo", "Data" };
     private final Font font = new Font("Arial", Font.PLAIN, 10);
 
-    public jtCalendar(String nome){
+    public tableCalendar(String nome){
         super();
         setName(nome);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {

@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
-import org.feedworker.client.frontend.table.jtCalendar;
+import org.feedworker.client.frontend.table.tableCalendar;
 import org.jfacility.java.lang.Lang;
 /**
  *
@@ -19,7 +19,7 @@ import org.jfacility.java.lang.Lang;
 public class paneCalendar extends paneAbstract{
 
     private static paneCalendar jpanel = null;
-    private jtCalendar jtable;
+    private tableCalendar jtable;
 
     private paneCalendar(){
         super();
@@ -36,7 +36,7 @@ public class paneCalendar extends paneAbstract{
 
     @Override
     void initializePanel() {
-        jtable = new jtCalendar(proxy.getNameTableCalendar());
+        jtable = new tableCalendar(proxy.getNameTableCalendar());
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
         add(jScrollTable1, BorderLayout.CENTER);

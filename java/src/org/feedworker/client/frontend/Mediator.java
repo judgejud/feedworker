@@ -22,7 +22,7 @@ import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
-import org.feedworker.client.frontend.table.jtSubtitleDest;
+import org.feedworker.client.frontend.table.tableSubtitleDest;
 import org.feedworker.core.Kernel;
 import org.feedworker.core.ManageListener;
 import org.feedworker.core.RssParser;
@@ -75,7 +75,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "309 by "
+                + "312 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -294,7 +294,7 @@ public class Mediator {
         return core.testSamba(ip, dir, dir, user, pwd);
     }
 
-    public void saveRules(jtSubtitleDest jtable) {
+    public void saveRules(tableSubtitleDest jtable) {
         boolean _break = false;
         TreeMap<KeyRule, ValueRule> temp = new TreeMap<KeyRule, ValueRule>();
         for (int r = 0; r < jtable.getRowCount(); r++) {
