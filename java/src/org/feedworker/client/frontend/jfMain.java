@@ -24,16 +24,7 @@ import org.feedworker.client.frontend.events.JFrameEventIconDate;
 import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
 import org.feedworker.client.frontend.events.JFrameEventOperation;
 import org.feedworker.client.frontend.events.JFrameEventOperationListener;
-import org.feedworker.client.frontend.panel.jpCalendar;
-import org.feedworker.client.frontend.panel.jpItasa;
-import org.feedworker.client.frontend.panel.jpLog;
-import org.feedworker.client.frontend.panel.jpSearchSubItasa;
-import org.feedworker.client.frontend.panel.jpSetting;
-import org.feedworker.client.frontend.panel.jpSettingEnhanced;
-import org.feedworker.client.frontend.panel.jpStatusBar;
-import org.feedworker.client.frontend.panel.jpSubsfactory;
-import org.feedworker.client.frontend.panel.jpSubtitleDest;
-import org.feedworker.client.frontend.panel.jpTorrent;
+import org.feedworker.client.frontend.panel.*;
 
 import org.jfacility.java.awt.AWT;
 import org.jfacility.javax.swing.ButtonTabComponent;
@@ -53,17 +44,19 @@ public class jfMain extends JFrame implements WindowListener,
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
     //VARIABLES PRIVATE
-    private jpSetting jpSettings;
-    private jpSubtitleDest jpDestination;
     private JTabbedPane mainJTP;
     private Mediator proxy = Mediator.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
-    private jpItasa itasaJP;
-    private jpTorrent torrentJP;
-    private jpSubsfactory subsfactoryJP;
-    private jpLog logJP;
-    private jpSearchSubItasa jpSearch;
-    private jpStatusBar statusBar;
+    //private Panels
+    private paneSetting jpSettings;
+    private paneSubtitleDest jpDestination;
+    private paneItasa jpItasa;
+    private paneTorrent jpTorrent;
+    private paneSubsfactory jpSubsfactory;
+    private paneLog jpLog;
+    private paneSearchSubItasa jpSearch;
+    private paneStatusBar statusBar;
+    private paneReminder jpReminder;
     private jdResultSearchTv resultSearchTvJD = jdResultSearchTv.getDialog();
     private ProgressDialog progressBar;
     private EnhancedSystemTray systemTray;
@@ -88,39 +81,40 @@ public class jfMain extends JFrame implements WindowListener,
         mainJTP = new JTabbedPane();
         mainJTP.setPreferredSize(TAB_SIZE);
         this.add(mainJTP, BorderLayout.CENTER);
-        itasaJP = jpItasa.getPanel();
-        mainJTP.addTab("Itasa", itasaJP);
+        jpItasa = paneItasa.getPanel();
+        mainJTP.addTab("Itasa", jpItasa);
         if (prop.isSubsfactoryOption()) {
-            subsfactoryJP = jpSubsfactory.getPanel();
-            mainJTP.addTab("Subsfactory", subsfactoryJP);
+            jpSubsfactory = paneSubsfactory.getPanel();
+            mainJTP.addTab("Subsfactory", jpSubsfactory);
         }
         if (prop.isTorrentOption()) {
-            torrentJP = jpTorrent.getPanel();
-            mainJTP.addTab("Torrent", torrentJP);
+            jpTorrent = paneTorrent.getPanel();
+            mainJTP.addTab("Torrent", jpTorrent);
         }
-        mainJTP.addTab("Calendar", jpCalendar.getPanel());
-        jpSearch = new jpSearchSubItasa();
+        mainJTP.addTab("Calendar", paneCalendar.getPanel());
+        jpSearch = new paneSearchSubItasa();
         if (prop.isEnablePaneSearchSubItasa())
-            checkAddTab(jpSearch);
-        jpDestination = jpSubtitleDest.getPanel();
+            checkAddTab(jpSearch, false);
+        jpReminder = paneReminder.getPanel();
+        checkAddTab(jpReminder, false);
+        jpDestination = paneSubtitleDest.getPanel();
         if (prop.isEnablePaneSubDestination())
-            checkAddTab(jpDestination);
+            checkAddTab(jpDestination, false);
         if (proxy.isJava6())
-            jpSettings = jpSettingEnhanced.getPanel();
+            jpSettings = paneSettingEnhanced.getPanel();
         else
-            jpSettings = jpSetting.getPanel();
+            jpSettings = paneSetting.getPanel();
         if (prop.isEnablePaneSetting())
-            checkAddTab(jpSettings);
-        logJP = new jpLog();
+            checkAddTab(jpSettings, false);
+        jpLog = new paneLog();
         if (prop.isEnablePaneLog())
-            checkAddTab(logJP);
+            checkAddTab(jpLog, false);
 
-        statusBar = new jpStatusBar();
+        statusBar = new paneStatusBar();
         add(statusBar, BorderLayout.SOUTH);
 
         if (prop.isApplicationFirstTimeUsed()) {
-            checkAddTab(jpSettings);
-            mainJTP.setSelectedComponent(jpSettings);
+            checkAddTab(jpSettings,false);
             changeEnabledButton(false);
             proxy.printOk("Benvenuto al primo utilizzo.");
             proxy.printAlert("Per poter usare il client, devi configurare le "
@@ -151,7 +145,7 @@ public class jfMain extends JFrame implements WindowListener,
         clearLogJMI.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                logJP.cleanLogs();
+                jpLog.cleanLogs();
             }
         });
         fileJM.add(clearLogJMI);
@@ -235,7 +229,7 @@ public class jfMain extends JFrame implements WindowListener,
         jmiWindowSubDest.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpDestination);
+                checkAddTab(jpDestination,true);
             }
         });
         
@@ -243,7 +237,7 @@ public class jfMain extends JFrame implements WindowListener,
         jmiWindowSetting.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpSettings);
+                checkAddTab(jpSettings, true);
             }
         });
         
@@ -251,7 +245,7 @@ public class jfMain extends JFrame implements WindowListener,
         jmiWindowLog.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(logJP);
+                checkAddTab(jpLog, true);
             }
         });
         
@@ -470,20 +464,20 @@ public class jfMain extends JFrame implements WindowListener,
      *            stato
      */
     protected void changeEnabledButton(boolean e) {
-        itasaJP.setButtonEnabled(e);
-        if (prop.isSubsfactoryOption()) {
-            subsfactoryJP.setEnableButton(e);
-        }
-        if (prop.isTorrentOption()) {
-            torrentJP.setButtonEnabled(e);
-        }
+        jpItasa.setButtonEnabled(e);
+        if (prop.isSubsfactoryOption())
+            jpSubsfactory.setEnableButton(e);
+        if (prop.isTorrentOption())
+            jpTorrent.setButtonEnabled(e);
     }
 
-    private void checkAddTab(JPanel pane) {
+    private void checkAddTab(JPanel pane, boolean visible) {
         if (!mainJTP.isAncestorOf(pane)) {
             mainJTP.addTab(pane.getName(), pane);
             mainJTP.setTabComponentAt(mainJTP.getTabCount() - 1,
                     new ButtonTabComponent(mainJTP));
+            if (visible)
+                mainJTP.setSelectedComponent(pane);
         }
     }
 

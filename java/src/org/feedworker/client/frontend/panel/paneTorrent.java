@@ -13,13 +13,13 @@ import org.feedworker.client.frontend.table.jtRss;
  * 
  * @author luca
  */
-public class jpTorrent extends jpAbstract {
+public class paneTorrent extends paneAbstract {
 
-    private static jpTorrent jpanel = null;
+    private static paneTorrent jpanel = null;
     private JButton jbDown, jbCopyLinks, jbClean, jbFireNas;
     private jtRss jtTorrent1, jtTorrent2;
 
-    private jpTorrent() {
+    private paneTorrent() {
         super();
         setName("Torrent");
         initializePanel();
@@ -28,9 +28,9 @@ public class jpTorrent extends jpAbstract {
         proxy.setTableListener(jtTorrent2);
     }
 
-    public static jpTorrent getPanel() {
+    public static paneTorrent getPanel() {
         if (jpanel == null) {
-            jpanel = new jpTorrent();
+            jpanel = new paneTorrent();
         }
         return jpanel;
     }

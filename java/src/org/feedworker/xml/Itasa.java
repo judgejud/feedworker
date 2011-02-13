@@ -3,8 +3,9 @@ package org.feedworker.xml;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import org.feedworker.exception.ItasaException;
+import java.util.TreeMap;
 
+import org.feedworker.exception.ItasaException;
 import org.feedworker.object.Show;
 import org.feedworker.object.Subtitle;
 
@@ -127,8 +128,8 @@ public class Itasa extends AbstractXML{
      * @throws JDOMException
      * @throws IOException 
      */
-    public ArrayList<String> searchIdSingleByTvrage(int tvrage) 
-                                                throws JDOMException, IOException, ItasaException{
+    public ArrayList<String> searchIdSingleByTvrage(int tvrage) throws JDOMException, 
+                                                    IOException, ItasaException{
         ArrayList params = new ArrayList();
         params.add(API_KEY);
         params.add(PARAM_VALUE + tvrage);
@@ -209,6 +210,34 @@ public class Itasa extends AbstractXML{
             throw new ItasaException("show list: "+ error);
         return container;
     }
+    
+    private TreeMap<String, String> mapIdName() throws JDOMException, IOException, 
+                                                        ItasaException {
+        TreeMap<String, String> container = null;
+        ArrayList params = new ArrayList();
+        params.add(API_KEY);
+        
+        params.add(PARAM_FIELDS + TAG_SHOW_ID);
+        params.add(PARAM_FIELDS + TAG_SHOW_NAME);
+            
+        
+        buildUrl(composeUrl(URL_SHOW_LIST, params));
+        checkStatus();
+        if (isStatusSuccess()){
+            container = new TreeMap<String, String>();
+            Iterator iter =  getDescendantsZero(2);
+            while (iter.hasNext()){
+                Element item = (Element) iter.next();
+                String id = item.getChild(TAG_SHOW_ID).getText();
+                String name = item.getChild(TAG_SHOW_NAME).getText();
+                container.put(id, name);
+            }
+        } else 
+            throw new ItasaException("mapIdName: "+ error);
+        return container;
+    }
+    
+    
     
     public Subtitle subtitleSingle(int id) throws JDOMException, IOException, 
                                                                     ItasaException{
@@ -386,7 +415,11 @@ public class Itasa extends AbstractXML{
             */
             //i.searchIdSingleByTvrage(24996);
             //i.showList(5, 0, false);
-            System.out.println(i.login("judge", "qwerty"));
+            ArrayList<Show> a = i.showListNameIdNoLimit();
+            for (int j=0; j<a.size(); j++){
+                String[] s = a.get(j).toArrayIdName();
+                System.out.println(s[0] + " " + s[3]);
+            }
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {

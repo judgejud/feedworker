@@ -30,11 +30,11 @@ import org.jfacility.javax.swing.Swing;
  *
  * @author luca
  */
-public class jpSetting extends jpAbstract {
+public class paneSetting extends paneAbstract {
     private final Dimension INTERNALSETTINGS = new Dimension(500, 430);
     private final String[] timeout = new String[]{"3", "6", "9", "12", "15", "18"};
     private final String[] minuti = new String[]{"3", "6", "10", "15", "20", "30", "45"};
-    private static jpSetting jpanel = null;
+    private static paneSetting jpanel = null;
     protected JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
     protected JLabel jlDataAggiornamento;
     protected JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
@@ -51,7 +51,7 @@ public class jpSetting extends jpAbstract {
     protected ApplicationSettings prop;
 
    
-    protected jpSetting() {
+    protected paneSetting() {
         super();
         setName("Settings");
         prop = proxy.getSettings();
@@ -60,9 +60,9 @@ public class jpSetting extends jpAbstract {
         initializeButtons();
     }
 
-    public static jpSetting getPanel() {
+    public static paneSetting getPanel() {
         if (jpanel == null) {
-            jpanel = new jpSetting();
+            jpanel = new paneSetting();
         }
         return jpanel;
     }

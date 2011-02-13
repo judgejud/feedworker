@@ -13,13 +13,13 @@ import org.feedworker.client.frontend.table.jtRss;
  * 
  * @author luca
  */
-public class jpSubsfactory extends jpAbstract {
+public class paneSubsfactory extends paneAbstract {
 
-    private static jpSubsfactory jpanel = null;
+    private static paneSubsfactory jpanel = null;
     private JButton jbDown, jbClean;
     private jtRss jtSubsf, jtMySubsf;
 
-    private jpSubsfactory() {
+    private paneSubsfactory() {
         super();
         setName("Subsfactory");
         initializePanel();
@@ -28,9 +28,9 @@ public class jpSubsfactory extends jpAbstract {
         proxy.setTableListener(jtMySubsf);
     }
 
-    public static jpSubsfactory getPanel() {
+    public static paneSubsfactory getPanel() {
         if (jpanel == null) {
-            jpanel = new jpSubsfactory();
+            jpanel = new paneSubsfactory();
         }
         return jpanel;
     }

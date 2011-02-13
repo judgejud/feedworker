@@ -19,7 +19,7 @@ import org.feedworker.client.frontend.Mediator;
  * 
  * @author luca
  */
-abstract class jpAbstract extends JPanel {
+abstract class paneAbstract extends JPanel {
 
     private final Dimension TAB_SIZE = new Dimension(1024, 540);
     private final Dimension ACTION_PANEL_SIZE = new Dimension(1000, 30);
@@ -32,7 +32,7 @@ abstract class jpAbstract extends JPanel {
     protected Mediator proxy = Mediator.getIstance();
 
     /** Costruttore protetto, per essere invocato dai figli tramite ereditarietà */
-    protected jpAbstract() {
+    protected paneAbstract() {
         super(new BorderLayout());
         setPreferredSize(TAB_SIZE);
         jpCenter = new JPanel();

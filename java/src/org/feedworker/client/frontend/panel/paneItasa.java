@@ -14,14 +14,14 @@ import org.feedworker.client.frontend.table.jtRss;
  * 
  * @author luca
  */
-public class jpItasa extends jpAbstract {
+public class paneItasa extends paneAbstract {
 
-    private static jpItasa jpanel = null;
+    private static paneItasa jpanel = null;
     private JButton jbAllItasa, jbDown, jbClean, jbAllMyItasa;
     private jtRss jtItasa, jtMyItasa;
 
     /** Costruttore privato */
-    private jpItasa() {
+    private paneItasa() {
         super();
         setName("Italiansubs");
         initializePanel();
@@ -35,9 +35,9 @@ public class jpItasa extends jpAbstract {
      *
      * @return pannello itasa
      */
-    public static jpItasa getPanel() {
+    public static paneItasa getPanel() {
         if (jpanel == null)
-            jpanel = new jpItasa();
+            jpanel = new paneItasa();
         return jpanel;
     }
 

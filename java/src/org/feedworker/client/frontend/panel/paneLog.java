@@ -9,11 +9,11 @@ import org.feedworker.client.frontend.jtpLog;
  *
  * @author luca
  */
-public class jpLog extends jpAbstract{
+public class paneLog extends paneAbstract{
     
     private jtpLog logWest, logEast;
     
-    public jpLog(){
+    public paneLog(){
         super();
         setName("Log");
         initializePanel();
