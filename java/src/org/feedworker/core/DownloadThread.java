@@ -78,11 +78,9 @@ public class DownloadThread implements Runnable {
             } catch (IOException ex) {
                 error.launch(ex, getClass(), null);
             }
-        } else {
+        } else 
             ManageListener.fireTextPaneEvent(this, "Scaricato: " + f.getName(), 
                                                         TextPaneEvent.OK, true);
-        }
-        //return Zip.getAlFile();
         return alf;
     }
 
@@ -184,7 +182,8 @@ public class DownloadThread implements Runnable {
     public void run() {
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
         Http http = new Http(connection_Timeout);
-        ArrayList<File> alf = new ArrayList<File>();
+        ArrayList<File> alFile = new ArrayList<File>();
+        ArrayList<Object[]> alReminder = new ArrayList<Object[]>();
         try {
             if (itasa)
                 http.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
@@ -196,7 +195,10 @@ public class DownloadThread implements Runnable {
                         int l = n.length();
                         File f = File.createTempFile(n.substring(0, l - 4), n.substring(l - 4));
                         Io.downloadSingle(entity.getContent(), f);
-                        alf.addAll(extract(f));
+                        alFile.addAll(extract(f));
+                        alReminder.add(new Object[]{Common.actualTime(), 
+                                f.getName().split(".sub.")[0].replaceAll("\\.", " "), 
+                                        false});
                     } else
                         printAlert("Sessione scaduta");
                 }
@@ -211,9 +213,10 @@ public class DownloadThread implements Runnable {
             error.launch(ex, this.getClass(), itasa);
         } catch (IOException ex) {
             error.launch(ex, this.getClass(), null);
-        }
+        }        
         http.closeClient();
-        analyzeDest(alf);
+        analyzeDest(alFile);
+        ManageListener.fireTableEvent(this, alReminder, Kernel.getIstance().REMINDER);
     }
 
     private String rename(KeyRule key, String namesub) throws NullPointerException{

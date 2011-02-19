@@ -84,7 +84,7 @@ public class tableRss extends JTable implements TableEventListener {
             this.setPreferredSize(new Dimension(width, (16 * lenght)));
             for (int i = 0; i < size; i++)
                 dtm.insertRow(i, evt.getArray().get(i));
-            this.getColumn(titleCol).setCellRenderer(new JLabelTitleRenderer());
+            this.getColumn(titleCol).setCellRenderer(new labelCellColorRenderer());
             this.getColumn(dateCol).setCellRenderer(
                     new JLabelDateRenderer(lastFeedSize[0], lastFeedSize[1]));
         }
@@ -135,6 +135,7 @@ public class tableRss extends JTable implements TableEventListener {
      * Classe che restituisce la jlabel della cella tabella con determinati
      * colori e font di testo ed eventuale tooltip se testo lungo
      */
+    /*
     class JLabelTitleRenderer extends JLabel implements TableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(JTable table,
@@ -161,4 +162,6 @@ public class tableRss extends JTable implements TableEventListener {
             return this;
         }
     } // end class JLabelRenderer
+     * 
+     */
 }

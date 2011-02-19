@@ -24,7 +24,7 @@ public class paneReminder extends paneAbstract{
         setName("Reminder");
         initializePanel();
         initializeButtons();
-        //initListeners();
+        proxy.setTableListener(jtable);
         setVisible(true);
     }
 

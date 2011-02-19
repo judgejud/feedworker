@@ -1,18 +1,13 @@
 package org.feedworker.client.frontend.table;
 
 //IMPORT JAVA
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 
-import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.TableEvent;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.jfacility.javax.swing.Swing;
@@ -23,10 +18,8 @@ import org.jfacility.javax.swing.Swing;
 public class tableReminder extends JTable implements TableEventListener {
     // PRIVATE FINAL VARIABLE
     private final Font font = new Font("Arial", Font.PLAIN, 10);
-    private final String[] columnNames = {"Data", "Sottotitolo", "Select"};
-    private final int width = 500;
-    // PRIVATE VARIABLE
-    private Mediator proxy = Mediator.getIstance();
+    private final String colSubtitle = "Sottotitolo";
+    private final String[] columnNames = {"Data", colSubtitle, "Select"};    
 
     /**
      *
@@ -35,6 +28,7 @@ public class tableReminder extends JTable implements TableEventListener {
     public tableReminder(String name) {
         super();
         setName(name);
+        setFont(font);
         DefaultTableModel dtm = new DefaultTableModel(null, columnNames) {
             Class[] types = new Class[]{String.class, String.class, Boolean.class};
             @Override
@@ -67,7 +61,15 @@ public class tableReminder extends JTable implements TableEventListener {
 
     @Override
     public void objReceived(TableEvent evt) {
-        //TODO
+        if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
+            //String titleCol = (String) this.getColumnModel().getColumn(3).getHeaderValue();
+            DefaultTableModel dtm = (DefaultTableModel) getModel();
+            int size = evt.getArray().size();
+            int start = dtm.getRowCount();
+            for (int i = 0; i < size; i++)
+                dtm.insertRow(i+start, evt.getArray().get(i));
+            this.getColumn(colSubtitle).setCellRenderer(new labelCellColorRenderer());
+        }
     }
 
     public void removeAllRows() {
@@ -76,36 +78,5 @@ public class tableReminder extends JTable implements TableEventListener {
         for (int i = 0; i < size; i++) {
             dtm.removeRow(0);
         }
-    }    
-
-    /**
-     * Classe che restituisce la jlabel della cella tabella con determinati
-     * colori e font di testo ed eventuale tooltip se testo lungo
-     */
-    class JLabelTitleRenderer extends JLabel implements TableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table,
-                Object value, boolean isSelected, boolean hasFocus, int row,
-                int column) {
-            // imposta il testo della cella
-            String text = value.toString();
-            setText(text);
-            setToolTipText(Swing.getTextToolTip(table, column, this, text));
-            // imposta il font della cella
-            setFont(font);
-
-            setBackground(proxy.searchVersion(text));
-            Color back = getBackground();
-            if (back.equals(Color.blue) || back.equals(Color.red) 
-                || back.equals(Color.black) || back.equals(new Color(183, 65, 14)) 
-                || back.equals(Color.darkGray)) {        
-                setForeground(Color.white);
-            } else {
-                setForeground(Color.black);
-            }
-            setOpaque(true);
-            this.repaint();
-            return this;
-        }
-    } // end class JLabelRenderer
+    }
 }

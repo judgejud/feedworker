@@ -74,6 +74,7 @@ public class Kernel implements PropertyChangeListener {
     public final String SEARCH_TV = "SearchTV";
     public final String SUBTITLE_DEST = "SubtitleDest";
     public final String CALENDAR = "Calendar";
+    public final String REMINDER = "Reminder";
     public final String OPERATION_FOCUS = "Focus";
     public final String OPERATION_PROGRESS_SHOW = "ProgressShow";
     public final String OPERATION_PROGRESS_INCREMENT = "ProgressIncrement";
@@ -106,9 +107,8 @@ public class Kernel implements PropertyChangeListener {
      * @return istanza kernel
      */
     public static Kernel getIstance() {
-        if (core == null) {
+        if (core == null)
             core = new Kernel();
-        }
         return core;
     }
 
