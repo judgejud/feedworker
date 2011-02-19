@@ -27,6 +27,7 @@ public class XPathReader {
     private static final File FILE_NAME = new File("calendar.xml");
     private static DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     private static XPath xpath = XPathFactory.newInstance().newXPath();
+    private static TreeMap<Long, String> array;
 
     public static String queryDayEquals(String day) throws SAXException, 
             ParserConfigurationException, IOException, XPathExpressionException{
@@ -65,26 +66,32 @@ public class XPathReader {
         try{
             day = Common.stringToAmerican(day);
         } catch (ParseException e){}
+        array  = new TreeMap<Long, String>();
+        //data > nextdate
         String query = "//SHOW[translate('" + day + "', '-', '') > "
                 + "translate(NEXT_DATE, '-', '')]/ID_TVRAGE/text()";
-        NodeList nodes = initializeXPathNode(query);
-        TreeMap<Long, String> array  = new TreeMap<Long, String>();
-        for (int i=0; i<nodes.getLength(); i++){
-            String temp = nodes.item(i).getNodeValue();
-            String query1 = "count(//SHOW[ID_TVRAGE='" + temp + 
-                            "']/preceding::ID_TVRAGE)+1";
-            array.put(initializeXPathNumber(query1), temp);
-        }
-        
+        addToArray(initializeXPathNode(query));
+        //query next date blank
         query = "//SHOW[NEXT_DATE[not(text())]]/ID_TVRAGE/text()";
-        nodes = initializeXPathNode(query);
+        addToArray(initializeXPathNode(query));
+        //(data-nextdate)>15
+        query = "//SHOW[(translate('" + day + "', '-', '') - "
+                + "translate(NEXT_DATE, '-', ''))>15]/ID_TVRAGE/text()";
+        System.out.println(query);
+        //addToArray(initializeXPathNode(query));
+        return array;
+        
+    }
+    
+    private static void addToArray(NodeList nodes) throws SAXException, 
+            ParserConfigurationException, IOException, XPathExpressionException{
+        String temp, query1;
         for (int i=0; i<nodes.getLength(); i++){
-            String temp = nodes.item(i).getNodeValue();
-            String query1 = "count(//SHOW[ID_TVRAGE='" + temp + 
+            temp = nodes.item(i).getNodeValue();
+            query1 = "count(//SHOW[ID_TVRAGE='" + temp + 
                             "']/preceding::ID_TVRAGE)+1";
             array.put(initializeXPathNumber(query1), temp);
         }
-        return array;
     }
     
     private static NodeList initializeXPathNode(String query) throws SAXException, 

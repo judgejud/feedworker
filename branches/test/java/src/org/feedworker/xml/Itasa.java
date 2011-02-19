@@ -336,7 +336,7 @@ public class Itasa extends AbstractXML{
         checkStatus();
         String authcode = null;
         if (isStatusSuccess()){
-            Element item = (Element) super.getDescendantsZero(0).next();
+            Element item = (Element) getDescendantsZero(1).next();
             authcode = item.getChild(TAG_LOGIN_AUTHCODE).getText();
         } else
             throw new ItasaException(error);
