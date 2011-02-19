@@ -1,7 +1,6 @@
 package org.feedworker.client.frontend.table;
 
 import java.awt.Component;
-import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -9,19 +8,16 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import org.feedworker.client.frontend.events.TableEvent;
-import org.feedworker.client.frontend.events.TableEventListener;
 import org.jfacility.javax.swing.Swing;
 /**
  *
  * @author luca
  */
-public class tableResultSearchTv extends JTable implements TableEventListener{
+public class tableResultSearchTv extends tableAbstract{
     private final String[] nameCols = {"ID","Serie", "Stagione", "Status", "Giorno"};
-    private final Font font = new Font("Arial", Font.PLAIN, 10);
 
     public tableResultSearchTv(String name){
-        super();
-        setName(name);
+        super(name);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
             Class[] types = new Class[]{Integer.class, String.class, String.class,
                 String.class, String.class};
@@ -35,14 +31,18 @@ public class tableResultSearchTv extends JTable implements TableEventListener{
             }
         };
         setModel(dtm);
-        getTableHeader().setReorderingAllowed(false);
-        setFont(font);
+        lockColumns();
         Swing.tableSorter(this);
+        setRowSelectionAllowed(true);
+        getColumn(nameCols[1]).setCellRenderer(new JLabelCellTextRenderer());
+    }
+    
+    @Override
+    protected void lockColumns(){
         Swing.setTableDimensionLockColumn(this, 0, 45);
         Swing.setTableDimensionLockColumn(this, 2, 80);
         Swing.setTableDimensionLockColumn(this, 3, 90);
         Swing.setTableDimensionLockColumn(this, 4, 70);
-        this.getColumn(nameCols[1]).setCellRenderer(new JLabelCellTextRenderer());
     }
 
     @Override
@@ -57,7 +57,6 @@ public class tableResultSearchTv extends JTable implements TableEventListener{
     }
 
     class JLabelCellTextRenderer extends JLabel implements TableCellRenderer {
-        private final Font font = new Font("Arial", Font.PLAIN, 10);
         @Override
         public Component getTableCellRendererComponent(JTable table,
                 Object value, boolean isSelected, boolean hasFocus, int row,

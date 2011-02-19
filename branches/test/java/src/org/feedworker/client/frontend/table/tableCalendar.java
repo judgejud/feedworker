@@ -2,7 +2,6 @@ package org.feedworker.client.frontend.table;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
@@ -14,7 +13,6 @@ import javax.swing.table.TableCellRenderer;
 
 import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.TableEvent;
-import org.feedworker.client.frontend.events.TableEventListener;
 
 import org.jfacility.javax.swing.Swing;
 
@@ -22,15 +20,13 @@ import org.jfacility.javax.swing.Swing;
  *
  * @author luca
  */
-public class tableCalendar extends JTable implements TableEventListener{
+public class tableCalendar extends tableAbstract{
     private final String[] nameCols = {"ID tvrage", "ID Itasa", "ID Tvdb", "Serie", 
                                         "Stato", "Giorno", "Last Ep", "Titolo", 
                                         "Data", "Next Ep", "Titolo", "Data" };
-    private final Font font = new Font("Arial", Font.PLAIN, 10);
 
     public tableCalendar(String nome){
-        super();
-        setName(nome);
+        super(nome);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
 
             Class[] types = new Class[]{String.class, String.class, String.class,
@@ -48,10 +44,9 @@ public class tableCalendar extends JTable implements TableEventListener{
             }
         };
         setModel(dtm);
-        getTableHeader().setReorderingAllowed(false);
-        setFont(font);
+        setRowSelectionAllowed(true);
         Swing.tableSorter(this);
-        lockColumns();
+
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent evt) {
@@ -59,18 +54,7 @@ public class tableCalendar extends JTable implements TableEventListener{
                                                         getSelectedRowCount());
             }
         });
-    }
-    
-    private void lockColumns(){
-        Swing.setTableDimensionLockColumn(this, 0, -1); //id tvrage
-        Swing.setTableDimensionLockColumn(this, 1, -1); //id itasa
-        Swing.setTableDimensionLockColumn(this, 2, -1); //id tvdb
-        Swing.setTableDimensionLockColumn(this, 4, -1); //stato
-        Swing.setTableDimensionLockColumn(this, 5, 70);
-        Swing.setTableDimensionLockColumn(this, 6, 70);
-        Swing.setTableDimensionLockColumn(this, 8, 65);
-        Swing.setTableDimensionLockColumn(this, 9, 75);
-        Swing.setTableDimensionLockColumn(this, 11, 65);
+        lockColumns();
     }
 
     @Override
@@ -84,6 +68,19 @@ public class tableCalendar extends JTable implements TableEventListener{
                 dtm.insertRow(i+start, evt.getArray().get(i));
             getColumn(titleCol).setCellRenderer(new ColorRenderer());
         }
+    }
+
+    @Override
+    protected void lockColumns() {
+        Swing.setTableDimensionLockColumn(this, 0, -1); //id tvrage
+        Swing.setTableDimensionLockColumn(this, 1, -1); //id itasa
+        Swing.setTableDimensionLockColumn(this, 2, -1); //id tvdb
+        Swing.setTableDimensionLockColumn(this, 4, -1); //stato
+        Swing.setTableDimensionLockColumn(this, 5, 70);
+        Swing.setTableDimensionLockColumn(this, 6, 70);
+        Swing.setTableDimensionLockColumn(this, 8, 65);
+        Swing.setTableDimensionLockColumn(this, 9, 75);
+        Swing.setTableDimensionLockColumn(this, 11, 65);
     }
     
     class ColorRenderer extends JLabel implements TableCellRenderer {

@@ -12,7 +12,6 @@ import javax.swing.table.TableColumn;
 
 import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.TableEvent;
-import org.feedworker.client.frontend.events.TableEventListener;
 import org.jfacility.javax.swing.ComboBoxEditor;
 import org.jfacility.javax.swing.Swing;
 
@@ -20,18 +19,15 @@ import org.jfacility.javax.swing.Swing;
  * 
  * @author luca
  */
-public class tableSubtitleDest extends JTable implements TableEventListener {    
-    private Mediator proxy = Mediator.getIstance();
+public class tableSubtitleDest extends tableAbstract {    
     private final String[] nameCols = {"Serie", "Stagione", "Versione",
         "Destinazione",  "Rename", "Delete"};
-    private final String[] itemsCombo = proxy.getQualityEnum();
-    private final Font font = new Font("Arial", Font.PLAIN, 10);
+    private final String[] itemsCombo = Mediator.getIstance().getQualityEnum();
 
 
     /** Costruttore */
     public tableSubtitleDest(String name) {
-        super();
-        setName(name);
+        super(name);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
             Class[] types = new Class[]{String.class, Integer.class,
                 String.class, String.class, Boolean.class, Boolean.class};
@@ -42,7 +38,14 @@ public class tableSubtitleDest extends JTable implements TableEventListener {
         };
         setModel(dtm);
 
-        getTableHeader().setReorderingAllowed(false);
+        setComboBoxColumn(2, itemsCombo);
+        setRowSelectionAllowed(true);
+        Swing.tableSorter(this);
+        lockColumns();
+    }
+    
+    @Override
+    protected void lockColumns(){
         int c = -1;
         getColumnModel().getColumn(++c).setMinWidth(70); //serie
         Swing.setTableDimensionLockColumn(this, ++c, 80); //stagione
@@ -50,11 +53,6 @@ public class tableSubtitleDest extends JTable implements TableEventListener {
         getColumnModel().getColumn(++c).setMinWidth(100); //destinazione
         Swing.setTableDimensionLockColumn(this, ++c, 75); //rename
         Swing.setTableDimensionLockColumn(this, ++c, 65); //delete
-
-        setComboBoxColumn(2, itemsCombo);
-
-        setFont(font);
-        Swing.tableSorter(this);
     }
 
     private void setComboBoxColumn(int num, String[] items) {
