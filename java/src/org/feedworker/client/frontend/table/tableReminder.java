@@ -1,34 +1,28 @@
 package org.feedworker.client.frontend.table;
 
 //IMPORT JAVA
-import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import org.feedworker.client.frontend.events.TableEvent;
-import org.feedworker.client.frontend.events.TableEventListener;
 import org.jfacility.javax.swing.Swing;
 /**
  *
  * @author luca
  */
-public class tableReminder extends JTable implements TableEventListener {
+public class tableReminder extends tableAbstract {
     // PRIVATE FINAL VARIABLE
-    private final Font font = new Font("Arial", Font.PLAIN, 10);
-    private final String colSubtitle = "Sottotitolo";
-    private final String[] columnNames = {"Data", colSubtitle, "Select"};    
+    private final String[] columnNames = {"Data", "Sottotitolo", "Select"};    
 
     /**
      *
      * @param name
      */
     public tableReminder(String name) {
-        super();
-        setName(name);
-        setFont(font);
+        super(name);
+        
         DefaultTableModel dtm = new DefaultTableModel(null, columnNames) {
             Class[] types = new Class[]{String.class, String.class, Boolean.class};
             @Override
@@ -41,10 +35,7 @@ public class tableReminder extends JTable implements TableEventListener {
             }
         };
         setModel(dtm);
-        setRowSelectionAllowed(false);
-        getTableHeader().setReorderingAllowed(false);
-        Swing.setTableDimensionLockColumn(this, 0, 110);
-        Swing.setTableDimensionLockColumn(this, 2, 50);
+        lockColumns();    
         Swing.tableSorter(this);
 
         addMouseListener(new MouseAdapter() {
@@ -62,21 +53,18 @@ public class tableReminder extends JTable implements TableEventListener {
     @Override
     public void objReceived(TableEvent evt) {
         if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
-            //String titleCol = (String) this.getColumnModel().getColumn(3).getHeaderValue();
             DefaultTableModel dtm = (DefaultTableModel) getModel();
             int size = evt.getArray().size();
             int start = dtm.getRowCount();
             for (int i = 0; i < size; i++)
                 dtm.insertRow(i+start, evt.getArray().get(i));
-            this.getColumn(colSubtitle).setCellRenderer(new labelCellColorRenderer());
+            getColumn(columnNames[1]).setCellRenderer(new labelCellColorRenderer());
         }
     }
-
-    public void removeAllRows() {
-        DefaultTableModel dtm = (DefaultTableModel) getModel();
-        int size = dtm.getRowCount();
-        for (int i = 0; i < size; i++) {
-            dtm.removeRow(0);
-        }
+    
+    @Override
+    protected void lockColumns(){
+        Swing.setTableDimensionLockColumn(this, 0, 110);
+        Swing.setTableDimensionLockColumn(this, 2, 50);
     }
 }
