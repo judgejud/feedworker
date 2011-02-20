@@ -52,8 +52,7 @@ public class paneSetting extends paneAbstract {
 
    
     protected paneSetting() {
-        super();
-        setName("Settings");
+        super("Settings");
         prop = proxy.getSettings();
         initComponents();
         initializePanel();

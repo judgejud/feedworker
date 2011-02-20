@@ -36,8 +36,7 @@ public class paneSubtitleDest extends paneAbstract {
     }
 
     private paneSubtitleDest() {
-        super();
-        setName("Subtitle Destination");
+        super("Subtitle Destination");
         initializePanel();
         initializeButtons();
         initListeners();
@@ -80,7 +79,7 @@ public class paneSubtitleDest extends paneAbstract {
         jbRemoveAll.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                jbRemoveAllRowsMouseClick();
+                jtable.removeAllRows();
             }
         });
 
@@ -163,7 +162,8 @@ public class paneSubtitleDest extends paneAbstract {
     private void jbRemoveRowMouseClicked() {
         int row = jtable.getSelectedRow();
         if (row > -1)
-            ((DefaultTableModel) jtable.getModel()).removeRow(jtable.convertRowIndexToModel(row));
+            ((DefaultTableModel) jtable.getModel()).removeRow(
+                                                jtable.convertRowIndexToModel(row));
     }
 
     private void jbAddDirMouseClicked() {
@@ -180,9 +180,5 @@ public class paneSubtitleDest extends paneAbstract {
     private void jmiOpenFolderClicked(Point p){
         int row = jtable.rowAtPoint(p);
         proxy.openFolder(jtable.getValueAt(row, 3).toString());
-    }
-    
-    private void jbRemoveAllRowsMouseClick(){
-        ((DefaultTableModel) jtable.getModel()).setRowCount(0);
     }
 }

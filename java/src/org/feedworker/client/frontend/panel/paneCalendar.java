@@ -22,8 +22,7 @@ public class paneCalendar extends paneAbstract{
     private tableCalendar jtable;
 
     private paneCalendar(){
-        super();
-        setName("Calendar");
+        super("Calendar");
         initializePanel();
         initializeButtons();
     }
@@ -147,7 +146,7 @@ public class paneCalendar extends paneAbstract{
     
     private void jbRemoveAllRowsMouseClick(){
         proxy.removeAllShowCalendar();
-        ((DefaultTableModel) jtable.getModel()).setRowCount(0);
+        jtable.removeAllRows();
     }
     
     private void jbRefreshCalendarMouseClick() {

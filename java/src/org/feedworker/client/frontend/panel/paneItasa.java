@@ -22,8 +22,7 @@ public class paneItasa extends paneAbstract {
 
     /** Costruttore privato */
     private paneItasa() {
-        super();
-        setName("Italiansubs");
+        super("Italiansubs");
         initializePanel();
         initializeButtons();
         proxy.setTableListener(jtItasa);

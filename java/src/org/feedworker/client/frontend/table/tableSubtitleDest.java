@@ -2,7 +2,6 @@ package org.feedworker.client.frontend.table;
 
 //IMPORT JAVA
 import java.awt.Component;
-import java.awt.Font;
 
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -23,7 +22,6 @@ public class tableSubtitleDest extends tableAbstract {
     private final String[] nameCols = {"Serie", "Stagione", "Versione",
         "Destinazione",  "Rename", "Delete"};
     private final String[] itemsCombo = Mediator.getIstance().getQualityEnum();
-
 
     /** Costruttore */
     public tableSubtitleDest(String name) {
@@ -75,8 +73,6 @@ public class tableSubtitleDest extends tableAbstract {
     }
 
     class MyComboBoxRenderer extends JComboBox implements TableCellRenderer {
-        private final Font font = new Font("Arial", Font.PLAIN, 10);
-
         public MyComboBoxRenderer(String[] items) {
             super(items);
             setFont(font);
