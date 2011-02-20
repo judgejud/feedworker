@@ -32,8 +32,9 @@ abstract class paneAbstract extends JPanel {
     protected Mediator proxy = Mediator.getIstance();
 
     /** Costruttore protetto, per essere invocato dai figli tramite ereditarietà */
-    protected paneAbstract() {
+    protected paneAbstract(String name) {
         super(new BorderLayout());
+        setName(name);
         setPreferredSize(TAB_SIZE);
         jpCenter = new JPanel();
         jpCenter.setLayout(new BoxLayout(jpCenter, BoxLayout.X_AXIS));

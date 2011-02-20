@@ -20,8 +20,7 @@ public class paneSubsfactory extends paneAbstract {
     private tableRss jtSubsf, jtMySubsf;
 
     private paneSubsfactory() {
-        super();
-        setName("Subsfactory");
+        super("Subsfactory");
         initializePanel();
         initializeButtons();
         proxy.setTableListener(jtSubsf);

@@ -14,8 +14,7 @@ public class paneLog extends paneAbstract{
     private jtpLog logWest, logEast;
     
     public paneLog(){
-        super();
-        setName("Log");
+        super("Log");
         initializePanel();
         proxy.setTextPaneListener(logEast);
         proxy.setTextPaneListener(logWest);

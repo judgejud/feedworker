@@ -91,9 +91,7 @@ public class tableRss extends tableAbstract {
     public void setTitleDescriptionColumn(String _name) {
         this.getColumnModel().getColumn(2).setHeaderValue(_name);
     }
-
     
-
     class JLabelDateRenderer extends JLabel implements TableCellRenderer {
         private int rowsize0, rowsize1;
 

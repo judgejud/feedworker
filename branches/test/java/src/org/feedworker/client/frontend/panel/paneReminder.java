@@ -1,7 +1,13 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JButton;
 import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+
 import org.feedworker.client.frontend.table.tableReminder;
 
 /**
@@ -20,8 +26,7 @@ public class paneReminder extends paneAbstract{
     }
 
     private paneReminder() {
-        super();
-        setName("Reminder");
+        super("Reminder");
         initializePanel();
         initializeButtons();
         proxy.setTableListener(jtable);
@@ -32,12 +37,32 @@ public class paneReminder extends paneAbstract{
     void initializePanel() {
         jtable = new tableReminder("Reminder");
         JScrollPane jsp = new JScrollPane(jtable);
-        this.add(jsp, BorderLayout.WEST);
+        
+        jpCenter.add(jsp);
+        jpCenter.add(RIGID_AREA);
+        add(jpCenter, BorderLayout.CENTER);
     }
 
     @Override
     void initializeButtons() {
-        
+        JButton jbRemoveRow = new JButton(" - ");
+        jbRemoveRow.setToolTipText("Rimuovi riga/serie selezionata dalla tabella");
+        jbRemoveRow.setBorder(BORDER);
+        jbRemoveRow.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbRemoveRowMouseClicked();
+            }
+        });
+        jpAction.add(jbRemoveRow);
     }
-
+    
+    private void jbRemoveRowMouseClicked() {
+        int row = jtable.getSelectedRow();
+        if (row > -1){
+            row = jtable.convertRowIndexToModel(row);
+            //proxy.removeSingleShowCalendar(row, jtable.getValueAt(row, 0));
+            ((DefaultTableModel) jtable.getModel()).removeRow(row);
+        }
+    }
 }

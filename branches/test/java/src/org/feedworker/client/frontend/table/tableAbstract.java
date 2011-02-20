@@ -13,26 +13,24 @@ import org.feedworker.client.frontend.events.TableEventListener;
  * @author luca
  */
 abstract class tableAbstract extends JTable implements TableEventListener {
-    // PRIVATE FINAL VARIABLE
+
     protected final Font font = new Font("Arial", Font.PLAIN, 10);
 
     public tableAbstract(String name) {
         super();
         setName(name);
         setFont(font);
+        setFocusable(false);
         setRowSelectionAllowed(false);
         getTableHeader().setReorderingAllowed(false);
     }
 
     @Override
     abstract public void objReceived(TableEvent evt);
-    
+
     abstract protected void lockColumns();
-    
+
     public void removeAllRows() {
-        DefaultTableModel dtm = (DefaultTableModel) getModel();
-        int size = dtm.getRowCount();
-        for (int i = 0; i < size; i++)
-            dtm.removeRow(0);
+        ((DefaultTableModel) getModel()).setRowCount(0);
     }
 }

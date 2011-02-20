@@ -20,8 +20,7 @@ public class paneTorrent extends paneAbstract {
     private tableRss jtTorrent1, jtTorrent2;
 
     private paneTorrent() {
-        super();
-        setName("Torrent");
+        super("Torrent");
         initializePanel();
         initializeButtons();
         proxy.setTableListener(jtTorrent1);
@@ -29,9 +28,8 @@ public class paneTorrent extends paneAbstract {
     }
 
     public static paneTorrent getPanel() {
-        if (jpanel == null) {
+        if (jpanel == null)
             jpanel = new paneTorrent();
-        }
         return jpanel;
     }
 

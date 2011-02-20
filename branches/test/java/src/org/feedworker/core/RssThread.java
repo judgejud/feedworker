@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TreeMap;
+
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.object.KeyRule;
@@ -28,29 +29,59 @@ public class RssThread implements Runnable{
     private ManageException error = ManageException.getIstance();
     private Kernel core = Kernel.getIstance();
     private TreeMap<KeyRule, ValueRule> map;
+    private String url, data, from;
+    private boolean download, first;
 
-    RssThread(TreeMap<KeyRule, ValueRule> map) {
+    RssThread(TreeMap<KeyRule, ValueRule> map, String urlRss, String data, 
+                String from, boolean download, boolean first) {
         this.map = map;
+        this.url = urlRss;
+        this.data = data;
+        this.from = from;
     }
     
-
-    /**Restituisce l'arraylist contenente i feed rss
+    /**Verifica se il nome non presenta la parola "stagione"
      * 
-     * @param urlRss url rss da analizzare
-     * @param data data da confrontare
-     * @param from provenienza
-     * @param download download automatico
-     * @param first
-     * @return arraylist di feed(array di oggetti)
+     * @param name nome da controllare
+     * @return risultato controllo
      */
-    private void getFeedRss(String urlRss, String data, String from, 
-                                            boolean download, boolean first) {
+    private boolean isNotStagione(String name) {
+        boolean check = true;
+        String[] array = name.split(" ");
+        for (int i = 0; i < array.length; i++) {
+            String confronta = array[i].toLowerCase();
+            if (confronta.equals("stagione") || confronta.equals("season")
+                    || confronta.equals("completa")) {
+                check = false;
+                break;
+            }
+        }
+        return check;
+    }
+    
+    /**
+     * effettua il download automatico di myitasa comprende le fasi anche di
+     * estrazione zip e analizzazione percorso definitivo.
+     * 
+     * @param link
+     *            link da analizzare
+     */
+    private void downItasaAuto(Object link) {
+        ArrayList<String> als = new ArrayList<String>();
+        als.add(link.toString());
+        DownloadThread dt = new DownloadThread(map, als, true);
+        Thread t = new Thread(dt, "AutoItasa");
+        t.start();
+    }
+    
+    @Override
+    public void run() {
         RssParser rss = null;
         ArrayList<Object[]> matrice = null;
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
         Http http = new Http(connection_Timeout);
         try {
-            InputStream ist = http.getStreamRss(urlRss);
+            InputStream ist = http.getStreamRss(url);
             if (ist != null) {
                 File ft = File.createTempFile("rss", ".xml");
                 Io.downloadSingle(ist, ft);
@@ -117,44 +148,5 @@ public class RssThread implements Runnable{
         }
 
         //return matrice; fare il fire 
-    }
-    
-    /**Verifica se il nome non presenta la parola "stagione"
-     * 
-     * @param name nome da controllare
-     * @return risultato controllo
-     */
-    private boolean isNotStagione(String name) {
-        boolean check = true;
-        String[] array = name.split(" ");
-        for (int i = 0; i < array.length; i++) {
-            String confronta = array[i].toLowerCase();
-            if (confronta.equals("stagione") || confronta.equals("season")
-                    || confronta.equals("completa")) {
-                check = false;
-                break;
-            }
-        }
-        return check;
-    }
-    
-    /**
-     * effettua il download automatico di myitasa comprende le fasi anche di
-     * estrazione zip e analizzazione percorso definitivo.
-     * 
-     * @param link
-     *            link da analizzare
-     */
-    private void downItasaAuto(Object link) {
-        ArrayList<String> als = new ArrayList<String>();
-        als.add(link.toString());
-        DownloadThread dt = new DownloadThread(map, als, true);
-        Thread t = new Thread(dt, "AutoItasa");
-        t.start();
-    }
-    
-    @Override
-    public void run() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
