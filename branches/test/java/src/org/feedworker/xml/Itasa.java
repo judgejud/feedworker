@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import org.feedworker.exception.ItasaException;
+import org.feedworker.object.ItasaUser;
 import org.feedworker.object.Show;
 import org.feedworker.object.Subtitle;
 
@@ -41,8 +42,11 @@ public class Itasa extends AbstractXML{
     
     private final String TAG_STATUS = "status";
     private final String TAG_ERROR = "error";
+    private final String TAG_ERROR_MESSAGE = "message";
     private final String TAG_COUNT = "count";
-    private final String TAG_LOGIN_AUTHCODE = "authcode";
+    private final String TAG_USER_AUTHCODE = "authcode";
+    private final String TAG_USER_ID = "id";
+    private final String TAG_USER_HASMYITASA = "has_myitasa";
     private final String TAG_SHOW_PLOT = "plot";
     private final String TAG_SHOW_GENRES = "genres";
     private final String TAG_SHOW_BANNER = "banner";
@@ -69,10 +73,12 @@ public class Itasa extends AbstractXML{
     private final String TAG_SUBTITLE_INFOURL = "infourl";
     
     private final String URL_BASE = "http://api.italiansubs.net/api/rest";
-    private final String URL_LOGIN = URL_BASE + "/user/login/?";
-    private final String URL_SHOW_SINGLE = URL_BASE + "/show/show/?";
-    private final String URL_SHOW_LIST = URL_BASE + "/show/shows/?";
-    private final String URL_SHOW_SEARCH = URL_BASE + "/show/search/?";
+    private final String URL_LOGIN = URL_BASE + "/users/login/?"; //OK
+    //http://api.italiansubs.net/api/rest/shows/<SHOW_ID>?
+    private final String URL_SHOW_SINGLE = URL_BASE + "/shows/?";
+    private final String URL_SHOW_LIST = URL_BASE + "/shows/?";
+    //http://api.italiansubs.net/api/rest/shows/search?q=<QUERY>&page=<PAGE=1>
+    private final String URL_SHOW_SEARCH = URL_BASE + "/shows/search/?";
     private final String URL_SUBTITILE_SINGLE = URL_BASE + "/subtitle/subtitle/?";
     private final String URL_SUBTITILE_SHOW = URL_BASE + "/subtitle/subtitles/?";
     private final String URL_SUBTITILE_SEARCH = URL_BASE + "/subtitle/search/?";
@@ -152,59 +158,19 @@ public class Itasa extends AbstractXML{
             throw new ItasaException("search: "+ error);
         return list;
     }
-
-    public ArrayList<Show> showListNoLimit() throws JDOMException, IOException, 
-                                                                ItasaException {
-        return showList(0, 0, true);
-    }
-    
-    public ArrayList<Show> showListNameIdNoLimit() throws JDOMException, 
-                                                    IOException, ItasaException {
-        return showList(0, 0, false);
-    }
         
-    private ArrayList<Show> showList(int limit, int offset, boolean flag_all) throws 
-                                            JDOMException, IOException, ItasaException {
+    private ArrayList<Show> showList() throws JDOMException, IOException, ItasaException {
         ArrayList<Show> container = null;
-        ArrayList params = new ArrayList();
-        params.add(API_KEY);
-        if (limit>0)
-            params.add(PARAM_LIMIT + limit);
-        if (offset>0)
-            params.add(PARAM_OFFSET + offset);
-        if (flag_all)
-            params.add(PARAM_FIELDS_ALL);
-        else{
-            params.add(PARAM_FIELDS + TAG_SHOW_ID);
-            params.add(PARAM_FIELDS + TAG_SHOW_NAME);
-            params.add(PARAM_FIELDS + TAG_SHOW_ID_TVDB);
-            params.add(PARAM_FIELDS + TAG_SHOW_ID_TVRAGE);
-        }
-        buildUrl(composeUrl(URL_SHOW_LIST, params));
+        buildUrl(composeUrl(URL_SHOW_LIST, null));
         checkStatus();
         if (isStatusSuccess()){
             container = new ArrayList<Show>();
             Iterator iter =  getDescendantsZero(2);
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
-                Show s;
                 String id = item.getChild(TAG_SHOW_ID).getText();
                 String name = item.getChild(TAG_SHOW_NAME).getText();
-                String tvdb = checkNPE(item.getChild(TAG_SHOW_ID_TVDB));
-                String tvrage = checkNPE(item.getChild(TAG_SHOW_ID_TVRAGE));
-                if (flag_all) {
-                    String plot = checkNPE(item.getChild(TAG_SHOW_PLOT));
-                    String banner = checkNPE(item.getChild(TAG_SHOW_BANNER));
-                    String icon = checkNPE(item.getChild(TAG_SHOW_FOLDER_THUMB));
-                    Iterator genres = getIteratorGenres(item);
-                    ArrayList<String> gen = new ArrayList<String>();
-                    while (genres.hasNext()){
-                        gen.add(((Element) genres.next()).getText());
-                    }                
-                    s = new Show(name, id, tvdb, tvrage, plot, banner, icon, gen);
-                } else
-                    s = new Show(name, id, tvdb, tvrage);
-                container.add(s);
+                container.add(new Show(id, name));
             }
         } else 
             throw new ItasaException("show list: "+ error);
@@ -326,21 +292,26 @@ public class Itasa extends AbstractXML{
         return subs;
     }
     
-    public String login(String user, String pwd) throws JDOMException, IOException, 
+    public ItasaUser login(String user, String pwd) throws JDOMException, IOException, 
                                                                     ItasaException{
         ArrayList params = new ArrayList();
-        params.add(API_KEY);
         params.add(PARAM_USERNAME + user);
         params.add(PARAM_PASSWORD + pwd);
         buildUrl(composeUrl(URL_LOGIN, params));
         checkStatus();
-        String authcode = null;
+        ItasaUser itasa = null;
         if (isStatusSuccess()){
             Element item = (Element) getDescendantsZero(1).next();
-            authcode = item.getChild(TAG_LOGIN_AUTHCODE).getText();
+            String id = item.getChild(TAG_USER_ID).getText();
+            String authcode = item.getChild(TAG_USER_AUTHCODE).getText();
+            String hasmyitasa = item.getChild(TAG_USER_HASMYITASA).getText();
+            boolean myitasa = false;
+            if (hasmyitasa.equals("1"))
+                myitasa = true;
+            itasa = new ItasaUser(authcode, id, myitasa);
         } else
             throw new ItasaException(error);
-        return authcode;
+        return itasa;
     }
     
     /**Compone la url compresa di parametri
@@ -351,8 +322,9 @@ public class Itasa extends AbstractXML{
      */
     private String composeUrl(final String url, ArrayList params){
         String newUrl = url + API_KEY;
-        for (int i=1; i<params.size(); i++)
-            newUrl+= OPERATOR_AND + params.get(i).toString();
+        if (params!=null)
+            for (int i=0; i<params.size(); i++)
+                newUrl+= OPERATOR_AND + params.get(i).toString();
         System.out.println(newUrl);
         return newUrl;
     }
@@ -370,7 +342,8 @@ public class Itasa extends AbstractXML{
             Element item = (Element) iterator.next();
             status = item.getChild(TAG_STATUS).getText();
             if (isStatusFail())
-                error = item.getChild(TAG_ERROR).getText();
+                error = ((Element)item.getChildren(TAG_ERROR).get(0)).
+                                        getChild(TAG_ERROR_MESSAGE).getText();
         }
     }
     
@@ -415,10 +388,11 @@ public class Itasa extends AbstractXML{
             */
             //i.searchIdSingleByTvrage(24996);
             //i.showList(5, 0, false);
-            ArrayList<Show> a = i.showListNameIdNoLimit();
+            
+            ArrayList<Show> a = i.showList();
             for (int j=0; j<a.size(); j++){
                 String[] s = a.get(j).toArrayIdName();
-                System.out.println(s[0] + " " + s[3]);
+                System.out.println(s[0] + " " + s[1]);
             }
         } catch (JDOMException ex) {
             ex.printStackTrace();
