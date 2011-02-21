@@ -11,12 +11,11 @@ public class Show {
             network, started, ended;
     private ArrayList<String> genres;
     private ArrayList<String[]> actors;
+    
 
-    public Show(String name, String id, String id_tvdb, String id_tvrage) {
+    public Show(String name, String id) {
         this.name = name;
         this.id = id;
-        this.id_tvdb = id_tvdb;
-        this.id_tvrage = id_tvrage;
     }
 
     public Show(String name, String id, String id_tvdb, String id_tvrage, 
@@ -46,7 +45,7 @@ public class Show {
     }
     
     public String[] toArrayIdName(){
-        return new String[]{id, id_tvdb, id_tvrage, name};
+        return new String[]{id, name};
     }
     
     public Object[] toArrayResultSearch(){

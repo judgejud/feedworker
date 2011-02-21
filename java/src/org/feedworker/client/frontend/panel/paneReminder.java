@@ -55,14 +55,18 @@ public class paneReminder extends paneAbstract{
             }
         });
         jpAction.add(jbRemoveRow);
+        add(jpAction, BorderLayout.NORTH);
     }
     
     private void jbRemoveRowMouseClicked() {
-        int row = jtable.getSelectedRow();
-        if (row > -1){
-            row = jtable.convertRowIndexToModel(row);
-            //proxy.removeSingleShowCalendar(row, jtable.getValueAt(row, 0));
-            ((DefaultTableModel) jtable.getModel()).removeRow(row);
+        int[] rows = jtable.getSelectedRows();
+        if (rows.length > 0){
+            for (int i=0; i<rows.length; i++){
+                int row = jtable.convertRowIndexToModel(rows[i]);
+                System.out.println(row); 
+                //proxy.removeSingleShowCalendar(row, jtable.getValueAt(row, 0));
+                ((DefaultTableModel) jtable.getModel()).removeRow(row);
+            }
         }
     }
 }

@@ -86,6 +86,7 @@ public class Kernel implements PropertyChangeListener {
     private final String[] QUALITY = Quality.toArray();
     private final File FILE_RULE = new File("rules.xml");
     private final File FILE_CALENDAR = new File("calendar.xml");
+    private final File FILE_REMINDER = new File("reminder.xml");
     // PRIVATE STATIC VARIABLES
     private static Kernel core = null;
     // PRIVATE VARIABLES
@@ -96,7 +97,7 @@ public class Kernel implements PropertyChangeListener {
             itasaAuthcode=null;
     private TreeMap<KeyRule, ValueRule> mapRules;
     private ManageException error = ManageException.getIstance();
-    private Xml xmlCalendar, xmlSubDest;
+    private Xml xmlCalendar, xmlSubDest, xmlReminder;
     private ImportTask importTask;
     private RefreshTask refreshTask;
     private TreeSet tsIdCalendar;
@@ -617,10 +618,9 @@ public class Kernel implements PropertyChangeListener {
             xmlSubDest = new Xml(FILE_RULE, true);
             ArrayList temp = xmlSubDest.initializeReaderRule();
             mapRules = (TreeMap<KeyRule, ValueRule>) temp.get(0);
-            if (mapRules != null) {
+            if (mapRules != null)
                 ManageListener.fireTableEvent(this,
                         (ArrayList<Object[]>) temp.get(1), SUBTITLE_DEST);
-            }
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
@@ -630,10 +630,20 @@ public class Kernel implements PropertyChangeListener {
             xmlCalendar = new Xml(FILE_CALENDAR, true);
             ArrayList temp = xmlCalendar.readingDocumentCalendar();
             tsIdCalendar = (TreeSet) temp.get(0);
-            if (tsIdCalendar.size() > 0) {
+            if (tsIdCalendar.size() > 0) 
                 ManageListener.fireTableEvent(this,
                         (ArrayList<Object[]>) temp.get(1), CALENDAR);
-            }
+        } catch (JDOMException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass(), null);
+        }
+        try {
+            xmlReminder = new Xml(FILE_REMINDER, true);
+            ArrayList<Object[]> temp = xmlReminder.readingDocumentReminder();
+            if (temp.size() > 0) 
+                ManageListener.fireTableEvent(this, temp, REMINDER);
+            
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
