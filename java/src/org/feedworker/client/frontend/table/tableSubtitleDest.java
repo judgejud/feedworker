@@ -35,10 +35,8 @@ public class tableSubtitleDest extends tableAbstract {
             }
         };
         setModel(dtm);
-
         setComboBoxColumn(2, itemsCombo);
         setRowSelectionAllowed(true);
-        Swing.tableSorter(this);
         lockColumns();
     }
     

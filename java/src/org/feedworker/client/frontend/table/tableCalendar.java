@@ -21,18 +21,17 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class tableCalendar extends tableAbstract{
-    private final String[] nameCols = {"ID tvrage", "ID Itasa", "ID Tvdb", "Serie", 
-                                        "Stato", "Giorno", "Last Ep", "Titolo", 
-                                        "Data", "Next Ep", "Titolo", "Data" };
+    private final String[] nameCols = {"ID tvrage", "Serie", "Stato", "Giorno", 
+                                        "Last Ep", "Titolo", "Data", 
+                                        "Next Ep", "Titolo", "Data" };
 
     public tableCalendar(String nome){
         super(nome);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
 
-            Class[] types = new Class[]{String.class, String.class, String.class,
-                            String.class, Boolean.class, String.class, String.class, 
-                            String.class, Date.class, String.class, String.class, 
-                            Date.class};
+            Class[] types = new Class[]{String.class, String.class, Boolean.class, 
+                            String.class, String.class, String.class, Date.class, 
+                            String.class, String.class, Date.class};
 
             @Override
             public Class getColumnClass(int columnIndex) {
@@ -45,7 +44,7 @@ public class tableCalendar extends tableAbstract{
         };
         setModel(dtm);
         setRowSelectionAllowed(true);
-        Swing.tableSorter(this);
+        
 
         this.addMouseListener(new MouseAdapter() {
             @Override
@@ -60,27 +59,24 @@ public class tableCalendar extends tableAbstract{
     @Override
     public void objReceived(TableEvent evt) {
         if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
-            String titleCol = (String) this.getColumnModel().getColumn(3).getHeaderValue();
             DefaultTableModel dtm = (DefaultTableModel) getModel();
             int size = evt.getArray().size();
             int start = dtm.getRowCount();
             for (int i = 0; i < size; i++)
                 dtm.insertRow(i+start, evt.getArray().get(i));
-            getColumn(titleCol).setCellRenderer(new ColorRenderer());
+            getColumn(nameCols[1]).setCellRenderer(new ColorRenderer());
         }
     }
 
     @Override
     protected void lockColumns() {
         Swing.setTableDimensionLockColumn(this, 0, -1); //id tvrage
-        Swing.setTableDimensionLockColumn(this, 1, -1); //id itasa
-        Swing.setTableDimensionLockColumn(this, 2, -1); //id tvdb
-        Swing.setTableDimensionLockColumn(this, 4, -1); //stato
-        Swing.setTableDimensionLockColumn(this, 5, 70);
-        Swing.setTableDimensionLockColumn(this, 6, 70);
-        Swing.setTableDimensionLockColumn(this, 8, 65);
-        Swing.setTableDimensionLockColumn(this, 9, 75);
-        Swing.setTableDimensionLockColumn(this, 11, 65);
+        Swing.setTableDimensionLockColumn(this, 2, -1); //stato
+        Swing.setTableDimensionLockColumn(this, 3, 70);
+        Swing.setTableDimensionLockColumn(this, 4, 70);
+        Swing.setTableDimensionLockColumn(this, 6, 65);
+        Swing.setTableDimensionLockColumn(this, 7, 75);
+        Swing.setTableDimensionLockColumn(this, 9, 65);
     }
     
     class ColorRenderer extends JLabel implements TableCellRenderer {
@@ -91,7 +87,7 @@ public class tableCalendar extends tableAbstract{
             setFont(font);
             setOpaque(true);
 
-            Boolean flag = (Boolean)table.getValueAt(row, 4);
+            Boolean flag = (Boolean)table.getValueAt(row, 2);
             if (flag){
                 setBackground(Color.red);
                 setToolTipText("Series finale");

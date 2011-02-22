@@ -35,8 +35,7 @@ public class tableReminder extends tableAbstract {
             }
         };
         setModel(dtm);
-        lockColumns();    
-        Swing.tableSorter(this);
+        lockColumns();
 
         addMouseListener(new MouseAdapter() {
             @Override
