@@ -912,7 +912,7 @@ public class Kernel implements PropertyChangeListener {
             for (int i = 0; i < from.size(); i++) {
                 show = from.get(i);
                 if (!tsIdCalendar.contains(show[0])) {
-                    Object[] array = setArray(t, show, it);
+                    Object[] array = setArray(t, show);
                     al.add(array);
                     xmlCalendar.addShowTV(array);
                 }
@@ -928,22 +928,25 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    private Object[] setArray(TvRage t, Object[] show, Itasa it)
-            throws JDOMException, IOException {
+    private Object[] setArray(TvRage t, Object[] show)
+                                            throws JDOMException, IOException {
         Object[] array = t.readingEpisodeList_byID(show[0].toString(),
                 show[2].toString());
+        array[0] = show[0];
+        /*
         ArrayList<String> temp = null;
         try {
             temp = it.searchIdSingleByTvrage(Integer.parseInt(show[0].toString()));
-        } catch (ItasaException ex) {}
-        array[0] = show[0];
+        } catch (ItasaException ex) {}        
         if (temp != null) {
             array[1] = temp.get(0);
             array[2] = temp.get(1);
         }
-        array[3] = show[1];
-        array[4] = Common.getStatus((String) show[3]);
-        array[5] = show[4];
+         * 
+         */
+        array[1] = show[1];
+        array[2] = Common.getStatus((String) show[3]);
+        array[3] = show[4];
         return array;
     }
 
@@ -1019,15 +1022,15 @@ public class Kernel implements PropertyChangeListener {
         try {
             array = XPathReader.queryDayID(Common.dateString(Common.actualDate()));
         } catch (ParserConfigurationException ex) {
-            error.launch(ex, null);
+            error.launch(ex, getClass());
         } catch (SAXException ex) {
-            error.launch(ex, null);
+            error.launch(ex, getClass());
         } catch (IOException ex) {
-            error.launch(ex, null);
+            error.launch(ex, getClass());
         } catch (XPathExpressionException ex) {
-            error.launch(ex, null);
+            error.launch(ex, getClass());
         }
-        if (array.size() > 0) {
+        if (array!=null && array.size() > 0) {
             ManageListener.fireJFrameEventOperation(this,
                     OPERATION_PROGRESS_SHOW, array.size());
             ArrayList al = new ArrayList();
@@ -1150,7 +1153,7 @@ public class Kernel implements PropertyChangeListener {
                     if (temp != null) {
                         Object[] show = temp.get(0);
                         if (!ts.contains(show[0])) {
-                            Object[] array = setArray(t, show, it);
+                            Object[] array = setArray(t, show);
                             alObjs.add(array);
                             ts.add(show[0]);
                             xmlCalendar.addShowTV(array);
@@ -1192,7 +1195,7 @@ public class Kernel implements PropertyChangeListener {
                     Long index = iter.next();
                     String id = tmRefresh.get(index);
                     Object[] show = t.showInfo_byID(id);
-                    Object[] array = setArray(t, show, it);
+                    Object[] array = setArray(t, show);
                     alObjs.add(array);
                     xmlCalendar.removeShowTv(index.intValue() - 1);
                     xmlCalendar.addShowTV(array);

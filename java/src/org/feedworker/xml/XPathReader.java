@@ -63,6 +63,7 @@ public class XPathReader {
      */
     public static TreeMap<Long, String> queryDayID(String day) throws SAXException,
             ParserConfigurationException, IOException, XPathExpressionException{
+        String day8 = Common.dateStringAmerican(Common.afterDayDate(8));
         try{
             day = Common.stringToAmerican(day);
         } catch (ParseException e){}
@@ -74,13 +75,11 @@ public class XPathReader {
         //query next date blank
         query = "//SHOW[NEXT_DATE[not(text())]]/ID_TVRAGE/text()";
         addToArray(initializeXPathNode(query));
-        //(data-nextdate)>15
-        query = "//SHOW[(translate('" + day + "', '-', '') - "
-                + "translate(NEXT_DATE, '-', ''))>15]/ID_TVRAGE/text()";
-        System.out.println(query);
-        //addToArray(initializeXPathNode(query));
+        //(nextdate-data)>8
+        query = "//SHOW[translate(NEXT_DATE, '-', '') > "
+                + "translate('" + day8 + "', '-', '')]/ID_TVRAGE/text()";
+        addToArray(initializeXPathNode(query));
         return array;
-        
     }
     
     private static void addToArray(NodeList nodes) throws SAXException, 
