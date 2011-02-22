@@ -46,6 +46,12 @@ public class Common {
         g.setTimeInMillis(System.currentTimeMillis() + day_millisec);
         return g.getTime();
     }
+    
+    public static Date afterDayDate(int day) {
+        GregorianCalendar g = new GregorianCalendar();
+        g.setTimeInMillis(System.currentTimeMillis() + (day_millisec*day));
+        return g.getTime();
+    }
 
     public static Date yesterdayDate() {
         GregorianCalendar g = new GregorianCalendar();
