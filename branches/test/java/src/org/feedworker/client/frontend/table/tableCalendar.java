@@ -42,10 +42,12 @@ public class tableCalendar extends tableAbstract{
                 return false;
             }
         };
+        
         setModel(dtm);
         setRowSelectionAllowed(true);
+        Swing.tableSorter(this);
+        lockColumns();
         
-
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent evt) {
@@ -53,7 +55,6 @@ public class tableCalendar extends tableAbstract{
                                                         getSelectedRowCount());
             }
         });
-        lockColumns();
     }
 
     @Override
@@ -74,9 +75,9 @@ public class tableCalendar extends tableAbstract{
         Swing.setTableDimensionLockColumn(this, 2, -1); //stato
         Swing.setTableDimensionLockColumn(this, 3, 70);
         Swing.setTableDimensionLockColumn(this, 4, 70);
-        Swing.setTableDimensionLockColumn(this, 6, 65);
+        Swing.setTableDimensionLockColumn(this, 6, 70);
         Swing.setTableDimensionLockColumn(this, 7, 75);
-        Swing.setTableDimensionLockColumn(this, 9, 65);
+        Swing.setTableDimensionLockColumn(this, 9, 70);
     }
     
     class ColorRenderer extends JLabel implements TableCellRenderer {

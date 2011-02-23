@@ -41,8 +41,8 @@ import org.feedworker.exception.ManageException;
 import org.feedworker.util.Samba;
 import org.feedworker.xml.Itasa;
 import org.feedworker.xml.TvRage;
-import org.feedworker.xml.XPathReader;
-import org.feedworker.xml.Xml;
+import org.feedworker.xml.XPathCalendar;
+import org.feedworker.xml.Calendar;
 
 import org.jfacility.Io;
 import org.jfacility.Util;
@@ -56,6 +56,8 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.feedworker.xml.Reminder;
+import org.feedworker.xml.RuleDestination;
 
 /**
  * Motore di Feedworker
@@ -93,11 +95,12 @@ public class Kernel implements PropertyChangeListener {
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Timer timer;
     private String lastItasa = null, lastMyItasa = null, lastSubsf = null,
-            lastEztv = null, lastBtchat = null, lastMySubsf = null, 
-            itasaAuthcode=null;
+            lastEztv = null, lastBtchat = null, lastMySubsf = null;
     private TreeMap<KeyRule, ValueRule> mapRules;
     private ManageException error = ManageException.getIstance();
-    private Xml xmlCalendar, xmlSubDest, xmlReminder;
+    private Calendar xmlCalendar;
+    private RuleDestination xmlSubDest;
+    private Reminder xmlReminder;
     private ImportTask importTask;
     private RefreshTask refreshTask;
     private TreeSet tsIdCalendar;
@@ -602,7 +605,7 @@ public class Kernel implements PropertyChangeListener {
      */
     public void saveMap(TreeMap<KeyRule, ValueRule> temp) {
         try {
-            new Xml(FILE_RULE, false).writeMap(temp);
+            new RuleDestination(FILE_RULE, false).writeMap(temp);
             mapRules = temp;
             printOk("Regola/e memorizzate");
         } catch (JDOMException ex) {
@@ -615,8 +618,8 @@ public class Kernel implements PropertyChangeListener {
     /** Carica gli xml */
     public void loadXml() {
         try {
-            xmlSubDest = new Xml(FILE_RULE, true);
-            ArrayList temp = xmlSubDest.initializeReaderRule();
+            xmlSubDest = new RuleDestination(FILE_RULE, true);
+            ArrayList temp = xmlSubDest.initializeReader();
             mapRules = (TreeMap<KeyRule, ValueRule>) temp.get(0);
             if (mapRules != null)
                 ManageListener.fireTableEvent(this,
@@ -627,8 +630,8 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass(), null);
         }
         try {
-            xmlCalendar = new Xml(FILE_CALENDAR, true);
-            ArrayList temp = xmlCalendar.readingDocumentCalendar();
+            xmlCalendar = new Calendar(FILE_CALENDAR, true);
+            ArrayList temp = xmlCalendar.readingDocument();
             tsIdCalendar = (TreeSet) temp.get(0);
             if (tsIdCalendar.size() > 0) 
                 ManageListener.fireTableEvent(this,
@@ -639,8 +642,8 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass(), null);
         }
         try {
-            xmlReminder = new Xml(FILE_REMINDER, true);
-            ArrayList<Object[]> temp = xmlReminder.readingDocumentReminder();
+            xmlReminder = new Reminder(FILE_REMINDER, true);
+            ArrayList<Object[]> temp = xmlReminder.readingDocument();
             if (temp.size() > 0) 
                 ManageListener.fireTableEvent(this, temp, REMINDER);
             
@@ -1001,8 +1004,8 @@ public class Kernel implements PropertyChangeListener {
                         refreshTask.getProgress());
                 if (refreshTask.isDone()) {
                     try {
-                        xmlCalendar = new Xml(FILE_CALENDAR, true);
-                        ArrayList temp = xmlCalendar.readingDocumentCalendar();
+                        xmlCalendar = new Calendar(FILE_CALENDAR, true);
+                        ArrayList temp = xmlCalendar.readingDocument();
                         tsIdCalendar = (TreeSet) temp.get(0);
                         if (tsIdCalendar.size() > 0) {
                             ManageListener.fireTableEvent(this,
@@ -1020,7 +1023,7 @@ public class Kernel implements PropertyChangeListener {
     public void refreshCalendar() {
         TreeMap<Long, String> array = null;
         try {
-            array = XPathReader.queryDayID(Common.dateString(Common.actualDate()));
+            array = XPathCalendar.queryDayID(Common.dateString(Common.actualDate()));
         } catch (ParserConfigurationException ex) {
             error.launch(ex, getClass());
         } catch (SAXException ex) {
@@ -1051,7 +1054,7 @@ public class Kernel implements PropertyChangeListener {
             day = Common.dateString(Common.tomorrowDate());
         }
         try {
-            String result = XPathReader.queryDayEquals(day);
+            String result = XPathCalendar.queryDayEquals(day);
             if (result != null) {
                 String msg;
                 if (result.equalsIgnoreCase("")) {

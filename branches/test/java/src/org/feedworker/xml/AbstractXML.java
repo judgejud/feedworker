@@ -1,28 +1,40 @@
 package org.feedworker.xml;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Iterator;
 
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 /**
  *
  * @author luca
  */
 class AbstractXML {
-    protected Document document;
+    private final String TAG_ROOT = "ROOT";
     
-    protected void buildUrl(String url) throws JDOMException, IOException {
-        document = new SAXBuilder().build(new URL(url));
+    protected Document document;
+    protected Element root;
+    protected File file;
+    
+    protected void initialize(File f, boolean read) throws JDOMException, IOException{
+        file = f;
+        if (file.exists() && read){
+            document = new SAXBuilder().build(f);
+            root = document.getRootElement();
+        } else
+            initializeWriter();
     }
     
-    protected void buildFile(File f) throws JDOMException, IOException{
-        document = new SAXBuilder().build(f);
+    protected void initializeWriter(){
+        root = new Element(TAG_ROOT);
+        document = new Document(root);
     }
     
     protected int sizeRootChildren(){
@@ -41,19 +53,16 @@ class AbstractXML {
         }
     }
     
-    protected String checkNPE(Element obj){
-        try{
-            return obj.getText();
-        } catch (NullPointerException e){
-            return "";
-        }
-    }
-    
-    protected Iterator getDescendantsZero(int level){
-        Element doc = document.getRootElement();
-        for (int i=0; i<level; i++){
-            doc = (Element) doc.getChildren().get(0);
-        }
-        return doc.getChildren().iterator();
+    /**Scrive l'xml
+     *
+     * @throws IOException
+     */
+    public void write() throws IOException {
+        // Creazione dell'oggetto XMLOutputter
+        XMLOutputter outputter = new XMLOutputter();
+        // Imposto il formato dell'outputter come "bel formato"
+        outputter.setFormat(Format.getPrettyFormat());
+        // Produco l'output sul file xml.foo
+        outputter.output(document, new FileOutputStream(file));
     }
 }

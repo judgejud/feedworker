@@ -16,7 +16,7 @@ import org.jfacility.java.lang.Lang;
  *
  * @author luca
  */
-public class TvRage extends AbstractXML{
+public class TvRage extends AbstractQueryXML{
     private final String URL_TVRAGE = "http://services.tvrage.com/feeds"; 
     private final String URL_TVRAGE_DETAILED_SEARCH = URL_TVRAGE +
                                                     "/full_search.php?show=";

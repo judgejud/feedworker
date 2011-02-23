@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableModel;
 
 import org.feedworker.client.frontend.events.TableEvent;
 import org.feedworker.client.frontend.events.TableEventListener;
-import org.jfacility.javax.swing.Swing;
 
 /**
  *
@@ -24,7 +23,6 @@ abstract class tableAbstract extends JTable implements TableEventListener {
         setFocusable(false);
         setRowSelectionAllowed(false);
         getTableHeader().setReorderingAllowed(false);
-        Swing.tableSorter(this);
     }
 
     @Override
