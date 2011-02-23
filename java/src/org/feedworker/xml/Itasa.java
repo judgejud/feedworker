@@ -17,9 +17,8 @@ import org.jdom.JDOMException;
  *
  * @author luca
  */
-public class Itasa extends AbstractXML{
+public class Itasa extends AbstractQueryXML{
     private final String API_KEY = "apikey=436e566f3d09b217cf687fa5bad5effc";
-    
     private final String STRING_REPLACE = "StringReplace";
     
     private final String OPERATOR_AND = "&";

@@ -34,6 +34,7 @@ public class tableResultSearchTv extends tableAbstract{
         lockColumns();
         setRowSelectionAllowed(true);
         getColumn(nameCols[1]).setCellRenderer(new JLabelCellTextRenderer());
+        Swing.tableSorter(this);
     }
     
     @Override

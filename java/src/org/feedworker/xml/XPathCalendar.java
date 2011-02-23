@@ -22,7 +22,7 @@ import org.xml.sax.SAXException;
  *
  * @author luca
  */
-public class XPathReader {
+public class XPathCalendar {
     
     private static final File FILE_NAME = new File("calendar.xml");
     private static DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
