@@ -69,9 +69,11 @@ public class RssThread implements Runnable{
     private void downItasaAuto(Object link) {
         ArrayList<String> als = new ArrayList<String>();
         als.add(link.toString());
+        /*
         DownloadThread dt = new DownloadThread(map, als, true);
         Thread t = new Thread(dt, "AutoItasa");
         t.start();
+         */
     }
     
     @Override

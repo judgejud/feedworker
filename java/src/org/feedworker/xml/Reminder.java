@@ -29,13 +29,31 @@ public class Reminder extends AbstractXML{
             Iterator iter = iteratorRootChildren();
             while (iter.hasNext()) {
                 Element reminder = (Element) iter.next();
-                Object[] obj = new Object[2];
+                Object[] obj = new Object[3];
                 int i=-1;
                 obj[++i] = reminder.getChild(TAG_REMINDER_DATE).getText();
                 obj[++i] = reminder.getChild(TAG_REMINDER_SUBTITLE).getText();
+                obj[++i] = false;
                 al.add(obj);
-            }            
+            }
         }
         return al;
+    }
+    
+    public void addItem(Object[] array) throws IOException{
+        Element reminder = new Element(TAG_REMINDER_ROOT);
+        int i=-1;
+        Element date = new Element(TAG_REMINDER_DATE);
+        date.setText(array[++i].toString());
+        reminder.addContent(date);
+        
+        Element sub = new Element(TAG_REMINDER_SUBTITLE);
+        sub.setText(array[++i].toString());
+        reminder.addContent(sub);
+        root.addContent(reminder);
+    }
+    
+    public void removeItem(int row) throws IOException{
+        root.getChildren().remove(row);
     }
 }

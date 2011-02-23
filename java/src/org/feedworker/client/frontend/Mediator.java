@@ -75,7 +75,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "316 by "
+                + "320 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -766,5 +766,9 @@ public class Mediator {
 
     public void checkLoginItasa(String user, char[] password) {
         core.checkLoginItasa(user,new String(password));
+    }
+
+    public void removeReminders(ArrayList<Integer> numbers) {
+        core.removeReminders(numbers);
     }
 }
