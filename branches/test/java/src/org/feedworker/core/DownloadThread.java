@@ -24,6 +24,7 @@ import jcifs.smb.SmbException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
+import org.feedworker.xml.Reminder;
 /**
  * 
  * @author luca
@@ -39,24 +40,16 @@ public class DownloadThread implements Runnable {
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
     private TreeMap<KeyRule, ValueRule> mapRules;
-    //private Http httpItasa;
+    private Reminder xmlReminder;
 
-    DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als, 
-                                                                boolean _itasa) {
+    DownloadThread(TreeMap<KeyRule, ValueRule> map, Reminder xml, 
+                                    ArrayList<String> _als, boolean _itasa) {
         als = _als;
         itasa = _itasa;
         mapRules = map;
+        xmlReminder = xml;
     }
     
-/*da usare con le nuove api itasa quando saranno rilasciate.
-    DownloadThread(TreeMap<KeyRule, ValueRule> map, ArrayList<String> _als,
-            boolean _itasa, Http _http) {
-        als = _als;
-        itasa = _itasa;
-        mapRules = map;
-        httpItasa = _http;
-    }
-*/
     /**Estrae lo zip e restituisce l'arraylist di file contenuti nello zip
      *
      * @param f file zip di riferimento da estrarre
@@ -216,7 +209,18 @@ public class DownloadThread implements Runnable {
         }        
         http.closeClient();
         analyzeDest(alFile);
+        addXML(alReminder);
         ManageListener.fireTableEvent(this, alReminder, Kernel.getIstance().REMINDER);
+    }
+    
+    private void addXML(ArrayList<Object[]> al){
+        try {
+            for (int i=0; i<al.size(); i++)
+                xmlReminder.addItem(al.get(i));
+            xmlReminder.write();
+        } catch (IOException ex) {
+            error.launch(ex, null);
+        }
     }
 
     private String rename(KeyRule key, String namesub) throws NullPointerException{

@@ -3,6 +3,7 @@ package org.feedworker.client.frontend.panel;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -59,14 +60,17 @@ public class paneReminder extends paneAbstract{
     }
     
     private void jbRemoveRowMouseClicked() {
-        int[] rows = jtable.getSelectedRows();
-        if (rows.length > 0){
-            for (int i=0; i<rows.length; i++){
-                int row = jtable.convertRowIndexToModel(rows[i]);
-                System.out.println(row); 
-                //proxy.removeSingleShowCalendar(row, jtable.getValueAt(row, 0));
-                ((DefaultTableModel) jtable.getModel()).removeRow(row);
+        int rows = jtable.getRowCount();
+        if (rows > 0){
+            ArrayList<Integer> numbers = new ArrayList<Integer>();
+            for (int i=rows-1; i>-1; i--){
+                if (Boolean.parseBoolean(jtable.getValueAt(i, 2).toString())){
+                    int row = jtable.convertRowIndexToModel(i);
+                    numbers.add(row);
+                    ((DefaultTableModel) jtable.getModel()).removeRow(row);
+                }
             }
+            proxy.removeReminders(numbers);
         }
     }
 }

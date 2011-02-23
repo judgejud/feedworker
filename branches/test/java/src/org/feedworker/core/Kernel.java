@@ -18,6 +18,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -125,7 +127,7 @@ public class Kernel implements PropertyChangeListener {
      * @param itasa
      */
     public void downloadSub(ArrayList<String> als, boolean itasa) {
-        DownloadThread dt = new DownloadThread(mapRules, als, itasa);
+        DownloadThread dt = new DownloadThread(mapRules, xmlReminder, als, itasa);
         Thread t = new Thread(dt, "Thread download");
         t.start();
     }
@@ -140,7 +142,7 @@ public class Kernel implements PropertyChangeListener {
     private void downItasaAuto(Object link) {
         ArrayList<String> als = new ArrayList<String>();
         als.add(link.toString());
-        DownloadThread dt = new DownloadThread(mapRules, als, true);
+        DownloadThread dt = new DownloadThread(mapRules, xmlReminder, als, true);
         Thread t = new Thread(dt, "AutoItasa");
         t.start();
     }
@@ -1135,6 +1137,16 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, this.getClass());
         } catch (ItasaException ex) {
             printAlert("CheckLogin itasa: " + ex.getMessage());
+        }
+    }
+
+    public void removeReminders(ArrayList<Integer> numbers) {
+        try {
+            for (int i=0; i<numbers.size(); i++)
+                xmlReminder.removeItem(numbers.get(i).intValue());
+            xmlReminder.write();
+        } catch (IOException ex) {
+            error.launch(ex, getClass());
         }
     }
 
