@@ -107,14 +107,13 @@ public class tableRss extends tableAbstract {
             setText(text);
             setFont(font);
             setOpaque(true);
-            if (row < rowsize0) {
+            if (row < rowsize0)
                 setBackground(Color.orange);
-            } else if (row >= rowsize0 && row < rowsize0 + rowsize1) {
+            else if (row >= rowsize0 && row < rowsize0 + rowsize1)
                 setBackground(Color.lightGray);
-            } else {
+            else
                 setBackground(Color.white);
-            }
-            this.repaint();
+            repaint();
             return this;
         }
     } // end class JLabelRenderer

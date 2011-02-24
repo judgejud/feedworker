@@ -14,7 +14,7 @@ import org.feedworker.client.frontend.events.TableEventListener;
  */
 abstract class tableAbstract extends JTable implements TableEventListener {
 
-    protected final Font font = new Font("Arial", Font.PLAIN, 10);
+    protected final Font font = new Font("Arial", Font.PLAIN, 11);
 
     public tableAbstract(String name) {
         super();

@@ -22,7 +22,6 @@ public class Itasa extends AbstractQueryXML{
     private final String STRING_REPLACE = "StringReplace";
     
     private final String OPERATOR_AND = "&";
-    private final String OPERATOR_EQUAL = "%3D";
     private final String OPERATOR_LIKE = "like";
     
     private final String PARAM_FIELDS = "fields[]=";
@@ -31,8 +30,8 @@ public class Itasa extends AbstractQueryXML{
     private final String PARAM_LIMIT = "limit=";
     private final String PARAM_ORDERBY = "order_by";
     private final String PARAM_SHOW_ID = "show_id=";
-    private final String PARAM_SUBTITLE_ID = "subtitle_id=";
     private final String PARAM_VALUE = "value=";
+    private final String PARAM_AUTHCODE = "authcode=";
     private final String PARAM_USERNAME = "username=";
     private final String PARAM_PASSWORD = "password=";
     
@@ -66,16 +65,15 @@ public class Itasa extends AbstractQueryXML{
     private final String TAG_SUBTITLE_FILESIZE = "filesize";
     private final String TAG_SUBTITLE_DESCRIPTION = "description";
     private final String TAG_SUBTITLE_SUBMIT_DATE = "submit_date";
-    private final String TAG_SUBTITLE_INFOURL = "infourl";
     
     private final String URL_BASE = "http://api.italiansubs.net/api/rest";
     private final String URL_LOGIN = URL_BASE + "/users/login/?"; //OK
-    ///shows/<SHOW_ID>?
-    private final String URL_SHOW_SINGLE = URL_BASE + "/shows/" + STRING_REPLACE + "?";
+    private final String URL_MYITASA_SHOWS = URL_BASE + "/myitasa/shows?";
+    private final String URL_SHOW_SINGLE = 
+                                    URL_BASE + "/shows/" + STRING_REPLACE + "?"; //OK
     private final String URL_SHOW_LIST = URL_BASE + "/shows/?"; //OK
-    //http://api.italiansubs.net/api/rest/shows/search?q=<QUERY>&page=<PAGE=1>
-    private final String URL_SHOW_SEARCH = URL_BASE + "/shows/search/?";
-    private final String URL_SUBTITILE_SINGLE = URL_BASE + "/subtitle/subtitle/?";
+    private final String URL_SUBTITILE_SINGLE = 
+                                URL_BASE + "/subtitles/" + STRING_REPLACE + "?"; //OK
     private final String URL_SUBTITILE_SHOW = URL_BASE + "/subtitle/subtitles/?";
     private final String URL_SUBTITILE_SEARCH = URL_BASE + "/subtitle/search/?";
     
@@ -83,7 +81,6 @@ public class Itasa extends AbstractQueryXML{
     
     public Show showSingle(String id, boolean flag_actors) throws JDOMException, 
                                                     IOException, ItasaException{
-        
         buildUrl(composeUrl(URL_SHOW_SINGLE.replaceFirst(STRING_REPLACE, id), null));
         checkStatus();
         Show show = null;
@@ -139,14 +136,10 @@ public class Itasa extends AbstractQueryXML{
             throw new ItasaException("mapIdName: "+ error);
         return container;
     }
-    
-    
-    
-    public Subtitle subtitleSingle(int id) throws JDOMException, IOException, 
+
+    public Subtitle subtitleSingle(String id) throws JDOMException, IOException, 
                                                                     ItasaException{
-        ArrayList params = new ArrayList();
-        params.add(PARAM_SUBTITLE_ID + id);
-        buildUrl(composeUrl(URL_SUBTITILE_SINGLE, params));
+        buildUrl(composeUrl(URL_SUBTITILE_SINGLE.replaceFirst(STRING_REPLACE, id), null));
         checkStatus();
         Subtitle sub = null;
         if (isStatusSuccess()){
@@ -159,9 +152,7 @@ public class Itasa extends AbstractQueryXML{
             String filesize  = item.getChild(TAG_SUBTITLE_FILESIZE).getText();
             String date = item.getChild(TAG_SUBTITLE_SUBMIT_DATE).getText();
             String description  = item.getChild(TAG_SUBTITLE_DESCRIPTION).getText();
-            String infourl = item.getChild(TAG_SUBTITLE_INFOURL).getText();
-            sub = new Subtitle(name, version, filename, filesize, date, description, 
-                            infourl);
+            sub = new Subtitle(name, version, filename, filesize, date, description);
         } else
             throw new ItasaException("subtitleSingle: "+ error);
         return sub;
@@ -248,6 +239,12 @@ public class Itasa extends AbstractQueryXML{
         return itasa;
     }
     
+    public void myItasaShows(String authcode) throws JDOMException, IOException{
+        ArrayList params = new ArrayList();
+        params.add(PARAM_AUTHCODE + authcode);
+        buildUrl(composeUrl(URL_MYITASA_SHOWS, params));
+    }
+    
     /**Compone la url compresa di parametri
      * 
      * @param url url base
@@ -305,14 +302,15 @@ public class Itasa extends AbstractQueryXML{
     public static void main (String[] args){
         Itasa i = new Itasa();
         try {
+            ItasaUser iu = i.login("judge", "qwerty");
+            i.myItasaShows(iu.getAuthcode());
+            /*
             Show s = i.showSingle("1363", true);
-            /*
-            Subtitle s = i.subtitleSingle(20000);
-            Object[] obj = s.toArraySingle();
+            Subtitle sub = i.subtitleSingle("20000");
+            Object[] obj = sub.toArraySingle();
             for (int n=0; n<obj.length; n++)
-            System.out.println(obj[n]);
-             */
-            /*
+                System.out.println(obj[n]);
+            
             ArrayList<Subtitle> a = i.subtitleListByIdShow(1363);
             for (int m=0; m<a.size(); m++){
             Object[] obj = a.get(m).toArrayIdNameVersion();
@@ -320,8 +318,6 @@ public class Itasa extends AbstractQueryXML{
             System.out.println(obj[n]);
             }
              */
-            //i.searchIdSingleByTvrage(24996);
-            //i.showList(5, 0, false);
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {

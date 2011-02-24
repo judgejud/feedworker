@@ -5,17 +5,16 @@ package org.feedworker.object;
  */
 public class Subtitle {
     private String id, showId, showName, name, version, fileName, fileSize, 
-                date, description, infoUrl;
+                date, description;
 
     public Subtitle(String name, String version, String fileName, String fileSize, 
-                    String date, String description, String infoUrl) {
+                    String date, String description) {
         this.name = name;
         this.version = version;
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.date = date;
         this.description = description;
-        this.infoUrl = infoUrl;
     }
 
     public Subtitle(String id, String name, String version) {
@@ -25,11 +24,10 @@ public class Subtitle {
     }
     
     public String[] toArraySingle(){
-        return new String[]{name, version, fileName, fileSize, date, description, infoUrl};
+        return new String[]{name, version, fileName, fileSize, date, description};
     }
     
     public String[] toArrayIdNameVersion(){
         return new String[]{id, name, version};
     }
-    
 }

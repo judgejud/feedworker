@@ -18,7 +18,7 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 class labelCellColorRenderer extends JLabel implements TableCellRenderer {
-    private final Font font = new Font("Arial", Font.PLAIN, 10);
+    private final Font font = new Font("Arial", Font.PLAIN, 11);
     private Mediator proxy = Mediator.getIstance();
     @Override
     public Component getTableCellRendererComponent(JTable table,
