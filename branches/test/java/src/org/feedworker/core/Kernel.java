@@ -18,8 +18,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -1137,6 +1135,8 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, this.getClass());
         } catch (ItasaException ex) {
             printAlert("CheckLogin itasa: " + ex.getMessage());
+        } catch (Exception ex) {
+            error.launch(ex, this.getClass());
         }
     }
 
