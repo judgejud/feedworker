@@ -1,6 +1,7 @@
 package org.feedworker.xml;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Iterator;
 
