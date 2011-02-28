@@ -40,7 +40,6 @@ public class Https {
     
     public InputStream connection(String url) throws Exception {
         InputStream is = null;
-
         URL u = new URL(url);
         HttpsURLConnection conn = (HttpsURLConnection) u.openConnection();
         conn.setHostnameVerifier(new HostnameVerifier() {
