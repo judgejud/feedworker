@@ -10,6 +10,7 @@ import java.util.TreeMap;
 import org.feedworker.core.Https;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.object.ItasaUser;
+import org.feedworker.object.News;
 import org.feedworker.object.Show;
 import org.feedworker.object.Subtitle;
 
@@ -23,29 +24,37 @@ import org.jdom.input.SAXBuilder;
  */
 public class Itasa extends AbstractQueryXML{
     private final String API_KEY = "apikey=436e566f3d09b217cf687fa5bad5effc";
-    private final String STRING_REPLACE = "StringReplace";
     
     private final String OPERATOR_AND = "&";
-    private final String OPERATOR_LIKE = "like";
+    private final String OPERATOR_LIKE = "like";//
     
-    private final String PARAM_SEARCH_FIELD = "search_field[]=";
-    private final String PARAM_SEARCH_OP = "search_op=";
-    private final String PARAM_SHOW_ID = "show_id=";
-    private final String PARAM_VALUE = "value=";
     private final String PARAM_AUTHCODE = "authcode=";
-    private final String PARAM_USERNAME = "username=";
+    private final String PARAM_PAGE = "page=";
     private final String PARAM_PASSWORD = "password=";
-    
-    private final String STATUS_SUCCESS = "success";
+    private final String PARAM_QUERY = "q=";
+    private final String PARAM_SHOW_ID = "show_id=";
+    private final String PARAM_USERNAME = "username=";
+    private final String PARAM_VERSION = "version=";
+
     private final String STATUS_FAIL = "fail";
+    private final String STATUS_SUCCESS = "success";
+    
+    private final String STRING_REPLACE = "StringReplace";
     
     private final String TAG_STATUS = "status";
     private final String TAG_ERROR = "error";
     private final String TAG_ERROR_MESSAGE = "message";
     private final String TAG_COUNT = "count";
-    private final String TAG_USER_AUTHCODE = "authcode";
-    private final String TAG_USER_ID = "id";
-    private final String TAG_USER_HASMYITASA = "has_myitasa";
+    //TAG NEWS
+    private final String TAG_NEWS_ID = "id";
+    private final String TAG_NEWS_SHOWID = "show_id";
+    private final String TAG_NEWS_SHOWNAME = "show_name";
+    private final String TAG_NEWS_IMAGE = "image";
+    private final String TAG_NEWS_SUBMITDATE = "submit_date";
+    private final String TAG_NEWS_THUMB = "thumb";
+    private final String TAG_NEWS_EPISODES = "episodes";
+    
+    //TAG SHOW
     private final String TAG_SHOW_PLOT = "plot";
     private final String TAG_SHOW_GENRES = "genres";
     private final String TAG_SHOW_BANNER = "banner";
@@ -59,6 +68,7 @@ public class Itasa extends AbstractQueryXML{
     private final String TAG_SHOW_ACTORS = "actors";
     private final String TAG_SHOW_ACTOR_NAME = "name";
     private final String TAG_SHOW_ACTOR_AS = "as";
+    //TAG SUBTITLE
     private final String TAG_SUBTITLE_ID = "id";
     private final String TAG_SUBTITLE_NAME = "name";
     private final String TAG_SUBTITLE_VERSION = "version";
@@ -66,18 +76,24 @@ public class Itasa extends AbstractQueryXML{
     private final String TAG_SUBTITLE_FILESIZE = "filesize";
     private final String TAG_SUBTITLE_DESCRIPTION = "description";
     private final String TAG_SUBTITLE_SUBMIT_DATE = "submit_date";
-    
+    //TAG USER
+    private final String TAG_USER_AUTHCODE = "authcode";
+    private final String TAG_USER_ID = "id";
+    private final String TAG_USER_HASMYITASA = "has_myitasa";
+    //URL
     private final String URL_BASE = "https://api.italiansubs.net/api/rest";
     private final String URL_LOGIN = URL_BASE + "/users/login/?"; 
     private final String URL_MYITASA_LAST_SUB = URL_BASE + "/myitasa/lastsubtitles?";
     private final String URL_MYITASA_SHOWS = URL_BASE + "/myitasa/shows?";
+    private final String URL_NEWS = URL_BASE + "/news?";
+    private final String URL_NEWS_SINGLE = URL_BASE + "/news/" + STRING_REPLACE + "?";
     private final String URL_SHOW_SINGLE = 
                                     URL_BASE + "/shows/" + STRING_REPLACE + "?";
     private final String URL_SHOW_LIST = URL_BASE + "/shows/?";
-    private final String URL_SUBTITILE_SINGLE = 
+    private final String URL_SUBTITLE_SINGLE = 
                                 URL_BASE + "/subtitles/" + STRING_REPLACE + "?"; 
-    private final String URL_SUBTITILE_SHOW = URL_BASE + "/subtitles?"; //    
-    private final String URL_SUBTITILE_SEARCH = URL_BASE + "/subtitles/search?"; //
+    private final String URL_SUBTITLE_SHOW = URL_BASE + "/subtitles?"; //    
+    private final String URL_SUBTITLE_SEARCH = URL_BASE + "/subtitles/search?"; //
     
     private String status, error;
     
@@ -135,13 +151,13 @@ public class Itasa extends AbstractQueryXML{
                 container.put(name, id);
             }
         } else 
-            throw new ItasaException("mapIdName: "+ error);
+            throw new ItasaException("ShowList: "+ error);
         return container;
     }
 
     public Subtitle subtitleSingle(String id) throws JDOMException, IOException, 
                                                             ItasaException, Exception{
-        connectHttps(composeUrl(URL_SUBTITILE_SINGLE.replaceFirst(STRING_REPLACE, id), null));
+        connectHttps(composeUrl(URL_SUBTITLE_SINGLE.replaceFirst(STRING_REPLACE, id), null));
         checkStatus();
         Subtitle sub = null;
         if (isStatusSuccess()){
@@ -164,8 +180,11 @@ public class Itasa extends AbstractQueryXML{
                         throws JDOMException, IOException, ItasaException, Exception{
         ArrayList params = new ArrayList();
         params.add(PARAM_SHOW_ID + idShow);
-        //version=<VERSION=null>&page=<PAGE=1>
-        connectHttps(composeUrl(URL_SUBTITILE_SHOW, params));
+        if (_version!=null)
+            params.add(PARAM_VERSION + _version);
+        if (page>0)
+            params.add(PARAM_PAGE + page);
+        connectHttps(composeUrl(URL_SUBTITLE_SHOW, params));
         checkStatus();
         ArrayList<Subtitle>  subs = null;
         if (isStatusSuccess()){
@@ -184,37 +203,66 @@ public class Itasa extends AbstractQueryXML{
         return subs;
     }
     
-    public ArrayList<Subtitle> searchSubtitle(){
-        //q=<QUERY>&show_id=<SHOW_ID>&version=<VERSION=null>&page=<PAGE=1>
-        ArrayList<Subtitle>  subs = null;
-        return subs;
-    }
-    
-    public ArrayList<Subtitle> searchSubtitleCompleted(String id) throws JDOMException, 
-                                                    IOException, ItasaException{
-        //q=<QUERY>&show_id=<SHOW_ID>&version=<VERSION=null>&page=<PAGE=1>
+    public ArrayList<Subtitle> searchSubtitleEpisodeByIdShow(int id, String ep, int page)
+                    throws JDOMException, IOException, ItasaException, Exception{
         ArrayList params = new ArrayList();
-        if (id!=null)
-            params.add(PARAM_SHOW_ID + id);
-        params.add(PARAM_VALUE + "%completa%25");
-        params.add(PARAM_SEARCH_FIELD + TAG_SUBTITLE_NAME);
-        params.add(PARAM_SEARCH_OP + OPERATOR_LIKE);
-        buildUrl(composeUrl(URL_SUBTITILE_SEARCH, params));
+        params.add(PARAM_SHOW_ID + id);        
+        params.add(PARAM_QUERY + ep);
+        if (page>0)
+            params.add(PARAM_PAGE + page);
+        connectHttps(composeUrl(URL_SUBTITLE_SEARCH, params));
         checkStatus();
         ArrayList<Subtitle>  subs = null;
         if (isStatusSuccess()){
-            subs = new ArrayList<Subtitle>();
-            Iterator iter = getDescendantsZero(1);
-            while (iter.hasNext()){
-                Element item = (Element) iter.next();
-                String idSub = item.getChild(TAG_SUBTITLE_ID).getText();
-                String name = item.getChild(TAG_SUBTITLE_NAME).getText();
-                String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
-                Subtitle sub = new Subtitle(idSub, name, version);
-                subs.add(sub);
-            }
+            if (getResponseCount()>0){
+                subs = new ArrayList<Subtitle>();
+                Iterator iter = getDescendantsZero(2);
+                while (iter.hasNext()){
+                    Element item = (Element) iter.next();
+                    String idSub = item.getChild(TAG_SUBTITLE_ID).getText();
+                    String name = item.getChild(TAG_SUBTITLE_NAME).getText();
+                    String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
+                    Subtitle sub = new Subtitle(idSub, name, version);
+                    subs.add(sub);
+                }
+            } else
+                throw new ItasaException("searchSubtitleEpisodeByIdShow: "
+                        + "non ci sono sottotitoli che rispondono ai criteri di ricerca");
         } else
-            throw new ItasaException("searchSubtitleCompleted: "+ error);
+            throw new ItasaException("searchSubtitleEpisodeByIdShow: "+ error);
+        return subs;
+    }
+    
+    public ArrayList<Subtitle> searchSubtitleCompletedByIdShow(int id, 
+                                                        String _version, int page) 
+                                throws JDOMException, IOException, ItasaException, Exception{
+        ArrayList params = new ArrayList();
+        params.add(PARAM_SHOW_ID + id);
+        if (_version!=null)
+            params.add(PARAM_VERSION + _version);
+        params.add(PARAM_QUERY + "%completa%25");
+        if (page>0)
+            params.add(PARAM_PAGE + page);
+        connectHttps(composeUrl(URL_SUBTITLE_SEARCH, params));
+        checkStatus();
+        ArrayList<Subtitle>  subs = null;
+        if (isStatusSuccess()){
+            if (getResponseCount()>0){
+                subs = new ArrayList<Subtitle>();
+                Iterator iter = getDescendantsZero(2);
+                while (iter.hasNext()){
+                    Element item = (Element) iter.next();
+                    String idSub = item.getChild(TAG_SUBTITLE_ID).getText();
+                    String name = item.getChild(TAG_SUBTITLE_NAME).getText();
+                    String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
+                    Subtitle sub = new Subtitle(idSub, name, version);
+                    subs.add(sub);
+                }
+            } else
+                throw new ItasaException("searchSubtitleComplete: "
+                        + "non ci sono sottotitoli che rispondono ai criteri di ricerca");
+        } else
+            throw new ItasaException("searchSubtitleComplete: "+ error);
         return subs;
     }
     
@@ -239,14 +287,79 @@ public class Itasa extends AbstractQueryXML{
             throw new ItasaException(error);
         return itasa;
     }
-    
+    //TODO: decidere come restituire gli show
     public void myItasaShows(String authcode) throws JDOMException, IOException, Exception{
         ArrayList params = new ArrayList();
         params.add(PARAM_AUTHCODE + authcode);
         connectHttps(composeUrl(URL_MYITASA_SHOWS, params));
+        checkStatus();
+        if (isStatusSuccess()){
+            Iterator iter =  getDescendantsZero(2);
+            while (iter.hasNext()){
+                Element item = (Element) iter.next();
+                String id = item.getChild(TAG_SHOW_ID).getText();
+                String name = item.getChild(TAG_SHOW_NAME).getText();
+            }
+        } else 
+            throw new ItasaException("MyItasa Show: "+ error);
     }
     
-    public void myItasaLastSub(String authcode) throws JDOMException, IOException, Exception{
+    public ArrayList<News> newsList(int page) throws JDOMException, IOException, Exception{
+        ArrayList params = new ArrayList();
+        if (page>0)
+            params.add(PARAM_PAGE + page);
+        connectHttps(composeUrl(URL_NEWS, params));
+        checkStatus();
+        ArrayList<News> container = null;
+        if (isStatusSuccess()){
+            Iterator iter =  getDescendantsZero(2);
+            container = new ArrayList<News>();
+            while (iter.hasNext()){
+                Element item = (Element) iter.next();
+                String id = item.getChild(TAG_NEWS_ID).getText();
+                String showId = item.getChild(TAG_NEWS_SHOWID).getText();
+                String showName = item.getChild(TAG_NEWS_SHOWNAME).getText();
+                String image = item.getChild(TAG_NEWS_IMAGE).getText();
+                String date = item.getChild(TAG_NEWS_SUBMITDATE).getText();
+                String thumb = item.getChild(TAG_NEWS_THUMB).getText();
+                Iterator temp = item.getChild(TAG_NEWS_EPISODES).getChildren().iterator();
+                String episode = ((Element) temp.next()).getText();
+                container.add(new News(id, showId, showName, image, date, thumb, episode));
+            }
+        } else 
+            throw new ItasaException("NewsList: "+ error);
+        return container;
+    }
+    
+    public News newsSingle(String id) throws JDOMException, IOException, Exception{
+        connectHttps(composeUrl(URL_NEWS_SINGLE.replaceFirst(STRING_REPLACE, id), null));
+        checkStatus();
+        News news = null;
+        if (isStatusSuccess()){
+            /*
+            Iterator iter =  getDescendantsZero(2);
+            while (iter.hasNext()){
+                Element item = (Element) iter.next();
+                //String id = item.getChild(TAG_NEWS_ID).getText();
+                String showId = item.getChild(TAG_NEWS_SHOWID).getText();
+                String showName = item.getChild(TAG_NEWS_SHOWNAME).getText();
+                String image = item.getChild(TAG_NEWS_IMAGE).getText();
+                String date = item.getChild(TAG_NEWS_SUBMITDATE).getText();
+                String thumb = item.getChild(TAG_NEWS_THUMB).getText();
+                Iterator temp = item.getChild(TAG_NEWS_EPISODES).getChildren().iterator();
+                String episode = ((Element) temp.next()).getText();
+            }
+            */
+        } else 
+            throw new ItasaException("NewsList: "+ error);
+        return news;
+    }
+    
+    
+    /*TODO: non implementare finchè non viene risolto il problema di risposta 
+     * che impiega troppo
+     */
+    private void myItasaLastSub(String authcode) throws JDOMException, IOException, Exception{
         ArrayList params = new ArrayList();
         params.add(PARAM_AUTHCODE + authcode);
         connectHttps(composeUrl(URL_MYITASA_LAST_SUB, params));
@@ -318,24 +431,24 @@ public class Itasa extends AbstractQueryXML{
     public static void main (String[] args){
         Itasa i = new Itasa();
         try {
+            /*
             ItasaUser iu = i.login("judge", "qwerty");
             if (iu.isMyitasa()){
+                i.myItasaLastSub(iu.getAuthcode());
                 i.myItasaShows(iu.getAuthcode());
-                //i.myItasaLastSub(iu.getAuthcode());
             }
-            i.showList();
-            Show s = i.showSingle("1363", true);
+            */
+            //i.showList();
+            //i.showSingle("1363", true);
             
-            Subtitle sub = i.subtitleSingle("20000");
-            ArrayList<Subtitle> a = i.subtitleListByIdShow(1363,null,-1);
-            /* 
+            //i.subtitleSingle("20000");
+            //i.subtitleListByIdShow(1363,"720p",1);
+            //i.searchSubtitleCompletedByIdShow(134,null,1);
+            //i.searchSubtitleEpisodeByIdShow(134,"1x01",1);
             
-            for (int m=0; m<a.size(); m++){
-            Object[] obj = a.get(m).toArrayIdNameVersion();
-            for (int n=0; n<obj.length; n++)
-            System.out.println(obj[n]);
-            }
-             */
+            //i.newsList(1);
+            i.newsSingle("10503");
+
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {

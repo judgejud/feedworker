@@ -31,7 +31,7 @@ public class ApplicationSettings {
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
             enableAdvisorMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
-            enablePaneSearchSubItasa;
+            enablePaneSearchSubItasa, enablePaneReminder;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -85,13 +85,14 @@ public class ApplicationSettings {
                 setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
                 setEnableAdvisorMail(getBooleanDecryptedValue("ENABLE_ADVISOR_MAIL"));
                 setMailTO(getDecryptedValue("MAIL_TO"));
-                setMailSmtp(getDecryptedValue("MAIL_SMTP"));
+                setMailSMTP(getDecryptedValue("MAIL_SMTP"));
                 setEnablePaneLog(getBooleanDecryptedValue("ENABLE_PANE_LOG"));
                 setEnablePaneSearchSubItasa(
                             getBooleanDecryptedValue("ENABLE_PANE_SEARCH_SUB_ITASA"));
                 setEnablePaneSetting(getBooleanDecryptedValue("ENABLE_PANE_SETTING"));
                 setEnablePaneSubDestination(
                                     getBooleanDecryptedValue("ENABLE_PANE_SUB_DEST"));
+                setEnablePaneReminder(getBooleanDecryptedValue("ENABLE_PANE_REMINDER"));
             } else {
                 loadDefaultSettings();
                 storeSettings();
@@ -222,6 +223,7 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_PANE_SETTING", enablePaneSetting);
             propertiesCrypting("ENABLE_PANE_SUB_DEST", enablePaneSubDestination);
             propertiesCrypting("ENABLE_PANE_SEARCH_SUB_ITASA", enablePaneSearchSubItasa);
+            propertiesCrypting("ENABLE_PANE_REMINDER", enablePaneReminder);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -338,14 +340,16 @@ public class ApplicationSettings {
     public void setMailTO(String mail) {
         this.mailTO = mail;
     }
-    
-    public String getMailSmtp() {
+
+    public String getMailSMTP() {
         return mailSMTP;
     }
 
-    public void setMailSmtp(String smtp) {
-        this.mailSMTP = smtp;
+    public void setMailSMTP(String mailSMTP) {
+        this.mailSMTP = mailSMTP;
     }
+    
+    
 
     public String getItasaUsername() {
         if (itasaUsername == null) {
@@ -582,4 +586,14 @@ public class ApplicationSettings {
     public void setEnablePaneSubDestination(boolean enablePaneSubDestination) {
         this.enablePaneSubDestination = enablePaneSubDestination;
     }
+
+    public boolean isEnablePaneReminder() {
+        return enablePaneReminder;
+    }
+
+    public void setEnablePaneReminder(boolean enablePaneReminder) {
+        this.enablePaneReminder = enablePaneReminder;
+    }
+    
+    
 }// end class

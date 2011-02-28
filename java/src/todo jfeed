@@ -2,7 +2,6 @@ IMPLEMENTARE
 -feed rss sotto thread
 -ripristino files backuppati
 -destinazione avanzata in mixed mode
--implementare il tipo di download di mysubsfactory (come x myitasa)
 -fare caricamento xml sotto thread
 -ricerca sottotitoli itasa
 
@@ -33,3 +32,11 @@ riavvio con java home (win, mac)
 1080i
 splashscreen (java5)
 avvio ridotto ad icona (java5)
+
+API
+https://api.italiansubs.net/api/rest/users/login/?apikey=436e566f3d09b217cf687fa5bad5effc&username=judge&password=qwerty
+https://api.italiansubs.net/api/rest/myitasa/shows?apikey=436e566f3d09b217cf687fa5bad5effc&authcode=0b24bd1b18f094501b365c70f295b21a
+https://api.italiansubs.net/api/rest/shows/?apikey=436e566f3d09b217cf687fa5bad5effc
+https://api.italiansubs.net/api/rest/shows/1363?apikey=436e566f3d09b217cf687fa5bad5effc
+https://api.italiansubs.net/api/rest/subtitles/20000?apikey=436e566f3d09b217cf687fa5bad5effc
+https://api.italiansubs.net/api/rest/subtitles?apikey=436e566f3d09b217cf687fa5bad5effc&show_id=1363

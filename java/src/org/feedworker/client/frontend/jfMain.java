@@ -96,7 +96,8 @@ public class jfMain extends JFrame implements WindowListener,
         if (prop.isEnablePaneSearchSubItasa())
             checkAddTab(jpSearch, false);
         jpReminder = paneReminder.getPanel();
-        checkAddTab(jpReminder, false);
+        if (prop.isEnablePaneReminder())
+            checkAddTab(jpReminder, false);
         jpDestination = paneSubtitleDest.getPanel();
         if (prop.isEnablePaneSubDestination())
             checkAddTab(jpDestination, false);
@@ -249,8 +250,17 @@ public class jfMain extends JFrame implements WindowListener,
             }
         });
         
-        jmWindowTab.add(jmiWindowSubDest);
+        JMenuItem jmiWindowReminder = new JMenuItem(" Reminder ");
+        jmiWindowReminder.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpReminder, true);
+            }
+        });
+        
         jmWindowTab.add(jmiWindowSetting);
+        jmWindowTab.add(jmiWindowSubDest);
+        jmWindowTab.add(jmiWindowReminder);
         jmWindowTab.add(jmiWindowLog);
 
         JMenu nasJM = new JMenu(" NAS ");

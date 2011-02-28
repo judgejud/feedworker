@@ -40,7 +40,7 @@ public class paneSetting extends paneAbstract {
     protected JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
     protected JCheckBox jcbAudioRss, jcbAudioSub, jcbAdvancedDownload, jcbRunIconized,
             jcbDownloadMyitasaStartup, jcbMail, jcbPaneSubDest, jcbPaneLog, 
-            jcbPaneSetting, jcbPaneSearchSubItasa;
+            jcbPaneSetting, jcbPaneSearchSubItasa, jcbPaneReminder;
     private JButton jbSaveSettings, jbAnnullaSettings;
     protected JButton jbDestSub, jbDestTorrent, jbCheckItasa;
     protected JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
@@ -444,6 +444,7 @@ public class paneSetting extends paneAbstract {
         jcbPaneSetting = new JCheckBox("Settings");
         jcbPaneLog = new JCheckBox("Log");
         jcbPaneSearchSubItasa = new JCheckBox("Search Subtitle Itasa");
+        jcbPaneReminder = new JCheckBox("Reminder");
     }
    
     private JPanel initPanelSettingsAlert(){
@@ -488,6 +489,8 @@ public class paneSetting extends paneAbstract {
         jpSettingVP.add(jcbPaneSetting, gbc);
         gbc.gridy = ++y;
         jpSettingVP.add(jcbPaneLog, gbc);
+        gbc.gridy = ++y;
+        jpSettingVP.add(jcbPaneReminder, gbc);
         return jpSettingVP;
     }
 
@@ -496,9 +499,8 @@ public class paneSetting extends paneAbstract {
         if (jbDestSub.isEnabled()) {
             String title = "Seleziona la Directory dove si vogliono salvare i sub";
             String dir = Swing.getDirectory(this, title);
-            if (dir != null) {
+            if (dir != null)
                 jtfDestSub.setText(dir);
-            }
         }
     }
 
@@ -506,9 +508,8 @@ public class paneSetting extends paneAbstract {
         if (jbDestTorrent.isEnabled()) {
             String title = "Seleziona la Directory dove si vogliono salvare i torrent";
             String dir = Swing.getDirectory(this, title);
-            if (dir != null) {
+            if (dir != null)
                 jtfDestTorrent.setText(dir);
-            }
         }
     }
 
@@ -576,7 +577,7 @@ public class paneSetting extends paneAbstract {
         jcbAudioSub.setSelected(prop.isEnabledAdvisorAudioSub());
         jcbMail.setSelected(prop.isEnabledAdvisorMail());
         jtfMailTo.setText(prop.getMailTO());
-        jtfMailSmtp.setText(prop.getMailSmtp());
+        jtfMailSmtp.setText(prop.getMailSMTP());
     }
     
     private void settingsPaneVisibleValue(){
@@ -584,6 +585,7 @@ public class paneSetting extends paneAbstract {
         jcbPaneSearchSubItasa.setSelected(prop.isEnablePaneSearchSubItasa());
         jcbPaneSetting.setSelected(prop.isEnablePaneSetting());
         jcbPaneSubDest.setSelected(prop.isEnablePaneSubDestination());
+        jcbPaneReminder.setSelected(prop.isEnablePaneReminder());
     }
 
     public void setDataAggiornamento(String data) {
@@ -610,7 +612,7 @@ public class paneSetting extends paneAbstract {
                 jcbAudioSub.isSelected(), jcbMail.isSelected(), jtfMailTo.getText(),
                 jtfMailSmtp.getText(), jcbPaneLog.isSelected(), 
                 jcbPaneSearchSubItasa.isSelected(), jcbPaneSetting.isSelected(), 
-                jcbPaneSubDest.isSelected());
+                jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected());
 
         if (!previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {
             int returnCode = JOptionPane.showConfirmDialog(this,

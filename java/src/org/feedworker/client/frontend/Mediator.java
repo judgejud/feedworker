@@ -75,7 +75,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "320 by "
+                + "323 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -509,7 +509,7 @@ public class Mediator {
             boolean autoLoadMyItasa, String subsf, String mySubsf, String torrent,
             boolean audioRss, boolean audioSub, boolean mail, String mailTO, 
             String smtp, boolean paneLog, boolean paneSearch, boolean paneSetting,
-            boolean paneSubDest) {
+            boolean paneSubDest, boolean paneReminder) {
                 
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
@@ -533,7 +533,7 @@ public class Mediator {
             setPropSubsf(subsf, mySubsf);
             prop.setTorrentDestinationFolder(torrent);
             setPropAdvisor(audioRss, audioSub, mail, mailTO, smtp);
-            setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest);
+            setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, paneReminder);
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio "
@@ -592,15 +592,16 @@ public class Mediator {
         prop.setEnableAdvisorAudioSub(audioSub);
         prop.setEnableAdvisorMail(mail);
         prop.setMailTO(mailTO);
-        prop.setMailSmtp(smtp);
+        prop.setMailSMTP(smtp);
     }
     
     private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
-                                    boolean subdest){
+                                    boolean subdest, boolean reminder){
         prop.setEnablePaneLog(log);
         prop.setEnablePaneSearchSubItasa(search);
         prop.setEnablePaneSetting(setting);
         prop.setEnablePaneSubDestination(subdest);
+        prop.setEnablePaneReminder(reminder);
     }
 
     void bruteRefresh() {

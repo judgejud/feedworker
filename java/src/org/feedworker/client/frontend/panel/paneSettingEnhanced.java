@@ -232,10 +232,11 @@ public class paneSettingEnhanced extends paneSetting {
         task.setTitle("Visible Pane at Startup");
         task.setCollapsed(true);
         
-        task.add(jcbPaneSearchSubItasa);
-        task.add(jcbPaneSubDest);
-        task.add(jcbPaneSetting);
         task.add(jcbPaneLog);
+        task.add(jcbPaneSearchSubItasa);
+        task.add(jcbPaneReminder);
+        task.add(jcbPaneSetting);
+        task.add(jcbPaneSubDest);
         return task;
     }
 }
