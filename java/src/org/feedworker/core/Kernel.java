@@ -97,6 +97,7 @@ public class Kernel implements PropertyChangeListener {
     private String lastItasa = null, lastMyItasa = null, lastSubsf = null,
             lastEztv = null, lastBtchat = null, lastMySubsf = null;
     private TreeMap<KeyRule, ValueRule> mapRules;
+    private TreeMap<String, String> mapShowItasa;
     private ManageException error = ManageException.getIstance();
     private Calendar xmlCalendar;
     private RuleDestination xmlSubDest;
@@ -104,6 +105,7 @@ public class Kernel implements PropertyChangeListener {
     private ImportTask importTask;
     private RefreshTask refreshTask;
     private TreeSet tsIdCalendar;
+    private Itasa itasa;
 
     /**
      * Restituisce l'istanza corrente del kernel
@@ -111,9 +113,29 @@ public class Kernel implements PropertyChangeListener {
      * @return istanza kernel
      */
     public static Kernel getIstance() {
-        if (core == null)
+        if (core == null){
             core = new Kernel();
+        }
         return core;
+    }
+    
+    private Kernel(){
+        itasa = new Itasa();
+        try {
+            mapShowItasa = itasa.showList();
+        } catch (JDOMException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (ItasaException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public Object[] getShowNameList(){
+        return mapShowItasa.keySet().toArray();
     }
 
     /**
