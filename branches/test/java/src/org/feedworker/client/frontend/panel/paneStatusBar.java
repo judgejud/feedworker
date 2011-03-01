@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.StatusBarEvent;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
+import org.feedworker.util.Common;
 /**
  *
  * @author luca
@@ -72,7 +73,7 @@ public class paneStatusBar extends JPanel implements StatusBarEventListener{
 
     @Override
     public void objReceived(StatusBarEvent evt) {
-        jlText.setText(evt.getText());
+        jlText.setText(Common.actualTime() + " " + evt.getText());
     }
 }
 

@@ -75,7 +75,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "323 by "
+                + "324 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -771,5 +771,9 @@ public class Mediator {
 
     public void removeReminders(ArrayList<Integer> numbers) {
         core.removeReminders(numbers);
+    }
+    
+    public Object[] showList(){
+        return core.getShowNameList();
     }
 }

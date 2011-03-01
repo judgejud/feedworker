@@ -1,22 +1,58 @@
 package org.feedworker.client.frontend.panel;
 
-import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 
 /**
  *
  * @author luca
  */
-public class paneSearchSubItasa extends JPanel{
-    private JPanel jpParams;
+public class paneSearchSubItasa extends paneAbstract{
+    private static paneSearchSubItasa jpanel = null;
     
-    public paneSearchSubItasa(){
-        super();
-        setName("Search sub Itasa");
-        initPaneParams();
+    private JComboBox jcbShow, jcbVersion;
+    
+    private paneSearchSubItasa(){
+        super("Search sub Itasa");
+        initializePanel();
+        initializeButtons();
     }
     
-    private void initPaneParams(){
-        jpParams = new JPanel();
+    public static paneSearchSubItasa getPanel(){
+        if (jpanel==null)
+            jpanel = new paneSearchSubItasa();
+        return jpanel;
     }
 
+    @Override
+    void initializePanel() {
+        
+    }
+
+    @Override
+    void initializeButtons() {
+        jcbShow = new JComboBox(proxy.showList());
+        jcbVersion = new JComboBox(proxy.getQualityEnum());
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        int x = -1;
+        gbc.gridx = ++x;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = BUTTON_SPACE_INSETS;
+        
+        jpAction.add(new JLabel("Show"), gbc);
+        gbc.gridx = ++x;
+        jpAction.add(jcbShow, gbc); 
+        
+        gbc.gridx = ++x;
+        jpAction.add(new JLabel("Versione"), gbc);
+        gbc.gridx = ++x;
+        jpAction.add(jcbVersion, gbc);
+        
+        add(jpAction, BorderLayout.NORTH);
+    }
 }

@@ -114,7 +114,7 @@ public class Itasa extends AbstractQueryXML{
             String country = item.getChild(TAG_SHOW_COUNTRY).getText();
             String network = item.getChild(TAG_SHOW_NETWORK).getText();
             ArrayList genres = new ArrayList();
-            Iterator it = getIteratorGenres(item);
+            Iterator it = item.getChild(TAG_SHOW_GENRES).getChildren().iterator();
             while (it.hasNext()){
                 genres.add(((Element) it.next()).getText());
             }
@@ -355,7 +355,6 @@ public class Itasa extends AbstractQueryXML{
         return news;
     }
     
-    
     /*TODO: non implementare finchè non viene risolto il problema di risposta 
      * che impiega troppo
      */
@@ -378,10 +377,6 @@ public class Itasa extends AbstractQueryXML{
                 newUrl+= OPERATOR_AND + params.get(i).toString();
         System.out.println(newUrl);
         return newUrl;
-    }
-    
-    private Iterator getIteratorGenres(Element item){
-        return item.getChild(TAG_SHOW_GENRES).getChildren().iterator();
     }
     
     /**controlla lo status presente nel document
@@ -448,7 +443,6 @@ public class Itasa extends AbstractQueryXML{
             
             //i.newsList(1);
             i.newsSingle("10503");
-
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {

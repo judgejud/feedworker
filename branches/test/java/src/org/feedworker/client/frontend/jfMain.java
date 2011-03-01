@@ -92,7 +92,7 @@ public class jfMain extends JFrame implements WindowListener,
             mainJTP.addTab("Torrent", jpTorrent);
         }
         mainJTP.addTab("Calendar", paneCalendar.getPanel());
-        jpSearch = new paneSearchSubItasa();
+        jpSearch = paneSearchSubItasa.getPanel();
         if (prop.isEnablePaneSearchSubItasa())
             checkAddTab(jpSearch, false);
         jpReminder = paneReminder.getPanel();
@@ -258,10 +258,19 @@ public class jfMain extends JFrame implements WindowListener,
             }
         });
         
+        JMenuItem jmiWindowSearch = new JMenuItem(" Search Subtitle ");
+        jmiWindowSearch.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpSearch, true);
+            }
+        });
+        
+        jmWindowTab.add(jmiWindowLog);
+        jmWindowTab.add(jmiWindowReminder);
+        jmWindowTab.add(jmiWindowSearch);
         jmWindowTab.add(jmiWindowSetting);
         jmWindowTab.add(jmiWindowSubDest);
-        jmWindowTab.add(jmiWindowReminder);
-        jmWindowTab.add(jmiWindowLog);
 
         JMenu nasJM = new JMenu(" NAS ");
         JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
