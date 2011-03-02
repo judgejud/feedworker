@@ -13,10 +13,10 @@ import org.jfacility.javax.swing.Swing;
  *
  * @author luca
  */
-public class tableResultSearchTv extends tableAbstract{
+public class tableResultSearchTvRage extends tableAbstract{
     private final String[] nameCols = {"ID","Serie", "Stagione", "Status", "Giorno"};
 
-    public tableResultSearchTv(String name){
+    public tableResultSearchTvRage(String name){
         super(name);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
             Class[] types = new Class[]{Integer.class, String.class, String.class,
