@@ -673,7 +673,7 @@ public class Mediator {
         ManageException.getIstance().launch(e, this.getClass());
     }
 
-    void printAlert(String msg) {
+    public void printAlert(String msg) {
         ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT, true);
     }
     
@@ -775,5 +775,10 @@ public class Mediator {
     
     public Object[] showList(){
         return core.getShowNameList();
+    }
+
+    public void searchSubItasa(Object show, Object version, boolean complete, 
+                                String season, String episode) {
+        
     }
 }
