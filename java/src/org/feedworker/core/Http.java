@@ -27,6 +27,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 
 /**
  * Gestisce le interazioni http lato client (metodi post e get)
@@ -47,7 +48,7 @@ class Http {
     private HttpEntity entity;
     private HttpGet get;
     private CookieStore cookies;
-    private String namefile, returnVal, val;
+    private String namefile;
 
     /** Costruttore, inizializza il client http
      *
@@ -75,7 +76,6 @@ class Http {
      */
     void connectItasa(String user, String pwd) throws UnsupportedEncodingException,
             ClientProtocolException, IOException {
-        //getValuesItasaForm();
         itasaLogonPOST(user, pwd);
     }
 
@@ -97,16 +97,13 @@ class Http {
         lnvp.add(new BasicNameValuePair("option", "com_user"));
         lnvp.add(new BasicNameValuePair("task", "login"));
         lnvp.add(new BasicNameValuePair("silent", "true"));
-        //lnvp.add(new BasicNameValuePair("return", returnVal));
-        //lnvp.add(new BasicNameValuePair(val, "1"));
         post.setEntity(new UrlEncodedFormEntity(lnvp, HTTP.UTF_8));
         //per vedere la stringa che manda in POST
         //BufferedReader br = new BufferedReader(new InputStreamReader(post.getEntity().getContent()));
         //System.out.println(br.readLine());
         response = client.execute(post);
         entity = response.getEntity();
-        if (entity != null)
-            entity.consumeContent();
+        consumeEntity();
         getCookiesItasa();
     } // end doPost
 
@@ -117,7 +114,7 @@ class Http {
         while (lenght == -1) {
             ++temp;
             if (entity != null)
-                entity.consumeContent();
+                EntityUtils.consume(entity);
             client.setCookieStore(cookies);
             get = new HttpGet(link);
             response = client.execute(get);
@@ -129,8 +126,7 @@ class Http {
                 url = readInputStreamURL(entity.getContent(), TAG_SUBSF, 8);
                 url = url.replaceAll("amp;", "");
             }
-            if (entity != null)
-                entity.consumeContent();
+            consumeEntity();
             if (url != null) {
                 get = new HttpGet(url);
                 client.setCookieStore(cookies);
@@ -190,9 +186,7 @@ class Http {
         get = new HttpGet(ADDRESS_ITASA);
         response = client.execute(get);
         entity = response.getEntity();
-        if (entity != null) {
-            entity.consumeContent();
-        }
+        consumeEntity();
         cookies = client.getCookieStore();
     }
 
@@ -235,9 +229,8 @@ class Http {
     private void getAttachement(Header[] head, String from) throws IndexOutOfBoundsException {
         int i;
         for (i = 0; i < head.length; i++) {
-            if (head[i].getName().equalsIgnoreCase("Content-Disposition")) {
+            if (head[i].getName().equalsIgnoreCase("Content-Disposition"))
                 break;
-            }
         }
         String attachement = head[i].getValue();
         if (from.equalsIgnoreCase(ADDRESS_ITASA)) {
@@ -266,37 +259,7 @@ class Http {
         url = url.replace(" ", "%20");
         return url;
     }
-
-    private void getValuesItasaForm() throws IOException {
-        get = new HttpGet(ADDRESS_ITASA);
-        String line = null;
-        String tag = "<input type=\"hidden\" name=\"return\"";
-        int start = 1;
-        response = client.execute(get);
-        entity = response.getEntity();
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-                entity.getContent()));
-        while ((line = br.readLine()) != null) {
-            int min = start;
-            int max = start + tag.length();
-            int len = line.length();
-            if (len < max)
-                max = len;
-            if (len < min)
-                min = len;
-            if (line.substring(min, max).equalsIgnoreCase(tag)) {
-                System.out.println(line);
-                line = line.substring(max + 1);
-                line = line.substring(line.indexOf('"') + 1);
-                returnVal = line.substring(0, line.indexOf('"'));
-                line = br.readLine().substring(31);
-                val = line.substring(0, line.indexOf('"'));
-                break;
-            }
-        }
-        br.close();
-    }
-
+    
     String synoConnectGetID(String url, String user, String pwd)
             throws IOException {
         String id = null;
@@ -319,9 +282,7 @@ class Http {
                 break;
             }
         }
-        if (entity != null) {
-            entity.consumeContent();
-        }
+        consumeEntity();
         return id;
     }
 
@@ -371,5 +332,10 @@ class Http {
     /** Chiude il client http e dealloca le risorse usate */
     void closeClient() {
         client.getConnectionManager().shutdown();
+    }
+    
+    private void consumeEntity() throws IOException{
+        if (entity != null)
+            EntityUtils.consume(entity);
     }
 }// end Http
