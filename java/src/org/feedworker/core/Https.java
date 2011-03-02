@@ -1,5 +1,5 @@
 package org.feedworker.core;
-
+//IMPORT JAVA
 import java.io.InputStream;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-
+//IMPORT JAVAX
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
@@ -15,21 +15,20 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
 /**
  *
  * @author luca
  */
 public class Https {
     private static Https https = null;
-    private SSLContext ctx;
-    
+    private SSLContext ssl;
+    // Install the all-trusting trust manager
     private Https () throws NoSuchAlgorithmException, KeyManagementException{
-        ctx = SSLContext.getInstance("TLS");
-        ctx.init(new KeyManager[0], 
+        ssl = SSLContext.getInstance("TLS");
+        ssl.init(new KeyManager[0], 
                 new TrustManager[] {new DefaultTrustManager()}, 
                 new SecureRandom());
-        SSLContext.setDefault(ctx);
+        SSLContext.setDefault(ssl);
     }
     
     public static Https getInstance() throws NoSuchAlgorithmException, KeyManagementException{
@@ -37,7 +36,7 @@ public class Https {
             https = new Https();
         return https;
     }
-    
+    // Now you can access an https URL without having the certificate in the truststore
     public InputStream connection(String url) throws Exception {
         InputStream is = null;
         URL u = new URL(url);
@@ -52,13 +51,13 @@ public class Https {
             is = conn.getInputStream();
         return is;
     }
-
+    // Create a trust manager that does not validate certificate chains
     private class DefaultTrustManager implements X509TrustManager {
         @Override
-        public void checkClientTrusted(X509Certificate[] arg0, String arg1) 
+        public void checkClientTrusted(X509Certificate[] certs, String authtype) 
                                                     throws CertificateException {}
         @Override
-        public void checkServerTrusted(X509Certificate[] arg0, String arg1) 
+        public void checkServerTrusted(X509Certificate[] certs, String authtype) 
                                                     throws CertificateException {}
         @Override
         public X509Certificate[] getAcceptedIssuers() {

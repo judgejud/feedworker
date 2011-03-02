@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import org.feedworker.core.Https;
+import org.feedworker.core.Https_1;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.object.ItasaUser;
 import org.feedworker.object.News;
@@ -203,38 +204,7 @@ public class Itasa extends AbstractQueryXML{
         return subs;
     }
     
-    public ArrayList<Subtitle> searchSubtitleEpisodeByIdShow(int id, String ep, int page)
-                    throws JDOMException, IOException, ItasaException, Exception{
-        ArrayList params = new ArrayList();
-        params.add(PARAM_SHOW_ID + id);        
-        params.add(PARAM_QUERY + ep);
-        if (page>0)
-            params.add(PARAM_PAGE + page);
-        connectHttps(composeUrl(URL_SUBTITLE_SEARCH, params));
-        checkStatus();
-        ArrayList<Subtitle>  subs = null;
-        if (isStatusSuccess()){
-            if (getResponseCount()>0){
-                subs = new ArrayList<Subtitle>();
-                Iterator iter = getDescendantsZero(2);
-                while (iter.hasNext()){
-                    Element item = (Element) iter.next();
-                    String idSub = item.getChild(TAG_SUBTITLE_ID).getText();
-                    String name = item.getChild(TAG_SUBTITLE_NAME).getText();
-                    String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
-                    Subtitle sub = new Subtitle(idSub, name, version);
-                    subs.add(sub);
-                }
-            } else
-                throw new ItasaException("searchSubtitleEpisodeByIdShow: "
-                        + "non ci sono sottotitoli che rispondono ai criteri di ricerca");
-        } else
-            throw new ItasaException("searchSubtitleEpisodeByIdShow: "+ error);
-        return subs;
-    }
-    
-    public ArrayList<Subtitle> searchSubtitleCompletedByIdShow(int id, 
-                                                        String _version, int page) 
+    public ArrayList<Subtitle> searchSubtitles(int id, String _version, String query, int page) 
                                 throws JDOMException, IOException, ItasaException, Exception{
         ArrayList params = new ArrayList();
         params.add(PARAM_SHOW_ID + id);
@@ -400,7 +370,7 @@ public class Itasa extends AbstractQueryXML{
     
     private void connectHttps(String url) throws JDOMException, IOException, Exception {
         try {
-            Https h = Https.getInstance();
+            Https_1 h = Https_1.getInstance();
             document = new SAXBuilder().build(h.connection(url));
         } catch (NoSuchAlgorithmException ex) {
         } catch (KeyManagementException ex) {    
@@ -426,8 +396,9 @@ public class Itasa extends AbstractQueryXML{
     public static void main (String[] args){
         Itasa i = new Itasa();
         try {
-            /*
+            
             ItasaUser iu = i.login("judge", "qwerty");
+            /*
             if (iu.isMyitasa()){
                 i.myItasaLastSub(iu.getAuthcode());
                 i.myItasaShows(iu.getAuthcode());
@@ -442,7 +413,7 @@ public class Itasa extends AbstractQueryXML{
             //i.searchSubtitleEpisodeByIdShow(134,"1x01",1);
             
             //i.newsList(1);
-            i.newsSingle("10503");
+            //i.newsSingle("10503");
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {

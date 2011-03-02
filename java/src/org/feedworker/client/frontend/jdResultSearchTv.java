@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.feedworker.client.frontend.table.tableResultSearchTv;
+import org.feedworker.client.frontend.table.tableResultSearchTvRage;
 import org.jfacility.java.lang.Lang;
 
 /**
@@ -22,7 +22,7 @@ import org.jfacility.java.lang.Lang;
 class jdResultSearchTv extends JDialog implements ActionListener{
     private static jdResultSearchTv dialog;
     private Mediator proxy = Mediator.getIstance();
-    private tableResultSearchTv table;
+    private tableResultSearchTvRage table;
     private JButton jbAdd = new JButton(" Aggiunge ");
     private JButton jbCancel = new JButton(" Annulla ");
     private JButton jbSearch = new JButton(" Nuova Ricerca");
@@ -39,7 +39,7 @@ class jdResultSearchTv extends JDialog implements ActionListener{
         setPreferredSize(new Dimension(550,350));
         setLocation(100, 100);
         getContentPane().setLayout(new BorderLayout());
-        table = new tableResultSearchTv(proxy.getSearchTV());
+        table = new tableResultSearchTvRage(proxy.getSearchTV());
         JScrollPane jScrollTable1 = new JScrollPane(table);
         jScrollTable1.setAutoscrolls(true);
         getContentPane().add(jScrollTable1, BorderLayout.CENTER);
