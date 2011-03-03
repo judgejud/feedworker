@@ -1,8 +1,6 @@
 package org.feedworker.client.frontend.panel;
 
 //IMPORT JAVA
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +38,6 @@ public class paneSubtitleDest extends paneAbstract {
         initializePanel();
         initializeButtons();
         initListeners();
-        setVisible(true);
     }
 
     @Override
@@ -48,7 +45,7 @@ public class paneSubtitleDest extends paneAbstract {
         jtable = new tableSubtitleDest(proxy.getNameTableSubtitleDest());
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
-        add(jScrollTable1, BorderLayout.CENTER);
+        jpCenter.add(jScrollTable1);
     }
 
     @Override
@@ -103,24 +100,16 @@ public class paneSubtitleDest extends paneAbstract {
             }
         });
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        int x = -1;
-        gbc.gridx = ++x;
-        gbc.gridy = 0;
-        gbc.insets = BUTTON_SPACE_INSETS;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-
-        jpAction.add(jbAddRow, gbc);
-        gbc.gridx = ++x;
-        jpAction.add(jbRemoveRow, gbc);
-        gbc.gridx = ++x;
-        jpAction.add(jbRemoveAll, gbc);
-        gbc.gridx = ++x;
-        jpAction.add(jbSaveRole, gbc);
-        gbc.gridx = ++x;
-        jpAction.add(jbAddDir, gbc);
-
-        add(jpAction, BorderLayout.NORTH);
+        int x = 0;
+        jpAction.add(jbAddRow, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbRemoveRow, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbRemoveAll, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbSaveRole, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbAddDir, gbcAction);
     }
     
     private void initListeners(){

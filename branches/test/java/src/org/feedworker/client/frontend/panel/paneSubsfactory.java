@@ -1,7 +1,5 @@
 package org.feedworker.client.frontend.panel;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -28,9 +26,8 @@ public class paneSubsfactory extends paneAbstract {
     }
 
     public static paneSubsfactory getPanel() {
-        if (jpanel == null) {
+        if (jpanel == null)
             jpanel = new paneSubsfactory();
-        }
         return jpanel;
     }
 
@@ -52,9 +49,6 @@ public class paneSubsfactory extends paneAbstract {
         jpCenter.add(jScrollTable1);
         jpCenter.add(RIGID_AREA);
         jpCenter.add(jScrollTable2);
-        add(jpCenter, BorderLayout.CENTER);
-
-        setVisible(true);
     }
 
     @Override
@@ -80,15 +74,9 @@ public class paneSubsfactory extends paneAbstract {
             }
         });
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = BUTTON_SPACE_INSETS;
-        jpAction.add(jbDown, gbc);
-        gbc.gridx = 1;
-        jpAction.add(jbClean, gbc);
-        add(jpAction, BorderLayout.NORTH);
+        jpAction.add(jbDown, gbcAction);
+        gbcAction.gridx = 1;
+        jpAction.add(jbClean, gbcAction);
     }
 
     private void jbDownMouseClicked() {

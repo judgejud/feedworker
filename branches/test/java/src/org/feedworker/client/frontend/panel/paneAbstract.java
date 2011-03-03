@@ -3,6 +3,7 @@ package org.feedworker.client.frontend.panel;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
@@ -27,6 +28,7 @@ abstract class paneAbstract extends JPanel {
     protected final Insets BUTTON_SPACE_INSETS = new Insets(0, 2, 0, 2);
     protected final Dimension TABLE_SCROLL_SIZE = new Dimension(500, 460);
     protected final Component RIGID_AREA = Box.createRigidArea(new Dimension(5,0));
+    protected GridBagConstraints gbcAction;
 
     protected JPanel jpAction, jpCenter;
     protected Mediator proxy = Mediator.getIstance();
@@ -40,6 +42,14 @@ abstract class paneAbstract extends JPanel {
         jpCenter.setLayout(new BoxLayout(jpCenter, BoxLayout.X_AXIS));
         jpAction = new JPanel(new GridBagLayout());
         jpAction.setPreferredSize(ACTION_PANEL_SIZE);
+        add(jpAction, BorderLayout.NORTH);
+        add(jpCenter, BorderLayout.CENTER);
+        gbcAction = new GridBagConstraints();
+        gbcAction.gridx = 0;
+        gbcAction.gridy = 0;
+        gbcAction.insets = BUTTON_SPACE_INSETS;
+        gbcAction.anchor = GridBagConstraints.NORTHWEST;
+        
     }
 
     /** inizializza il pannello */

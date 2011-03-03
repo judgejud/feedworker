@@ -1,9 +1,7 @@
 package org.feedworker.client.frontend.panel;
 //IMPORT JAVA
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -60,9 +58,8 @@ public class paneSetting extends paneAbstract {
     }
 
     public static paneSetting getPanel() {
-        if (jpanel == null) {
+        if (jpanel == null)
             jpanel = new paneSetting();
-        }
         return jpanel;
     }
     
@@ -79,7 +76,6 @@ public class paneSetting extends paneAbstract {
         jtpSettings.addTab("Visible Panel", initPaneSettingsVisiblePanel());
        
         jpCenter.add(jtpSettings);
-        add(jpCenter, BorderLayout.CENTER);
     }
     
     @Override
@@ -102,10 +98,9 @@ public class paneSetting extends paneAbstract {
         });
         jbAnnullaSettings.setEnabled(false);
 
-        jpAction = new JPanel(new FlowLayout());
-        jpAction.add(jbAnnullaSettings);
-        jpAction.add(jbSaveSettings);
-        this.add(jpAction, BorderLayout.SOUTH);
+        jpAction.add(jbAnnullaSettings,gbcAction);
+        gbcAction.gridx = 1;
+        jpAction.add(jbSaveSettings, gbcAction);
     }
    
     private GridBagConstraints initGbc(){

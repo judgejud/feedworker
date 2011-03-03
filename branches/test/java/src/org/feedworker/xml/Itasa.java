@@ -176,7 +176,7 @@ public class Itasa extends AbstractQueryXML{
             throw new ItasaException("subtitleSingle: "+ error);
         return sub;
     }
-    
+   
     public ArrayList<Subtitle> subtitleListByIdShow(int idShow, String _version, int page) 
                         throws JDOMException, IOException, ItasaException, Exception{
         ArrayList params = new ArrayList();
@@ -203,7 +203,7 @@ public class Itasa extends AbstractQueryXML{
             throw new ItasaException("subtitleListByIdShow: "+ error);
         return subs;
     }
-    
+
     public ArrayList<Subtitle> searchSubtitles(int id, String _version, String query, int page) 
                                 throws JDOMException, IOException, ItasaException, Exception{
         ArrayList params = new ArrayList();
@@ -370,7 +370,8 @@ public class Itasa extends AbstractQueryXML{
     
     private void connectHttps(String url) throws JDOMException, IOException, Exception {
         try {
-            Https_1 h = Https_1.getInstance();
+            //Https_1 h = Https_1.getInstance();
+            Https h = Https.getInstance();
             document = new SAXBuilder().build(h.connection(url));
         } catch (NoSuchAlgorithmException ex) {
         } catch (KeyManagementException ex) {    

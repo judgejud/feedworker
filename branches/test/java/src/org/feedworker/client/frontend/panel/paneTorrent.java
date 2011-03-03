@@ -1,7 +1,5 @@
 package org.feedworker.client.frontend.panel;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -50,7 +48,6 @@ public class paneTorrent extends paneAbstract {
         jpCenter.add(jsp1);
         jpCenter.add(RIGID_AREA);
         jpCenter.add(jsp2);
-        add(jpCenter, BorderLayout.CENTER);
     }
 
     @Override
@@ -100,20 +97,14 @@ public class paneTorrent extends paneAbstract {
                     proxy.fireTorrentToNas(jtTorrent1, jtTorrent2);
             }
         });
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = BUTTON_SPACE_INSETS;
-        jpAction.add(jbDown, gbc);
-        gbc.gridx = 1;
-        jpAction.add(jbCopyLinks, gbc);
-        gbc.gridx = 2;
-        jpAction.add(jbClean, gbc);
-        gbc.gridx = 3;
-        jpAction.add(jbFireNas, gbc);
-        add(jpAction, BorderLayout.NORTH);
+        
+        jpAction.add(jbDown, gbcAction);
+        gbcAction.gridx = 1;
+        jpAction.add(jbCopyLinks, gbcAction);
+        gbcAction.gridx = 2;
+        jpAction.add(jbClean, gbcAction);
+        gbcAction.gridx = 3;
+        jpAction.add(jbFireNas, gbcAction);
     }
 
     public void setButtonEnabled(boolean e) {

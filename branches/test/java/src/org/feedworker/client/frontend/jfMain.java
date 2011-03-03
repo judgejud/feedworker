@@ -142,15 +142,6 @@ public class jfMain extends JFrame implements WindowListener,
         JMenu fileJM = new JMenu(" Operazioni ");
         applicationJMB.add(fileJM);
 
-        JMenuItem clearLogJMI = new JMenuItem(" Pulisci log ");
-        clearLogJMI.addActionListener(new ActionListener()  {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                jpLog.cleanLogs();
-            }
-        });
-        fileJM.add(clearLogJMI);
-
         JMenuItem bruteRefreshJMI = new JMenuItem(" Forza aggiornamento RSS");
         bruteRefreshJMI.addActionListener(new ActionListener()  {
             @Override
