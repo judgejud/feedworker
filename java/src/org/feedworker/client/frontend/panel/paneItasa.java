@@ -1,7 +1,5 @@
 package org.feedworker.client.frontend.panel;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -57,9 +55,6 @@ public class paneItasa extends paneAbstract {
         jpCenter.add(jScrollTable1);
         jpCenter.add(RIGID_AREA);
         jpCenter.add(jScrollTable2);
-        add(jpCenter, BorderLayout.CENTER);
-
-        setVisible(true);
     }
 
     @Override
@@ -103,21 +98,15 @@ public class paneItasa extends paneAbstract {
                 selectAll(jtMyItasa);
             }
         });
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = BUTTON_SPACE_INSETS;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        jpAction.add(jbAllItasa, gbc);
-        gbc.gridx = 1;
-        jpAction.add(jbDown, gbc);
-        gbc.gridx = 2;
-        jpAction.add(jbClean, gbc);
-        gbc.gridx = 3;
-        jpAction.add(jbAllMyItasa, gbc);
-
-        add(jpAction, BorderLayout.NORTH);
+        
+        int x = 0;
+        jpAction.add(jbAllItasa, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbDown, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbClean, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbAllMyItasa, gbcAction);
     }
 
     public void setButtonEnabled(boolean e) {

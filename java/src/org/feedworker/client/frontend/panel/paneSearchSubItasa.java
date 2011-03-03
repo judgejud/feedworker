@@ -1,15 +1,17 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import org.feedworker.client.frontend.table.tableResultSearchSub;
 
 /**
  *
@@ -21,6 +23,7 @@ public class paneSearchSubItasa extends paneAbstract{
     private JComboBox jcbShow, jcbVersion;
     private JCheckBox jcbComplete;
     private JTextField jtfSeason, jtfEpisode;
+    private tableResultSearchSub jtable;
     
     private paneSearchSubItasa(){
         super("Search sub Itasa");
@@ -36,7 +39,14 @@ public class paneSearchSubItasa extends paneAbstract{
 
     @Override
     void initializePanel() {
-        
+        //TODO: cambiare null col nome
+        jtable = new tableResultSearchSub(null);
+        JScrollPane jsp = new JScrollPane(jtable);
+        JPanel jpTemp = new JPanel(new BorderLayout());
+        jpTemp.add(jsp, BorderLayout.CENTER);
+        JPanel jpButton = new JPanel();
+        jpTemp.add(jpButton, BorderLayout.SOUTH);
+        jpCenter.add(jpTemp, BorderLayout.CENTER);
     }
 
     @Override
@@ -67,41 +77,33 @@ public class paneSearchSubItasa extends paneAbstract{
             }
         });
         
-        GridBagConstraints gbc = new GridBagConstraints();
-        int x = -1;
-        gbc.gridx = ++x;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = BUTTON_SPACE_INSETS;
+        int x = 0;
+        jpAction.add(new JLabel("Show"), gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jcbShow, gbcAction); 
         
-        jpAction.add(new JLabel("Show"), gbc);
-        gbc.gridx = ++x;
-        jpAction.add(jcbShow, gbc); 
+        gbcAction.gridx = ++x;
+        jpAction.add(new JLabel("Versione"), gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jcbVersion, gbcAction);
         
-        gbc.gridx = ++x;
-        jpAction.add(new JLabel("Versione"), gbc);
-        gbc.gridx = ++x;
-        jpAction.add(jcbVersion, gbc);
+        gbcAction.gridx = ++x;
+        jpAction.add(jcbComplete, gbcAction);
         
-        gbc.gridx = ++x;
-        jpAction.add(jcbComplete, gbc);
+        gbcAction.gridx = ++x;
+        jpAction.add(new JLabel("Stagione"), gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jtfSeason, gbcAction);
         
-        gbc.gridx = ++x;
-        jpAction.add(new JLabel("Stagione"), gbc);
-        gbc.gridx = ++x;
-        jpAction.add(jtfSeason, gbc);
+        gbcAction.gridx = ++x;
+        jpAction.add(new JLabel("Episodio"), gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jtfEpisode, gbcAction);
         
-        gbc.gridx = ++x;
-        jpAction.add(new JLabel("Episodio"), gbc);
-        gbc.gridx = ++x;
-        jpAction.add(jtfEpisode, gbc);
-        
-        gbc.gridx = ++x;
-        jpAction.add(jbSearch, gbc);
-        gbc.gridx = ++x;
-        jpAction.add(jbClean, gbc);
-        
-        add(jpAction, BorderLayout.NORTH);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbSearch, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbClean, gbcAction);
     }
     
     private void jbCleanMouseClicked(){

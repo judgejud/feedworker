@@ -1,6 +1,5 @@
 package org.feedworker.client.frontend.panel;
 //IMPORT JAVA
-import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JLabel;
@@ -35,8 +34,7 @@ public class paneSettingEnhanced extends paneSetting {
         tpcWest.add(initTaskPaneVisibilePane());
         if (prop.isTorrentOption())
             tpcWest.add(initTaskPaneTorrent());
-        
-        
+                
         JXTaskPaneContainer tpcEast = new JXTaskPaneContainer();
         tpcEast.add(initTaskPaneItalianSubs());
         tpcEast.add(initTaskPaneAlert());
@@ -54,9 +52,6 @@ public class paneSettingEnhanced extends paneSetting {
         jpCenter.add(jspWest);
         jpCenter.add(RIGID_AREA);
         jpCenter.add(jspEast);
-        add(jpCenter, BorderLayout.CENTER);
-
-        this.setVisible(true);
     }
 
     private JXTaskPane initTaskPaneGeneral() {

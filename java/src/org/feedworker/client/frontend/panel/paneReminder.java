@@ -32,15 +32,15 @@ public class paneReminder extends paneAbstract{
         initializePanel();
         initializeButtons();
         proxy.setTableListener(jtable);
-        setVisible(true);
     }
 
     @Override
     void initializePanel() {
+        remove(jpCenter);
         jtable = new tableReminder("Reminder");
-        jtable.setPreferredSize(new Dimension(500, 750));
-        JScrollPane jsp = new JScrollPane(jtable);
-        
+        jtable.setPreferredSize(new Dimension(500, 650));
+        JScrollPane jsp = new JScrollPane(jtable);        
+        jpCenter.add(RIGID_AREA);
         jpCenter.add(jsp);
         jpCenter.add(RIGID_AREA);
         add(jpCenter, BorderLayout.WEST);
@@ -57,8 +57,7 @@ public class paneReminder extends paneAbstract{
                 jbRemoveRowMouseClicked();
             }
         });
-        jpAction.add(jbRemoveRow);
-        add(jpAction, BorderLayout.NORTH);
+        jpAction.add(jbRemoveRow, gbcAction);
     }
     
     private void jbRemoveRowMouseClicked() {

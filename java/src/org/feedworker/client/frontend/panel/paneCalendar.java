@@ -1,7 +1,5 @@
 package org.feedworker.client.frontend.panel;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -38,9 +36,8 @@ public class paneCalendar extends paneAbstract{
         jtable = new tableCalendar(proxy.getNameTableCalendar());
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
-        add(jScrollTable1, BorderLayout.CENTER);
+        jpCenter.add(jScrollTable1);
         proxy.setTableListener(jtable);
-        setVisible(true);
     }
 
     @Override
@@ -107,26 +104,18 @@ public class paneCalendar extends paneAbstract{
             }
         });
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = BUTTON_SPACE_INSETS;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-
-        int x=1;
-        jpAction.add(jbAddRow, gbc);
-        gbc.gridx = x++;
-        jpAction.add(jbRemoveRow, gbc);
-        gbc.gridx = x++;
-        jpAction.add(jbRemoveAll, gbc);
-        gbc.gridx = x++;
-        jpAction.add(jbRefresh, gbc);
-        gbc.gridx = x++;
-        jpAction.add(jbSingleRefresh, gbc);
-        gbc.gridx = x++;
-        jpAction.add(jbImport, gbc);
-        
-        add(jpAction, BorderLayout.NORTH);
+        int x=0;
+        jpAction.add(jbAddRow, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbRemoveRow, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbRemoveAll, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbRefresh, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbSingleRefresh, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbImport, gbcAction);
     }
 
     private void jbAddRowMouseClicked() {
