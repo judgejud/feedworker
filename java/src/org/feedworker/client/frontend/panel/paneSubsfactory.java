@@ -69,8 +69,7 @@ public class paneSubsfactory extends paneAbstract {
         jbClean.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.cleanSelect(jtSubsf);
-                proxy.cleanSelect(jtMySubsf);
+                jbCleanMouseClicked();
             }
         });
 
@@ -82,9 +81,13 @@ public class paneSubsfactory extends paneAbstract {
     private void jbDownMouseClicked() {
         if (jbDown.isEnabled()) {
             proxy.downloadSub(jtSubsf, jtMySubsf, false);
-            proxy.cleanSelect(jtSubsf);
-            proxy.cleanSelect(jtMySubsf);
+            jbCleanMouseClicked();
         }
+    }
+    
+    private void jbCleanMouseClicked(){
+        proxy.cleanSelect(jtSubsf,3);
+        proxy.cleanSelect(jtMySubsf,3);
     }
 
     public void setEnableButton(boolean e) {
