@@ -129,7 +129,7 @@ public class paneItasa extends paneAbstract {
     }
 
     private void jbCleanMouseClicked() {
-        proxy.cleanSelect(jtItasa);
-        proxy.cleanSelect(jtMyItasa);
+        proxy.cleanSelect(jtItasa,3);
+        proxy.cleanSelect(jtMyItasa,3);
     }
 }

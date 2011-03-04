@@ -1,6 +1,8 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -11,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
 import org.feedworker.client.frontend.table.tableResultSearchSub;
 
 /**
@@ -24,6 +27,7 @@ public class paneSearchSubItasa extends paneAbstract{
     private JCheckBox jcbComplete;
     private JTextField jtfSeason, jtfEpisode;
     private tableResultSearchSub jtable;
+    private JPanel jpButton;
     
     private paneSearchSubItasa(){
         super("Search sub Itasa");
@@ -44,9 +48,10 @@ public class paneSearchSubItasa extends paneAbstract{
         JScrollPane jsp = new JScrollPane(jtable);
         JPanel jpTemp = new JPanel(new BorderLayout());
         jpTemp.add(jsp, BorderLayout.CENTER);
-        JPanel jpButton = new JPanel();
-        jpTemp.add(jpButton, BorderLayout.SOUTH);
-        jpCenter.add(jpTemp, BorderLayout.CENTER);
+        jpButton = new JPanel(new GridBagLayout());
+        jpButton.setPreferredSize(new Dimension(1000, 30));
+        jpTemp.add(jpButton, BorderLayout.NORTH);
+        jpCenter.add(jpTemp);
     }
 
     @Override
@@ -60,7 +65,7 @@ public class paneSearchSubItasa extends paneAbstract{
         jtfSeason = new JTextField(3);
         jtfEpisode = new JTextField(3);
         
-        JButton jbSearch = new JButton("Ricerca");
+        JButton jbSearch = new JButton(" Ricerca ");
         jbSearch.setBorder(BORDER);
         jbSearch.addMouseListener(new MouseAdapter() {
             @Override
@@ -68,12 +73,28 @@ public class paneSearchSubItasa extends paneAbstract{
                 jbSearchMouseClicked();
             }
         });
-        JButton jbClean = new JButton(" Pulisci ");
-        jbClean.setBorder(BORDER);
-        jbClean.addMouseListener(new MouseAdapter() {
+        JButton jbReset = new JButton(" Reset ");
+        jbReset.setBorder(BORDER);
+        jbReset.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                jbCleanMouseClicked();
+                jbResetMouseClicked();
+            }
+        });
+        JButton jbDownload = new JButton(" Download ");
+        jbDownload.setBorder(BORDER);
+        jbDownload.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbDownloadMouseClicked();
+            }
+        });
+        JButton jbPulisci = new JButton(" Pulisci ");
+        jbPulisci.setBorder(BORDER);
+        jbPulisci.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                proxy.cleanSelect(jtable, -1);
             }
         });
         
@@ -103,10 +124,15 @@ public class paneSearchSubItasa extends paneAbstract{
         gbcAction.gridx = ++x;
         jpAction.add(jbSearch, gbcAction);
         gbcAction.gridx = ++x;
-        jpAction.add(jbClean, gbcAction);
+        jpAction.add(jbReset, gbcAction);
+        
+        gbcAction.gridx = 0;
+        jpButton.add(jbDownload, gbcAction);
+        gbcAction.gridx = 1;
+        jpButton.add(jbPulisci, gbcAction);
     }
     
-    private void jbCleanMouseClicked(){
+    private void jbResetMouseClicked(){
         jcbShow.setSelectedItem(null);
         jcbVersion.setSelectedIndex(0);
         jcbComplete.setSelected(false);
@@ -121,5 +147,9 @@ public class paneSearchSubItasa extends paneAbstract{
                                     jtfEpisode.getText());
         } else
             proxy.printAlert("Lo show è obbligatorio per la ricerca");
+    }
+    
+    private void jbDownloadMouseClicked(){
+        
     }
 }

@@ -81,8 +81,8 @@ public class paneTorrent extends paneAbstract {
         jbClean.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.cleanSelect(jtTorrent1);
-                proxy.cleanSelect(jtTorrent2);
+                proxy.cleanSelect(jtTorrent1,3);
+                proxy.cleanSelect(jtTorrent2,3);
             }
         });
 
