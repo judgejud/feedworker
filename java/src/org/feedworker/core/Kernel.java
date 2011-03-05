@@ -113,9 +113,8 @@ public class Kernel implements PropertyChangeListener {
      * @return istanza kernel
      */
     public static Kernel getIstance() {
-        if (core == null){
+        if (core == null)
             core = new Kernel();
-        }
         return core;
     }
     
@@ -124,6 +123,7 @@ public class Kernel implements PropertyChangeListener {
         while (mapShowItasa==null){
             try {
                 mapShowItasa = itasa.showList();
+                //TODO: se itasa = errore, caricare da file
             } catch (JDOMException ex) {
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -208,9 +208,8 @@ public class Kernel implements PropertyChangeListener {
      * @return path di destinazione
      */
     private String mapPath(KeyRule key) {
-        if (key != null && mapRules != null) {
+        if (key != null && mapRules != null)
             return mapRules.get(key).getPath();
-        }
         return null;
     }
 
@@ -516,23 +515,20 @@ public class Kernel implements PropertyChangeListener {
             feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA,
                     false, first);
             if ((feedIta != null) && (feedIta.size() > 0)) {
-                if (!first) {
+                if (!first)
                     status = true;
-                }
                 lastItasa = (String) feedIta.get(0)[1];
                 ManageListener.fireTableEvent(this, feedIta, ITASA);
             }
         }
         if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
-            if (first && prop.isAutoLoadDownloadMyItasa()) {
+            if (first && prop.isAutoLoadDownloadMyItasa())
                 lastMyItasa = prop.getLastDateTimeRefresh();
-            }
             feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
                     MYITASA, prop.isAutoDownloadMyItasa(), first);
             if ((feedMyita != null) && (feedMyita.size() > 0)) {
-                if (!first) {
+                if (!first)
                     status = true;
-                }
                 lastMyItasa = (String) feedMyita.get(0)[1];
                 ManageListener.fireTableEvent(this, feedMyita, MYITASA);
             }
@@ -932,7 +928,7 @@ public class Kernel implements PropertyChangeListener {
             for (int i = 0; i < from.size(); i++) {
                 show = from.get(i);
                 if (!tsIdCalendar.contains(show[0])) {
-                    Object[] array = setArray(t, show);
+                    Object[] array = setArray(t, show, true);
                     al.add(array);
                     xmlCalendar.addShowTV(array);
                 }
@@ -948,36 +944,36 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    private Object[] setArray(TvRage t, Object[] show)
+    private Object[] setArray(TvRage t, Object[] show, boolean status)
                                             throws JDOMException, IOException {
         Object[] array = t.readingEpisodeList_byID(show[0].toString(),
                 show[2].toString());
         array[0] = show[0];
         array[1] = show[1];
-        //array[2] = Common.getStatus((String) show[3]);
-        array[2] = show[3];
+        if (status)
+            array[2] = Common.getStatus((String) show[3]);
+        else
+            array[2] = show[3];
         array[3] = show[4];
         return array;
     }
 
     public void removeShowTv(int row, Object id) {
-        TvRage t = new TvRage();
         try {
             xmlCalendar.removeShowTv(row);
+            tsIdCalendar.remove(id);
         } catch (IOException ex) {
             error.launch(ex, null);
         }
-        tsIdCalendar.remove(id);
     }
 
     public void removeAllShowTv() {
-        TvRage t = new TvRage();
         try {
             xmlCalendar.removeAllShowTv();
+            tsIdCalendar = new TreeSet();
         } catch (IOException ex) {
             error.launch(ex, null);
         }
-        tsIdCalendar = new TreeSet();
     }
 
     public void importTvFromDestSub() {
@@ -1005,7 +1001,6 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
         } else if (evtName.equalsIgnoreCase(className + "$RefreshTask")) {
-            System.out.println(evt.getPropertyName());
             if (evt.getPropertyName().equals("progress")){
                 ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_INCREMENT,
                         refreshTask.getProgress());
@@ -1177,7 +1172,7 @@ public class Kernel implements PropertyChangeListener {
                     if (temp != null) {
                         Object[] show = temp.get(0);
                         if (!ts.contains(show[0])) {
-                            Object[] array = setArray(t, show);
+                            Object[] array = setArray(t, show, false);
                             alObjs.add(array);
                             ts.add(show[0]);
                             xmlCalendar.addShowTV(array);
@@ -1214,16 +1209,14 @@ public class Kernel implements PropertyChangeListener {
             setProgress(progress);
             Calendar xmlClone = xmlCalendar.clone();
             try {
-                while (iter.hasNext()) {
+                while (iter.hasNext() && !this.isCancelled()) {
                     Long index = iter.next();
                     String id = tmRefresh.get(index);
                     Object[] show = t.showInfo_byID(id);
-                    Object[] array = setArray(t, show);
+                    Object[] array = setArray(t, show, true);
                     alObjs.add(array);
                     xmlClone.removeShowTv(index.intValue() - 1);
                     xmlClone.addShowTV(array);
-                    //xmlCalendar.removeShowTv(index.intValue() - 1);
-                    //xmlCalendar.addShowTV(array);
                     setProgress(++progress);
                 }
                 if (!this.isCancelled())

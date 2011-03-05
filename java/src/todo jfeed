@@ -4,9 +4,11 @@ IMPLEMENTARE
 -destinazione avanzata in mixed mode
 -fare caricamento xml sotto thread
 -ricerca sottotitoli itasa
+-caricare da file la lista serie itasa se da remoto genera errore.
 
+salvare in automatico l'ultima data di aggiornamento se myitasa down auto is true
 aggiungere versioning automatico all'applicazione
-calendario: introdurre aggiornamento singolo
+calendario: implementare aggiornamento singolo
 javamail: avviso mail sub scaricato
 audio: avviso sub estratto
 aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
