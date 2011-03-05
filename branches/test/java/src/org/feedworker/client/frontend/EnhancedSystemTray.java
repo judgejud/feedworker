@@ -31,7 +31,7 @@ public class EnhancedSystemTray {
         try {
             trayIcon = new TrayIcon(owner, iconRss);
             trayIcon.setJPopuMenu(createJPopupMenu());
-            trayIcon.setToolTip("FeedWorker");
+            trayIcon.setToolTip(" FeedWorker ");
             SystemTray.getSystemTray().add(trayIcon);
         } catch (AWTException e) {
             proxy.printError(e);
@@ -46,7 +46,7 @@ public class EnhancedSystemTray {
 
     private JPopupMenu createJPopupMenu() {
         JPopupMenu m = new JPopupMenu();
-        final JMenuItem exitItem = new JMenuItem("Esci");
+        final JMenuItem exitItem = new JMenuItem(" Esci ");
         exitItem.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -61,7 +61,7 @@ public class EnhancedSystemTray {
     }
 
     public void notifyIncomingFeed() {
-        trayIcon.setToolTip("FeedWorker - ci sono nuovi feed :)");
+        trayIcon.setToolTip(" FeedWorker - ci sono nuovi feed :) ");
         trayIcon.setImage(iconSub);
     }
 }
