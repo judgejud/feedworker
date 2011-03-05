@@ -1009,7 +1009,7 @@ public class Kernel implements PropertyChangeListener {
             if (evt.getPropertyName().equals("progress")){
                 ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_INCREMENT,
                         refreshTask.getProgress());
-                if (refreshTask.isDone() && !refreshTask.isCancelled()) {
+                if (refreshTask.isDone()) {
                     try {
                         xmlCalendar = new Calendar(FILE_CALENDAR, true);
                         ArrayList temp = xmlCalendar.readingDocument();
@@ -1041,8 +1041,8 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass());
         }
         if (array!=null && array.size() > 0) {
-            ManageListener.fireJFrameEventOperation(this,
-                    OPERATION_PROGRESS_SHOW, array.size());
+            ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW, 
+                                                                array.size());
             ArrayList al = new ArrayList();
             al.add(array.descendingKeySet().toArray(new Long[array.size()]));
             refreshTask = new RefreshTask(array);
@@ -1199,7 +1199,6 @@ public class Kernel implements PropertyChangeListener {
     }
 
     class RefreshTask extends SwingWorker<Void, Void> {
-
         private TreeMap<Long, String> tmRefresh;
 
         public RefreshTask(TreeMap<Long, String> _tm) {
@@ -1223,12 +1222,12 @@ public class Kernel implements PropertyChangeListener {
                     alObjs.add(array);
                     xmlClone.removeShowTv(index.intValue() - 1);
                     xmlClone.addShowTV(array);
+                    //xmlCalendar.removeShowTv(index.intValue() - 1);
+                    //xmlCalendar.addShowTV(array);
                     setProgress(++progress);
                 }
-                if (!this.isCancelled()){
-                    xmlCalendar.reverseDataCloning();
-                    xmlCalendar.write();
-                }
+                if (!this.isCancelled())
+                    xmlCalendar.reverseDataCloning(xmlClone);
             } catch (JDOMException ex) {
                 error.launch(ex, null);
             } catch (IOException ex) {

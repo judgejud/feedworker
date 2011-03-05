@@ -70,7 +70,12 @@ class AbstractXML {
         return document;
     }
     
-    protected void setDocument(Document doc){
+    protected Element getRoot(){
+        return root;
+    }
+    
+    protected void setDocumentRoot(Document doc, Element r){
         document = doc;
+        root = r;
     }
 }
