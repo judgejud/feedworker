@@ -754,10 +754,10 @@ public class Mediator {
         core.openFolder(dir);
     }
     
-    public void stopImport() {
-    	core.stopImport();
+    public void stopImportRefresh() {
+    	core.stopImportRefreshCalendar();
     }
-
+    
     public void checkLoginItasa(String user, char[] password) {
         core.checkLoginItasa(user,new String(password));
     }

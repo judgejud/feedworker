@@ -65,4 +65,12 @@ class AbstractXML {
         // Produco l'output sul file xml.foo
         outputter.output(document, new FileOutputStream(file));
     }
+    
+    protected Document getDocument(){
+        return document;
+    }
+    
+    protected void setDocument(Document doc){
+        document = doc;
+    }
 }

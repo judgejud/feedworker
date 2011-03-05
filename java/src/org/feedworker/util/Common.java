@@ -215,7 +215,7 @@ public class Common {
     
     public static boolean getStatus(String text){
         if (text.equalsIgnoreCase("Final Season") || 
-                    text.equalsIgnoreCase("Canceled/Ended"))
+                text.equalsIgnoreCase("Canceled/Ended"))
             return true;
         else
             return false;

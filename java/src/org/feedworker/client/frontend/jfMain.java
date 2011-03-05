@@ -438,29 +438,24 @@ public class jfMain extends JFrame implements WindowListener,
 
     @Override
     public void objReceived(final JFrameEventOperation evt) {
-        if (evt.getOperaz() != null) {
-            if (evt.getOperaz().equalsIgnoreCase(
-                    proxy.getOperationEnableButton())) {
+        if (evt.getOperaz() != null) {            
+            if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationEnableButton()))
                 changeEnabledButton(true);
-            } else if (evt.getOperaz().equalsIgnoreCase(proxy.getSearchTV())) {
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getSearchTV()))
                 resultSearchTvJD.setVisible(true);
-            } else if (evt.getOperaz().equalsIgnoreCase(
-                    proxy.getOperationFocus())) {
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationFocus()))
                 requestFocus();
-            } else if (evt.getOperaz().equalsIgnoreCase(
-                    proxy.getOperationProgressShow())) {
-                progressBar = new ProgressDialog(this,
-                        "Operazione in corso...", evt.getMax());
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationProgressShow())) {
+                String msg = "Operazione in corso...";
+                progressBar = new ProgressDialog(this, msg, evt.getMax());
                 AWT.centerComponent(progressBar, this);
                 progressBar.addProgressListener(new ProgressListener()  {
-
                     @Override
-                    public void objReceived(ProgressEvent evt) {
-                        proxy.stopImport();
+                    public void objReceived(ProgressEvent pe) {
+                        proxy.stopImportRefresh();
                     }
                 });
-            } else if (evt.getOperaz().equalsIgnoreCase(
-                    proxy.getOperationProgressIncrement())) {
+            } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationProgressIncrement())) {
                 progressBar.setProgress(evt.getMax());
             }
         }

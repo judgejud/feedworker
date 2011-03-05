@@ -881,15 +881,10 @@ public class Kernel implements PropertyChangeListener {
     public void backup(String name) {
         ArrayList<File> files = new ArrayList<File>();
         File s = new File("settings.properties");
-        if (FILE_RULE.exists()) {
+        if (FILE_RULE.exists())
             files.add(FILE_RULE);
-        }
-        if (FILE_CALENDAR.exists()) {
-            files.add(FILE_RULE);
-        }
-        if (s.exists()) {
+        if (s.exists())
             files.add(s);
-        }
         if (files.size() > 0) {
             if (!name.substring(name.length() - 4).toLowerCase().equalsIgnoreCase(".zip")) {
                 name += ".zip";
@@ -933,7 +928,6 @@ public class Kernel implements PropertyChangeListener {
         Object[] show = null;
         try {
             TvRage t = new TvRage();
-            Itasa it = new Itasa();
             ArrayList<Object[]> al = new ArrayList<Object[]>();
             for (int i = 0; i < from.size(); i++) {
                 show = from.get(i);
@@ -959,19 +953,9 @@ public class Kernel implements PropertyChangeListener {
         Object[] array = t.readingEpisodeList_byID(show[0].toString(),
                 show[2].toString());
         array[0] = show[0];
-        /*
-        ArrayList<String> temp = null;
-        try {
-            temp = it.searchIdSingleByTvrage(Integer.parseInt(show[0].toString()));
-        } catch (ItasaException ex) {}        
-        if (temp != null) {
-            array[1] = temp.get(0);
-            array[2] = temp.get(1);
-        }
-         * 
-         */
         array[1] = show[1];
-        array[2] = Common.getStatus((String) show[3]);
+        //array[2] = Common.getStatus((String) show[3]);
+        array[2] = show[3];
         array[3] = show[4];
         return array;
     }
@@ -1021,11 +1005,11 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
         } else if (evtName.equalsIgnoreCase(className + "$RefreshTask")) {
-            if (evt.getPropertyName().equals("progress")) {
-                ManageListener.fireJFrameEventOperation(this,
-                        OPERATION_PROGRESS_INCREMENT,
+            System.out.println(evt.getPropertyName());
+            if (evt.getPropertyName().equals("progress")){
+                ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_INCREMENT,
                         refreshTask.getProgress());
-                if (refreshTask.isDone()) {
+                if (refreshTask.isDone() && !refreshTask.isCancelled()) {
                     try {
                         xmlCalendar = new Calendar(FILE_CALENDAR, true);
                         ArrayList temp = xmlCalendar.readingDocument();
@@ -1125,8 +1109,11 @@ public class Kernel implements PropertyChangeListener {
         }
     }
     
-    public void stopImport() {
-        importTask.cancel(true);
+    public void stopImportRefreshCalendar() {
+        if (importTask!=null && importTask.getState()==SwingWorker.StateValue.STARTED)
+            importTask.cancel(true);
+        else if (refreshTask!=null && refreshTask.getState()==SwingWorker.StateValue.STARTED)
+            refreshTask.cancel(true);
     }
 
     /**
@@ -1183,7 +1170,6 @@ public class Kernel implements PropertyChangeListener {
             setProgress(progress);
             try {
                 TvRage t = new TvRage();
-                Itasa it = new Itasa();
                 while (iter.hasNext() && !this.isCancelled()) {
                     String name = iter.next().getName();
                     ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(
@@ -1226,8 +1212,8 @@ public class Kernel implements PropertyChangeListener {
             Iterator<Long> iter = tmRefresh.descendingKeySet().iterator();
             ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
             TvRage t = new TvRage();
-            Itasa it = new Itasa();
             setProgress(progress);
+            Calendar xmlClone = xmlCalendar.clone();
             try {
                 while (iter.hasNext()) {
                     Long index = iter.next();
@@ -1235,11 +1221,14 @@ public class Kernel implements PropertyChangeListener {
                     Object[] show = t.showInfo_byID(id);
                     Object[] array = setArray(t, show);
                     alObjs.add(array);
-                    xmlCalendar.removeShowTv(index.intValue() - 1);
-                    xmlCalendar.addShowTV(array);
+                    xmlClone.removeShowTv(index.intValue() - 1);
+                    xmlClone.addShowTV(array);
                     setProgress(++progress);
                 }
-                xmlCalendar.write();
+                if (!this.isCancelled()){
+                    xmlCalendar.reverseDataCloning();
+                    xmlCalendar.write();
+                }
             } catch (JDOMException ex) {
                 error.launch(ex, null);
             } catch (IOException ex) {
