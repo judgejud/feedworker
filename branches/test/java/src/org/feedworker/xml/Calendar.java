@@ -32,8 +32,6 @@ public class Calendar extends AbstractXML{
     private final String TAG_CALENDAR_NEXT_TITLE = "NEXT_TITLE";
     private final String TAG_CALENDAR_NEXT_DATE = "NEXT_DATE";
     
-    private Calendar clone;
-    
     public Calendar(File f, boolean read) throws JDOMException, IOException{
         initialize(f, read);
     }
@@ -141,16 +139,21 @@ public class Calendar extends AbstractXML{
     
     @Override
     public Calendar clone(){
+        Calendar clone=null;
         try {
-            clone = new Calendar(File.createTempFile("tempcal", "xml"), false);
-            clone.setDocument(this.getDocument());
+            clone = new Calendar(File.createTempFile("tempcal", ".xml"), false);
+            clone.setDocumentRoot(this.getDocument(), this.getRoot());
+            clone.write();
         } catch (JDOMException ex) {
+            ex.printStackTrace();
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
         return clone;
     }
     
-    public void reverseDataCloning(){
-        this.setDocument(clone.getDocument());
+    public void reverseDataCloning(Calendar clone) throws IOException{
+        this.setDocumentRoot(clone.getDocument(),clone.getRoot());
+        this.write();
     }
 }
