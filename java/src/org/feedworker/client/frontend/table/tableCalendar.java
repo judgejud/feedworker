@@ -45,7 +45,8 @@ public class tableCalendar extends tableAbstract{
         
         setModel(dtm);
         setRowSelectionAllowed(true);
-        Swing.tableSorter(this);
+        if (Mediator.getIstance().isJava6())
+            Swing.tableSorter(this);
         lockColumns();
         
         this.addMouseListener(new MouseAdapter() {

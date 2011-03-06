@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend.table;
 
 import javax.swing.table.DefaultTableModel;
+import org.feedworker.client.frontend.Mediator;
 
 import org.feedworker.client.frontend.events.TableEvent;
 import org.jfacility.javax.swing.Swing;
@@ -27,7 +28,8 @@ public class tableResultSearchSub extends tableAbstract{
         };
         setModel(dtm);
         lockColumns();
-        Swing.tableSorter(this);
+        if (Mediator.getIstance().isJava6())
+            Swing.tableSorter(this);
     }
     
     @Override

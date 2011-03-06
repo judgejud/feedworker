@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+import org.feedworker.client.frontend.Mediator;
 
 import org.feedworker.client.frontend.table.tableReminder;
 
@@ -66,7 +67,11 @@ public class paneReminder extends paneAbstract{
             ArrayList<Integer> numbers = new ArrayList<Integer>();
             for (int i=rows-1; i>-1; i--){
                 if (Boolean.parseBoolean(jtable.getValueAt(i, 2).toString())){
-                    int row = jtable.convertRowIndexToModel(i);
+                    int row;
+                    if (Mediator.getIstance().isJava6())
+                        row = jtable.convertRowIndexToModel(i);
+                    else
+                        row = i;
                     numbers.add(row);
                     ((DefaultTableModel) jtable.getModel()).removeRow(row);
                 }
