@@ -38,8 +38,7 @@ public class tableSubtitleDest extends tableAbstract {
         setComboBoxColumn(2, itemsCombo);
         setRowSelectionAllowed(true);
         lockColumns();
-        if (Mediator.getIstance().isJava6())
-            Swing.tableSorter(this);
+        Swing.tableSorter(this);
     }
     
     @Override

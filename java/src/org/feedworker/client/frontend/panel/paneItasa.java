@@ -70,7 +70,8 @@ public class paneItasa extends paneAbstract {
         });
 
         jbDown = new JButton(" Download ");
-        jbDown.setToolTipText("Scarica tutti i sub selezionati");
+        //jbDown = new JButton(Common.getResourceImageIcon(proxy.getPNG_DOWNLOAD()));
+        jbDown.setToolTipText("Scarica i sub selezionati");
         jbDown.setBorder(BORDER);
         jbDown.addMouseListener(new MouseAdapter() {
             @Override

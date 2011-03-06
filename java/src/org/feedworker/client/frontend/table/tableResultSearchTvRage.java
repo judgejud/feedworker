@@ -6,7 +6,6 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import org.feedworker.client.frontend.Mediator;
 
 import org.feedworker.client.frontend.events.TableEvent;
 import org.jfacility.javax.swing.Swing;
@@ -35,8 +34,7 @@ public class tableResultSearchTvRage extends tableAbstract{
         lockColumns();
         setRowSelectionAllowed(true);
         getColumn(nameCols[1]).setCellRenderer(new JLabelCellTextRenderer());
-        if (Mediator.getIstance().isJava6())
-            Swing.tableSorter(this);
+        Swing.tableSorter(this);
     }
     
     @Override

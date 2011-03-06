@@ -5,7 +5,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.table.DefaultTableModel;
-import org.feedworker.client.frontend.Mediator;
 
 import org.feedworker.client.frontend.events.TableEvent;
 import org.jfacility.javax.swing.Swing;
@@ -38,8 +37,7 @@ public class tableReminder extends tableAbstract {
         
         setModel(dtm);
         lockColumns();
-        if (Mediator.getIstance().isJava6())
-            Swing.tableSorter(this);
+        Swing.tableSorter(this);
         
         addMouseListener(new MouseAdapter() {
             @Override

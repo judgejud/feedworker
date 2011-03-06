@@ -48,6 +48,7 @@ import com.sun.syndication.io.FeedException;
 public class Mediator {
 
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
+    private final String PNG_DOWNLOAD = "download.png";
     private final String ENABLE_BUTTON = "enableButton";
     private final FileNameExtensionFilter fnfeZIP =
             new FileNameExtensionFilter("ZIP file", "zip");
@@ -774,4 +775,10 @@ public class Mediator {
                                 String season, String episode) {
         
     }
+
+    public String getPNG_DOWNLOAD() {
+        return PNG_DOWNLOAD;
+    }
+    
+    
 }
