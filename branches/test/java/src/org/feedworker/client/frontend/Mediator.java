@@ -67,7 +67,7 @@ public class Mediator {
         return proxy;
     }
     
-    boolean isJava6(){
+    public boolean isJava6(){
         return new JVM().isOrLater(16);
     }
 
