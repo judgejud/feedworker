@@ -204,13 +204,14 @@ public class Itasa extends AbstractQueryXML{
         return subs;
     }
 
-    public ArrayList<Subtitle> searchSubtitles(int id, String _version, String query, int page) 
+    public ArrayList<Subtitle> subtitleSearch(String id, String _version, String query, int page) 
                                 throws JDOMException, IOException, ItasaException, Exception{
         ArrayList params = new ArrayList();
         params.add(PARAM_SHOW_ID + id);
         if (_version!=null)
             params.add(PARAM_VERSION + _version);
-        params.add(PARAM_QUERY + "%completa%25");
+        if (query!=null)
+            params.add(PARAM_QUERY + query);
         if (page>0)
             params.add(PARAM_PAGE + page);
         connectHttps(composeUrl(URL_SUBTITLE_SEARCH, params));

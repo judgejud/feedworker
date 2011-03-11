@@ -189,7 +189,8 @@ public class DownloadThread implements Runnable {
                         File f = File.createTempFile(n.substring(0, l - 4), n.substring(l - 4));
                         Io.downloadSingle(entity.getContent(), f);
                         alFile.addAll(extract(f));
-                        alReminder.add(new Object[]{Common.actualTime(), 
+                        if (prop.isReminderOption())
+                            alReminder.add(new Object[]{Common.actualTime(), 
                                 f.getName().split(".sub.")[0].replaceAll("\\.", " "), 
                                         false});
                     } else
@@ -209,8 +210,10 @@ public class DownloadThread implements Runnable {
         }        
         http.closeClient();
         analyzeDest(alFile);
-        addXML(alReminder);
-        ManageListener.fireTableEvent(this, alReminder, Kernel.getIstance().REMINDER);
+        if (prop.isReminderOption()){
+            addXML(alReminder);
+            ManageListener.fireTableEvent(this, alReminder, Kernel.getIstance().REMINDER);
+        }
     }
     
     private void addXML(ArrayList<Object[]> al){
@@ -305,9 +308,8 @@ public class DownloadThread implements Runnable {
                 break;
             }
         }
-        if (version == null) {
+        if (version == null)
             version = Quality.NORMAL.toString();
-        }
         return version;
     }
     

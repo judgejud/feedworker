@@ -1155,6 +1155,28 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
+    public void searchSubItasa(Object show, Object version, boolean complete, 
+                                                String season, String episode) {
+        String id = mapShowItasa.get(show);
+        System.out.println(version);
+        String temp = null;
+        if (!version.equals(new String("*")))
+            temp = version.toString();
+        try {
+            itasa.subtitleSearch(id, temp, null, -1);
+        } catch (JDOMException ex) {
+            
+        } catch (IOException ex) {
+            error.launch(ex, getClass());
+        } catch (ItasaException ex) {
+            printAlert(ex.getMessage());
+        } catch (Exception ex) {
+            
+        }
+        
+        
+    }
+
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
         @Override
         public ArrayList<Object[]> doInBackground() {

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
-import org.feedworker.client.frontend.Mediator;
 
 import org.feedworker.client.frontend.table.tableReminder;
 

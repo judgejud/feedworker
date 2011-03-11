@@ -1,4 +1,4 @@
-package org.feedworker.util;
+package org.feedworker.exception;
 //IMPORT JAVA
 import java.io.File;
 import java.io.IOException;

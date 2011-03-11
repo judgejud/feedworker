@@ -36,8 +36,8 @@ public class paneSetting extends paneAbstract {
     protected JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
     protected JLabel jlDataAggiornamento;
     protected JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
-    protected JCheckBox jcbAudioRss, jcbAudioSub, jcbAdvancedDownload, jcbRunIconized,
-            jcbDownloadMyitasaStartup, jcbMail, jcbPaneSubDest, jcbPaneLog, 
+    protected JCheckBox jcbAudioRss, jcbAudioSub, jcbDestination, jcbRunIconized,
+            jcbDownloadMyitasaStartup, jcbMail, jcbReminder, jcbPaneSubDest, jcbPaneLog, 
             jcbPaneSetting, jcbPaneSearchSubItasa, jcbPaneReminder;
     private JButton jbSaveSettings, jbAnnullaSettings;
     protected JButton jbDestSub, jbDestTorrent, jbCheckItasa;
@@ -154,7 +154,7 @@ public class paneSetting extends paneAbstract {
         gbc.gridx = 0;
         gbc.gridy = ++y;
         gbc.gridwidth = 2;
-        jpSettingGlobal.add(jcbAdvancedDownload, gbc);
+        jpSettingGlobal.add(jcbDestination, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = ++y;
@@ -238,6 +238,9 @@ public class paneSetting extends paneAbstract {
         gbc.gridx = 0;
         gbc.gridy = ++y;
         jpSettingGlobal.add(jcbRunIconized, gbc);
+
+        gbc.gridy = ++y;
+        jpSettingGlobal.add(jcbReminder, gbc);
         
         return jpSettingGlobal;
     }
@@ -358,7 +361,8 @@ public class paneSetting extends paneAbstract {
         jrbDirLocal = new JRadioButton("HD locale");
         jrbDirLocal.setSelected(true);
         jrbDirSamba = new JRadioButton("HD Samba");
-        jcbAdvancedDownload = new JCheckBox("Download avanzato");
+        jcbDestination = new JCheckBox("Abilita Destinazione personalizzata");
+        jcbReminder = new JCheckBox("Abilita Reminder");
         jtfDestSub = new JTextField(20);
         jbDestSub = new JButton("Seleziona");
         jbDestSub.setBorder(BORDER);
@@ -528,8 +532,9 @@ public class paneSetting extends paneAbstract {
         jrbDirLocal.setSelected(prop.isLocalFolder());
         jrbDirSamba.setSelected(!prop.isLocalFolder());
         jcbTimeout.setSelectedItem(prop.getHttpTimeout());
-        jcbAdvancedDownload.setSelected(prop.isEnabledAdvancedDownload());
+        jcbDestination.setSelected(prop.isEnabledAdvancedDownload());
         jcbRunIconized.setSelected(prop.isEnabledIconizedRun());
+        jcbReminder.setSelected(prop.isReminderOption());
     }
     private void settingsSambaValue() {
         jtfSambaDomain.setText(prop.getCifsShareDomain());
@@ -599,7 +604,7 @@ public class paneSetting extends paneAbstract {
                 jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
                 jcbMinuti.getSelectedItem().toString(), jcbLookFeel.getSelectedItem().toString(),
                 jcbTimeout.getSelectedItem().toString(),
-                jcbAdvancedDownload.isSelected(), jcbRunIconized.isSelected(),
+                jcbDestination.isSelected(), jcbRunIconized.isSelected(),
                 jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
                 new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
                 jcbDownloadMyitasaStartup.isSelected(), jtfRssSubsf.getText(), 
@@ -607,7 +612,8 @@ public class paneSetting extends paneAbstract {
                 jcbAudioSub.isSelected(), jcbMail.isSelected(), jtfMailTo.getText(),
                 jtfMailSmtp.getText(), jcbPaneLog.isSelected(), 
                 jcbPaneSearchSubItasa.isSelected(), jcbPaneSetting.isSelected(), 
-                jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected());
+                jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected(), 
+                jcbReminder.isSelected());
 
         if (!previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {
             int returnCode = JOptionPane.showConfirmDialog(this,

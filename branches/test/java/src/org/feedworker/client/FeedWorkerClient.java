@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 import org.feedworker.client.frontend.jfMain;
 import org.feedworker.core.Kernel;
 import org.feedworker.util.Common;
-import org.feedworker.util.Logging;
+import org.feedworker.exception.Logging;
 import org.feedworker.util.ResourceLocator;
 
 import org.jfacility.java.lang.JVM;
