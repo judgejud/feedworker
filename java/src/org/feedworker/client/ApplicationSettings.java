@@ -31,7 +31,7 @@ public class ApplicationSettings {
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
             enableAdvisorMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
-            enablePaneSearchSubItasa, enablePaneReminder;
+            enablePaneSearchSubItasa, enablePaneReminder, reminderOption;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -93,6 +93,7 @@ public class ApplicationSettings {
                 setEnablePaneSubDestination(
                                     getBooleanDecryptedValue("ENABLE_PANE_SUB_DEST"));
                 setEnablePaneReminder(getBooleanDecryptedValue("ENABLE_PANE_REMINDER"));
+                setReminderOption(getBooleanDecryptedValue("ENABLE_REMINDER"));
             } else {
                 loadDefaultSettings();
                 storeSettings();
@@ -150,6 +151,7 @@ public class ApplicationSettings {
             propertiesCrypting("HTTP_TIMEOUT", httpTimeout);
             propertiesCrypting("ENABLE_ADVANCED_DOWNLOAD",enableAdvancedDownload);
             propertiesCrypting("ENABLE_ICONIZED_RUN", enableIconizedRun);
+            propertiesCrypting("ENABLE_REMINDER", reminderOption);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -594,6 +596,12 @@ public class ApplicationSettings {
     public void setEnablePaneReminder(boolean enablePaneReminder) {
         this.enablePaneReminder = enablePaneReminder;
     }
-    
-    
+
+    public boolean isReminderOption() {
+        return reminderOption;
+    }
+
+    public void setReminderOption(boolean reminderOption) {
+        this.reminderOption = reminderOption;
+    }
 }// end class

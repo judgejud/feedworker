@@ -24,7 +24,6 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import org.feedworker.util.Logging;
 
 /**
  * Stampa nella textpane i messaggi d'errore se è un messaggio d'errore "rosso"
@@ -42,9 +41,8 @@ public class ManageException {
      * @return istanza manageexception
      */
     public static ManageException getIstance() {
-        if (core == null) {
+        if (core == null)
             core = new ManageException();
-        }
         return core;
     }
 
@@ -364,7 +362,7 @@ public class ManageException {
 
     private void printError(Exception e, Class c) {
         ManageListener.fireTextPaneEvent(this, e.getMessage(), TextPaneEvent.ERROR, true);
-        Logging.getIstance().printClass(c);
+        //Logging.getIstance().printClass(c);
         Logging.getIstance().printError(e);
     }
 }

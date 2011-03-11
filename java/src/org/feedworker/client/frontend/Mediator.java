@@ -76,7 +76,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "331 by "
+                + "335 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -503,7 +503,7 @@ public class Mediator {
             boolean autoLoadMyItasa, String subsf, String mySubsf, String torrent,
             boolean audioRss, boolean audioSub, boolean mail, String mailTO, 
             String smtp, boolean paneLog, boolean paneSearch, boolean paneSetting,
-            boolean paneSubDest, boolean paneReminder) {
+            boolean paneSubDest, boolean paneReminder, boolean reminder) {
                 
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
@@ -522,7 +522,7 @@ public class Mediator {
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                     sambaUser, sambaPwd, time, laf, timeout, 
-                    advancedDownload, runIconized);
+                    advancedDownload, runIconized, reminder);
             setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
             setPropSubsf(subsf, mySubsf);
             prop.setTorrentDestinationFolder(torrent);
@@ -550,7 +550,7 @@ public class Mediator {
             String sambaDomain, String sambaIP, String sambaDir,
             String sambaUser, String sambaPwd, String time, String laf,
             String timeout, boolean advancedDownload,
-            boolean runIconized) {
+            boolean runIconized, boolean reminder) {
         prop.setLocalFolder(dirLocal);
         prop.setSubtitleDestinationFolder(destSub);
         prop.setRefreshInterval(time);
@@ -563,6 +563,7 @@ public class Mediator {
         prop.setHttpTimeout(timeout);
         prop.setEnableAdvancedDownload(advancedDownload);
         prop.setEnableIconizedRun(runIconized);
+        prop.setReminderOption(reminder);
     }
 
     private void setPropItasa(String itasa, String myitasa, String user,
@@ -773,7 +774,15 @@ public class Mediator {
 
     public void searchSubItasa(Object show, Object version, boolean complete, 
                                 String season, String episode) {
-        
+        try{
+            if (Lang.verifyTextNotNull(season))
+                Lang.stringToInt(season);
+            if (Lang.verifyTextNotNull(episode))
+                Lang.stringToInt(episode);
+            core.searchSubItasa(show, version, complete, season, episode);
+        } catch (NumberFormatException e){
+            printAlert("Immettere un numero alla stagione e/o episodio invece di una stringa");
+        }
     }
 
     public String getPNG_DOWNLOAD() {

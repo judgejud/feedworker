@@ -76,8 +76,6 @@ public class paneSettingEnhanced extends paneSetting {
         temp.add(jrbDirSamba);
         task.add(temp);
 
-        task.add(jcbAdvancedDownload);
-
         temp = new JPanel();
         JLabel jlLocal = new JLabel("Percorso locale standard");
         jlLocal.setForeground(Color.magenta);
@@ -85,6 +83,10 @@ public class paneSettingEnhanced extends paneSetting {
         temp.add(jbDestSub);
         task.add(temp);
         task.add(jtfDestSub);
+        
+        task.add(jcbDestination);
+        
+        task.add(jcbReminder);
         
         temp = new JPanel();
         temp.add(new JLabel("Look&Feel"));
