@@ -76,7 +76,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "335 by "
+                + "337 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -789,6 +789,8 @@ public class Mediator {
     public String getPNG_DOWNLOAD() {
         return PNG_DOWNLOAD;
     }
-    
-    
+
+    public void refreshSingleCalendar(String value, int row) {
+        core.refreshSingleCalendar(row, value);
+    }
 }

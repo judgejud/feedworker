@@ -84,7 +84,6 @@ public class paneCalendar extends paneAbstract{
         });
         
         JButton jbSingleRefresh = new JButton(" Aggiorna Singolo ");
-        jbSingleRefresh.setEnabled(false);
         jbSingleRefresh.setToolTipText("Aggiorna le informazioni sulla serie selezionata");
         jbSingleRefresh.setBorder(BORDER);
         jbSingleRefresh.addMouseListener(new MouseAdapter() {
@@ -140,7 +139,7 @@ public class paneCalendar extends paneAbstract{
     
     private void jbRefreshCalendarMouseClick() {
         if (jtable.getRowCount()>0){
-            ((DefaultTableModel) jtable.getModel()).setRowCount(0);
+            jtable.removeAllRows();
             proxy.refreshCalendar();
         }
     }
@@ -148,9 +147,10 @@ public class paneCalendar extends paneAbstract{
     private void jbRefreshSingleMouseClick(){
         int row = jtable.getSelectedRow();
         if (row > -1){
-            if (proxy.isJava6())
-                row = jtable.convertRowIndexToModel(row);
-            //TODO
+            row = jtable.convertRowIndexToModel(row);
+            String value = (String) jtable.getValueAt(row, 0);
+            jtable.removeAllRows();
+            proxy.refreshSingleCalendar(value,row);
         }
     }
     
