@@ -495,7 +495,7 @@ public class Mediator {
         return check;
     }
 
-    public void saveSettings(boolean dirLocal, String destSub, String sambaDomain,
+    public boolean saveSettings(boolean dirLocal, String destSub, String sambaDomain,
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
             String time, String laf, String timeout,
             boolean advancedDownload, boolean runIconized, String itasa,
@@ -544,6 +544,7 @@ public class Mediator {
             }
             printOk("Impostazioni salvate in " + prop.getSettingsFilename());
         }
+        return save;
     }
 
     private void setPropGlobal(boolean dirLocal, String destSub,

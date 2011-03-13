@@ -76,22 +76,11 @@ class Http {
      */
     void connectItasa(String user, String pwd) throws UnsupportedEncodingException,
             ClientProtocolException, IOException {
-        itasaLogonPOST(user, pwd);
-    }
-
-    /**
-     * Esegue la POST ad itasa con login
-     *
-     * @param username
-     * @param password
-     */
-    private void itasaLogonPOST(String username, String password) throws
-            UnsupportedEncodingException, ClientProtocolException, IOException {
         HttpPost post = new HttpPost(ADDRESS_ITASA);
         // parametri presi dall'html form action del sito
         List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
-        lnvp.add(new BasicNameValuePair("username", username));
-        lnvp.add(new BasicNameValuePair("passwd", password));
+        lnvp.add(new BasicNameValuePair("username", user));
+        lnvp.add(new BasicNameValuePair("passwd", pwd));
         lnvp.add(new BasicNameValuePair("remember", "yes"));
         lnvp.add(new BasicNameValuePair("Submit", "Login"));
         lnvp.add(new BasicNameValuePair("option", "com_user"));

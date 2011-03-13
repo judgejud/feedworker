@@ -12,10 +12,13 @@ calendario: implementare aggiornamento singolo
 javamail: avviso mail sub scaricato
 audio: avviso sub estratto
 aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
+introdurre set per i reminder in modo che non ci siano duplicati (treeset)?
+fare bottone test connect samba
 
 CORREZIONI:
 -mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
 -migliorare il fire alla reminder considerando la regola delete.
+-sistemare la tabella reminder
 
 PUNTI INTERROGATIVI
 feature proxy http? 

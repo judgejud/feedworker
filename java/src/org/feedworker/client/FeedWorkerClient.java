@@ -82,6 +82,7 @@ public class FeedWorkerClient {
                     feedWorker.getIstanceLAF().setLookAndFeel(
                                     feedWorkerSettings.getApplicationLookAndFeel());
                 } catch (NotAvailableLookAndFeelException e) {
+                    System.out.println("LAF default");
                     feedWorker.getIstanceLAF().setLookAndFeel();
                 }
                 splash.updateStartupState("Loading Application settings ...");
@@ -93,9 +94,9 @@ public class FeedWorkerClient {
                 EventQueue.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        jfMain jframe = null;
+                        
                         splash.updateStartupState("Loading GUI ...");
-                        jframe = new jfMain();
+                        jfMain jframe = new jfMain();
                         splash.updateStartupState("Loading xml ...");
                         K.loadXml();
                         splash.updateStartupState("Initializing RSS...");
