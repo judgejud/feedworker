@@ -511,6 +511,10 @@ public class paneSetting extends paneAbstract {
                 jtfDestTorrent.setText(dir);
         }
     }
+    
+    public void settingFirstLookFeel(){
+        jcbLookFeel.setSelectedItem(prop.getApplicationLookAndFeel());
+    }
 
     public void settingsValue() {
         settingsGeneralValue();
@@ -599,7 +603,7 @@ public class paneSetting extends paneAbstract {
     private void saveSettings() {
         String previousLookAndFeel = prop.getApplicationLookAndFeel();
 
-        proxy.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
+        boolean save = proxy.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
                 jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(), 
                 jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
                 jcbMinuti.getSelectedItem().toString(), jcbLookFeel.getSelectedItem().toString(),
@@ -615,7 +619,8 @@ public class paneSetting extends paneAbstract {
                 jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected(), 
                 jcbReminder.isSelected());
 
-        if (!previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {
+        if (save && 
+            !previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {
             int returnCode = JOptionPane.showConfirmDialog(this,
                     "Per applicare il nuovo Look & Feel è necessario riavviare "
                     + proxy.getNameApp()

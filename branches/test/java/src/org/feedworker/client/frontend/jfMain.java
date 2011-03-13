@@ -45,8 +45,8 @@ public class jfMain extends JFrame implements WindowListener,
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
     //VARIABLES PRIVATE
     private JTabbedPane mainJTP;
-    private Mediator proxy = Mediator.getIstance();
-    private ApplicationSettings prop = ApplicationSettings.getIstance();
+    private Mediator proxy;
+    private ApplicationSettings prop;
     //private Panels
     private paneSetting jpSettings;
     private paneSubtitleDest jpDestination;
@@ -57,19 +57,21 @@ public class jfMain extends JFrame implements WindowListener,
     private paneSearchSubItasa jpSearch;
     private paneStatusBar statusBar;
     private paneReminder jpReminder;
-    private jdResultSearchTv resultSearchTvJD = jdResultSearchTv.getDialog();
+    private jdResultSearchTv resultSearchTvJD;
     private ProgressDialog progressBar;
     private EnhancedSystemTray systemTray;
 
     /** Costruttore */
     public jfMain() {
         super();
+        proxy = Mediator.getIstance();
+        prop = proxy.getSettings();
         systemTray = EnhancedSystemTray.getInstance(this);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        this.setPreferredSize(SCREEN_SIZE);
-        this.setMinimumSize(SCREEN_SIZE);
-        this.setTitle(proxy.getTitle());
-        this.setIconImage(proxy.getApplicationIcon());
+        setPreferredSize(SCREEN_SIZE);
+        setMinimumSize(SCREEN_SIZE);
+        setTitle(proxy.getTitle());
+        setIconImage(proxy.getApplicationIcon());
         initializeMenuBar();
         initializeComponents();
         initListeners();
@@ -115,16 +117,17 @@ public class jfMain extends JFrame implements WindowListener,
         add(statusBar, BorderLayout.SOUTH);
 
         if (prop.isApplicationFirstTimeUsed()) {
-            checkAddTab(jpSettings,false);
+            jpSettings.settingFirstLookFeel();
+            checkAddTab(jpSettings,true);
             changeEnabledButton(false);
-            proxy.printOk("Benvenuto al primo utilizzo.");
-            proxy.printAlert("Per poter usare il client, devi configurare le "
-                    + "impostazioni presenti nella specifica sezione");
+            proxy.printAlert("Benvenuto al primo utilizzo :) Per poter usare il client, "
+                    + "devi configurare le impostazioni");
         } else {
             jpSettings.settingsValue();
             proxy.printOk("Ciao " + prop.getItasaUsername()
                     + ", impostazioni caricate.");
         }
+        resultSearchTvJD = jdResultSearchTv.getDialog();
         pack();
     }
 
@@ -413,9 +416,8 @@ public class jfMain extends JFrame implements WindowListener,
     @Override
     public void windowClosing(WindowEvent we) {
         if (we.getSource() instanceof JMenuItem) {
-            if (requestClose("uscire")) {
+            if (requestClose("uscire"))
                 applicationClose();
-            }
         } else {
             setVisible(false);
             try {
@@ -476,6 +478,11 @@ public class jfMain extends JFrame implements WindowListener,
             jpTorrent.setButtonEnabled(e);
     }
 
+    /**verifica se il pannello non è presente e lo aggiunge stabilendo la visibilità
+     * 
+     * @param pane
+     * @param visible 
+     */
     private void checkAddTab(JPanel pane, boolean visible) {
         if (!mainJTP.isAncestorOf(pane)) {
             mainJTP.addTab(pane.getName(), pane);
@@ -494,26 +501,15 @@ public class jfMain extends JFrame implements WindowListener,
     }
 
     @Override
-    public void windowOpened(WindowEvent e) {
-    }
-
+    public void windowOpened(WindowEvent e) {    }
     @Override
-    public void windowClosed(WindowEvent e) {
-    }
-
+    public void windowClosed(WindowEvent e) {    }
     @Override
-    public void windowIconified(WindowEvent e) {
-    }
-
+    public void windowIconified(WindowEvent e) {    }
     @Override
-    public void windowDeiconified(WindowEvent e) {
-    }
-
+    public void windowDeiconified(WindowEvent e) {    }
     @Override
-    public void windowActivated(WindowEvent e) {
-    }
-
+    public void windowActivated(WindowEvent e) {    }
     @Override
-    public void windowDeactivated(WindowEvent e) {
-    }
+    public void windowDeactivated(WindowEvent e) {    }
 } // end class

@@ -326,9 +326,8 @@ public class Kernel implements PropertyChangeListener {
             data = Common.actualTime();
         }
         prop.setLastDateTimeRefresh(data);
-        if (!prop.isApplicationFirstTimeUsed()) {
+        if (!prop.isApplicationFirstTimeUsed())
             prop.writeOnlyLastDate();
-        }
         if (restart) {
             try {
                 FeedWorkerClient.getApplication().restart();
@@ -417,15 +416,12 @@ public class Kernel implements PropertyChangeListener {
                                 }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2]))
-                                    && download) {
+                            if ((isNotStagione(matrice.get(i)[2])) && download)
                                 downItasaAuto(matrice.get(i)[0]);
-                            }
                         } else if (first && from.equals(MYITASA)) {
                             // non deve fare nulla
-                        } else {// if confronta after
+                        } else // if confronta after
                             matrice.remove(i);
-                        }
                     }
                 }
             }
@@ -680,9 +676,9 @@ public class Kernel implements PropertyChangeListener {
      *            nome da controllare
      * @return risultato controllo
      */
-    private boolean isNotStagione(String name) {
+    private boolean isNotStagione(Object obj) {
         boolean check = true;
-        String[] array = name.split(" ");
+        String[] array = ((String) obj).split(" ");
         for (int i = 0; i < array.length; i++) {
             String confronta = array[i].toLowerCase();
             if (confronta.equals("stagione") || confronta.equals("season")

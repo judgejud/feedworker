@@ -1,7 +1,6 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -38,9 +37,9 @@ public class paneReminder extends paneAbstract{
     void initializePanel() {
         remove(jpCenter);
         jtable = new tableReminder("Reminder");
-        jtable.setPreferredSize(new Dimension(500, 550));
-        JScrollPane jsp = new JScrollPane(jtable);        
-        jpCenter.add(RIGID_AREA);
+        JScrollPane jsp = new JScrollPane(jtable);
+        jsp.setPreferredSize(TABLE_SCROLL_SIZE);
+        jsp.setAutoscrolls(true);
         jpCenter.add(jsp);
         jpCenter.add(RIGID_AREA);
         add(jpCenter, BorderLayout.WEST);
