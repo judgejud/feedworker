@@ -1000,22 +1000,41 @@ public class Kernel implements PropertyChangeListener {
             if (evt.getPropertyName().equals("progress")){
                 ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_INCREMENT,
                         refreshTask.getProgress());
+                if (refreshTask.isDone())
+                    fireCalendar();
+            } else if (evt.getPropertyName().equals("state")){
                 if (refreshTask.isDone()) {
-                    try {
-                        xmlCalendar = new Calendar(FILE_CALENDAR, true);
-                        ArrayList temp = xmlCalendar.readingDocument();
-                        tsIdCalendar = (TreeSet) temp.get(0);
-                        if (tsIdCalendar.size() > 0) {
-                            ManageListener.fireTableEvent(this,
-                                    (ArrayList<Object[]>) temp.get(1),
-                                    CALENDAR);
-                        }
-                    } catch (Exception e) {
-                        error.launch(e, this.getClass());
-                    }
-                }
+                    ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_INCREMENT,
+                        1);
+                    fireCalendar();
+                } else if (refreshTask.isCancelled())
+                    fireCalendar();
             }
         }
+    }
+    
+    private void fireCalendar(){
+        try {
+            xmlCalendar = new Calendar(FILE_CALENDAR, true);
+            ArrayList temp = xmlCalendar.readingDocument();
+            tsIdCalendar = (TreeSet) temp.get(0);
+            if (tsIdCalendar.size() > 0) {
+                ManageListener.fireTableEvent(this,
+                        (ArrayList<Object[]>) temp.get(1),
+                        CALENDAR);
+            }
+        } catch (Exception e) {
+            error.launch(e, this.getClass());
+        }
+    }
+    
+    public void refreshSingleCalendar(int key, String value) {
+        TreeMap<Long, String> array = new TreeMap<Long, String>();
+        array.put(Long.valueOf(key), value);
+        ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW, 1);
+        refreshTask = new RefreshTask(array);
+        refreshTask.addPropertyChangeListener(this);
+        refreshTask.execute();
     }
 
     public void refreshCalendar() {
@@ -1034,8 +1053,8 @@ public class Kernel implements PropertyChangeListener {
         if (array!=null && array.size() > 0) {
             ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW, 
                                                                 array.size());
-            ArrayList al = new ArrayList();
-            al.add(array.descendingKeySet().toArray(new Long[array.size()]));
+            //ArrayList al = new ArrayList();
+            //al.add(array.descendingKeySet().toArray(new Long[array.size()]));
             refreshTask = new RefreshTask(array);
             refreshTask.addPropertyChangeListener(this);
             refreshTask.execute();
@@ -1169,8 +1188,6 @@ public class Kernel implements PropertyChangeListener {
         } catch (Exception ex) {
             
         }
-        
-        
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
@@ -1217,7 +1234,6 @@ public class Kernel implements PropertyChangeListener {
         public RefreshTask(TreeMap<Long, String> _tm) {
             tmRefresh = _tm;
         }
-
         @Override
         public Void doInBackground() {
             int progress = 0;
