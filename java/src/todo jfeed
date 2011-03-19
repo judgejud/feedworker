@@ -4,16 +4,16 @@ IMPLEMENTARE
 -destinazione avanzata in mixed mode
 -fare caricamento xml sotto thread
 -ricerca sottotitoli itasa
--caricare da file la lista serie itasa se da remoto genera errore.
 
+caricare da file la lista serie itasa se da remoto genera errore.
 salvare in automatico l'ultima data di aggiornamento se myitasa down auto is true
 aggiungere versioning automatico all'applicazione
-calendario: implementare aggiornamento singolo
 javamail: avviso mail sub scaricato
 audio: avviso sub estratto
 aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
 introdurre set per i reminder in modo che non ci siano duplicati (treeset)?
 fare bottone test connect samba
+implementare import nomi serie myitasa x il calendario
 
 CORREZIONI:
 -mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.

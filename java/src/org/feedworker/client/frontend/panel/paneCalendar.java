@@ -102,6 +102,16 @@ public class paneCalendar extends paneAbstract{
                 jbImportCalendarMouseClick();
             }
         });
+        
+        JButton jbImportMyItasa = new JButton(" Importa da myItasa");
+        jbImportMyItasa.setToolTipText("Importa dai nomi serie di myItasa");
+        jbImportMyItasa.setBorder(BORDER);
+        jbImportMyItasa.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbImportMyItasaCalendarMouseClick();
+            }
+        });
 
         int x=0;
         jpAction.add(jbAddRow, gbcAction);
@@ -115,6 +125,8 @@ public class paneCalendar extends paneAbstract{
         jpAction.add(jbSingleRefresh, gbcAction);
         gbcAction.gridx = ++x;
         jpAction.add(jbImport, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbImportMyItasa, gbcAction);
     }
 
     private void jbAddRowMouseClicked() {
@@ -157,5 +169,10 @@ public class paneCalendar extends paneAbstract{
     private void jbImportCalendarMouseClick() {
         if (jtable.getRowCount()==0)
             proxy.importFromSubDest();
+    }
+    
+    private void jbImportMyItasaCalendarMouseClick() {
+        if (jtable.getRowCount()==0)
+            proxy.importFromMyItasa();
     }
 }

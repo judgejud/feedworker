@@ -51,7 +51,7 @@ public class Mediator {
     private final String PNG_DOWNLOAD = "download.png";
     private final String ENABLE_BUTTON = "enableButton";
     private final FileNameExtensionFilter fnfeZIP =
-            new FileNameExtensionFilter("ZIP file", "zip");
+                                new FileNameExtensionFilter("ZIP file", "zip");
     private static Mediator proxy = null;
     private Kernel core = Kernel.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
@@ -76,7 +76,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "337 by "
+                + "338 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -792,5 +792,9 @@ public class Mediator {
 
     public void refreshSingleCalendar(String value, int row) {
         core.refreshSingleCalendar(row, value);
+    }
+
+    public void importFromMyItasa() {
+        core.importTvFromMyItasa();
     }
 }
