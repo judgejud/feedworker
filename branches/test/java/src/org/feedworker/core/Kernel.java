@@ -31,18 +31,21 @@ import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.exception.ItasaException;
+import org.feedworker.exception.ManageException;
+import org.feedworker.object.ItasaUser;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
 import org.feedworker.util.ExtensionFilter;
-import org.feedworker.exception.ManageException;
 import org.feedworker.util.Samba;
+import org.feedworker.xml.Calendar;
 import org.feedworker.xml.Itasa;
+import org.feedworker.xml.Reminder;
+import org.feedworker.xml.RuleDestination;
 import org.feedworker.xml.TvRage;
 import org.feedworker.xml.XPathCalendar;
-import org.feedworker.xml.Calendar;
 
 import org.jfacility.Io;
 import org.jfacility.Util;
@@ -56,8 +59,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import org.feedworker.xml.Reminder;
-import org.feedworker.xml.RuleDestination;
+
 
 /**
  * Motore di Feedworker
@@ -106,6 +108,7 @@ public class Kernel implements PropertyChangeListener {
     private RefreshTask refreshTask;
     private TreeSet tsIdCalendar;
     private Itasa itasa;
+    private ItasaUser user;
 
     /**
      * Restituisce l'istanza corrente del kernel
@@ -975,7 +978,7 @@ public class Kernel implements PropertyChangeListener {
     public void importTvFromDestSub() {
         ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW,
                 mapRules.size());
-        importTask = new ImportTask();
+        importTask = new ImportTask(mapRules.keySet().iterator());
         importTask.addPropertyChangeListener(this);
         importTask.execute();
     }
@@ -997,13 +1000,14 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
         } else if (evtName.equalsIgnoreCase(className + "$RefreshTask")) {
+            System.out.println(evt.getPropertyName());
             if (evt.getPropertyName().equals("progress")){
                 ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_INCREMENT,
                         refreshTask.getProgress());
                 if (refreshTask.isDone())
                     fireCalendar();
             } else if (evt.getPropertyName().equals("state")){
-                if (refreshTask.isDone()) {
+                if (refreshTask.isDone() && refreshTask.getProgress()==0) {
                     ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_INCREMENT,
                         1);
                     fireCalendar();
@@ -1022,6 +1026,7 @@ public class Kernel implements PropertyChangeListener {
                 ManageListener.fireTableEvent(this,
                         (ArrayList<Object[]>) temp.get(1),
                         CALENDAR);
+                System.out.println("fireCalendar");
             }
         } catch (Exception e) {
             error.launch(e, this.getClass());
@@ -1144,19 +1149,21 @@ public class Kernel implements PropertyChangeListener {
         ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
     }
 
-    public void checkLoginItasa(String user, String pwd) {
-        Itasa i = new Itasa();
-        try {
-            i.login(user, pwd);
-            printOk("CheckLogin itasa: ok");
-        } catch (JDOMException ex) {
-            error.launch(ex, this.getClass());
-        } catch (IOException ex) {
-            error.launch(ex, this.getClass());
-        } catch (ItasaException ex) {
-            printAlert("CheckLogin itasa: " + ex.getMessage());
-        } catch (Exception ex) {
-            error.launch(ex, this.getClass());
+    public void checkLoginItasa(String username, String pwd) {
+        if (user==null){
+            try {
+                Itasa i = new Itasa();
+                user = i.login(username, pwd);
+                printOk("CheckLogin Itasa: ok");
+            } catch (JDOMException ex) {
+                error.launch(ex, this.getClass());
+            } catch (IOException ex) {
+                error.launch(ex, this.getClass());
+            } catch (ItasaException ex) {
+                printAlert("Login itasa: " + ex.getMessage());
+            } catch (Exception ex) {
+                error.launch(ex, this.getClass());
+            }
         }
     }
 
@@ -1180,44 +1187,87 @@ public class Kernel implements PropertyChangeListener {
         try {
             itasa.subtitleSearch(id, temp, null, -1);
         } catch (JDOMException ex) {
-            
+            error.launch(ex, getClass());
         } catch (IOException ex) {
             error.launch(ex, getClass());
         } catch (ItasaException ex) {
             printAlert(ex.getMessage());
         } catch (Exception ex) {
-            
+            error.launch(ex, getClass());
+        }
+    }
+
+    public void importTvFromMyItasa() {
+        checkLoginItasa(prop.getItasaUsername(), prop.getItasaPassword());
+        if (user!=null){
+            if (user.isMyitasa()){
+                ArrayList<String> myShows = null;
+                try {
+                    myShows = itasa.myItasaShowsName(user.getAuthcode());
+                } catch (JDOMException ex) {
+                    error.launch(ex, getClass());
+                } catch (IOException ex) {
+                    error.launch(ex, getClass());
+                } catch (ItasaException ex) {
+                    printAlert(ex.getMessage());
+                } catch (Exception ex) {
+                    error.launch(ex, getClass());
+                }
+                if (myShows!=null && myShows.size()>0){
+                    ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW,
+                        myShows.size());
+                    importTask = new ImportTask(myShows);
+                    importTask.addPropertyChangeListener(this);
+                    importTask.execute();
+                }
+            } else 
+                printAlert("Non hai abilitato l'uso di myItasa");
         }
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
+        private boolean myitasa;
+        private ArrayList<String> myShows; 
+        private Iterator<KeyRule> iterKey;
+        
+        public ImportTask(ArrayList<String> shows){
+            myShows = shows;
+            myitasa = true;
+        }
+        
+        public ImportTask(Iterator<KeyRule> key){
+            iterKey = key;
+            myitasa = false;
+        }
+        
         @Override
         public ArrayList<Object[]> doInBackground() {
             int progress = 0;
-            Iterator<KeyRule> iter = mapRules.keySet().iterator();
             ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
             TreeSet ts = new TreeSet();
             setProgress(progress);
             try {
                 TvRage t = new TvRage();
-                while (iter.hasNext() && !this.isCancelled()) {
-                    String name = iter.next().getName();
-                    ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(
-                            name, true, false);
-                    if (temp != null) {
-                        Object[] show = temp.get(0);
-                        if (!ts.contains(show[0])) {
-                            Object[] array = setArray(t, show, false);
-                            alObjs.add(array);
-                            ts.add(show[0]);
-                            xmlCalendar.addShowTV(array);
-                        }
+                if (myitasa){
+                    int count = 0;
+                    while (count<myShows.size() && !this.isCancelled()) {
+                        importShow(myShows.get(count), t, ts, alObjs);
+                        count++;
+                        setProgress(++progress);
                     }
-                    setProgress(++progress);
-                }
-                if (!this.isCancelled()) {
-                    tsIdCalendar = ts;
-                    xmlCalendar.write();
+                    if (!this.isCancelled()) {
+                        tsIdCalendar = ts;
+                        xmlCalendar.write();
+                    }
+                }else{
+                    while (iterKey.hasNext() && !this.isCancelled()) {
+                        importShow(iterKey.next().getName(), t, ts, alObjs);
+                        setProgress(++progress);
+                    }
+                    if (!this.isCancelled()) {
+                        tsIdCalendar = ts;
+                        xmlCalendar.write();
+                    }
                 }
             } catch (JDOMException ex) {
                 error.launch(ex, null);
@@ -1225,6 +1275,21 @@ public class Kernel implements PropertyChangeListener {
                 error.launch(ex, null);
             }
             return alObjs;
+        }
+        
+        private void importShow(String name, TvRage t, TreeSet ts, ArrayList<Object[]> al) 
+                                                throws JDOMException, IOException{
+            ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(
+                                                                name, true, false);
+            if (temp != null) {
+                Object[] show = temp.get(0);
+                if (!ts.contains(show[0])) {
+                    Object[] array = setArray(t, show, false);
+                    al.add(array);
+                    ts.add(show[0]);
+                    xmlCalendar.addShowTV(array);
+                }
+            }
         }
     }
 

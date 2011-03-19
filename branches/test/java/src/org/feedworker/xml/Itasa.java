@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import org.feedworker.core.Https;
-import org.feedworker.core.Https_1;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.object.ItasaUser;
 import org.feedworker.object.News;
@@ -27,7 +26,6 @@ public class Itasa extends AbstractQueryXML{
     private final String API_KEY = "apikey=436e566f3d09b217cf687fa5bad5effc";
     
     private final String OPERATOR_AND = "&";
-    private final String OPERATOR_LIKE = "like";//
     
     private final String PARAM_AUTHCODE = "authcode=";
     private final String PARAM_PAGE = "page=";
@@ -54,7 +52,6 @@ public class Itasa extends AbstractQueryXML{
     private final String TAG_NEWS_SUBMITDATE = "submit_date";
     private final String TAG_NEWS_THUMB = "thumb";
     private final String TAG_NEWS_EPISODES = "episodes";
-    
     //TAG SHOW
     private final String TAG_SHOW_PLOT = "plot";
     private final String TAG_SHOW_GENRES = "genres";
@@ -273,6 +270,22 @@ public class Itasa extends AbstractQueryXML{
             }
         } else 
             throw new ItasaException("MyItasa Show: "+ error);
+    }
+    
+    public ArrayList<String> myItasaShowsName(String authcode) 
+                                    throws JDOMException, IOException, Exception{
+        ArrayList params = new ArrayList();
+        params.add(PARAM_AUTHCODE + authcode);
+        connectHttps(composeUrl(URL_MYITASA_SHOWS, params));
+        checkStatus();
+        ArrayList<String> showsName = new ArrayList<String>();
+        if (isStatusSuccess()){
+            Iterator iter =  getDescendantsZero(2);
+            while (iter.hasNext())
+                showsName.add(((Element) iter.next()).getChild(TAG_SHOW_NAME).getText());
+        } else 
+            throw new ItasaException("MyItasa Show: "+ error);
+        return showsName;
     }
     
     public ArrayList<News> newsList(int page) throws JDOMException, IOException, Exception{
