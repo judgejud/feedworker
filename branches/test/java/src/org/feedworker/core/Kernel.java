@@ -60,7 +60,6 @@ import org.xml.sax.SAXException;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 
-
 /**
  * Motore di Feedworker
  * 
@@ -1033,13 +1032,25 @@ public class Kernel implements PropertyChangeListener {
         }
     }
     
-    public void refreshSingleCalendar(int key, String value) {
-        TreeMap<Long, String> array = new TreeMap<Long, String>();
-        array.put(Long.valueOf(key), value);
-        ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW, 1);
-        refreshTask = new RefreshTask(array);
-        refreshTask.addPropertyChangeListener(this);
-        refreshTask.execute();
+    public void refreshSingleCalendar(String id) {
+        Long temp = null;
+        try{
+            temp = XPathCalendar.queryRowId(id);
+        } catch (ParserConfigurationException ex) {
+            error.launch(ex, getClass());
+        } catch (SAXException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass());
+        } catch (XPathExpressionException ex) {
+            error.launch(ex, getClass());
+        }
+        if (temp!=null){
+            ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW, 1);
+            refreshTask = new RefreshTask(temp.intValue(), id);
+            refreshTask.addPropertyChangeListener(this);
+            refreshTask.execute();
+        }
     }
 
     public void refreshCalendar() {
@@ -1058,8 +1069,6 @@ public class Kernel implements PropertyChangeListener {
         if (array!=null && array.size() > 0) {
             ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW, 
                                                                 array.size());
-            //ArrayList al = new ArrayList();
-            //al.add(array.descendingKeySet().toArray(new Long[array.size()]));
             refreshTask = new RefreshTask(array);
             refreshTask.addPropertyChangeListener(this);
             refreshTask.execute();
@@ -1068,26 +1077,21 @@ public class Kernel implements PropertyChangeListener {
 
     public void searchDay(int temp) {
         String day = null;
-        if (temp == 0) {
+        if (temp == 0)
             day = Common.dateString(Common.actualDate());
-        } else if (temp == -1) {
+        else if (temp == -1)
             day = Common.dateString(Common.yesterdayDate());
-        } else if (temp == 1) {
+        else if (temp == 1)
             day = Common.dateString(Common.tomorrowDate());
-        }
         try {
             String result = XPathCalendar.queryDayEquals(day);
             if (result != null) {
                 String msg;
-                if (result.equalsIgnoreCase("")) {
-                    msg = "Non ci sono serial tv previsti per " + getDay(temp)
-                            + ".";
-                } else {
-                    msg = "Serial tv previsti per " + getDay(temp) + ": "
-                            + result;
-                }
-                ManageListener.fireTextPaneEvent(this, msg,
-                        TextPaneEvent.DAY_SERIAL, true);
+                if (result.equalsIgnoreCase(""))
+                    msg = "Non ci sono serial tv previsti per " + getDay(temp) + ".";
+                else
+                    msg = "Serial tv previsti per " + getDay(temp) + ": " + result;
+                ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.DAY_SERIAL, true);
             }
         } catch (ParserConfigurationException ex) {
             error.launch(ex, getClass());
@@ -1101,15 +1105,13 @@ public class Kernel implements PropertyChangeListener {
     }
 
     private String getDay(int temp) {
-        String day = null;
-        if (temp == 0) {
-            day = "oggi";
-        } else if (temp == 1) {
-            day = "domani";
-        } else if (temp == -1) {
-            day = "ieri";
-        }
-        return day;
+        if (temp == 0)
+            return "oggi";
+        else if (temp == 1)
+            return "domani";
+        else if (temp == -1)
+            return "ieri";
+        return null;
     }
 
     public void openFolder(String dir) {
@@ -1119,9 +1121,8 @@ public class Kernel implements PropertyChangeListener {
             } catch (IOException ex) {
                 error.launch(ex, this.getClass());
             }
-        } else {
+        } else
             printAlert("apertura di cartella samba non implementata");
-        }
     }
     
     public void stopImportRefreshCalendar() {
@@ -1295,31 +1296,48 @@ public class Kernel implements PropertyChangeListener {
 
     class RefreshTask extends SwingWorker<Void, Void> {
         private TreeMap<Long, String> tmRefresh;
-
+        private String id;
+        private int row;
+        private boolean all;
+        
         public RefreshTask(TreeMap<Long, String> _tm) {
             tmRefresh = _tm;
+            all = true;
         }
+        
+        public RefreshTask(int k, String v){
+            row = k;
+            id = v;
+            all = false;
+        }
+        
         @Override
         public Void doInBackground() {
             int progress = 0;
-            Iterator<Long> iter = tmRefresh.descendingKeySet().iterator();
-            ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
             TvRage t = new TvRage();
             setProgress(progress);
             Calendar xmlClone = xmlCalendar.clone();
             try {
-                while (iter.hasNext() && !this.isCancelled()) {
-                    Long index = iter.next();
-                    String id = tmRefresh.get(index);
-                    Object[] show = t.showInfo_byID(id);
-                    Object[] array = setArray(t, show, true);
-                    alObjs.add(array);
-                    xmlClone.removeShowTv(index.intValue() - 1);
+                if (all){
+                    Iterator<Long> iter = tmRefresh.descendingKeySet().iterator();
+                    while (iter.hasNext() && !this.isCancelled()) {
+                        Long index = iter.next();
+                        id = tmRefresh.get(index);
+                        Object[] array = setArray(t, t.showInfo_byID(id), true);
+                        xmlClone.removeShowTv(index.intValue() - 1);
+                        xmlClone.addShowTV(array);
+                        setProgress(++progress);
+                    } //end while
+                    if (!this.isCancelled())
+                        xmlCalendar.reverseDataCloning(xmlClone);
+                } else { // REFRESH SINGLE
+                    Object[] array = setArray(t, t.showInfo_byID(id), true);
+                    xmlClone.removeShowTv(row-1);
                     xmlClone.addShowTV(array);
                     setProgress(++progress);
+                    if (!this.isCancelled())
+                        xmlCalendar.reverseDataCloning(xmlClone);
                 }
-                if (!this.isCancelled())
-                    xmlCalendar.reverseDataCloning(xmlClone);
             } catch (JDOMException ex) {
                 error.launch(ex, null);
             } catch (IOException ex) {

@@ -138,7 +138,9 @@ public class paneCalendar extends paneAbstract{
     private void jbRemoveRowMouseClicked() {
         int row = jtable.getSelectedRow();
         if (row > -1){
+            System.out.println(row);
             row = jtable.convertRowIndexToModel(row);
+            System.out.println(row);
             proxy.removeSingleShowCalendar(row, jtable.getValueAt(row, 0));
             ((DefaultTableModel) jtable.getModel()).removeRow(row);
         }
@@ -159,10 +161,13 @@ public class paneCalendar extends paneAbstract{
     private void jbRefreshSingleMouseClick(){
         int row = jtable.getSelectedRow();
         if (row > -1){
-            row = jtable.convertRowIndexToModel(row);
-            String value = (String) jtable.getValueAt(row, 0);
+            System.out.println(row + " " + jtable.getValueAt(row, 1));
+            //int newrow = jtable.convertRowIndexToModel(row);
+            //System.out.println(newrow + " " + jtable.getValueAt(newrow, 1));
+            Object value = jtable.getValueAt(row, 0);
+            System.out.println(value);
             jtable.removeAllRows();
-            proxy.refreshSingleCalendar(value,row);
+            proxy.refreshSingleCalendar(row, value);
         }
     }
     

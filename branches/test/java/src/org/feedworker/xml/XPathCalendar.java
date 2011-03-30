@@ -15,6 +15,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.feedworker.util.Common;
+
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -82,14 +83,20 @@ public class XPathCalendar {
         return array;
     }
     
+    public static Long queryRowId(String id)throws SAXException, 
+            ParserConfigurationException, IOException, XPathExpressionException{
+        String query = "count(//SHOW[ID_TVRAGE='" + id + "']/preceding::ID_TVRAGE)+1";
+        return initializeXPathNumber(query);
+    }
+    
     private static void addToArray(NodeList nodes) throws SAXException, 
             ParserConfigurationException, IOException, XPathExpressionException{
-        String temp, query1;
+        String temp;
         for (int i=0; i<nodes.getLength(); i++){
             temp = nodes.item(i).getNodeValue();
-            query1 = "count(//SHOW[ID_TVRAGE='" + temp + 
-                            "']/preceding::ID_TVRAGE)+1";
-            array.put(initializeXPathNumber(query1), temp);
+            //query = "count(//SHOW[ID_TVRAGE='" + temp + "']/preceding::ID_TVRAGE)+1";
+            //array.put(initializeXPathNumber(query), temp);
+            array.put(queryRowId(temp), temp);
         }
     }
     
