@@ -790,8 +790,8 @@ public class Mediator {
         return PNG_DOWNLOAD;
     }
 
-    public void refreshSingleCalendar(String value, int row) {
-        core.refreshSingleCalendar(row, value);
+    public void refreshSingleCalendar(int row, Object value) {
+        core.refreshSingleCalendar(value.toString());
     }
 
     public void importFromMyItasa() {
