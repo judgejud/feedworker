@@ -33,6 +33,7 @@ public class paneSearchSubItasa extends paneAbstract{
         super("Search sub Itasa");
         initializePanel();
         initializeButtons();
+        proxy.setTableListener(jtable);
     }
     
     public static paneSearchSubItasa getPanel(){
@@ -44,7 +45,7 @@ public class paneSearchSubItasa extends paneAbstract{
     @Override
     void initializePanel() {
         //TODO: cambiare null col nome
-        jtable = new tableResultSearchSub(null);
+        jtable = new tableResultSearchSub(proxy.getNameTableSearchSub());
         JScrollPane jsp = new JScrollPane(jtable);
         JPanel jpTemp = new JPanel(new BorderLayout());
         jpTemp.add(jsp, BorderLayout.CENTER);
@@ -142,6 +143,7 @@ public class paneSearchSubItasa extends paneAbstract{
     
     private void jbSearchMouseClicked(){
         if (jcbShow.getSelectedItem()!=null){
+            jtable.removeAllRows();
             proxy.searchSubItasa(jcbShow.getSelectedItem(), jcbVersion.getSelectedItem(), 
                                     jcbComplete.isSelected(), jtfSeason.getText(),
                                     jtfEpisode.getText());
@@ -150,6 +152,6 @@ public class paneSearchSubItasa extends paneAbstract{
     }
     
     private void jbDownloadMouseClicked(){
-        
+        //TODO
     }
 }

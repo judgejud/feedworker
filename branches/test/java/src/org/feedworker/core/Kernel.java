@@ -59,6 +59,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.feedworker.object.Subtitle;
 
 /**
  * Motore di Feedworker
@@ -78,6 +79,7 @@ public class Kernel implements PropertyChangeListener {
     public final String SUBTITLE_DEST = "SubtitleDest";
     public final String CALENDAR = "Calendar";
     public final String REMINDER = "Reminder";
+    public final String TABLE_SEARCH_SUB = "SearchSub";
     public final String OPERATION_FOCUS = "Focus";
     public final String OPERATION_PROGRESS_SHOW = "ProgressShow";
     public final String OPERATION_PROGRESS_INCREMENT = "ProgressIncrement";
@@ -999,7 +1001,6 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
         } else if (evtName.equalsIgnoreCase(className + "$RefreshTask")) {
-            System.out.println(evt.getPropertyName());
             if (evt.getPropertyName().equals("progress")){
                 ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_INCREMENT,
                         refreshTask.getProgress());
@@ -1021,12 +1022,9 @@ public class Kernel implements PropertyChangeListener {
             xmlCalendar = new Calendar(FILE_CALENDAR, true);
             ArrayList temp = xmlCalendar.readingDocument();
             tsIdCalendar = (TreeSet) temp.get(0);
-            if (tsIdCalendar.size() > 0) {
+            if (tsIdCalendar.size() > 0)
                 ManageListener.fireTableEvent(this,
-                        (ArrayList<Object[]>) temp.get(1),
-                        CALENDAR);
-                System.out.println("fireCalendar");
-            }
+                            (ArrayList<Object[]>) temp.get(1), CALENDAR);
         } catch (Exception e) {
             error.launch(e, this.getClass());
         }
@@ -1182,11 +1180,16 @@ public class Kernel implements PropertyChangeListener {
                                                 String season, String episode) {
         String id = mapShowItasa.get(show);
         System.out.println(version);
-        String temp = null;
+        String _version = null;
+        String _complete = null;
         if (!version.equals(new String("*")))
-            temp = version.toString();
+            _version = version.toString();
+        if (complete)
+            _complete = "Completa";
         try {
-            itasa.subtitleSearch(id, temp, null, -1);
+            ArrayList<Subtitle> array = itasa.subtitleSearch(id, _version, _complete, -1);
+            if (array.size()>0)
+                ManageListener.fireTableEvent(this, TABLE_SEARCH_SUB, array);
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {

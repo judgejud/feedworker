@@ -14,6 +14,7 @@ import org.feedworker.client.frontend.events.TableEvent;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
+import org.feedworker.object.Subtitle;
 
 /**
  *
@@ -55,6 +56,16 @@ public class ManageListener {
     public static synchronized void fireTableEvent(Object from, ArrayList<Object[]> alObj, 
             String dest) {
         TableEvent event = new TableEvent(from, alObj, dest);
+        Iterator listeners = listenerTable.iterator();
+        while (listeners.hasNext()) {
+            TableEventListener myel = (TableEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
+    public static synchronized void fireTableEvent(Object from, String dest, 
+                                                        ArrayList<Subtitle> alObj) {
+        TableEvent event = new TableEvent(from, dest, alObj);
         Iterator listeners = listenerTable.iterator();
         while (listeners.hasNext()) {
             TableEventListener myel = (TableEventListener) listeners.next();

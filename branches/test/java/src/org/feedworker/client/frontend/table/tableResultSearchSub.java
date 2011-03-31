@@ -28,11 +28,14 @@ public class tableResultSearchSub extends tableAbstract{
         setModel(dtm);
         lockColumns();
         Swing.tableSorter(this);
+        super.setMouseClickBoolean(3, 0);
     }
     
     @Override
     protected void lockColumns(){
-        
+        Swing.setTableDimensionLockColumn(this, 0, 100);
+        Swing.setTableDimensionLockColumn(this, 2, 100);
+        Swing.setTableDimensionLockColumn(this, 3, 100);
     }
 
     @Override
@@ -40,9 +43,11 @@ public class tableResultSearchSub extends tableAbstract{
         if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
             DefaultTableModel dtm = (DefaultTableModel) getModel();
             dtm.setRowCount(0);
-            int size = evt.getArray().size();
-            for (int i = 0; i < size; i++)
-                dtm.insertRow(i, evt.getArray().get(i));            
+            int size = evt.getArraySubtitle().size();
+            for (int i = 0; i < size; i++){
+                dtm.insertRow(i, evt.getArraySubtitle().get(i).toArrayIdNameVersion());
+                dtm.setValueAt(false, i, 3);
+            }
         }
     }
 }

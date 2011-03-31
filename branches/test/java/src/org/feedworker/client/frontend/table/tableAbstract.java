@@ -1,6 +1,8 @@
 package org.feedworker.client.frontend.table;
 
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -32,5 +34,20 @@ abstract class tableAbstract extends JTable implements TableEventListener {
 
     public void removeAllRows() {
         ((DefaultTableModel) getModel()).setRowCount(0);
+    }
+    
+    protected void setMouseClickBoolean(final int col, final int min_col){
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                if (getSelectedColumn() >= min_col) {
+                    int row = getSelectedRow();
+                    if (Boolean.parseBoolean(getValueAt(row, col).toString()) == true)
+                        setValueAt(false, row, col);
+                    else
+                        setValueAt(true, row, col);
+                }
+            }
+        });
     }
 }

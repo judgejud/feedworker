@@ -138,6 +138,9 @@ public class paneSettingEnhanced extends paneSetting {
         task.add(jlSpwd);
         
         task.add(jpfSamba);
+        
+        task.add(jbCheckSamba);
+        
         return task;
     }
 

@@ -161,13 +161,9 @@ public class paneCalendar extends paneAbstract{
     private void jbRefreshSingleMouseClick(){
         int row = jtable.getSelectedRow();
         if (row > -1){
-            System.out.println(row + " " + jtable.getValueAt(row, 1));
-            //int newrow = jtable.convertRowIndexToModel(row);
-            //System.out.println(newrow + " " + jtable.getValueAt(newrow, 1));
             Object value = jtable.getValueAt(row, 0);
-            System.out.println(value);
             jtable.removeAllRows();
-            proxy.refreshSingleCalendar(row, value);
+            proxy.refreshSingleCalendar(value);
         }
     }
     
