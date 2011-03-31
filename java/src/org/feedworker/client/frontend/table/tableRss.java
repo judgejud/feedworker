@@ -46,6 +46,8 @@ public class tableRss extends tableAbstract {
         };
         setModel(dtm);
         lockColumns();
+        super.setMouseClickBoolean(3, 1);
+        /*
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -57,7 +59,7 @@ public class tableRss extends tableAbstract {
                         setValueAt(true, row, 3);
                 }
             }
-        });
+        }); */
     }
 
     @Override

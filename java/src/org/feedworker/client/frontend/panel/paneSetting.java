@@ -40,7 +40,7 @@ public class paneSetting extends paneAbstract {
             jcbDownloadMyitasaStartup, jcbMail, jcbReminder, jcbPaneSubDest, jcbPaneLog, 
             jcbPaneSetting, jcbPaneSearchSubItasa, jcbPaneReminder;
     private JButton jbSaveSettings, jbAnnullaSettings;
-    protected JButton jbDestSub, jbDestTorrent, jbCheckItasa;
+    protected JButton jbDestSub, jbDestTorrent, jbCheckItasa, jbCheckSamba;
     protected JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf,
             jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp;
@@ -382,6 +382,14 @@ public class paneSetting extends paneAbstract {
         jtfSambaDir = new JTextField(20);
         jtfSambaUser = new JTextField(20);
         jpfSamba = new JPasswordField(20);
+        jbCheckSamba = new JButton(" Test connessione Samba ");
+        jbCheckSamba.setBorder(BORDER);
+        jbCheckSamba.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbCheckSambaMouseClicked();
+            }
+        });
         //ITASA
         jtfRssItasa = new JTextField(25);
         jtfRssMyItasa = new JTextField(25);
@@ -598,6 +606,10 @@ public class paneSetting extends paneAbstract {
 
     public String getDataAggiornamento() {
         return jlDataAggiornamento.getText();
+    }
+    
+    private void jbCheckSambaMouseClicked(){
+        //TODO
     }
 
     private void saveSettings() {
