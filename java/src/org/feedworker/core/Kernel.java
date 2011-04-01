@@ -1181,13 +1181,24 @@ public class Kernel implements PropertyChangeListener {
         String id = mapShowItasa.get(show);
         System.out.println(version);
         String _version = null;
-        String _complete = null;
+        String query = null;
         if (!version.equals(new String("*")))
             _version = version.toString();
-        if (complete)
-            _complete = "Completa";
+        if (complete){
+            if (season!=null)
+                query = season + " Completa";
+            else 
+                query = "Completa";
+        } else {
+            if (season!=null){
+                query = season + "x";
+                if (episode!=null)
+                    query += episode;
+            } else if (episode!=null)
+                query = "x" + episode;
+        }
         try {
-            ArrayList<Subtitle> array = itasa.subtitleSearch(id, _version, _complete, -1);
+            ArrayList<Subtitle> array = itasa.subtitleSearch(id, _version, query, -1);
             if (array.size()>0)
                 ManageListener.fireTableEvent(this, TABLE_SEARCH_SUB, array);
         } catch (JDOMException ex) {
