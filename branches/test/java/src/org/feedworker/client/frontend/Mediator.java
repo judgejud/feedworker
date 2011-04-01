@@ -780,11 +780,22 @@ public class Mediator {
     public void searchSubItasa(Object show, Object version, boolean complete, 
                                 String season, String episode) {
         try{
-            if (Lang.verifyTextNotNull(season))
+            boolean check = false;
+            if (Lang.verifyTextNotNull(season)){
                 Lang.stringToInt(season);
-            if (Lang.verifyTextNotNull(episode))
+                check = true;
+            }
+            if (Lang.verifyTextNotNull(episode)){
                 Lang.stringToInt(episode);
-            core.searchSubItasa(show, version, complete, season, episode);
+                check = true;
+            }
+            if (!check && complete)
+                check = true;
+            if (check)
+                core.searchSubItasa(show, version, complete, season, episode);
+            else 
+                printAlert("Selezionare almeno un elemento di ricerca tra stagione completa,"
+                        + " numero stagione e/o numero episodio");
         } catch (NumberFormatException e){
             printAlert("Immettere un numero alla stagione e/o episodio invece di una stringa");
         }

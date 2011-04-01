@@ -83,6 +83,7 @@ public class paneSearchSubItasa extends paneAbstract{
             }
         });
         JButton jbDownload = new JButton(" Download ");
+        jbDownload.setEnabled(false);
         jbDownload.setBorder(BORDER);
         jbDownload.addMouseListener(new MouseAdapter() {
             @Override
@@ -95,7 +96,7 @@ public class paneSearchSubItasa extends paneAbstract{
         jbPulisci.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.cleanSelect(jtable, -1);
+                proxy.cleanSelect(jtable, 3);
             }
         });
         

@@ -227,10 +227,10 @@ public class Itasa extends AbstractQueryXML{
                     subs.add(sub);
                 }
             } else
-                throw new ItasaException("searchSubtitleComplete: "
+                throw new ItasaException("subtitleSearch: "
                         + "non ci sono sottotitoli che rispondono ai criteri di ricerca");
         } else
-            throw new ItasaException("searchSubtitleComplete: "+ error);
+            throw new ItasaException("subtitleSearch: "+ error);
         return subs;
     }
     
