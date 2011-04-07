@@ -3,8 +3,12 @@ package org.feedworker.xml;
 //IMPORT JAVA
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+
+import org.feedworker.util.Common;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -31,7 +35,11 @@ public class Reminder extends AbstractXML{
                 Element reminder = (Element) iter.next();
                 Object[] obj = new Object[3];
                 int i=-1;
-                obj[++i] = reminder.getChild(TAG_REMINDER_DATE).getText();
+                Date d = null;
+                try {
+                    d = Common.stringDate(reminder.getChild(TAG_REMINDER_DATE).getText());
+                } catch (ParseException ex) {}
+                obj[++i] = d;
                 obj[++i] = reminder.getChild(TAG_REMINDER_SUBTITLE).getText();
                 obj[++i] = false;
                 al.add(obj);
@@ -44,7 +52,7 @@ public class Reminder extends AbstractXML{
         Element reminder = new Element(TAG_REMINDER_ROOT);
         int i=-1;
         Element date = new Element(TAG_REMINDER_DATE);
-        date.setText(array[++i].toString());
+        date.setText(Common.dateString((Date)array[++i]));
         reminder.addContent(date);
         
         Element sub = new Element(TAG_REMINDER_SUBTITLE);
