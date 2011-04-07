@@ -3,6 +3,7 @@ package org.feedworker.client.frontend.table;
 //IMPORT JAVA
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -24,7 +25,7 @@ public class tableReminder extends tableAbstract {
         super(name);
         
         DefaultTableModel dtm = new DefaultTableModel(null, columnNames) {
-            Class[] types = new Class[]{String.class, String.class, Boolean.class};
+            Class[] types = new Class[]{Date.class, String.class, Boolean.class};
             @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
@@ -65,7 +66,7 @@ public class tableReminder extends tableAbstract {
     
     @Override
     protected void lockColumns(){
-        Swing.setTableDimensionLockColumn(this, 0, 110);
+        Swing.setTableDimensionLockColumn(this, 0, 70);
         Swing.setTableDimensionLockColumn(this, 2, 50);
     }
 }

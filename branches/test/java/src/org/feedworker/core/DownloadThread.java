@@ -190,7 +190,7 @@ public class DownloadThread implements Runnable {
                         Io.downloadSingle(entity.getContent(), f);
                         alFile.addAll(extract(f));
                         if (prop.isReminderOption())
-                            alReminder.add(new Object[]{Common.actualTime(), 
+                            alReminder.add(new Object[]{Common.actualDate(), 
                                 f.getName().split(".sub.")[0].replaceAll("\\.", " "), 
                                         false});
                     } else

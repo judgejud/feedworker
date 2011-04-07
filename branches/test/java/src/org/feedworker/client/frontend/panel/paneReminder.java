@@ -57,6 +57,19 @@ public class paneReminder extends paneAbstract{
             }
         });
         jpAction.add(jbRemoveRow, gbcAction);
+        
+        JButton jbClean = new JButton(" Pulisci ");
+        jbClean.setToolTipText("Pulisce le righe selezionate");
+        jbClean.setBorder(BORDER);
+        jbClean.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                proxy.cleanSelect(jtable, 2);
+            }
+        });
+        
+        gbcAction.gridx = 1;
+        jpAction.add(jbClean, gbcAction);
     }
     
     private void jbRemoveRowMouseClicked() {
