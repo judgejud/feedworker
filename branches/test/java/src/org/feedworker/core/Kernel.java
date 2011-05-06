@@ -467,20 +467,16 @@ public class Kernel implements PropertyChangeListener {
         timer = new Timer();
         try {
             timer.scheduleAtFixedRate(new TimerTask()  {
-
                 @Override
                 public void run() {
                     boolean icontray = false;
                     prop.setLastDateTimeRefresh(Common.actualTime());
-                    if (runItasa(false)) {
+                    if (runItasa(false))
                         icontray = true;
-                    }
-                    if (runSubsfactory(false)) {
+                    if (runSubsfactory(false))
                         icontray = true;
-                    }
-                    if (runTorrent(false)) {
+                    if (runTorrent(false))
                         icontray = true;
-                    }
                     if ((icontray) && (prop.isEnabledAdvisorAudioRss())) {
                         try {
                             AudioPlay.playFeedWav();
@@ -605,15 +601,14 @@ public class Kernel implements PropertyChangeListener {
         return status;
     }
 
-    /**
-     * Interrompe il timer attuale e ne fa partire uno nuovo col nuovo
-     * intervallo
+    /**Interrompe il timer attuale e ne fa partire uno nuovo col nuovo intervallo
      */
     public void stopAndRestartTimer() {
-        timer.cancel();
-        timer.purge();
-        int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
-        runTimer(delay);
+        if (timer!=null){
+            timer.cancel();
+            timer.purge();
+        }
+        runTimer(Lang.stringToInt(prop.getRefreshInterval()) * 60000);
     }
 
     /**

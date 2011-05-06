@@ -812,4 +812,8 @@ public class Mediator {
     public void importFromMyItasa() {
         core.importTvFromMyItasa();
     }
+
+    public void undoLastRemoveReminder() {
+        
+    }
 }

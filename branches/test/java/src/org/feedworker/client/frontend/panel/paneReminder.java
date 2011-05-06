@@ -56,7 +56,6 @@ public class paneReminder extends paneAbstract{
                 jbRemoveRowMouseClicked();
             }
         });
-        jpAction.add(jbRemoveRow, gbcAction);
         
         JButton jbClean = new JButton(" Pulisci ");
         jbClean.setToolTipText("Pulisce le righe selezionate");
@@ -68,8 +67,21 @@ public class paneReminder extends paneAbstract{
             }
         });
         
+        JButton jbUndo = new JButton(" Annulla ");
+        jbUndo.setToolTipText("Annulla ultima rimozione");
+        jbUndo.setBorder(BORDER);
+        jbUndo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                proxy.undoLastRemoveReminder();
+            }
+        });
+        
+        jpAction.add(jbRemoveRow, gbcAction);
         gbcAction.gridx = 1;
         jpAction.add(jbClean, gbcAction);
+        gbcAction.gridx = 2;
+        jpAction.add(jbUndo, gbcAction);
     }
     
     private void jbRemoveRowMouseClicked() {
@@ -80,10 +92,15 @@ public class paneReminder extends paneAbstract{
                 if (Boolean.parseBoolean(jtable.getValueAt(i, 2).toString())){
                     int row = jtable.convertRowIndexToModel(i);
                     numbers.add(row);
+                    
                     ((DefaultTableModel) jtable.getModel()).removeRow(row);
                 }
             }
             proxy.removeReminders(numbers);
         }
+    }
+    
+    private void jbUndoMouseClicked(){
+        
     }
 }
