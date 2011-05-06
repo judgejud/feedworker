@@ -433,7 +433,6 @@ public class jfMain extends JFrame implements WindowListener,
     public void objReceived(JFrameEventIconDate evt) {
         if ((evt.isIcontray()) && (!this.isVisible()))
             systemTray.notifyIncomingFeed();
-        
         if (evt.getDate() != null)
             jpSettings.setDataAggiornamento(evt.getDate());
     }
