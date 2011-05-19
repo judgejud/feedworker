@@ -33,8 +33,8 @@ public class EnhancedSystemTray {
     public void showSystemTray() {
         try {
             SystemTray tray = SystemTray.getSystemTray();
+            trayIcon.setImage(iconRss);
             tray.add(trayIcon);
-            System.out.println("tray added");
         } catch (AWTException e) {
             proxy.printError(e);
         }

@@ -67,7 +67,7 @@ public class XPathCalendar {
         String day8 = Common.dateStringAmerican(Common.afterDayDate(8));
         try{
             day = Common.stringToAmerican(day);
-        } catch (ParseException e){}
+        } catch (ParseException e){e.printStackTrace();}
         array  = new TreeMap<Long, String>();
         //data > nextdate
         String query = "//SHOW[translate('" + day + "', '-', '') > "
@@ -94,8 +94,6 @@ public class XPathCalendar {
         String temp;
         for (int i=0; i<nodes.getLength(); i++){
             temp = nodes.item(i).getNodeValue();
-            //query = "count(//SHOW[ID_TVRAGE='" + temp + "']/preceding::ID_TVRAGE)+1";
-            //array.put(initializeXPathNumber(query), temp);
             array.put(queryRowId(temp), temp);
         }
     }
