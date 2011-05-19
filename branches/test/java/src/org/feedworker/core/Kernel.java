@@ -25,8 +25,6 @@ import javax.swing.SwingWorker;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
-import jcifs.smb.SmbException;
-
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.TextPaneEvent;
@@ -35,6 +33,7 @@ import org.feedworker.exception.ManageException;
 import org.feedworker.object.ItasaUser;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
+import org.feedworker.object.Subtitle;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
@@ -54,15 +53,15 @@ import org.jfacility.java.lang.SystemFileManager;
 
 import org.opensanskrit.exception.UnableRestartApplicationException;
 
+import jcifs.smb.SmbException;
+
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import org.feedworker.object.Subtitle;
 
-/**
- * Motore di Feedworker
+/**Motore di Feedworker
  * 
  * @author luca
  */
@@ -1333,6 +1332,7 @@ public class Kernel implements PropertyChangeListener {
                         Long index = iter.next();
                         id = tmRefresh.get(index);
                         Object[] array = setArray(t, t.showInfo_byID(id), true);
+                        System.out.println(id + " " + array[1]);
                         xmlClone.removeShowTv(index.intValue() - 1);
                         xmlClone.addShowTV(array);
                         setProgress(++progress);
