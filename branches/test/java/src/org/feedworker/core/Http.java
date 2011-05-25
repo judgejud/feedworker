@@ -29,8 +29,7 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-/**
- * Gestisce le interazioni http lato client (metodi post e get)
+/**Gestisce le interazioni http lato client (metodi post e get)
  * 
  * @author luca judge
  */
@@ -102,8 +101,7 @@ class Http {
         int temp = 0;
         while (lenght == -1) {
             ++temp;
-            if (entity != null)
-                EntityUtils.consume(entity);
+            consumeEntity();
             client.setCookieStore(cookies);
             get = new HttpGet(link);
             response = client.execute(get);

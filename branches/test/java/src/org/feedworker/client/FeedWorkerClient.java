@@ -61,9 +61,9 @@ public class FeedWorkerClient {
                     "E' necessario disporre di JavaVendor della Sun e non altre come openJDK",
                     feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
             feedWorker.shutdown();
-        } else if (!jvm.isOrLater(15)) {
+        } else if (!jvm.isOrLater(16)) {
             JOptionPane.showMessageDialog(null,
-                    "E' necessario disporre di una versione della JVM >= 1.5",
+                    "E' necessario disporre di una versione della JVM >= 1.6",
                     feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
             feedWorker.shutdown();
         } else {
@@ -93,8 +93,7 @@ public class FeedWorkerClient {
 
                 EventQueue.invokeLater(new Runnable() {
                     @Override
-                    public void run() {
-                        
+                    public void run() {                        
                         splash.updateStartupState("Loading GUI ...");
                         jfMain jframe = new jfMain();
                         splash.updateStartupState("Loading xml ...");
