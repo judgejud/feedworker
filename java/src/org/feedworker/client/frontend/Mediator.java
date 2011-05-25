@@ -48,8 +48,8 @@ import com.sun.syndication.io.FeedException;
 public class Mediator {
 
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
-    private final String PNG_DOWNLOAD = "download.png";
     private final String ENABLE_BUTTON = "enableButton";
+    //TODO: 1.6 only
     private final FileNameExtensionFilter fnfeZIP =
                                 new FileNameExtensionFilter("ZIP file", "zip");
     private static Mediator proxy = null;
@@ -76,7 +76,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "342 by "
+                + "345 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -728,9 +728,8 @@ public class Mediator {
     void invokeBackup(Component parent) {
         String name = Swing.getFile(parent, "Creare il file zip per il backup",
                 fnfeZIP, new File(SystemProperty.getUserDir() + File.separator));
-        if (name != null) {
+        if (name != null)
             core.backup(name);
-        }
     }
 
     public void searchTV(String tv) {
@@ -799,10 +798,6 @@ public class Mediator {
         } catch (NumberFormatException e){
             printAlert("Immettere un numero alla stagione e/o episodio invece di una stringa");
         }
-    }
-
-    public String getPNG_DOWNLOAD() {
-        return PNG_DOWNLOAD;
     }
 
     public void refreshSingleCalendar(Object value) {

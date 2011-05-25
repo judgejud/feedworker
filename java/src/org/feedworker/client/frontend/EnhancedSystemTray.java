@@ -34,6 +34,7 @@ public class EnhancedSystemTray {
         try {
             SystemTray tray = SystemTray.getSystemTray();
             trayIcon.setImage(iconRss);
+            trayIcon.setToolTip(" FeedWorker ");
             tray.add(trayIcon);
         } catch (AWTException e) {
             proxy.printError(e);

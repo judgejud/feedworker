@@ -123,18 +123,17 @@ public class Kernel implements PropertyChangeListener {
     
     private Kernel(){
         itasa = new Itasa();
-        while (mapShowItasa==null){
-            try {
-                mapShowItasa = itasa.showList();
-                //TODO: se itasa = errore, caricare da file
-            } catch (JDOMException ex) {
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } catch (ItasaException ex) {
-                ex.printStackTrace();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        try {
+            mapShowItasa = itasa.showList();
+            //TODO: se itasa = errore, caricare da file
+        } catch (JDOMException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (ItasaException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
     
