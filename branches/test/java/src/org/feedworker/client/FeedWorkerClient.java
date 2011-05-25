@@ -41,83 +41,85 @@ public class FeedWorkerClient {
         final SplashableWindow splash;
         final Image splashImage = Common.getResourceImage("SplashImage.png");
         JVM jvm = new JVM();
-
-        splash = SplashScreen.getInstance(iteration, splashImage);
-        splash.start();
-        splash.updateStartupState("Inizializzazione Feedworker");
-        ResourceLocator.setWorkspace();
         
-        feedWorker = Application.getInstance(true);
-        feedWorkerSettings = ApplicationSettings.getIstance();
-
-        feedWorker.setName("FeedWorker");
-        feedWorker.setAuthor("Luka Judge");
-        feedWorker.setIcon(Common.getResourceIcon(ICON_FILENAME));
-        feedWorker.enableSingleInstance(true);
-        
-        splash.updateStartupState("Checking JVM ...");
-        if (!JVM.isVendorSun()){
+        if (!JVM.isRuntimeJava()){
             JOptionPane.showMessageDialog(null,
-                    "E' necessario disporre di JavaVendor della Sun e non altre come openJDK",
-                    feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
-            feedWorker.shutdown();
-        } else if (!jvm.isOrLater(16)) {
-            JOptionPane.showMessageDialog(null,
-                    "E' necessario disporre di una versione della JVM >= 1.6",
-                    feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
-            feedWorker.shutdown();
+                    "E' necessario disporre di Java Sun e non altre come openJDK",
+                    "FeedWorker", JOptionPane.ERROR_MESSAGE);
+            Application.getInstance(true).shutdown();
         } else {
-            try {
-                splash.updateStartupState("Finding other FeedWorker instance ...");
-                feedWorker.start();
-                splash.updateStartupState("Preparing Kernel instance ...");
-                K = Kernel.getIstance();
-                splash.updateStartupState("Setting Look & Feel ...");
-                try {
-                    feedWorker.getIstanceLAF().addJavaLAF();        	
-                    feedWorker.getIstanceLAF().addJTattooLAF();
-                    feedWorker.getIstanceLAF().addSyntheticaStandardLAF();
-                    feedWorker.getIstanceLAF().addSyntheticaFreeLAF();
-                    feedWorker.getIstanceLAF().addSyntheticaNotFreeLAF();
-                    feedWorker.getIstanceLAF().setLookAndFeel(
-                                    feedWorkerSettings.getApplicationLookAndFeel());
-                } catch (NotAvailableLookAndFeelException e) {
-                    System.out.println("LAF default");
-                    feedWorker.getIstanceLAF().setLookAndFeel();
-                }
-                splash.updateStartupState("Loading Application settings ...");
-                ApplicationSettings.getIstance();
-                splash.updateStartupState("Preparing Application logging ...");
-                Logging.getIstance();
-                splash.updateStartupState("Running ...");
+            splash = SplashScreen.getInstance(iteration, splashImage);
+            splash.start();
+            splash.updateStartupState("Inizializzazione Feedworker");
+            ResourceLocator.setWorkspace();
 
-                EventQueue.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {                        
-                        splash.updateStartupState("Loading GUI ...");
-                        jfMain jframe = new jfMain();
-                        splash.updateStartupState("Loading xml ...");
-                        K.loadXml();
-                        splash.updateStartupState("Initializing RSS...");
-                        K.runRss();
-                        K.searchDay(0);
-                        splash.close();
-                        if (!ApplicationSettings.getIstance().isEnabledIconizedRun())
-                            jframe.setVisible(true);
-                        else {
-                            try {
-                                jframe.initializeSystemTray();
-                            } catch (URISyntaxException ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }//end run
-                }); //end runnable EventQueue.invokeLater
-            } catch (AlreadyStartedApplicationException e) {
+            feedWorker = Application.getInstance(true);
+            feedWorkerSettings = ApplicationSettings.getIstance();
+
+            feedWorker.setName("FeedWorker");
+            feedWorker.setAuthor("Luka Judge");
+            feedWorker.setIcon(Common.getResourceIcon(ICON_FILENAME));
+            feedWorker.enableSingleInstance(true);
+
+            splash.updateStartupState("Checking JVM ...");
+            if (!jvm.isOrLater(16)) {
                 JOptionPane.showMessageDialog(null,
-                        "C'è già la stessa applicazione avviata.",
+                        "E' necessario disporre di una versione della JVM >= 1.6",
                         feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
                 feedWorker.shutdown();
+            } else {
+                try {
+                    splash.updateStartupState("Finding other FeedWorker instance ...");
+                    feedWorker.start();
+                    splash.updateStartupState("Preparing Kernel instance ...");
+                    K = Kernel.getIstance();
+                    splash.updateStartupState("Setting Look & Feel ...");
+                    try {
+                        feedWorker.getIstanceLAF().addJavaLAF();        	
+                        feedWorker.getIstanceLAF().addJTattooLAF();
+                        feedWorker.getIstanceLAF().addSyntheticaStandardLAF();
+                        feedWorker.getIstanceLAF().addSyntheticaFreeLAF();
+                        feedWorker.getIstanceLAF().addSyntheticaNotFreeLAF();
+                        feedWorker.getIstanceLAF().setLookAndFeel(
+                                        feedWorkerSettings.getApplicationLookAndFeel());
+                    } catch (NotAvailableLookAndFeelException e) {
+                        System.out.println("LAF default");
+                        feedWorker.getIstanceLAF().setLookAndFeel();
+                    }
+                    splash.updateStartupState("Loading Application settings ...");
+                    ApplicationSettings.getIstance();
+                    splash.updateStartupState("Preparing Application logging ...");
+                    Logging.getIstance();
+                    splash.updateStartupState("Running ...");
+
+                    EventQueue.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {                        
+                            splash.updateStartupState("Loading GUI ...");
+                            jfMain jframe = new jfMain();
+                            splash.updateStartupState("Loading xml ...");
+                            K.loadXml();
+                            splash.updateStartupState("Initializing RSS...");
+                            K.runRss();
+                            K.searchDay(0);
+                            splash.close();
+                            if (!ApplicationSettings.getIstance().isEnabledIconizedRun())
+                                jframe.setVisible(true);
+                            else {
+                                try {
+                                    jframe.initializeSystemTray();
+                                } catch (URISyntaxException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        }//end run
+                    }); //end runnable EventQueue.invokeLater
+                } catch (AlreadyStartedApplicationException e) {
+                    JOptionPane.showMessageDialog(null,
+                            "C'è già la stessa applicazione avviata.",
+                            feedWorker.getName(), JOptionPane.ERROR_MESSAGE);
+                    feedWorker.shutdown();
+                }
             }
         }
     }
