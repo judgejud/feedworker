@@ -16,6 +16,7 @@ import org.feedworker.object.Subtitle;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
 
 /**
@@ -137,19 +138,23 @@ public class Itasa extends AbstractQueryXML{
     public TreeMap<String, String> showList() throws JDOMException, IOException, 
                                                         ItasaException, Exception {
         TreeMap<String, String> container = null;
-        connectHttps(composeUrl(URL_SHOW_LIST, null));
-        checkStatus();
-        if (isStatusSuccess()){
-            container = new TreeMap<String, String>();
-            Iterator iter =  getDescendantsZero(2);
-            while (iter.hasNext()){
-                Element item = (Element) iter.next();
-                String id = item.getChild(TAG_SHOW_ID).getText();
-                String name = item.getChild(TAG_SHOW_NAME).getText();
-                container.put(name, id);
-            }
-        } else 
-            throw new ItasaException("ShowList: "+ error);
+        try{
+            connectHttps(composeUrl(URL_SHOW_LIST, null));            
+            checkStatus();
+            if (isStatusSuccess()){
+                container = new TreeMap<String, String>();
+                Iterator iter =  getDescendantsZero(2);
+                while (iter.hasNext()){
+                    Element item = (Element) iter.next();
+                    String id = item.getChild(TAG_SHOW_ID).getText();
+                    String name = item.getChild(TAG_SHOW_NAME).getText();
+                    container.put(name, id);
+                }
+            } else 
+                throw new ItasaException("ShowList: "+ error);
+        } catch(JDOMParseException ex){
+            //TODO JDOMParseException fare caricamento da file xml
+        }
         return container;
     }
 
@@ -382,13 +387,13 @@ public class Itasa extends AbstractQueryXML{
         return Integer.parseInt(item.getChild(TAG_COUNT).getText());
     }
     
-    private void connectHttps(String url) throws JDOMException, IOException, Exception {
+    private void connectHttps(String url) throws JDOMParseException, JDOMException, 
+                                                        IOException, Exception {
         try {
             //Https_1 h = Https_1.getInstance();
-            Https h = Https.getInstance();
-            document = new SAXBuilder().build(h.connection(url));
+            document = new SAXBuilder().build(Https.getInstance().connection(url));
         } catch (NoSuchAlgorithmException ex) {
-        } catch (KeyManagementException ex) {    
+        } catch (KeyManagementException ex) {
         }
     }
     
