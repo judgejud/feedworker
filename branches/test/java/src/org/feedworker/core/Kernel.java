@@ -109,6 +109,7 @@ public class Kernel implements PropertyChangeListener {
     private TreeSet tsIdCalendar;
     private Itasa itasa;
     private ItasaUser user;
+    private static boolean debug_flag;
 
     /**
      * Restituisce l'istanza corrente del kernel
@@ -118,6 +119,14 @@ public class Kernel implements PropertyChangeListener {
     public static Kernel getIstance() {
         if (core == null)
             core = new Kernel();
+        return core;
+    }
+    
+    public static Kernel getIstance(boolean debug) {
+        if (core == null){
+            core = new Kernel();
+            debug_flag = debug;
+        }
         return core;
     }
     
@@ -136,9 +145,12 @@ public class Kernel implements PropertyChangeListener {
             ex.printStackTrace();
         }
     }
-    
+        
     public Object[] getShowNameList(){
-        return mapShowItasa.keySet().toArray();
+        if (mapShowItasa!=null)
+            return mapShowItasa.keySet().toArray();
+        else
+            return null;
     }
 
     /**
@@ -284,19 +296,13 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    /**
-     * testa la connessione a samba
+    /**testa la connessione a samba
      * 
-     * @param ip
-     *            ip della macchina samba
-     * @param dir
-     *            directory condivisa
-     * @param dom
-     *            dominio
-     * @param user
-     *            utente
-     * @param pwd
-     *            password
+     * @param ip ip della macchina samba
+     * @param dir directory condivisa
+     * @param dom dominio
+     * @param user utente
+     * @param pwd password
      * @return true se positivo, false altrimenti
      */
     public boolean testSamba(String ip, String dir, String dom, String user,
@@ -315,18 +321,14 @@ public class Kernel implements PropertyChangeListener {
         return test;
     }
 
-    /**
-     * chiude/restarta l'applicazione salvando la data nel settings
+    /**chiude/restarta l'applicazione salvando la data nel settings
      * 
-     * @param data
-     *            data da salvare
-     * @param restart
-     *            effettuare il riavvio dell'applicazione
+     * @param data data da salvare
+     * @param restart riavvio dell'applicazione
      */
     public void closeApp(String data, boolean restart) {
-        if (!Lang.verifyTextNotNull(data)) {
+        if (!Lang.verifyTextNotNull(data))
             data = Common.actualTime();
-        }
         prop.setLastDateTimeRefresh(data);
         if (!prop.isApplicationFirstTimeUsed())
             prop.writeOnlyLastDate();
@@ -336,9 +338,8 @@ public class Kernel implements PropertyChangeListener {
             } catch (UnableRestartApplicationException ex) {
                 error.launch(ex, this.getClass());
             }
-        } else {
+        } else
             System.exit(0);
-        }
     }
 
     /** Scrive le proprietà dell'applicazione nel file properties */
@@ -355,17 +356,12 @@ public class Kernel implements PropertyChangeListener {
             prop.writeApplicationFirstTimeUsedFalse();
     }
 
-    /**
-     * Restituisce l'arraylist contenente i feed rss
+    /**Restituisce l'arraylist contenente i feed rss
      * 
-     * @param urlRss
-     *            url rss da analizzare
-     * @param data
-     *            data da confrontare
-     * @param from
-     *            provenienza
-     * @param download
-     *            download automatico
+     * @param urlRss url rss da analizzare
+     * @param data data da confrontare
+     * @param from  provenienza
+     * @param download download automatico
      * @param first
      * @return arraylist di feed(array di oggetti)
      */
@@ -582,16 +578,14 @@ public class Kernel implements PropertyChangeListener {
             feedBt = getFeedRss(RSS_TORRENT_BTCHAT, lastBtchat, BTCHAT, false,
                     first);
             if ((feedEz != null) && (feedEz.size() > 0)) {
-                if (!first) {
+                if (!first)
                     status = true;
-                }
                 lastEztv = (String) feedEz.get(0)[1];
                 ManageListener.fireTableEvent(this, feedEz, EZTV);
             }
             if ((feedBt != null) && (feedBt.size() > 0)) {
-                if (!first) {
+                if (!first)
                     status = true;
-                }
                 lastBtchat = (String) feedBt.get(0)[1];
                 ManageListener.fireTableEvent(this, feedBt, BTCHAT);
             }
@@ -599,8 +593,7 @@ public class Kernel implements PropertyChangeListener {
         return status;
     }
 
-    /**Interrompe il timer attuale e ne fa partire uno nuovo col nuovo intervallo
-     */
+    /**Interrompe il timer attuale e ne fa partire uno nuovo col nuovo intervallo*/
     public void stopAndRestartTimer() {
         if (timer!=null){
             timer.cancel();
@@ -609,11 +602,9 @@ public class Kernel implements PropertyChangeListener {
         runTimer(Lang.stringToInt(prop.getRefreshInterval()) * 60000);
     }
 
-    /**
-     * Sostituisce la treemap delle regole con quella creata dal mediator
+    /**Sostituisce la treemap delle regole con quella creata dal mediator
      * 
-     * @param temp
-     *            treepam regole
+     * @param temp treepam regole
      */
     public void saveMap(TreeMap<KeyRule, ValueRule> temp) {
         try {
@@ -666,11 +657,9 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    /**
-     * Verifica se il nome non presenta la parola "stagione"
+    /** Verifica se il nome non presenta la parola "stagione"
      * 
-     * @param name
-     *            nome da controllare
+     * @param name nome da controllare
      * @return risultato controllo
      */
     private boolean isNotStagione(Object obj) {
@@ -1172,7 +1161,6 @@ public class Kernel implements PropertyChangeListener {
     public void searchSubItasa(Object show, Object version, boolean complete, 
                                                 String season, String episode) {
         String id = mapShowItasa.get(show);
-        System.out.println(version);
         String _version = null;
         String query = null;
         if (!version.equals(new String("*")))
@@ -1331,7 +1319,8 @@ public class Kernel implements PropertyChangeListener {
                         Long index = iter.next();
                         id = tmRefresh.get(index);
                         Object[] array = setArray(t, t.showInfo_byID(id), true);
-                        System.out.println(id + " " + array[1]);
+                        if (debug_flag)
+                            System.out.println(id + " " + array[1]);
                         xmlClone.removeShowTv(index.intValue() - 1);
                         xmlClone.addShowTV(array);
                         setProgress(++progress);

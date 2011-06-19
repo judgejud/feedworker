@@ -38,22 +38,25 @@ public class FeedWorkerClient {
     }
 
     public static void main(String args[]) {
+        boolean debug = false;
+        if (args.length>0 && args[0].toLowerCase().equalsIgnoreCase("debug=true"))
+            debug=true;
         final SplashableWindow splash;
         final Image splashImage = Common.getResourceImage("SplashImage.png");
         JVM jvm = new JVM();
         
-        if (!JVM.isRuntimeJava()){
+        if (!JVM.isRuntimeJavaSun()){
             JOptionPane.showMessageDialog(null,
                     "E' necessario disporre di Java Sun e non altre come openJDK",
                     "FeedWorker", JOptionPane.ERROR_MESSAGE);
-            Application.getInstance(true).shutdown();
+            Application.getInstance(debug).shutdown();
         } else {
             splash = SplashScreen.getInstance(iteration, splashImage);
             splash.start();
             splash.updateStartupState("Inizializzazione Feedworker");
             ResourceLocator.setWorkspace();
 
-            feedWorker = Application.getInstance(true);
+            feedWorker = Application.getInstance(debug);
             feedWorkerSettings = ApplicationSettings.getIstance();
 
             feedWorker.setName("FeedWorker");
@@ -72,7 +75,7 @@ public class FeedWorkerClient {
                     splash.updateStartupState("Finding other FeedWorker instance ...");
                     feedWorker.start();
                     splash.updateStartupState("Preparing Kernel instance ...");
-                    K = Kernel.getIstance();
+                    K = Kernel.getIstance(debug);
                     splash.updateStartupState("Setting Look & Feel ...");
                     try {
                         feedWorker.getIstanceLAF().addJavaLAF();        	
