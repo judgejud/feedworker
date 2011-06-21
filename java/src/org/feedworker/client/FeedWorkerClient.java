@@ -28,7 +28,7 @@ import org.opensanskrit.widget.interfaces.SplashableWindow;
 public class FeedWorkerClient {
 
     public static String ICON_FILENAME = "ApplicationIcon.png";
-    private static Kernel K;
+    private static Kernel core;
     private static Application feedWorker;
     private static ApplicationSettings feedWorkerSettings;
     private static int iteration = 11;
@@ -75,7 +75,7 @@ public class FeedWorkerClient {
                     splash.updateStartupState("Finding other FeedWorker instance ...");
                     feedWorker.start();
                     splash.updateStartupState("Preparing Kernel instance ...");
-                    K = Kernel.getIstance(debug);
+                    core = Kernel.getIstance(debug);
                     splash.updateStartupState("Setting Look & Feel ...");
                     try {
                         feedWorker.getIstanceLAF().addJavaLAF();        	
@@ -101,10 +101,11 @@ public class FeedWorkerClient {
                             splash.updateStartupState("Loading GUI ...");
                             jfMain jframe = new jfMain();
                             splash.updateStartupState("Loading xml ...");
-                            K.loadXml();
+                            core.loadXml();
+                            core.loadItasaSeries();
                             splash.updateStartupState("Initializing RSS...");
-                            K.runRss();
-                            K.searchDay(0);
+                            core.runRss();
+                            core.searchDay(0);
                             splash.close();
                             if (!ApplicationSettings.getIstance().isEnabledIconizedRun())
                                 jframe.setVisible(true);

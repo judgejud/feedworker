@@ -4,16 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.feedworker.client.frontend.events.JFrameEventIconDate;
-import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
-import org.feedworker.client.frontend.events.JFrameEventOperation;
-import org.feedworker.client.frontend.events.JFrameEventOperationListener;
-import org.feedworker.client.frontend.events.StatusBarEvent;
-import org.feedworker.client.frontend.events.StatusBarEventListener;
-import org.feedworker.client.frontend.events.TableEvent;
-import org.feedworker.client.frontend.events.TableEventListener;
-import org.feedworker.client.frontend.events.TextPaneEvent;
-import org.feedworker.client.frontend.events.TextPaneEventListener;
+import org.feedworker.client.frontend.events.*;
 import org.feedworker.object.Subtitle;
 
 /**
@@ -27,6 +18,7 @@ public class ManageListener {
     private static List listenerJFrameID = new ArrayList();
     private static List listenerTextPane = new ArrayList();
     private static List listenerStatusBar = new ArrayList();
+    private static List listenerComboBox = new ArrayList();
 
     public static synchronized void addTableEventListener(
                                                     TableEventListener listener) {
@@ -51,6 +43,11 @@ public class ManageListener {
     public static synchronized void addStatusBarEventListener(
                                                 StatusBarEventListener listener) {
         listenerStatusBar.add(listener);
+    }
+    
+    public static synchronized void addComboBoxEventListener(
+                                                ComboboxEventListener listener) {
+        listenerComboBox.add(listener);
     }
 
     public static synchronized void fireTableEvent(Object from, ArrayList<Object[]> alObj, 
@@ -118,6 +115,15 @@ public class ManageListener {
         Iterator listeners = listenerStatusBar.iterator();
         while (listeners.hasNext()) {
             StatusBarEventListener myel = (StatusBarEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
+    public static synchronized void fireComboBoxEvent(Object from, Object[] array) {
+        ComboboxEvent event = new ComboboxEvent(from, array);
+        Iterator listeners = listenerComboBox.iterator();
+        while (listeners.hasNext()) {
+            ComboboxEventListener myel = (ComboboxEventListener) listeners.next();
             myel.objReceived(event);
         }
     }

@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import org.feedworker.client.frontend.events.ComboboxEvent;
+import org.feedworker.client.frontend.events.ComboboxEventListener;
 
 import org.feedworker.client.frontend.table.tableResultSearchSub;
 
@@ -20,7 +22,7 @@ import org.feedworker.client.frontend.table.tableResultSearchSub;
  *
  * @author luca
  */
-public class paneSearchSubItasa extends paneAbstract{
+public class paneSearchSubItasa extends paneAbstract implements ComboboxEventListener{
     private static paneSearchSubItasa jpanel = null;
     
     private JComboBox jcbShow, jcbVersion;
@@ -34,6 +36,7 @@ public class paneSearchSubItasa extends paneAbstract{
         initializePanel();
         initializeButtons();
         proxy.setTableListener(jtable);
+        proxy.setComboboxListener(this);
     }
     
     public static paneSearchSubItasa getPanel(){
@@ -57,9 +60,7 @@ public class paneSearchSubItasa extends paneAbstract{
 
     @Override
     void initializeButtons() {
-        jcbShow = new JComboBox(proxy.showList());
-        jcbShow.addItem(null);
-        jcbShow.setSelectedItem(null);
+        jcbShow = new JComboBox();
         jcbVersion = new JComboBox(proxy.getQualityEnum());
         jcbVersion.removeItemAt(jcbVersion.getItemCount()-1);
         jcbComplete = new JCheckBox("Stagione completa");
@@ -154,5 +155,14 @@ public class paneSearchSubItasa extends paneAbstract{
     
     private void jbDownloadMouseClicked(){
         //TODO
+    }
+
+    @Override
+    public void objReceived(ComboboxEvent evt) {
+        Object[] array = evt.getArray(); 
+        for (int i=0; i<array.length; i++)
+            jcbShow.addItem(array[i]);
+        jcbShow.addItem(null);
+        jcbShow.setSelectedItem(null);
     }
 }

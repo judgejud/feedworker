@@ -33,12 +33,12 @@ import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
 
 import org.jfacility.java.awt.AWT;
-import org.jfacility.java.lang.JVM;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
+import org.feedworker.client.frontend.events.ComboboxEventListener;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -67,16 +67,12 @@ public class Mediator {
             proxy = new Mediator();
         return proxy;
     }
-    
-    public boolean isJava6(){
-        return new JVM().isOrLater(16);
-    }
 
     //TODO: ripristinare col getbuildernumber
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "345 by "
+                + "348 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -258,6 +254,10 @@ public class Mediator {
     
     void setFrameOperationListener(JFrameEventOperationListener listener) {
         ManageListener.addJFrameEventOperationListener(listener);
+    }
+    
+    public void setComboboxListener(ComboboxEventListener listener) {
+        ManageListener.addComboBoxEventListener(listener);
     }
 
     void restartRss() {
@@ -770,10 +770,6 @@ public class Mediator {
 
     public void removeReminders(ArrayList<Integer> numbers) {
         core.removeReminders(numbers);
-    }
-    
-    public Object[] showList(){
-        return core.getShowNameList();
     }
 
     public void searchSubItasa(Object show, Object version, boolean complete, 

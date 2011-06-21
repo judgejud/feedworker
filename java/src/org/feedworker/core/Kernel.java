@@ -129,36 +129,11 @@ public class Kernel implements PropertyChangeListener {
         }
         return core;
     }
-    
-    private Kernel(){
-        itasa = new Itasa();
-        try {
-            mapShowItasa = itasa.showList();
-            //TODO: se itasa = errore, caricare da file
-        } catch (JDOMException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (ItasaException ex) {
-            ex.printStackTrace();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-        
-    public Object[] getShowNameList(){
-        if (mapShowItasa!=null)
-            return mapShowItasa.keySet().toArray();
-        else
-            return null;
-    }
 
-    /**
-     * Scarica lo zip, estrae i sub e invoca l'analizzatore del path di
+    /**Scarica lo zip, estrae i sub e invoca l'analizzatore del path di
      * destinazione
      * 
-     * @param als
-     *            arraylist di link
+     * @param als  arraylist di link
      * @param itasa
      */
     public void downloadSub(ArrayList<String> als, boolean itasa) {
@@ -182,11 +157,9 @@ public class Kernel implements PropertyChangeListener {
         t.start();
     }
 
-    /**
-     * Scarica i torrent
+    /**Scarica i torrent
      * 
-     * @param als
-     *            arraylist di link
+     * @param als arraylist di link
      */
     public void downloadTorrent(ArrayList<String> als) {
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
@@ -1219,6 +1192,30 @@ public class Kernel implements PropertyChangeListener {
             } else 
                 printAlert("Non hai abilitato l'uso di myItasa");
         }
+    }
+
+    /**Inizializza dal web l'elenco delle serie itasa, 
+     * o le preleva dall'xml nel caso in cui ci sono problemi vari con itasa
+     */
+    public void loadItasaSeries() {
+        if (mapShowItasa==null){
+            itasa = new Itasa();
+            try {
+                mapShowItasa = itasa.showList();
+                //TODO: se itasa = errore, caricare da file
+            } catch (JDOMException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (ItasaException ex) {
+                ex.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        if (mapShowItasa!=null)
+            ManageListener.fireComboBoxEvent(this, mapShowItasa.keySet().toArray());
+        //TODO
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
