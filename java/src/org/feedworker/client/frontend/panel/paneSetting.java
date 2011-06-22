@@ -1,11 +1,6 @@
-//TODO: prelevare quello che serve da panesettingEhnanced e poi cancellarlo
 package org.feedworker.client.frontend.panel;
 //IMPORT JAVA
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -19,10 +14,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
-import javax.swing.JTabbedPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import org.feedworker.client.ApplicationSettings;
+
+import org.jdesktop.swingx.JXTaskPane;
+import org.jdesktop.swingx.JXTaskPaneContainer;
+
 import org.jfacility.javax.swing.Swing;
 
 /**
@@ -30,7 +29,6 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class paneSetting extends paneAbstract {
-    private final Dimension INTERNALSETTINGS = new Dimension(500, 430);
     private final String[] timeout = new String[]{"3", "6", "9", "12", "15", "18"};
     private final String[] minuti = new String[]{"3", "6", "10", "15", "20", "30", "45"};
     private static paneSetting jpanel = null;
@@ -39,13 +37,15 @@ public class paneSetting extends paneAbstract {
     protected JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
     protected JCheckBox jcbAudioRss, jcbAudioSub, jcbDestination, jcbRunIconized,
             jcbDownloadMyitasaStartup, jcbMail, jcbReminder, jcbPaneSubDest, jcbPaneLog, 
-            jcbPaneSetting, jcbPaneSearchSubItasa, jcbPaneReminder;
+            jcbPaneSetting, jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, 
+            jcbGoogleSMS;
     private JButton jbSaveSettings, jbAnnullaSettings;
     protected JButton jbDestSub, jbDestTorrent, jbCheckItasa, jbCheckSamba;
     protected JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf,
-            jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp;
-    protected JPasswordField jpfSamba, jpfItasa;
+            jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp,
+            jtfGoogleUser;
+    protected JPasswordField jpfSamba, jpfItasa, jpfGoogle;
     private ButtonGroup bgLocalSamba, bgDownItasa;
     protected ApplicationSettings prop;
 
@@ -53,7 +53,6 @@ public class paneSetting extends paneAbstract {
     protected paneSetting() {
         super("Settings");
         prop = proxy.getSettings();
-        initComponents();
         initializePanel();
         initializeButtons();
     }
@@ -66,19 +65,32 @@ public class paneSetting extends paneAbstract {
     
     @Override
     void initializePanel() {
-        JTabbedPane jtpSettings = new JTabbedPane(JTabbedPane.LEFT);
-        jtpSettings.addTab("General", initPanelSettingsGlobal());
-        jtpSettings.addTab("ItalianSubs", initPanelSettingsItasa());
-        if (prop.isSubsfactoryOption())
-            jtpSettings.addTab("Subsfactory", initPanelSettingsSubsf());
+        JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
+        tpcWest.add(initTaskPaneGeneral());
+        tpcWest.add(initTaskPaneSamba());
+        tpcWest.add(initTaskPaneVisibilePane());
         if (prop.isTorrentOption())
-            jtpSettings.addTab("Torrent", initPanelSettingsTorrent());
-        jtpSettings.addTab("Alert", initPanelSettingsAlert());
-        jtpSettings.addTab("Visible Panel", initPaneSettingsVisiblePanel());
-       
-        jpCenter.add(jtpSettings);
+            tpcWest.add(initTaskPaneTorrent());
+                
+        JXTaskPaneContainer tpcEast = new JXTaskPaneContainer();
+        tpcEast.add(initTaskPaneItalianSubs());
+        tpcEast.add(initTaskPaneAlert());
+        if (prop.isSubsfactoryOption())
+            tpcEast.add(initTaskPaneSubsfactory());
+
+        JScrollPane jspWest = new JScrollPane(tpcWest);
+        jspWest.setPreferredSize(TABLE_SCROLL_SIZE);
+        jspWest.setAutoscrolls(true);
+        
+        JScrollPane jspEast = new JScrollPane(tpcEast);
+        jspEast.setPreferredSize(TABLE_SCROLL_SIZE);
+        jspEast.setAutoscrolls(true);
+        
+        jpCenter.add(jspWest);
+        jpCenter.add(RIGID_AREA);
+        jpCenter.add(jspEast);
     }
-    
+
     @Override
     void initializeButtons() {
         jbSaveSettings = new JButton("Salva");
@@ -103,256 +115,8 @@ public class paneSetting extends paneAbstract {
         gbcAction.gridx = 1;
         jpAction.add(jbSaveSettings, gbcAction);
     }
-   
-    private GridBagConstraints initGbc(){
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.insets = new Insets(2, 1, 2, 1);
-        return gbc;
-    }
-
-    private JPanel initPanelSettingsGlobal() {
-        JPanel jpSettingGlobal = new JPanel(new GridBagLayout());
-        jpSettingGlobal.setPreferredSize(INTERNALSETTINGS);
-
-        GridBagConstraints gbc = initGbc();
-        int y = 0;
-        jpSettingGlobal.add(new JLabel("Aggiorna RSS"), gbc);
-
-        gbc.gridx = 2;
-        gbc.gridwidth = 1;
-        jpSettingGlobal.add(jcbMinuti, gbc);
-
-        gbc.gridx = 3;
-        jpSettingGlobal.add(new JLabel("minuti"), gbc);
-
-        ++y;
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridheight = 1;
-        gbc.gridwidth = 2;
-        jpSettingGlobal.add(new JLabel("Ultimo aggiornamento"), gbc);
-
-        gbc.gridx = 2;
-        gbc.gridwidth = 1;
-        jpSettingGlobal.add(jlDataAggiornamento, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        jpSettingGlobal.add(new JLabel("Destinazione Sub"), gbc);
-
-        gbc.gridx = 2;
-        gbc.gridwidth = 1;
-        jpSettingGlobal.add(jrbDirLocal, gbc);
-
-        gbc.gridx = 3;
-        jpSettingGlobal.add(jrbDirSamba, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        jpSettingGlobal.add(jcbDestination, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        JLabel jlLocal = new JLabel("Percorso locale standard");
-        jlLocal.setForeground(Color.magenta);
-        jpSettingGlobal.add(jlLocal, gbc);
-
-        gbc.gridx = 2;
-        jpSettingGlobal.add(jtfDestSub, gbc);
-
-        gbc.gridx = 4;
-        gbc.gridwidth = 1;
-        jpSettingGlobal.add(jbDestSub, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        JLabel jlDomain = new JLabel("Samba Dominio");
-        jlDomain.setForeground(Color.blue);
-        jpSettingGlobal.add(jlDomain, gbc);
-
-        gbc.gridx = 2;
-        jpSettingGlobal.add(jtfSambaDomain, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        JLabel jlSip = new JLabel("Samba IP");
-        jlSip.setForeground(Color.blue);
-        jpSettingGlobal.add(jlSip, gbc);
-
-        gbc.gridx = 2;
-        jpSettingGlobal.add(jtfSambaIP, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        JLabel jlSdir = new JLabel("Samba cartella condivisa");
-        jlSdir.setForeground(Color.blue);
-        jpSettingGlobal.add(jlSdir, gbc);
-
-        gbc.gridx = 2;
-        jpSettingGlobal.add(jtfSambaDir, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        JLabel jlSuser = new JLabel("Samba Username");
-        jlSuser.setForeground(Color.blue);
-        jpSettingGlobal.add(jlSuser, gbc);
-
-        gbc.gridx = 2;
-        jpSettingGlobal.add(jtfSambaUser, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        JLabel jlSpwd = new JLabel("Samba Password");
-        jlSpwd.setForeground(Color.blue);
-        jpSettingGlobal.add(jlSpwd, gbc);
-
-        gbc.gridx = 2;
-        jpSettingGlobal.add(jpfSamba, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        jpSettingGlobal.add(new JLabel("Look&Feel"), gbc);
-
-        gbc.gridx = 2;
-        jpSettingGlobal.add(jcbLookFeel, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        jpSettingGlobal.add(new JLabel("Timeout"), gbc);
-
-        gbc.gridx = 2;
-        gbc.gridwidth = 1;
-        jpSettingGlobal.add(jcbTimeout, gbc);
-
-        gbc.gridx = 3;
-        jpSettingGlobal.add(new JLabel("secondi"), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        jpSettingGlobal.add(jcbRunIconized, gbc);
-
-        gbc.gridy = ++y;
-        jpSettingGlobal.add(jcbReminder, gbc);
-        
-        return jpSettingGlobal;
-    }
-
-    /** inizializza il pannello dei settaggi itasa */
-    private JPanel initPanelSettingsItasa() {
-        JPanel jpSettingItasa = new JPanel(new GridBagLayout());
-        jpSettingItasa.setPreferredSize(INTERNALSETTINGS);
-        GridBagConstraints gbc = initGbc();
-        int y = 0;
-
-        JLabel jlItasa = new JLabel("RSS Itasa:");
-        jlItasa.setForeground(Color.magenta);
-        jpSettingItasa.add(jlItasa, gbc);
-
-        gbc.gridx = 2;
-        gbc.gridwidth = 3;
-        jpSettingItasa.add(jtfRssItasa, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        JLabel jlMyItasa = new JLabel("RSS myItasa:");
-        jlMyItasa.setForeground(Color.magenta);
-        jpSettingItasa.add(jlMyItasa, gbc);
-
-        gbc.gridx = 2;
-        gbc.gridwidth = 3;
-        jpSettingItasa.add(jtfRssMyItasa, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        jpSettingItasa.add(new JLabel("myItasa download sub"), gbc);
-
-        gbc.gridx = 2;
-        gbc.gridwidth = 1;
-        jpSettingItasa.add(jrbDownAuto, gbc);
-
-        gbc.gridx = 3;
-        jpSettingItasa.add(jrbDownManual, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 3;
-        jpSettingItasa.add(jcbDownloadMyitasaStartup, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        gbc.gridwidth = 2;
-        JLabel jlIuser = new JLabel("Username");
-        jlIuser.setForeground(Color.red);
-        jpSettingItasa.add(jlIuser, gbc);
-
-        gbc.gridx = 2;
-        jpSettingItasa.add(jtfItasaUser, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        JLabel jlIpwd = new JLabel("Password");
-        jlIpwd.setForeground(Color.red);
-        jpSettingItasa.add(jlIpwd, gbc);
-
-        gbc.gridx = 2;
-        jpSettingItasa.add(jpfItasa, gbc);
-        
-        return jpSettingItasa;
-    }
-
-    /** inizializzo il pannello settaggi torrent */
-    private JPanel initPanelSettingsTorrent() {
-        JPanel jpSettingTorrent = new JPanel(new GridBagLayout());
-        jpSettingTorrent.setPreferredSize(INTERNALSETTINGS);
-        GridBagConstraints gbc = initGbc();
-        int y = 0;
-
-        jpSettingTorrent.add(new JLabel("Destinazione Torrent"), gbc);
-
-        gbc.gridx = 2;
-        gbc.gridwidth = 2;
-        jpSettingTorrent.add(jtfDestTorrent, gbc);
-
-        gbc.gridx = 4;
-        gbc.gridwidth = 1;
-        jpSettingTorrent.add(jbDestTorrent, gbc);
-        return jpSettingTorrent;
-    }
     
-    /** inizializzo il pannello settaggi subsfactory */
-    private JPanel initPanelSettingsSubsf() {
-        JPanel jpSettingSubsf = new JPanel(new GridBagLayout());
-        jpSettingSubsf.setPreferredSize(INTERNALSETTINGS);
-        GridBagConstraints gbc = initGbc();
-        int y = 0;
-        jpSettingSubsf.add(new JLabel("Indirizzo RSS Subsfactory: "), gbc);
-
-        gbc.gridx = 2;
-        jpSettingSubsf.add(jtfRssSubsf, gbc);
-       
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        jpSettingSubsf.add(new JLabel("Indirizzo RSS Subsf personalizzato: "), gbc);
-
-        gbc.gridx = 2;
-        jpSettingSubsf.add(jtfRssMySubsf, gbc);
-        
-        return jpSettingSubsf;
-    }
-    
-    private void initComponents(){
-        //GENERAL
+    private JXTaskPane initTaskPaneGeneral() {
         jcbMinuti = new JComboBox(new DefaultComboBoxModel(minuti));
         jcbMinuti.setSelectedIndex(2);
         jcbLookFeel = new JComboBox(new DefaultComboBoxModel(proxy.getAvailableLAF()));
@@ -377,7 +141,57 @@ public class paneSetting extends paneAbstract {
         bgLocalSamba = new ButtonGroup();
         bgLocalSamba.add(jrbDirLocal);
         bgLocalSamba.add(jrbDirSamba);
-        //SAMBA
+        
+        JXTaskPane task = new JXTaskPane();
+        task.setTitle("General");
+        task.setCollapsed(true);
+        
+        JPanel temp = new JPanel();
+        temp.add(new JLabel("Aggiorna RSS"));
+        temp.add(jcbMinuti);
+        temp.add(new JLabel("minuti"));
+        task.add(temp);
+
+        temp = new JPanel();
+        temp.add(new JLabel("Ultimo aggiornamento: "));
+        temp.add(jlDataAggiornamento);
+        task.add(temp);
+
+        temp = new JPanel();
+        temp.add(new JLabel("Destinazione Sub"));
+        temp.add(jrbDirLocal);
+        temp.add(jrbDirSamba);
+        task.add(temp);
+
+        temp = new JPanel();
+        JLabel jlLocal = new JLabel("Percorso locale standard");
+        jlLocal.setForeground(Color.magenta);
+        temp.add(jlLocal);
+        temp.add(jbDestSub);
+        task.add(temp);
+        task.add(jtfDestSub);
+        
+        task.add(jcbDestination);
+        
+        task.add(jcbReminder);
+        
+        temp = new JPanel();
+        temp.add(new JLabel("Look&Feel"));
+        temp.add(jcbLookFeel);
+        task.add(temp);
+
+        temp = new JPanel();
+        temp.add(new JLabel("Timeout"));
+        temp.add(jcbTimeout);
+        temp.add(new JLabel("secondi"));
+        task.add(temp);
+        
+        task.add(jcbRunIconized);
+        
+        return task;
+    }
+    
+    private JXTaskPane initTaskPaneSamba(){
         jtfSambaDomain = new JTextField(20);
         jtfSambaIP = new JTextField(20);
         jtfSambaDir = new JTextField(20);
@@ -391,7 +205,48 @@ public class paneSetting extends paneAbstract {
                 jbCheckSambaMouseClicked();
             }
         });
-        //ITASA
+        
+        JXTaskPane task = new JXTaskPane();
+        task.setTitle("Samba/jcifs");
+        task.setCollapsed(true);
+        
+        JLabel jlDomain = new JLabel("Samba Dominio");
+        jlDomain.setForeground(Color.blue);
+        task.add(jlDomain);
+        
+        task.add(jtfSambaDomain);
+        
+        JLabel jlSip = new JLabel("Samba IP");
+        jlSip.setForeground(Color.blue);
+        task.add(jlSip);
+        
+        task.add(jtfSambaIP);
+
+        JLabel jlSdir = new JLabel("Samba cartella condivisa");
+        jlSdir.setForeground(Color.blue);
+        task.add(jlSdir);
+
+        task.add(jtfSambaDir);
+
+        JLabel jlSuser = new JLabel("Samba Username");
+        jlSuser.setForeground(Color.blue);
+        task.add(jlSuser);
+
+        task.add(jtfSambaUser);
+
+        JLabel jlSpwd = new JLabel("Samba Password");
+        jlSpwd.setForeground(Color.blue);
+        task.add(jlSpwd);
+        
+        task.add(jpfSamba);
+        
+        task.add(jbCheckSamba);
+        
+        return task;
+    }
+
+    /** inizializza il pannello dei settaggi itasa */
+    private JXTaskPane initTaskPaneItalianSubs() {
         jtfRssItasa = new JTextField(25);
         jtfRssMyItasa = new JTextField(25);
         jrbDownAuto = new JRadioButton("Automatico");
@@ -425,7 +280,45 @@ public class paneSetting extends paneAbstract {
                         jpfItasa.getPassword());
             }
         });
-        //TORRENT
+        
+        JXTaskPane task = new JXTaskPane();
+        task.setTitle("ItalianSubs");
+        task.setCollapsed(true);
+
+        JLabel jlItasa = new JLabel("RSS Itasa");
+        jlItasa.setForeground(Color.magenta);
+        task.add(jlItasa);
+        task.add(jtfRssItasa);
+
+        JLabel jlMyItasa = new JLabel("RSS myItasa");
+        jlMyItasa.setForeground(Color.magenta);
+        task.add(jlMyItasa);
+        task.add(jtfRssMyItasa);
+
+        JPanel temp = new JPanel();
+        temp.add(new JLabel("myItasa download sub"));
+        temp.add(jrbDownAuto);
+        temp.add(jrbDownManual);
+        task.add(temp);
+
+        task.add(jcbDownloadMyitasaStartup);
+
+        JLabel jlIuser = new JLabel("Username");
+        jlIuser.setForeground(Color.red);
+        task.add(jlIuser);
+        task.add(jtfItasaUser);
+
+        JLabel jlIpwd = new JLabel("Password");
+        jlIpwd.setForeground(Color.red);
+        task.add(jlIpwd);
+        task.add(jpfItasa);
+        
+        task.add(jbCheckItasa);
+        return task;
+    }
+
+    /** inizializzo il pannello settaggi torrent */
+    private JXTaskPane initTaskPaneTorrent() {
         jtfDestTorrent = new JTextField(20);
         jbDestTorrent = new JButton("Seleziona");
         jbDestTorrent.setBorder(BORDER);
@@ -435,11 +328,35 @@ public class paneSetting extends paneAbstract {
                 jbDestTorrentMouseClicked();
             }
         });
-        //SUBSFACTORY
+        
+        JXTaskPane task = new JXTaskPane();
+        task.setTitle("Torrent");
+        task.setCollapsed(true);
+        
+        task.add(jbDestTorrent);
+
+        task.add(jtfDestTorrent);
+        return task;
+    }
+
+    /** inizializzo il pannello settaggi subsfactory */
+    private JXTaskPane initTaskPaneSubsfactory() {
         jtfRssSubsf = new JTextField(25);
         jtfRssMySubsf = new JTextField(25);
-        //ALERT
-        //TODO
+        
+        JXTaskPane task = new JXTaskPane();
+        task.setTitle("Subsfactory");
+        task.setCollapsed(true);
+        
+        task.add(new JLabel("Indirizzo RSS Subsfactory"));
+        task.add(jtfRssSubsf);
+        
+        task.add(new JLabel("Indirizzo RSS Subsf personalizzato"));
+        task.add(jtfRssMySubsf);
+        return task;
+    }
+    
+    private JXTaskPane initTaskPaneAlert(){
         jcbAudioRss = new JCheckBox("Avviso audio rss");
         jcbAudioSub = new JCheckBox("Avviso audio sub");
         jcbAudioSub.setEnabled(false);
@@ -447,59 +364,42 @@ public class paneSetting extends paneAbstract {
         jcbMail.setEnabled(false);
         jtfMailTo = new JTextField(20);
         jtfMailSmtp = new JTextField(20);
-        //VISIBLE PANEL
+        
+        JXTaskPane task = new JXTaskPane();
+        task.setTitle("Alert");
+        task.setCollapsed(true);
+        
+        task.add(jcbAudioRss);
+        
+        task.add(jcbAudioSub);
+        
+        task.add(jcbMail);
+
+        task.add(new JLabel("mail TO"));
+        task.add(jtfMailTo);
+        
+        task.add(new JLabel("SMTP server"));
+        task.add(jtfMailSmtp);
+        return task;
+    }
+    
+    private JXTaskPane initTaskPaneVisibilePane(){
         jcbPaneSubDest = new JCheckBox("Subtitle Destination");
         jcbPaneSetting = new JCheckBox("Settings");
         jcbPaneLog = new JCheckBox("Log");
         jcbPaneSearchSubItasa = new JCheckBox("Search Subtitle Itasa");
         jcbPaneReminder = new JCheckBox("Reminder");
-    }
-   
-    private JPanel initPanelSettingsAlert(){
-        JPanel jpSettingAlert = new JPanel(new GridBagLayout());
-        jpSettingAlert.setPreferredSize(INTERNALSETTINGS);
-        GridBagConstraints gbc = initGbc();
-        int y = 0;
-        jpSettingAlert.add(jcbAudioRss, gbc);
-       
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        jpSettingAlert.add(jcbAudioSub, gbc);
-       
-        gbc.gridx = 0;
-        gbc.gridy = ++y;        
-        jpSettingAlert.add(jcbMail, gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        jpSettingAlert.add(new JLabel("mail TO"), gbc);
-        gbc.gridx = 2;
-        jpSettingAlert.add(jtfMailTo, gbc);
-       
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
-        jpSettingAlert.add(new JLabel("SMTP server"), gbc);
-        gbc.gridx = 2;
-        jpSettingAlert.add(jtfMailSmtp, gbc);
         
-        return jpSettingAlert;
-    }
-    
-    private JPanel initPaneSettingsVisiblePanel() {
-        JPanel jpSettingVP = new JPanel(new GridBagLayout());
-        jpSettingVP.setPreferredSize(INTERNALSETTINGS);
-        GridBagConstraints gbc = initGbc();
-        int y = 0;
-        jpSettingVP.add(jcbPaneSearchSubItasa, gbc);
-        gbc.gridy = ++y;
-        jpSettingVP.add(jcbPaneSubDest, gbc);
-        gbc.gridy = ++y;
-        jpSettingVP.add(jcbPaneSetting, gbc);
-        gbc.gridy = ++y;
-        jpSettingVP.add(jcbPaneLog, gbc);
-        gbc.gridy = ++y;
-        jpSettingVP.add(jcbPaneReminder, gbc);
-        return jpSettingVP;
+        JXTaskPane task = new JXTaskPane();
+        task.setTitle("Visible Pane at Startup");
+        task.setCollapsed(true);
+        
+        task.add(jcbPaneLog);
+        task.add(jcbPaneSearchSubItasa);
+        task.add(jcbPaneReminder);
+        task.add(jcbPaneSetting);
+        task.add(jcbPaneSubDest);
+        return task;
     }
 
     /** Evento click select cartella */
@@ -549,6 +449,7 @@ public class paneSetting extends paneAbstract {
         jcbRunIconized.setSelected(prop.isEnabledIconizedRun());
         jcbReminder.setSelected(prop.isReminderOption());
     }
+    
     private void settingsSambaValue() {
         jtfSambaDomain.setText(prop.getCifsShareDomain());
         jtfSambaDir.setText(prop.getCifsSharePath());
@@ -566,6 +467,7 @@ public class paneSetting extends paneAbstract {
         jrbDownManual.setSelected(!prop.isAutoDownloadMyItasa());
         settingItasaDownloadStartup();
     }
+    
     private void settingItasaDownloadStartup(){
         if (jrbDownManual.isSelected()){
             jcbDownloadMyitasaStartup.setEnabled(false);
