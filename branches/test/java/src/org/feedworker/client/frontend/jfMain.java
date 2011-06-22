@@ -103,7 +103,7 @@ public class jfMain extends JFrame implements WindowListener,
         jpDestination = paneSubtitleDest.getPanel();
         if (prop.isEnablePaneSubDestination())
             checkAddTab(jpDestination, false);
-        jpSettings = paneSettingEnhanced.getPanel();
+        jpSettings = paneSetting.getPanel();
         if (prop.isEnablePaneSetting())
             checkAddTab(jpSettings, false);
         jpLog = new paneLog();
