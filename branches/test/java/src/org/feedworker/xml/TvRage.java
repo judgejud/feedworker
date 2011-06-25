@@ -97,18 +97,21 @@ public class TvRage extends AbstractQueryXML{
                 tempDate = yesterday;
                 d = null;
             }
-            String seasonNum = item.getChild(TAG_SEASON_NUM).getText();
-            String title = item.getChild(TAG_TITLE).getText();
-            if (tempDate.before(yesterday)){
-                values[4] = season + "x" + seasonNum;
-                values[5] = title;
-                values[6] = d;
-            } else {
-                values[7] = season + "x" + seasonNum;
-                values[8] = title;
-                values[9] = d;
-                break;
-            }
+            String episodeSeason = null; 
+            try{
+                episodeSeason = item.getChild(TAG_SEASON_NUM).getText();
+                String title = item.getChild(TAG_TITLE).getText();
+                if (tempDate.before(yesterday)){
+                    values[4] = season + "x" + episodeSeason;
+                    values[5] = title;
+                    values[6] = d;
+                } else {
+                    values[7] = season + "x" + episodeSeason;
+                    values[8] = title;
+                    values[9] = d;
+                    break;
+                }
+            } catch (NullPointerException npe){}
         }
         return values;
     }

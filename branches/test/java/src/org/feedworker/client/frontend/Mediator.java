@@ -225,7 +225,7 @@ public class Mediator {
     }
 
     void runRss() {
-        core.runRss();
+        core.runRss(true);
     }
 
     /**chiama nel kernel la chiusura applicazione
@@ -505,9 +505,8 @@ public class Mediator {
             boolean advancedDownload, boolean runIconized, String itasa,
             String myitasa, String user, String pwd, boolean autoMyitasa,
             boolean autoLoadMyItasa, String subsf, String mySubsf, String torrent,
-            boolean audioRss, boolean audioSub, boolean mail, String mailTO, 
-            String smtp, boolean paneLog, boolean paneSearch, boolean paneSetting,
-            boolean paneSubDest, boolean paneReminder, boolean reminder) {
+            String mailTO,  String smtp, boolean paneLog, boolean paneSearch, 
+            boolean paneSetting, boolean paneSubDest, boolean paneReminder, boolean reminder) {
                 
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
@@ -530,7 +529,7 @@ public class Mediator {
             setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
             setPropSubsf(subsf, mySubsf);
             prop.setTorrentDestinationFolder(torrent);
-            setPropAdvisor(audioRss, audioSub, mail, mailTO, smtp);
+            setPropAdvisor(mailTO, smtp);
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, paneReminder);
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
@@ -586,11 +585,7 @@ public class Mediator {
         prop.setMySubsfactoryFeedUrl(mySubsf);
     }
     
-    private void setPropAdvisor(boolean audioRss, boolean audioSub, boolean mail,
-                                String mailTO, String smtp){
-        prop.setEnableAdvisorAudioRss(audioRss);
-        prop.setEnableAdvisorAudioSub(audioSub);
-        prop.setEnableAdvisorMail(mail);
+    private void setPropAdvisor(String mailTO, String smtp){
         prop.setMailTO(mailTO);
         prop.setMailSMTP(smtp);
     }

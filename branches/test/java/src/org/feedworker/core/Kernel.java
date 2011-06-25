@@ -412,7 +412,7 @@ public class Kernel implements PropertyChangeListener {
     }
 
     /** Esegue gli rss */
-    public void runRss() {
+    public void runRss(boolean autoloaddownload) {
         if (!prop.isApplicationFirstTimeUsed()) {
             String temp = Common.actualTime();
             runItasa(true);

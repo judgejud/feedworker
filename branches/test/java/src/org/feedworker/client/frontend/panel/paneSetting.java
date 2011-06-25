@@ -35,10 +35,9 @@ public class paneSetting extends paneAbstract {
     protected JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
     protected JLabel jlDataAggiornamento;
     protected JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
-    protected JCheckBox jcbAudioRss, jcbAudioSub, jcbDestination, jcbRunIconized,
-            jcbDownloadMyitasaStartup, jcbMail, jcbReminder, jcbPaneSubDest, jcbPaneLog, 
-            jcbPaneSetting, jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, 
-            jcbGoogleSMS;
+    protected JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
+            jcbReminder, jcbPaneSubDest, jcbPaneLog, 
+            jcbPaneSetting, jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent;
     private JButton jbSaveSettings, jbAnnullaSettings;
     protected JButton jbDestSub, jbDestTorrent, jbCheckItasa, jbCheckSamba;
     protected JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
@@ -357,24 +356,17 @@ public class paneSetting extends paneAbstract {
     }
     
     private JXTaskPane initTaskPaneAlert(){
-        jcbAudioRss = new JCheckBox("Avviso audio rss");
-        jcbAudioSub = new JCheckBox("Avviso audio sub");
-        jcbAudioSub.setEnabled(false);
-        jcbMail = new JCheckBox("Avviso sub mail");
-        jcbMail.setEnabled(false);
         jtfMailTo = new JTextField(20);
+        jtfMailTo.setToolTipText("Immettere l'indirizzo e-mail a cui si vogliono "
+                                + "inviare le notifiche");
         jtfMailSmtp = new JTextField(20);
+        jtfMailSmtp.setToolTipText("Immettere l'indirizzo del server di posta SMTP "
+                + "della propria connessione internet per spedire le mail ");
         
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Alert");
         task.setCollapsed(true);
         
-        task.add(jcbAudioRss);
-        
-        task.add(jcbAudioSub);
-        
-        task.add(jcbMail);
-
         task.add(new JLabel("mail TO"));
         task.add(jtfMailTo);
         
@@ -488,9 +480,6 @@ public class paneSetting extends paneAbstract {
     }
    
     private void settingsAlertValue(){
-        jcbAudioRss.setSelected(prop.isEnabledAdvisorAudioRss());
-        jcbAudioSub.setSelected(prop.isEnabledAdvisorAudioSub());
-        jcbMail.setSelected(prop.isEnabledAdvisorMail());
         jtfMailTo.setText(prop.getMailTO());
         jtfMailSmtp.setText(prop.getMailSMTP());
     }
@@ -527,8 +516,7 @@ public class paneSetting extends paneAbstract {
                 jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
                 new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
                 jcbDownloadMyitasaStartup.isSelected(), jtfRssSubsf.getText(), 
-                jtfRssMySubsf.getText(), jtfDestTorrent.getText(), jcbAudioRss.isSelected(), 
-                jcbAudioSub.isSelected(), jcbMail.isSelected(), jtfMailTo.getText(),
+                jtfRssMySubsf.getText(), jtfDestTorrent.getText(), jtfMailTo.getText(),
                 jtfMailSmtp.getText(), jcbPaneLog.isSelected(), 
                 jcbPaneSearchSubItasa.isSelected(), jcbPaneSetting.isSelected(), 
                 jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected(), 

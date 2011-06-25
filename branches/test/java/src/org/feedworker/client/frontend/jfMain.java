@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URISyntaxException;
+import javax.swing.JCheckBoxMenuItem;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -155,9 +156,8 @@ public class jfMain extends JFrame implements WindowListener,
         restartJMI.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (requestClose("riavviare")) {
+                if (requestClose("riavviare"))
                     proxy.restartApplication(jpSettings.getDataAggiornamento());
-                }
             }
         });
         fileJM.add(restartJMI);
@@ -293,7 +293,29 @@ public class jfMain extends JFrame implements WindowListener,
         nasJM.add(taskStatusJMI);
         nasJM.add(deleteCompletedTaskJMI);
         applicationJMB.add(nasJM);
-
+        //MENU NOTIFICHE
+        JMenu jmNotify = new JMenu(" Notifiche ");
+        applicationJMB.add(jmNotify);
+        
+        JCheckBoxMenuItem jcbmiNotifyAudioRss = new JCheckBoxMenuItem(" Rss audio ");
+        jcbmiNotifyAudioRss.setToolTipText("Abilita la notifica audio dei nuovi feed rss");
+        jmNotify.add(jcbmiNotifyAudioRss);
+        
+        JCheckBoxMenuItem jcbmiNotifyAudioSub = new JCheckBoxMenuItem(" Sub audio");
+        jcbmiNotifyAudioSub.setToolTipText("Abilita la notifica audio dei sub "
+                                        + "scaricati in automatico");
+        jmNotify.add(jcbmiNotifyAudioSub);
+        
+        JCheckBoxMenuItem jcbmiNotifyMail = new JCheckBoxMenuItem(" Sub e-mail ");
+        jcbmiNotifyMail.setToolTipText("Abilita la notifica per posta dei sub "
+                                        + "scaricati in automatico");
+        jmNotify.add(jcbmiNotifyMail);
+        
+        JCheckBoxMenuItem jcbmiNotifySms = new JCheckBoxMenuItem(" Sub sms ");
+        jcbmiNotifySms.setToolTipText("Abilita la notifica per sms tramite google "
+                                        + "calendar dei sub scaricati in automatico ");
+        jmNotify.add(jcbmiNotifySms);
+        //MENU HELP
         JMenu helpJM = new JMenu(" Help ");
         applicationJMB.add(helpJM);
 
@@ -374,14 +396,16 @@ public class jfMain extends JFrame implements WindowListener,
         jtaHelp.append("\n\nStagione: immettere il numero della stagione per la "
                 + "quale si vuole creare la regola\nad eccezione degli anime/cartoon "
                 + "dove la stagione molto probabilmente è unica e quindi 1");
-        jtaHelp.append("\n\nQualità: * = tutte le versioni dei sub ; normale = sub qualità standard");
-        jtaHelp.append("\n720p = versione 720p; 1080p = versione 1080p; dvdrip = versione dvdrip");
-        jtaHelp.append("\nbluray = versione bluray; hr = versione hr");
-        jtaHelp.append("\n\\ = se avete già impostato una regola per una versione e volete che le "
-                + "altre versioni");
-        jtaHelp.append("\nvadino in un'altra cartella basterà selezionare questa opzione "
-                + "\"differenziale\"");
-        jtaHelp.append("\n\nPercorso: specificare il percorso dove desiderate che vi estragga il sub");
+        jtaHelp.append("\n\nQualità: \n- * = tutte le versioni dei sub; \n- normale = sub "
+                + "qualità standard;");
+        jtaHelp.append("\n- 720p = versione 720p;\n- 1080p = versione 1080p; \n- dvdrip = "
+                + "versione dvdrip");
+        jtaHelp.append("\n- bluray = versione bluray;\n- hr = versione hr;");
+        jtaHelp.append("\n- \\ = se avete già impostato una regola per una versione e "
+                + "volete che le altre versioni vadino \nin un'altra cartella basterà "
+                + "selezionare questa opzione \"differenziale\".");
+        jtaHelp.append("\n\nPercorso: specificare il percorso dove desiderate che "
+                + "vi estragga il sub.");
         jpanel.add(jtaHelp);
         return jpanel;
     }
