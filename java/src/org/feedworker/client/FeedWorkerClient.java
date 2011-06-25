@@ -39,8 +39,21 @@ public class FeedWorkerClient {
 
     public static void main(String args[]) {
         boolean debug = false;
-        if (args.length>0 && args[0].toLowerCase().equalsIgnoreCase("debug=true"))
-            debug=true;
+        boolean autodownload = true;
+        if (args.length>0){
+            String temp = args[0].toLowerCase();
+            if (temp.equalsIgnoreCase("debug=true"))
+                debug=true;
+            else if (temp.equalsIgnoreCase("autodownload=false"))
+                autodownload=false;
+            if (args.length>1){
+                temp = args[1].toLowerCase();
+                if (temp.equalsIgnoreCase("debug=true"))
+                    debug=true;
+                else if (temp.equalsIgnoreCase("autodownload=false"))
+                    autodownload=false;
+            }
+        }
         final SplashableWindow splash;
         final Image splashImage = Common.getResourceImage("SplashImage.png");
         JVM jvm = new JVM();
@@ -94,6 +107,7 @@ public class FeedWorkerClient {
                     splash.updateStartupState("Preparing Application logging ...");
                     Logging.getIstance();
                     splash.updateStartupState("Running ...");
+                    final boolean auto = autodownload;
 
                     EventQueue.invokeLater(new Runnable() {
                         @Override
@@ -104,7 +118,7 @@ public class FeedWorkerClient {
                             core.loadXml();
                             core.loadItasaSeries();
                             splash.updateStartupState("Initializing RSS...");
-                            core.runRss();
+                            core.runRss(auto);
                             core.searchDay(0);
                             splash.close();
                             if (!ApplicationSettings.getIstance().isEnabledIconizedRun())
