@@ -58,6 +58,7 @@ public class jfMain extends JFrame implements WindowListener,
     private paneSearchSubItasa jpSearch;
     private paneStatusBar statusBar;
     private paneReminder jpReminder;
+    private paneCalendar jpCalendar;
     private jdResultSearchTv resultSearchTvJD;
     private ProgressDialog progressBar;
     private EnhancedSystemTray systemTray;
@@ -84,30 +85,33 @@ public class jfMain extends JFrame implements WindowListener,
         mainJTP = new JTabbedPane();
         mainJTP.setPreferredSize(TAB_SIZE);
         this.add(mainJTP, BorderLayout.CENTER);
+        
+        jpCalendar = paneCalendar.getPanel();
         jpItasa = paneItasa.getPanel();
+        jpLog = new paneLog();
+        jpReminder = paneReminder.getPanel();
+        jpSearch = paneSearchSubItasa.getPanel();
+        jpSettings = paneSetting.getPanel();
+        jpDestination = paneSubtitleDest.getPanel();
+        jpTorrent = paneTorrent.getPanel();
+        
         mainJTP.addTab("Itasa", jpItasa);
         if (prop.isSubsfactoryOption()) {
             jpSubsfactory = paneSubsfactory.getPanel();
             mainJTP.addTab("Subsfactory", jpSubsfactory);
         }
-        if (prop.isTorrentOption()) {
-            jpTorrent = paneTorrent.getPanel();
-            mainJTP.addTab("Torrent", jpTorrent);
-        }
-        mainJTP.addTab("Calendar", paneCalendar.getPanel());
-        jpSearch = paneSearchSubItasa.getPanel();
+        if (prop.isEnablePaneTorrent())
+            checkAddTab(jpTorrent, false);
+        if (prop.isEnablePaneCalendar())
+            checkAddTab(jpCalendar, false);
         if (prop.isEnablePaneSearchSubItasa())
             checkAddTab(jpSearch, false);
-        jpReminder = paneReminder.getPanel();
         if (prop.isEnablePaneReminder())
             checkAddTab(jpReminder, false);
-        jpDestination = paneSubtitleDest.getPanel();
         if (prop.isEnablePaneSubDestination())
             checkAddTab(jpDestination, false);
-        jpSettings = paneSetting.getPanel();
         if (prop.isEnablePaneSetting())
             checkAddTab(jpSettings, false);
-        jpLog = new paneLog();
         if (prop.isEnablePaneLog())
             checkAddTab(jpLog, false);
 
@@ -257,11 +261,29 @@ public class jfMain extends JFrame implements WindowListener,
             }
         });
         
+        JMenuItem jmiWindowCalendar = new JMenuItem(" Calendar ");
+        jmiWindowCalendar.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpCalendar, true);
+            }
+        });
+        
+        JMenuItem jmiWindowTorrent = new JMenuItem(" Torrent ");
+        jmiWindowTorrent.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpTorrent, true);
+            }
+        });
+        
+        jmWindowTab.add(jmiWindowCalendar);
         jmWindowTab.add(jmiWindowLog);
         jmWindowTab.add(jmiWindowReminder);
         jmWindowTab.add(jmiWindowSearch);
         jmWindowTab.add(jmiWindowSetting);
         jmWindowTab.add(jmiWindowSubDest);
+        jmWindowTab.add(jmiWindowTorrent);
 
         JMenu nasJM = new JMenu(" NAS ");
         JMenuItem videoMoveJMI = new JMenuItem(" Video move ");

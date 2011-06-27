@@ -16,6 +16,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
+import org.feedworker.client.frontend.events.ComboboxEventListener;
 import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
 import org.feedworker.client.frontend.events.JFrameEventOperationListener;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
@@ -38,7 +39,6 @@ import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
-import org.feedworker.client.frontend.events.ComboboxEventListener;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -72,7 +72,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "348 by "
+                + "351 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -196,12 +196,13 @@ public class Mediator {
      * @param jt2 tabella2
      * @param itasa tabelle itasa
      */
-    public void downloadSub(JTable jt1, JTable jt2, boolean itasa) {
+    public void downloadSub(JTable jt1, JTable jt2, boolean itasa, boolean id) {
         ArrayList<String> alLinks = new ArrayList<String>();
         alLinks = addLinks(jt1);
-        alLinks.addAll(addLinks(jt2));
+        if (jt2!=null)
+            alLinks.addAll(addLinks(jt2));
         if (alLinks.size() > 0)
-            core.downloadSub(alLinks, itasa);
+            core.downloadSub(alLinks, itasa, id);
         else {
             String temp = "dalle tabelle";
             if (!itasa)
@@ -362,20 +363,16 @@ public class Mediator {
         }
     }
 
-    /**
-     * Aggiunge i link corrispondenti al true della colonna download
-     * nell'arraylist
+    /**Aggiunge i link corrispondenti al true della colonna download nell'arraylist
      *
-     * @param jt
-     *            jtable su cui operare
+     * @param jt jtable su cui operare
      * @return Arraylist di stringhe
      */
     ArrayList<String> addLinks(JTable jt) {
         ArrayList<String> alLinks = new ArrayList<String>();
         for (int i = 0; i < jt.getRowCount(); i++) {
-            if (jt.getValueAt(i, 3) == Boolean.TRUE) {
+            if (jt.getValueAt(i, 3) == Boolean.TRUE)
                 alLinks.add(jt.getValueAt(i, 0).toString());
-            }
         }
         return alLinks;
     }
@@ -506,7 +503,9 @@ public class Mediator {
             String myitasa, String user, String pwd, boolean autoMyitasa,
             boolean autoLoadMyItasa, String subsf, String mySubsf, String torrent,
             String mailTO,  String smtp, boolean paneLog, boolean paneSearch, 
-            boolean paneSetting, boolean paneSubDest, boolean paneReminder, boolean reminder) {
+            boolean paneSetting, boolean paneSubDest, boolean paneReminder, boolean reminder, 
+            String googleUser, String googlePwd, String googleCalendar, boolean paneTorrent, 
+            boolean paneCalendar) {
                 
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
@@ -529,8 +528,9 @@ public class Mediator {
             setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
             setPropSubsf(subsf, mySubsf);
             prop.setTorrentDestinationFolder(torrent);
-            setPropAdvisor(mailTO, smtp);
-            setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, paneReminder);
+            setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
+            setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
+                            paneReminder, paneTorrent, paneCalendar);
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio "
@@ -585,31 +585,35 @@ public class Mediator {
         prop.setMySubsfactoryFeedUrl(mySubsf);
     }
     
-    private void setPropAdvisor(String mailTO, String smtp){
+    private void setPropAdvisor(String mailTO, String smtp, String googleUser,
+            String googlePwd, String googleCalendar){
         prop.setMailTO(mailTO);
         prop.setMailSMTP(smtp);
+        prop.setGoogleUser(googleUser);
+        prop.setGooglePwd(googlePwd);
+        prop.setGoogleCalendar(googleCalendar);
     }
     
     private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
-                                    boolean subdest, boolean reminder){
+                                    boolean subdest, boolean reminder, boolean torrent,
+                                    boolean calendar){
+        prop.setEnablePaneCalendar(calendar);
         prop.setEnablePaneLog(log);
         prop.setEnablePaneSearchSubItasa(search);
         prop.setEnablePaneSetting(setting);
         prop.setEnablePaneSubDestination(subdest);
         prop.setEnablePaneReminder(reminder);
+        prop.setEnablePaneTorrent(torrent);
     }
 
     void bruteRefresh() {
         core.bruteRefreshRSS();
     }
 
-    /**
-     * Invia alla download station del nas i link torrent selezionati
+    /**Invia alla download station del nas i link torrent selezionati
      *
-     * @param jt1
-     *            tabella1
-     * @param jt2
-     *            tabella2
+     * @param jt1 tabella1
+     * @param jt2 tabella2
      */
     public void fireTorrentToNas(JTable jt1, JTable jt2) {
         ArrayList<String> al = new ArrayList<String>();
