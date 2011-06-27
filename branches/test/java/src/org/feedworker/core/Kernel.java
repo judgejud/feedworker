@@ -136,18 +136,22 @@ public class Kernel implements PropertyChangeListener {
      * @param als  arraylist di link
      * @param itasa
      */
-    public void downloadSub(ArrayList<String> als, boolean itasa) {
+    public void downloadSub(ArrayList<String> als, boolean itasa, boolean id) {
+        if (id){
+            String url = "http://www.italiansubs.net/index.php?option=com_remository&"
+                    + "Itemid=6&func=fileinfo&id=";
+            for (int i=0; i<als.size(); i++)
+                als.set(i, url+als.get(i));
+        }
         DownloadThread dt = new DownloadThread(mapRules, xmlReminder, als, itasa);
         Thread t = new Thread(dt, "Thread download");
         t.start();
     }
 
-    /**
-     * effettua il download automatico di myitasa comprende le fasi anche di
+    /**effettua il download automatico di myitasa comprende le fasi anche di
      * estrazione zip e analizzazione percorso definitivo.
      * 
-     * @param link
-     *            link da analizzare
+     * @param link link da analizzare
      */
     private void downItasaAuto(Object link) {
         ArrayList<String> als = new ArrayList<String>();

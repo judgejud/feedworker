@@ -36,14 +36,14 @@ public class paneSetting extends paneAbstract {
     protected JLabel jlDataAggiornamento;
     protected JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
     protected JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
-            jcbReminder, jcbPaneSubDest, jcbPaneLog, 
-            jcbPaneSetting, jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent;
+            jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
+            jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar;
     private JButton jbSaveSettings, jbAnnullaSettings;
     protected JButton jbDestSub, jbDestTorrent, jbCheckItasa, jbCheckSamba;
     protected JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf,
             jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp,
-            jtfGoogleUser;
+            jtfGoogleUser, jtfGoogleCalendar;
     protected JPasswordField jpfSamba, jpfItasa, jpfGoogle;
     private ButtonGroup bgLocalSamba, bgDownItasa;
     protected ApplicationSettings prop;
@@ -68,14 +68,13 @@ public class paneSetting extends paneAbstract {
         tpcWest.add(initTaskPaneGeneral());
         tpcWest.add(initTaskPaneSamba());
         tpcWest.add(initTaskPaneVisibilePane());
-        if (prop.isTorrentOption())
-            tpcWest.add(initTaskPaneTorrent());
+        if (prop.isSubsfactoryOption())
+            tpcWest.add(initTaskPaneSubsfactory());
                 
         JXTaskPaneContainer tpcEast = new JXTaskPaneContainer();
         tpcEast.add(initTaskPaneItalianSubs());
         tpcEast.add(initTaskPaneAlert());
-        if (prop.isSubsfactoryOption())
-            tpcEast.add(initTaskPaneSubsfactory());
+        tpcEast.add(initTaskPaneTorrent());
 
         JScrollPane jspWest = new JScrollPane(tpcWest);
         jspWest.setPreferredSize(TABLE_SCROLL_SIZE);
@@ -319,7 +318,9 @@ public class paneSetting extends paneAbstract {
     /** inizializzo il pannello settaggi torrent */
     private JXTaskPane initTaskPaneTorrent() {
         jtfDestTorrent = new JTextField(20);
-        jbDestTorrent = new JButton("Seleziona");
+        jbDestTorrent = new JButton("Seleziona directory");
+        jbDestTorrent.setToolTipText("Seleziona la directory per i "
+                + "download dei .torrent");
         jbDestTorrent.setBorder(BORDER);
         jbDestTorrent.addMouseListener(new MouseAdapter() {
             @Override
@@ -362,6 +363,14 @@ public class paneSetting extends paneAbstract {
         jtfMailSmtp = new JTextField(20);
         jtfMailSmtp.setToolTipText("Immettere l'indirizzo del server di posta SMTP "
                 + "della propria connessione internet per spedire le mail ");
+        jtfGoogleUser = new JTextField(20);
+        jtfGoogleUser.setToolTipText("Immettere l'username google completo di indirizzo "
+                + "per poter fruire degli sms tramite google calendar");
+        jtfGoogleCalendar = new JTextField(20);
+        jtfGoogleCalendar.setToolTipText("Immettere l'username google completo di indirizzo "
+                + "per poter fruire degli sms tramite google calendar");
+        jpfGoogle = new JPasswordField(20);
+        jpfGoogle.setToolTipText("Immettere la password dell'account google");
         
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Alert");
@@ -372,25 +381,39 @@ public class paneSetting extends paneAbstract {
         
         task.add(new JLabel("SMTP server"));
         task.add(jtfMailSmtp);
+        
+        task.add(new JLabel("Account google"));
+        task.add(jtfGoogleUser);
+        
+        task.add(new JLabel("Password"));
+        task.add(jpfGoogle);
+        
+        task.add(new JLabel("Calendario google da usare"));
+        task.add(jtfGoogleCalendar);
+        
         return task;
     }
     
     private JXTaskPane initTaskPaneVisibilePane(){
-        jcbPaneSubDest = new JCheckBox("Subtitle Destination");
-        jcbPaneSetting = new JCheckBox("Settings");
+        jcbPaneCalendar = new JCheckBox("Calendar");
         jcbPaneLog = new JCheckBox("Log");
-        jcbPaneSearchSubItasa = new JCheckBox("Search Subtitle Itasa");
         jcbPaneReminder = new JCheckBox("Reminder");
+        jcbPaneSearchSubItasa = new JCheckBox("Search Subtitle Itasa");
+        jcbPaneSetting = new JCheckBox("Settings");
+        jcbPaneSubDest = new JCheckBox("Subtitle Destination");
+        jcbPaneTorrent = new JCheckBox("Torrent");
         
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Visible Pane at Startup");
         task.setCollapsed(true);
         
+        task.add(jcbPaneCalendar);
         task.add(jcbPaneLog);
-        task.add(jcbPaneSearchSubItasa);
         task.add(jcbPaneReminder);
+        task.add(jcbPaneSearchSubItasa);
         task.add(jcbPaneSetting);
         task.add(jcbPaneSubDest);
+        task.add(jcbPaneTorrent);
         return task;
     }
 
@@ -405,12 +428,10 @@ public class paneSetting extends paneAbstract {
     }
 
     private void jbDestTorrentMouseClicked() {
-        if (jbDestTorrent.isEnabled()) {
-            String title = "Seleziona la Directory dove si vogliono salvare i torrent";
-            String dir = Swing.getDirectory(this, title);
-            if (dir != null)
-                jtfDestTorrent.setText(dir);
-        }
+        String title = "Seleziona la Directory dove si vogliono salvare i torrent";
+        String dir = Swing.getDirectory(this, title);
+        if (dir != null)
+            jtfDestTorrent.setText(dir);
     }
     
     public void settingFirstLookFeel(){
@@ -482,14 +503,19 @@ public class paneSetting extends paneAbstract {
     private void settingsAlertValue(){
         jtfMailTo.setText(prop.getMailTO());
         jtfMailSmtp.setText(prop.getMailSMTP());
+        jtfGoogleUser.setText(prop.getGoogleUser());
+        jtfGoogleCalendar.setText(prop.getGoogleCalendar());
+        jpfGoogle.setText(prop.getGooglePwd());
     }
     
     private void settingsPaneVisibleValue(){
+        jcbPaneCalendar.setSelected(prop.isEnablePaneCalendar());
         jcbPaneLog.setSelected(prop.isEnablePaneLog());
+        jcbPaneReminder.setSelected(prop.isEnablePaneReminder());
         jcbPaneSearchSubItasa.setSelected(prop.isEnablePaneSearchSubItasa());
         jcbPaneSetting.setSelected(prop.isEnablePaneSetting());
         jcbPaneSubDest.setSelected(prop.isEnablePaneSubDestination());
-        jcbPaneReminder.setSelected(prop.isEnablePaneReminder());
+        jcbPaneTorrent.setSelected(prop.isEnablePaneTorrent());
     }
 
     public void setDataAggiornamento(String data) {
@@ -520,7 +546,9 @@ public class paneSetting extends paneAbstract {
                 jtfMailSmtp.getText(), jcbPaneLog.isSelected(), 
                 jcbPaneSearchSubItasa.isSelected(), jcbPaneSetting.isSelected(), 
                 jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected(), 
-                jcbReminder.isSelected());
+                jcbReminder.isSelected(), jtfGoogleUser.getText(), 
+                new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), 
+                jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected());
 
         if (save && 
             !previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {

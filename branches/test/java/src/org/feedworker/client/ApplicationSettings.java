@@ -25,13 +25,14 @@ public class ApplicationSettings {
             applicationLookAndFeel, torrentDestinationFolder,
             cifsShareLocation, cifsSharePath, cifsShareUsername,
             cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, mySubsfactoryFeedUrl,
-            httpTimeout, mailTO, mailSMTP;
+            httpTimeout, mailTO, mailSMTP, googleUser, googlePwd, googleCalendar;
     private boolean subsfactoryOption, torrentOption, 
             autoDownloadMyItasa, enableAdvisorAudioRss, enableAdvisorAudioSub, 
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
             enableAdvisorMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
-            enablePaneSearchSubItasa, enablePaneReminder, reminderOption;
+            enablePaneSearchSubItasa, enablePaneReminder, reminderOption, enablePaneTorrent,
+            enablePaneCalendar;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -61,16 +62,13 @@ public class ApplicationSettings {
                 setLastDateTimeRefresh(getDecryptedValue("LAST_DATETIME_REFRESH"));
                 setApplicationLookAndFeel(
                                     getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
-                setEnableAdvisorAudioRss(
-                            getBooleanDecryptedValue("ENABLE_ADVISOR_AUDIO_RSS"));
-                setEnableAdvisorAudioSub(
-                            getBooleanDecryptedValue("ENABLE_ADVISOR_AUDIO_SUB"));
                 setTorrentOption(getBooleanDecryptedValue("TORRENT"));
                 applicationFirstTimeUsed = 
                         getBooleanDecryptedValue("IS_APPLICATION_FIRST_TIME_USED");
                 setLocalFolder(getBooleanDecryptedValue("IS_LOCAL_FOLDER"));
                 setTorrentDestinationFolder(
                                 getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
+                //SAMBA-CIFS
                 setCifsSharePath(getDecryptedValue("CIFS_SHARE_PATH"));
                 setCifsShareDomain(getDecryptedValue("CIFS_SHARE_DOMAIN"));
                 setCifsShareLocation(getDecryptedValue("CIFS_SHARE_LOCATION"));
@@ -83,17 +81,24 @@ public class ApplicationSettings {
                 setAutoLoadDownloadMyItasa(
                         getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
                 setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
-                setEnableAdvisorMail(getBooleanDecryptedValue("ENABLE_ADVISOR_MAIL"));
-                setMailTO(getDecryptedValue("MAIL_TO"));
-                setMailSMTP(getDecryptedValue("MAIL_SMTP"));
+                //VISIBLE PANE
+                setEnablePaneCalendar(getBooleanDecryptedValue("ENABLE_PANE_CALENDAR"));
                 setEnablePaneLog(getBooleanDecryptedValue("ENABLE_PANE_LOG"));
+                setEnablePaneReminder(getBooleanDecryptedValue("ENABLE_PANE_REMINDER"));
                 setEnablePaneSearchSubItasa(
                             getBooleanDecryptedValue("ENABLE_PANE_SEARCH_SUB_ITASA"));
                 setEnablePaneSetting(getBooleanDecryptedValue("ENABLE_PANE_SETTING"));
                 setEnablePaneSubDestination(
                                     getBooleanDecryptedValue("ENABLE_PANE_SUB_DEST"));
-                setEnablePaneReminder(getBooleanDecryptedValue("ENABLE_PANE_REMINDER"));
+                setEnablePaneTorrent(getBooleanDecryptedValue("ENABLE_PANE_TORRENT"));
+                //
                 setReminderOption(getBooleanDecryptedValue("ENABLE_REMINDER"));
+                //ADVISOR SETTINGS
+                setMailTO(getDecryptedValue("MAIL_TO"));
+                setMailSMTP(getDecryptedValue("MAIL_SMTP"));
+                setGoogleCalendar(getDecryptedValue("GOOGLE_CALENDAR"));
+                setGooglePwd(getDecryptedValue("GOOGLE_PWD"));
+                setGoogleUser(getDecryptedValue("GOOGLE_USER"));
             } else {
                 loadDefaultSettings();
                 storeSettings();
@@ -204,12 +209,11 @@ public class ApplicationSettings {
     /** Scrive i settaggi su file */
     public void writeAdvisorSettings() {
         try {
-            propertiesCrypting("ENABLE_ADVISOR_AUDIO_RSS", enableAdvisorAudioRss);
-            propertiesCrypting("ENABLE_ADVISOR_AUDIO_SUB", enableAdvisorAudioSub);
-            propertiesCrypting("ENABLE_ADVISOR_MAIL", enableAdvisorMail);
-            propertiesCrypting("ENABLE_ADVISOR_MAIL", enableAdvisorMail);
             propertiesCrypting("MAIL_TO", mailTO);
             propertiesCrypting("MAIL_SMTP", mailSMTP);
+            propertiesCrypting("GOOGLE_CALENDAR", googleCalendar);
+            propertiesCrypting("GOOGLE_PWD", googlePwd);
+            propertiesCrypting("GOOGLE_USER", googleUser);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -221,11 +225,13 @@ public class ApplicationSettings {
     /** Scrive i settaggi su file */
     public void writePaneVisibleSetting() {
         try {
+            propertiesCrypting("ENABLE_PANE_CALENDAR", enablePaneCalendar);
             propertiesCrypting("ENABLE_PANE_LOG", enablePaneLog);
             propertiesCrypting("ENABLE_PANE_SETTING", enablePaneSetting);
             propertiesCrypting("ENABLE_PANE_SUB_DEST", enablePaneSubDestination);
             propertiesCrypting("ENABLE_PANE_SEARCH_SUB_ITASA", enablePaneSearchSubItasa);
             propertiesCrypting("ENABLE_PANE_REMINDER", enablePaneReminder);
+            propertiesCrypting("ENABLE_PANE_TORRENT", enablePaneTorrent);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -603,5 +609,45 @@ public class ApplicationSettings {
 
     public void setReminderOption(boolean reminderOption) {
         this.reminderOption = reminderOption;
+    }
+
+    public String getGoogleCalendar() {
+        return googleCalendar;
+    }
+
+    public void setGoogleCalendar(String googleCalendar) {
+        this.googleCalendar = googleCalendar;
+    }
+
+    public String getGooglePwd() {
+        return googlePwd;
+    }
+
+    public void setGooglePwd(String googlePwd) {
+        this.googlePwd = googlePwd;
+    }
+
+    public String getGoogleUser() {
+        return googleUser;
+    }
+
+    public void setGoogleUser(String googleUser) {
+        this.googleUser = googleUser;
+    }
+
+    public boolean isEnablePaneTorrent() {
+        return enablePaneTorrent;
+    }
+
+    public void setEnablePaneTorrent(boolean enablePaneTorrent) {
+        this.enablePaneTorrent = enablePaneTorrent;
+    }
+
+    public boolean isEnablePaneCalendar() {
+        return enablePaneCalendar;
+    }
+
+    public void setEnablePaneCalendar(boolean enablePaneCalendar) {
+        this.enablePaneCalendar = enablePaneCalendar;
     }
 }// end class

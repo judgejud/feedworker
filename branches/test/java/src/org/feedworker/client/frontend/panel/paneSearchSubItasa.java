@@ -13,9 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
 import org.feedworker.client.frontend.events.ComboboxEvent;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
-
 import org.feedworker.client.frontend.table.tableResultSearchSub;
 
 /**
@@ -84,12 +84,12 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
             }
         });
         JButton jbDownload = new JButton(" Download ");
-        jbDownload.setEnabled(false);
         jbDownload.setBorder(BORDER);
         jbDownload.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                jbDownloadMouseClicked();
+                proxy.downloadSub(jtable, null, true, true);
+                proxy.cleanSelect(jtable,3);
             }
         });
         JButton jbPulisci = new JButton(" Pulisci ");
@@ -151,10 +151,6 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
                                     jtfEpisode.getText());
         } else
             proxy.printAlert("Lo show è obbligatorio per la ricerca");
-    }
-    
-    private void jbDownloadMouseClicked(){
-        //TODO
     }
 
     @Override

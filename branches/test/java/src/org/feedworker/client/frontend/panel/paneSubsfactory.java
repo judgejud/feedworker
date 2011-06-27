@@ -80,7 +80,7 @@ public class paneSubsfactory extends paneAbstract {
 
     private void jbDownMouseClicked() {
         if (jbDown.isEnabled()) {
-            proxy.downloadSub(jtSubsf, jtMySubsf, false);
+            proxy.downloadSub(jtSubsf, jtMySubsf, false, false);
             jbCleanMouseClicked();
         }
     }
