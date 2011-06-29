@@ -47,7 +47,6 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
 
     @Override
     void initializePanel() {
-        //TODO: cambiare null col nome
         jtable = new tableResultSearchSub(proxy.getNameTableSearchSub());
         JScrollPane jsp = new JScrollPane(jtable);
         JPanel jpTemp = new JPanel(new BorderLayout());

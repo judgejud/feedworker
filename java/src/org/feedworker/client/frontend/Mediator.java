@@ -49,7 +49,6 @@ public class Mediator {
 
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
     private final String ENABLE_BUTTON = "enableButton";
-    //TODO: 1.6 only
     private final FileNameExtensionFilter fnfeZIP =
                                 new FileNameExtensionFilter("ZIP file", "zip");
     private static Mediator proxy = null;
@@ -811,13 +810,6 @@ public class Mediator {
     }
 
     void invertMenuCheck(int i, boolean value) {
-        if (i==0)
-            prop.setEnableNotifyAudioRss(value);
-        else if (i==1)
-            prop.setEnableNotifyAudioSub(value);
-        else if (i==2)
-            prop.setEnableNotifyMail(value);
-        else if (i==3)
-            prop.setEnableNotifySms(value);
+        core.setPropNotify(i,value);
     }
 }
