@@ -105,11 +105,10 @@ public class paneSetting extends paneAbstract {
         jbAnnullaSettings.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                //TODO
+                settingsValue();
             }
         });
-        jbAnnullaSettings.setEnabled(false);
-
+        
         jpAction.add(jbAnnullaSettings,gbcAction);
         gbcAction.gridx = 1;
         jpAction.add(jbSaveSettings, gbcAction);
@@ -447,10 +446,9 @@ public class paneSetting extends paneAbstract {
         settingsAlertValue();
         settingsItasaValue();
         settingsPaneVisibleValue();
+        settingsTorrentValue();
         if (prop.isSubsfactoryOption())
             settingsSubsfactoryValue();
-        if (prop.isTorrentOption())
-            settingsTorrentValue();
     }
 
     /* Popola le impostazioni con il properties caricato */

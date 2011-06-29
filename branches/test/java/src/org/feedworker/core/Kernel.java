@@ -153,10 +153,12 @@ public class Kernel implements PropertyChangeListener {
      * 
      * @param link link da analizzare
      */
-    private void downItasaAuto(Object link) {
-        ArrayList<String> als = new ArrayList<String>();
-        als.add(link.toString());
-        DownloadThread dt = new DownloadThread(mapRules, xmlReminder, als, true, true);
+    private void downItasaAuto(ArrayList<String> links, boolean first) {
+        DownloadThread dt = null;
+        if (first)
+            dt = new DownloadThread(mapRules, xmlReminder, links, true, false);
+        else
+            dt = new DownloadThread(mapRules, xmlReminder, links, true, true);
         Thread t = new Thread(dt, "AutoItasa");
         t.start();
     }
@@ -232,8 +234,7 @@ public class Kernel implements PropertyChangeListener {
         return new KeyRule(name, seriesNum, version);
     }
 
-    /**
-     * cerca la versione/qualità del sub/video
+    /**cerca la versione/qualità del sub/video
      * 
      * @param text
      *            testo da confrontare
@@ -358,6 +359,7 @@ public class Kernel implements PropertyChangeListener {
                 boolean continua = true;
                 if (data != null) {
                     Date confronta = Common.stringDateTime(data);
+                    ArrayList<String> links = new ArrayList<String>();
                     for (int i = matrice.size() - 1; i >= 0; i--) {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
                         if (confronta.before(Common.stringDateTime(date_matrix))) {
@@ -391,12 +393,14 @@ public class Kernel implements PropertyChangeListener {
                                 continua = false;
                             }
                             if ((isNotStagione(matrice.get(i)[2])) && download)
-                                downItasaAuto(matrice.get(i)[0]);
+                                links.add((String)matrice.get(i)[0]);
                         } else if (first && from.equals(MYITASA)) {
                             // non deve fare nulla
                         } else // if confronta after
                             matrice.remove(i);
-                    }
+                    } //end for
+                    if (links.size()>0)
+                        downItasaAuto(links, first);
                 }
             }
         } catch (ParseException ex) {
@@ -410,7 +414,6 @@ public class Kernel implements PropertyChangeListener {
         } catch (IOException ex) {
             error.launch(ex, getClass(), from);
         }
-
         return matrice;
     }
 
@@ -1218,7 +1221,18 @@ public class Kernel implements PropertyChangeListener {
         }
         if (mapShowItasa!=null)
             ManageListener.fireComboBoxEvent(this, mapShowItasa.keySet().toArray());
-        //TODO
+    }
+
+    public void setPropNotify(int i, boolean value) {
+        if (i==0)
+            prop.setEnableNotifyAudioRss(value);
+        else if (i==1)
+            prop.setEnableNotifyAudioSub(value);
+        else if (i==2)
+            prop.setEnableNotifyMail(value);
+        else if (i==3)
+            prop.setEnableNotifySms(value);
+        prop.writeNotifySettings();
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {

@@ -80,13 +80,13 @@ public class paneSubtitleDest extends paneAbstract {
             }
         });
 
-        JButton jbSaveRole = new JButton(" Salva ");
-        jbSaveRole.setToolTipText("Salva impostazioni");
-        jbSaveRole.setBorder(BORDER);
-        jbSaveRole.addMouseListener(new MouseAdapter() {
+        JButton jbSaveRules = new JButton(" Salva ");
+        jbSaveRules.setToolTipText("Salva impostazioni");
+        jbSaveRules.setBorder(BORDER);
+        jbSaveRules.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                jbSaveRoleMouseClicked();
+                proxy.saveRules(jtable);
             }
         });
 
@@ -107,7 +107,7 @@ public class paneSubtitleDest extends paneAbstract {
         gbcAction.gridx = ++x;
         jpAction.add(jbRemoveAll, gbcAction);
         gbcAction.gridx = ++x;
-        jpAction.add(jbSaveRole, gbcAction);
+        jpAction.add(jbSaveRules, gbcAction);
         gbcAction.gridx = ++x;
         jpAction.add(jbAddDir, gbcAction);
     }
@@ -141,11 +141,6 @@ public class paneSubtitleDest extends paneAbstract {
     private void jbAddRowMouseClicked() {
         DefaultTableModel dtm = (DefaultTableModel) jtable.getModel();
         dtm.insertRow(0, new Object[]{null, 1, "normale", null, null, null, false});
-    }
-
-    private void jbSaveRoleMouseClicked() {
-        //TODO passare il model
-        proxy.saveRules(jtable);
     }
 
     private void jbRemoveRowMouseClicked() {

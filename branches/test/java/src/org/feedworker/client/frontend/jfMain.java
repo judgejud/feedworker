@@ -360,6 +360,11 @@ public class jfMain extends JFrame implements WindowListener,
             }
         });
         jmNotify.add(jcbmiNotifySms);
+        
+        jcbmiNotifyAudioRss.setSelected(prop.isEnableNotifyAudioRss());
+        jcbmiNotifyAudioSub.setSelected(prop.isEnableNotifyAudioSub());
+        jcbmiNotifyMail.setSelected(prop.isEnableNotifyMail());
+        jcbmiNotifySms.setSelected(prop.isEnableNotifySms());
         //MENU HELP
         JMenu helpJM = new JMenu(" Help ");
         applicationJMB.add(helpJM);
@@ -557,7 +562,7 @@ public class jfMain extends JFrame implements WindowListener,
                 mainJTP.setSelectedComponent(pane);
         }
     }
-
+    
     /** inizializza i listener per l'ascolto */
     private void initListeners() {
         addWindowListener(this);
