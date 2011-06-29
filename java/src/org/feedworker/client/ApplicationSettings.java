@@ -27,12 +27,12 @@ public class ApplicationSettings {
             cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, mySubsfactoryFeedUrl,
             httpTimeout, mailTO, mailSMTP, googleUser, googlePwd, googleCalendar;
     private boolean subsfactoryOption, torrentOption, 
-            autoDownloadMyItasa, enableAdvisorAudioRss, enableAdvisorAudioSub, 
+            autoDownloadMyItasa, enableNotifyAudioRss, enableNotifyAudioSub, 
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
-            enableAdvisorMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
+            enableNotifyMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
             enablePaneSearchSubItasa, enablePaneReminder, reminderOption, enablePaneTorrent,
-            enablePaneCalendar;
+            enablePaneCalendar, enableNotifySms;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -47,25 +47,36 @@ public class ApplicationSettings {
             if (SETTINGS_FILE.exists()) {
                 // Read properties file.
                 properties.load(new FileInputStream(SETTINGS_FILE));
-                
+                applicationFirstTimeUsed = 
+                        getBooleanDecryptedValue("IS_APPLICATION_FIRST_TIME_USED");
+                //GENERAL
+                setReminderOption(getBooleanDecryptedValue("ENABLE_REMINDER"));
+                setSubtitleDestinationFolder(
+                                getDecryptedValue("SUBTITLE_DESTINATION_FOLDER"));
+                setRefreshInterval(getDecryptedValue("REFRESH_INTERVAL"));
+                setLastDateTimeRefresh(getDecryptedValue("LAST_DATETIME_REFRESH"));
+                setApplicationLookAndFeel(
+                                    getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
+                setLocalFolder(getBooleanDecryptedValue("IS_LOCAL_FOLDER"));
+                setHttpTimeout(getDecryptedValue("HTTP_TIMEOUT"));
+                setEnableAdvancedDownload(
+                            getBooleanDecryptedValue("ENABLE_ADVANCED_DOWNLOAD"));
+                setEnableIconizedRun(getBooleanDecryptedValue("ENABLE_ICONIZED_RUN"));
+                //ITASA
                 setItasaFeedURL(getDecryptedValue("ITASA_FEED_URL"));
                 setMyitasaFeedURL(getDecryptedValue("MYITASA_FEED_URL"));
                 setItasaUsername(getDecryptedValue("ITASA_USERNAME"));
                 setItasaPassword(getDecryptedValue("ITASA_PASSWORD"));
-                setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
-                setSubtitleDestinationFolder(
-                                getDecryptedValue("SUBTITLE_DESTINATION_FOLDER"));
-                setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
-                setRefreshInterval(getDecryptedValue("REFRESH_INTERVAL"));
                 setAutoDownloadMyItasa(
                             getBooleanDecryptedValue("IS_AUTO_DOWNLOAD_MYITASA"));
-                setLastDateTimeRefresh(getDecryptedValue("LAST_DATETIME_REFRESH"));
-                setApplicationLookAndFeel(
-                                    getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
+                setAutoLoadDownloadMyItasa(
+                        getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
+                //SUBSFATORY
+                setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
+                setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
+                setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
+                //TORRENT
                 setTorrentOption(getBooleanDecryptedValue("TORRENT"));
-                applicationFirstTimeUsed = 
-                        getBooleanDecryptedValue("IS_APPLICATION_FIRST_TIME_USED");
-                setLocalFolder(getBooleanDecryptedValue("IS_LOCAL_FOLDER"));
                 setTorrentDestinationFolder(
                                 getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
                 //SAMBA-CIFS
@@ -74,13 +85,6 @@ public class ApplicationSettings {
                 setCifsShareLocation(getDecryptedValue("CIFS_SHARE_LOCATION"));
                 setCifsSharePassword(getDecryptedValue("CIFS_SHARE_PASSWORD"));
                 setCifsShareUsername(getDecryptedValue("CIFS_SHARE_USERNAME"));
-                setHttpTimeout(getDecryptedValue("HTTP_TIMEOUT"));
-                setEnableAdvancedDownload(
-                            getBooleanDecryptedValue("ENABLE_ADVANCED_DOWNLOAD"));
-                setEnableIconizedRun(getBooleanDecryptedValue("ENABLE_ICONIZED_RUN"));
-                setAutoLoadDownloadMyItasa(
-                        getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
-                setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
                 //VISIBLE PANE
                 setEnablePaneCalendar(getBooleanDecryptedValue("ENABLE_PANE_CALENDAR"));
                 setEnablePaneLog(getBooleanDecryptedValue("ENABLE_PANE_LOG"));
@@ -91,18 +95,19 @@ public class ApplicationSettings {
                 setEnablePaneSubDestination(
                                     getBooleanDecryptedValue("ENABLE_PANE_SUB_DEST"));
                 setEnablePaneTorrent(getBooleanDecryptedValue("ENABLE_PANE_TORRENT"));
-                //
-                setReminderOption(getBooleanDecryptedValue("ENABLE_REMINDER"));
                 //ADVISOR SETTINGS
                 setMailTO(getDecryptedValue("MAIL_TO"));
                 setMailSMTP(getDecryptedValue("MAIL_SMTP"));
                 setGoogleCalendar(getDecryptedValue("GOOGLE_CALENDAR"));
                 setGooglePwd(getDecryptedValue("GOOGLE_PWD"));
                 setGoogleUser(getDecryptedValue("GOOGLE_USER"));
-            } else {
+                //NOTIFY SETTINGS
+                setEnableNotifyAudioRss(getBooleanDecryptedValue("ENABLE_NOTIFY_AUDIO_RSS"));
+                setEnableNotifyAudioSub(getBooleanDecryptedValue("ENABLE_NOTIFY_AUDIO_SUB"));
+                setEnableNotifyMail(getBooleanDecryptedValue("ENABLE_NOTIFY_MAIL"));
+                setEnableNotifySms(getBooleanDecryptedValue("ENABLE_NOTIFY_SMS"));
+            } else
                 loadDefaultSettings();
-                storeSettings();
-            }
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -124,9 +129,8 @@ public class ApplicationSettings {
     private String getDecryptedValue(String property) {
         try {
             String value = properties.getProperty(propertyEncrypter.encrypt(property));
-            if (value != null) {
+            if (value != null)
                 return valueEncrypter.decrypt(value);
-            }
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -139,7 +143,6 @@ public class ApplicationSettings {
         return Boolean.parseBoolean(getDecryptedValue(property));
     }
 
-    /** Scrive i settaggi su file */
     public void writeGeneralSettings() {
         try {
             propertiesCrypting("SUBTITLE_DESTINATION_FOLDER",
@@ -165,7 +168,6 @@ public class ApplicationSettings {
         }
     }// end write
 
-    /** Scrive i settaggi su file */
     public void writeItasaSettings() {
         try {
             propertiesCrypting("ITASA_FEED_URL", itasaFeedURL);
@@ -174,7 +176,6 @@ public class ApplicationSettings {
             propertiesCrypting("ITASA_PASSWORD", itasaPassword);
             propertiesCrypting("IS_AUTO_DOWNLOAD_MYITASA", autoDownloadMyItasa);
             propertiesCrypting("IS_AUTO_LOAD_DOWNLOAD_MYITASA", autoLoadDownloadMyItasa);
-            storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -186,7 +187,7 @@ public class ApplicationSettings {
         try {
             propertiesCrypting("SUBSFACTORY_FEED_URL", subsfactoryFeedURL);
             propertiesCrypting("MYSUBSFACTORY_FEED_URL", mySubsfactoryFeedUrl);
-            storeSettings();
+            //storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -198,7 +199,7 @@ public class ApplicationSettings {
         try {
             propertiesCrypting("TORRENT_DESTINATION_FOLDER",
                     torrentDestinationFolder);
-            storeSettings();
+            propertiesCrypting("TORRENT", torrentOption);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -206,7 +207,7 @@ public class ApplicationSettings {
         }
     }
     
-    /** Scrive i settaggi su file */
+    
     public void writeAdvisorSettings() {
         try {
             propertiesCrypting("MAIL_TO", mailTO);
@@ -214,6 +215,20 @@ public class ApplicationSettings {
             propertiesCrypting("GOOGLE_CALENDAR", googleCalendar);
             propertiesCrypting("GOOGLE_PWD", googlePwd);
             propertiesCrypting("GOOGLE_USER", googleUser);
+            //storeSettings();
+        } catch (GeneralSecurityException e) {
+            error.launch(e, getClass());
+        } catch (IOException e) {
+            error.launch(e, getClass(), null);
+        }
+    }// end write
+    
+    public void writeNotifySettings() {
+        try {
+            propertiesCrypting("ENABLE_NOTIFY_AUDIO_RSS", enableNotifyAudioRss);
+            propertiesCrypting("ENABLE_NOTIFY_AUDIO_SUB", enableNotifyAudioSub);
+            propertiesCrypting("ENABLE_NOTIFY_MAIL", enableNotifyMail);
+            propertiesCrypting("ENABLE_NOTIFY_SMS", enableNotifySms);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -232,7 +247,6 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_PANE_SEARCH_SUB_ITASA", enablePaneSearchSubItasa);
             propertiesCrypting("ENABLE_PANE_REMINDER", enablePaneReminder);
             propertiesCrypting("ENABLE_PANE_TORRENT", enablePaneTorrent);
-            storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -272,7 +286,6 @@ public class ApplicationSettings {
 
     private void loadDefaultSettings() {
         subsfactoryOption = true;
-        torrentOption = true;
         applicationFirstTimeUsed = true;
         applicationLookAndFeel = "Synthetica Standard";
         enablePaneLog = true;
@@ -280,9 +293,8 @@ public class ApplicationSettings {
         try {
             propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED",
                     applicationFirstTimeUsed);
-            propertiesCrypting("TORRENT", torrentOption);
             propertiesCrypting("SUBSFACTORY", subsfactoryOption);
-            propertiesCrypting("APPLICATION_LOOK_AND_FEEL", applicationLookAndFeel);
+            storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -302,34 +314,42 @@ public class ApplicationSettings {
         }
     }// end writeOnlyLastDate
 
-    public boolean isEnabledAdvisorAudioRss() {
-        return enableAdvisorAudioRss;
+    public boolean isEnableNotifyAudioRss() {
+        return enableNotifyAudioRss;
     }
 
-    public void setEnableAdvisorAudioRss(boolean enableAdvisor) {
-        enableAdvisorAudioRss = enableAdvisor;
+    public void setEnableNotifyAudioRss(boolean enableAdvisor) {
+        enableNotifyAudioRss = enableAdvisor;
     }
-    public boolean isEnabledAdvisorAudioSub() {
-        return enableAdvisorAudioSub;
+    public boolean isEnableNotifyAudioSub() {
+        return enableNotifyAudioSub;
     }
 
-    public void setEnableAdvisorAudioSub(boolean enableAdvisor) {
-        enableAdvisorAudioSub = enableAdvisor;
+    public void setEnableNotifyAudioSub(boolean enableAdvisor) {
+        enableNotifyAudioSub = enableAdvisor;
     }
     
-    public boolean isEnabledAdvisorMail() {
-        return enableAdvisorMail;
+    public boolean isEnableNotifyMail() {
+        return enableNotifyMail;
     }
 
-    public void setEnableAdvisorMail(boolean enableAdvisor) {
-        enableAdvisorMail = enableAdvisor;
+    public void setEnableNotifyMail(boolean enableAdvisor) {
+        enableNotifyMail = enableAdvisor;
+    }
+
+    public boolean isEnableNotifySms() {
+        return enableNotifySms;
+    }
+
+    public void setEnableNotifySms(boolean enableNotifySms) {
+        this.enableNotifySms = enableNotifySms;
     }
 
     public boolean isTorrentOption() {
         return torrentOption;
     }
 
-    private void setTorrentOption(boolean hasTorrentOption) {
+    public void setTorrentOption(boolean hasTorrentOption) {
         this.torrentOption = hasTorrentOption;
     }
 

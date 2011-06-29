@@ -284,28 +284,27 @@ public class jfMain extends JFrame implements WindowListener,
         jmWindowTab.add(jmiWindowSetting);
         jmWindowTab.add(jmiWindowSubDest);
         jmWindowTab.add(jmiWindowTorrent);
-
+        //NAS
         JMenu nasJM = new JMenu(" NAS ");
         JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
-        JMenuItem taskStatusJMI = new JMenuItem(" Task status ");
-        JMenuItem deleteCompletedTaskJMI = new JMenuItem(
-                " Delete completed task ");
         videoMoveJMI.addActionListener(new ActionListener()  {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 proxy.synoMoveVideo();
             }
         });
+        
+        JMenuItem taskStatusJMI = new JMenuItem(" Task status ");
         taskStatusJMI.addActionListener(new ActionListener()  {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 proxy.synoStatus();
             }
         });
+        
+        JMenuItem deleteCompletedTaskJMI = new JMenuItem(
+                " Delete completed task ");
         deleteCompletedTaskJMI.addActionListener(new ActionListener()  {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 proxy.synoClearFinish();
@@ -321,21 +320,45 @@ public class jfMain extends JFrame implements WindowListener,
         
         JCheckBoxMenuItem jcbmiNotifyAudioRss = new JCheckBoxMenuItem(" Rss audio ");
         jcbmiNotifyAudioRss.setToolTipText("Abilita la notifica audio dei nuovi feed rss");
+        jcbmiNotifyAudioRss.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                proxy.invertMenuCheck(0, ((JCheckBoxMenuItem)e.getSource()).isSelected());
+            }
+        });
         jmNotify.add(jcbmiNotifyAudioRss);
         
         JCheckBoxMenuItem jcbmiNotifyAudioSub = new JCheckBoxMenuItem(" Sub audio");
         jcbmiNotifyAudioSub.setToolTipText("Abilita la notifica audio dei sub "
                                         + "scaricati in automatico");
+        jcbmiNotifyAudioSub.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                proxy.invertMenuCheck(1, ((JCheckBoxMenuItem)e.getSource()).isSelected());
+            }
+        });
         jmNotify.add(jcbmiNotifyAudioSub);
         
         JCheckBoxMenuItem jcbmiNotifyMail = new JCheckBoxMenuItem(" Sub e-mail ");
         jcbmiNotifyMail.setToolTipText("Abilita la notifica per posta dei sub "
                                         + "scaricati in automatico");
+        jcbmiNotifyMail.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                proxy.invertMenuCheck(2, ((JCheckBoxMenuItem)e.getSource()).isSelected());
+            }
+        });
         jmNotify.add(jcbmiNotifyMail);
         
         JCheckBoxMenuItem jcbmiNotifySms = new JCheckBoxMenuItem(" Sub sms ");
         jcbmiNotifySms.setToolTipText("Abilita la notifica per sms tramite google "
                                         + "calendar dei sub scaricati in automatico ");
+        jcbmiNotifySms.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                proxy.invertMenuCheck(3, ((JCheckBoxMenuItem)e.getSource()).isSelected());
+            }
+        });
         jmNotify.add(jcbmiNotifySms);
         //MENU HELP
         JMenu helpJM = new JMenu(" Help ");

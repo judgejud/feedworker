@@ -143,7 +143,7 @@ public class Kernel implements PropertyChangeListener {
             for (int i=0; i<als.size(); i++)
                 als.set(i, url+als.get(i));
         }
-        DownloadThread dt = new DownloadThread(mapRules, xmlReminder, als, itasa);
+        DownloadThread dt = new DownloadThread(mapRules, xmlReminder, als, itasa, false);
         Thread t = new Thread(dt, "Thread download");
         t.start();
     }
@@ -156,7 +156,7 @@ public class Kernel implements PropertyChangeListener {
     private void downItasaAuto(Object link) {
         ArrayList<String> als = new ArrayList<String>();
         als.add(link.toString());
-        DownloadThread dt = new DownloadThread(mapRules, xmlReminder, als, true);
+        DownloadThread dt = new DownloadThread(mapRules, xmlReminder, als, true, true);
         Thread t = new Thread(dt, "AutoItasa");
         t.start();
     }
@@ -321,16 +321,15 @@ public class Kernel implements PropertyChangeListener {
 
     /** Scrive le proprietà dell'applicazione nel file properties */
     public void writeProp() {
-        prop.writeGeneralSettings();
         prop.writeItasaSettings();
         prop.writeAdvisorSettings();
         prop.writePaneVisibleSetting();
+        prop.writeTorrentSettings();
         if (prop.isSubsfactoryOption())
             prop.writeSubsfactorySettings();
-        if (prop.isTorrentOption())
-            prop.writeTorrentSettings();
         if (prop.isApplicationFirstTimeUsed())
             prop.writeApplicationFirstTimeUsedFalse();
+        prop.writeGeneralSettings();
     }
 
     /**Restituisce l'arraylist contenente i feed rss
@@ -421,15 +420,15 @@ public class Kernel implements PropertyChangeListener {
             String temp = Common.actualTime();
             runItasa(true);
             runSubsfactory(true);
-            runTorrent(true);
+            if (prop.isTorrentOption())
+                runTorrent(true);
             prop.setLastDateTimeRefresh(temp);
             int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
             runTimer(delay);
         }
     }
 
-    /**
-     * esegue gli rss sotto timer
+    /**esegue gli rss sotto timer
      * 
      * @param delay
      *            tempo in secondi per il timer
@@ -446,9 +445,9 @@ public class Kernel implements PropertyChangeListener {
                         icontray = true;
                     if (runSubsfactory(false))
                         icontray = true;
-                    if (runTorrent(false))
+                    if (prop.isTorrentOption() && runTorrent(false))
                         icontray = true;
-                    if ((icontray) && (prop.isEnabledAdvisorAudioRss())) {
+                    if ((icontray) && (prop.isEnableNotifyAudioRss())) {
                         try {
                             AudioPlay.playFeedWav();
                         } catch (UnsupportedAudioFileException ex) {

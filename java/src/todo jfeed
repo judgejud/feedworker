@@ -13,7 +13,6 @@ aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
 introdurre set per i reminder in modo che non ci siano duplicati (treeset)?
 fare bottone test connect samba
 migrazione account itasa da 1vecchio a 1nuovo per quanto riguarda la lista di serial tv myitasa
-ricerca sub: fare il download
 
 CORREZIONI:
 -mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.

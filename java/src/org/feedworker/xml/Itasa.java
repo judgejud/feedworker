@@ -138,23 +138,19 @@ public class Itasa extends AbstractQueryXML{
     public TreeMap<String, String> showList() throws JDOMException, IOException, 
                                                         ItasaException, Exception {
         TreeMap<String, String> container = null;
-        try{
-            connectHttps(composeUrl(URL_SHOW_LIST, null));            
-            checkStatus();
-            if (isStatusSuccess()){
-                container = new TreeMap<String, String>();
-                Iterator iter =  getDescendantsZero(2);
-                while (iter.hasNext()){
-                    Element item = (Element) iter.next();
-                    String id = item.getChild(TAG_SHOW_ID).getText();
-                    String name = item.getChild(TAG_SHOW_NAME).getText();
-                    container.put(name, id);
-                }
-            } else 
-                throw new ItasaException("ShowList: "+ error);
-        } catch(JDOMParseException ex){
-            //TODO JDOMParseException fare caricamento da file xml
-        }
+        connectHttps(composeUrl(URL_SHOW_LIST, null));            
+        checkStatus();
+        if (isStatusSuccess()){
+            container = new TreeMap<String, String>();
+            Iterator iter =  getDescendantsZero(2);
+            while (iter.hasNext()){
+                Element item = (Element) iter.next();
+                String id = item.getChild(TAG_SHOW_ID).getText();
+                String name = item.getChild(TAG_SHOW_NAME).getText();
+                container.put(name, id);
+            }
+        } else 
+            throw new ItasaException("ShowList: "+ error);
         return container;
     }
 
@@ -260,6 +256,7 @@ public class Itasa extends AbstractQueryXML{
             throw new ItasaException(error);
         return itasa;
     }
+    
     //TODO: decidere come restituire gli show
     public void myItasaShows(String authcode) throws JDOMException, IOException, Exception{
         ArrayList params = new ArrayList();
@@ -364,7 +361,7 @@ public class Itasa extends AbstractQueryXML{
         if (params!=null)
             for (int i=0; i<params.size(); i++)
                 newUrl+= OPERATOR_AND + params.get(i).toString();
-        System.out.println(newUrl);
+        //System.out.println(newUrl);
         return newUrl;
     }
     
@@ -393,7 +390,9 @@ public class Itasa extends AbstractQueryXML{
             //Https_1 h = Https_1.getInstance();
             document = new SAXBuilder().build(Https.getInstance().connection(url));
         } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
         } catch (KeyManagementException ex) {
+            ex.printStackTrace();
         }
     }
     

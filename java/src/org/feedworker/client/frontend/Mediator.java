@@ -57,8 +57,7 @@ public class Mediator {
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
 
-    /**
-     * Restituisce l'istanza attiva del Mediator se non esiste la crea
+    /**Restituisce l'istanza attiva del Mediator se non esiste la crea
      *
      * @return Mediator
      */
@@ -72,7 +71,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "351 by "
+                + "352 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -394,10 +393,9 @@ public class Mediator {
      * @return booleano che le impostazioni sono ok
      */
     boolean checkSaveTorrent(String text) {
-        if (!Lang.verifyTextNotNull(text)) {
+        if (!Lang.verifyTextNotNull(text))
             printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai "
                     + "scaricare .torrent");
-        }
         return true;
     }
 
@@ -501,11 +499,11 @@ public class Mediator {
             String time, String laf, String timeout,
             boolean advancedDownload, boolean runIconized, String itasa,
             String myitasa, String user, String pwd, boolean autoMyitasa,
-            boolean autoLoadMyItasa, String subsf, String mySubsf, String torrent,
+            boolean autoLoadMyItasa, String subsf, String mySubsf, String torrentDest,
             String mailTO,  String smtp, boolean paneLog, boolean paneSearch, 
-            boolean paneSetting, boolean paneSubDest, boolean paneReminder, boolean reminder, 
-            String googleUser, String googlePwd, String googleCalendar, boolean paneTorrent, 
-            boolean paneCalendar) {
+            boolean paneSetting, boolean paneSubDest, boolean paneReminder, 
+            boolean reminder, String googleUser, String googlePwd, String googleCalendar, 
+            boolean paneTorrent, boolean paneCalendar, boolean torrentOption) {
                 
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
@@ -519,7 +517,7 @@ public class Mediator {
             if (prop.isSubsfactoryOption() && save)
                 save = checkSaveSubsf(subsf, mySubsf);
             if (prop.isTorrentOption() && save)
-                checkSaveTorrent(torrent);
+                checkSaveTorrent(torrentDest);
         }
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
@@ -527,7 +525,7 @@ public class Mediator {
                     advancedDownload, runIconized, reminder);
             setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
             setPropSubsf(subsf, mySubsf);
-            prop.setTorrentDestinationFolder(torrent);
+            setPropTorrent(torrentDest, torrentOption);
             setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
                             paneReminder, paneTorrent, paneCalendar);
@@ -604,6 +602,11 @@ public class Mediator {
         prop.setEnablePaneSubDestination(subdest);
         prop.setEnablePaneReminder(reminder);
         prop.setEnablePaneTorrent(torrent);
+    }
+    
+    private void setPropTorrent(String dest, boolean option){
+        prop.setTorrentDestinationFolder(dest);
+        prop.setTorrentOption(option);
     }
 
     void bruteRefresh() {
@@ -805,5 +808,16 @@ public class Mediator {
 
     public void undoLastRemoveReminder() {
         
+    }
+
+    void invertMenuCheck(int i, boolean value) {
+        if (i==0)
+            prop.setEnableNotifyAudioRss(value);
+        else if (i==1)
+            prop.setEnableNotifyAudioSub(value);
+        else if (i==2)
+            prop.setEnableNotifyMail(value);
+        else if (i==3)
+            prop.setEnableNotifySms(value);
     }
 }
