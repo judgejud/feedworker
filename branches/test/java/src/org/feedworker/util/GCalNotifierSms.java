@@ -23,7 +23,6 @@ import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
 
 public class GCalNotifierSms {
-    
     /**
     * TimeZone offset (in hours)
     * event start offset (in minutes)
@@ -31,10 +30,8 @@ public class GCalNotifierSms {
     * title
     * description
     */
-    public static void main(String[] args) {
-        String user = "judgejud@gmail.com";
-        String password = "pincopallino";
-        String calendarName = "judge judge";
+    public static void send(String user, String password, String calendarName, 
+                            String description) {
         String url_https = "https://www.google.com/calendar/feeds/default/allcalendars/full";
         long minutes = 60*1000;
         try {
@@ -51,10 +48,9 @@ public class GCalNotifierSms {
                 String currCalendarName = entry.getTitle().getPlainText();
                 if (currCalendarName.equals(calendarName)) {
                     Long tzOffset = 2 * 60 * minutes;
-                    Long startOffset = 30 * minutes;
-                    Long endOffset = 60 * minutes;
-                    String title = "test";
-                    String description = "ciao";
+                    Long startOffset = 12 * minutes;
+                    Long endOffset = 30 * minutes;
+                    String title = "FeedWorker";
                     sendDowntimeAlert(myService, entry, title, description, 
                             startOffset, endOffset, tzOffset);
                     break;
@@ -76,7 +72,7 @@ public class GCalNotifierSms {
                                             Long startOffset, Long endOffset, Long tzOffset) 
                                         throws IOException, ServiceException {
         String postUrlString = entry.getLink("alternate", "application/atom+xml").getHref();
-        //was: "http://www.google.com/calendar/feeds/jo@gmail.com/private/full"
+
         URL postUrl = new URL(postUrlString);
 
         CalendarEventEntry myEntry = new CalendarEventEntry();
@@ -106,7 +102,7 @@ public class GCalNotifierSms {
 
         //5 minute reminder
         Reminder reminder = new Reminder();
-        reminder.setMinutes(10);
+        reminder.setMinutes(5);
         reminder.setMethod(Method.SMS);
         insertedEntry.getReminder().add(reminder);
         insertedEntry.update();

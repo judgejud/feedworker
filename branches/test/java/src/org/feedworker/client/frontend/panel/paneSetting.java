@@ -37,7 +37,8 @@ public class paneSetting extends paneAbstract {
     protected JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
     protected JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
             jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
-            jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar;
+            jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
+            jcbTorrent;
     private JButton jbSaveSettings, jbAnnullaSettings;
     protected JButton jbDestSub, jbDestTorrent, jbCheckItasa, jbCheckSamba;
     protected JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
@@ -317,7 +318,8 @@ public class paneSetting extends paneAbstract {
 
     /** inizializzo il pannello settaggi torrent */
     private JXTaskPane initTaskPaneTorrent() {
-        jtfDestTorrent = new JTextField(20);
+        jcbTorrent = new JCheckBox("Abilita feed torrent");
+        jtfDestTorrent = new JTextField(25);
         jbDestTorrent = new JButton("Seleziona directory");
         jbDestTorrent.setToolTipText("Seleziona la directory per i "
                 + "download dei .torrent");
@@ -328,14 +330,15 @@ public class paneSetting extends paneAbstract {
                 jbDestTorrentMouseClicked();
             }
         });
+        JPanel temp = new JPanel();
+        temp.add(jtfDestTorrent);
+        temp.add(jbDestTorrent);
         
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Torrent");
         task.setCollapsed(true);
-        
-        task.add(jbDestTorrent);
-
-        task.add(jtfDestTorrent);
+        task.add(jcbTorrent);
+        task.add(temp);
         return task;
     }
 
@@ -492,6 +495,7 @@ public class paneSetting extends paneAbstract {
     }
 
     private void settingsTorrentValue() {
+        jcbTorrent.setSelected(prop.isTorrentOption());
         jtfDestTorrent.setText(prop.getTorrentDestinationFolder());
     }
 
@@ -536,7 +540,8 @@ public class paneSetting extends paneAbstract {
         boolean save = proxy.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
                 jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(), 
                 jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
-                jcbMinuti.getSelectedItem().toString(), jcbLookFeel.getSelectedItem().toString(),
+                jcbMinuti.getSelectedItem().toString(), 
+                jcbLookFeel.getSelectedItem().toString(),
                 jcbTimeout.getSelectedItem().toString(),
                 jcbDestination.isSelected(), jcbRunIconized.isSelected(),
                 jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
@@ -548,7 +553,8 @@ public class paneSetting extends paneAbstract {
                 jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected(), 
                 jcbReminder.isSelected(), jtfGoogleUser.getText(), 
                 new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), 
-                jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected());
+                jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected(), 
+                jcbTorrent.isSelected());
 
         if (save && 
             !previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {

@@ -14,9 +14,9 @@ import javax.mail.internet.MimeMessage;
  * @author luca
  */
 public class Mail {
-    
-    public static boolean send(String smtp, String to, String text) throws MessagingException {
-        String from = "FeedWorker@test.org";
+    public static boolean send(String smtp, String to, String text, String user) 
+                                                    throws MessagingException {
+        String from = "FeedWorker@italiansubs.net";
         // Get system properties
         Properties properties = System.getProperties();
         // Setup mail server
@@ -34,21 +34,14 @@ public class Mail {
         message.setSubject("Avviso sottotitolo/i estratti");
         // Sets the given String as this part's content,
         // with a MIME type of "text/plain".
-        message.setText(text);
+        String msg = "Ciao " + user + "\n\n" + text;
+        msg += "\nN.B. Questa è una mail di avviso generata dal tuo client FeedWorker,"
+                + "usando un indirizzo fittizio, dal quale potrai ricevere avvisi, ma "
+                + "non potrai rispondere.\nSe vuoi evitare le mail, sei pregato di"
+                + "disabilitare la notifica e-mail da FeedWorker.";
+        message.setText(msg);
         // Send message
         Transport.send(message);
         return true;
     }
-    
-    public static void main(String[] args){
-        String msg = "04/01/2011 21:55:16 Estratto "
-                + "Pretty.Little.Liars.s01e11.sub.itasa.srt e rinominato in 11.srt "
-                + "nella cartella condivisa samba\\pretty little liars";
-        try {
-            send("out.alice.it", "judgejud@gmail.com", msg);
-        } catch (MessagingException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
 }

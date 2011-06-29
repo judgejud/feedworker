@@ -5,16 +5,24 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipException;
+import javax.mail.MessagingException;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.exception.ManageException;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
+import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
-import org.feedworker.exception.ManageException;
 import org.feedworker.util.Samba;
+import org.feedworker.xml.Reminder;
 
 import org.jfacility.Io;
 import org.jfacility.Util;
@@ -24,30 +32,31 @@ import jcifs.smb.SmbException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
-import org.feedworker.xml.Reminder;
+import org.feedworker.util.GCalNotifierSms;
+import org.feedworker.util.Mail;
 /**
  * 
  * @author luca
  */
 public class DownloadThread implements Runnable {
-
-    //private final String CMD_DELETE = "delete";
     private final String SPLIT_SUB = ".sub";
     private final String SPLIT_POINT = "\\.";
     private final String[] QUALITY = Quality.toArray();
     private ArrayList<String> als;
     private boolean itasa;
+    private boolean autoItasa;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
     private TreeMap<KeyRule, ValueRule> mapRules;
     private Reminder xmlReminder;
 
     DownloadThread(TreeMap<KeyRule, ValueRule> map, Reminder xml, 
-                                    ArrayList<String> _als, boolean _itasa) {
+                            ArrayList<String> _als, boolean _itasa, boolean _autoitasa) {
         als = _als;
         itasa = _itasa;
         mapRules = map;
         xmlReminder = xml;
+        autoItasa = _autoitasa;
     }
     
     /**Estrae lo zip e restituisce l'arraylist di file contenuti nello zip
@@ -177,6 +186,8 @@ public class DownloadThread implements Runnable {
         Http http = new Http(connection_Timeout);
         ArrayList<File> alFile = new ArrayList<File>();
         ArrayList<Object[]> alReminder = new ArrayList<Object[]>();
+        ArrayList<String> alNotify = new ArrayList<String>();
+        boolean sub = false;
         try {
             if (itasa)
                 http.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
@@ -189,10 +200,13 @@ public class DownloadThread implements Runnable {
                         File f = File.createTempFile(n.substring(0, l - 4), n.substring(l - 4));
                         Io.downloadSingle(entity.getContent(), f);
                         alFile.addAll(extract(f));
+                        String temp = f.getName().split(".sub.")[0].replaceAll("\\.", " ");
                         if (prop.isReminderOption())
-                            alReminder.add(new Object[]{Common.actualDate(), 
-                                f.getName().split(".sub.")[0].replaceAll("\\.", " "), 
-                                        false});
+                            alReminder.add(new Object[]{Common.actualDate(), temp, false});
+                        if (prop.isEnableNotifyMail() || prop.isEnableNotifySms())
+                            alNotify.add(temp);
+                        if (autoItasa && !sub)
+                            sub=true;
                     } else
                         printAlert("Sessione scaduta");
                 }
@@ -210,9 +224,39 @@ public class DownloadThread implements Runnable {
         }        
         http.closeClient();
         analyzeDest(alFile);
+        if (sub && prop.isEnableNotifyAudioSub())
+            try {
+                AudioPlay.playSubWav();
+        } catch (UnsupportedAudioFileException ex) {
+            error.launch(ex, getClass());
+        } catch (LineUnavailableException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass(), null);
+        }
         if (prop.isReminderOption()){
             addXML(alReminder);
             ManageListener.fireTableEvent(this, alReminder, Kernel.getIstance().REMINDER);
+        }
+        if (alNotify.size()>0)
+            startNotifyMailSms(alNotify);
+    }
+    
+    private void startNotifyMailSms(ArrayList<String> array){
+        String text = "";
+        for (int i=0; i<array.size(); i++)
+            text += array.get(i) + "\n";
+        if (prop.isEnableNotifyMail()){
+            try {
+                Mail.send(prop.getMailSMTP(), prop.getMailTO(), text, 
+                        prop.getItasaUsername());
+            } catch (MessagingException ex) {
+                ex.printStackTrace();
+            }
+        }
+        if (prop.isEnableNotifySms()){
+            GCalNotifierSms.send(prop.getGoogleUser(), prop.getGooglePwd(), 
+                                prop.getGoogleCalendar(), text);
         }
     }
     
@@ -233,11 +277,10 @@ public class DownloadThread implements Runnable {
             newname = namesub.split(SPLIT_SUB)[0].toLowerCase().replaceFirst(
                     from, "");
             String ext = namesub.substring(namesub.length() - 4);
-            if (newname.substring(0, 1).equalsIgnoreCase("s")) {
+            if (newname.substring(0, 1).equalsIgnoreCase("s"))
                 newname = newname.substring(4);
-            } else if (newname.substring(0, 1).equalsIgnoreCase("e")) {
+            else if (newname.substring(0, 1).equalsIgnoreCase("e"))
                 newname = newname.substring(1);
-            }
             newname += ext;
         }
         return newname;
