@@ -48,8 +48,8 @@ public class GCalNotifierSms {
                 String currCalendarName = entry.getTitle().getPlainText();
                 if (currCalendarName.equals(calendarName)) {
                     Long tzOffset = 2 * 60 * minutes;
-                    Long startOffset = 12 * minutes;
-                    Long endOffset = 30 * minutes;
+                    Long startOffset = 20 * minutes;
+                    Long endOffset = 60 * minutes;
                     String title = "FeedWorker";
                     sendDowntimeAlert(myService, entry, title, description, 
                             startOffset, endOffset, tzOffset);
@@ -102,7 +102,7 @@ public class GCalNotifierSms {
 
         //5 minute reminder
         Reminder reminder = new Reminder();
-        reminder.setMinutes(5);
+        reminder.setMinutes(10);
         reminder.setMethod(Method.SMS);
         insertedEntry.getReminder().add(reminder);
         insertedEntry.update();

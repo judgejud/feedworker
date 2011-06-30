@@ -70,7 +70,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "352 by "
+                + "354 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -810,6 +810,25 @@ public class Mediator {
     }
 
     void invertMenuCheck(int i, boolean value) {
-        core.setPropNotify(i,value);
+        boolean check = true;
+        if (i==2){
+            if (!Lang.verifyTextNotNull(prop.getMailTO())||
+                    Lang.verifyTextNotNull(prop.getMailSMTP())) {
+                check = false;
+                printAlert("Per usare le notifiche email devono essere impostati i campi "
+                        + "MailTO & SMTP");
+            }
+        }
+        if (i==3){
+            if (!Lang.verifyTextNotNull(prop.getGoogleUser())||
+                    Lang.verifyTextNotNull(prop.getGooglePwd()) || 
+                    Lang.verifyTextNotNull(prop.getGoogleCalendar())) {
+                check = false;
+                printAlert("Per usare le notifiche sms devono essere impostati i campi "
+                        + "Google User Password Calendar");
+            }
+        }
+        if (check)
+            core.setPropNotify(i,value);
     }
 }
