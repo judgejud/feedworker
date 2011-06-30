@@ -37,7 +37,7 @@ public class Mail {
         String msg = "Ciao " + user + "\n\n" + text;
         msg += "\nN.B. Questa è una mail di avviso generata dal tuo client FeedWorker,"
                 + "usando un indirizzo fittizio, dal quale potrai ricevere avvisi, ma "
-                + "non potrai rispondere.\nSe vuoi evitare le mail, sei pregato di"
+                + "non potrai rispondere.\nSe vuoi evitare le mail, sei pregato di "
                 + "disabilitare la notifica e-mail da FeedWorker.";
         message.setText(msg);
         // Send message

@@ -143,10 +143,8 @@ public class jfMain extends JFrame implements WindowListener,
     /** inizializza la barra di menù */
     private void initializeMenuBar() {
         JMenuBar applicationJMB = new JMenuBar();
-
+        
         JMenu fileJM = new JMenu(" Operazioni ");
-        applicationJMB.add(fileJM);
-
         JMenuItem bruteRefreshJMI = new JMenuItem(" Forza aggiornamento RSS");
         bruteRefreshJMI.addActionListener(new ActionListener()  {
             @Override
@@ -186,10 +184,20 @@ public class jfMain extends JFrame implements WindowListener,
             }
         });
         fileJM.add(closeJMI);
-
+        
+        applicationJMB.add(fileJM);
+        applicationJMB.add(jMenuSerial()); //Stampa tf
+        applicationJMB.add(jMenuWindowTab());//Visualizza pannelli
+        applicationJMB.add(jMenuNas()); //NAS
+        applicationJMB.add(jMenuNotify()); //NOTIFICHE
+        applicationJMB.add(jMenuHelp()); //HELP
+        // Install the menu bar in the frame
+        setJMenuBar(applicationJMB);
+    }
+    
+    private JMenu jMenuSerial(){
         JMenu jmSerial = new JMenu(" Serial tv ");
-        applicationJMB.add(jmSerial);
-
+        
         JMenuItem jmiPrintToday = new JMenuItem(" Stampa oggi ");        
         jmiPrintToday.addActionListener(new ActionListener()  {
             @Override
@@ -217,9 +225,12 @@ public class jfMain extends JFrame implements WindowListener,
         jmSerial.add(jmiPrintToday);
         jmSerial.add(jmiPrintTomorrow);
         jmSerial.add(jmiPrintYesterday);
-
+        
+        return jmSerial;
+    }
+    
+    private JMenu jMenuWindowTab(){
         JMenu jmWindowTab = new JMenu(" Visualizza ");
-        applicationJMB.add(jmWindowTab);
         
         JMenuItem jmiWindowSubDest = new JMenuItem(" Subtitle Destination ");
         jmiWindowSubDest.addActionListener(new ActionListener()  {
@@ -284,7 +295,62 @@ public class jfMain extends JFrame implements WindowListener,
         jmWindowTab.add(jmiWindowSetting);
         jmWindowTab.add(jmiWindowSubDest);
         jmWindowTab.add(jmiWindowTorrent);
-        //NAS
+        
+        return jmWindowTab;
+    }
+    
+    private JMenu jMenuHelp(){
+        JMenu helpJM = new JMenu(" Help ");
+
+        JMenuItem subtitleRule = new JMenuItem(" Regola Sottotitolo ");
+        JMenuItem systemInfo = new JMenuItem(" Informazioni Sistema ");
+        JMenuItem infoFeedColor = new JMenuItem(" Legenda Colori Feed ");
+        JMenuItem googleCalendarSMS = new JMenuItem(" Google Calendar SMS ");
+        
+        subtitleRule.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(getParent(),
+                        createPopupRuleHelp(),
+                        "Come creare le regole per i sottotitoli",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+
+        systemInfo.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showSystemInfo();
+            }
+        });
+
+        infoFeedColor.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(getParent(),
+                        createPopupInfoFeedColor(), "Legenda Colori",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+        
+        googleCalendarSMS.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(getParent(),
+                        createPopupGoogleCalSMS(), "Legenda Colori",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+        
+        helpJM.add(subtitleRule);
+        helpJM.add(systemInfo);
+        helpJM.add(infoFeedColor);
+        helpJM.add(googleCalendarSMS);
+        
+        return helpJM;
+    }
+    
+    private JMenu jMenuNas(){
         JMenu nasJM = new JMenu(" NAS ");
         JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
         videoMoveJMI.addActionListener(new ActionListener()  {
@@ -313,10 +379,11 @@ public class jfMain extends JFrame implements WindowListener,
         nasJM.add(videoMoveJMI);
         nasJM.add(taskStatusJMI);
         nasJM.add(deleteCompletedTaskJMI);
-        applicationJMB.add(nasJM);
-        //MENU NOTIFICHE
+        return nasJM;
+    }
+    
+    private JMenu jMenuNotify(){
         JMenu jmNotify = new JMenu(" Notifiche ");
-        applicationJMB.add(jmNotify);
         
         JCheckBoxMenuItem jcbmiNotifyAudioRss = new JCheckBoxMenuItem(" Rss audio ");
         jcbmiNotifyAudioRss.setToolTipText("Abilita la notifica audio dei nuovi feed rss");
@@ -365,45 +432,30 @@ public class jfMain extends JFrame implements WindowListener,
         jcbmiNotifyAudioSub.setSelected(prop.isEnableNotifyAudioSub());
         jcbmiNotifyMail.setSelected(prop.isEnableNotifyMail());
         jcbmiNotifySms.setSelected(prop.isEnableNotifySms());
-        //MENU HELP
-        JMenu helpJM = new JMenu(" Help ");
-        applicationJMB.add(helpJM);
-
-        JMenuItem helpSubtitleRoleJMI = new JMenuItem(" Regola Sottotitolo ");
-        helpSubtitleRoleJMI.addActionListener(new ActionListener()  {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(getParent(),
-                        createPopupRuleHelp(),
-                        "Come creare le regole per i sottotitoli",
-                        JOptionPane.PLAIN_MESSAGE);
-            }
-        });
-        helpJM.add(helpSubtitleRoleJMI);
-
-        JMenuItem helpSystemInfoJMI = new JMenuItem(" Informazioni Sistema ");
-        helpSystemInfoJMI.addActionListener(new ActionListener()  {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showSystemInfo();
-            }
-        });
-        helpJM.add(helpSystemInfoJMI);
-
-        JMenuItem jmiHelpInfoFeedColor = new JMenuItem(" Legenda Colori Feed ");
-        jmiHelpInfoFeedColor.addActionListener(new ActionListener()  {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(getParent(),
-                        createPopupInfoFeedColor(), "Legenda Colori",
-                        JOptionPane.PLAIN_MESSAGE);
-            }
-        });
-        helpJM.add(jmiHelpInfoFeedColor);
-        // Install the menu bar in the frame
-        setJMenuBar(applicationJMB);
+        
+        return jmNotify;
+    }
+    
+    private JPanel createPopupGoogleCalSMS() {
+        JPanel jpanel = new JPanel();
+        Dimension dim = new Dimension(550, 300);
+        jpanel.setPreferredSize(dim);
+        jpanel.setVisible(true);
+        JTextArea jtaHelp = new JTextArea();
+        jtaHelp.setPreferredSize(dim);
+        jtaHelp.append("Inanzitutto bisogna avere un accoung google per poter "
+                + "fruire del servizio");
+        jtaHelp.append("\nCollegarsi a google calendar al seguente indirizzo "
+                + "http://www.google.com/calendar ");
+        jtaHelp.append("\nIn automatico avrete due calendari a disposizione, "
+                + "uno \"vostro\" e un \"google task\" \n(che al momento ignoro cosa sia).");
+        jtaHelp.append("\nAndate nelle impostazioni, a configurazione cellulare, qui "
+                + "immetterete i dati del vostro cellulare \ne il codice di notifica "
+                + "una volta ricevuto.");
+        jtaHelp.append("\nNei settings dovrete immettere preferibilmente il nome "
+                + "del calendario \"vostro\"");
+        jpanel.add(jtaHelp);
+        return jpanel;
     }
 
     private JPanel createPopupInfoFeedColor() {
@@ -461,8 +513,7 @@ public class jfMain extends JFrame implements WindowListener,
     }
 
     private void showSystemInfo() {
-        SystemInfoDialog sid = new SystemInfoDialog(this,
-                proxy.getPropertiesInfo());
+        SystemInfoDialog sid = new SystemInfoDialog(this, proxy.getPropertiesInfo());
         AWT.centerComponent(sid, this);
         sid.setVisible(true);
     }
