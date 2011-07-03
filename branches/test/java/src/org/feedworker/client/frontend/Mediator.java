@@ -813,7 +813,7 @@ public class Mediator {
         boolean check = true;
         if (i==2){
             if (!Lang.verifyTextNotNull(prop.getMailTO())||
-                    Lang.verifyTextNotNull(prop.getMailSMTP())) {
+                    !Lang.verifyTextNotNull(prop.getMailSMTP())) {
                 check = false;
                 printAlert("Per usare le notifiche email devono essere impostati i campi "
                         + "MailTO & SMTP");
@@ -821,8 +821,8 @@ public class Mediator {
         }
         if (i==3){
             if (!Lang.verifyTextNotNull(prop.getGoogleUser())||
-                    Lang.verifyTextNotNull(prop.getGooglePwd()) || 
-                    Lang.verifyTextNotNull(prop.getGoogleCalendar())) {
+                    !Lang.verifyTextNotNull(prop.getGooglePwd()) || 
+                    !Lang.verifyTextNotNull(prop.getGoogleCalendar())) {
                 check = false;
                 printAlert("Per usare le notifiche sms devono essere impostati i campi "
                         + "Google User Password Calendar");

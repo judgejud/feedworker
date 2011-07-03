@@ -5,11 +5,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipException;
-import javax.mail.MessagingException;
 
+import javax.mail.MessagingException;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -203,7 +201,7 @@ public class DownloadThread implements Runnable {
                         String temp = f.getName().split(".sub.")[0].replaceAll("\\.", " ");
                         if (prop.isReminderOption())
                             alReminder.add(new Object[]{Common.actualDate(), temp, false});
-                        if (prop.isEnableNotifyMail() || prop.isEnableNotifySms())
+                        if (autoItasa && (prop.isEnableNotifyMail() || prop.isEnableNotifySms()))
                             alNotify.add(temp);
                         if (autoItasa && !sub)
                             sub=true;
@@ -254,10 +252,9 @@ public class DownloadThread implements Runnable {
                 ex.printStackTrace();
             }
         }
-        if (prop.isEnableNotifySms()){
+        if (prop.isEnableNotifySms())
             GCalNotifierSms.send(prop.getGoogleUser(), prop.getGooglePwd(), 
                                 prop.getGoogleCalendar(), text);
-        }
     }
     
     private void addXML(ArrayList<Object[]> al){

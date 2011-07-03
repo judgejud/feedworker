@@ -21,15 +21,16 @@ import com.google.gdata.data.extensions.When;
 import com.google.gdata.data.extensions.Reminder.Method;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
+import org.feedworker.client.ApplicationSettings;
 
 public class GCalNotifierSms {
-    /**
-    * TimeZone offset (in hours)
-    * event start offset (in minutes)
-    * event end offset (in minutes)
-    * title
-    * description
-    */
+    /**Invia l'evento a google calendar
+     * 
+     * @param user account google
+     * @param password
+     * @param calendarName nome calendario da usare per l'evento
+     * @param description descrizione evento
+     */
     public static void send(String user, String password, String calendarName, 
                             String description) {
         String url_https = "https://www.google.com/calendar/feeds/default/allcalendars/full";
@@ -50,7 +51,7 @@ public class GCalNotifierSms {
                     Long tzOffset = 2 * 60 * minutes;
                     Long startOffset = 20 * minutes;
                     Long endOffset = 60 * minutes;
-                    String title = "FeedWorker";
+                    String title = "FeedWorker - " + description;
                     sendDowntimeAlert(myService, entry, title, description, 
                             startOffset, endOffset, tzOffset);
                     break;
@@ -72,39 +73,36 @@ public class GCalNotifierSms {
                                             Long startOffset, Long endOffset, Long tzOffset) 
                                         throws IOException, ServiceException {
         String postUrlString = entry.getLink("alternate", "application/atom+xml").getHref();
-
         URL postUrl = new URL(postUrlString);
 
         CalendarEventEntry myEntry = new CalendarEventEntry();
-
         myEntry.setTitle(new PlainTextConstruct(title));
         myEntry.setContent(new PlainTextConstruct(description));
 
         Date now = new Date();
-
         Date startDate = new Date(now.getTime()+startOffset);
         Date endDate = new Date(now.getTime()+endOffset);
-
         DateTime startTime = new DateTime(startDate.getTime()+tzOffset);
-
         DateTime endTime = new DateTime(endDate.getTime()+tzOffset);
 
         When eventTimes = new When();
         eventTimes.setStartTime(startTime);
         eventTimes.setEndTime(endTime);
         myEntry.addTime(eventTimes);
-
         // Send the request and receive the response:
         CalendarEventEntry insertedEntry = myService.insert(postUrl, myEntry);
-        for(When when : insertedEntry.getTimes()) {
-            System.out.println("When: "+when.getStartTime()+" to "+when.getEndTime());
-        }
-
-        //5 minute reminder
+        //reminder sms
         Reminder reminder = new Reminder();
         reminder.setMinutes(10);
         reminder.setMethod(Method.SMS);
         insertedEntry.getReminder().add(reminder);
         insertedEntry.update();
     }
+    /*
+    public static void main(String[] args) {
+        ApplicationSettings prop = ApplicationSettings.getIstance();
+        send(prop.getGoogleUser(), prop.getGooglePwd(), prop.getGoogleCalendar(), 
+                "ciao");
+    }
+     */
 }
