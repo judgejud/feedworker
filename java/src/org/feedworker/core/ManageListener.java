@@ -14,8 +14,7 @@ import org.feedworker.object.Subtitle;
 public class ManageListener {
 
     private static List listenerTable = new ArrayList();
-    private static List listenerJFrameO = new ArrayList();
-    private static List listenerJFrameID = new ArrayList();
+    private static List listenerFrame = new ArrayList();
     private static List listenerTextPane = new ArrayList();
     private static List listenerStatusBar = new ArrayList();
     private static List listenerComboBox = new ArrayList();
@@ -24,15 +23,9 @@ public class ManageListener {
                                                     TableEventListener listener) {
         listenerTable.add(listener);
     }
-
-    public static synchronized void addJFrameEventIconDateListener(
-                                            JFrameEventIconDateListener listener) {
-        listenerJFrameID.add(listener);
-    }
     
-    public static synchronized void addJFrameEventOperationListener(
-                                            JFrameEventOperationListener listener) {
-        listenerJFrameO.add(listener);
+    public static synchronized void addFrameEventListener(FrameEventListener listener) {
+        listenerFrame.add(listener);
     }
     
     public static synchronized void addTextPaneEventListener(
@@ -70,30 +63,29 @@ public class ManageListener {
         }
     }
     
-    public static synchronized void fireJFrameEventIconData(Object from, boolean _icontray,
-                                                            final String _data) {
-        JFrameEventIconDate event = new JFrameEventIconDate(from, _icontray, _data);
-        Iterator listeners = listenerJFrameID.iterator();
+    public static synchronized void fireFrameEvent(Object from, boolean _icontray) {
+        FrameEvent event = new FrameEvent(from, _icontray);
+        Iterator listeners = listenerFrame.iterator();
         while (listeners.hasNext()) {
-            JFrameEventIconDateListener myel = (JFrameEventIconDateListener) listeners.next();
+            FrameEventListener myel = (FrameEventListener) listeners.next();
             myel.objReceived(event);
         }
     }
 
-    public static synchronized void fireJFrameEventOperation(Object from, String oper) {
-        JFrameEventOperation event = new JFrameEventOperation(from, oper);
-        Iterator listeners = listenerJFrameO.iterator();
+    public static synchronized void fireFrameEvent(Object from, String oper) {
+        FrameEvent event = new FrameEvent(from, oper);
+        Iterator listeners = listenerFrame.iterator();
         while (listeners.hasNext()) {
-            JFrameEventOperationListener myel = (JFrameEventOperationListener) listeners.next();
+            FrameEventListener myel = (FrameEventListener) listeners.next();
             myel.objReceived(event);
         }
     }
 
-    public static synchronized void fireJFrameEventOperation(Object from, String oper, int max) {
-        JFrameEventOperation event = new JFrameEventOperation(from, oper, max);
-        Iterator listeners = listenerJFrameO.iterator();
+    public static synchronized void fireFrameEvent(Object from, String oper, int max) {
+        FrameEvent event = new FrameEvent(from, oper, max);
+        Iterator listeners = listenerFrame.iterator();
         while (listeners.hasNext()) {
-            JFrameEventOperationListener myel = (JFrameEventOperationListener) listeners.next();
+            FrameEventListener myel = (FrameEventListener) listeners.next();
             myel.objReceived(event);
         }
     }

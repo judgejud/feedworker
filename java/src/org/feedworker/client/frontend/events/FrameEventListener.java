@@ -6,7 +6,7 @@ import java.util.EventListener;
  *
  * @author luca
  */
-public interface JFrameEventOperationListener extends EventListener {
+public interface FrameEventListener extends EventListener {
     /** intercetta l'evento myjframe e lo gestisce */
-    public void objReceived(JFrameEventOperation evt);
+    public void objReceived(FrameEvent evt);
 }

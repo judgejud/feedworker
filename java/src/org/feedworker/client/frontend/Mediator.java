@@ -17,8 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
-import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
-import org.feedworker.client.frontend.events.JFrameEventOperationListener;
+import org.feedworker.client.frontend.events.FrameEventListener;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
@@ -70,7 +69,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "354 by "
+                + "356 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -229,10 +228,9 @@ public class Mediator {
 
     /**chiama nel kernel la chiusura applicazione
      * 
-     * @param date 
      */
-    void closeApp(String date) {
-        core.closeApp(date, false);
+    void closeApp() {
+        core.closeApp(false);
     }
 
     public void setTableListener(TableEventListener listener) {
@@ -247,12 +245,8 @@ public class Mediator {
         ManageListener.addStatusBarEventListener(listener);
     }
 
-    void setFrameIconDateListener(JFrameEventIconDateListener listener) {
-        ManageListener.addJFrameEventIconDateListener(listener);
-    }
-    
-    void setFrameOperationListener(JFrameEventOperationListener listener) {
-        ManageListener.addJFrameEventOperationListener(listener);
+    void setFrameListener(FrameEventListener listener) {
+        ManageListener.addFrameEventListener(listener);
     }
     
     public void setComboboxListener(ComboboxEventListener listener) {
@@ -534,7 +528,7 @@ public class Mediator {
                                                                 + "del client.");
             }
             if (!prop.isApplicationFirstTimeUsed() && first) {
-                ManageListener.fireJFrameEventOperation(this, ENABLE_BUTTON);
+                ManageListener.fireFrameEvent(this, ENABLE_BUTTON);
                 runRss();
             } else {
                 if (Lang.verifyTextNotNull(oldMin)
@@ -686,8 +680,8 @@ public class Mediator {
         ManageListener.fireStatusBarEvent(this, msg);
     }
 
-    public void restartApplication(String date) {
-        core.closeApp(date, true);
+    public void restartApplication() {
+        core.closeApp(true);
     }
 
     public String getNameApp() {
@@ -765,7 +759,7 @@ public class Mediator {
     	core.stopImportRefreshCalendar();
     }
     
-    public void checkLoginItasa(String user, char[] password) {
+    public void checkLoginItasaApi(String user, char[] password) {
         core.checkLoginItasa(user,new String(password));
     }
 
@@ -830,5 +824,9 @@ public class Mediator {
         }
         if (check)
             core.setPropNotify(i,value);
+    }
+
+    void printLastDate() {
+        printOk("Data & ora ultimo aggiornamento: "+prop.getLastDateTimeRefresh());
     }
 }
