@@ -21,7 +21,6 @@ import com.google.gdata.data.extensions.When;
 import com.google.gdata.data.extensions.Reminder.Method;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ServiceException;
-import org.feedworker.client.ApplicationSettings;
 
 public class GCalNotifierSms {
     /**Invia l'evento a google calendar
@@ -100,9 +99,7 @@ public class GCalNotifierSms {
     }
     /*
     public static void main(String[] args) {
-        ApplicationSettings prop = ApplicationSettings.getIstance();
-        send(prop.getGoogleUser(), prop.getGooglePwd(), prop.getGoogleCalendar(), 
-                "ciao");
+        send("judgejud@gmail.com", "pincopallino", "judge judge", "ciao");
     }
-     */
+    */
 }

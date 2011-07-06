@@ -304,10 +304,9 @@ public class Kernel implements PropertyChangeListener {
      * @param data data da salvare
      * @param restart riavvio dell'applicazione
      */
-    public void closeApp(String data, boolean restart) {
-        if (!Lang.verifyTextNotNull(data))
-            data = Common.actualTime();
-        prop.setLastDateTimeRefresh(data);
+    public void closeApp(boolean restart) {
+        if (!Lang.verifyTextNotNull(prop.getLastDateTimeRefresh()))
+            prop.setLastDateTimeRefresh(Common.actualTime());
         if (!prop.isApplicationFirstTimeUsed())
             prop.writeOnlyLastDate();
         if (restart) {
@@ -461,8 +460,7 @@ public class Kernel implements PropertyChangeListener {
                             error.launch(ex, getClass(), null);
                         }
                     }
-                    ManageListener.fireJFrameEventIconData(this, icontray,
-                            prop.getLastDateTimeRefresh());
+                    ManageListener.fireFrameEvent(this, icontray);
                 }// end run
             }, delay, delay);
         } catch (IllegalStateException ex) {
@@ -869,10 +867,10 @@ public class Kernel implements PropertyChangeListener {
                                                                             true);
             if (array != null) {
                 ManageListener.fireTableEvent(this, array, SEARCH_TV);
-                ManageListener.fireJFrameEventOperation(this, SEARCH_TV);
+                ManageListener.fireFrameEvent(this, SEARCH_TV);
             } else {
                 printAlert("La ricerca di " + tv + " non ha prodotto risultati");
-                ManageListener.fireJFrameEventOperation(this, OPERATION_FOCUS);
+                ManageListener.fireFrameEvent(this, OPERATION_FOCUS);
             }
         } catch (JDOMException ex) {
             error.launch(ex, null);
@@ -938,8 +936,7 @@ public class Kernel implements PropertyChangeListener {
     }
 
     public void importTvFromDestSub() {
-        ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW,
-                mapRules.size());
+        ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_SHOW, mapRules.size());
         importTask = new ImportTask(mapRules.keySet().iterator());
         importTask.addPropertyChangeListener(this);
         importTask.execute();
@@ -951,8 +948,8 @@ public class Kernel implements PropertyChangeListener {
         String className = this.getClass().getName();
         if (evtName.equalsIgnoreCase(className + "$ImportTask")) {
             if (evt.getPropertyName().equals("progress")) {
-                ManageListener.fireJFrameEventOperation(this,
-                        OPERATION_PROGRESS_INCREMENT, importTask.getProgress());
+                ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_INCREMENT, 
+                        importTask.getProgress());
                 if (importTask.isDone() && !importTask.isCancelled()) {
                     try {
                         ManageListener.fireTableEvent(this, importTask.get(), CALENDAR);
@@ -963,14 +960,13 @@ public class Kernel implements PropertyChangeListener {
             }
         } else if (evtName.equalsIgnoreCase(className + "$RefreshTask")) {
             if (evt.getPropertyName().equals("progress")){
-                ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_INCREMENT,
-                        refreshTask.getProgress());
+                ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_INCREMENT,
+                                            refreshTask.getProgress());
                 if (refreshTask.isDone())
                     fireCalendar();
             } else if (evt.getPropertyName().equals("state")){
                 if (refreshTask.isDone() && refreshTask.getProgress()==0) {
-                    ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_INCREMENT,
-                        1);
+                    ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_INCREMENT, 1);
                     fireCalendar();
                 } else if (refreshTask.isCancelled())
                     fireCalendar();
@@ -1005,7 +1001,7 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass());
         }
         if (temp!=null){
-            ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW, 1);
+            ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_SHOW, 1);
             refreshTask = new RefreshTask(temp.intValue(), id);
             refreshTask.addPropertyChangeListener(this);
             refreshTask.execute();
@@ -1026,8 +1022,7 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass());
         }
         if (array!=null && array.size() > 0) {
-            ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW, 
-                                                                array.size());
+            ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_SHOW, array.size());
             refreshTask = new RefreshTask(array);
             refreshTask.addPropertyChangeListener(this);
             refreshTask.execute();
@@ -1189,7 +1184,7 @@ public class Kernel implements PropertyChangeListener {
                     error.launch(ex, getClass());
                 }
                 if (myShows!=null && myShows.size()>0){
-                    ManageListener.fireJFrameEventOperation(this, OPERATION_PROGRESS_SHOW,
+                    ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_SHOW,
                         myShows.size());
                     importTask = new ImportTask(myShows);
                     importTask.addPropertyChangeListener(this);

@@ -32,25 +32,23 @@ public class paneSetting extends paneAbstract {
     private final String[] timeout = new String[]{"3", "6", "9", "12", "15", "18"};
     private final String[] minuti = new String[]{"3", "6", "10", "15", "20", "30", "45"};
     private static paneSetting jpanel = null;
-    protected JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
-    protected JLabel jlDataAggiornamento;
-    protected JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
-    protected JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
+    private JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
+    private JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
+    private JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
             jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
             jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
             jcbTorrent;
-    private JButton jbSaveSettings, jbAnnullaSettings;
-    protected JButton jbDestSub, jbDestTorrent, jbCheckItasa, jbCheckSamba;
-    protected JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
+    private JButton jbSaveSettings, jbAnnullaSettings, jbDestSub, jbDestTorrent, 
+            jbCheckItasaApi, jbCheckItasaLogin,  jbCheckSamba;
+    private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf,
             jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp,
             jtfGoogleUser, jtfGoogleCalendar;
-    protected JPasswordField jpfSamba, jpfItasa, jpfGoogle;
+    private JPasswordField jpfSamba, jpfItasa, jpfGoogle;
     private ButtonGroup bgLocalSamba, bgDownItasa;
-    protected ApplicationSettings prop;
+    private ApplicationSettings prop;
 
-   
-    protected paneSetting() {
+    private paneSetting() {
         super("Settings");
         prop = proxy.getSettings();
         initializePanel();
@@ -120,7 +118,6 @@ public class paneSetting extends paneAbstract {
         jcbLookFeel = new JComboBox(new DefaultComboBoxModel(proxy.getAvailableLAF()));
         jcbTimeout = new JComboBox(new DefaultComboBoxModel(timeout));
         jcbTimeout.setSelectedIndex(2);
-        jlDataAggiornamento = new JLabel();
         jrbDirLocal = new JRadioButton("HD locale");
         jrbDirLocal.setSelected(true);
         jrbDirSamba = new JRadioButton("HD Samba");
@@ -148,11 +145,6 @@ public class paneSetting extends paneAbstract {
         temp.add(new JLabel("Aggiorna RSS"));
         temp.add(jcbMinuti);
         temp.add(new JLabel("minuti"));
-        task.add(temp);
-
-        temp = new JPanel();
-        temp.add(new JLabel("Ultimo aggiornamento: "));
-        temp.add(jlDataAggiornamento);
         task.add(temp);
 
         temp = new JPanel();
@@ -269,12 +261,12 @@ public class paneSetting extends paneAbstract {
                                                     + "sub myItasa all'avvio");
         jtfItasaUser = new JTextField(20);
         jpfItasa = new JPasswordField(20);
-        jbCheckItasa = new JButton("Check login");
-        jbCheckItasa.setBorder(BORDER);
-        jbCheckItasa.addMouseListener(new MouseAdapter() {
+        jbCheckItasaApi = new JButton("Check login API");
+        jbCheckItasaApi.setBorder(BORDER);
+        jbCheckItasaApi.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.checkLoginItasa(jtfItasaUser.getText(), 
+                proxy.checkLoginItasaApi(jtfItasaUser.getText(), 
                         jpfItasa.getPassword());
             }
         });
@@ -311,7 +303,7 @@ public class paneSetting extends paneAbstract {
         task.add(jlIpwd);
         task.add(jpfItasa);
         
-        task.add(jbCheckItasa);
+        task.add(jbCheckItasaApi);
         return task;
     }
 
@@ -519,14 +511,6 @@ public class paneSetting extends paneAbstract {
         jcbPaneSubDest.setSelected(prop.isEnablePaneSubDestination());
         jcbPaneTorrent.setSelected(prop.isEnablePaneTorrent());
     }
-
-    public void setDataAggiornamento(String data) {
-        jlDataAggiornamento.setText(data);
-    }
-
-    public String getDataAggiornamento() {
-        return jlDataAggiornamento.getText();
-    }
     
     private void jbCheckSambaMouseClicked(){
         //TODO
@@ -564,7 +548,7 @@ public class paneSetting extends paneAbstract {
                     JOptionPane.QUESTION_MESSAGE);
             if (returnCode == 1)
                 return;
-            proxy.restartApplication(jlDataAggiornamento.getText());
+            proxy.restartApplication();
         }
     }
 }

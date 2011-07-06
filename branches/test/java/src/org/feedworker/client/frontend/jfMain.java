@@ -21,10 +21,8 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import org.feedworker.client.ApplicationSettings;
-import org.feedworker.client.frontend.events.JFrameEventIconDate;
-import org.feedworker.client.frontend.events.JFrameEventIconDateListener;
-import org.feedworker.client.frontend.events.JFrameEventOperation;
-import org.feedworker.client.frontend.events.JFrameEventOperationListener;
+import org.feedworker.client.frontend.events.FrameEvent;
+import org.feedworker.client.frontend.events.FrameEventListener;
 import org.feedworker.client.frontend.panel.*;
 
 import org.jfacility.java.awt.AWT;
@@ -39,8 +37,7 @@ import org.opensanskrit.widget.SystemInfoDialog;
  * 
  * @author luca judge
  */
-public class jfMain extends JFrame implements WindowListener,
-                    JFrameEventIconDateListener, JFrameEventOperationListener {
+public class jfMain extends JFrame implements WindowListener, FrameEventListener {
     //VARIABLES PRIVATE FINAL
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
@@ -159,7 +156,7 @@ public class jfMain extends JFrame implements WindowListener,
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (requestClose("riavviare"))
-                    proxy.restartApplication(jpSettings.getDataAggiornamento());
+                    proxy.restartApplication();
             }
         });
         fileJM.add(restartJMI);
@@ -172,6 +169,15 @@ public class jfMain extends JFrame implements WindowListener,
             }
         });
         fileJM.add(jmiBackup);
+        
+        JMenuItem jmiPrintLastDateRefresh = new JMenuItem(" Stampa data ultimo aggiornamento");
+        jmiPrintLastDateRefresh.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                proxy.printLastDate();
+            }
+        });
+        fileJM.add(jmiPrintLastDateRefresh);
 
         JMenuItem closeJMI = new JMenuItem(" Esci ");
         closeJMI.addActionListener(new ActionListener()  {
@@ -520,9 +526,8 @@ public class jfMain extends JFrame implements WindowListener,
 
     /** chiude l'applicazione */
     protected void applicationClose() {
-        String temp = jpSettings.getDataAggiornamento();
         this.dispose();
-        proxy.closeApp(temp);
+        proxy.closeApp();
     }
 
     private boolean requestClose(String oper) {
@@ -552,16 +557,8 @@ public class jfMain extends JFrame implements WindowListener,
     }
 
     @Override
-    public void objReceived(JFrameEventIconDate evt) {
-        if ((evt.isIcontray()) && (!this.isVisible()))
-            systemTray.notifyIncomingFeed();
-        if (evt.getDate() != null)
-            jpSettings.setDataAggiornamento(evt.getDate());
-    }
-
-    @Override
-    public void objReceived(final JFrameEventOperation evt) {
-        if (evt.getOperaz() != null) {            
+    public void objReceived(final FrameEvent evt) {
+        if (evt.getOperaz() != null) {
             if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationEnableButton()))
                 changeEnabledButton(true);
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getSearchTV()))
@@ -582,6 +579,8 @@ public class jfMain extends JFrame implements WindowListener,
                 progressBar.setProgress(evt.getMax());
             }
         }
+        if ((evt.isIcontray()) && (!this.isVisible()))
+            systemTray.notifyIncomingFeed();
     }
 
     /**
@@ -617,8 +616,7 @@ public class jfMain extends JFrame implements WindowListener,
     /** inizializza i listener per l'ascolto */
     private void initListeners() {
         addWindowListener(this);
-        proxy.setFrameIconDateListener(this);
-        proxy.setFrameOperationListener(this);
+        proxy.setFrameListener(this);
     }
 
     @Override
