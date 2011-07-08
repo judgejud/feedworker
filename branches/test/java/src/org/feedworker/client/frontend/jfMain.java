@@ -312,6 +312,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         JMenuItem systemInfo = new JMenuItem(" Informazioni Sistema ");
         JMenuItem infoFeedColor = new JMenuItem(" Legenda Colori Feed ");
         JMenuItem googleCalendarSMS = new JMenuItem(" Google Calendar SMS ");
+        JMenuItem calendarImport = new JMenuItem(" Importazione Calendario ");
         
         subtitleRule.addActionListener(new ActionListener()  {
             @Override
@@ -343,7 +344,17 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(getParent(),
-                        createPopupGoogleCalSMS(), "Legenda Colori",
+                        createPopupGoogleCalSMS(), "Uso del servizio sms tramite "
+                        + "Google Calendar",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+        
+        calendarImport.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(getParent(),
+                        createPopupCalendarImport(), "Importazione Calendario",
                         JOptionPane.PLAIN_MESSAGE);
             }
         });
@@ -352,6 +363,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         helpJM.add(systemInfo);
         helpJM.add(infoFeedColor);
         helpJM.add(googleCalendarSMS);
+        helpJM.add(calendarImport);
         
         return helpJM;
     }
@@ -460,6 +472,22 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
                 + "una volta ricevuto.");
         jtaHelp.append("\nNei settings dovrete immettere preferibilmente il nome "
                 + "del calendario \"vostro\"");
+        jpanel.add(jtaHelp);
+        return jpanel;
+    }
+    
+    private JPanel createPopupCalendarImport() {
+        JPanel jpanel = new JPanel();
+        Dimension dim = new Dimension(550, 300);
+        jpanel.setPreferredSize(dim);
+        jpanel.setVisible(true);
+        JTextArea jtaHelp = new JTextArea();
+        jtaHelp.setPreferredSize(dim);
+        jtaHelp.append("Quando si importano le serie nel calendario è consigliato "
+                + "fare un controllo dei nomi.\nSe nel caso sono presenti nomi di "
+                + "serie sconosciute basta cancellarle e fare la ricerca\n manuale"
+                + "con il nome giusto ed inserirla.\nN.B. Sarebbe consigliato"
+                + " controllare i nomi delle serie remake con stesso nome.");
         jpanel.add(jtaHelp);
         return jpanel;
     }
