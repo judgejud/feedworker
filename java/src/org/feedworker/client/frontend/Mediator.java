@@ -38,6 +38,7 @@ import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
+import javax.swing.JFrame;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -829,4 +830,9 @@ public class Mediator {
     void printLastDate() {
         printOk("Data & ora ultimo aggiornamento: "+prop.getLastDateTimeRefresh());
     }
+/*    
+    void changeRuntimeLaf(String laf, JFrame parent){
+        core.setLaf(laf, parent);
+    }
+ */
 }
