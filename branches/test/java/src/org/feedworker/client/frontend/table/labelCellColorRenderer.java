@@ -38,7 +38,11 @@ class labelCellColorRenderer extends JLabel implements TableCellRenderer {
         } else
             setForeground(Color.black);
         setOpaque(true);
-        setToolTipText(Swing.getTextToolTip(table, column, this, text));
+        try{
+            setToolTipText(Swing.getTextToolTip(table, column, this, text));
+        } catch (NullPointerException e){
+            setToolTipText(null);
+        }
         this.repaint();
         return this;
     }

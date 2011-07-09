@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URISyntaxException;
+import javax.swing.ButtonGroup;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -195,7 +196,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         applicationJMB.add(jMenuSerial()); //Stampa tf
         applicationJMB.add(jMenuWindowTab());//Visualizza pannelli
         applicationJMB.add(jMenuNas()); //NAS
-        //applicationJMB.add(jMenuLAF()); //LAF
+        applicationJMB.add(jMenuLAF()); //LAF
         applicationJMB.add(jMenuNotify()); //NOTIFICHE
         applicationJMB.add(jMenuHelp()); //HELP
         // Install the menu bar in the frame
@@ -400,7 +401,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         menu.add(deleteCompletedTaskJMI);
         return menu;
     }
-/*    
+    
     private JMenu jMenuLAF(){
         JMenu menu = new JMenu(" Look & Feel ");
         String[] laf = proxy.getAvailableLAF();
@@ -421,7 +422,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         }
         return menu;
     }
-  */  
+  
     private JMenu jMenuNotify(){
         JMenu jmNotify = new JMenu(" Notifiche ");
         

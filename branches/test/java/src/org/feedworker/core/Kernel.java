@@ -59,6 +59,8 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import java.awt.Frame;
+import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 
 /**Motore di Feedworker
  * 
@@ -1228,7 +1230,7 @@ public class Kernel implements PropertyChangeListener {
             prop.setEnableNotifySms(value);
         prop.writeNotifySettings();
     }
-/*    
+ 
     public void setLaf(String laf, Frame frame){
         try {
             FeedWorkerClient.getApplication().getIstanceLAF().setLookAndFeelRuntime(laf, frame);
@@ -1236,7 +1238,7 @@ public class Kernel implements PropertyChangeListener {
             ex.printStackTrace();
         }
     }
-*/
+
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
         private boolean myitasa;
         private ArrayList<String> myShows; 
