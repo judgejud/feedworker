@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URISyntaxException;
-import javax.swing.JCheckBoxMenuItem;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -195,6 +195,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         applicationJMB.add(jMenuSerial()); //Stampa tf
         applicationJMB.add(jMenuWindowTab());//Visualizza pannelli
         applicationJMB.add(jMenuNas()); //NAS
+        //applicationJMB.add(jMenuLAF()); //LAF
         applicationJMB.add(jMenuNotify()); //NOTIFICHE
         applicationJMB.add(jMenuHelp()); //HELP
         // Install the menu bar in the frame
@@ -369,7 +370,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     }
     
     private JMenu jMenuNas(){
-        JMenu nasJM = new JMenu(" NAS ");
+        JMenu menu = new JMenu(" NAS ");
         JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
         videoMoveJMI.addActionListener(new ActionListener()  {
             @Override
@@ -394,12 +395,33 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
                 proxy.synoClearFinish();
             }
         });
-        nasJM.add(videoMoveJMI);
-        nasJM.add(taskStatusJMI);
-        nasJM.add(deleteCompletedTaskJMI);
-        return nasJM;
+        menu.add(videoMoveJMI);
+        menu.add(taskStatusJMI);
+        menu.add(deleteCompletedTaskJMI);
+        return menu;
     }
-    
+/*    
+    private JMenu jMenuLAF(){
+        JMenu menu = new JMenu(" Look & Feel ");
+        String[] laf = proxy.getAvailableLAF();
+        JCheckBoxMenuItem[] menuItems = new JCheckBoxMenuItem[laf.length];
+        ButtonGroup bg = new ButtonGroup();
+        for (int i=0; i<laf.length; i++){
+            menuItems[i] = new JCheckBoxMenuItem(laf[i]);
+            if (laf[i].equals(prop.getApplicationLookAndFeel()))
+                menuItems[i].setSelected(true);
+            menuItems[i].addActionListener(new ActionListener()  {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    proxy.changeRuntimeLaf(e.getActionCommand(),jfMain.this);
+                }
+            });
+            bg.add(menuItems[i]);
+            menu.add(menuItems[i]);
+        }
+        return menu;
+    }
+  */  
     private JMenu jMenuNotify(){
         JMenu jmNotify = new JMenu(" Notifiche ");
         

@@ -1,5 +1,4 @@
 package org.feedworker.core;
-
 //IMPORT JAVA
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -1229,7 +1228,15 @@ public class Kernel implements PropertyChangeListener {
             prop.setEnableNotifySms(value);
         prop.writeNotifySettings();
     }
-
+/*    
+    public void setLaf(String laf, Frame frame){
+        try {
+            FeedWorkerClient.getApplication().getIstanceLAF().setLookAndFeelRuntime(laf, frame);
+        } catch (NotAvailableLookAndFeelException ex) {
+            ex.printStackTrace();
+        }
+    }
+*/
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
         private boolean myitasa;
         private ArrayList<String> myShows; 
