@@ -830,9 +830,8 @@ public class Mediator {
     void printLastDate() {
         printOk("Data & ora ultimo aggiornamento: "+prop.getLastDateTimeRefresh());
     }
-/*    
+    
     void changeRuntimeLaf(String laf, JFrame parent){
         core.setLaf(laf, parent);
     }
- */
 }
