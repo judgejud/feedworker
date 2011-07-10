@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
@@ -32,7 +31,7 @@ public class paneSetting extends paneAbstract {
     private final String[] timeout = new String[]{"3", "6", "9", "12", "15", "18"};
     private final String[] minuti = new String[]{"3", "6", "10", "15", "20", "30", "45"};
     private static paneSetting jpanel = null;
-    private JComboBox jcbMinuti, jcbLookFeel, jcbTimeout;
+    private JComboBox jcbMinuti, jcbTimeout;
     private JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
     private JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
             jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
@@ -115,7 +114,6 @@ public class paneSetting extends paneAbstract {
     private JXTaskPane initTaskPaneGeneral() {
         jcbMinuti = new JComboBox(new DefaultComboBoxModel(minuti));
         jcbMinuti.setSelectedIndex(2);
-        jcbLookFeel = new JComboBox(new DefaultComboBoxModel(proxy.getAvailableLAF()));
         jcbTimeout = new JComboBox(new DefaultComboBoxModel(timeout));
         jcbTimeout.setSelectedIndex(2);
         jrbDirLocal = new JRadioButton("HD locale");
@@ -164,11 +162,6 @@ public class paneSetting extends paneAbstract {
         task.add(jcbDestination);
         
         task.add(jcbReminder);
-        
-        temp = new JPanel();
-        temp.add(new JLabel("Look&Feel"));
-        temp.add(jcbLookFeel);
-        task.add(temp);
 
         temp = new JPanel();
         temp.add(new JLabel("Timeout"));
@@ -427,10 +420,6 @@ public class paneSetting extends paneAbstract {
         if (dir != null)
             jtfDestTorrent.setText(dir);
     }
-    
-    public void settingFirstLookFeel(){
-        jcbLookFeel.setSelectedItem(prop.getApplicationLookAndFeel());
-    }
 
     public void settingsValue() {
         settingsGeneralValue();
@@ -447,7 +436,6 @@ public class paneSetting extends paneAbstract {
     private void settingsGeneralValue() {
         jtfDestSub.setText(prop.getSubtitleDestinationFolder());
         jcbMinuti.setSelectedItem(prop.getRefreshInterval());
-        jcbLookFeel.setSelectedItem(prop.getApplicationLookAndFeel());
         jrbDirLocal.setSelected(prop.isLocalFolder());
         jrbDirSamba.setSelected(!prop.isLocalFolder());
         jcbTimeout.setSelectedItem(prop.getHttpTimeout());
@@ -523,7 +511,6 @@ public class paneSetting extends paneAbstract {
                 jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(), 
                 jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
                 jcbMinuti.getSelectedItem().toString(), 
-                jcbLookFeel.getSelectedItem().toString(),
                 jcbTimeout.getSelectedItem().toString(),
                 jcbDestination.isSelected(), jcbRunIconized.isSelected(),
                 jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
@@ -537,7 +524,7 @@ public class paneSetting extends paneAbstract {
                 new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), 
                 jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected(), 
                 jcbTorrent.isSelected());
-
+        /*
         if (save && 
             !previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {
             int returnCode = JOptionPane.showConfirmDialog(this,
@@ -550,5 +537,6 @@ public class paneSetting extends paneAbstract {
                 return;
             proxy.restartApplication();
         }
+         */
     }
 }
