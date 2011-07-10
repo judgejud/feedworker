@@ -117,7 +117,6 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         add(statusBar, BorderLayout.SOUTH);
 
         if (prop.isApplicationFirstTimeUsed()) {
-            jpSettings.settingFirstLookFeel();
             checkAddTab(jpSettings,true);
             changeEnabledButton(false);
             proxy.printAlert("Benvenuto al primo utilizzo :) Per poter usare il client, "

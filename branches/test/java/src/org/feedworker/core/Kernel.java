@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1231,11 +1232,16 @@ public class Kernel implements PropertyChangeListener {
         prop.writeNotifySettings();
     }
  
-    public void setLaf(String laf, Frame frame){
+    public void setWriteLaf(String laf, Frame frame){
         try {
             FeedWorkerClient.getApplication().getIstanceLAF().setLookAndFeelRuntime(laf, frame);
+            prop.setApplicationLookAndFeel(laf);
         } catch (NotAvailableLookAndFeelException ex) {
-            ex.printStackTrace();
+            error.launch(ex, this.getClass());
+        } catch (GeneralSecurityException ex) {
+            error.launch(ex, this.getClass());
+        } catch (IOException ex) {
+            error.launch(ex, this.getClass());
         }
     }
 

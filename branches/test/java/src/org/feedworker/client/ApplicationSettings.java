@@ -55,8 +55,7 @@ public class ApplicationSettings {
                                 getDecryptedValue("SUBTITLE_DESTINATION_FOLDER"));
                 setRefreshInterval(getDecryptedValue("REFRESH_INTERVAL"));
                 setLastDateTimeRefresh(getDecryptedValue("LAST_DATETIME_REFRESH"));
-                setApplicationLookAndFeel(
-                                    getDecryptedValue("APPLICATION_LOOK_AND_FEEL"));
+                applicationLookAndFeel = getDecryptedValue("APPLICATION_LOOK_AND_FEEL");
                 setLocalFolder(getBooleanDecryptedValue("IS_LOCAL_FOLDER"));
                 setHttpTimeout(getDecryptedValue("HTTP_TIMEOUT"));
                 setEnableAdvancedDownload(
@@ -148,8 +147,6 @@ public class ApplicationSettings {
             propertiesCrypting("SUBTITLE_DESTINATION_FOLDER",
                                                     subtitleDestinationFolder);
             propertiesCrypting("REFRESH_INTERVAL", refreshInterval);
-            propertiesCrypting("APPLICATION_LOOK_AND_FEEL",
-                                                        applicationLookAndFeel);
             propertiesCrypting("IS_LOCAL_FOLDER", localFolder);
             propertiesCrypting("CIFS_SHARE_PATH", cifsSharePath);
             propertiesCrypting("CIFS_SHARE_DOMAIN", cifsShareDomain);
@@ -471,8 +468,11 @@ public class ApplicationSettings {
         return applicationLookAndFeel;
     }
 
-    public void setApplicationLookAndFeel(String applicationLookAndFeel) {
-        this.applicationLookAndFeel = applicationLookAndFeel;
+    public void setApplicationLookAndFeel(String laf) throws 
+                                            GeneralSecurityException, IOException {
+        propertiesCrypting("APPLICATION_LOOK_AND_FEEL", laf);
+        storeSettings();
+        applicationLookAndFeel = laf;
     }
 
     public String getTorrentDestinationFolder() {

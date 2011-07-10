@@ -3,9 +3,6 @@ package org.feedworker.client.frontend.table;
 //IMPORT JAVA
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -22,7 +19,6 @@ import org.jfacility.javax.swing.Swing;
 public class tableRss extends tableAbstract {
     // PRIVATE FINAL VARIABLE
     private final String[] columnNames = {"link", "Data", "Sottotitolo", "Select"};
-    private final int width = 500;
     // PRIVATE VARIABLE
     private int[] lastFeedSize = {0, 0};
 
@@ -47,21 +43,8 @@ public class tableRss extends tableAbstract {
         setModel(dtm);
         lockColumns();
         super.setMouseClickBoolean(3, 1);
-        /*
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                if (getSelectedColumn() >= 1) {
-                    int row = getSelectedRow();
-                    if (Boolean.parseBoolean(getValueAt(row, 3).toString()) == true)
-                        setValueAt(false, row, 3);
-                    else
-                        setValueAt(true, row, 3);
-                }
-            }
-        }); */
     }
-
+    
     @Override
     public void objReceived(TableEvent evt) {
         if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
@@ -71,8 +54,6 @@ public class tableRss extends tableAbstract {
             int size = evt.getArray().size();
             lastFeedSize[1] = lastFeedSize[0];
             lastFeedSize[0] = size;
-            int lenght = dtm.getRowCount() + size;
-            this.setPreferredSize(new Dimension(width, (16 * lenght)));
             for (int i = 0; i < size; i++)
                 dtm.insertRow(i, evt.getArray().get(i));
             this.getColumn(titleCol).setCellRenderer(new labelCellColorRenderer());
@@ -105,8 +86,7 @@ public class tableRss extends tableAbstract {
                 Object value, boolean isSelected, boolean hasFocus, int row,
                 int column) {
             // imposta il testo della cella
-            String text = value.toString();
-            setText(text);
+            setText(value.toString());
             setFont(font);
             setOpaque(true);
             if (row < rowsize0)

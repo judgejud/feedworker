@@ -70,7 +70,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "356 by "
+                + "360 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -490,7 +490,7 @@ public class Mediator {
 
     public boolean saveSettings(boolean dirLocal, String destSub, String sambaDomain,
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
-            String time, String laf, String timeout,
+            String time, String timeout,
             boolean advancedDownload, boolean runIconized, String itasa,
             String myitasa, String user, String pwd, boolean autoMyitasa,
             boolean autoLoadMyItasa, String subsf, String mySubsf, String torrentDest,
@@ -515,7 +515,7 @@ public class Mediator {
         }
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
-                    sambaUser, sambaPwd, time, laf, timeout, 
+                    sambaUser, sambaPwd, time, timeout, 
                     advancedDownload, runIconized, reminder);
             setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
             setPropSubsf(subsf, mySubsf);
@@ -544,13 +544,12 @@ public class Mediator {
 
     private void setPropGlobal(boolean dirLocal, String destSub,
             String sambaDomain, String sambaIP, String sambaDir,
-            String sambaUser, String sambaPwd, String time, String laf,
+            String sambaUser, String sambaPwd, String time,
             String timeout, boolean advancedDownload,
             boolean runIconized, boolean reminder) {
         prop.setLocalFolder(dirLocal);
         prop.setSubtitleDestinationFolder(destSub);
         prop.setRefreshInterval(time);
-        prop.setApplicationLookAndFeel(laf);
         prop.setCifsShareDomain(sambaDomain);
         prop.setCifsShareLocation(sambaIP);
         prop.setCifsSharePath(sambaDir);
@@ -832,6 +831,6 @@ public class Mediator {
     }
     
     void changeRuntimeLaf(String laf, JFrame parent){
-        core.setLaf(laf, parent);
+        core.setWriteLaf(laf, parent);
     }
 }
