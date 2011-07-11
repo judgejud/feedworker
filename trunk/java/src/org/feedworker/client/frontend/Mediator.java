@@ -1,49 +1,44 @@
 package org.feedworker.client.frontend;
-
 //IMPORT JAVA
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.TreeMap;
 
 import javax.swing.JTable;
-import javax.swing.table.TableModel;
-import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.eclipse.swt.SWTException;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
-import org.feedworker.client.Kernel;
-import org.feedworker.client.RssParser;
-import org.feedworker.client.frontend.events.MyJFrameEvent;
-import org.feedworker.client.frontend.events.MyJFrameEventListener;
-import org.feedworker.client.frontend.events.MyTextPaneEvent;
-import org.feedworker.client.frontend.events.MyTextPaneEventListener;
-import org.feedworker.client.frontend.events.TableRssEventListener;
-import org.feedworker.client.frontend.events.TableXmlEventListener;
+import org.feedworker.client.frontend.events.ComboboxEventListener;
+import org.feedworker.client.frontend.events.FrameEventListener;
+import org.feedworker.client.frontend.events.StatusBarEventListener;
+import org.feedworker.client.frontend.events.TableEventListener;
+import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.client.frontend.events.TextPaneEventListener;
+import org.feedworker.client.frontend.table.tableSubtitleDest;
+import org.feedworker.core.Kernel;
+import org.feedworker.core.ManageListener;
+import org.feedworker.core.RssParser;
+import org.feedworker.exception.ManageException;
+import org.feedworker.object.KeyRule;
+import org.feedworker.object.Quality;
+import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
-import org.feedworker.util.KeyRule;
-import org.feedworker.util.ManageException;
-import org.feedworker.util.Quality;
-import org.feedworker.util.ValueRule;
 
-import org.jfacility.Awt;
+import org.jfacility.java.awt.AWT;
 import org.jfacility.java.lang.Lang;
-import org.opensanskrit.application.UnableRestartApplicationException;
+import org.jfacility.java.lang.SystemProperty;
+import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
-import java.awt.Component;
-import java.io.File;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.table.DefaultTableModel;
-import org.jfacility.java.lang.MySystem;
-import org.jfacility.javax.swing.Swing;
+import javax.swing.JFrame;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -51,57 +46,59 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class Mediator {
+
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
-    private final FileNameExtensionFilter fnfeZIP = new FileNameExtensionFilter("ZIP file", "zip");
-
+    private final String ENABLE_BUTTON = "enableButton";
+    private final FileNameExtensionFilter fnfeZIP =
+                                new FileNameExtensionFilter("ZIP file", "zip");
     private static Mediator proxy = null;
-
     private Kernel core = Kernel.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
-    private List listenerTextPane = new ArrayList();
-    private List listenerJFrame = new ArrayList();
     private ManageException error = ManageException.getIstance();
 
-    /**
-     * Restituisce l'istanza attiva del Mediator se non esiste la crea
+    /**Restituisce l'istanza attiva del Mediator se non esiste la crea
      *
      * @return Mediator
      */
     public static Mediator getIstance() {
-        if (proxy == null) {
+        if (proxy == null)
             proxy = new Mediator();
-        }
         return proxy;
     }
 
-    /**
-     * Restituisce il testo itasa
+    //TODO: ripristinare col getbuildernumber
+    String getTitle() {
+        return getApplicationName() + " revision "
+                //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
+                + "360 by "
+                + FeedWorkerClient.getApplication().getAuthor();
+    }
+
+    /**Restituisce il testo itasa
      *
      * @return itasa
      */
-    String getItasa() {
+    public String getItasa() {
         return core.ITASA;
     }
 
-    /**
-     * Restituisce il testo myitasa
+    /**Restituisce il testo myitasa
      *
      * @return myitasa
      */
-    String getMyItasa() {
+    public String getMyItasa() {
         return core.MYITASA;
     }
 
-    /**
-     * Restituisce il testo subsfactory
+    /**Restituisce il testo subsfactory
      *
      * @return subsfactory
      */
-    String getSubsf() {
+    public String getSubsf() {
         return core.SUBSF;
     }
 
-    String getMySubsf() {
+    public String getMySubsf() {
         return core.MYSUBSF;
     }
 
@@ -110,40 +107,67 @@ public class Mediator {
      *
      * @return eztv
      */
-    String getEztv() {
+    public String getEztv() {
         return core.EZTV;
     }
 
-    /**
-     * Restituisce il testo btchat
+    /**Restituisce il testo btchat
      *
      * @return btchat
      */
-    String getBtchat() {
+    public String getBtchat() {
         return core.BTCHAT;
     }
 
-    /**
-     * Pulisce la tabella specificata dai check
+    public String getNameTableSubtitleDest() {
+        return core.SUBTITLE_DEST;
+    }
+
+    public String getNameTableCalendar() {
+        return core.CALENDAR;
+    }
+    
+    public String getNameTableSearchSub() {
+        return core.TABLE_SEARCH_SUB;
+    }
+
+    String getSearchTV() {
+        return core.SEARCH_TV;
+    }
+
+    String getOperationFocus() {
+        return core.OPERATION_FOCUS;
+    }
+
+    String getOperationProgressShow() {
+        return core.OPERATION_PROGRESS_SHOW;
+    }
+
+    String getOperationProgressIncrement() {
+        return core.OPERATION_PROGRESS_INCREMENT;
+    }
+
+    String getOperationEnableButton() {
+        return ENABLE_BUTTON;
+    }
+
+    /**Pulisce la tabella specificata dai check
      *
      * @param jt
      *            tabella
      */
-    void cleanSelect(JTable jt) {
+    public void cleanSelect(JTable jt, int col) {
         for (int i = 0; i < jt.getRowCount(); i++) {
-            jt.setValueAt(false, i, 3);
+            jt.setValueAt(false, i, col);
         }
     }
 
-    /**
-     * Copia nella clipboard i link torrent selezionati
+    /** Copia nella clipboard i link torrent selezionati
      *
-     * @param jt1
-     *            tabella1
-     * @param jt2
-     *            tabella2
+     * @param jt1 tabella1
+     * @param jt2 tabella2
      */
-    void copyLinkTorrent(JTable jt1, JTable jt2) {
+    public void copyLinkTorrent(JTable jt1, JTable jt2) {
         String text = "";
         for (int i = 0; i < jt1.getRowCount(); i++) {
             if (jt1.getValueAt(i, 3) == Boolean.TRUE) {
@@ -158,48 +182,41 @@ public class Mediator {
             }
         }
         if (!text.equalsIgnoreCase("")) {
-            Awt.setClipboard(text);
-            fireNewTextPaneEvent("link copiati nella clipboard",
-                    MyTextPaneEvent.OK);
+            AWT.setClipboard(text);
+            printOk("link copiati nella clipboard");
         }
     }
 
     /**verifica le tabelle se sono flaggate per i download e invoca il kernel
      * coi link per il loro download
      *
-     * @param jt1
-     *            tabella1
-     * @param jt2
-     *            tabella2
-     * @param itasa
-     *            tabelle itasa
+     * @param jt1 tabella1
+     * @param jt2 tabella2
+     * @param itasa tabelle itasa
      */
-    void downloadSub(JTable jt1, JTable jt2, boolean itasa) {
+    public void downloadSub(JTable jt1, JTable jt2, boolean itasa, boolean id) {
         ArrayList<String> alLinks = new ArrayList<String>();
         alLinks = addLinks(jt1);
-        if (jt2 != null) {
+        if (jt2!=null)
             alLinks.addAll(addLinks(jt2));
-        }
-        if (alLinks.size() > 0) {
-            core.downloadSub(alLinks, itasa);
-        } else {
+        if (alLinks.size() > 0)
+            core.downloadSub(alLinks, itasa, id);
+        else {
             String temp = "dalle tabelle";
-            if (!itasa) {
+            if (!itasa)
                 temp = "dalla tabella";
-            }
             printAlert("Selezionare almeno un rigo " + temp);
         }
     }
 
-    void downloadTorrent(JTable jt1, JTable jt2) {
+    public void downloadTorrent(JTable jt1, JTable jt2) {
         if (Lang.verifyTextNotNull(prop.getTorrentDestinationFolder())) {
             ArrayList<String> alLinks = addLinks(jt1);
             alLinks.addAll(addLinks(jt2));
-            if (alLinks.size() > 0) {
+            if (alLinks.size() > 0)
                 core.downloadTorrent(alLinks);
-            } else {
+            else
                 printAlert("Selezionare almeno un rigo dalle tabelle");
-            }
         } else {
             printAlert("Non posso salvare perchè non hai specificato "
                     + "una cartella dove scaricare i file.torrent");
@@ -207,52 +224,34 @@ public class Mediator {
     }
 
     void runRss() {
-        core.runRss();
+        core.runRss(true);
     }
 
-    void closeApp(String date) {
-        core.closeApp(date);
-    }
-
-    void setTableRssListener(TableRssEventListener listener) {
-        core.addTableRssEventListener(listener);
-    }
-
-    void setTableXmlListener(TableXmlEventListener listener) {
-        core.addTableXmlEventListener(listener);
-    }
-
-    void setTextPaneListener(MyTextPaneEventListener listener) {
-        core.addMyTextPaneEventListener(listener);
-        core.setDownloadThreadListener(listener);
-        ManageException.getIstance().addMyTextPaneEventListener(listener);
-        addMyTextPaneEventListener(listener);
-
-    }
-
-    void setFrameListener(MyJFrameEventListener listener) {
-        core.addMyJFrameEventListener(listener);
-        addMyJFrameEventListener(listener);
-    }
-
-    /**Restituisce i nodi per la jtree Settings
-     *
-     * @return nodi jtree
+    /**chiama nel kernel la chiusura applicazione
+     * 
      */
-    DefaultMutableTreeNode getTreeNode() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Settings");
-        root.add(new DefaultMutableTreeNode("General"));
-        //root.add(new DefaultMutableTreeNode("Tabs"));
-        if (prop.isItasaOption()) {
-            root.add(new DefaultMutableTreeNode("Itasa"));
-        }
-        if (prop.isSubsfactoryOption()) {
-            root.add(new DefaultMutableTreeNode("Subsfactory"));
-        }
-        if (prop.isTorrentOption()) {
-            root.add(new DefaultMutableTreeNode("Torrent"));
-        }
-        return root;
+    void closeApp() {
+        core.closeApp(false);
+    }
+
+    public void setTableListener(TableEventListener listener) {
+        ManageListener.addTableEventListener(listener);
+    }
+
+    public void setTextPaneListener(TextPaneEventListener listener) {
+        ManageListener.addTextPaneEventListener(listener);
+    }
+    
+    public void setStatusBarListener(StatusBarEventListener listener) {
+        ManageListener.addStatusBarEventListener(listener);
+    }
+
+    void setFrameListener(FrameEventListener listener) {
+        ManageListener.addFrameEventListener(listener);
+    }
+    
+    public void setComboboxListener(ComboboxEventListener listener) {
+        ManageListener.addComboBoxEventListener(listener);
     }
 
     void restartRss() {
@@ -287,85 +286,92 @@ public class Mediator {
         return core.testSamba(ip, dir, dir, user, pwd);
     }
 
-    void saveRules(tableXml jtable) {
+    public void saveRules(tableSubtitleDest jtable) {
         boolean _break = false;
         TreeMap<KeyRule, ValueRule> temp = new TreeMap<KeyRule, ValueRule>();
-        for (int i = 0; i < jtable.getRowCount(); i++) {
-            String name = ((String) jtable.getValueAt(i, 0));
-            String season = jtable.getValueAt(i, 1).toString();
-            String quality = (String) jtable.getValueAt(i, 2);
-            String path = (String) jtable.getValueAt(i, 3);
-            String status = (String) jtable.getValueAt(i, 4);
-            String day = (String) jtable.getValueAt(i, 5);
-            boolean rename = Boolean.parseBoolean(jtable.getValueAt(i, 6).toString());
-
-            if (Lang.verifyTextNotNull(name)) {
-                if (Lang.verifyTextNotNull(path)) {
-                    try {
-                        if (Lang.verifyTextNotNull(season)) {
-                            int s = Lang.stringToInt(season);
-                            season = Lang.intToString(s);
-                        } else {
-                            printAlert("Riga: " + i
-                                    + " immettere un numero alla stagione");
+        for (int r = 0; r < jtable.getRowCount(); r++) {
+            int c = -1;
+            String name = ((String) jtable.getValueAt(r, ++c));
+            String season = jtable.getValueAt(r, ++c).toString();
+            String quality = (String) jtable.getValueAt(r, ++c);
+            String path = (String) jtable.getValueAt(r, ++c);
+            boolean rename = false, delete = false;
+            try {
+                rename = Boolean.parseBoolean(jtable.getValueAt(r, ++c).toString());
+            } catch (NullPointerException e) {
+            }
+            try {
+                delete = Boolean.parseBoolean(jtable.getValueAt(r, ++c).toString());
+            } catch (NullPointerException e) {
+            }
+            if (rename && delete) {
+                printAlert("Riga: " + r
+                        + " non possono coesistere entrambi i flag true di rename e delete");
+                _break = true;
+                break;
+            } else {
+                if (Lang.verifyTextNotNull(name)) {
+                    if (delete || Lang.verifyTextNotNull(path)) {
+                        try {
+                            if (Lang.verifyTextNotNull(season)) {
+                                int s = Lang.stringToInt(season);
+                                season = Lang.intToString(s);
+                            } else {
+                                printAlert("Riga: " + r
+                                        + " immettere un numero alla stagione");
+                                _break = true;
+                                break;
+                            }
+                            KeyRule key = new KeyRule(name, season, quality);
+                            ValueRule value = new ValueRule(path, rename, delete);
+                            if (!temp.containsKey(key)) {
+                                temp.put(key, value);
+                            } else {
+                                printAlert("Riga: " + r
+                                        + " trovato duplicato, si prega di correggerlo");
+                                _break = true;
+                                break;
+                            }
+                        } catch (NumberFormatException ex) {
+                            error.launch(ex, getClass(), Lang.intToString(r));
                             _break = true;
                             break;
                         }
-                        KeyRule key = new KeyRule(name, season, quality);
-                        ValueRule value = new ValueRule(path, day, status,
-                                rename);
-                        if (!temp.containsKey(key)) {
-                            temp.put(key, value);
-                        } else {
-                            printAlert("Riga: "
-                                    + i
-                                    + " trovato duplicato, si prega di correggerlo");
-                            _break = true;
-                            break;
-                        }
-                    } catch (NumberFormatException ex) {
-                        error.launch(ex, getClass(), Lang.intToString(i));
+                    } else {
+                        printAlert("Riga: " + r
+                                + " immettere la destinazione per la regola/sub");
                         _break = true;
                         break;
                     }
                 } else {
-                    printAlert("Riga: " + i
-                            + " immettere la destinazione per la regola/sub");
+                    printAlert("Riga: " + r
+                            + " immettere il nome della regola/sub/serie");
                     _break = true;
                     break;
                 }
-            } else {
-                printAlert("Riga: " + i
-                        + " immettere il nome della regola/sub/serie");
-                _break = true;
-                break;
             }
-        }
+        } //end for
         if (!_break) {
             core.saveMap(temp);
         }
     }
 
-    /**
-     * Aggiunge i link corrispondenti al true della colonna download
-     * nell'arraylist
+    /**Aggiunge i link corrispondenti al true della colonna download nell'arraylist
      *
-     * @param jt
-     *            jtable su cui operare
+     * @param jt jtable su cui operare
      * @return Arraylist di stringhe
      */
     ArrayList<String> addLinks(JTable jt) {
         ArrayList<String> alLinks = new ArrayList<String>();
         for (int i = 0; i < jt.getRowCount(); i++) {
-            if (jt.getValueAt(i, 3) == Boolean.TRUE) {
+            if (jt.getValueAt(i, 3) == Boolean.TRUE)
                 alLinks.add(jt.getValueAt(i, 0).toString());
-            }
         }
         return alLinks;
     }
 
-    String[] getElemEnum() {
-        return core.getQuality();
+    public String[] getQualityEnum() {
+        return Quality.toArray();
     }
 
     void synoMoveVideo() {
@@ -381,10 +387,9 @@ public class Mediator {
      * @return booleano che le impostazioni sono ok
      */
     boolean checkSaveTorrent(String text) {
-        if (!Lang.verifyTextNotNull(text)) {
+        if (!Lang.verifyTextNotNull(text))
             printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai "
                     + "scaricare .torrent");
-        }
         return true;
     }
 
@@ -394,15 +399,17 @@ public class Mediator {
      */
     boolean checkSaveSubsf(String subsf, String mySubsf) {
         boolean check = true;
-        if (!Lang.verifyTextNotNull(subsf) && !Lang.verifyTextNotNull(mySubsf))
+        if (!Lang.verifyTextNotNull(subsf) && !Lang.verifyTextNotNull(mySubsf)) {
             printAlert("Avviso: Non immettendo link RSS Subsfactory non potrai usare i feed"
                     + " Subsfactory");
-        else {
+        } else {
             try {
-                if (Lang.verifyTextNotNull(subsf))
+                if (Lang.verifyTextNotNull(subsf)) {
                     check = testRss(subsf, "subsfactory");
-                if (check && Lang.verifyTextNotNull(mySubsf))
-                        check = testRss(mySubsf, "mysubsfactory");
+                }
+                if (check && Lang.verifyTextNotNull(mySubsf)) {
+                    check = testRss(mySubsf, "mysubsfactory");
+                }
             } catch (MalformedURLException e) {
                 error.launch(e, getClass(), "subsfactory");
                 check = false;
@@ -423,8 +430,9 @@ public class Mediator {
                 printAlert("Avviso: Non immettendo link RSS itasa e/o myitasa non potrai "
                         + "usare i feed italiansubs");
             } else {
-                if (Lang.verifyTextNotNull(itasa))
+                if (Lang.verifyTextNotNull(itasa)) {
                     check = testRss(itasa, "itasa");
+                }
                 if (check) {
                     if (Lang.verifyTextNotNull(myitasa)) {
                         check = testRss(myitasa, "myitasa");
@@ -453,7 +461,8 @@ public class Mediator {
         boolean check = false;
         if (dirLocal) {
             if (!Lang.verifyTextNotNull(destSub)) {
-                printAlert("INPUT OBBLIGATORIO: La Destinazione Locale non può essere vuota.");
+                printAlert("INPUT OBBLIGATORIO: La Destinazione Locale non può "
+                                                                + "essere vuota.");
             } else {
                 check = true;
             }
@@ -479,49 +488,48 @@ public class Mediator {
         return check;
     }
 
-    void saveSettings(boolean dirLocal, String destSub, String sambaDomain,
+    public boolean saveSettings(boolean dirLocal, String destSub, String sambaDomain,
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
-            String time, String laf, boolean audio, String timeout,
-            boolean advancedDest, boolean runIconized, String itasa,
+            String time, String timeout,
+            boolean advancedDownload, boolean runIconized, String itasa,
             String myitasa, String user, String pwd, boolean autoMyitasa,
-            boolean autoLoadMyItasa,
-            String subsf, String mySubsf, String torrent) {
+            boolean autoLoadMyItasa, String subsf, String mySubsf, String torrentDest,
+            String mailTO,  String smtp, boolean paneLog, boolean paneSearch, 
+            boolean paneSetting, boolean paneSubDest, boolean paneReminder, 
+            boolean reminder, String googleUser, String googlePwd, String googleCalendar, 
+            boolean paneTorrent, boolean paneCalendar, boolean torrentOption) {
+                
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
-        boolean oldAD = prop.isEnabledCustomDestinationFolder();
         boolean save = false;
         if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                 sambaUser, sambaPwd)) {
             save = true;
-            if (prop.isItasaOption() && save)
+            if (save)
                 save = checkSaveItasa(itasa, myitasa, user, pwd);
             if (prop.isSubsfactoryOption() && save)
                 save = checkSaveSubsf(subsf, mySubsf);
             if (prop.isTorrentOption() && save)
-                checkSaveTorrent(torrent);
+                checkSaveTorrent(torrentDest);
         }
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
-                    sambaUser, sambaPwd, time, laf, audio, timeout,
-                    advancedDest, runIconized);
+                    sambaUser, sambaPwd, time, timeout, 
+                    advancedDownload, runIconized, reminder);
             setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
-            prop.setSubsfactoryFeedURL(subsf);
-            prop.setMySubsfactoryFeedUrl(mySubsf);
-            prop.setTorrentDestinationFolder(torrent);
+            setPropSubsf(subsf, mySubsf);
+            setPropTorrent(torrentDest, torrentOption);
+            setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
+            setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
+                            paneReminder, paneTorrent, paneCalendar);
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
-                printAlert("Il Look&Feel selezionato sarà disponibile al riavvio del client.");
-            }
-            if (oldAD != prop.isEnabledCustomDestinationFolder()) {
-                if (prop.isEnabledCustomDestinationFolder()) {
-                    fireNewJFrameEvent("ADD_PANE_RULEZ");
-                } else {
-                    fireNewJFrameEvent("REMOVE_PANE_RULEZ");
-                }
+                printAlert("Il Look&Feel selezionato sarà disponibile al riavvio "
+                                                                + "del client.");
             }
             if (!prop.isApplicationFirstTimeUsed() && first) {
-                fireNewJFrameEvent("ENABLED_BUTTON");
+                ManageListener.fireFrameEvent(this, ENABLE_BUTTON);
                 runRss();
             } else {
                 if (Lang.verifyTextNotNull(oldMin)
@@ -529,30 +537,28 @@ public class Mediator {
                     restartRss();
                 }
             }
-            fireNewTextPaneEvent(
-                    "Impostazioni salvate in " + prop.getSettingsFilename(),
-                    MyTextPaneEvent.OK);
+            printOk("Impostazioni salvate in " + prop.getSettingsFilename());
         }
+        return save;
     }
 
     private void setPropGlobal(boolean dirLocal, String destSub,
             String sambaDomain, String sambaIP, String sambaDir,
-            String sambaUser, String sambaPwd, String time, String laf,
-            boolean audio, String timeout, boolean advancedDest,
-            boolean runIconized) {
+            String sambaUser, String sambaPwd, String time,
+            String timeout, boolean advancedDownload,
+            boolean runIconized, boolean reminder) {
         prop.setLocalFolder(dirLocal);
         prop.setSubtitleDestinationFolder(destSub);
         prop.setRefreshInterval(time);
-        prop.setApplicationLookAndFeel(laf);
-        prop.setEnableAudioAdvisor(audio);
         prop.setCifsShareDomain(sambaDomain);
         prop.setCifsShareLocation(sambaIP);
         prop.setCifsSharePath(sambaDir);
         prop.setCifsShareUsername(sambaUser);
         prop.setCifsSharePassword(sambaPwd);
         prop.setHttpTimeout(timeout);
-        prop.setEnableCustomDestinationFolder(advancedDest);
+        prop.setEnableAdvancedDownload(advancedDownload);
         prop.setEnableIconizedRun(runIconized);
+        prop.setReminderOption(reminder);
     }
 
     private void setPropItasa(String itasa, String myitasa, String user,
@@ -564,20 +570,48 @@ public class Mediator {
         prop.setAutoDownloadMyItasa(auto);
         prop.setAutoLoadDownloadMyItasa(autoload);
     }
+    
+    private void setPropSubsf(String subsf, String mySubsf){
+        prop.setSubsfactoryFeedURL(subsf);
+        prop.setMySubsfactoryFeedUrl(mySubsf);
+    }
+    
+    private void setPropAdvisor(String mailTO, String smtp, String googleUser,
+            String googlePwd, String googleCalendar){
+        prop.setMailTO(mailTO);
+        prop.setMailSMTP(smtp);
+        prop.setGoogleUser(googleUser);
+        prop.setGooglePwd(googlePwd);
+        prop.setGoogleCalendar(googleCalendar);
+    }
+    
+    private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
+                                    boolean subdest, boolean reminder, boolean torrent,
+                                    boolean calendar){
+        prop.setEnablePaneCalendar(calendar);
+        prop.setEnablePaneLog(log);
+        prop.setEnablePaneSearchSubItasa(search);
+        prop.setEnablePaneSetting(setting);
+        prop.setEnablePaneSubDestination(subdest);
+        prop.setEnablePaneReminder(reminder);
+        prop.setEnablePaneTorrent(torrent);
+    }
+    
+    private void setPropTorrent(String dest, boolean option){
+        prop.setTorrentDestinationFolder(dest);
+        prop.setTorrentOption(option);
+    }
 
     void bruteRefresh() {
         core.bruteRefreshRSS();
     }
 
-    /**
-     * Invia alla download station del nas i link torrent selezionati
+    /**Invia alla download station del nas i link torrent selezionati
      *
-     * @param jt1
-     *            tabella1
-     * @param jt2
-     *            tabella2
+     * @param jt1 tabella1
+     * @param jt2 tabella2
      */
-    void fireTorrentToNas(JTable jt1, JTable jt2) {
+    public void fireTorrentToNas(JTable jt1, JTable jt2) {
         ArrayList<String> al = new ArrayList<String>();
         for (int i = 0; i < jt1.getRowCount(); i++) {
             if (jt1.getValueAt(i, 3) == Boolean.TRUE) {
@@ -600,147 +634,86 @@ public class Mediator {
         core.synoClearFinish();
     }
 
-    Color searchVersion(String text) {
+    public Color searchVersion(String text) {
         Color col = Color.cyan;
         String[] temp = text.split(" ");
         String version = temp[temp.length - 1].toLowerCase();
-        if (version.equals(Quality.FORM_1080p.toString()))
+        if (version.equals(Quality._1080p.toString())) {
             col = Color.blue;
-        else if (version.equals(Quality.FORM_1080i.toString()))
+        } else if (version.equals(Quality._1080i.toString())) {
             col = Color.orange;
-        else if (version.equals(Quality.FORM_720p.toString()))
+        } else if (version.equals(Quality._720p.toString())) {
             col = Color.red;
-        else if (version.equals(Quality.DVDRIP.toString()))
+        } else if (version.equals(Quality.DVDRIP.toString())) {
             col = new Color(183, 65, 14);
-        else if (version.equals(Quality.HR.toString()))
+        } else if (version.equals(Quality.HR.toString())) {
             col = Color.green;
-        else if (version.equals(Quality.BLURAY.toString()))
+        } else if (version.equals(Quality.BLURAY.toString())) {
             col = Color.magenta;
+        } else if (version.equals(Quality.WEB_DL.toString())) {
+            col = Color.white;
+        } else if (version.equals(Quality.BRRIP.toString())) {
+            col = Color.black;
+        } else if (version.equals(Quality.BDRIP.toString())) {
+            col = Color.darkGray;
+        }
         return col;
     }
 
     void printError(URISyntaxException e) {
-        ManageException.getIstance().launch(e, null);
+        ManageException.getIstance().launch(e, this.getClass());
     }
 
     void printError(Exception e) {
-        ManageException.getIstance().launch(e);
+        ManageException.getIstance().launch(e, this.getClass());
     }
 
-    void printError(SWTException e) {
-        ManageException.getIstance().launch(e, EnhancedMainJF.class);
+    public void printAlert(String msg) {
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT, true);
+    }
+    
+    void printOk(String msg) {
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
+    }
+    
+    public void printStatusBar(String msg){
+        ManageListener.fireStatusBarEvent(this, msg);
     }
 
-    private void printAlert(String msg) {
-        fireNewTextPaneEvent(msg, MyTextPaneEvent.ALERT);
+    public void restartApplication() {
+        core.closeApp(true);
     }
 
-    // This methods allows classes to register for MyEvents
-    public synchronized void addMyTextPaneEventListener(
-            MyTextPaneEventListener listener) {
-        listenerTextPane.add(listener);
-    }
-
-    // This methods allows classes to unregister for MyEvents
-    public synchronized void removeMyTextPaneEventListener(
-            MyTextPaneEventListener listener) {
-        listenerTextPane.remove(listener);
-    }
-
-    private synchronized void fireNewTextPaneEvent(String msg, String type) {
-        MyTextPaneEvent event = new MyTextPaneEvent(this, msg, type);
-        Iterator listeners = listenerTextPane.iterator();
-        while (listeners.hasNext()) {
-            MyTextPaneEventListener myel = (MyTextPaneEventListener) listeners.next();
-            myel.objReceived(event);
-        }
-    }
-
-    public synchronized void addMyJFrameEventListener(
-            MyJFrameEventListener listener) {
-        listenerJFrame.add(listener);
-    }
-
-    public synchronized void removeMyJFrameEventListener(
-            MyJFrameEventListener listener) {
-        listenerJFrame.remove(listener);
-    }
-
-    private synchronized void fireNewJFrameEvent(String oper) {
-        MyJFrameEvent event = new MyJFrameEvent(this, oper);
-        Iterator listeners = listenerJFrame.iterator();
-        while (listeners.hasNext()) {
-            MyJFrameEventListener myel = (MyJFrameEventListener) listeners.next();
-            myel.objReceived(event);
-        }
-    }
-
-    void restartApplication() {
-        try {
-            FeedWorkerClient.getApplication().restart();
-        } catch (UnableRestartApplicationException e) {
-            e.printStackTrace();
-        }
-    }
-
-    String getNameApp() {
+    public String getNameApp() {
         return FeedWorkerClient.getApplication().getName();
     }
 
-    Object[] getAvailableLAF() {
-        return FeedWorkerClient.getApplication().getAvailableLookAndFeel().toArray();
+    public String[] getAvailableLAF() {
+        return FeedWorkerClient.getApplication().getIstanceLAF().getAvailableLAF();
     }
 
-    ApplicationSettings getSettings(){
+    public ApplicationSettings getSettings() {
         return ApplicationSettings.getIstance();
     }
 
-    Image getIncomingFeedIcon(){
+    Image getIncomingFeedIcon() {
         return Common.getResourceIcon(INCOMING_FEED_ICON_FILE_NAME);
     }
 
-    Image getApplicationIcon(){
+    Image getApplicationIcon() {
         return FeedWorkerClient.getApplication().getIcon();
     }
 
-    String getApplicationName(){
+    String getApplicationName() {
         return FeedWorkerClient.getApplication().getName();
     }
 
-    //TODO: ripristinare col getbuildernumber
-    String getTitle(){
-        return getApplicationName() + " build "
-                //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "193 by "
-                + FeedWorkerClient.getApplication().getAuthor();
-    }
-
-    String[] getDaysOfWeek(){
-        return core.daysOfWeek;
-    }
-
-    TableModel getModelSystemInfo() {
-        DefaultTableModel dtm = new DefaultTableModel(null, new String[]{"Informazione", "Valore"}) {
-            Class[] types = new Class[]{String.class, String.class};
-            @Override
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-            @Override
-            public boolean isCellEditable(int rowIndex, int vColIndex) {
-                return false;
-            }
-        };
-        dtm.addRow(new String[]{"Java version", MySystem.getJavaVersion()});
-        dtm.addRow(new String[]{"Java vendor", MySystem.getJavaVendor()});
-        dtm.addRow(new String[]{"Java Home", MySystem.getJavaHome()});
-        dtm.addRow(new String[]{"Sistema Operativo", MySystem.getOsName()});
-        dtm.addRow(new String[]{"Versione SO", MySystem.getOsVersion()});
-        dtm.addRow(new String[]{"Architettura SO", MySystem.getOsArchitecture()});
-        dtm.addRow(new String[]{"Directory attuale", MySystem.getUserDir()});
-        dtm.addRow(new String[]{"File regole", "rules.xml"});
-        dtm.addRow(new String[]{"File impostazioni", prop.getSettingsFilename()});
-        return dtm;
+    ArrayList<String[]> getPropertiesInfo(){
+        ArrayList<String[]> array = new ArrayList<String[]>();
+        array.add(new String[]{"File calendario", "calendar.xml"});
+        array.add(new String[]{"File impostazioni", prop.getSettingsFilename()});
+        array.add(new String[]{"File regole", "rules.xml"});
+        return array;
     }
 
     void printDay(int day) {
@@ -749,8 +722,115 @@ public class Mediator {
 
     void invokeBackup(Component parent) {
         String name = Swing.getFile(parent, "Creare il file zip per il backup",
-                fnfeZIP, new File(MySystem.getUserDir() + File.separator));
-        if (name!=null)
+                fnfeZIP, new File(SystemProperty.getUserDir() + File.separator));
+        if (name != null)
             core.backup(name);
+    }
+
+    public void searchTV(String tv) {
+        core.detailedSearchShow(tv);
+    }
+
+    void searchIdTv(ArrayList<Object[]> id) {
+        core.searchIdTv(id);
+    }
+
+    public void importFromSubDest() {
+        core.importTvFromDestSub();
+    }
+
+    public void removeSingleShowCalendar(int value, Object id) {
+        core.removeShowTv(value, id);
+    }
+
+    public void removeAllShowCalendar() {
+        core.removeAllShowTv();
+    }
+
+    public void refreshCalendar() {
+        core.refreshCalendar();
+    }
+
+    public void openFolder(String dir) {
+        core.openFolder(dir);
+    }
+    
+    public void stopImportRefresh() {
+    	core.stopImportRefreshCalendar();
+    }
+    
+    public void checkLoginItasaApi(String user, char[] password) {
+        core.checkLoginItasa(user,new String(password));
+    }
+
+    public void removeReminders(ArrayList<Integer> numbers) {
+        core.removeReminders(numbers);
+    }
+
+    public void searchSubItasa(Object show, Object version, boolean complete, 
+                                String season, String episode) {
+        try{
+            boolean check = false;
+            if (Lang.verifyTextNotNull(season)){
+                Lang.stringToInt(season);
+                check = true;
+            }
+            if (Lang.verifyTextNotNull(episode)){
+                Lang.stringToInt(episode);
+                check = true;
+            }
+            if (!check && complete)
+                check = true;
+            if (check)
+                core.searchSubItasa(show, version, complete, season, episode);
+            else 
+                printAlert("Selezionare almeno un elemento di ricerca tra stagione completa,"
+                        + " numero stagione e/o numero episodio");
+        } catch (NumberFormatException e){
+            printAlert("Immettere un numero alla stagione e/o episodio invece di una stringa");
+        }
+    }
+
+    public void refreshSingleCalendar(Object value) {
+        core.refreshSingleCalendar(value.toString());
+    }
+
+    public void importFromMyItasa() {
+        core.importTvFromMyItasa();
+    }
+
+    public void undoLastRemoveReminder() {
+        
+    }
+
+    void invertMenuCheck(int i, boolean value) {
+        boolean check = true;
+        if (i==2){
+            if (!Lang.verifyTextNotNull(prop.getMailTO())||
+                    !Lang.verifyTextNotNull(prop.getMailSMTP())) {
+                check = false;
+                printAlert("Per usare le notifiche email devono essere impostati i campi "
+                        + "MailTO & SMTP");
+            }
+        }
+        if (i==3){
+            if (!Lang.verifyTextNotNull(prop.getGoogleUser())||
+                    !Lang.verifyTextNotNull(prop.getGooglePwd()) || 
+                    !Lang.verifyTextNotNull(prop.getGoogleCalendar())) {
+                check = false;
+                printAlert("Per usare le notifiche sms devono essere impostati i campi "
+                        + "Google User Password Calendar");
+            }
+        }
+        if (check)
+            core.setPropNotify(i,value);
+    }
+
+    void printLastDate() {
+        printOk("Data & ora ultimo aggiornamento: "+prop.getLastDateTimeRefresh());
+    }
+    
+    void changeRuntimeLaf(String laf, JFrame parent){
+        core.setWriteLaf(laf, parent);
     }
 }

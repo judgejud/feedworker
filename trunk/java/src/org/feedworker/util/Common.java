@@ -2,105 +2,164 @@ package org.feedworker.util;
 
 //IMPORT JAVA
 import java.awt.Image;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import javax.swing.Icon;
 
 import javax.swing.ImageIcon;
 
 import org.jfacility.java.lang.Lang;
-import org.jfacility.java.lang.MySystem;
+import org.jfacility.java.lang.OS;
 import org.jfacility.javax.swing.Swing;
 
-/**Classe Utility di conversioni varie e raccolta di metodi comuni
+/**
+ * Classe Utility di conversioni varie e raccolta di metodi comuni
  * 
  * @author luca judge
  */
 public class Common {
+    private static int day_millisec = 86400000;
+    private static SimpleDateFormat sdfAmerican = new SimpleDateFormat(
+            "yyyy-MM-dd", Locale.ITALY);
+    private static SimpleDateFormat sdfItalian = new SimpleDateFormat(
+            "dd/MM/yyyy", Locale.ITALY);
+    private static SimpleDateFormat sdfDateTime = new SimpleDateFormat(
+            "dd/MM/yyyy HH:mm:ss", Locale.ITALY);
 
-    /**Converte una jav.util.Date in formato stringa
-     *
-     * @param d data
-     * @return gg/mm/aaaa - hh:mm:ss
-     */
-    public static String dateToString(Date d) {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(d);
-        return calendarToString(cal);
-    }
-
-    /** Restituisce la data ed ora attuale
-     *
+    /**
+     * Restituisce la data ed ora attuale
+     * 
      * @return Stringa gg/mm/aaaa - hh:mm:ss
      */
     public static String actualTime() {
-        return calendarToString(new GregorianCalendar());
+        return dateTimeString(actualDate());
+    }
+
+    public static Date actualDate() {
+        return new GregorianCalendar().getTime();
+    }
+
+    public static Date tomorrowDate() {
+        GregorianCalendar g = new GregorianCalendar();
+        g.setTimeInMillis(System.currentTimeMillis() + day_millisec);
+        return g.getTime();
+    }
+    
+    public static Date afterDayDate(int day) {
+        GregorianCalendar g = new GregorianCalendar();
+        g.setTimeInMillis(System.currentTimeMillis() + (day_millisec*day));
+        return g.getTime();
+    }
+
+    public static Date yesterdayDate() {
+        GregorianCalendar g = new GregorianCalendar();
+        g.setTimeInMillis(System.currentTimeMillis() - day_millisec);
+        return g.getTime();
     }
 
     /**
-     * Trasforma una stringa in una data
-     *
+     * Trasforma una stringa data ora in una data
+     * 
      * @param s
      *            stringa dd/MM/yyyy HH:mm:ss
      * @return data nel tipo Date
      * @throws ParseException
      */
-    public static Date stringToDate(String s) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss",
-                Locale.ITALY);
-        Date d = sdf.parse(s);
-        return d;
+    public static Date stringDateTime(String s) throws ParseException {
+        return sdfDateTime.parse(s);
     }
 
-    /**converte calendar in stringa
-     *
-     * @param cal
-     * @return
+    /**
+     * Converte una data in stringa data ora
+     * 
+     * @param d
+     *            data
+     * @return stringa dd/MM/yyyy HH:mm:ss
      */
-    private static String calendarToString(Calendar cal) {
-        return cal.get(Calendar.DATE) + "/" + (cal.get(Calendar.MONTH) + 1)
-                + "/" + cal.get(Calendar.YEAR) + " "
-                + addZero(cal.get(Calendar.HOUR_OF_DAY)) + ":"
-                + addZero(cal.get(Calendar.MINUTE)) + ":"
-                + addZero(cal.get(Calendar.SECOND));
+    public static String dateTimeString(Date d) {
+        return sdfDateTime.format(d);
     }
 
-    /**Aggiunge lo zero ai numeri < 10
-     *
-     * @param n intero da controllare
-     * @return Stringa con/senza 0
+    /**
+     * Trasforma una stringa data in una data
+     * 
+     * @param s
+     *            stringa dd/MM/yyyy
+     * @return data nel tipo Date
+     * @throws ParseException
      */
-    private static String addZero(int n) {
-        String s = new String();
-        if (n < 10) {
-            s = "0";
+    public static Date stringDate(String s) throws ParseException {
+        return sdfItalian.parse(s);
+    }
+
+    /**
+     * Converte una data in stringa data
+     * 
+     * @param d
+     *            data
+     * @return stringa dd/MM/yyyy
+     */
+    public static String dateString(Date d) {
+        if (d == null) {
+            return null;
+        } else {
+            return sdfItalian.format(d);
         }
-        s += String.valueOf(n);
-        return s;
+    }
+
+    /**
+     * Converte una data in stringa data
+     * 
+     * @param d
+     *            data
+     * @return stringa dd/MM/yyyy
+     */
+    public static String dateStringAmerican(Date d) {
+        if (d == null) {
+            return null;
+        } else {
+            return sdfAmerican.format(d);
+        }
+    }
+
+    /**
+     * Converte una stringa yyyy-MM-dd in data
+     * 
+     * @param s
+     *            stringa data americana yyyy-MM-dd
+     * @return
+     * @throws ParseException
+     */
+    public static Date stringAmericanToDate(String s) throws ParseException {
+        return sdfAmerican.parse(s);
+    }
+
+    public static String stringToAmerican(String s) throws ParseException {
+        return dateStringAmerican(stringDate(s));
     }
 
     /**
      * Restituisce l'icona per la systemtraybar
-     *
+     * 
      * @param name
      * @return icona
      */
     public static Image getResourceIcon(String name) {
         ImageIcon icon = new ImageIcon(
                 ResourceLocator.convertStringToURL(getResourcePath(name)));
-        if (MySystem.isWindows()) {
+        if (OS.isWindows()) {
             icon = Swing.scaleImage(icon, 16, 16);
         }
         return icon.getImage();
+    }
+    
+    public static ImageIcon getResourceImageIcon(String name) {
+        ImageIcon icon = new ImageIcon(
+                ResourceLocator.convertStringToURL(getResourcePath(name)));
+        return Swing.scaleImage(icon, 24, 24);
     }
 
     public static Image getResourceImage(String name) {
@@ -114,7 +173,7 @@ public class Common {
 
     /**
      * cerca il numero della serie nel testo
-     *
+     * 
      * @param text
      * @return numero serie/stagione
      */
@@ -146,7 +205,7 @@ public class Common {
     /**
      * cerca la posizione della stringa corrispondente al numero di serie ed
      * episodio nell'array; es: s01e01
-     *
+     * 
      * @param _array
      * @return restituisce la posizione se l'ha trovato, altrimenti -1
      */
@@ -160,31 +219,12 @@ public class Common {
         }
         return pos;
     }
-
-    /**
-     * Effettua il download dell'inputStream sotto forma di file
-     *
-     * @param is
-     *            http content-stream
-     * @param f
-     *            file di riferimento su cui mandare il flusso di inputstream
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public static void downloadSingle(InputStream is, File f)
-            throws FileNotFoundException, IOException {
-        OutputStream out = new FileOutputStream(f);
-        byte buf[] = new byte[1024];
-        int len;
-        while ((len = is.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        out.flush();
-        out.close();
-        is.close();
-    }
-
-    public static int getDay(){
-        return new GregorianCalendar().get(Calendar.DAY_OF_WEEK);
+    
+    public static boolean getStatus(String text){
+        if (text.equalsIgnoreCase("Final Season") || 
+                text.equalsIgnoreCase("Canceled/Ended"))
+            return true;
+        else
+            return false;
     }
 }
