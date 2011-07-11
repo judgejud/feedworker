@@ -1,24 +1,34 @@
 IMPLEMENTARE
-*feed rss sotto thread
-*vedere di creare 1http permanente x itasa
-ripristino proprietà (file properties e rules.xml)
+-feed rss sotto thread
+-ripristino files backuppati
+-destinazione avanzata in mixed mode
+-fare caricamento xml sotto thread
+-info sul singolo show (quindi nuovo pannello)
+
+salvare in automatico l'ultima data di aggiornamento se myitasa down auto is true
+caricare da file la lista serie itasa se da remoto genera errore.
 aggiungere versioning automatico all'applicazione
-ricerca sottotitoli itasa
-destinazione avanzata in mixed mode 
-salvare i feed in modo da conservare i vecchi fino a numero da definire in input come settings.
-destinazione avanzata: bottone info su ciò che è presente nella tabella e quindi treemap.
-destinazione avanzata: integrazione con qlk sito tipo tvrage per lo status e il giorno ed eventuale prelevo dell'ultima puntata trasmessa cioè numero stagione/puntata per ogni serie?
-implementare il tipo di download di mysubsfactory (come x myitasa)
-avvio automatico (win-unix-mac)
-impostazioni dei tabs 
-multiutenza?
+aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
+introdurre set per i reminder in modo che non ci siano duplicati (treeset)?
+fare bottone test connect samba
+fare 2°bottone test login itasa x download e rinominare l'altro x api
+migrazione account itasa da 1vecchio a 1nuovo per quanto riguarda la lista di serial tv myitasa
+specificare altri suoni
+
+CORREZIONI:
+-mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
+-migliorare il fire alla reminder considerando la regola delete.
+-sistemare la tabella reminder
+
+PUNTI INTERROGATIVI
+feature proxy http? 
+esiste evento "arresta sistema"? e come intercettarlo???
 log4j?
-ERRORI DA SISTEMARE:
-alla chiusura The program 'SWT' received an X Window System error. This probably reflects a bug in the program. The error was 'BadWindow (invalid Window parameter)'. PACKY
+avvio automatico all'avvio OS (win-unix-mac)?
+multiutenza?
+properties sotto jfacility?
+http://thetvdb.com/wiki/index.php?title=Programmers_API?
 
 VERIFICARE LE IMPLEMENTAZIONI
-sistemare "Timeout di lettura null" al primo avvio
-avvio ridotto ad icona (java5)
-autoriavvio con java home (e quindi win, linux, mac)
-splashscreen (java 1.5 e jar)
-1080i
+riavvio con java home (win, mac)
+verificare il corretto funzionamento delle notifiche.
