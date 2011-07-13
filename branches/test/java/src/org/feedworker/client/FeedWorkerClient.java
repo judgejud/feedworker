@@ -91,16 +91,16 @@ public class FeedWorkerClient {
                     core = Kernel.getIstance(debug);
                     splash.updateStartupState("Setting Look & Feel ...");
                     try {
-                        feedWorker.getIstanceLAF().addJavaLAF();        	
-                        feedWorker.getIstanceLAF().addJTattooLAF();
-                        feedWorker.getIstanceLAF().addSyntheticaStandardLAF();
-                        feedWorker.getIstanceLAF().addSyntheticaFreeLAF();
-                        feedWorker.getIstanceLAF().addSyntheticaNotFreeLAF();
-                        feedWorker.getIstanceLAF().setLookAndFeel(
+                        feedWorker.getLookAndFeelInstance().addJavaLAF();        	
+                        feedWorker.getLookAndFeelInstance().addJTattooLAF();
+                        feedWorker.getLookAndFeelInstance().addSyntheticaStandardLAF();
+                        feedWorker.getLookAndFeelInstance().addSyntheticaFreeLAF();
+                        feedWorker.getLookAndFeelInstance().addSyntheticaNotFreeLAF();
+                        feedWorker.getLookAndFeelInstance().setLookAndFeel(
                                         feedWorkerSettings.getApplicationLookAndFeel());
                     } catch (NotAvailableLookAndFeelException e) {
                         System.out.println("LAF default");
-                        feedWorker.getIstanceLAF().setLookAndFeel();
+                        feedWorker.getLookAndFeelInstance().setLookAndFeel();
                     }
                     splash.updateStartupState("Loading Application settings ...");
                     ApplicationSettings.getIstance();
