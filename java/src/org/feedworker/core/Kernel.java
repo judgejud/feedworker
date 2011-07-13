@@ -1234,7 +1234,7 @@ public class Kernel implements PropertyChangeListener {
  
     public void setWriteLaf(String laf, Frame frame){
         try {
-            FeedWorkerClient.getApplication().getIstanceLAF().setLookAndFeelRuntime(laf, frame);
+            FeedWorkerClient.getApplication().getLookAndFeelInstance().setLookAndFeelRuntime(laf, frame);
             prop.setApplicationLookAndFeel(laf);
         } catch (NotAvailableLookAndFeelException ex) {
             error.launch(ex, this.getClass());
