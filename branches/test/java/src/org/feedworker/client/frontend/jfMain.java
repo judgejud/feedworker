@@ -57,6 +57,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     private paneStatusBar statusBar;
     private paneReminder jpReminder;
     private paneCalendar jpCalendar;
+    private paneShow jpShow;
     private jdResultSearchTv resultSearchTvJD;
     private ProgressDialog progressBar;
     private EnhancedSystemTray systemTray;
@@ -92,6 +93,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         jpSettings = paneSetting.getPanel();
         jpDestination = paneSubtitleDest.getPanel();
         jpTorrent = paneTorrent.getPanel();
+        jpShow = paneShow.getPanel();
         
         mainJTP.addTab("Itasa", jpItasa);
         if (prop.isSubsfactoryOption()) {
@@ -108,11 +110,13 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             checkAddTab(jpReminder, false);
         if (prop.isEnablePaneSubDestination())
             checkAddTab(jpDestination, false);
+        if (prop.isEnablePaneShow())
+            checkAddTab(jpShow, false);
         if (prop.isEnablePaneSetting())
             checkAddTab(jpSettings, false);
         if (prop.isEnablePaneLog())
             checkAddTab(jpLog, false);
-
+        
         statusBar = new paneStatusBar();
         add(statusBar, BorderLayout.SOUTH);
 
@@ -295,11 +299,20 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             }
         });
         
+        JMenuItem jmiWindowShow = new JMenuItem(" Show ");
+        jmiWindowShow.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpShow, true);
+            }
+        });
+        
         jmWindowTab.add(jmiWindowCalendar);
         jmWindowTab.add(jmiWindowLog);
         jmWindowTab.add(jmiWindowReminder);
         jmWindowTab.add(jmiWindowSearch);
         jmWindowTab.add(jmiWindowSetting);
+        jmWindowTab.add(jmiWindowShow);
         jmWindowTab.add(jmiWindowSubDest);
         jmWindowTab.add(jmiWindowTorrent);
         

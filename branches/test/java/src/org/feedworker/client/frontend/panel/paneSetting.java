@@ -36,7 +36,7 @@ public class paneSetting extends paneAbstract {
     private JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
             jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
             jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
-            jcbTorrent;
+            jcbPaneShow, jcbTorrent;
     private JButton jbSaveSettings, jbAnnullaSettings, jbDestSub, jbDestTorrent, 
             jbCheckItasaApi, jbCheckItasaLogin,  jbCheckSamba;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
@@ -93,12 +93,30 @@ public class paneSetting extends paneAbstract {
         jbSaveSettings.setBorder(BORDER);
         jbAnnullaSettings = new JButton("Annulla");
         jbAnnullaSettings.setBorder(BORDER);
+        
         jbSaveSettings.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                saveSettings();
+                proxy.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
+                jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(), 
+                jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
+                jcbMinuti.getSelectedItem().toString(), 
+                jcbTimeout.getSelectedItem().toString(),
+                jcbDestination.isSelected(), jcbRunIconized.isSelected(),
+                jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
+                new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
+                jcbDownloadMyitasaStartup.isSelected(), jtfRssSubsf.getText(), 
+                jtfRssMySubsf.getText(), jtfDestTorrent.getText(), jtfMailTo.getText(),
+                jtfMailSmtp.getText(), jcbPaneLog.isSelected(), 
+                jcbPaneSearchSubItasa.isSelected(), jcbPaneSetting.isSelected(), 
+                jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected(), 
+                jcbReminder.isSelected(), jtfGoogleUser.getText(), 
+                new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), 
+                jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected(), 
+                jcbTorrent.isSelected(), jcbPaneShow.isSelected());
             }
         });
+        
         jbAnnullaSettings.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -386,7 +404,8 @@ public class paneSetting extends paneAbstract {
         jcbPaneLog = new JCheckBox("Log");
         jcbPaneReminder = new JCheckBox("Reminder");
         jcbPaneSearchSubItasa = new JCheckBox("Search Subtitle Itasa");
-        jcbPaneSetting = new JCheckBox("Settings");
+        jcbPaneSetting = new JCheckBox("Setting");
+        jcbPaneShow = new JCheckBox("Show");
         jcbPaneSubDest = new JCheckBox("Subtitle Destination");
         jcbPaneTorrent = new JCheckBox("Torrent");
         
@@ -399,6 +418,7 @@ public class paneSetting extends paneAbstract {
         task.add(jcbPaneReminder);
         task.add(jcbPaneSearchSubItasa);
         task.add(jcbPaneSetting);
+        task.add(jcbPaneShow);
         task.add(jcbPaneSubDest);
         task.add(jcbPaneTorrent);
         return task;
@@ -496,47 +516,12 @@ public class paneSetting extends paneAbstract {
         jcbPaneReminder.setSelected(prop.isEnablePaneReminder());
         jcbPaneSearchSubItasa.setSelected(prop.isEnablePaneSearchSubItasa());
         jcbPaneSetting.setSelected(prop.isEnablePaneSetting());
+        jcbPaneShow.setSelected(prop.isEnablePaneShow());
         jcbPaneSubDest.setSelected(prop.isEnablePaneSubDestination());
         jcbPaneTorrent.setSelected(prop.isEnablePaneTorrent());
     }
     
     private void jbCheckSambaMouseClicked(){
         //TODO
-    }
-
-    private void saveSettings() {
-        String previousLookAndFeel = prop.getApplicationLookAndFeel();
-
-        boolean save = proxy.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
-                jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(), 
-                jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
-                jcbMinuti.getSelectedItem().toString(), 
-                jcbTimeout.getSelectedItem().toString(),
-                jcbDestination.isSelected(), jcbRunIconized.isSelected(),
-                jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
-                new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
-                jcbDownloadMyitasaStartup.isSelected(), jtfRssSubsf.getText(), 
-                jtfRssMySubsf.getText(), jtfDestTorrent.getText(), jtfMailTo.getText(),
-                jtfMailSmtp.getText(), jcbPaneLog.isSelected(), 
-                jcbPaneSearchSubItasa.isSelected(), jcbPaneSetting.isSelected(), 
-                jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected(), 
-                jcbReminder.isSelected(), jtfGoogleUser.getText(), 
-                new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), 
-                jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected(), 
-                jcbTorrent.isSelected());
-        /*
-        if (save && 
-            !previousLookAndFeel.equalsIgnoreCase(jcbLookFeel.getSelectedItem().toString())) {
-            int returnCode = JOptionPane.showConfirmDialog(this,
-                    "Per applicare il nuovo Look & Feel è necessario riavviare "
-                    + proxy.getNameApp()
-                    + ". \nPremi Si per riavviare, No altrimenti",
-                    "Info", JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-            if (returnCode == 1)
-                return;
-            proxy.restartApplication();
-        }
-         */
     }
 }

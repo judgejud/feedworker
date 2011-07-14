@@ -32,7 +32,7 @@ public class ApplicationSettings {
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
             enableNotifyMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
             enablePaneSearchSubItasa, enablePaneReminder, reminderOption, enablePaneTorrent,
-            enablePaneCalendar, enableNotifySms;
+            enablePaneCalendar, enableNotifySms, enablePaneShow;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -94,6 +94,7 @@ public class ApplicationSettings {
                 setEnablePaneSubDestination(
                                     getBooleanDecryptedValue("ENABLE_PANE_SUB_DEST"));
                 setEnablePaneTorrent(getBooleanDecryptedValue("ENABLE_PANE_TORRENT"));
+                setEnablePaneShow(getBooleanDecryptedValue("ENABLE_PANE_SHOW"));
                 //ADVISOR SETTINGS
                 setMailTO(getDecryptedValue("MAIL_TO"));
                 setMailSMTP(getDecryptedValue("MAIL_SMTP"));
@@ -244,6 +245,7 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_PANE_SEARCH_SUB_ITASA", enablePaneSearchSubItasa);
             propertiesCrypting("ENABLE_PANE_REMINDER", enablePaneReminder);
             propertiesCrypting("ENABLE_PANE_TORRENT", enablePaneTorrent);
+            propertiesCrypting("ENABLE_PANE_SHOW", enablePaneShow);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -669,5 +671,13 @@ public class ApplicationSettings {
 
     public void setEnablePaneCalendar(boolean enablePaneCalendar) {
         this.enablePaneCalendar = enablePaneCalendar;
+    }
+
+    public boolean isEnablePaneShow() {
+        return enablePaneShow;
+    }
+
+    public void setEnablePaneShow(boolean enablePaneShow) {
+        this.enablePaneShow = enablePaneShow;
     }
 }// end class

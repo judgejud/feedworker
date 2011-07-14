@@ -497,7 +497,8 @@ public class Mediator {
             String mailTO,  String smtp, boolean paneLog, boolean paneSearch, 
             boolean paneSetting, boolean paneSubDest, boolean paneReminder, 
             boolean reminder, String googleUser, String googlePwd, String googleCalendar, 
-            boolean paneTorrent, boolean paneCalendar, boolean torrentOption) {
+            boolean paneTorrent, boolean paneCalendar, boolean torrentOption, 
+            boolean paneShow) {
                 
         String oldLF = prop.getApplicationLookAndFeel();
         String oldMin = prop.getRefreshInterval();
@@ -522,7 +523,7 @@ public class Mediator {
             setPropTorrent(torrentDest, torrentOption);
             setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
-                            paneReminder, paneTorrent, paneCalendar);
+                            paneReminder, paneTorrent, paneCalendar, paneShow);
             core.writeProp();
             if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
                 printAlert("Il Look&Feel selezionato sarà disponibile al riavvio "
@@ -587,7 +588,7 @@ public class Mediator {
     
     private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
                                     boolean subdest, boolean reminder, boolean torrent,
-                                    boolean calendar){
+                                    boolean calendar, boolean show){
         prop.setEnablePaneCalendar(calendar);
         prop.setEnablePaneLog(log);
         prop.setEnablePaneSearchSubItasa(search);
@@ -595,6 +596,7 @@ public class Mediator {
         prop.setEnablePaneSubDestination(subdest);
         prop.setEnablePaneReminder(reminder);
         prop.setEnablePaneTorrent(torrent);
+        prop.setEnablePaneShow(show);
     }
     
     private void setPropTorrent(String dest, boolean option){
