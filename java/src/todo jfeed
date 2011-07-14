@@ -1,34 +1,32 @@
 IMPLEMENTARE
--feed rss sotto thread
--ripristino files backuppati
--destinazione avanzata in mixed mode
+-feed rss sotto thread	
 -fare caricamento xml sotto thread
 -info sul singolo show (quindi nuovo pannello)
+-ripristino files backuppati
+-destinazione avanzata in mixed mod
 
 salvare in automatico l'ultima data di aggiornamento se myitasa down auto is true
 caricare da file la lista serie itasa se da remoto genera errore.
 aggiungere versioning automatico all'applicazione
 aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
 introdurre set per i reminder in modo che non ci siano duplicati (treeset)?
-fare bottone test connect samba
+scrivede codice test connect samba
 fare 2°bottone test login itasa x download e rinominare l'altro x api
 migrazione account itasa da 1vecchio a 1nuovo per quanto riguarda la lista di serial tv myitasa
 specificare altri suoni
 
 CORREZIONI:
--mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
 -migliorare il fire alla reminder considerando la regola delete.
--sistemare la tabella reminder
+-sistemare la tabella reminder aggiungendo un undo last remove
 
 PUNTI INTERROGATIVI
+aspectj? log4j?
 feature proxy http? 
 esiste evento "arresta sistema"? e come intercettarlo???
-log4j?
 avvio automatico all'avvio OS (win-unix-mac)?
 multiutenza?
 properties sotto jfacility?
 http://thetvdb.com/wiki/index.php?title=Programmers_API?
 
 VERIFICARE LE IMPLEMENTAZIONI
-riavvio con java home (win, mac)
-verificare il corretto funzionamento delle notifiche.
+mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
