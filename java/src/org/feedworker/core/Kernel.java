@@ -344,7 +344,7 @@ public class Kernel implements PropertyChangeListener {
      * @return arraylist di feed(array di oggetti)
      */
     private ArrayList<Object[]> getFeedRss(String urlRss, String data,
-            String from, boolean download, boolean first) {
+            String from, boolean autodownload, boolean first) {
         RssParser rss = null;
         ArrayList<Object[]> matrice = null;
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
@@ -393,8 +393,15 @@ public class Kernel implements PropertyChangeListener {
                                 }
                                 continua = false;
                             }
-                            if ((isNotStagione(matrice.get(i)[2])) && download)
-                                links.add((String)matrice.get(i)[0]);
+                            if (autodownload){
+                                if ((isNotStagione(matrice.get(i)[2])))
+                                    links.add((String)matrice.get(i)[0]);
+                                else 
+                                    ManageListener.fireTextPaneEvent(this,
+                                            "Nuovo/i feed " + from,
+                                            TextPaneEvent.FEED_MYITASA, true);
+                            }
+                            
                         } else if (first && from.equals(MYITASA)) {
                             // non deve fare nulla
                         } else // if confronta after
@@ -1234,7 +1241,7 @@ public class Kernel implements PropertyChangeListener {
  
     public void setWriteLaf(String laf, Frame frame){
         try {
-            FeedWorkerClient.getApplication().getIstanceLAF().setLookAndFeelRuntime(laf, frame);
+            FeedWorkerClient.getApplication().getLookAndFeelInstance().setLookAndFeelRuntime(laf, frame);
             prop.setApplicationLookAndFeel(laf);
         } catch (NotAvailableLookAndFeelException ex) {
             error.launch(ex, this.getClass());
