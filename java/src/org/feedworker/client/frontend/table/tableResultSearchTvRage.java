@@ -70,7 +70,9 @@ public class tableResultSearchTvRage extends tableAbstract{
             }
             String text = value.toString();
             setText(text);
-            setToolTipText(Swing.getTextToolTip(table, column, this, text));
+            try{
+                setToolTipText(Swing.getTextToolTip(table, column, this, text));
+            } catch (NullPointerException e){}
             setFont(font);
             setOpaque(true);
             this.repaint();

@@ -70,7 +70,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "360 by "
+                + "376 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -834,5 +834,11 @@ public class Mediator {
     
     void changeRuntimeLaf(String laf, JFrame parent){
         core.setWriteLaf(laf, parent);
+    }
+
+    public void checkSamba(String domain, String dir, String ip, String user, 
+            char[] password) {
+        if (core.testSamba(ip, dir, domain, user, new String(password)))
+            printOk("Test connessione samba ok");
     }
 }
