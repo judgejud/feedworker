@@ -280,15 +280,21 @@ public class ManageException {
         String error01 = "The system cannot find the file specified.";
         String error02 = "Cannot create a file when that file already exists.";
         String error03 = "Access is denied.";
-        if (msg.equals(error01)) {
+        String error04 = "Logon failure: unknown user name or bad password.";
+        String error05 = "The network name cannot be found.";
+        
+        if (msg.equals(error01))
             printAlert("Samba non trova il file d'origine" + text, true);
-        } else if (msg.equals(error02)) {
+        else if (msg.equals(error02))
             printAlert("Samba non può rinominare un file che esiste " + text, true);
-        } else if (msg.equals(error03)) {
+        else if (msg.equals(error03))
             printAlert("Controllare i permessi della cartella samba " + text, true);
-        } else {
+        else if (msg.equals(error04))
+            printAlert("Login fallito, controllare username e/o password", true);
+        else if (msg.equals(error05))
+            printAlert("Cartella condivisa "+ text + " inesistente/errata", true);
+        else
             printError(ex, c);
-        }
     }
     
     /**

@@ -15,6 +15,7 @@ import org.feedworker.util.ResourceLocator;
 import org.jfacility.java.lang.JVM;
 
 import org.opensanskrit.application.Application;
+import org.opensanskrit.application.LookAndFeel;
 import org.opensanskrit.exception.AlreadyStartedApplicationException;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 import org.opensanskrit.widget.SplashScreen;
@@ -90,17 +91,16 @@ public class FeedWorkerClient {
                     splash.updateStartupState("Preparing Kernel instance ...");
                     core = Kernel.getIstance(debug);
                     splash.updateStartupState("Setting Look & Feel ...");
+                    LookAndFeel laf = feedWorker.getLookAndFeelInstance();
                     try {
-                        feedWorker.getLookAndFeelInstance().addJavaLAF();        	
-                        feedWorker.getLookAndFeelInstance().addJTattooLAF();
-                        feedWorker.getLookAndFeelInstance().addSyntheticaStandardLAF();
-                        feedWorker.getLookAndFeelInstance().addSyntheticaFreeLAF();
-                        feedWorker.getLookAndFeelInstance().addSyntheticaNotFreeLAF();
-                        feedWorker.getLookAndFeelInstance().setLookAndFeel(
-                                        feedWorkerSettings.getApplicationLookAndFeel());
+                        laf.addJavaLAF();
+                        laf.addJTattooLAF();
+                        laf.addSyntheticaStandardLAF();
+                        laf.addSyntheticaFreeLAF();
+                        laf.addSyntheticaNotFreeLAF();
+                        laf.setLookAndFeel(feedWorkerSettings.getApplicationLookAndFeel());
                     } catch (NotAvailableLookAndFeelException e) {
-                        System.out.println("LAF default");
-                        feedWorker.getLookAndFeelInstance().setLookAndFeel();
+                        laf.setLookAndFeel();
                     }
                     splash.updateStartupState("Loading Application settings ...");
                     ApplicationSettings.getIstance();

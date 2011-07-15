@@ -71,12 +71,10 @@ public class Samba {
             }
         } catch (Exception e) {
         } finally {
-            if (in != null) {
+            if (in != null)
                 in.close();
-            }
-            if (out != null) {
+            if (out != null)
                 out.close();
-            }
         }
         local.delete();
         return verify;

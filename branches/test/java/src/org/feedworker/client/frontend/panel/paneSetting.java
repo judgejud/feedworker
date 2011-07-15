@@ -203,7 +203,8 @@ public class paneSetting extends paneAbstract {
         jbCheckSamba.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                jbCheckSambaMouseClicked();
+                proxy.checkSamba(jtfSambaDomain.getText(), jtfSambaDir.getText(), 
+                    jtfSambaIP.getText(), jtfSambaUser.getText(), jpfSamba.getPassword());
             }
         });
         
@@ -519,9 +520,5 @@ public class paneSetting extends paneAbstract {
         jcbPaneShow.setSelected(prop.isEnablePaneShow());
         jcbPaneSubDest.setSelected(prop.isEnablePaneSubDestination());
         jcbPaneTorrent.setSelected(prop.isEnablePaneTorrent());
-    }
-    
-    private void jbCheckSambaMouseClicked(){
-        //TODO
     }
 }

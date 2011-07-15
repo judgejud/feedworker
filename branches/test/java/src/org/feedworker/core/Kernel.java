@@ -291,10 +291,9 @@ public class Kernel implements PropertyChangeListener {
         Samba.resetInstance();
         Samba s = Samba.getIstance(ip, dir, dom, user, pwd);
         try {
-            s.testConn();
             test = s.testConn();
         } catch (SmbException ex) {
-            error.launch(ex, getClass(), null);
+            error.launch(ex, getClass(), dir);
         } catch (IOException ex) {
             error.launch(ex, getClass(), null);
         }
