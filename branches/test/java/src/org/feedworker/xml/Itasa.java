@@ -105,6 +105,7 @@ public class Itasa extends AbstractQueryXML{
             Iterator iter = ((Element) document.getRootElement().getChildren().get(0))
                 .getChildren().iterator();
             Element item = (Element) iter.next();
+            String name = item.getChild(TAG_SHOW_NAME).getText();
             String plot = item.getChild(TAG_SHOW_PLOT).getText();
             String banner = item.getChild(TAG_SHOW_BANNER).getText();
             String season  = item.getChild(TAG_SHOW_SEASONS).getText();
@@ -128,7 +129,7 @@ public class Itasa extends AbstractQueryXML{
                                             temp.getChildText(TAG_SHOW_ACTOR_AS)});
                 }
             }
-            show = new Show(plot, banner, season, country, network, started,
+            show = new Show(name, plot, banner, season, country, network, started,
                                 ended, genres, actors);
         } else
             throw new ItasaException("show single: "+ error);
@@ -361,7 +362,7 @@ public class Itasa extends AbstractQueryXML{
         if (params!=null)
             for (int i=0; i<params.size(); i++)
                 newUrl+= OPERATOR_AND + params.get(i).toString();
-        //System.out.println(newUrl);
+        System.out.println(newUrl);
         return newUrl;
     }
     
@@ -416,7 +417,7 @@ public class Itasa extends AbstractQueryXML{
         Itasa i = new Itasa();
         try {
             
-            ItasaUser iu = i.login("judge", "qwerty");
+            //ItasaUser iu = i.login("judge", "qwerty");
             /*
             if (iu.isMyitasa()){
                 i.myItasaLastSub(iu.getAuthcode());
@@ -424,7 +425,7 @@ public class Itasa extends AbstractQueryXML{
             }
             */
             //i.showList();
-            //i.showSingle("1363", true);
+            i.showSingle("1363", true);
             
             //i.subtitleSingle("20000");
             //i.subtitleListByIdShow(1363,"720p",1);

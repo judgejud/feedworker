@@ -841,4 +841,8 @@ public class Mediator {
         if (core.testSamba(ip, dir, domain, user, new String(password)))
             printOk("Test connessione samba ok");
     }
+
+    public String test() {
+        return core.test();
+    }
 }

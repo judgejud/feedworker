@@ -18,6 +18,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -61,6 +63,7 @@ import org.xml.sax.SAXException;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 import java.awt.Frame;
+import org.feedworker.object.Show;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 
 /**Motore di Feedworker
@@ -1249,6 +1252,23 @@ public class Kernel implements PropertyChangeListener {
         } catch (IOException ex) {
             error.launch(ex, this.getClass());
         }
+    }
+
+    public String test() {
+        Itasa i = new Itasa();
+        try {
+            Show s = i.showSingle("1363", false);
+            return s.getTextHtml();
+        } catch (JDOMException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (ItasaException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {
