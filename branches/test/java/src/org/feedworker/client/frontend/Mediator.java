@@ -842,7 +842,7 @@ public class Mediator {
             printOk("Test connessione samba ok");
     }
 
-    public String test() {
-        return core.test();
+    public String test(String name) {
+        return core.test(name);
     }
 }
