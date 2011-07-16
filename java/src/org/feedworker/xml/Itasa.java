@@ -64,6 +64,7 @@ public class Itasa extends AbstractQueryXML{
     private final String TAG_SHOW_NETWORK = "network";
     private final String TAG_SHOW_NAME = "name";
     private final String TAG_SHOW_ID = "id";
+    private final String TAG_SHOW_STATUS = "status";
     private final String TAG_SHOW_ACTORS = "actors";
     private final String TAG_SHOW_ACTOR_NAME = "name";
     private final String TAG_SHOW_ACTOR_AS = "as";
@@ -113,6 +114,7 @@ public class Itasa extends AbstractQueryXML{
             String ended  = item.getChild(TAG_SHOW_ENDED).getText();
             String country = item.getChild(TAG_SHOW_COUNTRY).getText();
             String network = item.getChild(TAG_SHOW_NETWORK).getText();
+            String status = item.getChild(TAG_SHOW_STATUS).getText();
             ArrayList genres = new ArrayList();
             Iterator it = item.getChild(TAG_SHOW_GENRES).getChildren().iterator();
             while (it.hasNext()){
@@ -130,7 +132,7 @@ public class Itasa extends AbstractQueryXML{
                 }
             }
             show = new Show(name, plot, banner, season, country, network, started,
-                                ended, genres, actors);
+                                ended, status, genres, actors);
         } else
             throw new ItasaException("show single: "+ error);
         return show;

@@ -1254,10 +1254,10 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    public String test() {
+    public String test(String name) {
         Itasa i = new Itasa();
         try {
-            Show s = i.showSingle("1363", false);
+            Show s = i.showSingle(mapShowItasa.get(name), false);
             return s.getTextHtml();
         } catch (JDOMException ex) {
             ex.printStackTrace();
