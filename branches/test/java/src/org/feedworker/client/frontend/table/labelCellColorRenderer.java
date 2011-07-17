@@ -3,6 +3,8 @@ package org.feedworker.client.frontend.table;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -43,6 +45,18 @@ class labelCellColorRenderer extends JLabel implements TableCellRenderer {
         } catch (NullPointerException e){
             setToolTipText(null);
         }
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                System.out.println(KeyEvent.VK_CONTROL);
+                System.out.println(e.getID());
+                System.out.println(e.getKeyCode());
+                if (e.getID()==KeyEvent.VK_CONTROL){
+                    System.out.println("test");
+                }
+            }
+        });
+        
         this.repaint();
         return this;
     }
