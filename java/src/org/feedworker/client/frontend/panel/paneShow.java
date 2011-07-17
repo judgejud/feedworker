@@ -108,17 +108,20 @@ public class paneShow extends paneAbstract{
             map.put(name, temp);
         } else 
            temp = (tabShow) map.get(name);
-        if (!jtpShows.isAncestorOf(temp)) {
-            jtpShows.addTab(name, temp);
+        JScrollPane jsp = new JScrollPane(temp);
+        if (!jtpShows.isAncestorOf(jsp)) {
+            jtpShows.addTab(name, jsp);
             jtpShows.setTabComponentAt(jtpShows.getTabCount() - 1,
                     new ButtonTabComponent(jtpShows));
         }
+        jtpShows.setSelectedComponent(jsp);
     }
     
     
 } //end class
-class tabShow extends JPanel{
+class tabShow extends JXTaskPaneContainer{
         private JEditorPane jepShow, jepActors;
+        JXTaskPane taskShow, taskSeasons, taskActors;
 
         public tabShow(String name) {
             super();
@@ -128,25 +131,23 @@ class tabShow extends JPanel{
             jepShow.setOpaque(false);
             jepShow.setEditable(false);
             
-            JXTaskPane taskShow = new JXTaskPane();
+            taskShow = new JXTaskPane();
             taskShow.setTitle("Info Show");
             taskShow.setCollapsed(true);
             taskShow.add(jepShow);
 
-            JXTaskPane taskSeasons = new JXTaskPane();
+            taskSeasons = new JXTaskPane();
             taskSeasons.setTitle("Info Seasons");
             taskSeasons.setCollapsed(true);
 
-            JXTaskPane taskActors = new JXTaskPane();
+            taskActors = new JXTaskPane();
             taskActors.setTitle("Info Actors");
             taskActors.setCollapsed(true);
             
-            JXTaskPaneContainer tpc = new JXTaskPaneContainer();
-            tpc.add(taskShow);
-            tpc.add(taskSeasons);
-            tpc.add(taskActors);
-            add(tpc);
+            add(taskShow);
+            add(taskSeasons);
+            add(taskActors);
+            
             jepShow.setText(Mediator.getIstance().test(name));
-            setVisible(true);
         }
     }// END private class tabShow
