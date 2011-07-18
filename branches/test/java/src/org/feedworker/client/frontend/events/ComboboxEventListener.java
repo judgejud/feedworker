@@ -7,6 +7,6 @@ import java.util.EventListener;
  * @author luca
  */
 public interface ComboboxEventListener extends EventListener {
-    /** intercetta l'evento myjframe e lo gestisce */
+    /** intercetta l'evento combobox e lo gestisce */
     public void objReceived(ComboboxEvent evt);
 }
