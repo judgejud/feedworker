@@ -1,10 +1,12 @@
 package org.feedworker.client.frontend;
 
+import java.awt.Dimension;
 import java.util.TreeMap;
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
+import org.feedworker.client.frontend.events.EditorPaneEventListener;
 import org.feedworker.client.frontend.events.FrameEventListener;
 import org.feedworker.client.frontend.events.ListEventListener;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
@@ -23,7 +25,8 @@ public class GuiCore {
     private static GuiCore core = null;
     
     private Mediator proxy = Mediator.getIstance();
-    private TreeMap<String, JPanel> mapPaneShows = new TreeMap<String, JPanel>();
+    private TreeMap<Object, JXTaskPaneContainer> mapPaneShows = 
+                                    new TreeMap<Object, JXTaskPaneContainer>();
     
     public static GuiCore getInstance(){
         if (core==null)
@@ -55,22 +58,25 @@ public class GuiCore {
         ManageListener.addListEventListener(listener);
     }
     
+    public void setEditorPaneListener(EditorPaneEventListener listener) {
+        ManageListener.addEditorPaneEventListener(listener);
+    }
+    
     public void addNewSerial(){
         String tv = JOptionPane.showInputDialog(null,"Inserire nome serie tv");
         if (Lang.verifyTextNotNull(tv))
             proxy.searchTV(tv);
     }
     
-    public tabShow addNewTabShow(String name){
+    public tabShow addNewTabShow(Object name){
         tabShow pane;
         if (!mapPaneShows.containsKey(name)){
-            pane = new tabShow(name);
+            pane = new tabShow(name.toString());
             mapPaneShows.put(name, pane);
         } else 
            pane = (tabShow) mapPaneShows.get(name);
         return pane;
     }
-    
 }
 
 class tabShow extends JXTaskPaneContainer{
@@ -85,10 +91,11 @@ class tabShow extends JXTaskPaneContainer{
             jepShow.setContentType("text/html");
             jepShow.setOpaque(false);
             jepShow.setEditable(false);
+            //jepShow.setPreferredSize(new Dimension(500, 500));
             
             taskShow = new JXTaskPane();
             taskShow.setTitle("Info Show");
-            taskShow.setCollapsed(true);
+            //taskShow.setCollapsed(true);
             taskShow.add(jepShow);
 
             taskSeasons = new JXTaskPane();
