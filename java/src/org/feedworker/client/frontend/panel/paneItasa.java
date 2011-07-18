@@ -23,8 +23,8 @@ public class paneItasa extends paneAbstract {
         super("Italiansubs");
         initializePanel();
         initializeButtons();
-        proxy.setTableListener(jtItasa);
-        proxy.setTableListener(jtMyItasa);
+        core.setTableListener(jtItasa);
+        core.setTableListener(jtMyItasa);
     }
 
     /**

@@ -51,7 +51,7 @@ class jdResultSearchTv extends JDialog implements ActionListener{
         pane.add(jbCancel);
         pane.add(jbSearch);
         getContentPane().add(pane, BorderLayout.SOUTH);
-        proxy.setTableListener(table);
+        GuiCore.getInstance().setTableListener(table);
         pack();
     }
 

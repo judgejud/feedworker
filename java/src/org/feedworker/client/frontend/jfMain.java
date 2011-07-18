@@ -679,7 +679,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     /** inizializza i listener per l'ascolto */
     private void initListeners() {
         addWindowListener(this);
-        proxy.setFrameListener(this);
+        GuiCore.getInstance().setFrameListener(this);
     }
 
     @Override

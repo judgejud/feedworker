@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
+import org.feedworker.client.frontend.GuiCore;
 
 import org.feedworker.client.frontend.Mediator;
 /**
@@ -32,6 +33,7 @@ abstract class paneAbstract extends JPanel {
 
     protected JPanel jpAction, jpCenter;
     protected Mediator proxy = Mediator.getIstance();
+    protected GuiCore core = GuiCore.getInstance();
 
     /** Costruttore protetto, per essere invocato dai figli tramite ereditarietà */
     protected paneAbstract(String name) {

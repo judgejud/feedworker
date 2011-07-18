@@ -3,36 +3,36 @@ package org.feedworker.client.frontend.panel;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.TreeMap;
 
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import org.feedworker.client.frontend.Mediator;
+import org.feedworker.client.frontend.events.ListEvent;
+import org.feedworker.client.frontend.events.ListEventListener;
 
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
+
 import org.jfacility.javax.swing.ButtonTabComponent;
 
 /**
  *
  * @author luca
  */
-public class paneShow extends paneAbstract{
+public class paneShow extends paneAbstract implements ListEventListener{
     
     private static paneShow jpanel = null;
     private JList jlSeries;
     private JTabbedPane jtpShows;
-    private TreeMap<String, JPanel> map;
+    
     
     private paneShow(){
         super("Show");
         initializePanel();
         initializeButtons();
-        map = new TreeMap<String, JPanel>();
+        core.setListListener(this);
     }
     
     public static paneShow getPanel(){
@@ -43,21 +43,19 @@ public class paneShow extends paneAbstract{
 
     @Override
     void initializePanel() {
-        JButton jbImport = new JButton("importa da myItasa");
+        JButton jbImport = new JButton("Importa da myItasa");
         jbImport.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                //TODO
+                proxy.importNameListFromMyItasa();
             }
         });
-        String[] temp = {"90210", "Alias"};
-        jlSeries = new JList(temp);
+        jlSeries = new JList();
+        
         jlSeries.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 newTabShow(jlSeries.getSelectedValue().toString());
-                //TODO
-                //jepShow.setText(proxy.test(jlSeries.getSelectedValue().toString()));
             }
         });
         //JXList jxl = new JXList(temp);
@@ -81,34 +79,10 @@ public class paneShow extends paneAbstract{
     }
 
     @Override
-    void initializeButtons() {
-        //TODO add checkbox & import myitasa
-        JButton jb = new JButton("test");
-        jpAction.add(jb);
-        jb.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                //jepShow.setText(proxy.test());
-            }
-        });
-        JButton jb1 = new JButton("print html");
-        jpAction.add(jb1);
-        jb1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                //(System.out.println(jepShow.getText());
-            }
-        });
-    }
+    void initializeButtons() {}
     
     private void newTabShow(String name){
-        tabShow temp;
-        if (!map.containsKey(name)){
-            temp = new tabShow(name);
-            map.put(name, temp);
-        } else 
-           temp = (tabShow) map.get(name);
-        JScrollPane jsp = new JScrollPane(temp);
+        JScrollPane jsp = new JScrollPane(core.addNewTabShow(name));
         if (!jtpShows.isAncestorOf(jsp)) {
             jtpShows.addTab(name, jsp);
             jtpShows.setTabComponentAt(jtpShows.getTabCount() - 1,
@@ -116,38 +90,9 @@ public class paneShow extends paneAbstract{
         }
         jtpShows.setSelectedComponent(jsp);
     }
-    
-    
+
+    @Override
+    public void objReceived(ListEvent evt) {
+        jlSeries.setListData(evt.getArray());
+    }
 } //end class
-class tabShow extends JXTaskPaneContainer{
-        private JEditorPane jepShow, jepActors;
-        JXTaskPane taskShow, taskSeasons, taskActors;
-
-        public tabShow(String name) {
-            super();
-            setName(name);
-            jepShow = new JEditorPane();
-            jepShow.setContentType("text/html");
-            jepShow.setOpaque(false);
-            jepShow.setEditable(false);
-            
-            taskShow = new JXTaskPane();
-            taskShow.setTitle("Info Show");
-            taskShow.setCollapsed(true);
-            taskShow.add(jepShow);
-
-            taskSeasons = new JXTaskPane();
-            taskSeasons.setTitle("Info Seasons");
-            taskSeasons.setCollapsed(true);
-
-            taskActors = new JXTaskPane();
-            taskActors.setTitle("Info Actors");
-            taskActors.setCollapsed(true);
-            
-            add(taskShow);
-            add(taskSeasons);
-            add(taskActors);
-            
-            jepShow.setText(Mediator.getIstance().test(name));
-        }
-    }// END private class tabShow

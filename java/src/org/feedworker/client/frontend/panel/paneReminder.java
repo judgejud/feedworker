@@ -30,7 +30,7 @@ public class paneReminder extends paneAbstract{
         super("Reminder");
         initializePanel();
         initializeButtons();
-        proxy.setTableListener(jtable);
+        core.setTableListener(jtable);
     }
 
     @Override

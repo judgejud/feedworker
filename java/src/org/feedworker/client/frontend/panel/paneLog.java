@@ -19,8 +19,8 @@ public class paneLog extends paneAbstract{
         super("Log");
         initializePanel();
         initializeButtons();
-        proxy.setTextPaneListener(logEast);
-        proxy.setTextPaneListener(logWest);
+        core.setTextPaneListener(logEast);
+        core.setTextPaneListener(logWest);
     }
 
     @Override

@@ -21,8 +21,8 @@ public class paneSubsfactory extends paneAbstract {
         super("Subsfactory");
         initializePanel();
         initializeButtons();
-        proxy.setTableListener(jtSubsf);
-        proxy.setTableListener(jtMySubsf);
+        core.setTableListener(jtSubsf);
+        core.setTableListener(jtMySubsf);
     }
 
     public static paneSubsfactory getPanel() {

@@ -21,8 +21,8 @@ public class paneTorrent extends paneAbstract {
         super("Torrent");
         initializePanel();
         initializeButtons();
-        proxy.setTableListener(jtTorrent1);
-        proxy.setTableListener(jtTorrent2);
+        core.setTableListener(jtTorrent1);
+        core.setTableListener(jtTorrent2);
     }
 
     public static paneTorrent getPanel() {

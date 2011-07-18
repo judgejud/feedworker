@@ -18,6 +18,8 @@ public class ManageListener {
     private static List listenerTextPane = new ArrayList();
     private static List listenerStatusBar = new ArrayList();
     private static List listenerComboBox = new ArrayList();
+    private static List listenerEditorPane = new ArrayList();
+    private static List listenerList = new ArrayList();
 
     public static synchronized void addTableEventListener(
                                                     TableEventListener listener) {
@@ -41,6 +43,16 @@ public class ManageListener {
     public static synchronized void addComboBoxEventListener(
                                                 ComboboxEventListener listener) {
         listenerComboBox.add(listener);
+    }
+    
+    public static synchronized void addEditorPaneEventListener(
+                                                EditorPaneEventListener listener) {
+        listenerEditorPane.add(listener);
+    }
+    
+    public static synchronized void addListEventListener(
+                                                    ListEventListener listener) {
+        listenerList.add(listener);
     }
 
     public static synchronized void fireTableEvent(Object from, ArrayList<Object[]> alObj, 
@@ -111,6 +123,15 @@ public class ManageListener {
         }
     }
     
+    public static synchronized void fireEditorPaneEvent(Object from, String msg) {
+        EditorPaneEvent event = new EditorPaneEvent(from, msg);
+        Iterator listeners = listenerEditorPane.iterator();
+        while (listeners.hasNext()) {
+            EditorPaneEventListener myel = (EditorPaneEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
     public static synchronized void fireComboBoxEvent(Object from, Object[] array) {
         ComboboxEvent event = new ComboboxEvent(from, array);
         Iterator listeners = listenerComboBox.iterator();
@@ -119,10 +140,13 @@ public class ManageListener {
             myel.objReceived(event);
         }
     }
-}
-/*
-    public static synchronized void removeMyTextPaneEventListener(
-                                                    TextPaneEventListener listener) {
-        listenerTP.remove(listener);
+    
+    public static synchronized void fireListEvent(Object from, Object[] array) {
+        ListEvent event = new ListEvent(from, array);
+        Iterator listeners = listenerList.iterator();
+        while (listeners.hasNext()) {
+            ListEventListener myel = (ListEventListener) listeners.next();
+            myel.objReceived(event);
+        }
     }
-*/
+}
