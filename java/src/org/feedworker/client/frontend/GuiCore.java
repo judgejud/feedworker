@@ -1,10 +1,10 @@
 package org.feedworker.client.frontend;
 
-import java.awt.Dimension;
 import java.util.TreeMap;
+
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+
 import org.feedworker.client.frontend.events.ComboboxEventListener;
 import org.feedworker.client.frontend.events.EditorPaneEventListener;
 import org.feedworker.client.frontend.events.FrameEventListener;
@@ -13,6 +13,7 @@ import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.core.ManageListener;
+
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 
@@ -83,33 +84,32 @@ class tabShow extends JXTaskPaneContainer{
 
     private JEditorPane jepShow, jepActors;
     private JXTaskPane taskShow, taskSeasons, taskActors;
+    
+    public tabShow(String name) {
+        super();
+        setName(name);
 
-        public tabShow(String name) {
-            super();
-            setName(name);
-            jepShow = new JEditorPane();
-            jepShow.setContentType("text/html");
-            jepShow.setOpaque(false);
-            jepShow.setEditable(false);
-            //jepShow.setPreferredSize(new Dimension(500, 500));
-            
-            taskShow = new JXTaskPane();
-            taskShow.setTitle("Info Show");
-            //taskShow.setCollapsed(true);
-            taskShow.add(jepShow);
+        jepShow = new JEditorPane();
+        jepShow.setContentType("text/html");
+        jepShow.setOpaque(false);
+        jepShow.setEditable(false);
 
-            taskSeasons = new JXTaskPane();
-            taskSeasons.setTitle("Info Seasons");
-            taskSeasons.setCollapsed(true);
+        taskShow = new JXTaskPane();
+        taskShow.setTitle("Info Show");
+        taskShow.add(jepShow);
 
-            taskActors = new JXTaskPane();
-            taskActors.setTitle("Info Actors");
-            taskActors.setCollapsed(true);
-            
-            add(taskShow);
-            add(taskSeasons);
-            add(taskActors);
-            
-            jepShow.setText(Mediator.getIstance().test(name));
-        }
-    }// END private class tabShow
+        taskSeasons = new JXTaskPane();
+        taskSeasons.setTitle("Info Seasons");
+        taskSeasons.setCollapsed(true);
+
+        taskActors = new JXTaskPane();
+        taskActors.setTitle("Info Actors");
+        taskActors.setCollapsed(true);
+
+        add(taskShow);
+        add(taskSeasons);
+        add(taskActors);
+
+        jepShow.setText(Mediator.getIstance().test(name));
+    }
+}// END private class tabShow
