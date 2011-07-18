@@ -39,6 +39,7 @@ import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
 import javax.swing.JFrame;
+import org.feedworker.client.frontend.events.ListEventListener;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -70,7 +71,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "376 by "
+                + "383 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -232,26 +233,6 @@ public class Mediator {
      */
     void closeApp() {
         core.closeApp(false);
-    }
-
-    public void setTableListener(TableEventListener listener) {
-        ManageListener.addTableEventListener(listener);
-    }
-
-    public void setTextPaneListener(TextPaneEventListener listener) {
-        ManageListener.addTextPaneEventListener(listener);
-    }
-    
-    public void setStatusBarListener(StatusBarEventListener listener) {
-        ManageListener.addStatusBarEventListener(listener);
-    }
-
-    void setFrameListener(FrameEventListener listener) {
-        ManageListener.addFrameEventListener(listener);
-    }
-    
-    public void setComboboxListener(ComboboxEventListener listener) {
-        ManageListener.addComboBoxEventListener(listener);
     }
 
     void restartRss() {
@@ -844,5 +825,9 @@ public class Mediator {
 
     public String test(String name) {
         return core.test(name);
+    }
+
+    public void importNameListFromMyItasa() {
+        core.importNameFromMyItasa();
     }
 }

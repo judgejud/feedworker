@@ -12,7 +12,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.feedworker.client.frontend.Mediator;
+import org.feedworker.client.frontend.GuiCore;
 import org.feedworker.client.frontend.events.StatusBarEvent;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.util.Common;
@@ -39,7 +39,7 @@ public class paneStatusBar extends JPanel implements StatusBarEventListener{
         add(leftPanel, BorderLayout.WEST);
         add(rightPanel, BorderLayout.EAST);
         setBackground(SystemColor.control);
-        Mediator.getIstance().setStatusBarListener(this);
+        GuiCore.getInstance().setStatusBarListener(this);
     }
 
     @Override

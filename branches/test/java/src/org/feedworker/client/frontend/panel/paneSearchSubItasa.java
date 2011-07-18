@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ComboBoxModel;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -35,8 +36,8 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
         super("Search sub Itasa");
         initializePanel();
         initializeButtons();
-        proxy.setTableListener(jtable);
-        proxy.setComboboxListener(this);
+        core.setTableListener(jtable);
+        core.setComboboxListener(this);
     }
     
     public static paneSearchSubItasa getPanel(){

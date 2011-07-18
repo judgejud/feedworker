@@ -135,7 +135,7 @@ public class paneSubtitleDest extends paneAbstract {
 		}
             }
         });
-        proxy.setTableListener(jtable);
+        core.setTableListener(jtable);
     }
 
     private void jbAddRowMouseClicked() {

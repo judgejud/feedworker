@@ -1205,6 +1205,29 @@ public class Kernel implements PropertyChangeListener {
                 printAlert("Non hai abilitato l'uso di myItasa");
         }
     }
+    
+    public void importNameFromMyItasa() {
+        checkLoginItasa(prop.getItasaUsername(), prop.getItasaPassword());
+        if (user!=null){
+            if (user.isMyitasa()){
+                ArrayList<String> myShows = null;
+                try {
+                    myShows = itasa.myItasaShowsName(user.getAuthcode());
+                } catch (JDOMException ex) {
+                    error.launch(ex, getClass());
+                } catch (IOException ex) {
+                    error.launch(ex, getClass());
+                } catch (ItasaException ex) {
+                    printAlert(ex.getMessage());
+                } catch (Exception ex) {
+                    error.launch(ex, getClass());
+                }
+                if (myShows!=null && myShows.size()>0)
+                    ManageListener.fireListEvent(this, myShows.toArray());
+            } else 
+                printAlert("Non hai abilitato l'uso di myItasa");
+        }
+    }
 
     /**Inizializza dal web l'elenco delle serie itasa, 
      * o le preleva dall'xml nel caso in cui ci sono problemi vari con itasa

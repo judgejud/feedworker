@@ -4,12 +4,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import org.feedworker.client.frontend.table.tableCalendar;
-import org.jfacility.java.lang.Lang;
 /**
  *
  * @author luca
@@ -37,7 +35,7 @@ public class paneCalendar extends paneAbstract{
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
         jpCenter.add(jScrollTable1);
-        proxy.setTableListener(jtable);
+        core.setTableListener(jtable);
     }
 
     @Override
@@ -48,7 +46,7 @@ public class paneCalendar extends paneAbstract{
         jbAddRow.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                jbAddRowMouseClicked();
+                core.addNewSerial();
             }
         });
 
@@ -127,12 +125,6 @@ public class paneCalendar extends paneAbstract{
         jpAction.add(jbImport, gbcAction);
         gbcAction.gridx = ++x;
         jpAction.add(jbImportMyItasa, gbcAction);
-    }
-
-    private void jbAddRowMouseClicked() {
-        String tv = JOptionPane.showInputDialog(null,"Inserire nome serie tv");
-        if (Lang.verifyTextNotNull(tv))
-            proxy.searchTV(tv);
     }
 
     private void jbRemoveRowMouseClicked() {
