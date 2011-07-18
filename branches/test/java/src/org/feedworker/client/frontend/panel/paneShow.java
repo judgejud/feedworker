@@ -3,15 +3,14 @@ package org.feedworker.client.frontend.panel;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.DefaultListModel;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.ListSelectionModel;
 
 import org.feedworker.client.frontend.events.ComboboxEvent;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
@@ -20,14 +19,14 @@ import org.feedworker.client.frontend.events.EditorPaneEventListener;
 import org.feedworker.client.frontend.events.ListEvent;
 import org.feedworker.client.frontend.events.ListEventListener;
 
-
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 
 import org.jfacility.javax.swing.ButtonTabComponent;
 
-/**
- *
+/**TODO: lista ordinata e senza duplicati,
+ *TODO: problema duplicato scrollpane nel tabpane
+ *TODO: container dx sfasato in dimensioni, controllare con guicore
  * @author luca
  */
 public class paneShow extends paneAbstract implements ComboboxEventListener, 
@@ -37,6 +36,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     private JList jlSeries;
     private JTabbedPane jtpShows;
     private JComboBox jcbShows;
+    private DefaultListModel listModel;
     
     private paneShow(){
         super("Show");
@@ -62,8 +62,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
                 proxy.importNameListFromMyItasa();
             }
         });
-        
-        jlSeries = new JList();
+        listModel = new DefaultListModel();
+        jlSeries = new JList(listModel);
         jlSeries.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -77,9 +77,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jbAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                //TODO java.lang.ClassCastException: 
-                //javax.swing.JList$3 cannot be cast to javax.swing.DefaultListModel
-                ((DefaultListModel) jlSeries.getModel()).add(0, jcbShows.getSelectedItem());
+                listModel.add(0, jcbShows.getSelectedItem());                
             }
         });
         
@@ -94,7 +92,6 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         });
         
         JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
-        //tpcWest.setPreferredSize(new Dimension(200, 800));
         JXTaskPane taskMySeries = new JXTaskPane();
         taskMySeries.setTitle("My Series");
         taskMySeries.setCollapsed(true);
@@ -108,12 +105,12 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         taskAdd.add(jbSee);
         taskAdd.add(jcbShows);
         
-        tpcWest.add(taskMySeries);
         tpcWest.add(taskAdd);
+        tpcWest.add(taskMySeries);
         
         JScrollPane jspLeft = new JScrollPane(tpcWest);
-        JPanel pane = new JPanel(new BorderLayout());
         jtpShows = new JTabbedPane();
+        JPanel pane = new JPanel(new BorderLayout());
         pane.add(jspLeft, BorderLayout.WEST);
         pane.add(jtpShows, BorderLayout.CENTER);
         jpCenter.add(pane);
@@ -123,25 +120,25 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     void initializeButtons() {}
     
     private void newTabShow(Object name){
-        JScrollPane jsp = new JScrollPane(core.addNewTabShow(name));
-        if (!jtpShows.isAncestorOf(jsp)) {
-            jtpShows.addTab(name.toString(), jsp);
+        JScrollPane pane = new JScrollPane(core.addNewTabShow(name));
+        if (!jtpShows.isAncestorOf(pane)) {
+            jtpShows.addTab(name.toString(), pane);
             jtpShows.setTabComponentAt(jtpShows.getTabCount() - 1,
                     new ButtonTabComponent(jtpShows));
         }
-        jtpShows.setSelectedComponent(jsp);
+        jtpShows.setSelectedComponent(pane);
     }
 
     @Override
     public void objReceived(ListEvent evt) {
-        jlSeries.setListData(evt.getArray());
+        for (int i=0; i<evt.getArray().length; i++)
+            listModel.addElement(evt.getArray()[i]);
     }
 
     @Override
     public void objReceived(ComboboxEvent evt) {
-        Object[] array = evt.getArray(); 
-        for (int i=0; i<array.length; i++)
-            jcbShows.addItem(array[i]);
+        for (int i=0; i<evt.getArray().length; i++)
+            jcbShows.addItem(evt.getArray()[i]);
         jcbShows.addItem(null);
         jcbShows.setSelectedItem(null);
     }
