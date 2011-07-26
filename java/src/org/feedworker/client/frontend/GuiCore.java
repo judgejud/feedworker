@@ -5,6 +5,7 @@ import java.util.TreeMap;
 
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 import org.feedworker.client.frontend.events.ComboboxEventListener;
 import org.feedworker.client.frontend.events.EditorPaneEventListener;
@@ -27,8 +28,8 @@ public class GuiCore {
     private static GuiCore core = null;
     
     private Mediator proxy = Mediator.getIstance();
-    private TreeMap<Object, JXTaskPaneContainer> mapPaneShows = 
-                                    new TreeMap<Object, JXTaskPaneContainer>();
+    private TreeMap<Object, JScrollPane> mapPaneShows = 
+                                    new TreeMap<Object, JScrollPane>();
     
     public static GuiCore getInstance(){
         if (core==null)
@@ -70,7 +71,7 @@ public class GuiCore {
             proxy.searchTV(tv);
     }
     
-    public JXTaskPaneContainer addNewTabShow(Object name){
+    public JScrollPane addNewTabShow(Object name){
         tabShow pane;
         if (!mapPaneShows.containsKey(name)){
             pane = new tabShow(name.toString());
@@ -81,15 +82,17 @@ public class GuiCore {
     }
 }
 
-class tabShow extends JXTaskPaneContainer{
-
+class tabShow extends JScrollPane{
     private JEditorPane jepShow, jepActors;
     private JXTaskPane taskShow, taskSeasons, taskActors;
+    private JXTaskPaneContainer container;
     
     public tabShow(String name) {
         super();
         setName(name);
-        setPreferredSize(new Dimension(500, 600));
+        setPreferredSize(new Dimension(700, 600));
+        container = new JXTaskPaneContainer();
+        setViewportView(container);
         
         jepShow = new JEditorPane();
         jepShow.setContentType("text/html");
@@ -114,9 +117,9 @@ class tabShow extends JXTaskPaneContainer{
         taskActors.setCollapsed(true);
         taskActors.add(jepActors);
 
-        add(taskShow);
-        add(taskSeasons);
-        add(taskActors);
+        container.add(taskShow);
+        container.add(taskSeasons);
+        container.add(taskActors);
 
         jepShow.setText(Mediator.getIstance().test(name));
     }
