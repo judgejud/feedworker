@@ -12,7 +12,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JViewport;
 
 import org.feedworker.client.frontend.events.ComboboxEvent;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
@@ -27,8 +26,6 @@ import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.jfacility.javax.swing.ButtonTabComponent;
 
 /**TODO: lista ordinata e senza duplicati,
- *TODO: problema duplicato scrollpane nel tabpane
- *TODO: container dx sfasato in dimensioni, controllare con guicore
  * @author luca
  */
 public class paneShow extends paneAbstract implements ComboboxEventListener, 
@@ -126,7 +123,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     }
     
     private void newTabShow(Object name){
-        JXTaskPaneContainer pane = core.addNewTabShow(name);
+        JScrollPane pane = core.addNewTabShow(name);
         pane.setName(name.toString());
         if (!jtpShows.isAncestorOf(pane)) {
             jtpShows.addTab(name.toString(), pane);
