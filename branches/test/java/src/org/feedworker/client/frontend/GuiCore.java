@@ -1,5 +1,6 @@
 package org.feedworker.client.frontend;
 
+import java.awt.Dimension;
 import java.util.TreeMap;
 
 import javax.swing.JEditorPane;
@@ -69,7 +70,7 @@ public class GuiCore {
             proxy.searchTV(tv);
     }
     
-    public tabShow addNewTabShow(Object name){
+    public JXTaskPaneContainer addNewTabShow(Object name){
         tabShow pane;
         if (!mapPaneShows.containsKey(name)){
             pane = new tabShow(name.toString());
@@ -88,11 +89,17 @@ class tabShow extends JXTaskPaneContainer{
     public tabShow(String name) {
         super();
         setName(name);
-
+        setPreferredSize(new Dimension(500, 600));
+        
         jepShow = new JEditorPane();
         jepShow.setContentType("text/html");
         jepShow.setOpaque(false);
         jepShow.setEditable(false);
+        
+        jepActors = new JEditorPane();
+        jepActors.setContentType("text/html");
+        jepActors.setOpaque(false);
+        jepActors.setEditable(false);
 
         taskShow = new JXTaskPane();
         taskShow.setTitle("Info Show");
@@ -105,6 +112,7 @@ class tabShow extends JXTaskPaneContainer{
         taskActors = new JXTaskPane();
         taskActors.setTitle("Info Actors");
         taskActors.setCollapsed(true);
+        taskActors.add(jepActors);
 
         add(taskShow);
         add(taskSeasons);
