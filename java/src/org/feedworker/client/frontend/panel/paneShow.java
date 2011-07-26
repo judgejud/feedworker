@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -11,6 +12,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JViewport;
 
 import org.feedworker.client.frontend.events.ComboboxEvent;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
@@ -93,11 +95,12 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         
         JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
         JXTaskPane taskMySeries = new JXTaskPane();
+        
         taskMySeries.setTitle("My Series");
         taskMySeries.setCollapsed(true);
         taskMySeries.add(jbImport);
         taskMySeries.add(jlSeries);
-        //task.add(jxl);
+
         JXTaskPane taskAdd = new JXTaskPane();
         taskAdd.setTitle("List Series");
         taskAdd.setCollapsed(true);
@@ -109,6 +112,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         tpcWest.add(taskMySeries);
         
         JScrollPane jspLeft = new JScrollPane(tpcWest);
+        jspLeft.setPreferredSize(new Dimension(200,700));
         jtpShows = new JTabbedPane();
         JPanel pane = new JPanel(new BorderLayout());
         pane.add(jspLeft, BorderLayout.WEST);
@@ -117,10 +121,13 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     }
 
     @Override
-    void initializeButtons() {}
+    void initializeButtons() {
+    
+    }
     
     private void newTabShow(Object name){
-        JScrollPane pane = new JScrollPane(core.addNewTabShow(name));
+        JXTaskPaneContainer pane = core.addNewTabShow(name);
+        pane.setName(name.toString());
         if (!jtpShows.isAncestorOf(pane)) {
             jtpShows.addTab(name.toString(), pane);
             jtpShows.setTabComponentAt(jtpShows.getTabCount() - 1,

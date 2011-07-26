@@ -1,6 +1,7 @@
 package org.feedworker.xml;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,7 +68,7 @@ public class TvRage extends AbstractQueryXML{
     }
 
     public Object[] readingEpisodeList_byID(String id, String season) throws 
-            JDOMException, IOException, IndexOutOfBoundsException{
+            ConnectException, JDOMException, IOException, IndexOutOfBoundsException{
         buildUrl(URL_TVRAGE_EPISODE_LIST + id);
         List seasons = ((Element) document.getRootElement().getChildren().get(2))
                 .getChildren();

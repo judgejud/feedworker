@@ -1,5 +1,6 @@
 package org.feedworker.core;
 //IMPORT JAVA
+import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
@@ -7,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
@@ -18,8 +20,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -32,11 +32,7 @@ import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.exception.ManageException;
-import org.feedworker.object.ItasaUser;
-import org.feedworker.object.KeyRule;
-import org.feedworker.object.Quality;
-import org.feedworker.object.Subtitle;
-import org.feedworker.object.ValueRule;
+import org.feedworker.object.*;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
 import org.feedworker.util.ExtensionFilter;
@@ -53,6 +49,7 @@ import org.jfacility.Util;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemFileManager;
 
+import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 import org.opensanskrit.exception.UnableRestartApplicationException;
 
 import jcifs.smb.SmbException;
@@ -62,10 +59,6 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import java.awt.Frame;
-import org.feedworker.object.Show;
-import org.opensanskrit.exception.NotAvailableLookAndFeelException;
-
 /**Motore di Feedworker
  * 
  * @author luca
@@ -431,7 +424,7 @@ public class Kernel implements PropertyChangeListener {
     public void runRss(boolean autoloaddownload) {
         if (!prop.isApplicationFirstTimeUsed()) {
             String temp = Common.actualTime();
-            runItasa(true);
+            runItasa(true, autoloaddownload);
             runSubsfactory(true);
             if (prop.isTorrentOption())
                 runTorrent(true);
@@ -454,7 +447,7 @@ public class Kernel implements PropertyChangeListener {
                 public void run() {
                     boolean icontray = false;
                     prop.setLastDateTimeRefresh(Common.actualTime());
-                    if (runItasa(false))
+                    if (runItasa(false,true))
                         icontray = true;
                     if (runSubsfactory(false))
                         icontray = true;
@@ -479,14 +472,12 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    /**
-     * Esegue la parte rss itasa
+    /**Esegue la parte rss itasa
      * 
-     * @param first
-     *            primo lancio
+     * @param first primo lancio
      * @return true se ci sono nuovi feed, false altrimenti
      */
-    private boolean runItasa(boolean first) {
+    private boolean runItasa(boolean first, boolean autoloaddownload) {
         boolean status = false;
         ArrayList<Object[]> feedIta, feedMyita;
         if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
@@ -502,7 +493,11 @@ public class Kernel implements PropertyChangeListener {
         if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
             if (first && prop.isAutoLoadDownloadMyItasa())
                 lastMyItasa = prop.getLastDateTimeRefresh();
-            feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
+            if (first && !autoloaddownload)
+                feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
+                    MYITASA, autoloaddownload, first);
+            else
+                feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
                     MYITASA, prop.isAutoDownloadMyItasa(), first);
             if ((feedMyita != null) && (feedMyita.size() > 0)) {
                 if (!first)
@@ -514,8 +509,7 @@ public class Kernel implements PropertyChangeListener {
         return status;
     }
 
-    /**
-     * Esegue la parte rss subsfactory
+    /**Esegue la parte rss subsfactory
      * 
      * @param first
      *            primo lancio
@@ -667,7 +661,7 @@ public class Kernel implements PropertyChangeListener {
     /** Effettua l'aggiornamento dei feed forzato */
     public void bruteRefreshRSS() {
         printOk("Timer in fase di reinizializzazione.");
-        runItasa(false);
+        runItasa(false, true);
         runSubsfactory(false);
         runTorrent(false);
         stopAndRestartTimer();
@@ -914,8 +908,8 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    private Object[] setArray(TvRage t, Object[] show, boolean status)
-                                            throws JDOMException, IOException {
+    private Object[] setArray(TvRage t, Object[] show, boolean status) throws 
+                                    ConnectException, JDOMException, IOException {
         Object[] array = t.readingEpisodeList_byID(show[0].toString(),
                 show[2].toString());
         array[0] = show[0];
@@ -1239,6 +1233,8 @@ public class Kernel implements PropertyChangeListener {
                 mapShowItasa = itasa.showList();
                 //TODO: se itasa = errore, caricare da file
             } catch (JDOMException ex) {
+                //TODO:org.jdom.input.JDOMParseException: Error on line 3: 
+                //The markup in the document following the root element must be well-formed.
                 ex.printStackTrace();
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -1280,8 +1276,8 @@ public class Kernel implements PropertyChangeListener {
     public String test(String name) {
         Itasa i = new Itasa();
         try {
-            Show s = i.showSingle(mapShowItasa.get(name), false);
-            return s.getTextHtml();
+            Show s = i.showSingle(mapShowItasa.get(name), true);
+            return s.getHtmlShow();
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -1407,6 +1403,13 @@ public class Kernel implements PropertyChangeListener {
                     setProgress(++progress);
                     if (!this.isCancelled())
                         xmlCalendar.reverseDataCloning(xmlClone);
+                }
+            } catch (ConnectException ex) {
+                try {
+                    xmlCalendar.reverseDataCloning(xmlClone);
+                    printAlert("Errore di connessione con tvrage");
+                } catch (IOException ex1) {
+                error.launch(ex, null);    
                 }
             } catch (JDOMException ex) {
                 error.launch(ex, null);

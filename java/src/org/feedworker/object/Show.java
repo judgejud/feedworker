@@ -28,7 +28,7 @@ public class Show {
         this.actors = actors;
     }
     
-    public String getTextHtml(){
+    public String getHtmlShow(){
         String html = new String("<html><body><center><img src=\""+banner+"\"></img><br>"
                 + "<h1>"+name+"</h1></center>");
         html += "<table cellspacing=\"3\" cellpadding=\"2\">";
@@ -38,10 +38,24 @@ public class Show {
         html += "</td></tr>";
         html += "<tr><td valign=\"top\"><b>Trama</b></td><td>"+plot+"</td></tr>";
         html += "<tr><td><b>Network</b></td><td>"+network+"</td></tr>";
-        html += "<tr><td><b>Stagione/i</b></td><td>"+season+"</td></tr>";
-        html += "<tr><td><b>Status/i</b></td><td>"+status+"</td></tr>";
-        html += "<tr><td><b>Nazione/i</b></td><td>"+country+"</td></tr>";
+        html += "<tr><td><b>Stagioni</b></td><td>"+season+"</td></tr>";
+        html += "<tr><td><b>Status</b></td><td>"+status+"</td></tr>";
+        html += "<tr><td><b>Nazione</b></td><td>"+country+"</td></tr>";
         
+        html += "</table>";
+        html += "</body></html>";
+        return html;
+    }
+    
+    public String getHtmlActors(){
+        String html = new String("<html><body>");
+        html += "<table cellspacing=\"3\" cellpadding=\"2\">";
+        html += "<tr><td><b>Attore</b></td><td><b>Peronaggio</b></td><td><b>Foto</b></td></tr>";
+        for (int i=0; i<actors.size(); i++){
+            String[] row = actors.get(i);
+            html += "<tr><td>" + row[0] + "</td><td>" + row[1] + "</td><td><img src=\"" + 
+                    row[2] +"\"></img></td></tr>";
+        }
         html += "</table>";
         html += "</body></html>";
         return html;

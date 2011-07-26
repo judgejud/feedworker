@@ -1,7 +1,7 @@
 package org.feedworker.xml;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.ConnectException;
 import java.net.URL;
 import java.util.Iterator;
 
@@ -17,7 +17,7 @@ import org.jdom.input.SAXBuilder;
 class AbstractQueryXML {
     protected Document document;
     
-    protected void buildUrl(String url) throws JDOMException, IOException {
+    protected void buildUrl(String url) throws ConnectException, JDOMException, IOException {
         document = new SAXBuilder().build(new URL(url));
     }
     
