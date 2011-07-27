@@ -1,9 +1,7 @@
 package org.feedworker.client.frontend;
 
-import java.awt.Dimension;
 import java.util.TreeMap;
 
-import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
@@ -14,10 +12,8 @@ import org.feedworker.client.frontend.events.ListEventListener;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
+import org.feedworker.client.frontend.panel.tabShow;
 import org.feedworker.core.ManageListener;
-
-import org.jdesktop.swingx.JXTaskPane;
-import org.jdesktop.swingx.JXTaskPaneContainer;
 
 import org.jfacility.java.lang.Lang;
 /**
@@ -81,46 +77,3 @@ public class GuiCore {
         return pane;
     }
 }
-
-class tabShow extends JScrollPane{
-    private JEditorPane jepShow, jepActors;
-    private JXTaskPane taskShow, taskSeasons, taskActors;
-    private JXTaskPaneContainer container;
-    
-    public tabShow(String name) {
-        super();
-        setName(name);
-        setPreferredSize(new Dimension(700, 600));
-        container = new JXTaskPaneContainer();
-        setViewportView(container);
-        
-        jepShow = new JEditorPane();
-        jepShow.setContentType("text/html");
-        jepShow.setOpaque(false);
-        jepShow.setEditable(false);
-        
-        jepActors = new JEditorPane();
-        jepActors.setContentType("text/html");
-        jepActors.setOpaque(false);
-        jepActors.setEditable(false);
-
-        taskShow = new JXTaskPane();
-        taskShow.setTitle("Info Show");
-        taskShow.add(jepShow);
-
-        taskSeasons = new JXTaskPane();
-        taskSeasons.setTitle("Info Seasons");
-        taskSeasons.setCollapsed(true);
-
-        taskActors = new JXTaskPane();
-        taskActors.setTitle("Info Actors");
-        taskActors.setCollapsed(true);
-        taskActors.add(jepActors);
-
-        container.add(taskShow);
-        container.add(taskSeasons);
-        container.add(taskActors);
-
-        jepShow.setText(Mediator.getIstance().test(name));
-    }
-}// END private class tabShow

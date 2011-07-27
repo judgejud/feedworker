@@ -123,8 +123,9 @@ public class ManageListener {
         }
     }
     
-    public static synchronized void fireEditorPaneEvent(Object from, String msg) {
-        EditorPaneEvent event = new EditorPaneEvent(from, msg);
+    public static synchronized void fireEditorPaneEvent(Object from, String html, 
+                                                        String dest, String table) {
+        EditorPaneEvent event = new EditorPaneEvent(from, html, dest, table);
         Iterator listeners = listenerEditorPane.iterator();
         while (listeners.hasNext()) {
             EditorPaneEventListener myel = (EditorPaneEventListener) listeners.next();
