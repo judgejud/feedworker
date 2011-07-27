@@ -31,7 +31,7 @@ public class Show {
     public String getHtmlShow(){
         String html = new String("<html><body><center><img src=\""+banner+"\"></img><br>"
                 + "<h1>"+name+"</h1></center>");
-        html += "<table cellspacing=\"3\" cellpadding=\"2\">";
+        html += "<table width=\"97%\" cellspacing=\"2\" cellpadding=\"2\">";
         html += "<tr><td><b>Genere/i</b></td><td>"+genres.get(0);
         for (int i=1; i<genres.size(); i++)
             html += ", " + genres.get(i);

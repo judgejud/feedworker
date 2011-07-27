@@ -70,6 +70,27 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
+        JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
+        JXTaskPane taskMySeries = new JXTaskPane();
+        
+        taskMySeries.setTitle("My Series");
+        taskMySeries.setCollapsed(true);
+        taskMySeries.add(jbImport);
+        taskMySeries.add(jlSeries);
+        
+        tpcWest.add(taskMySeries);
+        
+        JScrollPane jspLeft = new JScrollPane(tpcWest);
+        jspLeft.setPreferredSize(new Dimension(200,700));
+        jtpShows = new JTabbedPane();
+        JPanel pane = new JPanel(new BorderLayout());
+        pane.add(jspLeft, BorderLayout.WEST);
+        pane.add(jtpShows, BorderLayout.CENTER);
+        jpCenter.add(pane);
+    }
+
+    @Override
+    void initializeButtons() {
         jcbShows = new JComboBox();
         JButton jbAdd = new JButton("Add to my series");
         jbAdd.setToolTipText("Aggiunge il rigo selezionato alle mie serie");
@@ -90,45 +111,21 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
-        JXTaskPane taskMySeries = new JXTaskPane();
-        
-        taskMySeries.setTitle("My Series");
-        taskMySeries.setCollapsed(true);
-        taskMySeries.add(jbImport);
-        taskMySeries.add(jlSeries);
-
-        JXTaskPane taskAdd = new JXTaskPane();
-        taskAdd.setTitle("List Series");
-        taskAdd.setCollapsed(true);
-        taskAdd.add(jbAdd);
-        taskAdd.add(jbSee);
-        taskAdd.add(jcbShows);
-        
-        tpcWest.add(taskAdd);
-        tpcWest.add(taskMySeries);
-        
-        JScrollPane jspLeft = new JScrollPane(tpcWest);
-        jspLeft.setPreferredSize(new Dimension(200,700));
-        jtpShows = new JTabbedPane();
-        JPanel pane = new JPanel(new BorderLayout());
-        pane.add(jspLeft, BorderLayout.WEST);
-        pane.add(jtpShows, BorderLayout.CENTER);
-        jpCenter.add(pane);
-    }
-
-    @Override
-    void initializeButtons() {
-    
+        int x=0;
+        jpAction.add(jcbShows, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbSee, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbAdd, gbcAction);
     }
     
     private void newTabShow(Object name){
-        JScrollPane pane = core.addNewTabShow(name);
-        pane.setName(name.toString());
+        tabShow pane = (tabShow) core.addNewTabShow(name);
         if (!jtpShows.isAncestorOf(pane)) {
             jtpShows.addTab(name.toString(), pane);
             jtpShows.setTabComponentAt(jtpShows.getTabCount() - 1,
                     new ButtonTabComponent(jtpShows));
+            proxy.infoShow(name.toString());
         }
         jtpShows.setSelectedComponent(pane);
     }
@@ -149,6 +146,10 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
 
     @Override
     public void objReceived(EditorPaneEvent evt) {
-        
+        tabShow pane = (tabShow) core.addNewTabShow(evt.getDest());
+        if (evt.getTable().equals("show"))
+            pane.setHtmlShow(evt.getHtml());
+        else if (evt.getTable().equals("actors"))
+            pane.setHtmlActors(evt.getHtml());
     }
 } //end class

@@ -1273,11 +1273,12 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    public String test(String name) {
+    public void requestInfoShow(String name) {
         Itasa i = new Itasa();
         try {
             Show s = i.showSingle(mapShowItasa.get(name), true);
-            return s.getHtmlShow();
+            ManageListener.fireEditorPaneEvent(this, s.getHtmlShow(), name, "show");
+            ManageListener.fireEditorPaneEvent(this, s.getHtmlActors(), name, "actors");
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -1287,7 +1288,6 @@ public class Kernel implements PropertyChangeListener {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return null;
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {

@@ -11,17 +11,13 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
-import org.feedworker.client.frontend.events.ComboboxEventListener;
-import org.feedworker.client.frontend.events.FrameEventListener;
-import org.feedworker.client.frontend.events.StatusBarEventListener;
-import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
-import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.client.frontend.table.tableSubtitleDest;
 import org.feedworker.core.Kernel;
 import org.feedworker.core.ManageListener;
@@ -38,8 +34,6 @@ import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
-import javax.swing.JFrame;
-import org.feedworker.client.frontend.events.ListEventListener;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -71,7 +65,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "383 by "
+                + "389 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -823,8 +817,8 @@ public class Mediator {
             printOk("Test connessione samba ok");
     }
 
-    public String test(String name) {
-        return core.test(name);
+    public void infoShow(String name) {
+        core.requestInfoShow(name);
     }
 
     public void importNameListFromMyItasa() {
