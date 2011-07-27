@@ -7,13 +7,12 @@ import java.util.ArrayList;
  * @author luca
  */
 public class Show {
-    private String name, id_tvrage, plot, banner, icon, season, country, status, 
-            network, started, ended;
+    private String name, tvrage, plot, banner, season, country, status, network, started, ended;
     private ArrayList<String> genres;
     private ArrayList<String[]> actors;
 
     public Show(String name, String plot, String banner, String season, String country, 
-                String network, String started, String ended, String status, 
+                String network, String started, String ended, String status, String tvrage, 
                 ArrayList<String> genres, ArrayList<String[]> actors) {
         this.name = name;
         this.plot = plot;
@@ -26,6 +25,7 @@ public class Show {
         this.status = status;
         this.genres = genres;
         this.actors = actors;
+        this.tvrage = tvrage;
     }
     
     public String getHtmlShow(){
@@ -41,7 +41,8 @@ public class Show {
         html += "<tr><td><b>Stagioni</b></td><td>"+season+"</td></tr>";
         html += "<tr><td><b>Status</b></td><td>"+status+"</td></tr>";
         html += "<tr><td><b>Nazione</b></td><td>"+country+"</td></tr>";
-        
+        html += "<tr><td><b>Iniziato</b></td><td>"+started+"</td></tr>";
+        html += "<tr><td><b>Terminato</b></td><td>"+ended+"</td></tr>";
         html += "</table>";
         html += "</body></html>";
         return html;
@@ -50,14 +51,26 @@ public class Show {
     public String getHtmlActors(){
         String html = new String("<html><body>");
         html += "<table cellspacing=\"3\" cellpadding=\"2\">";
-        html += "<tr><td><b>Attore</b></td><td><b>Peronaggio</b></td><td><b>Foto</b></td></tr>";
-        for (int i=0; i<actors.size(); i++){
+        html += "<tr><td><b>Foto</b></td><td><b>Attore</b></td><td><b>Personaggio</b></td>"
+                + "<td><b>Foto</b></td><td><b>Attore</b></td><td><b>Personaggio</b></td></tr>";
+        for (int i=0; i<actors.size(); i+=2){
             String[] row = actors.get(i);
-            html += "<tr><td>" + row[0] + "</td><td>" + row[1] + "</td><td><img src=\"" + 
-                    row[2] +"\"></img></td></tr>";
+            html += "<tr><td><img src=\"" + row[2] +"\" width=\"90\" height=\"135\"></img></td>"
+                    + "<td>" + row[0] + "</td><td>" + row[1] + "</td>";
+            if (i+1<actors.size()){
+                row = actors.get(i+1);
+                html += "<td><img src=\"" + row[2] +"\" width=\"90\" height=\"135\"></img></td>"
+                    + "<td>" + row[0] + "</td><td>" + row[1] + "</td>";
+            } else
+                html += "<td colspan=\"3\">&nbsp;</td>";
+            html += "</tr>";
         }
         html += "</table>";
         html += "</body></html>";
         return html;
+    }
+
+    public String getTvrage() {
+        return tvrage;
     }
 }
