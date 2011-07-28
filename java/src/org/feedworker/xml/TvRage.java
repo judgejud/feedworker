@@ -9,9 +9,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.feedworker.util.Common;
+import org.feedworker.util.Translate;
+import org.jfacility.java.lang.Lang;
+
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jfacility.java.lang.Lang;
 
 /**
  *
@@ -50,7 +52,7 @@ public class TvRage extends AbstractQueryXML{
                 String status = item.getChild(TAG_STATUS).getText();
                 String airday;
                 try{
-                    airday = convertDayIngToIta(item.getChild(TAG_AIRDAY).getText());
+                    airday = Translate.Day(item.getChild(TAG_AIRDAY).getText());
                 } catch(NullPointerException e){
                     airday = "";
                 }
@@ -117,6 +119,23 @@ public class TvRage extends AbstractQueryXML{
         return values;
     }
     
+    public Object[] readingAllEpisodeList_byID(String id) throws 
+            ConnectException, JDOMException, IOException, IndexOutOfBoundsException{
+        buildUrl(URL_TVRAGE_EPISODE_LIST + id);
+        //http://services.tvrage.com/feeds/episode_list.php?sid=2932
+        List seasons = ((Element) document.getRootElement().getChildren().get(2)).getChildren();
+        Iterator iter = seasons.iterator();
+        while (iter.hasNext()){
+            Element item = (Element) iter.next();
+            //System.out.println(item.getName());         
+            
+        }
+        
+        Object[] values = null;
+        
+        return values;
+    }
+    
     public Object[] showInfo_byID(String id) throws JDOMException, IOException{
         buildUrl(URL_TVRAGE_SHOW_INFO + id);
         Iterator iterator = document.getContent().iterator();
@@ -128,7 +147,7 @@ public class TvRage extends AbstractQueryXML{
             show[2] = item.getChild(TAG_SEASON).getText();
             show[3] = item.getChild(TAG_STATUS).getText();
             try{
-                show[4] = convertDayIngToIta(item.getChild(TAG_AIRDAY).getText());
+                show[4] = Translate.Day(item.getChild(TAG_AIRDAY).getText());
             } catch(NullPointerException e){
                 show[4] ="";
             }
@@ -136,26 +155,19 @@ public class TvRage extends AbstractQueryXML{
         return show;
     }
     
-    /**Trduce il giorno dall'inglese all'italiano
-     * 
-     * @param ing giorno inglese
-     * @return giorno italiano
-     */
-    private String convertDayIngToIta(String ing){
-        if (ing.toLowerCase().equalsIgnoreCase("sunday"))
-            return "Domenica";
-        else if(ing.toLowerCase().equalsIgnoreCase("monday"))
-            return "Lunedì";
-        else if(ing.toLowerCase().equalsIgnoreCase("tuesday"))
-            return "Martedì";
-        else if(ing.toLowerCase().equalsIgnoreCase("wednesday"))
-            return "Mercoledì";
-        else if(ing.toLowerCase().equalsIgnoreCase("thursday"))
-            return "Giovedì";
-        else if(ing.toLowerCase().equalsIgnoreCase("friday"))
-            return "Venerdì";
-        else if(ing.toLowerCase().equalsIgnoreCase("saturday"))
-            return "Sabato";
-        return "";
+    public static void main (String args[]){
+        TvRage t = new TvRage();
+        try {
+            //t.readingAllEpisodeList_byID("2870");
+            t.readingAllEpisodeList_byID("2932");
+        } catch (ConnectException ex) {
+            ex.printStackTrace();
+        } catch (JDOMException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (IndexOutOfBoundsException ex) {
+            ex.printStackTrace();
+        }
     }
 }
