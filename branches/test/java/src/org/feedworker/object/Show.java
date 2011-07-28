@@ -1,6 +1,9 @@
 package org.feedworker.object;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+
+import org.feedworker.util.Common;
 import org.feedworker.util.Translate;
 
 /**
@@ -21,8 +24,15 @@ public class Show {
         this.season = season;
         this.country = country;
         this.network = network;
-        this.started = started;
-        this.ended = ended;
+        try {
+            this.started = Common.dateString(Common.stringAmericanToDate(started));
+        } catch (ParseException ex) {}
+        if (ended.equalsIgnoreCase("0000-00-00"))
+            this.ended = "";
+        else
+            try {
+                this.ended = Common.dateString(Common.stringAmericanToDate(ended));
+            } catch (ParseException ex) {}
         this.status = status;
         this.genres = genres;
         this.actors = actors;
@@ -43,6 +53,7 @@ public class Show {
         html += "<tr><td><b>Status</b></td><td>"+Translate.Status(status)+"</td></tr>";
         html += "<tr><td><b>Nazione</b></td><td>"+country+"</td></tr>";
         html += "<tr><td><b>Iniziato</b></td><td>"+started+"</td></tr>";
+        
         html += "<tr><td><b>Terminato</b></td><td>"+ended+"</td></tr>";
         html += "</table>";
         html += "</body></html>";

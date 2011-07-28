@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import javax.swing.Icon;
 
 import javax.swing.ImageIcon;
 

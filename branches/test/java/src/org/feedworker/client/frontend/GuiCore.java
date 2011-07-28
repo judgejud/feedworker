@@ -4,8 +4,8 @@ import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-
 import org.feedworker.client.frontend.events.ComboboxEventListener;
+
 import org.feedworker.client.frontend.events.EditorPaneEventListener;
 import org.feedworker.client.frontend.events.FrameEventListener;
 import org.feedworker.client.frontend.events.ListEventListener;
