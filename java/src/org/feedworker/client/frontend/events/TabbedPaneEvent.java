@@ -19,4 +19,8 @@ public class TabbedPaneEvent extends EventObject{
         super(o);
         this.name = name;
     }
+
+    public ArrayList<String> getName() {
+        return name;
+    }
 }

@@ -20,6 +20,7 @@ public class ManageListener {
     private static List listenerComboBox = new ArrayList();
     private static List listenerEditorPane = new ArrayList();
     private static List listenerList = new ArrayList();
+    private static List listenerTabbedPane = new ArrayList();
 
     public static synchronized void addTableEventListener(
                                                     TableEventListener listener) {
@@ -53,6 +54,11 @@ public class ManageListener {
     public static synchronized void addListEventListener(
                                                     ListEventListener listener) {
         listenerList.add(listener);
+    }
+    
+    public static synchronized void addTabbedPaneEventListener(
+                                                    TabbedPaneEventListener listener) {
+        listenerTabbedPane.add(listener);
     }
 
     public static synchronized void fireTableEvent(Object from, ArrayList<Object[]> alObj, 
@@ -147,6 +153,15 @@ public class ManageListener {
         Iterator listeners = listenerList.iterator();
         while (listeners.hasNext()) {
             ListEventListener myel = (ListEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
+    public static synchronized void fireTabbedPaneEvent(Object from, ArrayList<String> array) {
+        TabbedPaneEvent event = new TabbedPaneEvent(from, array);
+        Iterator listeners = listenerList.iterator();
+        while (listeners.hasNext()) {
+            TabbedPaneEventListener myel = (TabbedPaneEventListener) listeners.next();
             myel.objReceived(event);
         }
     }

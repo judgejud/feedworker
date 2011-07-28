@@ -35,6 +35,7 @@ public class TvRage extends AbstractQueryXML{
     private final String TAG_SEASON_NUM = "seasonnum";
     private final String TAG_TITLE = "title";
     private final String TAG_SHOWNAME = "showname";
+    private final String TAG_EP_NUM = "epnum";
 
     public ArrayList<Object[]> readingDetailedSearch_byShow(String show, boolean stop, 
                                                                     boolean statusString)
@@ -122,12 +123,21 @@ public class TvRage extends AbstractQueryXML{
     public Object[] readingAllEpisodeList_byID(String id) throws 
             ConnectException, JDOMException, IOException, IndexOutOfBoundsException{
         buildUrl(URL_TVRAGE_EPISODE_LIST + id);
-        //http://services.tvrage.com/feeds/episode_list.php?sid=2932
-        List seasons = ((Element) document.getRootElement().getChildren().get(2)).getChildren();
-        Iterator iter = seasons.iterator();
-        while (iter.hasNext()){
-            Element item = (Element) iter.next();
-            //System.out.println(item.getName());         
+        Iterator seasons = ((Element) document.getRootElement().getChildren().get(2)).
+                                                            getChildren().iterator();
+        while (seasons.hasNext()){
+            Element season = (Element) seasons.next();
+            String number = season.getAttributeValue("no");
+            Iterator episodes = season.getChildren().iterator();
+            System.out.println("Season "+number);
+            while (episodes.hasNext()){
+                Element episode = (Element) episodes.next();
+                System.out.println(episode.getChild(TAG_EP_NUM).getText());
+                System.out.println(episode.getChild(TAG_SEASON_NUM).getText());
+                System.out.println(episode.getChild(TAG_AIRDATE).getText());
+                System.out.println(episode.getChild(TAG_TITLE).getText());
+            }
+            
             
         }
         
@@ -159,7 +169,8 @@ public class TvRage extends AbstractQueryXML{
         TvRage t = new TvRage();
         try {
             //t.readingAllEpisodeList_byID("2870");
-            t.readingAllEpisodeList_byID("2932");
+            //t.readingAllEpisodeList_byID("2932");
+            t.readingAllEpisodeList_byID("2874");
         } catch (ConnectException ex) {
             ex.printStackTrace();
         } catch (JDOMException ex) {

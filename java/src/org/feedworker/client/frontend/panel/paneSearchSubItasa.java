@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.ComboBoxModel;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
