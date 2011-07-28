@@ -1,12 +1,12 @@
 package org.feedworker.client.frontend.events;
-//IMPORT JAVA
+
 import java.util.EventListener;
 
-/**Interfaccia per eventi alla jframe
- * 
- * @author luca
+/**
+ *
+ * @author Administrator
  */
 public interface ComboboxEventListener extends EventListener {
-    /** intercetta l'evento combobox e lo gestisce */
+    /** intercetta l'evento editorpane e lo gestisce */
     public void objReceived(ComboboxEvent evt);
 }
