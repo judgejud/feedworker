@@ -1,6 +1,7 @@
 package org.feedworker.object;
 
 import java.util.ArrayList;
+import org.feedworker.util.Translate;
 
 /**
  *
@@ -39,7 +40,7 @@ public class Show {
         html += "<tr><td valign=\"top\"><b>Trama</b></td><td>"+plot+"</td></tr>";
         html += "<tr><td><b>Network</b></td><td>"+network+"</td></tr>";
         html += "<tr><td><b>Stagioni</b></td><td>"+season+"</td></tr>";
-        html += "<tr><td><b>Status</b></td><td>"+status+"</td></tr>";
+        html += "<tr><td><b>Status</b></td><td>"+Translate.Status(status)+"</td></tr>";
         html += "<tr><td><b>Nazione</b></td><td>"+country+"</td></tr>";
         html += "<tr><td><b>Iniziato</b></td><td>"+started+"</td></tr>";
         html += "<tr><td><b>Terminato</b></td><td>"+ended+"</td></tr>";
@@ -55,11 +56,11 @@ public class Show {
                 + "<td><b>Foto</b></td><td><b>Attore</b></td><td><b>Personaggio</b></td></tr>";
         for (int i=0; i<actors.size(); i+=2){
             String[] row = actors.get(i);
-            html += "<tr><td><img src=\"" + row[2] +"\" width=\"90\" height=\"135\"></img></td>"
+            html += "<tr><td><img src=\"" + row[2] +"\" width=\"75\" height=\"120\"></img></td>"
                     + "<td>" + row[0] + "</td><td>" + row[1] + "</td>";
             if (i+1<actors.size()){
                 row = actors.get(i+1);
-                html += "<td><img src=\"" + row[2] +"\" width=\"90\" height=\"135\"></img></td>"
+                html += "<td><img src=\"" + row[2] +"\" width=\"75\" height=\"120\"></img></td>"
                     + "<td>" + row[0] + "</td><td>" + row[1] + "</td>";
             } else
                 html += "<td colspan=\"3\">&nbsp;</td>";

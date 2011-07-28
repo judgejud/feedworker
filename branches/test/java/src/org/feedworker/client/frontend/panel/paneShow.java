@@ -61,12 +61,40 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
                 proxy.importNameListFromMyItasa();
             }
         });
+        
+        JButton jbSave = new JButton("Salva Lista");
+        jbSave.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                if (listModel.getSize()>0)
+                    proxy.saveList(listModel.toArray());
+            }
+        });
+        
+        JButton jbRemove = new JButton("Rimuovi selezionato");
+        jbRemove.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                int index = jlSeries.getSelectedIndex();
+                if (index>0)
+                    listModel.remove(index);
+            }
+        });
+        
         listModel = new DefaultListModel();
-        jlSeries = new JList(listModel);
+        jlSeries = new JList(listModel){
+            // This method is called as the cursor moves within the list.
+            @Override
+            public String getToolTipText(MouseEvent evt) {
+                return getModel().getElementAt(locationToIndex(evt.getPoint())).toString();
+            }
+        };
         jlSeries.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                newTabShow(jlSeries.getSelectedValue().toString());
+                // Double-click
+                if (evt.getClickCount() == 2) 
+                    newTabShow(jlSeries.getSelectedValue().toString());
             }
         });
         
@@ -74,8 +102,10 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         JXTaskPane taskMySeries = new JXTaskPane();
         
         taskMySeries.setTitle("My Series");
-        taskMySeries.setCollapsed(true);
+        taskMySeries.setCollapsed(false);
         taskMySeries.add(jbImport);
+        taskMySeries.add(jbSave);
+        taskMySeries.add(jbRemove);
         taskMySeries.add(jlSeries);
         
         tpcWest.add(taskMySeries);
@@ -92,7 +122,9 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     @Override
     void initializeButtons() {
         jcbShows = new JComboBox();
-        JButton jbAdd = new JButton("Add to my series");
+        
+        JButton jbAdd = new JButton(" Add to my series ");
+        jbAdd.setBorder(BORDER);
         jbAdd.setToolTipText("Aggiunge il rigo selezionato alle mie serie");
         jbAdd.addMouseListener(new MouseAdapter() {
             @Override
@@ -101,7 +133,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbSee = new JButton("Visualizza serie");
+        JButton jbSee = new JButton(" Visualizza serie ");
+        jbSee.setBorder(BORDER);
         jbSee.setToolTipText("Visualizza info serie selezionata");
         jbSee.addMouseListener(new MouseAdapter() {
             @Override
@@ -111,16 +144,28 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
+        JButton jbClose = new JButton(" Close all tabs ");
+        jbClose.setBorder(BORDER);
+        jbClose.setToolTipText("Chiude tutti i tab aperti");
+        jbClose.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jtpShows.removeAll();
+            }
+        });
+        
         int x=0;
         jpAction.add(jcbShows, gbcAction);
         gbcAction.gridx = ++x;
         jpAction.add(jbSee, gbcAction);
         gbcAction.gridx = ++x;
         jpAction.add(jbAdd, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbClose, gbcAction);
     }
     
     private void newTabShow(Object name){
-        tabShow pane = (tabShow) core.addNewTabShow(name);
+        tabInternalShow pane = (tabInternalShow) core.addNewTabShow(name);
         if (!jtpShows.isAncestorOf(pane)) {
             jtpShows.addTab(name.toString(), pane);
             jtpShows.setTabComponentAt(jtpShows.getTabCount() - 1,
@@ -146,7 +191,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
 
     @Override
     public void objReceived(EditorPaneEvent evt) {
-        tabShow pane = (tabShow) core.addNewTabShow(evt.getDest());
+        tabInternalShow pane = (tabInternalShow) core.addNewTabShow(evt.getDest());
         if (evt.getTable().equals("show"))
             pane.setHtmlShow(evt.getHtml());
         else if (evt.getTable().equals("actors"))

@@ -824,4 +824,8 @@ public class Mediator {
     public void importNameListFromMyItasa() {
         core.importNameFromMyItasa();
     }
+
+    public void saveList(Object[] toArray) {
+        
+    }
 }

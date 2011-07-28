@@ -12,7 +12,7 @@ import org.feedworker.client.frontend.events.ListEventListener;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
-import org.feedworker.client.frontend.panel.tabShow;
+import org.feedworker.client.frontend.panel.tabInternalShow;
 import org.feedworker.core.ManageListener;
 
 import org.jfacility.java.lang.Lang;
@@ -68,12 +68,12 @@ public class GuiCore {
     }
     
     public JScrollPane addNewTabShow(Object name){
-        tabShow pane;
+        tabInternalShow pane;
         if (!mapPaneShows.containsKey(name)){
-            pane = new tabShow(name.toString());
+            pane = new tabInternalShow(name.toString());
             mapPaneShows.put(name, pane);
         } else 
-           pane = (tabShow) mapPaneShows.get(name);
+           pane = (tabInternalShow) mapPaneShows.get(name);
         return pane;
     }
 }
