@@ -2,13 +2,14 @@ package org.feedworker.client.frontend.table;
 
 import javax.swing.table.DefaultTableModel;
 import org.feedworker.client.frontend.events.TableEvent;
+import org.feedworker.client.frontend.events.TableEventListener;
 import org.jfacility.javax.swing.Swing;
 
 /**
  *
  * @author Administrator
  */
-public class tableEpisode extends tableAbstract{
+public class tableEpisode extends tableAbstract implements TableEventListener{
     // PRIVATE FINAL VARIABLE
     private final String[] columnNames = {"Num ep", "Num ep season", "Data", "Titolo"};    
     

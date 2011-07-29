@@ -10,6 +10,7 @@ import org.feedworker.client.frontend.events.EditorPaneEventListener;
 import org.feedworker.client.frontend.events.FrameEventListener;
 import org.feedworker.client.frontend.events.ListEventListener;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
+import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.client.frontend.panel.tabInternalShow;
@@ -59,6 +60,10 @@ public class GuiCore {
     
     public void setEditorPaneListener(EditorPaneEventListener listener) {
         ManageListener.addEditorPaneEventListener(listener);
+    }
+    
+    public void setTabbedPaneListener(TabbedPaneEventListener listener) {
+        ManageListener.addTabbedPaneEventListener(listener);
     }
     
     public void addNewSerial(){

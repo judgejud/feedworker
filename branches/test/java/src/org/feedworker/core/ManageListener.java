@@ -157,9 +157,10 @@ public class ManageListener {
         }
     }
     
-    public static synchronized void fireTabbedPaneEvent(Object from, ArrayList<String> array) {
-        TabbedPaneEvent event = new TabbedPaneEvent(from, array);
-        Iterator listeners = listenerList.iterator();
+    public static synchronized void fireTabbedPaneEvent(Object from, ArrayList<String> array, 
+                                                                    String dest) {
+        TabbedPaneEvent event = new TabbedPaneEvent(from, array, dest);
+        Iterator listeners = listenerTabbedPane.iterator();
         while (listeners.hasNext()) {
             TabbedPaneEventListener myel = (TabbedPaneEventListener) listeners.next();
             myel.objReceived(event);

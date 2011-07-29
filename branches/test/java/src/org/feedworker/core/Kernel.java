@@ -1279,7 +1279,9 @@ public class Kernel implements PropertyChangeListener {
             Show s = i.showSingle(mapShowItasa.get(name), true);
             ManageListener.fireEditorPaneEvent(this, s.getHtmlShow(), name, "show");
             ManageListener.fireEditorPaneEvent(this, s.getHtmlActors(), name, "actors");
-            s.getTvrage();
+            TvRage t = new TvRage();
+            Object[] tvrage = t.readingAllEpisodeList_byID(s.getTvrage());
+            ManageListener.fireTabbedPaneEvent(this, (ArrayList<String>)tvrage[0], name);
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {

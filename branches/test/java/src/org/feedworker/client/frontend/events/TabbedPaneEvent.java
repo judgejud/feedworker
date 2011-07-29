@@ -14,10 +14,16 @@ import java.util.EventObject;
 public class TabbedPaneEvent extends EventObject{
     
     private ArrayList<String> name;
+    private String dest;
 
-    public TabbedPaneEvent(Object o, ArrayList<String> name) {
+    public TabbedPaneEvent(Object o, ArrayList<String> name, String dest) {
         super(o);
         this.name = name;
+        this.dest = dest;
+    }
+
+    public String getDest() {
+        return dest;
     }
 
     public ArrayList<String> getName() {
