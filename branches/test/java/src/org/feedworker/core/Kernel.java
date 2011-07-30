@@ -1281,7 +1281,11 @@ public class Kernel implements PropertyChangeListener {
             ManageListener.fireEditorPaneEvent(this, s.getHtmlActors(), name, "actors");
             TvRage t = new TvRage();
             Object[] tvrage = t.readingAllEpisodeList_byID(s.getTvrage());
-            ManageListener.fireTabbedPaneEvent(this, (ArrayList<String>)tvrage[0], name);
+            ArrayList<String> destName = (ArrayList<String>)tvrage[0];
+            ManageListener.fireTabbedPaneEvent(this, destName, name);
+            ArrayList<ArrayList<Object[]>> all = (ArrayList<ArrayList<Object[]>>) tvrage[1];
+            for (int n=0; n<all.size(); n++)
+                ManageListener.fireTableEvent(this, all.get(n), name + destName.get(n));
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
