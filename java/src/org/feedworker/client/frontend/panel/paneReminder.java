@@ -63,7 +63,7 @@ public class paneReminder extends paneAbstract{
         jbClean.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.cleanSelect(jtable, 2);
+                core.cleanSelect(jtable, 2);
             }
         });
         

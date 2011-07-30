@@ -71,7 +71,7 @@ public class paneTorrent extends paneAbstract {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (jbCopyLinks.isEnabled())
-                    proxy.copyLinkTorrent(jtTorrent1, jtTorrent2);
+                    core.copyLinkTorrent(jtTorrent1, jtTorrent2);
             }
         });
 
@@ -81,8 +81,8 @@ public class paneTorrent extends paneAbstract {
         jbClean.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.cleanSelect(jtTorrent1,3);
-                proxy.cleanSelect(jtTorrent2,3);
+                core.cleanSelect(jtTorrent1,3);
+                core.cleanSelect(jtTorrent2,3);
             }
         });
 

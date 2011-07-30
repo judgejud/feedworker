@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.feedworker.util.Common;
 import org.feedworker.util.Translate;
+
 import org.jfacility.java.lang.Lang;
 
 import org.jdom.Element;
@@ -140,7 +141,12 @@ public class TvRage extends AbstractQueryXML{
                 //TODO: 24 nullpointerexception?
                 row[0] = episode.getChild(TAG_EP_NUM).getText();
                 row[1] = episode.getChild(TAG_SEASON_NUM).getText();
-                row[2] = episode.getChild(TAG_AIRDATE).getText();
+                try {
+                    row[2] = Common.stringAmericanToString(
+                                    episode.getChild(TAG_AIRDATE).getText());
+                } catch (ParseException ex) {
+                    row[2] = "";
+                }
                 row[3] = episode.getChild(TAG_TITLE).getText();
                 alEpisodes.add(row);
             }
@@ -169,7 +175,7 @@ public class TvRage extends AbstractQueryXML{
         }
         return show;
     }
-    
+/*    
     public static void main (String args[]){
         TvRage t = new TvRage();
         try {
@@ -186,4 +192,6 @@ public class TvRage extends AbstractQueryXML{
             ex.printStackTrace();
         }
     }
+* 
+*/
 }

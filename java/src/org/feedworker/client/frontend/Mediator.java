@@ -28,7 +28,6 @@ import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
 
-import org.jfacility.java.awt.AWT;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
@@ -65,7 +64,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "396 by "
+                + "397 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -144,42 +143,6 @@ public class Mediator {
 
     String getOperationEnableButton() {
         return ENABLE_BUTTON;
-    }
-
-    /**Pulisce la tabella specificata dai check
-     *
-     * @param jt
-     *            tabella
-     */
-    public void cleanSelect(JTable jt, int col) {
-        for (int i = 0; i < jt.getRowCount(); i++) {
-            jt.setValueAt(false, i, col);
-        }
-    }
-
-    /** Copia nella clipboard i link torrent selezionati
-     *
-     * @param jt1 tabella1
-     * @param jt2 tabella2
-     */
-    public void copyLinkTorrent(JTable jt1, JTable jt2) {
-        String text = "";
-        for (int i = 0; i < jt1.getRowCount(); i++) {
-            if (jt1.getValueAt(i, 3) == Boolean.TRUE) {
-                text += jt1.getValueAt(i, 0).toString() + "\n";
-                jt1.setValueAt(false, i, 3);
-            }
-        }
-        for (int i = 0; i < jt2.getRowCount(); i++) {
-            if (jt2.getValueAt(i, 3) == Boolean.TRUE) {
-                text += jt2.getValueAt(i, 0).toString() + "\n";
-                jt2.setValueAt(false, i, 3);
-            }
-        }
-        if (!text.equalsIgnoreCase("")) {
-            AWT.setClipboard(text);
-            printOk("link copiati nella clipboard");
-        }
     }
 
     /**verifica le tabelle se sono flaggate per i download e invoca il kernel
@@ -826,6 +789,6 @@ public class Mediator {
     }
 
     public void saveList(Object[] toArray) {
-        
+        core.saveList(toArray);
     }
 }

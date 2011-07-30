@@ -135,6 +135,16 @@ public class Common {
     public static Date stringAmericanToDate(String s) throws ParseException {
         return sdfAmerican.parse(s);
     }
+    
+    /**Converte una stringa yyyy-MM-dd in dd/mm/YYYY
+     * 
+     * @param s
+     * @return
+     * @throws ParseException 
+     */
+    public static String stringAmericanToString(String s) throws ParseException {
+        return dateString(sdfAmerican.parse(s));
+    }
 
     public static String stringToAmerican(String s) throws ParseException {
         return dateStringAmerican(stringDate(s));

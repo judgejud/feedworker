@@ -12,8 +12,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
-import org.feedworker.client.frontend.GuiCore;
 
+import org.feedworker.client.frontend.GuiCore;
 import org.feedworker.client.frontend.Mediator;
 /**
  * Pannello Astratto che serve per far si che le classi pannello che ereditano

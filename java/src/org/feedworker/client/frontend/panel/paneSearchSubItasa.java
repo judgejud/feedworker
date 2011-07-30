@@ -88,7 +88,7 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
             @Override
             public void mouseClicked(MouseEvent evt) {
                 proxy.downloadSub(jtable, null, true, true);
-                proxy.cleanSelect(jtable,3);
+                core.cleanSelect(jtable,3);
             }
         });
         JButton jbPulisci = new JButton(" Pulisci ");
@@ -96,7 +96,7 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
         jbPulisci.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.cleanSelect(jtable, 3);
+                core.cleanSelect(jtable, 3);
             }
         });
         

@@ -25,13 +25,13 @@ public class Show {
         this.country = country;
         this.network = network;
         try {
-            this.started = Common.dateString(Common.stringAmericanToDate(started));
+            this.started = Common.stringAmericanToString(started);
         } catch (ParseException ex) {}
         if (ended.equalsIgnoreCase("0000-00-00"))
             this.ended = "";
         else
             try {
-                this.ended = Common.dateString(Common.stringAmericanToDate(ended));
+                this.ended = Common.stringAmericanToString(ended);
             } catch (ParseException ex) {}
         this.status = status;
         this.genres = genres;
