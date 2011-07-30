@@ -38,7 +38,8 @@ import org.feedworker.util.Common;
 import org.feedworker.util.ExtensionFilter;
 import org.feedworker.util.Samba;
 import org.feedworker.xml.Calendar;
-import org.feedworker.xml.Itasa;
+import org.feedworker.xml.ItasaOnline;
+import org.feedworker.xml.ItasaOffline;
 import org.feedworker.xml.Reminder;
 import org.feedworker.xml.RuleDestination;
 import org.feedworker.xml.TvRage;
@@ -59,6 +60,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+
 /**Motore di Feedworker
  * 
  * @author luca
@@ -89,6 +91,9 @@ public class Kernel implements PropertyChangeListener {
     private final File FILE_RULE = new File("rules.xml");
     private final File FILE_CALENDAR = new File("calendar.xml");
     private final File FILE_REMINDER = new File("reminder.xml");
+    private final File FILE_MYLIST = new File("mylist.xml");
+    private final File FILE_ITASA = new File("itasa.xml");
+    
     // PRIVATE STATIC VARIABLES
     private static Kernel core = null;
     // PRIVATE VARIABLES
@@ -105,7 +110,7 @@ public class Kernel implements PropertyChangeListener {
     private ImportTask importTask;
     private RefreshTask refreshTask;
     private TreeSet tsIdCalendar;
-    private Itasa itasa;
+    private ItasaOnline itasa;
     private ItasaUser user;
     private static boolean debug_flag;
 
@@ -1112,7 +1117,7 @@ public class Kernel implements PropertyChangeListener {
     public void checkLoginItasa(String username, String pwd) {
         if (user==null){
             try {
-                Itasa i = new Itasa();
+                ItasaOnline i = new ItasaOnline();
                 user = i.login(username, pwd);
                 printOk("CheckLogin Itasa: ok");
             } catch (JDOMException ex) {
@@ -1228,11 +1233,18 @@ public class Kernel implements PropertyChangeListener {
      */
     public void loadItasaSeries() {
         if (mapShowItasa==null){
-            itasa = new Itasa();
+            itasa = new ItasaOnline();
             try {
                 mapShowItasa = itasa.showList();
-                //TODO: se itasa = errore, caricare da file
+                new ItasaOffline(FILE_ITASA, false).writeMap(mapShowItasa);
             } catch (JDOMException ex) {
+                try {
+                    mapShowItasa = new ItasaOffline(FILE_ITASA, true).initializeReader();
+                } catch (JDOMException ex1) {
+                    ex1.printStackTrace();
+                } catch (IOException ex1) {
+                    ex1.printStackTrace();
+                }
                 //TODO:org.jdom.input.JDOMParseException: Error on line 3: 
                 //The markup in the document following the root element must be well-formed.
                 ex.printStackTrace();
@@ -1274,7 +1286,7 @@ public class Kernel implements PropertyChangeListener {
     }
 
     public void requestInfoShow(String name) {
-        Itasa i = new Itasa();
+        ItasaOnline i = new ItasaOnline();
         try {
             Show s = i.showSingle(mapShowItasa.get(name), true);
             ManageListener.fireEditorPaneEvent(this, s.getHtmlShow(), name, "show");

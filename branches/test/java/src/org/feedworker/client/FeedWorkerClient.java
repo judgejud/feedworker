@@ -21,8 +21,7 @@ import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 import org.opensanskrit.widget.SplashScreen;
 import org.opensanskrit.widget.interfaces.SplashableWindow;
 
-/**
- * Client
+/**Client
  * 
  * @author luca judge
  */
