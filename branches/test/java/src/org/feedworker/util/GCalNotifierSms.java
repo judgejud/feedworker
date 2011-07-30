@@ -1,7 +1,3 @@
-/**
- * http://www.danwalmsley.com/tag/sms-java-google-calendar-api-atom-app-service-monitoring/
- * http://code.google.com/intl/it/apis/calendar/data/2.0/developers_guide_java.html
- */
 package org.feedworker.util;
 
 import java.io.IOException;

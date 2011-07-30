@@ -60,6 +60,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.feedworker.xml.ListShow;
 
 /**Motore di Feedworker
  * 
@@ -107,6 +108,7 @@ public class Kernel implements PropertyChangeListener {
     private Calendar xmlCalendar;
     private RuleDestination xmlSubDest;
     private Reminder xmlReminder;
+    
     private ImportTask importTask;
     private RefreshTask refreshTask;
     private TreeSet tsIdCalendar;
@@ -637,6 +639,16 @@ public class Kernel implements PropertyChangeListener {
             if (temp.size() > 0) 
                 ManageListener.fireTableEvent(this, temp, REMINDER);
             
+        } catch (JDOMException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass(), null);
+        }
+        try {
+            ListShow xml = new ListShow(FILE_MYLIST, true);
+            Object[] temp = xml.initializeReader();
+            if (temp!=null && temp.length > 0) 
+                ManageListener.fireListEvent(this, temp);
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
@@ -1305,6 +1317,16 @@ public class Kernel implements PropertyChangeListener {
         } catch (ItasaException ex) {
             ex.printStackTrace();
         } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void saveList(Object[] toArray) {
+        try {
+            new ListShow(FILE_MYLIST, false).writeList(toArray);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (JDOMException ex) {
             ex.printStackTrace();
         }
     }

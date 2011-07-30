@@ -86,8 +86,8 @@ public class paneSubsfactory extends paneAbstract {
     }
     
     private void jbCleanMouseClicked(){
-        proxy.cleanSelect(jtSubsf,3);
-        proxy.cleanSelect(jtMySubsf,3);
+        core.cleanSelect(jtSubsf,3);
+        core.cleanSelect(jtMySubsf,3);
     }
 
     public void setEnableButton(boolean e) {

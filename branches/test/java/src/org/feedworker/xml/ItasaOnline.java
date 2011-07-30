@@ -418,19 +418,17 @@ public class ItasaOnline extends AbstractQueryXML{
     private boolean isStatusFail(){
         return status.equals(STATUS_FAIL);
     }
-    
+/*    
     public static void main (String[] args){
         ItasaOnline i = new ItasaOnline();
         try {
             
             //ItasaUser iu = i.login("judge", "qwerty");
-            /*
-            if (iu.isMyitasa()){
+              if (iu.isMyitasa()){
                 i.myItasaLastSub(iu.getAuthcode());
                 i.myItasaShows(iu.getAuthcode());
             }
-            */
-            //i.showList();
+              //i.showList();
             i.showSingle("1363", true);
             
             //i.subtitleSingle("20000");
@@ -450,4 +448,5 @@ public class ItasaOnline extends AbstractQueryXML{
             ex.printStackTrace();
         }
     }
-    }
+*/
+}

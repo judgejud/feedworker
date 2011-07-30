@@ -1,7 +1,4 @@
 IMPLEMENTARE
-*show: salvataggio/caricamento lista preferiti, generazione episode list
-*caricare da file la lista serie itasa se da remoto genera errore.
-
 -salvare in automatico l'ultima data di aggiornamento se myitasa down auto is true
 -feed rss sotto thread
 -fare caricamento xml sotto thread

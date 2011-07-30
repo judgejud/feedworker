@@ -15,10 +15,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
-import jcifs.smb.SmbException;
-
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.core.ManageListener;
+
+import jcifs.smb.SmbException;
+
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
 

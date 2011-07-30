@@ -4,8 +4,7 @@ package org.feedworker.object;
  * @author luca
  */
 public class Subtitle {
-    private String id, showId, showName, name, version, fileName, fileSize, 
-                date, description;
+    private String id, name, version, fileName, fileSize, date, description;
 
     public Subtitle(String name, String version, String fileName, String fileSize, 
                     String date, String description) {

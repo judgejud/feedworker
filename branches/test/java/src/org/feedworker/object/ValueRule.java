@@ -7,8 +7,7 @@ package org.feedworker.object;
 public class ValueRule {
 
     private String path;
-    private boolean rename;
-    private boolean delete;
+    private boolean rename, delete;
 
     public ValueRule(String path, boolean ren, boolean del) {
         this.path = path;
