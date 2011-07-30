@@ -23,7 +23,7 @@ import org.jdom.input.SAXBuilder;
  *
  * @author luca
  */
-public class Itasa extends AbstractQueryXML{
+public class ItasaOnline extends AbstractQueryXML{
     private final String API_KEY = "apikey=436e566f3d09b217cf687fa5bad5effc";
     
     private final String OPERATOR_AND = "&";
@@ -420,7 +420,7 @@ public class Itasa extends AbstractQueryXML{
     }
     
     public static void main (String[] args){
-        Itasa i = new Itasa();
+        ItasaOnline i = new ItasaOnline();
         try {
             
             //ItasaUser iu = i.login("judge", "qwerty");
