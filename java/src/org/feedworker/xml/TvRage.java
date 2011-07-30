@@ -125,26 +125,29 @@ public class TvRage extends AbstractQueryXML{
         buildUrl(URL_TVRAGE_EPISODE_LIST + id);
         Iterator seasons = ((Element) document.getRootElement().getChildren().get(2)).
                                                             getChildren().iterator();
-        ArrayList<String> alSeasons = new ArrayList<String>();
+        Object[] values = new Object[2];
+        ArrayList<String> alNames = new ArrayList<String>();
+        ArrayList<ArrayList<String[]>> alSeasons = new ArrayList<ArrayList<String[]>>();
         while (seasons.hasNext()){
             Element season = (Element) seasons.next();
             String number = season.getAttributeValue("no");
             Iterator episodes = season.getChildren().iterator();
-            alSeasons.add("Season "+number);
+            alNames.add("Season "+number);
+            ArrayList<String[]> alEpisodes = new ArrayList<String[]>();
             while (episodes.hasNext()){
+                String[] row = new String[4];
                 Element episode = (Element) episodes.next();
                 //TODO: 24 nullpointerexception?
-                episode.getChild(TAG_EP_NUM).getText();
-                episode.getChild(TAG_SEASON_NUM).getText();
-                episode.getChild(TAG_AIRDATE).getText();
-                episode.getChild(TAG_TITLE).getText();
+                row[0] = episode.getChild(TAG_EP_NUM).getText();
+                row[1] = episode.getChild(TAG_SEASON_NUM).getText();
+                row[2] = episode.getChild(TAG_AIRDATE).getText();
+                row[3] = episode.getChild(TAG_TITLE).getText();
+                alEpisodes.add(row);
             }
-            
-            
+            alSeasons.add(alEpisodes);
         }
-        
-        Object[] values = new Object[1];
-        values[0]=alSeasons;
+        values[0]=alNames;
+        values[1]=alSeasons;
         return values;
     }
     

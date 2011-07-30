@@ -23,7 +23,7 @@ public class tabInternalShow extends JScrollPane implements TabbedPaneEventListe
     private JXTaskPane taskShow, taskActors, taskEpisodes;
     private JXTaskPaneContainer container;
     private JTabbedPane tabEpisodes;
-    
+    private GuiCore core = GuiCore.getInstance();
     
     public tabInternalShow(String name) {
         super();
@@ -62,14 +62,14 @@ public class tabInternalShow extends JScrollPane implements TabbedPaneEventListe
         container.add(taskActors);
         container.add(taskEpisodes);
         
-        GuiCore.getInstance().setTabbedPaneListener(this);
+        core.setTabbedPaneListener(this);
     }
     
     public void setHtmlShow(String html){
         jepShow.setText(html);
     }
     
-    public void setHtmlActors(String html){        
+    public void setHtmlActors(String html){
         jepActors.setText(html);
     }
 
@@ -79,7 +79,8 @@ public class tabInternalShow extends JScrollPane implements TabbedPaneEventListe
             for (int i=0; i<evt.getName().size(); i++){
                 String name = evt.getName().get(i);
                 tableEpisode table = new tableEpisode(this.getName() + name);
-                tabEpisodes.addTab(name, table);
+                tabEpisodes.addTab(name, new JScrollPane(table));
+                core.setTableListener(table);
             }
         }
     }
