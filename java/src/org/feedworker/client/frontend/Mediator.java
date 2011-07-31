@@ -311,15 +311,6 @@ public class Mediator {
     public String[] getQualityEnum() {
         return Quality.toArray();
     }
-
-    void synoMoveVideo() {
-        core.synoMoveVideo();
-    }
-
-    void synoStatus() {
-        core.synoStatus();
-    }
-
     /**verifica impostazioni torrent
      *
      * @return booleano che le impostazioni sono ok
@@ -568,10 +559,6 @@ public class Mediator {
         if (al.size() > 0) {
             core.synoDownloadRedirectory(al);
         }
-    }
-
-    void synoClearFinish() {
-        core.synoClearFinish();
     }
 
     public Color searchVersion(String text) {

@@ -112,8 +112,6 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             checkAddTab(jpDestination, false);
         if (prop.isEnablePaneShow())
             checkAddTab(jpShow, false);
-        if (prop.isEnablePaneSetting())
-            checkAddTab(jpSettings, false);
         if (prop.isEnablePaneLog())
             checkAddTab(jpLog, false);
         
@@ -126,6 +124,8 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             proxy.printAlert("Benvenuto al primo utilizzo :) Per poter usare il client, "
                     + "devi configurare le impostazioni");
         } else {
+            if (prop.isEnablePaneSetting())
+                checkAddTab(jpSettings, false);
             jpSettings.settingsValue();
             proxy.printOk("Ciao " + prop.getItasaUsername()
                     + ", impostazioni caricate.");
@@ -198,7 +198,6 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         applicationJMB.add(fileJM);
         applicationJMB.add(jMenuSerial()); //Stampa tf
         applicationJMB.add(jMenuWindowTab());//Visualizza pannelli
-        applicationJMB.add(jMenuNas()); //NAS
         applicationJMB.add(jMenuLAF()); //LAF
         applicationJMB.add(jMenuNotify()); //NOTIFICHE
         applicationJMB.add(jMenuHelp()); //HELP
@@ -380,38 +379,6 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         helpJM.add(calendarImport);
         
         return helpJM;
-    }
-    
-    private JMenu jMenuNas(){
-        JMenu menu = new JMenu(" NAS ");
-        JMenuItem videoMoveJMI = new JMenuItem(" Video move ");
-        videoMoveJMI.addActionListener(new ActionListener()  {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                proxy.synoMoveVideo();
-            }
-        });
-        
-        JMenuItem taskStatusJMI = new JMenuItem(" Task status ");
-        taskStatusJMI.addActionListener(new ActionListener()  {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                proxy.synoStatus();
-            }
-        });
-        
-        JMenuItem deleteCompletedTaskJMI = new JMenuItem(
-                " Delete completed task ");
-        deleteCompletedTaskJMI.addActionListener(new ActionListener()  {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                proxy.synoClearFinish();
-            }
-        });
-        menu.add(videoMoveJMI);
-        menu.add(taskStatusJMI);
-        menu.add(deleteCompletedTaskJMI);
-        return menu;
     }
     
     private JMenu jMenuLAF(){

@@ -3,17 +3,13 @@ package org.feedworker.core;
 import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.ConnectException;
-import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Timer;
@@ -35,11 +31,11 @@ import org.feedworker.exception.ManageException;
 import org.feedworker.object.*;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
-import org.feedworker.util.ExtensionFilter;
 import org.feedworker.util.Samba;
 import org.feedworker.xml.Calendar;
 import org.feedworker.xml.ItasaOnline;
 import org.feedworker.xml.ItasaOffline;
+import org.feedworker.xml.ListShow;
 import org.feedworker.xml.Reminder;
 import org.feedworker.xml.RuleDestination;
 import org.feedworker.xml.TvRage;
@@ -60,7 +56,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import org.feedworker.xml.ListShow;
+
 
 /**Motore di Feedworker
  * 
@@ -86,7 +82,6 @@ public class Kernel implements PropertyChangeListener {
     // PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
-    private final String SPLIT_HDTV = ".hdtv";
     private final String SPLIT_POINT = "\\.";
     private final String[] QUALITY = Quality.toArray();
     private final File FILE_RULE = new File("rules.xml");
@@ -193,90 +188,6 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass(), null);
         }
         http.closeClient();
-    }
-
-    /**
-     * Restituisce il valore/percorso della chiave ad esso associato nella
-     * treemap
-     * 
-     * @param name
-     *            nome del file da analizzare
-     * @param parsing
-     *            valore sul quale effettuare lo split
-     * @return path di destinazione
-     */
-    private String mapPath(KeyRule key) {
-        if (key != null && mapRules != null)
-            return mapRules.get(key).getPath();
-        return null;
-    }
-
-    /**
-     * Effettua l'analisi del nome del file restituendo l'oggetto filtro da
-     * confrontare
-     * 
-     * @param name
-     *            nome del file da analizzare
-     * @param split
-     *            stringa col quale effettuare lo split del nome del file
-     * @return oggetto filtro
-     */
-    private KeyRule parsingNamefile(String namefile, String split) {
-        String[] temp = (namefile.split(split))[0].split(SPLIT_POINT);
-        int pos = temp.length - 1;
-        String version = searchVersion(temp[pos]);
-        String seriesNum;
-        pos = Common.searchPosSeries(temp);
-        if (pos > -1) {
-            seriesNum = Common.searchNumberSeries(temp[pos]);
-        } else {
-            seriesNum = "1";
-        }
-        String name = temp[0];
-        for (int i = 1; i < pos; i++) {
-            name += " " + temp[i];
-        }
-        return new KeyRule(name, seriesNum, version);
-    }
-
-    /**cerca la versione/qualità del sub/video
-     * 
-     * @param text
-     *            testo da confrontare
-     * @return versione video/sub
-     */
-    private String searchVersion(String text) {
-        String version = null;
-        for (int i = 0; i < QUALITY.length; i++) {
-            if (text.toLowerCase().equalsIgnoreCase(QUALITY[i])) {
-                version = QUALITY[i];
-                break;
-            }
-        }
-        if (version == null) {
-            version = Quality.NORMAL.toString();
-        }
-        return version;
-    }
-
-    // TODO: non usata, se sarà implementata, cambiare la parte di stampa
-    /**
-     * effuetta la stampa dei file con l'estensione e la directory in cui
-     * cercare
-     * 
-     * @param dir
-     *            directory su cui effettuare la ricerca
-     * @param ext
-     *            estensione dei file da cercare
-     */
-    private void listDir(String dir, String ext) {
-        // Get list of names
-        String[] list = new File(dir).list(new ExtensionFilter(ext));
-        // Sort it (Data Structuring chapter))
-        Arrays.sort(list);
-        for (int i = 0; i < list.length; i++) {
-            System.out.println(list[i]);
-        }
     }
 
     /**testa la connessione a samba
@@ -701,106 +612,6 @@ public class Kernel implements PropertyChangeListener {
         return id;
     }
 
-    /**
-     * Stampa lo stato del download redirectory coi download in corso o nessun
-     * download
-     */
-    public void synoStatus() {
-        String url = "http://" + prop.getCifsShareLocation()
-                + ":5000/download/download_redirector.cgi";
-        String filename = "         \"filename\" : \"";
-        String progress = "         \"progress\" : \"";
-        String itemsNull = "   \"items\" : [],";
-        String dss = "Download Station Synology: ";
-        try {
-            Http http = new Http();
-            String synoID = http.synoConnectGetID(url,
-                    prop.getCifsShareUsername(), prop.getCifsSharePassword());
-            http.closeClient();
-            if (Lang.verifyTextNotNull(synoID)) {
-                http = new Http();
-                InputStream is = http.synoStatus(url, synoID);
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(is));
-                String line, _filename = null, _progress = null;
-                while ((line = br.readLine()) != null) {
-                    if (line.equals(itemsNull)) {
-                        printSynology(dss + "Non ci sono download in corso");
-                        break;
-                    } else if (line.length() > filename.length()) {
-                        String _substring = line.substring(0, filename.length());
-                        if (_substring.equals(filename)) {
-                            _filename = line.substring(filename.length(),
-                                    line.length() - 2);
-                        } else if (_substring.equals(progress)) {
-                            _progress = line.substring(progress.length(),
-                                    line.length() - 2);
-                        }
-                    }
-                    if (Lang.verifyTextNotNull(_progress)) {
-                        printSynology(dss + _filename + " " + _progress);
-                        _progress = null;
-                    }
-                }
-            }
-        } catch (IllegalStateException ex) {
-            error.launch(ex, getClass());
-        } catch (IOException ex) {
-            error.launch(ex, getClass(), null);
-        }
-    }
-
-    /** effettua la move video sul synology */
-    public void synoMoveVideo() {
-        Samba s = Samba.getIstance(prop.getCifsShareLocation(),
-                prop.getCifsSharePath(), prop.getCifsShareDomain(),
-                prop.getCifsShareUsername(), prop.getCifsSharePassword());
-        try {
-            analyzeVideoSamba(s, s.listDir(null, "avi"));
-            analyzeVideoSamba(s, s.listDir(null, "mkv"));
-        } catch (MalformedURLException ex) {
-            error.launch(ex, getClass(), null);
-        } catch (SmbException ex) {
-            error.launch(ex, getClass(), null);
-        }
-    }
-
-    /**
-     * Analizza i nomi dei file e se per ciascuno trova una corrispondenza tra
-     * le regole, sposta il file nel path opportuno
-     * 
-     * @param s
-     *            istanza samba
-     * @param fileList
-     *            array di nomi di file
-     */
-    private void analyzeVideoSamba(Samba s, String[] fileList) {
-        for (int i = 0; i < fileList.length; i++) {
-            String name = fileList[i];
-            if (name.toLowerCase().contains(SPLIT_HDTV)) {
-                KeyRule key = parsingNamefile(name.toLowerCase(), SPLIT_HDTV);
-                String dest = mapPath(key);
-                if (dest != null) {
-                    try {
-                        String[] _array = name.toLowerCase().split(SPLIT_HDTV)[0].split("\\.");
-                        int pos = Common.searchPosSeries(_array);
-                        int conta = 0;
-                        for (int j = 0; j < pos; j++) {
-                            conta += _array[j].length() + 1;
-                        }
-                        String newName = name.substring(conta + 4);
-                        newName.replaceAll("\\.", " ");
-                        s.moveFile(name, dest, newName);
-                        printSynology("Spostato " + name + " in " + dest);
-                    } catch (SmbException ex) {
-                        error.launch(ex, getClass(), name);
-                    } catch (IOException ex) {
-                        error.launch(ex, getClass(), null);
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Effettua l'inserimento dei link al download redirectory del synology
@@ -823,26 +634,6 @@ public class Kernel implements PropertyChangeListener {
                     http.closeClient();
                 }
                 printSynology("link inviati al download redirectory Synology");
-            }
-        } catch (IOException ex) {
-            error.launch(ex, getClass(), null);
-        }
-    }
-
-    /** Pulisce i task completati del synology */
-    public void synoClearFinish() {
-        Http http = new Http();
-        String url = "http://" + prop.getCifsShareLocation()
-                + ":5000/download/download_redirector.cgi";
-        try {
-            String synoID = http.synoConnectGetID(url,
-                    prop.getCifsShareUsername(), prop.getCifsSharePassword());
-            http.closeClient();
-            if (Lang.verifyTextNotNull(synoID)) {
-                http = new Http();
-                http.synoClearTask(url, synoID, prop.getCifsShareUsername());
-                http.closeClient();
-                printSynology("Download Station Synology: cancellati task completati.");
             }
         } catch (IOException ex) {
             error.launch(ex, getClass(), null);
@@ -1461,3 +1252,26 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 }
+
+    // TODO: non usata, se sarà implementata, cambiare la parte di stampa
+    /**
+     * effuetta la stampa dei file con l'estensione e la directory in cui
+     * cercare
+     * 
+     * @param dir
+     *            directory su cui effettuare la ricerca
+     * @param ext
+     *            estensione dei file da cercare
+     */
+/*
+    private void listDir(String dir, String ext) {
+        // Get list of names
+        String[] list = new File(dir).list(new ExtensionFilter(ext));
+        // Sort it (Data Structuring chapter))
+        Arrays.sort(list);
+        for (int i = 0; i < list.length; i++) {
+            System.out.println(list[i]);
+        }
+    }
+ * 
+ */
