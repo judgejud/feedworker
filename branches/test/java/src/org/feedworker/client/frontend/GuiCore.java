@@ -1,5 +1,6 @@
 package org.feedworker.client.frontend;
 
+import java.awt.Color;
 import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
@@ -17,6 +18,7 @@ import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.client.frontend.panel.tabInternalShow;
 import org.feedworker.core.ManageListener;
+import org.feedworker.object.Quality;
 import org.jfacility.java.awt.AWT;
 
 import org.jfacility.java.lang.Lang;
@@ -123,5 +125,31 @@ public class GuiCore {
     
     void printOk(String msg) {
         ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
+    }
+    
+    public Color searchVersion(String text) {
+        Color col = Color.cyan;
+        String[] temp = text.split(" ");
+        String version = temp[temp.length - 1].toLowerCase();
+        if (version.equals(Quality._1080p.toString())) {
+            col = Color.blue;
+        } else if (version.equals(Quality._1080i.toString())) {
+            col = Color.orange;
+        } else if (version.equals(Quality._720p.toString())) {
+            col = Color.red;
+        } else if (version.equals(Quality.DVDRIP.toString())) {
+            col = new Color(183, 65, 14);
+        } else if (version.equals(Quality.HR.toString())) {
+            col = Color.green;
+        } else if (version.equals(Quality.BLURAY.toString())) {
+            col = Color.magenta;
+        } else if (version.equals(Quality.WEB_DL.toString())) {
+            col = Color.white;
+        } else if (version.equals(Quality.BRRIP.toString())) {
+            col = Color.black;
+        } else if (version.equals(Quality.BDRIP.toString())) {
+            col = Color.darkGray;
+        }
+        return col;
     }
 }

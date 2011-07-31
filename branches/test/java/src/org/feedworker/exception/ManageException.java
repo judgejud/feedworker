@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.feedworker.client.ApplicationSettings;
 
 /**
  * Stampa nella textpane i messaggi d'errore se è un messaggio d'errore "rosso"
@@ -116,7 +117,14 @@ public class ManageException {
 
 
     public void launch(IOException ex, Class c) {
-        printError(ex, c);
+        String msg = ex.getMessage();
+        String error01 = "Failed to open file://" + 
+                ApplicationSettings.getIstance().getCifsShareLocation();
+        if (msg.startsWith(error01))
+            printAlert("Impossibile trovare/aprire il path desiderato, controllare "
+                    + "l'esistenza del path o i permessi per accedervi ", true);
+        else
+            printError(ex, c);
     }
 
     public void launch(InstantiationException ex, Class c) {

@@ -368,6 +368,7 @@ public class ItasaOnline extends AbstractQueryXML{
         if (params!=null)
             for (int i=0; i<params.size(); i++)
                 newUrl+= OPERATOR_AND + params.get(i).toString();
+        //per vedere la stringa che genera come url per la chiamata all'api itasa
         System.out.println(newUrl);
         return newUrl;
     }

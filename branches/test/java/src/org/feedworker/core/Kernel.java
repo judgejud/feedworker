@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -888,8 +890,19 @@ public class Kernel implements PropertyChangeListener {
             } catch (IOException ex) {
                 error.launch(ex, this.getClass());
             }
-        } else
-            printAlert("apertura di cartella samba non implementata");
+        } else {
+            String newdir = "\\\\" + prop.getCifsShareLocation() + "\\" + 
+                    prop.getCifsSharePath()+"\\"+dir;
+            try {
+                SystemFileManager.browse(newdir);
+            } catch (MalformedURLException ex) {
+                error.launch(ex, this.getClass());
+            } catch (IOException ex) {
+                error.launch(ex, this.getClass());
+            } catch (URISyntaxException ex) {
+                error.launch(ex, this.getClass());
+            }
+        }
     }
     
     public void stopImportRefreshCalendar() {
