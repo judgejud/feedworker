@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import org.feedworker.client.frontend.Mediator;
+import org.feedworker.client.frontend.GuiCore;
 import org.jfacility.javax.swing.Swing;
 
 /**
@@ -21,7 +21,6 @@ import org.jfacility.javax.swing.Swing;
  */
 class labelCellColorRenderer extends JLabel implements TableCellRenderer {
     private final Font font = new Font("Arial", Font.PLAIN, 11);
-    private Mediator proxy = Mediator.getIstance();
     @Override
     public Component getTableCellRendererComponent(JTable table,
             Object value, boolean isSelected, boolean hasFocus, int row,
@@ -31,7 +30,7 @@ class labelCellColorRenderer extends JLabel implements TableCellRenderer {
         setText(text);
         // imposta il font della cella
         setFont(font);
-        setBackground(proxy.searchVersion(text));
+        setBackground(GuiCore.getInstance().searchVersion(text));
         Color back = getBackground();
         if (back.equals(Color.blue) || back.equals(Color.red) 
             || back.equals(Color.black) || back.equals(new Color(183, 65, 14)) 

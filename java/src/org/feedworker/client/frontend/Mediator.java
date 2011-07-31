@@ -1,6 +1,5 @@
 package org.feedworker.client.frontend;
 //IMPORT JAVA
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
 import java.io.File;
@@ -64,7 +63,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "397 by "
+                + "399 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -559,32 +558,6 @@ public class Mediator {
         if (al.size() > 0) {
             core.synoDownloadRedirectory(al);
         }
-    }
-
-    public Color searchVersion(String text) {
-        Color col = Color.cyan;
-        String[] temp = text.split(" ");
-        String version = temp[temp.length - 1].toLowerCase();
-        if (version.equals(Quality._1080p.toString())) {
-            col = Color.blue;
-        } else if (version.equals(Quality._1080i.toString())) {
-            col = Color.orange;
-        } else if (version.equals(Quality._720p.toString())) {
-            col = Color.red;
-        } else if (version.equals(Quality.DVDRIP.toString())) {
-            col = new Color(183, 65, 14);
-        } else if (version.equals(Quality.HR.toString())) {
-            col = Color.green;
-        } else if (version.equals(Quality.BLURAY.toString())) {
-            col = Color.magenta;
-        } else if (version.equals(Quality.WEB_DL.toString())) {
-            col = Color.white;
-        } else if (version.equals(Quality.BRRIP.toString())) {
-            col = Color.black;
-        } else if (version.equals(Quality.BDRIP.toString())) {
-            col = Color.darkGray;
-        }
-        return col;
     }
 
     void printError(URISyntaxException e) {
