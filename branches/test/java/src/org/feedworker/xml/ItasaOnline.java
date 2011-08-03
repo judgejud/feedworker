@@ -66,6 +66,7 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String TAG_SHOW_ID = "id";
     private final String TAG_SHOW_ID_TVRAGE = "id_tvrage";
     private final String TAG_SHOW_STATUS = "status";
+    private final String TAG_SHOW_THUMBNAIL = "folder_thumb";
     private final String TAG_SHOW_ACTORS = "actors";
     private final String TAG_SHOW_ACTOR_NAME = "name";
     private final String TAG_SHOW_ACTOR_AS = "as";
@@ -91,6 +92,9 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String URL_NEWS_SINGLE = URL_BASE + "/news/" + STRING_REPLACE + "?";
     private final String URL_SHOW_SINGLE = 
                                     URL_BASE + "/shows/" + STRING_REPLACE + "?";
+    private final String URL_SHOW_THUMBNAIL = 
+                                    URL_BASE + "/shows/" + STRING_REPLACE + "/folderThumb?";
+    
     private final String URL_SHOW_LIST = URL_BASE + "/shows/?";
     private final String URL_SUBTITLE_SINGLE = 
                                 URL_BASE + "/subtitles/" + STRING_REPLACE + "?"; 
@@ -160,9 +164,22 @@ public class ItasaOnline extends AbstractQueryXML{
             throw new ItasaException("ShowList: "+ error);
         return container;
     }
+    
+    public String showThumbnail(String id) throws JDOMException, IOException, 
+                                                        ItasaException, Exception{
+        //return composeUrl(URL_SHOW_THUMBNAIL.replaceFirst(STRING_REPLACE, id), null);
+        connectHttps(composeUrl(URL_SHOW_SINGLE.replaceFirst(STRING_REPLACE, id), null));
+        checkStatus();
+        if (isStatusSuccess()){
+            Iterator iter = ((Element) document.getRootElement().getChildren().get(0))
+                .getChildren().iterator();
+            return ((Element) iter.next()).getChild(TAG_SHOW_THUMBNAIL).getText();
+        } else 
+            throw new ItasaException("ShowList: "+ error);
+    }
 
     public Subtitle subtitleSingle(String id) throws JDOMException, IOException, 
-                                                            ItasaException, Exception{
+                                                        ItasaException, Exception{
         connectHttps(composeUrl(URL_SUBTITLE_SINGLE.replaceFirst(STRING_REPLACE, id), null));
         checkStatus();
         Subtitle sub = null;

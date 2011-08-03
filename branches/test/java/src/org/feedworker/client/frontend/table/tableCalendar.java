@@ -75,9 +75,9 @@ public class tableCalendar extends tableAbstract{
         Swing.setTableDimensionLockColumn(this, 2, -1); //stato
         Swing.setTableDimensionLockColumn(this, 3, 70);
         Swing.setTableDimensionLockColumn(this, 4, 65); //last ep
-        Swing.setTableDimensionLockColumn(this, 6, 75); //data last
+        Swing.setTableDimensionLockColumn(this, 6, 85); //data last
         Swing.setTableDimensionLockColumn(this, 7, 65); //next ep
-        Swing.setTableDimensionLockColumn(this, 9, 75); //data next
+        Swing.setTableDimensionLockColumn(this, 9, 85); //data next
     }
     
     class ColorRenderer extends JLabel implements TableCellRenderer {

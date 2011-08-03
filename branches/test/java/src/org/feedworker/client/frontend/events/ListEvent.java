@@ -7,14 +7,14 @@ import java.util.EventObject;
  * @author Administrator
  */
 public class ListEvent extends EventObject{
-    private Object[] array;
+    private Object[][] array;
 
-    public ListEvent(Object source, Object[] array) {
+    public ListEvent(Object source, Object[][] array) {
         super(source);
         this.array = array;
     }
 
-    public Object[] getArray() {
+    public Object[][] getArray() {
         return array;
     }
 }
