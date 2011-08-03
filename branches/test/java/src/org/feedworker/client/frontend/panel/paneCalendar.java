@@ -164,6 +164,6 @@ public class paneCalendar extends paneAbstract{
     
     private void jbImportMyItasaCalendarMouseClick() {
         if (jtable.getRowCount()==0)
-            proxy.importFromMyItasa();
+            proxy.calendarImportTVFromMyItasa();
     }
 }

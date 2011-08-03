@@ -38,7 +38,6 @@ public class Https {
     }
     // Now you can access an https URL without having the certificate in the truststore
     public InputStream connection(String url) throws Exception {
-        InputStream is = null;
         URL u = new URL(url);
         HttpsURLConnection conn = (HttpsURLConnection) u.openConnection();
         conn.setHostnameVerifier(new HostnameVerifier() {
@@ -48,9 +47,22 @@ public class Https {
             }
         });
         if (conn.getResponseCode()==200)
-            is = conn.getInputStream();
-        return is;
+            return conn.getInputStream();
+        return null;
     }
+    
+    public String getLocationRedirect(String url) throws Exception {
+        URL u = new URL(url);
+        HttpsURLConnection conn = (HttpsURLConnection) u.openConnection();
+        conn.setHostnameVerifier(new HostnameVerifier() {
+            @Override
+            public boolean verify(String arg0, SSLSession arg1) {
+                return true;
+            }
+        });
+        return conn.getHeaderField("Location");
+    }
+    
     // Create a trust manager that does not validate certificate chains
     private class DefaultTrustManager implements X509TrustManager {
         @Override

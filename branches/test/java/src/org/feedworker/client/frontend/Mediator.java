@@ -695,8 +695,8 @@ public class Mediator {
         core.refreshSingleCalendar(value.toString());
     }
 
-    public void importFromMyItasa() {
-        core.importTvFromMyItasa();
+    public void calendarImportTVFromMyItasa() {
+        core.calendarImportNameTvFromMyItasa();
     }
 
     public void undoLastRemoveReminder() {
