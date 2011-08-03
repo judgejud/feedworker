@@ -165,19 +165,10 @@ public class ItasaOnline extends AbstractQueryXML{
         return container;
     }
     
-    public String showThumbnail(String id) throws JDOMException, IOException, 
-                                                        ItasaException, Exception{
-        //return composeUrl(URL_SHOW_THUMBNAIL.replaceFirst(STRING_REPLACE, id), null);
-        connectHttps(composeUrl(URL_SHOW_SINGLE.replaceFirst(STRING_REPLACE, id), null));
-        checkStatus();
-        if (isStatusSuccess()){
-            Iterator iter = ((Element) document.getRootElement().getChildren().get(0))
-                .getChildren().iterator();
-            return ((Element) iter.next()).getChild(TAG_SHOW_THUMBNAIL).getText();
-        } else 
-            throw new ItasaException("ShowList: "+ error);
+    public String getUrlThumbnail(String id){
+        return composeUrl(URL_SHOW_THUMBNAIL.replaceFirst(STRING_REPLACE, id), null);
     }
-
+    
     public Subtitle subtitleSingle(String id) throws JDOMException, IOException, 
                                                         ItasaException, Exception{
         connectHttps(composeUrl(URL_SUBTITLE_SINGLE.replaceFirst(STRING_REPLACE, id), null));

@@ -160,7 +160,7 @@ public class Common {
         ImageIcon icon = new ImageIcon(
                 ResourceLocator.convertStringToURL(getResourcePath(name)));
         if (OS.isWindows()) {
-            icon = Swing.scaleImage(icon, 16, 16);
+            icon = Swing.scaleImageARGB(icon, 16, 16);
         }
         return icon.getImage();
     }
@@ -168,7 +168,7 @@ public class Common {
     public static ImageIcon getResourceImageIcon(String name) {
         ImageIcon icon = new ImageIcon(
                 ResourceLocator.convertStringToURL(getResourcePath(name)));
-        return Swing.scaleImage(icon, 24, 24);
+        return Swing.scaleImageARGB(icon, 24, 24);
     }
 
     public static Image getResourceImage(String name) {

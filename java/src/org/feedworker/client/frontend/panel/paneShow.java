@@ -3,6 +3,8 @@ package org.feedworker.client.frontend.panel;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.DefaultListCellRenderer;
@@ -24,9 +26,6 @@ import org.feedworker.client.frontend.events.EditorPaneEvent;
 import org.feedworker.client.frontend.events.EditorPaneEventListener;
 import org.feedworker.client.frontend.events.ListEvent;
 import org.feedworker.client.frontend.events.ListEventListener;
-
-import org.jdesktop.swingx.JXTaskPane;
-import org.jdesktop.swingx.JXTaskPaneContainer;
 
 import org.jfacility.javax.swing.ButtonTabComponent;
 import org.jfacility.javax.swing.Swing;
@@ -100,24 +99,29 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
                     newTabShow(((Object[]) jlSeries.getSelectedValue())[0]);
             }
         });
+        JScrollPane jspList = new JScrollPane(jlSeries);
+        jspList.setPreferredSize(new Dimension(190,550));
         
-        JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
-        JXTaskPane taskMySeries = new JXTaskPane();
+        JPanel jpWest = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        int y=-1;
+        gbc.gridx = 0;
+        gbc.gridy = ++y;
+        gbc.insets = BUTTON_SPACE_INSETS;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        jpWest.add(jbImport, gbc);
+        gbc.gridy = ++y;
+        jpWest.add(jbSave, gbc);
+        gbc.gridy = ++y;
+        jpWest.add(jbRemove, gbc);
+        gbc.gridy = ++y;
+        jpWest.add(jspList, gbc);
         
-        taskMySeries.setTitle("My Series");
-        taskMySeries.setCollapsed(false);
-        taskMySeries.add(jbImport);
-        taskMySeries.add(jbSave);
-        taskMySeries.add(jbRemove);
-        taskMySeries.add(jlSeries);
-        
-        tpcWest.add(taskMySeries);
-        
-        JScrollPane jspLeft = new JScrollPane(tpcWest);
-        jspLeft.setPreferredSize(new Dimension(200,700));
         jtpShows = new JTabbedPane();
+        
         JPanel pane = new JPanel(new BorderLayout());
-        pane.add(jspLeft, BorderLayout.WEST);
+        
+        pane.add(jpWest, BorderLayout.WEST);
         pane.add(jtpShows, BorderLayout.CENTER);
         jpCenter.add(pane);
     }
@@ -207,13 +211,14 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
                             int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, 
                                                     index, isSelected, cellHasFocus);
-            label.setPreferredSize(new Dimension(40,40));
+            label.setPreferredSize(new Dimension(55, 55));
             Object values[] = (Object[]) value;
             label.setName(values[0].toString());
+            label.setOpaque(false);
             setName(values[0].toString());
             label.setText(null);
-            label.setToolTipText(values[0].toString());
-            label.setIcon(Swing.scaleImage((ImageIcon)values[1],40,40));
+            label.setToolTipText(values[0].toString());          
+            label.setIcon(Swing.scaleImageARGB((ImageIcon)values[1], 55, 55));
             return label;
         }
     }
