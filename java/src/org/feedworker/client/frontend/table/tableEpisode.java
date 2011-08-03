@@ -27,11 +27,17 @@ public class tableEpisode extends tableAbstract{
         };        
         setModel(dtm);
         lockColumns();
+        int len = getName().length();
+        if (getName().substring(len-7).equalsIgnoreCase("Special") ||
+                getName().substring(len-5).equalsIgnoreCase("Movie")){
+            Swing.setTableDimensionLockColumn(this, 0, -1);
+            getColumnModel().getColumn(1).setHeaderValue("Season");
+        }
     }
     
     @Override
     public void objReceived(TableEvent evt) {
-        if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
+        if (getName().equalsIgnoreCase(evt.getNameTableDest())) {
             DefaultTableModel dtm = (DefaultTableModel) getModel();
             for (int i = 0; i < evt.getArray().size(); i++)
                 dtm.insertRow(i, evt.getArray().get(i));

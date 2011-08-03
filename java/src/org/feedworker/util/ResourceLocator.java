@@ -1,6 +1,7 @@
 package org.feedworker.util;
 
 //IMPORT JAVA
+import java.io.File;
 import java.net.URL;
 
 import org.jfacility.java.lang.SystemProperty;
@@ -13,6 +14,7 @@ import org.jfacility.java.lang.SystemProperty;
 public class ResourceLocator {
     private static String curDir;
     private final static String RESOURCES = "/org/feedworker/resource/";
+    private final static String THUMBNAIL_SHOW = "thumbnail";
 
     /**
      * Restituisce il percorso di lavoro corrente comprensivo di primo
@@ -22,6 +24,10 @@ public class ResourceLocator {
      */
     public static String getWorkspace() {
         return curDir;
+    }
+    
+    public static String getThumbnailShows() {
+        return curDir + THUMBNAIL_SHOW + File.separator;
     }
 
     /**

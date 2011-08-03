@@ -25,6 +25,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import java.net.ConnectException;
 import org.feedworker.client.ApplicationSettings;
 
 /**
@@ -113,8 +114,18 @@ public class ManageException {
             printError(ex, c);
         }
     }
+    
+    public void launch(ConnectException ex, Class c) {
+        String msg = ex.getMessage();
+        String error01 = "Connection timed out: connect";
+        if (msg.equals(error01)) {
+            printAlert("Timeout di connessione, riprovare", true);
+        } else {
+            printError(ex, c);
+        }
+    }
 
-
+    
 
     public void launch(IOException ex, Class c) {
         String msg = ex.getMessage();

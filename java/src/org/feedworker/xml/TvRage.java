@@ -131,25 +131,41 @@ public class TvRage extends AbstractQueryXML{
         ArrayList<ArrayList<String[]>> alSeasons = new ArrayList<ArrayList<String[]>>();
         while (seasons.hasNext()){
             Element season = (Element) seasons.next();
-            String number = season.getAttributeValue("no");
             Iterator episodes = season.getChildren().iterator();
-            alNames.add("Season "+number);
             ArrayList<String[]> alEpisodes = new ArrayList<String[]>();
-            while (episodes.hasNext()){
-                String[] row = new String[4];
-                Element episode = (Element) episodes.next();
-                //TODO: 24 nullpointerexception?
-                row[0] = episode.getChild(TAG_EP_NUM).getText();
-                row[1] = episode.getChild(TAG_SEASON_NUM).getText();
-                try {
-                    row[2] = Common.stringAmericanToString(
-                                    episode.getChild(TAG_AIRDATE).getText());
-                } catch (ParseException ex) {
-                    row[2] = "";
+            if (season.getName().equalsIgnoreCase("Season")) {
+                alNames.add("Season " + season.getAttributeValue("no"));
+                while (episodes.hasNext()){
+                    String[] row = new String[4];
+                    Element episode = (Element) episodes.next();
+                    row[0] = episode.getChild(TAG_EP_NUM).getText();
+                    row[1] = episode.getChild(TAG_SEASON_NUM).getText();
+                    try {
+                        row[2] = Common.stringAmericanToString(
+                                        episode.getChild(TAG_AIRDATE).getText());
+                    } catch (ParseException ex) {
+                        row[2] = "";
+                    }
+                    row[3] = episode.getChild(TAG_TITLE).getText();
+                    alEpisodes.add(row);
                 }
-                row[3] = episode.getChild(TAG_TITLE).getText();
-                alEpisodes.add(row);
-            }
+            } else {
+                alNames.add(season.getName());
+                while (episodes.hasNext()){
+                    String[] row = new String[4];
+                    Element episode = (Element) episodes.next();
+                    row[0] = "";
+                    row[1] = episode.getChild("season").getText();
+                    try {
+                        row[2] = Common.stringAmericanToString(
+                                        episode.getChild(TAG_AIRDATE).getText());
+                    } catch (ParseException ex) {
+                        row[2] = "";
+                    }
+                    row[3] = episode.getChild(TAG_TITLE).getText();
+                    alEpisodes.add(row);
+                }
+            } 
             alSeasons.add(alEpisodes);
         }
         values[0]=alNames;

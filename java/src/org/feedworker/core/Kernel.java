@@ -58,6 +58,10 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import java.io.FileNotFoundException;
+import java.net.URL;
+import javax.swing.ImageIcon;
+import org.feedworker.util.ResourceLocator;
 
 
 /**Motore di Feedworker
@@ -559,9 +563,9 @@ public class Kernel implements PropertyChangeListener {
         }
         try {
             ListShow xml = new ListShow(FILE_MYLIST, true);
-            Object[] temp = xml.initializeReader();
-            if (temp!=null && temp.length > 0) 
-                ManageListener.fireListEvent(this, temp);
+            Object[][] array = xml.initializeReader();
+            if (array!=null && array.length > 0) 
+               ManageListener.fireListEvent(this, array);
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
@@ -1038,7 +1042,9 @@ public class Kernel implements PropertyChangeListener {
                     error.launch(ex, getClass());
                 }
                 if (myShows!=null && myShows.size()>0)
-                    ManageListener.fireListEvent(this, myShows.toArray());
+                    System.out.println();
+                    //TODO
+                    //ManageListener.fireListEvent(this, myShows.toArray());
             } else 
                 printAlert("Non hai abilitato l'uso di myItasa");
         }
@@ -1067,7 +1073,7 @@ public class Kernel implements PropertyChangeListener {
             } catch (IOException ex) {
                 ex.printStackTrace();
             } catch (ItasaException ex) {
-                ex.printStackTrace();
+                printAlert(ex.getMessage());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -1114,14 +1120,16 @@ public class Kernel implements PropertyChangeListener {
             ArrayList<ArrayList<Object[]>> all = (ArrayList<ArrayList<Object[]>>) tvrage[1];
             for (int n=0; n<all.size(); n++)
                 ManageListener.fireTableEvent(this, all.get(n), name + destName.get(n));
+        } catch (ConnectException ex) {
+            error.launch(ex, getClass());
         } catch (JDOMException ex) {
-            ex.printStackTrace();
+            error.launch(ex, getClass());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            error.launch(ex, getClass());
         } catch (ItasaException ex) {
-            ex.printStackTrace();
+            error.launch(ex, getClass());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            error.launch(ex, getClass());
         }
     }
 
@@ -1133,6 +1141,45 @@ public class Kernel implements PropertyChangeListener {
         } catch (JDOMException ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void requestAddList(Object serial) {
+        ItasaOnline i = new ItasaOnline();
+        try {
+            String thumbnail = i.showThumbnail(mapShowItasa.get(serial));
+            String file = downloadImage(thumbnail, null);
+            ImageIcon image = new ImageIcon(file);
+            ManageListener.fireListEvent(this, new Object[][]{{serial,image}});
+        } catch (FileNotFoundException ex) {
+            String thumbnail = "http://www.italiansubs.net/varie/ico/unknown.png";
+            String file = ResourceLocator.getThumbnailShows() + "unknown.png";
+            try {
+                downloadImage(thumbnail, file);
+                ImageIcon image = new ImageIcon(file);
+                ManageListener.fireListEvent(this, new Object[][]{{serial,image}});
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    private String downloadImage(String link, String file) throws MalformedURLException, 
+                                                                    IOException{
+        if (file==null){
+            String[] split = link.split("/");
+            file = ResourceLocator.getThumbnailShows() + split[split.length-1];
+        }
+        File dir = new File(ResourceLocator.getThumbnailShows());
+        if (!dir.exists())
+            dir.mkdir();
+        File f = new File(file);
+        if (!f.exists())
+            Io.downloadSingle(new URL(link.replaceAll(" ", "%20")).openStream(), f);
+        return file;
     }
 
     class ImportTask extends SwingWorker<ArrayList<Object[]>, Void> {

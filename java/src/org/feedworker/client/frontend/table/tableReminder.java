@@ -66,7 +66,7 @@ public class tableReminder extends tableAbstract {
     
     @Override
     protected void lockColumns(){
-        Swing.setTableDimensionLockColumn(this, 0, 70);
+        Swing.setTableDimensionLockColumn(this, 0, 75);
         Swing.setTableDimensionLockColumn(this, 2, 50);
     }
 }

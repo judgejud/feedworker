@@ -751,4 +751,8 @@ public class Mediator {
     public void saveList(Object[] toArray) {
         core.saveList(toArray);
     }
+
+    public void requestAddList(Object selectedItem) {
+        core.requestAddList(selectedItem);
+    }
 }

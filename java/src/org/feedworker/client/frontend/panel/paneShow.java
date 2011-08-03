@@ -1,17 +1,22 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.DefaultListCellRenderer;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.ListSelectionModel;
 
 import org.feedworker.client.frontend.events.ComboboxEvent;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
@@ -24,6 +29,7 @@ import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 
 import org.jfacility.javax.swing.ButtonTabComponent;
+import org.jfacility.javax.swing.Swing;
 
 /**TODO: lista ordinata e senza duplicati,
  * @author luca
@@ -76,25 +82,22 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             @Override
             public void mouseClicked(MouseEvent evt) {
                 int index = jlSeries.getSelectedIndex();
-                if (index>0)
+                if (index>-1)
                     listModel.remove(index);
             }
         });
         
         listModel = new DefaultListModel();
-        jlSeries = new JList(listModel){
-            // This method is called as the cursor moves within the list.
-            @Override
-            public String getToolTipText(MouseEvent evt) {
-                return getModel().getElementAt(locationToIndex(evt.getPoint())).toString();
-            }
-        };
+        jlSeries = new JList(listModel);
+        jlSeries.setCellRenderer(new GraphicList());
+        jlSeries.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        jlSeries.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+        jlSeries.setVisibleRowCount(-1);
         jlSeries.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                // Double-click
-                if (evt.getClickCount() == 2) 
-                    newTabShow(jlSeries.getSelectedValue().toString());
+                if (evt.getClickCount() == 2) // Double-click 
+                    newTabShow(((Object[]) jlSeries.getSelectedValue())[0]);
             }
         });
         
@@ -129,7 +132,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jbAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                listModel.add(0, jcbShows.getSelectedItem());                
+                proxy.requestAddList(jcbShows.getSelectedItem());
             }
         });
         
@@ -196,5 +199,22 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             pane.setHtmlShow(evt.getHtml());
         else if (evt.getTable().equals("actors"))
             pane.setHtmlActors(evt.getHtml());
+    }
+    
+    class GraphicList extends DefaultListCellRenderer{
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, 
+                            int index, boolean isSelected, boolean cellHasFocus) {
+            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, 
+                                                    index, isSelected, cellHasFocus);
+            label.setPreferredSize(new Dimension(40,40));
+            Object values[] = (Object[]) value;
+            label.setName(values[0].toString());
+            setName(values[0].toString());
+            label.setText(null);
+            label.setToolTipText(values[0].toString());
+            label.setIcon(Swing.scaleImage((ImageIcon)values[1],40,40));
+            return label;
+        }
     }
 } //end class
