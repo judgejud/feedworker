@@ -101,6 +101,9 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String URL_SUBTITLE_SHOW = URL_BASE + "/subtitles?"; //    
     private final String URL_SUBTITLE_SEARCH = URL_BASE + "/subtitles/search?"; //
     
+    private final String LINK_ITASA = 
+        "http://www.italiansubs.net/index.php?option=com_info&Itemid=12&idserie=";
+    
     private String status, error;
     
     public Show showSingle(String id, boolean flag_actors) throws JDOMException, 
@@ -140,7 +143,7 @@ public class ItasaOnline extends AbstractQueryXML{
                 }
             }
             show = new Show(name, plot, banner, season, country, network, started,
-                                ended, _status, tvrage, genres, actors);
+                                ended, _status, tvrage, genres, actors, LINK_ITASA+id);
         } else
             throw new ItasaException("show single: "+ error);
         return show;
