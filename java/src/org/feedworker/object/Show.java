@@ -11,13 +11,14 @@ import org.feedworker.util.Translate;
  * @author luca
  */
 public class Show {
-    private String name, tvrage, plot, banner, season, country, status, network, started, ended;
+    private String name, tvrage, plot, banner, season, country, status, network, 
+                started, ended, link;
     private ArrayList<String> genres;
     private ArrayList<String[]> actors;
 
     public Show(String name, String plot, String banner, String season, String country, 
                 String network, String started, String ended, String status, String tvrage, 
-                ArrayList<String> genres, ArrayList<String[]> actors) {
+                ArrayList<String> genres, ArrayList<String[]> actors, String link) {
         this.name = name;
         this.plot = plot;
         this.banner = banner;
@@ -37,10 +38,12 @@ public class Show {
         this.genres = genres;
         this.actors = actors;
         this.tvrage = tvrage;
+        this.link = link;
     }
     
     public String getHtmlShow(){
-        String html = new String("<html><body><center><img src=\""+banner+"\"></img><br>"
+        String html = new String("<html><body><center><a href=\"" + link + "\">"
+                + "<img src=\""+banner+"\"></img></a><br>"
                 + "<h1>"+name+"</h1></center>");
         html += "<table width=\"97%\" cellspacing=\"2\" cellpadding=\"2\">";
         html += "<tr><td><b>Genere/i</b></td><td>"+genres.get(0);

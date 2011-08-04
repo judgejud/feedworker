@@ -109,7 +109,7 @@ public class Kernel implements PropertyChangeListener {
     private Calendar xmlCalendar;
     private RuleDestination xmlSubDest;
     private Reminder xmlReminder;
-    
+    private ImportTaskList importTaskList;
     private ImportTaskCalendar importTaskCalendar;
     private RefreshTask refreshTask;
     private TreeSet tsIdCalendar;
@@ -791,6 +791,18 @@ public class Kernel implements PropertyChangeListener {
                 } else if (refreshTask.isCancelled())
                     fireCalendar();
             }
+        } else if (evtName.equalsIgnoreCase(className + "$ImportTaskList")) {
+            if (evt.getPropertyName().equals("progress")) {
+                ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_INCREMENT, 
+                        importTaskList.getProgress());
+                if (importTaskList.isDone() && !importTaskList.isCancelled()) {
+                    try {
+                        ManageListener.fireListEvent(this, importTaskList.get());
+                    } catch (Exception e) {
+                        error.launch(e, getClass());
+                    }
+                }
+            }
         }
     }
     
@@ -1026,31 +1038,6 @@ public class Kernel implements PropertyChangeListener {
                 printAlert("Non hai abilitato l'uso di myItasa");
         }
     }
-    
-    public void importNameFromMyItasa() {
-        checkLoginItasa(prop.getItasaUsername(), prop.getItasaPassword());
-        if (user!=null){
-            if (user.isMyitasa()){
-                ArrayList<String> myShows = null;
-                try {
-                    myShows = itasa.myItasaShowsName(user.getAuthcode());
-                } catch (JDOMException ex) {
-                    error.launch(ex, getClass());
-                } catch (IOException ex) {
-                    error.launch(ex, getClass());
-                } catch (ItasaException ex) {
-                    printAlert(ex.getMessage());
-                } catch (Exception ex) {
-                    error.launch(ex, getClass());
-                }
-                if (myShows!=null && myShows.size()>0)
-                    System.out.println();
-                    //TODO
-                    //ManageListener.fireListEvent(this, myShows.toArray());
-            } else 
-                printAlert("Non hai abilitato l'uso di myItasa");
-        }
-    }
 
     /**Inizializza dal web l'elenco delle serie itasa, 
      * o le preleva dall'xml nel caso in cui ci sono problemi vari con itasa
@@ -1135,6 +1122,7 @@ public class Kernel implements PropertyChangeListener {
     public void saveList(Object[] toArray) {
         try {
             new ListShow(FILE_MYLIST, false).writeList(toArray);
+            printOk("Lista salvata");
         } catch (IOException ex) {
             error.launch(ex, getClass());
         } catch (JDOMException ex) {
@@ -1142,21 +1130,17 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    public void requestAddList(Object serial) {
+    public void requestSingleAddList(Object serial) {
         ItasaOnline i = new ItasaOnline();
+        String file = null;
         try {
             String temp = i.getUrlThumbnail(mapShowItasa.get(serial));
             String thumbnail = Https.getInstance().getLocationRedirect(temp);
-            String file = downloadImage(thumbnail, null);
-            ImageIcon image = new ImageIcon(file);
-            ManageListener.fireListEvent(this, new Object[][]{{serial,image}});
+            file = downloadImage(thumbnail);
         } catch (FileNotFoundException ex) {
             String thumbnail = "http://www.italiansubs.net/varie/ico/unknown.png";
-            String file = ResourceLocator.getThumbnailShows() + "unknown.png";
             try {
-                downloadImage(thumbnail, file);
-                ImageIcon image = new ImageIcon(file);
-                ManageListener.fireListEvent(this, new Object[][]{{serial,image}});
+                file = downloadImage(thumbnail);
             } catch (IOException e) {
                 error.launch(e, getClass());
             }
@@ -1165,14 +1149,43 @@ public class Kernel implements PropertyChangeListener {
         } catch (Exception ex) {
             error.launch(ex, getClass());
         }
+        ManageListener.fireListEvent(this, 
+                                    new Object[][]{{serial, new ImageIcon(file)}});
     }
     
-    private String downloadImage(String link, String file) throws MalformedURLException, 
-                                                                    IOException{
-        if (file==null){
-            String[] split = link.split("/");
-            file = ResourceLocator.getThumbnailShows() + split[split.length-1];
+    public void listImportNameTvFromMyItasa() {
+        checkLoginItasa(prop.getItasaUsername(), prop.getItasaPassword());
+        if (user!=null){
+            if (user.isMyitasa()){
+                ArrayList<String> myShows = null;
+                try {
+                    myShows = itasa.myItasaShowsName(user.getAuthcode());
+                } catch (JDOMException ex) {
+                    error.launch(ex, getClass());
+                } catch (IOException ex) {
+                    error.launch(ex, getClass());
+                } catch (ItasaException ex) {
+                    printAlert(ex.getMessage());
+                } catch (Exception ex) {
+                    error.launch(ex, getClass());
+                }
+                if (myShows!=null && myShows.size()>0){
+                    ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_SHOW,
+                        myShows.size());
+                    
+                    importTaskList = new ImportTaskList(myShows);
+                    importTaskList.addPropertyChangeListener(this);
+                    importTaskList.execute();
+                }
+            } else 
+                printAlert("Non hai abilitato l'uso di myItasa");
         }
+    }
+    
+    private String downloadImage(String link) throws MalformedURLException, 
+                                                                    IOException{
+        String[] split = link.split("/");
+        String file = ResourceLocator.getThumbnailShows() + split[split.length-1];
         File dir = new File(ResourceLocator.getThumbnailShows());
         if (!dir.exists())
             dir.mkdir();
@@ -1301,7 +1314,7 @@ public class Kernel implements PropertyChangeListener {
                     xmlCalendar.reverseDataCloning(xmlClone);
                     printAlert("Errore di connessione con tvrage");
                 } catch (IOException ex1) {
-                error.launch(ex, null);    
+                    error.launch(ex1, null);    
                 }
             } catch (JDOMException ex) {
                 error.launch(ex, null);
@@ -1312,17 +1325,41 @@ public class Kernel implements PropertyChangeListener {
         }
     } //end class RefreshTask
     
-    class ImportTaskList extends SwingWorker<ArrayList<Object[]>, Void> {
-        
-        public ImportTaskList(){
-        
+    class ImportTaskList extends SwingWorker<Object[][], Void> {
+        private ArrayList<String> myShows; 
+        public ImportTaskList(ArrayList<String> array){
+            myShows = array; 
         }
         
         @Override
-        public ArrayList<Object[]> doInBackground() {
+        public Object[][] doInBackground() {
             int progress = 0;
-            
-            return null;
+            ItasaOnline i = new ItasaOnline();
+            String serial=null, temp, thumbnail, file=null;
+            Object[][] array = new Object[myShows.size()][2];
+            while (progress<myShows.size() && !this.isCancelled()) {
+                try {
+                    serial = myShows.get(progress);
+                    temp = i.getUrlThumbnail(mapShowItasa.get(serial));
+                    thumbnail = Https.getInstance().getLocationRedirect(temp);
+                    file = downloadImage(thumbnail);
+                } catch (FileNotFoundException ex) {
+                    thumbnail = "http://www.italiansubs.net/varie/ico/unknown.png";
+                    try {
+                        file = downloadImage(thumbnail);
+                    } catch (IOException e) {
+                        error.launch(e, getClass());
+                    }
+                } catch (IOException ex) {
+                    error.launch(ex, getClass());
+                } catch (Exception ex) {
+                    error.launch(ex, getClass());
+                }
+                array[progress][0] = serial;
+                array[progress][1] = new ImageIcon(file);
+                setProgress(++progress);
+            }
+            return array;
         }
     }//end class ImportTaskList
 } //END class Kernel

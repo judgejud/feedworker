@@ -100,7 +100,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         JScrollPane jspList = new JScrollPane(jlSeries);
-        jspList.setPreferredSize(new Dimension(190,550));
+        jspList.setPreferredSize(new Dimension(190,800));
+        jspList.setMinimumSize(new Dimension(190,550));
         
         JPanel jpWest = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -136,7 +137,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jbAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.requestAddList(jcbShows.getSelectedItem());
+                proxy.requestSingleAddList(jcbShows.getSelectedItem());
             }
         });
         
