@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import javax.swing.ButtonGroup;
 
 import javax.swing.JCheckBoxMenuItem;
@@ -454,6 +455,27 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         jcbmiNotifySms.setSelected(prop.isEnableNotifySms());
         
         return jmNotify;
+    }
+    
+    private JMenu jMenuItasa(){
+        ArrayList<String[]> array = new ArrayList<String[]>();
+        JMenu jmItasa = new JMenu(" ItalianSubs ");
+        JMenuItem[] jmiItasa = new JMenuItem[array.size()];
+        for (int i=0; i<array.size(); i++){
+            String[] menu = array.get(i);
+            jmiItasa[i] = new JMenuItem(" " + menu[0] + " ");
+            jmiItasa[i].setToolTipText(menu[1]);
+            jmiItasa[i].setActionCommand(menu[1]);
+            jmiItasa[i].addActionListener(new ActionListener()  {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    proxy.openWebsite(e.getActionCommand());
+                }
+            });
+            jmItasa.add(jmiItasa[i]);
+        }
+
+        return jmItasa;
     }
     
     private JPanel createPopupGoogleCalSMS() {

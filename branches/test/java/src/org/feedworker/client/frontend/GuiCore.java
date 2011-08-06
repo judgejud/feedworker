@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
 
@@ -30,8 +29,8 @@ public class GuiCore {
     private static GuiCore core = null;
     
     private Mediator proxy = Mediator.getIstance();
-    private TreeMap<Object, JScrollPane> mapPaneShows = 
-                                    new TreeMap<Object, JScrollPane>();
+    private TreeMap<Object, tabInternalShow> mapPaneShows = 
+                                    new TreeMap<Object, tabInternalShow>();
     
     public static GuiCore getInstance(){
         if (core==null)
@@ -77,11 +76,12 @@ public class GuiCore {
             proxy.searchTV(tv);
     }
     
-    public JScrollPane addNewTabShow(Object name){
+    public tabInternalShow addNewTabShow(Object name){
         tabInternalShow pane;
         if (!mapPaneShows.containsKey(name)){
             pane = new tabInternalShow(name.toString());
             mapPaneShows.put(name, pane);
+            proxy.infoShow(name.toString());
         } else 
            pane = (tabInternalShow) mapPaneShows.get(name);
         return pane;
