@@ -12,7 +12,7 @@ import org.feedworker.util.Translate;
  */
 public class Show {
     private String name, tvrage, plot, banner, season, country, status, network, 
-                started, ended, link;
+                started, ended;
     private ArrayList<String> genres;
     private ArrayList<String[]> actors;
 
@@ -38,12 +38,10 @@ public class Show {
         this.genres = genres;
         this.actors = actors;
         this.tvrage = tvrage;
-        this.link = link;
     }
     
     public String getHtmlShow(){
-        String html = new String("<html><body><center><a href=\"" + link + "\">"
-                + "<img src=\""+banner+"\"></img></a><br>"
+        String html = new String("<html><body><center><img src=\""+banner+"\"></img><br>"
                 + "<h1>"+name+"</h1></center>");
         html += "<table width=\"97%\" cellspacing=\"2\" cellpadding=\"2\">";
         html += "<tr><td><b>Genere/i</b></td><td>"+genres.get(0);

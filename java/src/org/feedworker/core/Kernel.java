@@ -95,6 +95,7 @@ public class Kernel implements PropertyChangeListener {
     private final File FILE_REMINDER = new File("reminder.xml");
     private final File FILE_MYLIST = new File("mylist.xml");
     private final File FILE_ITASA = new File("itasa.xml");
+    private final File FILE_LINK_ITASA = new File("link_itasa.xml");
     
     // PRIVATE STATIC VARIABLES
     private static Kernel core = null;
@@ -566,6 +567,17 @@ public class Kernel implements PropertyChangeListener {
             Object[][] array = xml.initializeReader();
             if (array!=null && array.length > 0) 
                ManageListener.fireListEvent(this, array);
+        } catch (JDOMException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass(), null);
+        }
+        try {
+            ItasaOffline xml = new ItasaOffline(FILE_LINK_ITASA, true);
+            Object[][] array = xml.initializeReaderLink();
+            //TODO FIRE
+            //if (array!=null && array.length > 0) 
+               //ManageListener.fireListEvent(this, array);
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
@@ -1193,6 +1205,16 @@ public class Kernel implements PropertyChangeListener {
         if (!f.exists())
             Io.downloadSingle(new URL(link.replaceAll(" ", "%20")).openStream(), f);
         return file;
+    }
+
+    public void openWebsite(String url) {
+        try {
+            SystemFileManager.browse(url);
+        } catch (URISyntaxException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass());
+        }
     }
 
     class ImportTaskCalendar extends SwingWorker<ArrayList<Object[]>, Void> {

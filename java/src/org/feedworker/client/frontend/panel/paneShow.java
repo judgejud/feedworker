@@ -178,7 +178,6 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             jtpShows.addTab(name.toString(), pane);
             jtpShows.setTabComponentAt(jtpShows.getTabCount() - 1,
                     new ButtonTabComponent(jtpShows));
-            proxy.infoShow(name.toString());
         }
         jtpShows.setSelectedComponent(pane);
     }

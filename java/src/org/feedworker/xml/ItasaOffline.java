@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.TreeMap;
+
 import org.jdom.Element;
 import org.jdom.JDOMException;
 
@@ -15,6 +16,8 @@ public class ItasaOffline extends AbstractXML{
     private final String TAG_ITASA_ROOT = "SHOW";
     private final String TAG_ITASA_ID = "ID";
     private final String TAG_ITASA_NAME = "NAME";
+    private final String TAG_LINK_ITASA_URL = "URL";
+    private final String TAG_LINK_ITASA_NAME = "NAME";
     
     public ItasaOffline(File f, boolean read) throws JDOMException, IOException{
         initialize(f, read);
@@ -54,5 +57,20 @@ public class ItasaOffline extends AbstractXML{
             }
         }
         return map;
+    }
+    
+    public String[][] initializeReaderLink() throws JDOMException, IOException {
+        String[][] array = null;
+        if (sizeRootChildren() > 0){
+            array = new String[sizeRootChildren()][2];
+            Iterator iter = iteratorRootChildren();
+            int i=-1;
+            while (iter.hasNext()) {
+                Element link = (Element) iter.next();
+                array[++i][0] = link.getChild(TAG_LINK_ITASA_NAME).getText();
+                array[i][1] = link.getChild(TAG_LINK_ITASA_URL).getText();
+            }
+        }
+        return array;
     }
 }

@@ -755,4 +755,8 @@ public class Mediator {
     public void requestSingleAddList(Object selectedItem) {
         core.requestSingleAddList(selectedItem);
     }
+
+    void openWebsite(String url) {
+        core.openWebsite(url);
+    }
 }
