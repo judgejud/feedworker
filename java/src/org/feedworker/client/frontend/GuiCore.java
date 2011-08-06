@@ -1,10 +1,12 @@
 package org.feedworker.client.frontend;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
 
 import org.feedworker.client.frontend.events.EditorPaneEventListener;
@@ -27,7 +29,7 @@ import org.jfacility.java.lang.Lang;
  */
 public class GuiCore {
     private static GuiCore core = null;
-    
+    private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Mediator proxy = Mediator.getIstance();
     private TreeMap<Object, tabInternalShow> mapPaneShows = 
                                     new TreeMap<Object, tabInternalShow>();
@@ -151,5 +153,47 @@ public class GuiCore {
             col = Color.darkGray;
         }
         return col;
+    }
+    
+    public void downloadSub(JTable jt1, JTable jt2, boolean itasa, boolean id) {
+        ArrayList<String> alLinks = new ArrayList<String>();
+        alLinks = addLinks(jt1);
+        if (jt2!=null)
+            alLinks.addAll(addLinks(jt2));
+        if (alLinks.size() > 0)
+            proxy.downloadSub(alLinks, itasa, id);
+        else {
+            String temp = "dalle tabelle";
+            if (!itasa)
+                temp = "dalla tabella";
+            proxy.printAlert("Selezionare almeno un rigo " + temp);
+        }
+    }
+    
+    public void downloadTorrent(JTable jt1, JTable jt2) {
+        if (Lang.verifyTextNotNull(prop.getTorrentDestinationFolder())) {
+            ArrayList<String> alLinks = addLinks(jt1);
+            alLinks.addAll(addLinks(jt2));
+            if (alLinks.size() > 0)
+                proxy.downloadTorrent(alLinks);
+            else
+                proxy.printAlert("Selezionare almeno un rigo dalle tabelle");
+        } else 
+            proxy.printAlert("Non posso salvare perchè non hai specificato "
+                    + "una cartella dove scaricare i file.torrent");
+    }
+    
+    /**Aggiunge i link corrispondenti al true della colonna download nell'arraylist
+     *
+     * @param jt jtable su cui operare
+     * @return Arraylist di stringhe
+     */
+    private ArrayList<String> addLinks(JTable jt) {
+        ArrayList<String> alLinks = new ArrayList<String>();
+        for (int i = 0; i < jt.getRowCount(); i++) {
+            if (jt.getValueAt(i, 3) == Boolean.TRUE)
+                alLinks.add(jt.getValueAt(i, 0).toString());
+        }
+        return alLinks;
     }
 }
