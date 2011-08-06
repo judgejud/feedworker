@@ -574,10 +574,9 @@ public class Kernel implements PropertyChangeListener {
         }
         try {
             ItasaOffline xml = new ItasaOffline(FILE_LINK_ITASA, true);
-            Object[][] array = xml.initializeReaderLink();
-            //TODO FIRE
-            //if (array!=null && array.length > 0) 
-               //ManageListener.fireListEvent(this, array);
+            String[][] array = xml.initializeReaderLink();
+            if (array!=null && array.length > 0)
+               ManageListener.fireFrameEvent(this, array);
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {

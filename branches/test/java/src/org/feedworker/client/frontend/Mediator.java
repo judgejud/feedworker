@@ -63,7 +63,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "402 by "
+                + "404 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
 
@@ -142,42 +142,6 @@ public class Mediator {
 
     String getOperationEnableButton() {
         return ENABLE_BUTTON;
-    }
-
-    /**verifica le tabelle se sono flaggate per i download e invoca il kernel
-     * coi link per il loro download
-     *
-     * @param jt1 tabella1
-     * @param jt2 tabella2
-     * @param itasa tabelle itasa
-     */
-    public void downloadSub(JTable jt1, JTable jt2, boolean itasa, boolean id) {
-        ArrayList<String> alLinks = new ArrayList<String>();
-        alLinks = addLinks(jt1);
-        if (jt2!=null)
-            alLinks.addAll(addLinks(jt2));
-        if (alLinks.size() > 0)
-            core.downloadSub(alLinks, itasa, id);
-        else {
-            String temp = "dalle tabelle";
-            if (!itasa)
-                temp = "dalla tabella";
-            printAlert("Selezionare almeno un rigo " + temp);
-        }
-    }
-
-    public void downloadTorrent(JTable jt1, JTable jt2) {
-        if (Lang.verifyTextNotNull(prop.getTorrentDestinationFolder())) {
-            ArrayList<String> alLinks = addLinks(jt1);
-            alLinks.addAll(addLinks(jt2));
-            if (alLinks.size() > 0)
-                core.downloadTorrent(alLinks);
-            else
-                printAlert("Selezionare almeno un rigo dalle tabelle");
-        } else {
-            printAlert("Non posso salvare perchè non hai specificato "
-                    + "una cartella dove scaricare i file.torrent");
-        }
     }
 
     void runRss() {
@@ -291,20 +255,6 @@ public class Mediator {
         if (!_break) {
             core.saveMap(temp);
         }
-    }
-
-    /**Aggiunge i link corrispondenti al true della colonna download nell'arraylist
-     *
-     * @param jt jtable su cui operare
-     * @return Arraylist di stringhe
-     */
-    ArrayList<String> addLinks(JTable jt) {
-        ArrayList<String> alLinks = new ArrayList<String>();
-        for (int i = 0; i < jt.getRowCount(); i++) {
-            if (jt.getValueAt(i, 3) == Boolean.TRUE)
-                alLinks.add(jt.getValueAt(i, 0).toString());
-        }
-        return alLinks;
     }
 
     public String[] getQualityEnum() {
@@ -758,5 +708,13 @@ public class Mediator {
 
     void openWebsite(String url) {
         core.openWebsite(url);
+    }
+
+    void downloadSub(ArrayList<String> alLinks, boolean itasa, boolean id) {
+        core.downloadSub(alLinks, itasa, id);
+    }
+
+    void downloadTorrent(ArrayList<String> alLinks) {
+        core.downloadTorrent(alLinks);
     }
 }

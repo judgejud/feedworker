@@ -11,6 +11,7 @@ public class FrameEvent extends EventObject {
     private String operaz;
     private int max;
     private boolean icontray;
+    private String[][] menu;
 
     public FrameEvent(Object source, String oper) {
         super(source);
@@ -33,6 +34,11 @@ public class FrameEvent extends EventObject {
         this.icontray = icontray;
     }
 
+    public FrameEvent(Object o, String[][] menu) {
+        super(o);
+        this.menu = menu;
+    }
+
     public boolean isIcontray() {
         return icontray;
     }
@@ -43,5 +49,9 @@ public class FrameEvent extends EventObject {
 
     public int getMax() {
         return max;
+    }
+
+    public String[][] getMenu() {
+        return menu;
     }
 }

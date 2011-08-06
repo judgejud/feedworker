@@ -107,6 +107,15 @@ public class ManageListener {
             myel.objReceived(event);
         }
     }
+    
+    public static synchronized void fireFrameEvent(Object from, String[][] array) {
+        FrameEvent event = new FrameEvent(from, array);
+        Iterator listeners = listenerFrame.iterator();
+        while (listeners.hasNext()) {
+            FrameEventListener myel = (FrameEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
 
     public static synchronized void fireTextPaneEvent(Object from, String msg, 
             String type, boolean statusbar) {

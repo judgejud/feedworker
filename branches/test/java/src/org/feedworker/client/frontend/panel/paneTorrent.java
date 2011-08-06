@@ -59,7 +59,7 @@ public class paneTorrent extends paneAbstract {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (jbDown.isEnabled())
-                    proxy.downloadTorrent(jtTorrent1, jtTorrent2);
+                    core.downloadTorrent(jtTorrent1, jtTorrent2);
             }
         });
 

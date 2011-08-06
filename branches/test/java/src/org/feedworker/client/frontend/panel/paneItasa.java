@@ -119,7 +119,7 @@ public class paneItasa extends paneAbstract {
 
     private void jbDownMouseClicked() {
         if (jbDown.isEnabled()) {
-            proxy.downloadSub(jtItasa, jtMyItasa, true, false);
+            core.downloadSub(jtItasa, jtMyItasa, true, false);
             jbCleanMouseClicked();
         }
     }

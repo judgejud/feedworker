@@ -8,9 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import javax.swing.ButtonGroup;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -62,6 +61,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     private jdResultSearchTv resultSearchTvJD;
     private ProgressDialog progressBar;
     private EnhancedSystemTray systemTray;
+    private JMenu jmItasa;
 
     /** Costruttore */
     public jfMain() {
@@ -201,6 +201,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         applicationJMB.add(jMenuWindowTab());//Visualizza pannelli
         applicationJMB.add(jMenuLAF()); //LAF
         applicationJMB.add(jMenuNotify()); //NOTIFICHE
+        applicationJMB.add(jMenuItasa()); //
         applicationJMB.add(jMenuHelp()); //HELP
         // Install the menu bar in the frame
         setJMenuBar(applicationJMB);
@@ -458,23 +459,8 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     }
     
     private JMenu jMenuItasa(){
-        ArrayList<String[]> array = new ArrayList<String[]>();
-        JMenu jmItasa = new JMenu(" ItalianSubs ");
-        JMenuItem[] jmiItasa = new JMenuItem[array.size()];
-        for (int i=0; i<array.size(); i++){
-            String[] menu = array.get(i);
-            jmiItasa[i] = new JMenuItem(" " + menu[0] + " ");
-            jmiItasa[i].setToolTipText(menu[1]);
-            jmiItasa[i].setActionCommand(menu[1]);
-            jmiItasa[i].addActionListener(new ActionListener()  {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    proxy.openWebsite(e.getActionCommand());
-                }
-            });
-            jmItasa.add(jmiItasa[i]);
-        }
-
+        jmItasa = new JMenu(" ItalianSubs ");
+        jmItasa.setVisible(false);
         return jmItasa;
     }
     
@@ -633,6 +619,23 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         }
         if ((evt.isIcontray()) && (!this.isVisible()))
             systemTray.notifyIncomingFeed();
+        if (evt.getMenu()!=null && evt.getMenu().length>0){
+            String[][] menu = evt.getMenu();
+            JMenuItem[] jmiLink = new JMenuItem[menu.length];
+            for (int i=0; i<menu.length; i++){
+                jmiLink[i] = new JMenuItem(" " + menu[i][0] + " ");
+                jmiLink[i].setToolTipText(menu[i][1]);
+                jmiLink[i].setActionCommand(menu[i][1]);
+                jmiLink[i].addActionListener(new ActionListener()  {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        proxy.openWebsite(e.getActionCommand());
+                    }
+                });
+                jmItasa.add(jmiLink[i]);
+            }
+            jmItasa.setVisible(true);
+        }
     }
 
     /**

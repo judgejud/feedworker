@@ -87,7 +87,7 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
         jbDownload.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.downloadSub(jtable, null, true, true);
+                core.downloadSub(jtable, null, true, true);
                 core.cleanSelect(jtable,3);
             }
         });
