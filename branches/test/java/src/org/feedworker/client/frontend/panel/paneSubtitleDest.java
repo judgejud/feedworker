@@ -86,7 +86,7 @@ public class paneSubtitleDest extends paneAbstract {
         jbSaveRules.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.saveRules(jtable);
+                core.saveRules(jtable.getModel());
             }
         });
 

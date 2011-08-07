@@ -11,13 +11,11 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.swing.JFrame;
-import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.TextPaneEvent;
-import org.feedworker.client.frontend.table.tableSubtitleDest;
 import org.feedworker.core.Kernel;
 import org.feedworker.core.ManageListener;
 import org.feedworker.core.RssParser;
@@ -63,8 +61,16 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "404 by "
+                + "405 by "
                 + FeedWorkerClient.getApplication().getAuthor();
+    }
+    
+    ApplicationSettings getProperties(){
+        return prop;
+    }
+    
+    ManageException getError(){
+        return error;
     }
 
     /**Restituisce il testo itasa
@@ -185,76 +191,6 @@ public class Mediator {
     boolean testSamba(String ip, String dir, String domain, String user,
             String pwd) {
         return core.testSamba(ip, dir, dir, user, pwd);
-    }
-
-    public void saveRules(tableSubtitleDest jtable) {
-        boolean _break = false;
-        TreeMap<KeyRule, ValueRule> temp = new TreeMap<KeyRule, ValueRule>();
-        for (int r = 0; r < jtable.getRowCount(); r++) {
-            int c = -1;
-            String name = ((String) jtable.getValueAt(r, ++c));
-            String season = jtable.getValueAt(r, ++c).toString();
-            String quality = (String) jtable.getValueAt(r, ++c);
-            String path = (String) jtable.getValueAt(r, ++c);
-            boolean rename = false, delete = false;
-            try {
-                rename = Boolean.parseBoolean(jtable.getValueAt(r, ++c).toString());
-            } catch (NullPointerException e) {
-            }
-            try {
-                delete = Boolean.parseBoolean(jtable.getValueAt(r, ++c).toString());
-            } catch (NullPointerException e) {
-            }
-            if (rename && delete) {
-                printAlert("Riga: " + r
-                        + " non possono coesistere entrambi i flag true di rename e delete");
-                _break = true;
-                break;
-            } else {
-                if (Lang.verifyTextNotNull(name)) {
-                    if (delete || Lang.verifyTextNotNull(path)) {
-                        try {
-                            if (Lang.verifyTextNotNull(season)) {
-                                int s = Lang.stringToInt(season);
-                                season = Lang.intToString(s);
-                            } else {
-                                printAlert("Riga: " + r
-                                        + " immettere un numero alla stagione");
-                                _break = true;
-                                break;
-                            }
-                            KeyRule key = new KeyRule(name, season, quality);
-                            ValueRule value = new ValueRule(path, rename, delete);
-                            if (!temp.containsKey(key)) {
-                                temp.put(key, value);
-                            } else {
-                                printAlert("Riga: " + r
-                                        + " trovato duplicato, si prega di correggerlo");
-                                _break = true;
-                                break;
-                            }
-                        } catch (NumberFormatException ex) {
-                            error.launch(ex, getClass(), Lang.intToString(r));
-                            _break = true;
-                            break;
-                        }
-                    } else {
-                        printAlert("Riga: " + r
-                                + " immettere la destinazione per la regola/sub");
-                        _break = true;
-                        break;
-                    }
-                } else {
-                    printAlert("Riga: " + r
-                            + " immettere il nome della regola/sub/serie");
-                    _break = true;
-                    break;
-                }
-            }
-        } //end for
-        if (!_break) {
-            core.saveMap(temp);
-        }
     }
 
     public String[] getQualityEnum() {
@@ -486,30 +422,6 @@ public class Mediator {
         core.bruteRefreshRSS();
     }
 
-    /**Invia alla download station del nas i link torrent selezionati
-     *
-     * @param jt1 tabella1
-     * @param jt2 tabella2
-     */
-    public void fireTorrentToNas(JTable jt1, JTable jt2) {
-        ArrayList<String> al = new ArrayList<String>();
-        for (int i = 0; i < jt1.getRowCount(); i++) {
-            if (jt1.getValueAt(i, 3) == Boolean.TRUE) {
-                al.add(jt1.getValueAt(i, 0).toString());
-                jt1.setValueAt(false, i, 3);
-            }
-        }
-        for (int i = 0; i < jt2.getRowCount(); i++) {
-            if (jt2.getValueAt(i, 3) == Boolean.TRUE) {
-                al.add(jt2.getValueAt(i, 0).toString());
-                jt2.setValueAt(false, i, 3);
-            }
-        }
-        if (al.size() > 0) {
-            core.synoDownloadRedirectory(al);
-        }
-    }
-
     void printError(URISyntaxException e) {
         ManageException.getIstance().launch(e, this.getClass());
     }
@@ -617,30 +529,6 @@ public class Mediator {
         core.removeReminders(numbers);
     }
 
-    public void searchSubItasa(Object show, Object version, boolean complete, 
-                                String season, String episode) {
-        try{
-            boolean check = false;
-            if (Lang.verifyTextNotNull(season)){
-                Lang.stringToInt(season);
-                check = true;
-            }
-            if (Lang.verifyTextNotNull(episode)){
-                Lang.stringToInt(episode);
-                check = true;
-            }
-            if (!check && complete)
-                check = true;
-            if (check)
-                core.searchSubItasa(show, version, complete, season, episode);
-            else 
-                printAlert("Selezionare almeno un elemento di ricerca tra stagione completa,"
-                        + " numero stagione e/o numero episodio");
-        } catch (NumberFormatException e){
-            printAlert("Immettere un numero alla stagione e/o episodio invece di una stringa");
-        }
-    }
-
     public void refreshSingleCalendar(Object value) {
         core.refreshSingleCalendar(value.toString());
     }
@@ -652,30 +540,7 @@ public class Mediator {
     public void undoLastRemoveReminder() {
         
     }
-
-    void invertMenuCheck(int i, boolean value) {
-        boolean check = true;
-        if (i==2){
-            if (!Lang.verifyTextNotNull(prop.getMailTO())||
-                    !Lang.verifyTextNotNull(prop.getMailSMTP())) {
-                check = false;
-                printAlert("Per usare le notifiche email devono essere impostati i campi "
-                        + "MailTO & SMTP");
-            }
-        }
-        if (i==3){
-            if (!Lang.verifyTextNotNull(prop.getGoogleUser())||
-                    !Lang.verifyTextNotNull(prop.getGooglePwd()) || 
-                    !Lang.verifyTextNotNull(prop.getGoogleCalendar())) {
-                check = false;
-                printAlert("Per usare le notifiche sms devono essere impostati i campi "
-                        + "Google User Password Calendar");
-            }
-        }
-        if (check)
-            core.setPropNotify(i,value);
-    }
-
+    
     void printLastDate() {
         printOk("Data & ora ultimo aggiornamento: "+prop.getLastDateTimeRefresh());
     }
@@ -714,7 +579,28 @@ public class Mediator {
         core.downloadSub(alLinks, itasa, id);
     }
 
-    void downloadTorrent(ArrayList<String> alLinks) {
-        core.downloadTorrent(alLinks);
+    void downloadTorrent(ArrayList<String> array) {
+        core.downloadTorrent(array);
+    }
+
+    void saveMap(TreeMap<KeyRule, ValueRule> map) {
+        core.saveMap(map);
+    }
+
+    void synoDownloadRedirectory(ArrayList<String> array) {
+        core.synoDownloadRedirectory(array);
+    }
+
+    public void openFormTV(String name) {
+        core.openItasaID(name);
+    }
+
+    void setPropNotify(int i, boolean value) {
+        core.setPropNotify(i, value);
+    }
+
+    void searchSubItasa(Object show, Object version, boolean complete, 
+                                                String season, String episode) {
+        core.searchSubItasa(show, version, complete, season, episode);
     }
 }

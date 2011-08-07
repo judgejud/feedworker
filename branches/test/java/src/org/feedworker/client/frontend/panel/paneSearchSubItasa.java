@@ -145,7 +145,7 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
     private void jbSearchMouseClicked(){
         if (jcbShow.getSelectedItem()!=null){
             jtable.removeAllRows();
-            proxy.searchSubItasa(jcbShow.getSelectedItem(), jcbVersion.getSelectedItem(), 
+            core.searchSubItasa(jcbShow.getSelectedItem(), jcbVersion.getSelectedItem(), 
                                     jcbComplete.isSelected(), jtfSeason.getText(),
                                     jtfEpisode.getText());
         } else

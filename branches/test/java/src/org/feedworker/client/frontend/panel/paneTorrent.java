@@ -94,7 +94,7 @@ public class paneTorrent extends paneAbstract {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (jbFireNas.isEnabled())
-                    proxy.fireTorrentToNas(jtTorrent1, jtTorrent2);
+                     core.fireTorrentToNas(jtTorrent1, jtTorrent2);
             }
         });
         
