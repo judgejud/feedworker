@@ -45,6 +45,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     //VARIABLES PRIVATE
     private JTabbedPane mainJTP;
     private Mediator proxy;
+    private GuiCore core;
     private ApplicationSettings prop;
     //private Panels
     private paneSetting jpSettings;
@@ -412,7 +413,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         jcbmiNotifyAudioRss.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                proxy.invertMenuCheck(0, ((JCheckBoxMenuItem)e.getSource()).isSelected());
+                core.checkMenuNotify(0, ((JCheckBoxMenuItem)e.getSource()).isSelected());
             }
         });
         jmNotify.add(jcbmiNotifyAudioRss);
@@ -423,7 +424,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         jcbmiNotifyAudioSub.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                proxy.invertMenuCheck(1, ((JCheckBoxMenuItem)e.getSource()).isSelected());
+                core.checkMenuNotify(1, ((JCheckBoxMenuItem)e.getSource()).isSelected());
             }
         });
         jmNotify.add(jcbmiNotifyAudioSub);
@@ -434,7 +435,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         jcbmiNotifyMail.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                proxy.invertMenuCheck(2, ((JCheckBoxMenuItem)e.getSource()).isSelected());
+                core.checkMenuNotify(2, ((JCheckBoxMenuItem)e.getSource()).isSelected());
             }
         });
         jmNotify.add(jcbmiNotifyMail);
@@ -445,7 +446,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         jcbmiNotifySms.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                proxy.invertMenuCheck(3, ((JCheckBoxMenuItem)e.getSource()).isSelected());
+                core.checkMenuNotify(3, ((JCheckBoxMenuItem)e.getSource()).isSelected());
             }
         });
         jmNotify.add(jcbmiNotifySms);

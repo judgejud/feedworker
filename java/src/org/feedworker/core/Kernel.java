@@ -88,8 +88,8 @@ public class Kernel implements PropertyChangeListener {
     // PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
-    private final String SPLIT_POINT = "\\.";
-    private final String[] QUALITY = Quality.toArray();
+    private final String LINK_SCHEDA_ITASA =
+            "http://www.italiansubs.net/index.php?option=com_info&Itemid=12&idserie=";
     private final File FILE_RULE = new File("rules.xml");
     private final File FILE_CALENDAR = new File("calendar.xml");
     private final File FILE_REMINDER = new File("reminder.xml");
@@ -1207,6 +1207,17 @@ public class Kernel implements PropertyChangeListener {
     }
 
     public void openWebsite(String url) {
+        try {
+            SystemFileManager.browse(url);
+        } catch (URISyntaxException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass());
+        }
+    }
+
+    public void openItasaID(String name) {
+        String url = LINK_SCHEDA_ITASA + mapShowItasa.get(name);
         try {
             SystemFileManager.browse(url);
         } catch (URISyntaxException ex) {

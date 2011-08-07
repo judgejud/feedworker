@@ -152,6 +152,17 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
+        JButton jbBrowse = new JButton(" Apri scheda ");
+        jbBrowse.setBorder(BORDER);
+        jbBrowse.setToolTipText("Visualizza la scheda itasa del tab attivo nel browser");
+        jbBrowse.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                if (jtpShows.getSelectedIndex()>-1)
+                    proxy.openFormTV(jtpShows.getSelectedComponent().getName());
+            }
+        });
+        
         JButton jbClose = new JButton(" Close all tabs ");
         jbClose.setBorder(BORDER);
         jbClose.setToolTipText("Chiude tutti i tab aperti");
@@ -168,6 +179,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jpAction.add(jbSee, gbcAction);
         gbcAction.gridx = ++x;
         jpAction.add(jbAdd, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbBrowse, gbcAction);
         gbcAction.gridx = ++x;
         jpAction.add(jbClose, gbcAction);
     }
