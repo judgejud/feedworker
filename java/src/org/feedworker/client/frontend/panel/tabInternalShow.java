@@ -1,5 +1,6 @@
 package org.feedworker.client.frontend.panel;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JEditorPane;
@@ -34,11 +35,15 @@ public class tabInternalShow extends JScrollPane implements TabbedPaneEventListe
         
         jepShow = new JEditorPane();
         jepShow.setContentType("text/html");
+        jepShow.setBackground(Color.LIGHT_GRAY);
+        jepShow.setForeground(Color.BLACK);
         jepShow.setOpaque(false);
         jepShow.setEditable(false);
         
         jepActors = new JEditorPane();
         jepActors.setContentType("text/html");
+        jepActors.setBackground(Color.LIGHT_GRAY);
+        jepShow.setForeground(Color.BLACK);
         jepActors.setOpaque(false);
         jepActors.setEditable(false);
         

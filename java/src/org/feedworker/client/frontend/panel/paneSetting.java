@@ -97,7 +97,7 @@ public class paneSetting extends paneAbstract {
         jbSaveSettings.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
+                core.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
                 jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(), 
                 jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
                 jcbMinuti.getSelectedItem().toString(), 
