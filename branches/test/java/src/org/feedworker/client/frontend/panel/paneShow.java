@@ -130,6 +130,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     @Override
     void initializeButtons() {
         jcbShows = new JComboBox();
+        jcbShows.setMaximumRowCount(20);
         
         JButton jbAdd = new JButton(" Add to my series ");
         jbAdd.setBorder(BORDER);

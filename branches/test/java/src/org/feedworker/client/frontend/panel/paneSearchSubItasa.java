@@ -60,6 +60,7 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
     @Override
     void initializeButtons() {
         jcbShow = new JComboBox();
+        jcbShow.setMaximumRowCount(20);
         jcbVersion = new JComboBox(proxy.getQualityEnum());
         jcbVersion.removeItemAt(jcbVersion.getItemCount()-1);
         jcbComplete = new JCheckBox("Stagione completa");

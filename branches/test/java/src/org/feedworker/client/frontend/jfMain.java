@@ -598,7 +598,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     @Override
     public void objReceived(final FrameEvent evt) {
         if (evt.getOperaz() != null) {
-            if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationEnableButton()))
+            if (evt.getOperaz().equalsIgnoreCase(core.getOperationEnableButton()))
                 changeEnabledButton(true);
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getSearchTV()))
                 resultSearchTvJD.setVisible(true);

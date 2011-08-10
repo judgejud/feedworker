@@ -1093,7 +1093,8 @@ public class Kernel implements PropertyChangeListener {
  
     public void setWriteLaf(String laf, Frame frame){
         try {
-            FeedWorkerClient.getApplication().getLookAndFeelInstance().setLookAndFeelRuntime(laf, frame);
+            FeedWorkerClient.getApplication().getLookAndFeelInstance().
+                                                setLookAndFeelRuntime(laf, frame);
             prop.setApplicationLookAndFeel(laf);
         } catch (NotAvailableLookAndFeelException ex) {
             error.launch(ex, this.getClass());
@@ -1196,7 +1197,9 @@ public class Kernel implements PropertyChangeListener {
     private String downloadImage(String link) throws MalformedURLException, 
                                                                     IOException{
         String[] split = link.split("/");
-        String file = ResourceLocator.getThumbnailShows() + split[split.length-1];
+        String temp = split[split.length-1].replaceAll(":", "");
+        temp = temp.replaceAll("%20", " ");
+        String file = ResourceLocator.getThumbnailShows() + temp;
         File dir = new File(ResourceLocator.getThumbnailShows());
         if (!dir.exists())
             dir.mkdir();
@@ -1205,7 +1208,7 @@ public class Kernel implements PropertyChangeListener {
             Io.downloadSingle(new URL(link.replaceAll(" ", "%20")).openStream(), f);
         return file;
     }
-
+    
     public void openWebsite(String url) {
         try {
             SystemFileManager.browse(url);

@@ -25,7 +25,6 @@ import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
 
-import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
 
@@ -39,7 +38,7 @@ import com.sun.syndication.io.FeedException;
 public class Mediator {
 
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
-    private final String ENABLE_BUTTON = "enableButton";
+    
     private final FileNameExtensionFilter fnfeZIP =
                                 new FileNameExtensionFilter("ZIP file", "zip");
     private static Mediator proxy = null;
@@ -61,12 +60,8 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "405 by "
+                + "406 by "
                 + FeedWorkerClient.getApplication().getAuthor();
-    }
-    
-    ApplicationSettings getProperties(){
-        return prop;
     }
     
     ManageException getError(){
@@ -146,10 +141,6 @@ public class Mediator {
         return core.OPERATION_PROGRESS_INCREMENT;
     }
 
-    String getOperationEnableButton() {
-        return ENABLE_BUTTON;
-    }
-
     void runRss() {
         core.runRss(true);
     }
@@ -195,227 +186,6 @@ public class Mediator {
 
     public String[] getQualityEnum() {
         return Quality.toArray();
-    }
-    /**verifica impostazioni torrent
-     *
-     * @return booleano che le impostazioni sono ok
-     */
-    boolean checkSaveTorrent(String text) {
-        if (!Lang.verifyTextNotNull(text))
-            printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai "
-                    + "scaricare .torrent");
-        return true;
-    }
-
-    /**verifica impostazioni subsf
-     *
-     * @return booleano che le impostazioni sono ok
-     */
-    boolean checkSaveSubsf(String subsf, String mySubsf) {
-        boolean check = true;
-        if (!Lang.verifyTextNotNull(subsf) && !Lang.verifyTextNotNull(mySubsf)) {
-            printAlert("Avviso: Non immettendo link RSS Subsfactory non potrai usare i feed"
-                    + " Subsfactory");
-        } else {
-            try {
-                if (Lang.verifyTextNotNull(subsf)) {
-                    check = testRss(subsf, "subsfactory");
-                }
-                if (check && Lang.verifyTextNotNull(mySubsf)) {
-                    check = testRss(mySubsf, "mysubsfactory");
-                }
-            } catch (MalformedURLException e) {
-                error.launch(e, getClass(), "subsfactory");
-                check = false;
-            }
-        }
-        return check;
-    }
-
-    /**verifica impostazioni itasa
-     *
-     * @return booleano che le impostazioni sono ok
-     */
-    boolean checkSaveItasa(String itasa, String myitasa, String user, String pwd) {
-        boolean check = true;
-        try {
-            if (!Lang.verifyTextNotNull(itasa)
-                    && !Lang.verifyTextNotNull(myitasa)) {
-                printAlert("Avviso: Non immettendo link RSS itasa e/o myitasa non potrai "
-                        + "usare i feed italiansubs");
-            } else {
-                if (Lang.verifyTextNotNull(itasa)) {
-                    check = testRss(itasa, "itasa");
-                }
-                if (check) {
-                    if (Lang.verifyTextNotNull(myitasa)) {
-                        check = testRss(myitasa, "myitasa");
-                    }
-                    if (check) {
-                        if (!Lang.verifyTextNotNull(user)) {
-                            printAlert("Avviso: senza Username Itasa non potrai scaricare i "
-                                    + "subs");
-                        } else if (!Lang.verifyTextNotNull(new String(pwd))) {
-                            printAlert("Avviso: senza Password Itasa non potrai scaricare i "
-                                    + "subs");
-                        }
-                    }
-                }
-            }
-        } catch (MalformedURLException ex) {
-            error.launch(ex, getClass(), "Itasa");
-            check = false;
-        }
-        return check;
-    }
-
-    boolean checkSaveGlobal(boolean dirLocal, String destSub,
-            String sambaDomain, String sambaIP, String sambaDir,
-            String sambaUser, String sambaPwd) {
-        boolean check = false;
-        if (dirLocal) {
-            if (!Lang.verifyTextNotNull(destSub)) {
-                printAlert("INPUT OBBLIGATORIO: La Destinazione Locale non può "
-                                                                + "essere vuota.");
-            } else {
-                check = true;
-            }
-        } else { // SAMBA selected
-            if (!Lang.verifyTextNotNull(sambaDomain)) {
-                printAlert("INPUT OBBLIGATORIO: Il Dominio Samba non può essere vuoto.");
-            } else if (!Lang.verifyTextNotNull(sambaIP)) {
-                printAlert("INPUT OBBLIGATORIO: L'ip Samba non può essere vuoto.");
-            } else if (!Lang.verifyTextNotNull(sambaDir)) {
-                printAlert("INPUT OBBLIGATORIO: La cartella condivisa Samba non può essere "
-                        + "vuota.");
-            } else if (!Lang.verifyTextNotNull(sambaUser)) {
-                printAlert("INPUT OBBLIGATORIO: L'utente Samba non può essere vuoto.");
-            } else if (!Lang.verifyTextNotNull(sambaPwd)) {
-                printAlert("INPUT OBBLIGATORIO: La password Samba non può essere vuota.");
-            } else if (!proxy.testSamba(sambaIP, sambaDir, sambaDomain,
-                    sambaUser, sambaPwd)) {
-                printAlert("Impossibile connettermi al server/dir condivisa Samba");
-            } else {
-                check = true;
-            }
-        }
-        return check;
-    }
-
-    public boolean saveSettings(boolean dirLocal, String destSub, String sambaDomain,
-            String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
-            String time, String timeout,
-            boolean advancedDownload, boolean runIconized, String itasa,
-            String myitasa, String user, String pwd, boolean autoMyitasa,
-            boolean autoLoadMyItasa, String subsf, String mySubsf, String torrentDest,
-            String mailTO,  String smtp, boolean paneLog, boolean paneSearch, 
-            boolean paneSetting, boolean paneSubDest, boolean paneReminder, 
-            boolean reminder, String googleUser, String googlePwd, String googleCalendar, 
-            boolean paneTorrent, boolean paneCalendar, boolean torrentOption, 
-            boolean paneShow) {
-                
-        String oldLF = prop.getApplicationLookAndFeel();
-        String oldMin = prop.getRefreshInterval();
-        boolean first = prop.isApplicationFirstTimeUsed();
-        boolean save = false;
-        if (checkSaveGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
-                sambaUser, sambaPwd)) {
-            save = true;
-            if (save)
-                save = checkSaveItasa(itasa, myitasa, user, pwd);
-            if (prop.isSubsfactoryOption() && save)
-                save = checkSaveSubsf(subsf, mySubsf);
-            if (prop.isTorrentOption() && save)
-                checkSaveTorrent(torrentDest);
-        }
-        if (save) {
-            setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
-                    sambaUser, sambaPwd, time, timeout, 
-                    advancedDownload, runIconized, reminder);
-            setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
-            setPropSubsf(subsf, mySubsf);
-            setPropTorrent(torrentDest, torrentOption);
-            setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
-            setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
-                            paneReminder, paneTorrent, paneCalendar, paneShow);
-            core.writeProp();
-            if (!oldLF.equals(prop.getApplicationLookAndFeel())) {
-                printAlert("Il Look&Feel selezionato sarà disponibile al riavvio "
-                                                                + "del client.");
-            }
-            if (!prop.isApplicationFirstTimeUsed() && first) {
-                ManageListener.fireFrameEvent(this, ENABLE_BUTTON);
-                runRss();
-            } else {
-                if (Lang.verifyTextNotNull(oldMin)
-                        && !oldMin.equalsIgnoreCase(prop.getRefreshInterval())) {
-                    restartRss();
-                }
-            }
-            printOk("Impostazioni salvate in " + prop.getSettingsFilename());
-        }
-        return save;
-    }
-
-    private void setPropGlobal(boolean dirLocal, String destSub,
-            String sambaDomain, String sambaIP, String sambaDir,
-            String sambaUser, String sambaPwd, String time,
-            String timeout, boolean advancedDownload,
-            boolean runIconized, boolean reminder) {
-        prop.setLocalFolder(dirLocal);
-        prop.setSubtitleDestinationFolder(destSub);
-        prop.setRefreshInterval(time);
-        prop.setCifsShareDomain(sambaDomain);
-        prop.setCifsShareLocation(sambaIP);
-        prop.setCifsSharePath(sambaDir);
-        prop.setCifsShareUsername(sambaUser);
-        prop.setCifsSharePassword(sambaPwd);
-        prop.setHttpTimeout(timeout);
-        prop.setEnableAdvancedDownload(advancedDownload);
-        prop.setEnableIconizedRun(runIconized);
-        prop.setReminderOption(reminder);
-    }
-
-    private void setPropItasa(String itasa, String myitasa, String user,
-            String pwd, boolean auto, boolean autoload) {
-        prop.setItasaFeedURL(itasa);
-        prop.setMyitasaFeedURL(myitasa);
-        prop.setItasaUsername(user);
-        prop.setItasaPassword(pwd);
-        prop.setAutoDownloadMyItasa(auto);
-        prop.setAutoLoadDownloadMyItasa(autoload);
-    }
-    
-    private void setPropSubsf(String subsf, String mySubsf){
-        prop.setSubsfactoryFeedURL(subsf);
-        prop.setMySubsfactoryFeedUrl(mySubsf);
-    }
-    
-    private void setPropAdvisor(String mailTO, String smtp, String googleUser,
-            String googlePwd, String googleCalendar){
-        prop.setMailTO(mailTO);
-        prop.setMailSMTP(smtp);
-        prop.setGoogleUser(googleUser);
-        prop.setGooglePwd(googlePwd);
-        prop.setGoogleCalendar(googleCalendar);
-    }
-    
-    private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
-                                    boolean subdest, boolean reminder, boolean torrent,
-                                    boolean calendar, boolean show){
-        prop.setEnablePaneCalendar(calendar);
-        prop.setEnablePaneLog(log);
-        prop.setEnablePaneSearchSubItasa(search);
-        prop.setEnablePaneSetting(setting);
-        prop.setEnablePaneSubDestination(subdest);
-        prop.setEnablePaneReminder(reminder);
-        prop.setEnablePaneTorrent(torrent);
-        prop.setEnablePaneShow(show);
-    }
-    
-    private void setPropTorrent(String dest, boolean option){
-        prop.setTorrentDestinationFolder(dest);
-        prop.setTorrentOption(option);
     }
 
     void bruteRefresh() {
@@ -602,5 +372,9 @@ public class Mediator {
     void searchSubItasa(Object show, Object version, boolean complete, 
                                                 String season, String episode) {
         core.searchSubItasa(show, version, complete, season, episode);
+    }
+
+    void writeSettings() {
+        core.writeProp();
     }
 }
