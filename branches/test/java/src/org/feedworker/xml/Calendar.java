@@ -110,7 +110,7 @@ public class Calendar extends AbstractXML{
                 int i=-1;
                 obj[++i]=calendar.getChild(TAG_CALENDAR_ID_TVRAGE).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_NAME).getText();
-                obj[++i]=Boolean.parseBoolean(calendar.getChild(TAG_CALENDAR_STATUS).getText());
+                obj[++i]=calendar.getChild(TAG_CALENDAR_STATUS).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_DAY).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_EPISODE).getText();
                 obj[++i]=calendar.getChild(TAG_CALENDAR_LAST_TITLE).getText();

@@ -229,11 +229,13 @@ public class Common {
         return pos;
     }
     
-    public static boolean getStatus(String text){
-        if (text.equalsIgnoreCase("Final Season") || 
-                text.equalsIgnoreCase("Canceled/Ended"))
-            return true;
-        else
-            return false;
+    public static int getStatus(String text){
+        if (text.equalsIgnoreCase("Final Season"))
+            return 1;
+        else if (text.equalsIgnoreCase("Canceled/Ended"))
+            return 0;
+        else if (text.equalsIgnoreCase("New Series"))
+            return 2;
+        return -1;
     }
 }
