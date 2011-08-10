@@ -68,6 +68,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     public jfMain() {
         super();
         proxy = Mediator.getIstance();
+        core = GuiCore.getInstance();
         prop = proxy.getSettings();
         systemTray = EnhancedSystemTray.getInstance(this);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

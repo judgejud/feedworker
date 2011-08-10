@@ -29,7 +29,7 @@ public class tableCalendar extends tableAbstract{
         super(nome);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
 
-            Class[] types = new Class[]{String.class, String.class, Boolean.class, 
+            Class[] types = new Class[]{String.class, String.class, Integer.class, 
                             String.class, String.class, String.class, Date.class, 
                             String.class, String.class, Date.class};
 
@@ -87,11 +87,22 @@ public class tableCalendar extends tableAbstract{
             setText(value.toString());
             setFont(font);
             setOpaque(true);
-
-            Boolean flag = (Boolean)table.getValueAt(row, 2);
-            if (flag){
+            int status; 
+            try{
+                String text = table.getValueAt(row, 2).toString();
+                status = (Integer.parseInt(text));
+            } catch (NumberFormatException npe){
+                status=-1;
+            }
+            if (status==0){
                 setBackground(Color.red);
-                setToolTipText("Series finale");
+                setToolTipText("Serie cancellata/terminata");
+            } else if (status==1){
+                setBackground(Color.orange);
+                setToolTipText("Ultima stagione");
+            } else if (status==2){
+                setBackground(Color.green);
+                setToolTipText("Nuova serie");
             } else {
                 setBackground(table.getBackground());
                 setToolTipText(null);
