@@ -1,9 +1,12 @@
 IMPLEMENTARE
 -salvare in automatico l'ultima data di aggiornamento se myitasa down auto is true
+-fare caricamento show sotto thread
 -feed rss sotto thread
 -fare caricamento xml sotto thread
--ripristino files backuppati
+-inserire un refresh active show
+-sistemare la tabella reminder aggiungendo un undo last remove
 
+ripristino files backuppati
 destinazione avanzata in mixed mode
 aggiungere versioning automatico all'applicazione
 aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
@@ -18,7 +21,6 @@ introdurre trama singola puntata (da che fonte?)
 
 CORREZIONI:
 -migliorare il fire alla reminder considerando la regola delete.
--sistemare la tabella reminder aggiungendo un undo last remove
 
 PUNTI INTERROGATIVI
 aspectj? log4j?

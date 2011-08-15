@@ -157,18 +157,23 @@ public class Common {
      * @return icona
      */
     public static Image getResourceIcon(String name) {
-        ImageIcon icon = new ImageIcon(
-                ResourceLocator.convertStringToURL(getResourcePath(name)));
-        if (OS.isWindows()) {
+        ImageIcon icon = getImage(name);
+        if (OS.isWindows())
             icon = Swing.scaleImageARGB(icon, 16, 16);
-        }
         return icon.getImage();
     }
     
     public static ImageIcon getResourceImageIcon(String name) {
-        ImageIcon icon = new ImageIcon(
+        return Swing.scaleImageARGB(getImage(name), 24, 24);
+    }
+    
+    private static ImageIcon getImage(String name){
+        return new ImageIcon(
                 ResourceLocator.convertStringToURL(getResourcePath(name)));
-        return Swing.scaleImageARGB(icon, 24, 24);
+    }
+    
+    public static ImageIcon getResourceImageButton(String name) {
+        return Swing.scaleImageARGB(getImage(name), 25, 25);
     }
 
     public static Image getResourceImage(String name) {
@@ -195,18 +200,16 @@ public class Common {
                 num = Lang.stringToInt(text.substring(1, 3));
             } catch (NumberFormatException nfe) {
             }
-            if (num > -1) {
+            if (num > -1)
                 number = Lang.intToString(num);
-            }
         } else if (first.equalsIgnoreCase("e")) {
             int num = -1;
             try {
                 num = Lang.stringToInt(text.substring(1, 3));
             } catch (NumberFormatException nfe) {
             }
-            if (num > -1) {
+            if (num > -1)
                 number = "1";
-            }
         }
         return number;
     }

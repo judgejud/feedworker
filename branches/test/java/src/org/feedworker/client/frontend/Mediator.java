@@ -1,8 +1,6 @@
 package org.feedworker.client.frontend;
 //IMPORT JAVA
-import java.awt.Component;
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -23,10 +21,6 @@ import org.feedworker.exception.ManageException;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
-import org.feedworker.util.Common;
-
-import org.jfacility.java.lang.SystemProperty;
-import org.jfacility.javax.swing.Swing;
 
 import com.sun.syndication.io.FeedException;
 
@@ -36,11 +30,7 @@ import com.sun.syndication.io.FeedException;
  * @author luca
  */
 public class Mediator {
-
-    private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
     
-    private final FileNameExtensionFilter fnfeZIP =
-                                new FileNameExtensionFilter("ZIP file", "zip");
     private static Mediator proxy = null;
     private Kernel core = Kernel.getIstance();
     private ApplicationSettings prop = ApplicationSettings.getIstance();
@@ -60,7 +50,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "407 by "
+                + "408 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -228,10 +218,6 @@ public class Mediator {
         return ApplicationSettings.getIstance();
     }
 
-    Image getIncomingFeedIcon() {
-        return Common.getResourceIcon(INCOMING_FEED_ICON_FILE_NAME);
-    }
-
     Image getApplicationIcon() {
         return FeedWorkerClient.getApplication().getIcon();
     }
@@ -251,14 +237,7 @@ public class Mediator {
     void printDay(int day) {
         core.searchDay(day);
     }
-
-    void invokeBackup(Component parent) {
-        String name = Swing.getFile(parent, "Creare il file zip per il backup",
-                fnfeZIP, new File(SystemProperty.getUserDir() + File.separator));
-        if (name != null)
-            core.backup(name);
-    }
-
+    
     public void searchTV(String tv) {
         core.detailedSearchShow(tv);
     }
@@ -376,5 +355,9 @@ public class Mediator {
 
     void writeSettings() {
         core.writeProp();
+    }
+
+    void backup(String name) {
+        core.backup(name);
     }
 }

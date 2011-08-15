@@ -17,15 +17,15 @@ public class EnhancedSystemTray {
 
     private static EnhancedSystemTray systemTray = null;
     private Window owner;
-    private Image iconRss, iconSub;
+    private Image iconNormal, iconNew;
     private TrayIcon trayIcon;
     private Mediator proxy = Mediator.getIstance();
 
     private EnhancedSystemTray(Window owner) {
         this.owner = owner;
-        iconRss = proxy.getApplicationIcon();
-        iconSub = proxy.getIncomingFeedIcon();
-        trayIcon = new TrayIcon(owner, iconRss);
+        iconNormal = proxy.getApplicationIcon();
+        iconNew = GuiCore.getInstance().getIncomingFeedIcon();
+        trayIcon = new TrayIcon(owner, iconNormal);
         trayIcon.setJPopuMenu(createJPopupMenu());
         trayIcon.setToolTip(" FeedWorker ");
     }
@@ -33,7 +33,7 @@ public class EnhancedSystemTray {
     public void showSystemTray() {
         try {
             SystemTray tray = SystemTray.getSystemTray();
-            trayIcon.setImage(iconRss);
+            trayIcon.setImage(iconNormal);
             trayIcon.setToolTip(" FeedWorker ");
             tray.add(trayIcon);
         } catch (AWTException e) {
@@ -65,6 +65,6 @@ public class EnhancedSystemTray {
 
     public void notifyIncomingFeed() {
         trayIcon.setToolTip(" FeedWorker - ci sono nuovi feed :) ");
-        trayIcon.setImage(iconSub);
+        trayIcon.setImage(iconNew);
     }
 }

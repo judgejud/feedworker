@@ -40,7 +40,7 @@ public class paneCalendar extends paneAbstract{
 
     @Override
     void initializeButtons() {
-        JButton jbAddRow = new JButton(" + ");
+        JButton jbAddRow = new JButton(core.getIconAdd());
         jbAddRow.setToolTipText("Aggiungi riga/serie alla tabella");
         jbAddRow.setBorder(BORDER);
         jbAddRow.addMouseListener(new MouseAdapter() {
@@ -50,7 +50,7 @@ public class paneCalendar extends paneAbstract{
             }
         });
 
-        JButton jbRemoveRow = new JButton(" - ");
+        JButton jbRemoveRow = new JButton(core.getIconRemove());
         jbRemoveRow.setToolTipText("Rimuovi riga/serie selezionata dalla tabella");
         jbRemoveRow.setBorder(BORDER);
         jbRemoveRow.addMouseListener(new MouseAdapter() {
@@ -60,7 +60,7 @@ public class paneCalendar extends paneAbstract{
             }
         });
         
-        JButton jbRemoveAll = new JButton(" Remove All ");
+        JButton jbRemoveAll = new JButton(core.getIconRemoveAll());
         jbRemoveAll.setToolTipText("Rimuove tutte le serie dalla tabella");
         jbRemoveAll.setBorder(BORDER);
         jbRemoveAll.addMouseListener(new MouseAdapter() {
@@ -70,7 +70,7 @@ public class paneCalendar extends paneAbstract{
             }
         });
 
-        JButton jbRefresh = new JButton(" Aggiorna ");
+        JButton jbRefresh = new JButton(core.getIconRefresh1());
         jbRefresh.setToolTipText("Aggiorna le informazioni sulle serie che hanno data "
                 + "prossima puntata bianca o minore odierna");
         jbRefresh.setBorder(BORDER);
@@ -81,7 +81,7 @@ public class paneCalendar extends paneAbstract{
             }
         });
         
-        JButton jbSingleRefresh = new JButton(" Aggiorna Singolo ");
+        JButton jbSingleRefresh = new JButton(core.getIconRefresh2());
         jbSingleRefresh.setToolTipText("Aggiorna le informazioni sulla serie selezionata");
         jbSingleRefresh.setBorder(BORDER);
         jbSingleRefresh.addMouseListener(new MouseAdapter() {
@@ -91,7 +91,7 @@ public class paneCalendar extends paneAbstract{
             }
         });
 
-        JButton jbImport = new JButton(" Importa ");
+        JButton jbImport = new JButton(core.getIconImport1());
         jbImport.setToolTipText("Importa dai nomi serie di subtitle destination");
         jbImport.setBorder(BORDER);
         jbImport.addMouseListener(new MouseAdapter() {
@@ -101,7 +101,7 @@ public class paneCalendar extends paneAbstract{
             }
         });
         
-        JButton jbImportMyItasa = new JButton(" Importa da myItasa");
+        JButton jbImportMyItasa = new JButton(core.getIconImport2());
         jbImportMyItasa.setToolTipText("Importa dai nomi serie di myItasa");
         jbImportMyItasa.setBorder(BORDER);
         jbImportMyItasa.addMouseListener(new MouseAdapter() {
