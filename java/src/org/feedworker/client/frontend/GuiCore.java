@@ -1,12 +1,17 @@
 package org.feedworker.client.frontend;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Image;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableModel;
 
 import org.feedworker.client.ApplicationSettings;
@@ -24,14 +29,34 @@ import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 
+import org.feedworker.util.Common;
 import org.jfacility.java.awt.AWT;
 import org.jfacility.java.lang.Lang;
+import org.jfacility.java.lang.SystemProperty;
+import org.jfacility.javax.swing.Swing;
 /**
  *
  * @author Administrator
  */
 public class GuiCore {
     private final String ENABLE_BUTTON = "enableButton";
+    private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
+    private final String IMAGE_ADD = "add.png";
+    private final String IMAGE_CLEAN = "clean.png";
+    private final String IMAGE_COPY_LINK = "clipboard.png";
+    private final String IMAGE_DOWNLOAD = "download.png";
+    private final String IMAGE_IMPORT1 = "import1.png";
+    private final String IMAGE_IMPORT2 = "import2.png";
+    private final String IMAGE_NAS = "nas.png";
+    private final String IMAGE_REFRESH1 = "refresh1.png";
+    private final String IMAGE_REFRESH2 = "refresh2.png";
+    private final String IMAGE_REMOVE = "remove.png";
+    private final String IMAGE_REMOVE_ALL = "remove_all.png";
+    private final String IMAGE_SELECT1 = "select1.png";
+    private final String IMAGE_SELECT2 = "select2.png";
+    
+    private final FileNameExtensionFilter fnfeZIP =
+                                new FileNameExtensionFilter("ZIP file", "zip");
     
     private static GuiCore core = null;
     private Mediator proxy = Mediator.getIstance();
@@ -371,8 +396,71 @@ public class GuiCore {
         return save;
     }
     
+    public ImageIcon getIconAdd() {
+        return Common.getResourceImageButton(IMAGE_ADD);
+    }
+    
+    public ImageIcon getIconClean() {
+        return Common.getResourceImageButton(IMAGE_CLEAN);
+    }
+    
+    public ImageIcon getIconCopy() {
+        return Common.getResourceImageButton(IMAGE_COPY_LINK);
+    }
+    
+    public ImageIcon getIconDownload() {
+        return Common.getResourceImageButton(IMAGE_DOWNLOAD);
+    }
+    
+    public ImageIcon getIconImport1() {
+        return Common.getResourceImageButton(IMAGE_IMPORT1);
+    }
+    
+    public ImageIcon getIconImport2() {
+        return Common.getResourceImageButton(IMAGE_IMPORT2);
+    }
+    
+    public ImageIcon getIconNas() {
+        return Common.getResourceImageButton(IMAGE_NAS);
+    }
+    
+    public ImageIcon getIconRefresh1() {
+        return Common.getResourceImageButton(IMAGE_REFRESH1);
+    }
+    
+    public ImageIcon getIconRefresh2() {
+        return Common.getResourceImageButton(IMAGE_REFRESH2);
+    }
+    
+    public ImageIcon getIconRemove() {
+        return Common.getResourceImageButton(IMAGE_REMOVE);
+    }
+    
+    public ImageIcon getIconRemoveAll() {
+        return Common.getResourceImageButton(IMAGE_REMOVE_ALL);
+    }
+    
+    public ImageIcon getIconSelect1() {
+        return Common.getResourceImageButton(IMAGE_SELECT1);
+    }
+    
+    public ImageIcon getIconSelect2() {
+        return Common.getResourceImageButton(IMAGE_SELECT2);
+    }
+    
+    Image getIncomingFeedIcon() {
+        return Common.getResourceIcon(INCOMING_FEED_ICON_FILE_NAME);
+    }
+    
     String getOperationEnableButton() {
         return ENABLE_BUTTON;
+    }
+    
+    void invokeBackup(Component parent) {
+        String name = Swing.getFile(parent, "Creare il file zip per il backup",
+                fnfeZIP, new File(SystemProperty.getUserDir() + File.separator));
+        if (name != null)
+            proxy.backup(name);
     }
     
     private void setPropGlobal(boolean dirLocal, String destSub,

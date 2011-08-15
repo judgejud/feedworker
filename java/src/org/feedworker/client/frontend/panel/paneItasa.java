@@ -59,7 +59,7 @@ public class paneItasa extends paneAbstract {
 
     @Override
     void initializeButtons() {
-        jbAllItasa = new JButton(" Tutti Itasa ");
+        jbAllItasa = new JButton(core.getIconSelect1());
         jbAllItasa.setToolTipText("Seleziona tutti i sub itasa");
         jbAllItasa.setBorder(BORDER);
         jbAllItasa.addMouseListener(new MouseAdapter() {
@@ -69,8 +69,7 @@ public class paneItasa extends paneAbstract {
             }
         });
 
-        jbDown = new JButton(" Download ");
-        //jbDown = new JButton(Common.getResourceImageIcon(proxy.getPNG_DOWNLOAD()));
+        jbDown = new JButton(core.getIconDownload());
         jbDown.setToolTipText("Scarica i sub selezionati");
         jbDown.setBorder(BORDER);
         jbDown.addMouseListener(new MouseAdapter() {
@@ -80,7 +79,7 @@ public class paneItasa extends paneAbstract {
             }
         });
 
-        jbClean = new JButton(" Pulisci ");
+        jbClean = new JButton(core.getIconClean());
         jbClean.setToolTipText("Pulisce le righe selezionate");
         jbClean.setBorder(BORDER);
         jbClean.addMouseListener(new MouseAdapter() {
@@ -90,7 +89,7 @@ public class paneItasa extends paneAbstract {
             }
         });
 
-        jbAllMyItasa = new JButton(" Tutti MyItasa ");
+        jbAllMyItasa = new JButton(core.getIconSelect2());
         jbAllMyItasa.setToolTipText("Seleziona tutti i sub myItasa");
         jbAllMyItasa.setBorder(BORDER);
         jbAllMyItasa.addMouseListener(new MouseAdapter() {

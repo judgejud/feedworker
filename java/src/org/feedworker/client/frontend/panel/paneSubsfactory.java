@@ -53,7 +53,7 @@ public class paneSubsfactory extends paneAbstract {
 
     @Override
     void initializeButtons() {
-        jbDown = new JButton(" Download ");
+        jbDown = new JButton(core.getIconDownload());
         jbDown.setToolTipText("Scarica i sub selezionati");
         jbDown.setBorder(BORDER);
         jbDown.addMouseListener(new MouseAdapter() {
@@ -63,7 +63,7 @@ public class paneSubsfactory extends paneAbstract {
             }
         });
 
-        jbClean = new JButton(" Pulisci ");
+        jbClean = new JButton(core.getIconClean());
         jbClean.setToolTipText("Pulisce le righe selezionate");
         jbClean.setBorder(BORDER);
         jbClean.addMouseListener(new MouseAdapter() {

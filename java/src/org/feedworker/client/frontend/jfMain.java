@@ -172,7 +172,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         jmiBackup.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                proxy.invokeBackup(jfMain.this);
+                core.invokeBackup(jfMain.this);
             }
         });
         fileJM.add(jmiBackup);

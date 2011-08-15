@@ -52,7 +52,7 @@ public class paneTorrent extends paneAbstract {
 
     @Override
     void initializeButtons() {
-        jbDown = new JButton(" Download ");
+        jbDown = new JButton(core.getIconDownload());
         jbDown.setToolTipText("Scarica i .torrent selezionati");
         jbDown.setBorder(BORDER);
         jbDown.addMouseListener(new MouseAdapter() {
@@ -63,7 +63,7 @@ public class paneTorrent extends paneAbstract {
             }
         });
 
-        jbCopyLinks = new JButton(" Copia links ");
+        jbCopyLinks = new JButton(core.getIconCopy());
         jbCopyLinks.setToolTipText("Copia i link dei torrent selezionati nella "
                                 + "clipboard");
         jbCopyLinks.setBorder(BORDER);
@@ -75,7 +75,7 @@ public class paneTorrent extends paneAbstract {
             }
         });
 
-        jbClean = new JButton(" Pulisci ");
+        jbClean = new JButton(core.getIconClean());
         jbClean.setToolTipText("Pulisce le righe selezionate");
         jbClean.setBorder(BORDER);
         jbClean.addMouseListener(new MouseAdapter() {
@@ -86,7 +86,7 @@ public class paneTorrent extends paneAbstract {
             }
         });
 
-        jbFireNas = new JButton(" invia Nas ");
+        jbFireNas = new JButton(core.getIconNas());
         jbFireNas.setToolTipText("invia i link dei torrent selezionati alla "
                             + "download station NAS"); 
         jbFireNas.setBorder(BORDER);
