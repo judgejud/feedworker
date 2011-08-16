@@ -50,7 +50,7 @@ public class paneSubtitleDest extends paneAbstract {
 
     @Override
     void initializeButtons() {
-        JButton jbAddRow = new JButton(" + ");
+        JButton jbAddRow = new JButton(core.getIconAdd());
         jbAddRow.setToolTipText("Aggiungi riga alla tabella");
         jbAddRow.setBorder(BORDER);
         jbAddRow.addMouseListener(new MouseAdapter() {
@@ -60,7 +60,7 @@ public class paneSubtitleDest extends paneAbstract {
             }
         });
 
-        JButton jbRemoveRow = new JButton(" - ");
+        JButton jbRemoveRow = new JButton(core.getIconRemove());
         jbRemoveRow.setToolTipText("Rimuovi riga selezionata dalla tabella");
         jbRemoveRow.setBorder(BORDER);
         jbRemoveRow.addMouseListener(new MouseAdapter() {
@@ -70,7 +70,7 @@ public class paneSubtitleDest extends paneAbstract {
             }
         });
         
-        JButton jbRemoveAll = new JButton(" Remove All ");
+        JButton jbRemoveAll = new JButton(core.getIconRemoveAll());
         jbRemoveAll.setToolTipText("Rimuove tutte le serie dalla tabella");
         jbRemoveAll.setBorder(BORDER);
         jbRemoveAll.addMouseListener(new MouseAdapter() {
@@ -80,7 +80,7 @@ public class paneSubtitleDest extends paneAbstract {
             }
         });
 
-        JButton jbSaveRules = new JButton(" Salva ");
+        JButton jbSaveRules = new JButton(core.getIconSave());
         jbSaveRules.setToolTipText("Salva impostazioni");
         jbSaveRules.setBorder(BORDER);
         jbSaveRules.addMouseListener(new MouseAdapter() {
@@ -90,8 +90,8 @@ public class paneSubtitleDest extends paneAbstract {
             }
         });
 
-        JButton jbAddDir = new JButton(" Destinazione ");
-        jbAddDir.setToolTipText("");
+        JButton jbAddDir = new JButton(core.getIconFolder());
+        jbAddDir.setToolTipText("Destinazione per la riga selezionata");
         jbAddDir.setBorder(BORDER);
         jbAddDir.addMouseListener(new MouseAdapter() {
             @Override

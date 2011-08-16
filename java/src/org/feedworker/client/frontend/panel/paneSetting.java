@@ -89,9 +89,11 @@ public class paneSetting extends paneAbstract {
 
     @Override
     void initializeButtons() {
-        jbSaveSettings = new JButton("Salva");
+        jbSaveSettings = new JButton(core.getIconSave());
+        jbSaveSettings.setToolTipText("Salva");
         jbSaveSettings.setBorder(BORDER);
-        jbAnnullaSettings = new JButton("Annulla");
+        jbAnnullaSettings = new JButton(core.getIconUndo());
+        jbAnnullaSettings.setToolTipText("Annulla");
         jbAnnullaSettings.setBorder(BORDER);
         
         jbSaveSettings.addMouseListener(new MouseAdapter() {
