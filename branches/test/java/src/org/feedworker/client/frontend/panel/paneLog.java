@@ -42,7 +42,8 @@ public class paneLog extends paneAbstract{
 
     @Override
     void initializeButtons() {
-        JButton jbCleanWest = new JButton("Pulisci log sinistro");
+        JButton jbCleanWest = new JButton(core.getIconClean1());
+        jbCleanWest.setToolTipText("Pulisci log sinistro");
         jbCleanWest.setBorder(BORDER);
         jbCleanWest.addMouseListener(new MouseAdapter() {
             @Override
@@ -51,7 +52,8 @@ public class paneLog extends paneAbstract{
             }
         });
         
-        JButton jbCleanEast = new JButton("Pulisci log destro");
+        JButton jbCleanEast = new JButton(core.getIconClean2());
+        jbCleanEast.setToolTipText("Pulisci log destro");
         jbCleanEast.setBorder(BORDER);
         jbCleanEast.addMouseListener(new MouseAdapter() {
             @Override

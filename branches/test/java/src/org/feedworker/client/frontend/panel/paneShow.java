@@ -59,7 +59,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
 
     @Override
     void initializePanel() {
-        JButton jbImport = new JButton("Importa da myItasa");
+        JButton jbImport = new JButton(core.getIconImport2());
+        jbImport.setToolTipText("Importa da myItasa");
         jbImport.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -67,7 +68,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbSave = new JButton("Salva Lista");
+        JButton jbSave = new JButton(core.getIconSave());
+        jbSave.setToolTipText("Salva Lista");
         jbSave.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -76,7 +78,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbRemove = new JButton("Rimuovi selezionato");
+        JButton jbRemove = new JButton(core.getIconRemove());
+        jbRemove.setToolTipText("Rimuovi selezionato");
         jbRemove.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -100,22 +103,24 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         JScrollPane jspList = new JScrollPane(jlSeries);
-        jspList.setPreferredSize(new Dimension(190,800));
-        jspList.setMinimumSize(new Dimension(190,550));
+        jspList.setPreferredSize(new Dimension(190,850));
+        jspList.setMinimumSize(new Dimension(190,590));
         
         JPanel jpWest = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        int y=-1;
-        gbc.gridx = 0;
-        gbc.gridy = ++y;
+        int x=-1;
+        gbc.gridx = ++x;
+        gbc.gridy = 0;
         gbc.insets = BUTTON_SPACE_INSETS;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         jpWest.add(jbImport, gbc);
-        gbc.gridy = ++y;
+        gbc.gridx = ++x;
         jpWest.add(jbSave, gbc);
-        gbc.gridy = ++y;
+        gbc.gridx = ++x;
         jpWest.add(jbRemove, gbc);
-        gbc.gridy = ++y;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 3;
         jpWest.add(jspList, gbc);
         
         jtpShows = new JTabbedPane();
@@ -132,7 +137,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jcbShows = new JComboBox();
         jcbShows.setMaximumRowCount(20);
         
-        JButton jbAdd = new JButton(" Add to my series ");
+        JButton jbAdd = new JButton(core.getIconAdd());
         jbAdd.setBorder(BORDER);
         jbAdd.setToolTipText("Aggiunge il rigo selezionato alle mie serie");
         jbAdd.addMouseListener(new MouseAdapter() {
@@ -142,7 +147,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbSee = new JButton(" Visualizza serie ");
+        JButton jbSee = new JButton(core.getIconSee());
         jbSee.setBorder(BORDER);
         jbSee.setToolTipText("Visualizza info serie selezionata");
         jbSee.addMouseListener(new MouseAdapter() {
@@ -153,7 +158,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbRefresh = new JButton(" Refresh data active tab");
+        JButton jbRefresh = new JButton(core.getIconRefresh2());
         jbRefresh.setBorder(BORDER);
         jbRefresh.setToolTipText("Aggiorna i dati del tab attivo");
         jbRefresh.addMouseListener(new MouseAdapter() {
@@ -164,7 +169,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbBrowse = new JButton(" Apri scheda ");
+        JButton jbBrowse = new JButton(core.getIconWWW());
         jbBrowse.setBorder(BORDER);
         jbBrowse.setToolTipText("Visualizza la scheda itasa del tab attivo nel browser");
         jbBrowse.addMouseListener(new MouseAdapter() {
@@ -175,7 +180,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbClose = new JButton(" Close all tabs ");
+        JButton jbClose = new JButton(core.getIconClose());
         jbClose.setBorder(BORDER);
         jbClose.setToolTipText("Chiude tutti i tab aperti");
         jbClose.addMouseListener(new MouseAdapter() {

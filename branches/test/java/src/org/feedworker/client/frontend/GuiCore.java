@@ -42,9 +42,12 @@ public class GuiCore {
     private final String ENABLE_BUTTON = "enableButton";
     private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
     private final String IMAGE_ADD = "add.png";
-    private final String IMAGE_CLEAN = "clean.png";
+    private final String IMAGE_CLEAN1 = "clean1.png";
+    private final String IMAGE_CLEAN2 = "clean2.png";
+    private final String IMAGE_CLOSE = "close.png";
     private final String IMAGE_COPY_LINK = "clipboard.png";
     private final String IMAGE_DOWNLOAD = "download.png";
+    private final String IMAGE_FOLDER = "folder.png";
     private final String IMAGE_IMPORT1 = "import1.png";
     private final String IMAGE_IMPORT2 = "import2.png";
     private final String IMAGE_NAS = "nas.png";
@@ -52,8 +55,14 @@ public class GuiCore {
     private final String IMAGE_REFRESH2 = "refresh2.png";
     private final String IMAGE_REMOVE = "remove.png";
     private final String IMAGE_REMOVE_ALL = "remove_all.png";
+    private final String IMAGE_RESET = "reset.png";
+    private final String IMAGE_SAVE = "save.png";
+    private final String IMAGE_SEARCH = "search.png";
+    private final String IMAGE_SEE = "see.png";
     private final String IMAGE_SELECT1 = "select1.png";
     private final String IMAGE_SELECT2 = "select2.png";
+    private final String IMAGE_UNDO = "undo.png";
+    private final String IMAGE_WWW = "www.png";
     
     private final FileNameExtensionFilter fnfeZIP =
                                 new FileNameExtensionFilter("ZIP file", "zip");
@@ -400,8 +409,16 @@ public class GuiCore {
         return Common.getResourceImageButton(IMAGE_ADD);
     }
     
-    public ImageIcon getIconClean() {
-        return Common.getResourceImageButton(IMAGE_CLEAN);
+    public ImageIcon getIconClean1() {
+        return Common.getResourceImageButton(IMAGE_CLEAN1);
+    }
+    
+    public ImageIcon getIconClean2() {
+        return Common.getResourceImageButton(IMAGE_CLEAN2);
+    }
+    
+    public ImageIcon getIconClose() {
+        return Common.getResourceImageButton(IMAGE_CLOSE);
     }
     
     public ImageIcon getIconCopy() {
@@ -410,6 +427,10 @@ public class GuiCore {
     
     public ImageIcon getIconDownload() {
         return Common.getResourceImageButton(IMAGE_DOWNLOAD);
+    }
+    
+    public ImageIcon getIconFolder() {
+        return Common.getResourceImageButton(IMAGE_FOLDER);
     }
     
     public ImageIcon getIconImport1() {
@@ -440,12 +461,35 @@ public class GuiCore {
         return Common.getResourceImageButton(IMAGE_REMOVE_ALL);
     }
     
+    public ImageIcon getIconReset() {
+        return Common.getResourceImageButton(IMAGE_RESET);
+    }
+    public ImageIcon getIconSave() {
+        return Common.getResourceImageButton(IMAGE_SAVE);
+    }
+    
+    public ImageIcon getIconSearch() {
+        return Common.getResourceImageButton(IMAGE_SEARCH);
+    }
+    
+    public ImageIcon getIconSee() {
+        return Common.getResourceImageButton(IMAGE_SEE);
+    }
+    
     public ImageIcon getIconSelect1() {
         return Common.getResourceImageButton(IMAGE_SELECT1);
     }
     
     public ImageIcon getIconSelect2() {
         return Common.getResourceImageButton(IMAGE_SELECT2);
+    }
+    
+    public ImageIcon getIconUndo() {
+        return Common.getResourceImageButton(IMAGE_UNDO);
+    }
+    
+    public ImageIcon getIconWWW() {
+        return Common.getResourceImageButton(IMAGE_WWW);
     }
     
     Image getIncomingFeedIcon() {

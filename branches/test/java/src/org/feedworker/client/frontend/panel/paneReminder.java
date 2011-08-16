@@ -47,7 +47,7 @@ public class paneReminder extends paneAbstract{
 
     @Override
     void initializeButtons() {
-        JButton jbRemoveRow = new JButton(" - ");
+        JButton jbRemoveRow = new JButton(core.getIconRemove());
         jbRemoveRow.setToolTipText("Rimuovi riga/serie selezionata dalla tabella");
         jbRemoveRow.setBorder(BORDER);
         jbRemoveRow.addMouseListener(new MouseAdapter() {
@@ -57,7 +57,7 @@ public class paneReminder extends paneAbstract{
             }
         });
         
-        JButton jbClean = new JButton(" Pulisci ");
+        JButton jbClean = new JButton(core.getIconClean1());
         jbClean.setToolTipText("Pulisce le righe selezionate");
         jbClean.setBorder(BORDER);
         jbClean.addMouseListener(new MouseAdapter() {
@@ -67,7 +67,7 @@ public class paneReminder extends paneAbstract{
             }
         });
         
-        JButton jbUndo = new JButton(" Annulla ");
+        JButton jbUndo = new JButton(core.getIconUndo());
         jbUndo.setToolTipText("Annulla ultima rimozione");
         jbUndo.setBorder(BORDER);
         jbUndo.addMouseListener(new MouseAdapter() {

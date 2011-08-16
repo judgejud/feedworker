@@ -63,7 +63,7 @@ public class paneSubsfactory extends paneAbstract {
             }
         });
 
-        jbClean = new JButton(core.getIconClean());
+        jbClean = new JButton(core.getIconClean1());
         jbClean.setToolTipText("Pulisce le righe selezionate");
         jbClean.setBorder(BORDER);
         jbClean.addMouseListener(new MouseAdapter() {
