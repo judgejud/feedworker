@@ -60,6 +60,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     @Override
     void initializePanel() {
         JButton jbImport = new JButton(core.getIconImport2());
+        jbImport.setBorder(BORDER);
         jbImport.setToolTipText("Importa da myItasa");
         jbImport.addMouseListener(new MouseAdapter() {
             @Override
@@ -69,6 +70,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         });
         
         JButton jbSave = new JButton(core.getIconSave());
+        jbSave.setBorder(BORDER);
         jbSave.setToolTipText("Salva Lista");
         jbSave.addMouseListener(new MouseAdapter() {
             @Override
@@ -79,6 +81,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         });
         
         JButton jbRemove = new JButton(core.getIconRemove());
+        jbRemove.setBorder(BORDER);
         jbRemove.setToolTipText("Rimuovi selezionato");
         jbRemove.addMouseListener(new MouseAdapter() {
             @Override
@@ -99,9 +102,10 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() == 2) // Double-click 
-                    newTabShow(((Object[]) jlSeries.getSelectedValue())[0]);
+                    newTabShow(((Object[]) jlSeries.getSelectedValue())[0], false);
             }
         });
+        
         JScrollPane jspList = new JScrollPane(jlSeries);
         jspList.setPreferredSize(new Dimension(190,850));
         jspList.setMinimumSize(new Dimension(190,590));
@@ -154,7 +158,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (jcbShows.getSelectedIndex()>-1)
-                    newTabShow(jcbShows.getSelectedItem());
+                    newTabShow(jcbShows.getSelectedItem(), false);
             }
         });
         
@@ -164,8 +168,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jbRefresh.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                //if (jtpShows.getSelectedIndex()>-1)
-                    //TODO
+                if (jtpShows.getSelectedIndex()>-1)
+                    newTabShow(jtpShows.getSelectedComponent().getName(), true);
             }
         });
         
@@ -204,13 +208,17 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jpAction.add(jbClose, gbcAction);
     }
     
-    private void newTabShow(Object name){
-        tabInternalShow pane = (tabInternalShow) core.addNewTabShow(name);
-        if (!jtpShows.isAncestorOf(pane)) {
-            jtpShows.addTab(name.toString(), pane);
-            jtpShows.setTabComponentAt(jtpShows.getTabCount() - 1,
-                    new ButtonTabComponent(jtpShows));
-        }
+    private void newTabShow(Object name, boolean refresh){
+        tabInternalShow pane;
+        if (!refresh){
+            pane = (tabInternalShow) core.addNewTabShow(name);
+            if (!jtpShows.isAncestorOf(pane)) {
+                jtpShows.addTab(name.toString(), pane);
+                jtpShows.setTabComponentAt(jtpShows.getTabCount() - 1,
+                        new ButtonTabComponent(jtpShows));
+            }
+        } else
+            pane = (tabInternalShow) core.refreshTabShow(name);
         jtpShows.setSelectedComponent(pane);
     }
 

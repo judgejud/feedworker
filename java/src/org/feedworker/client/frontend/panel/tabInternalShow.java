@@ -77,6 +77,12 @@ public class tabInternalShow extends JScrollPane implements TabbedPaneEventListe
     public void setHtmlActors(String html){
         jepActors.setText(html);
     }
+    
+    public void reset(){
+        jepShow.setText(null);
+        jepActors.setText(null);
+        tabEpisodes.removeAll();
+    }
 
     @Override
     public void objReceived(TabbedPaneEvent evt) {

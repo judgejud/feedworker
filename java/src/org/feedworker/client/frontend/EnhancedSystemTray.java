@@ -23,8 +23,8 @@ public class EnhancedSystemTray {
 
     private EnhancedSystemTray(Window owner) {
         this.owner = owner;
-        iconNormal = proxy.getApplicationIcon();
-        iconNew = GuiCore.getInstance().getIncomingFeedIcon();
+        iconNormal = GuiCore.getInstance().getIconFeedNormal();
+        iconNew = GuiCore.getInstance().getIconFeedNew();
         trayIcon = new TrayIcon(owner, iconNormal);
         trayIcon.setJPopuMenu(createJPopupMenu());
         trayIcon.setToolTip(" FeedWorker ");
