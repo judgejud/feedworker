@@ -3,6 +3,7 @@ package org.feedworker.client.frontend;
 //IMPORT JAVA
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -17,6 +18,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
@@ -42,6 +44,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     //VARIABLES PRIVATE FINAL
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
+    private final Font FONT = new Font("Arial", Font.PLAIN, 12);
     //VARIABLES PRIVATE
     private JTabbedPane mainJTP;
     private Mediator proxy;
@@ -466,51 +469,48 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         return jmItasa;
     }
     
-    private JPanel createPopupGoogleCalSMS() {
-        JPanel jpanel = new JPanel();
-        Dimension dim = new Dimension(550, 300);
-        jpanel.setPreferredSize(dim);
+    private JScrollPane createPopupGoogleCalSMS() {
+        JScrollPane jpanel = new JScrollPane();
         jpanel.setVisible(true);
         JTextArea jtaHelp = new JTextArea();
-        jtaHelp.setPreferredSize(dim);
+        jtaHelp.setFont(FONT);
+        jtaHelp.setPreferredSize(new Dimension(530, 100));
         jtaHelp.append("Inanzitutto bisogna avere un accoung google per poter "
                 + "fruire del servizio");
         jtaHelp.append("\nCollegarsi a google calendar al seguente indirizzo "
                 + "http://www.google.com/calendar ");
         jtaHelp.append("\nIn automatico avrete due calendari a disposizione, "
-                + "uno \"vostro\" e un \"google task\" \n(che al momento ignoro cosa sia).");
+                + "uno \"vostro\" e un \"google task\".");
         jtaHelp.append("\nAndate nelle impostazioni, a configurazione cellulare, qui "
                 + "immetterete i dati del vostro cellulare \ne il codice di notifica "
                 + "una volta ricevuto.");
         jtaHelp.append("\nNei settings dovrete immettere preferibilmente il nome "
                 + "del calendario \"vostro\"");
-        jpanel.add(jtaHelp);
+        jpanel.setViewportView(jtaHelp);
         return jpanel;
     }
     
-    private JPanel createPopupCalendarImport() {
-        JPanel jpanel = new JPanel();
-        Dimension dim = new Dimension(550, 300);
-        jpanel.setPreferredSize(dim);
+    private JScrollPane createPopupCalendarImport() {
+        JScrollPane jpanel = new JScrollPane();
         jpanel.setVisible(true);
         JTextArea jtaHelp = new JTextArea();
-        jtaHelp.setPreferredSize(dim);
+        jtaHelp.setPreferredSize(new Dimension(500, 70));
+        jtaHelp.setFont(FONT);
         jtaHelp.append("Quando si importano le serie nel calendario è consigliato "
                 + "fare un controllo dei nomi.\nSe nel caso sono presenti nomi di "
-                + "serie sconosciute basta cancellarle e fare la ricerca\n manuale"
+                + "serie sconosciute basta cancellarle e fare la ricerca\nmanuale "
                 + "con il nome giusto ed inserirla.\nN.B. Sarebbe consigliato"
                 + " controllare i nomi delle serie remake con stesso nome.");
-        jpanel.add(jtaHelp);
+        jpanel.setViewportView(jtaHelp);
         return jpanel;
     }
 
-    private JPanel createPopupInfoFeedColor() {
-        JPanel jpanel = new JPanel();
-        Dimension dim = new Dimension(300, 200);
-        jpanel.setPreferredSize(dim);
+    private JScrollPane createPopupInfoFeedColor() {
+        JScrollPane jpanel = new JScrollPane();
         jpanel.setVisible(true);
         JTextArea jtaHelp = new JTextArea();
-        jtaHelp.setPreferredSize(dim);
+        jtaHelp.setFont(FONT);
+        jtaHelp.setPreferredSize(new Dimension(260, 160));
         jtaHelp.append("Colore ciano: sub per la versione normale"
                 + "\nColore rosso: sub per la versione 720"
                 + "\nColore blu: sub per la versione 1080p"
@@ -521,7 +521,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
                 + "\nColore nero: sub per la versione BRRIP"
                 + "\nColore grigio: sub per la versione BDRIP"
                 + "\nColore viola: sub per la versione bluray");
-        jpanel.add(jtaHelp);
+        jpanel.setViewportView(jtaHelp);
         return jpanel;
     }
 
@@ -530,13 +530,12 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
      * 
      * @return pannello helprolesub
      */
-    private JPanel createPopupRuleHelp() {
-        JPanel jpanel = new JPanel();
-        Dimension dim = new Dimension(550, 300);
-        jpanel.setPreferredSize(dim);
+    private JScrollPane createPopupRuleHelp() {
+        JScrollPane jpanel = new JScrollPane();
         jpanel.setVisible(true);
         JTextArea jtaHelp = new JTextArea();
-        jtaHelp.setPreferredSize(dim);
+        jtaHelp.setFont(FONT);
+        jtaHelp.setPreferredSize(new Dimension(520, 300));
         jtaHelp.append("Serie: inserire il nome del file scaricato sostituendo i "
                 + "\".\" con lo spazio \nesempio: Lost.s06e06.sub.itasa.srt -->lost "
                 + "(n.b. no spazio) \nesempio: Spartacus.Blood.And.Sand.s01e06.sub."
@@ -554,7 +553,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
                 + "selezionare questa opzione \"differenziale\".");
         jtaHelp.append("\n\nPercorso: specificare il percorso dove desiderate che "
                 + "vi estragga il sub.");
-        jpanel.add(jtaHelp);
+        jpanel.setViewportView(jtaHelp);
         return jpanel;
     }
 
@@ -565,7 +564,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     }
 
     /** chiude l'applicazione */
-    protected void applicationClose() {
+    private void applicationClose() {
         this.dispose();
         proxy.closeApp();
     }

@@ -163,10 +163,6 @@ public class Common {
         return icon.getImage();
     }
     
-    public static ImageIcon getResourceImageIcon(String name) {
-        return Swing.scaleImageARGB(getImage(name), 24, 24);
-    }
-    
     private static ImageIcon getImage(String name){
         return new ImageIcon(
                 ResourceLocator.convertStringToURL(getResourcePath(name)));

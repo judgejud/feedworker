@@ -40,7 +40,9 @@ import org.jfacility.javax.swing.Swing;
  */
 public class GuiCore {
     private final String ENABLE_BUTTON = "enableButton";
-    private final String INCOMING_FEED_ICON_FILE_NAME = "IncomingFeedIcon.png";
+    private final String IMAGE_FEED_NEW = "feed2.png";
+    private final String IMAGE_FEED_NORMAL = "ApplicationIcon.png";
+    //private final String IMAGE_FEED_NORMAL = "feed1.png";
     private final String IMAGE_ADD = "add.png";
     private final String IMAGE_CLEAN1 = "clean1.png";
     private final String IMAGE_CLEAN2 = "clean2.png";
@@ -127,6 +129,15 @@ public class GuiCore {
            pane = (tabInternalShow) mapPaneShows.get(name);
         return pane;
     }
+    
+    public tabInternalShow refreshTabShow(Object name){
+        tabInternalShow pane = (tabInternalShow) mapPaneShows.get(name);
+        pane.reset();
+        proxy.infoShow(name.toString());
+        return pane;
+    }
+    
+    
     
     /**Pulisce la tabella specificata dai check
      *
@@ -492,8 +503,12 @@ public class GuiCore {
         return Common.getResourceImageButton(IMAGE_WWW);
     }
     
-    Image getIncomingFeedIcon() {
-        return Common.getResourceIcon(INCOMING_FEED_ICON_FILE_NAME);
+    Image getIconFeedNew() {
+        return Common.getResourceIcon(IMAGE_FEED_NEW);
+    }
+    
+    Image getIconFeedNormal() {
+        return Common.getResourceIcon(IMAGE_FEED_NORMAL);
     }
     
     String getOperationEnableButton() {
