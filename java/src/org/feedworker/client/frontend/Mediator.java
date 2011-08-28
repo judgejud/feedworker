@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.swing.JFrame;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
@@ -50,7 +49,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "409 by "
+                + "412 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     

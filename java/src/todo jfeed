@@ -3,7 +3,6 @@ IMPLEMENTARE
 -fare caricamento show sotto thread
 -feed rss sotto thread
 -fare caricamento xml sotto thread
--inserire un refresh active show
 -sistemare la tabella reminder aggiungendo un undo last remove
 
 ripristino files backuppati
