@@ -308,32 +308,71 @@ public class DownloadThread implements Runnable {
         String[] temp = (namefile.split(split))[0].split(SPLIT_POINT);
         int pos = temp.length - 1;
         String version = searchVersion(temp[pos]);
-        String serieNum;
-        pos = Common.searchPosSeries(temp);
-        if (pos > -1) {
-            serieNum = Common.searchNumberSeries(temp[pos]);
-        } else {
-            serieNum = "1";
-            for (int i = 0; i < temp.length; i++) {
-            }
-        }
+        pos = searchPosSeries(temp);
+        String serieNum = "1";
+        if (pos > -1)
+            serieNum = searchNumberSeries(temp[pos]);
         String name = temp[0];
-        for (int i = 1; i < pos; i++) {
+        for (int i = 1; i < pos; i++)
             name += " " + temp[i];
-        }
         KeyRule key = new KeyRule(name, serieNum, version);
         if (key != null && mapRules != null) {
-            if (mapRules.containsKey(key)) {
+            if (mapRules.containsKey(key))
                 return key;
-            } else {
+            else {
                 key.setQuality(Quality.DIFF.toString());
-                if (mapRules.containsKey(key)) {
+                if (mapRules.containsKey(key))
                     return key;
-                }
             }
         }
         return null;
     }
+    
+    /**
+     * cerca la posizione della stringa corrispondente al numero di serie ed
+     * episodio nell'array; es: s01e01
+     * 
+     * @param _array
+     * @return restituisce la posizione se l'ha trovato, altrimenti -1
+     */
+    private int searchPosSeries(String[] array) {
+        int pos = -1;
+        for (int i = 0; i < array.length; i++) {
+            if (searchNumberSeries(array[i]) != null) {
+                pos = i;
+                break;
+            }
+        }
+        return pos;
+    }
+    
+    /**
+     * cerca il numero della serie nel testo
+     * 
+     * @param text
+     * @return numero serie/stagione
+     */
+    private String searchNumberSeries(String text){
+        String number = null;
+        String first = text.substring(0, 1).toLowerCase();
+        if (first.equalsIgnoreCase("s") && (text.length()==6)) {
+            int num = -1;
+            try {
+                num = Lang.stringToInt(text.substring(1, 3));
+            } catch (NumberFormatException nfe) {} 
+            if (num > -1)
+                number = Lang.intToString(num);
+        } else if (first.equalsIgnoreCase("e")) {
+            int num = -1;
+            try {
+                num = Lang.stringToInt(text.substring(1, 3));
+            } catch (NumberFormatException nfe) {}
+            if (num > -1)
+                number = "1";
+        }
+        return number;
+    }
+    
     /**cerca la versione/qualità del sub/video
      *
      * @param text

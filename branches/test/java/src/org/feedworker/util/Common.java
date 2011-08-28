@@ -10,7 +10,6 @@ import java.util.Locale;
 
 import javax.swing.ImageIcon;
 
-import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.OS;
 import org.jfacility.javax.swing.Swing;
 
@@ -179,53 +178,6 @@ public class Common {
 
     public static String getResourcePath(String name) {
         return ResourceLocator.getResourcePath() + name;
-    }
-
-    /**
-     * cerca il numero della serie nel testo
-     * 
-     * @param text
-     * @return numero serie/stagione
-     */
-    public static String searchNumberSeries(String text) {
-        String number = null;
-        String first = text.substring(0, 1).toLowerCase();
-        if (first.equalsIgnoreCase("s")) {
-            int num = -1;
-            try {
-                num = Lang.stringToInt(text.substring(1, 3));
-            } catch (NumberFormatException nfe) {
-            }
-            if (num > -1)
-                number = Lang.intToString(num);
-        } else if (first.equalsIgnoreCase("e")) {
-            int num = -1;
-            try {
-                num = Lang.stringToInt(text.substring(1, 3));
-            } catch (NumberFormatException nfe) {
-            }
-            if (num > -1)
-                number = "1";
-        }
-        return number;
-    }
-
-    /**
-     * cerca la posizione della stringa corrispondente al numero di serie ed
-     * episodio nell'array; es: s01e01
-     * 
-     * @param _array
-     * @return restituisce la posizione se l'ha trovato, altrimenti -1
-     */
-    public static int searchPosSeries(String[] _array) {
-        int pos = -1;
-        for (int i = 0; i < _array.length; i++) {
-            if (searchNumberSeries(_array[i]) != null) {
-                pos = i;
-                break;
-            }
-        }
-        return pos;
     }
     
     public static int getStatus(String text){
