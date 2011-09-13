@@ -503,6 +503,12 @@ public class GuiCore {
         return Common.getResourceImageButton(IMAGE_WWW);
     }
     
+    public int requestRemoveSeries(Component from){
+        return JOptionPane.showConfirmDialog(from, 
+                                "Vuoi eliminare le serie dalla tabella?", "Info", 
+                                JOptionPane.YES_NO_OPTION);
+    }
+    
     Image getIconFeedNew() {
         return Common.getResourceIcon(IMAGE_FEED_NEW);
     }
@@ -589,7 +595,7 @@ public class GuiCore {
      * @return Arraylist di stringhe
      */
     private ArrayList<String> addLinks(JTable jt) {
-        ArrayList<String> alLinks = new ArrayList<String>();
+        ArrayList<String> alLinks = new ArrayList<>();
         for (int i = 0; i < jt.getRowCount(); i++) {
             if (jt.getValueAt(i, 3) == Boolean.TRUE)
                 alLinks.add(jt.getValueAt(i, 0).toString());

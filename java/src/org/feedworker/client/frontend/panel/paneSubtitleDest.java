@@ -76,7 +76,8 @@ public class paneSubtitleDest extends paneAbstract {
         jbRemoveAll.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                jtable.removeAllRows();
+                if (core.requestRemoveSeries(getParent()) ==0)
+                    jtable.removeAllRows();
             }
         });
 

@@ -44,9 +44,9 @@ public class Show {
         String html = new String("<html><body><center><img src=\""+banner+"\"></img><br>"
                 + "<h1>"+name+"</h1></center>");
         html += "<table width=\"97%\" cellspacing=\"2\" cellpadding=\"2\">";
-        html += "<tr><td><b>Genere/i</b></td><td>"+genres.get(0);
-        for (int i=1; i<genres.size(); i++)
-            html += ", " + genres.get(i);
+        html += "<tr><td><b>Genere/i</b></td><td>";
+        for (int i=0; i<genres.size(); i++)
+            html += genres.get(i) + " ";
         html += "</td></tr>";
         html += "<tr><td valign=\"top\"><b>Trama</b></td><td>"+plot+"</td></tr>";
         html += "<tr><td><b>Network</b></td><td>"+network+"</td></tr>";

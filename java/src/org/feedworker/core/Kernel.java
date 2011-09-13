@@ -4,11 +4,13 @@ import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import java.util.TreeSet;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.ImageIcon;
 import javax.swing.SwingWorker;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
@@ -33,6 +36,7 @@ import org.feedworker.exception.ManageException;
 import org.feedworker.object.*;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
+import org.feedworker.util.ResourceLocator;
 import org.feedworker.util.Samba;
 import org.feedworker.xml.Calendar;
 import org.feedworker.xml.ItasaOnline;
@@ -58,18 +62,11 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import java.io.FileNotFoundException;
-import java.net.URL;
-import javax.swing.ImageIcon;
-import org.feedworker.util.ResourceLocator;
-
-
 /**Motore di Feedworker
  * 
  * @author luca
  */
 public class Kernel implements PropertyChangeListener {
-
     // PUBLIC FINAL VARIABLES
     public final String ITASA = "Itasa";
     public final String SUBSF = "Subsf";
@@ -95,8 +92,7 @@ public class Kernel implements PropertyChangeListener {
     private final File FILE_REMINDER = new File("reminder.xml");
     private final File FILE_MYLIST = new File("mylist.xml");
     private final File FILE_ITASA = new File("itasa.xml");
-    private final File FILE_LINK_ITASA = new File("link_itasa.xml");
-    
+    private final File FILE_LINK_ITASA = new File("link_itasa.xml");    
     // PRIVATE STATIC VARIABLES
     private static Kernel core = null;
     // PRIVATE VARIABLES
@@ -280,7 +276,7 @@ public class Kernel implements PropertyChangeListener {
                 boolean continua = true;
                 if (data != null) {
                     Date confronta = Common.stringDateTime(data);
-                    ArrayList<String> links = new ArrayList<String>();
+                    ArrayList<String> links = new ArrayList<>();
                     for (int i = matrice.size() - 1; i >= 0; i--) {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
                         if (confronta.before(Common.stringDateTime(date_matrix))) {
@@ -664,7 +660,7 @@ public class Kernel implements PropertyChangeListener {
      *            nome file
      */
     public void backup(String name) {
-        ArrayList<File> files = new ArrayList<File>();
+        ArrayList<File> files = new ArrayList<>();
         File s = new File("settings.properties");
         if (FILE_RULE.exists())
             files.add(FILE_RULE);
@@ -713,7 +709,7 @@ public class Kernel implements PropertyChangeListener {
         Object[] show = null;
         try {
             TvRage t = new TvRage();
-            ArrayList<Object[]> al = new ArrayList<Object[]>();
+            ArrayList<Object[]> al = new ArrayList<>();
             for (int i = 0; i < from.size(); i++) {
                 show = from.get(i);
                 if (!tsIdCalendar.contains(show[0])) {
@@ -1248,7 +1244,7 @@ public class Kernel implements PropertyChangeListener {
         @Override
         public ArrayList<Object[]> doInBackground() {
             int progress = 0;
-            ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
+            ArrayList<Object[]> alObjs = new ArrayList<>();
             TreeSet ts = new TreeSet();
             setProgress(progress);
             try {

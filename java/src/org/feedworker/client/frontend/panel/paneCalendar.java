@@ -137,8 +137,10 @@ public class paneCalendar extends paneAbstract{
     }
     
     private void jbRemoveAllRowsMouseClick(){
-        proxy.removeAllShowCalendar();
-        jtable.removeAllRows();
+        if (core.requestRemoveSeries(this)==0){
+            proxy.removeAllShowCalendar();
+            jtable.removeAllRows();
+        }
     }
     
     private void jbRefreshCalendarMouseClick() {
