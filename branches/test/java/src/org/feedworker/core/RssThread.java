@@ -67,7 +67,7 @@ public class RssThread implements Runnable{
      *            link da analizzare
      */
     private void downItasaAuto(Object link) {
-        ArrayList<String> als = new ArrayList<String>();
+        ArrayList<String> als = new ArrayList<>();
         als.add(link.toString());
         /*
         DownloadThread dt = new DownloadThread(map, als, true);

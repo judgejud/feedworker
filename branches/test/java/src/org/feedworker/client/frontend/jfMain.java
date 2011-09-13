@@ -573,9 +573,8 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         int returnCode = JOptionPane.showConfirmDialog(this, "Sei sicuro di "
                 + oper + "?", "Info", JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
-        if (returnCode == 1) {
+        if (returnCode == 1)
             return false;
-        }
         return true;
     }
 
@@ -639,8 +638,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         }
     }
 
-    /**
-     * risponde all'evento di cambiare lo stato (abilitato/disabilitato) dei
+    /**risponde all'evento di cambiare lo stato (abilitato/disabilitato) dei
      * bottoni
      * 
      * @param e
