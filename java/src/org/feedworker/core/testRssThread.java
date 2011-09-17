@@ -23,7 +23,7 @@ import org.jfacility.java.lang.Lang;
  *
  * @author luca
  */
-public class RssThread implements Runnable{
+public class testRssThread implements Runnable{
     
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
@@ -32,7 +32,7 @@ public class RssThread implements Runnable{
     private String url, data, from;
     private boolean download, first;
 
-    RssThread(TreeMap<KeyRule, ValueRule> map, String urlRss, String data, 
+    testRssThread(TreeMap<KeyRule, ValueRule> map, String urlRss, String data, 
                 String from, boolean download, boolean first) {
         this.map = map;
         this.url = urlRss;

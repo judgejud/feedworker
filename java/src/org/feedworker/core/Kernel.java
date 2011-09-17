@@ -1102,6 +1102,10 @@ public class Kernel implements PropertyChangeListener {
     }
 
     public void requestInfoShow(String name) {
+        ShowThread st = new ShowThread(name, mapShowItasa.get(name));
+        Thread t = new Thread(st, "Thread Show");
+        t.start();
+        /*
         ItasaOnline i = new ItasaOnline();
         try {
             Show s = i.showSingle(mapShowItasa.get(name), true);
@@ -1125,6 +1129,7 @@ public class Kernel implements PropertyChangeListener {
         } catch (Exception ex) {
             error.launch(ex, getClass());
         }
+         */
     }
 
     public void saveList(Object[] toArray) {

@@ -74,10 +74,10 @@ class Http {
      * @param pwd
      */
     void connectItasa(String user, String pwd) throws UnsupportedEncodingException,
-            ClientProtocolException, IOException {
+                                            ClientProtocolException, IOException {
         HttpPost post = new HttpPost(ADDRESS_ITASA);
         // parametri presi dall'html form action del sito
-        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
+        List<NameValuePair> lnvp = new ArrayList<>();
         lnvp.add(new BasicNameValuePair("username", user));
         lnvp.add(new BasicNameValuePair("passwd", pwd));
         lnvp.add(new BasicNameValuePair("remember", "yes"));
@@ -181,35 +181,30 @@ class Http {
             throws StringIndexOutOfBoundsException, IOException {
         String search = null;
         boolean subsf = false;
-        if (tag.equalsIgnoreCase(TAG_SUBSF)) {
+        if (tag.equalsIgnoreCase(TAG_SUBSF))
             subsf = true;
-        }
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String line;
         while ((line = br.readLine()) != null) {
             int min = start;
             int max = start + tag.length();
             int len = line.length();
-            if (len < max) {
+            if (len < max)
                 max = len;
-            }
-            if (len < min) {
+            if (len < min)
                 min = len;
-            }
             if (line.substring(min, max).equalsIgnoreCase(tag)) {
                 search = line;
-                if (subsf) {
+                if (subsf)
                     search = search.substring(max);
-                }
                 search = search.substring(search.indexOf('"') + 1);
                 search = search.substring(0, search.indexOf('"'));
                 break;
             }
         }
         br.close();
-        if (subsf && search != null) {
+        if (subsf && search != null)
             search = ADDRESS_SUBSF + search;
-        }
         return search;
     }
 
@@ -251,7 +246,7 @@ class Http {
             throws IOException {
         String id = null;
         String searchID = "   \"id\" : \"";
-        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
+        List<NameValuePair> lnvp = new ArrayList<>();
         lnvp.add(new BasicNameValuePair("action", "login"));
         lnvp.add(new BasicNameValuePair("username", user));
         lnvp.add(new BasicNameValuePair("passwd", pwd));
@@ -273,19 +268,15 @@ class Http {
         return id;
     }
 
-    /**
-     * Aggiunge il link al download redirectory synology
+    /**Aggiunge il link al download redirectory synology
      *
-     * @param url
-     *            url download redirectory
-     * @param id
-     *            id di sessione
-     * @param link
-     *            link da aggiungere
+     * @param url url download redirectory
+     * @param id id di sessione
+     * @param link link da aggiungere
      * @throws IOException
      */
     void synoAddLink(String url, String id, String link) throws IOException {
-        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
+        List<NameValuePair> lnvp = new ArrayList<>();
         lnvp.add(new BasicNameValuePair("id", id));
         lnvp.add(new BasicNameValuePair("action", "addurl"));
         lnvp.add(new BasicNameValuePair("url", link));
@@ -296,7 +287,7 @@ class Http {
 
     InputStream synoStatus(String url, String id) throws IllegalStateException,
             IOException {
-        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
+        List<NameValuePair> lnvp = new ArrayList<>();
         lnvp.add(new BasicNameValuePair("id", id));
         lnvp.add(new BasicNameValuePair("action", "getall"));
         HttpPost post = new HttpPost(url);
@@ -307,7 +298,7 @@ class Http {
 
     void synoClearTask(String url, String id, String username)
             throws IOException {
-        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
+        List<NameValuePair> lnvp = new ArrayList<>();
         lnvp.add(new BasicNameValuePair("id", id));
         lnvp.add(new BasicNameValuePair("action", "clear"));
         lnvp.add(new BasicNameValuePair("username", username));

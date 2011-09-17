@@ -66,7 +66,7 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String TAG_SHOW_ID = "id";
     private final String TAG_SHOW_ID_TVRAGE = "id_tvrage";
     private final String TAG_SHOW_STATUS = "status";
-    private final String TAG_SHOW_THUMBNAIL = "folder_thumb";
+    //private final String TAG_SHOW_THUMBNAIL = "folder_thumb";
     private final String TAG_SHOW_ACTORS = "actors";
     private final String TAG_SHOW_ACTOR_NAME = "name";
     private final String TAG_SHOW_ACTOR_AS = "as";
@@ -132,7 +132,7 @@ public class ItasaOnline extends AbstractQueryXML{
             }
             ArrayList<String[]> actors = null;
             if (flag_actors){
-                actors = new ArrayList<String[]>();
+                actors = new ArrayList<>();
                 it = ((Element)item.getChildren(TAG_SHOW_ACTORS).get(0))
                                 .getChildren().iterator();
                 while (it.hasNext()){
@@ -155,7 +155,7 @@ public class ItasaOnline extends AbstractQueryXML{
         connectHttps(composeUrl(URL_SHOW_LIST, null));            
         checkStatus();
         if (isStatusSuccess()){
-            container = new TreeMap<String, String>();
+            container = new TreeMap<>();
             Iterator iter =  getDescendantsZero(2);
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
@@ -205,7 +205,7 @@ public class ItasaOnline extends AbstractQueryXML{
         checkStatus();
         ArrayList<Subtitle>  subs = null;
         if (isStatusSuccess()){
-            subs = new ArrayList<Subtitle>();
+            subs = new ArrayList<>();
             Iterator iter = getDescendantsZero(2);
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
@@ -235,7 +235,7 @@ public class ItasaOnline extends AbstractQueryXML{
         ArrayList<Subtitle>  subs = null;
         if (isStatusSuccess()){
             if (getResponseCount()>0){
-                subs = new ArrayList<Subtitle>();
+                subs = new ArrayList<>();
                 Iterator iter = getDescendantsZero(2);
                 while (iter.hasNext()){
                     Element item = (Element) iter.next();
@@ -298,7 +298,7 @@ public class ItasaOnline extends AbstractQueryXML{
         params.add(PARAM_AUTHCODE + authcode);
         connectHttps(composeUrl(URL_MYITASA_SHOWS, params));
         checkStatus();
-        ArrayList<String> showsName = new ArrayList<String>();
+        ArrayList<String> showsName = new ArrayList<>();
         if (isStatusSuccess()){
             Iterator iter =  getDescendantsZero(2);
             while (iter.hasNext())
@@ -317,7 +317,7 @@ public class ItasaOnline extends AbstractQueryXML{
         ArrayList<News> container = null;
         if (isStatusSuccess()){
             Iterator iter =  getDescendantsZero(2);
-            container = new ArrayList<News>();
+            container = new ArrayList<>();
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
                 String id = item.getChild(TAG_NEWS_ID).getText();
@@ -380,7 +380,7 @@ public class ItasaOnline extends AbstractQueryXML{
             for (int i=0; i<params.size(); i++)
                 newUrl+= OPERATOR_AND + params.get(i).toString();
         //per vedere la stringa che genera come url per la chiamata all'api itasa
-        System.out.println(newUrl);
+        //System.out.println(newUrl);
         return newUrl;
     }
     
