@@ -58,7 +58,7 @@ public class RssParser {
      */
     public ArrayList<Object[]> read() {
         List rawEntryList = feed.getEntries();
-        ArrayList<Object[]> structuredEntryList = new ArrayList<>();
+        ArrayList<Object[]> structuredEntryList = new ArrayList<Object[]>();
         for (int i = 0; i < rawEntryList.size(); i++) {
             SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
             String temp = rawEntry.getTitle();

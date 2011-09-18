@@ -182,9 +182,9 @@ public class DownloadThread implements Runnable {
     public void run() {
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
         Http http = new Http(connection_Timeout);
-        ArrayList<File> alFile = new ArrayList<>();
-        ArrayList<Object[]> alReminder = new ArrayList<>();
-        ArrayList<String> alNotify = new ArrayList<>();
+        ArrayList<File> alFile = new ArrayList<File>();
+        ArrayList<Object[]> alReminder = new ArrayList<Object[]>();
+        ArrayList<String> alNotify = new ArrayList<String>();
         boolean sub = false;
         try {
             if (itasa)

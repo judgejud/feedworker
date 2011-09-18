@@ -276,7 +276,7 @@ public class Kernel implements PropertyChangeListener {
                 boolean continua = true;
                 if (data != null) {
                     Date confronta = Common.stringDateTime(data);
-                    ArrayList<String> links = new ArrayList<>();
+                    ArrayList<String> links = new ArrayList<String>();
                     for (int i = matrice.size() - 1; i >= 0; i--) {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
                         if (confronta.before(Common.stringDateTime(date_matrix))) {
@@ -660,7 +660,7 @@ public class Kernel implements PropertyChangeListener {
      *            nome file
      */
     public void backup(String name) {
-        ArrayList<File> files = new ArrayList<>();
+        ArrayList<File> files = new ArrayList<File>();
         File s = new File("settings.properties");
         if (FILE_RULE.exists())
             files.add(FILE_RULE);
@@ -709,7 +709,7 @@ public class Kernel implements PropertyChangeListener {
         Object[] show = null;
         try {
             TvRage t = new TvRage();
-            ArrayList<Object[]> al = new ArrayList<>();
+            ArrayList<Object[]> al = new ArrayList<Object[]>();
             for (int i = 0; i < from.size(); i++) {
                 show = from.get(i);
                 if (!tsIdCalendar.contains(show[0])) {
@@ -985,6 +985,7 @@ public class Kernel implements PropertyChangeListener {
 
     public void searchSubItasa(Object show, Object version, boolean complete, 
                                                 String season, String episode) {
+
         String id = mapShowItasa.get(show);
         String _version = null;
         String query = null;
@@ -1249,7 +1250,7 @@ public class Kernel implements PropertyChangeListener {
         @Override
         public ArrayList<Object[]> doInBackground() {
             int progress = 0;
-            ArrayList<Object[]> alObjs = new ArrayList<>();
+            ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
             TreeSet ts = new TreeSet();
             setProgress(progress);
             try {

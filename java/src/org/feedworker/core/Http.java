@@ -77,7 +77,7 @@ class Http {
                                             ClientProtocolException, IOException {
         HttpPost post = new HttpPost(ADDRESS_ITASA);
         // parametri presi dall'html form action del sito
-        List<NameValuePair> lnvp = new ArrayList<>();
+        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
         lnvp.add(new BasicNameValuePair("username", user));
         lnvp.add(new BasicNameValuePair("passwd", pwd));
         lnvp.add(new BasicNameValuePair("remember", "yes"));
@@ -246,7 +246,7 @@ class Http {
             throws IOException {
         String id = null;
         String searchID = "   \"id\" : \"";
-        List<NameValuePair> lnvp = new ArrayList<>();
+        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
         lnvp.add(new BasicNameValuePair("action", "login"));
         lnvp.add(new BasicNameValuePair("username", user));
         lnvp.add(new BasicNameValuePair("passwd", pwd));
@@ -276,7 +276,7 @@ class Http {
      * @throws IOException
      */
     void synoAddLink(String url, String id, String link) throws IOException {
-        List<NameValuePair> lnvp = new ArrayList<>();
+        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
         lnvp.add(new BasicNameValuePair("id", id));
         lnvp.add(new BasicNameValuePair("action", "addurl"));
         lnvp.add(new BasicNameValuePair("url", link));
@@ -286,8 +286,8 @@ class Http {
     }
 
     InputStream synoStatus(String url, String id) throws IllegalStateException,
-            IOException {
-        List<NameValuePair> lnvp = new ArrayList<>();
+                                                                IOException {
+        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
         lnvp.add(new BasicNameValuePair("id", id));
         lnvp.add(new BasicNameValuePair("action", "getall"));
         HttpPost post = new HttpPost(url);
@@ -296,9 +296,8 @@ class Http {
         return res.getEntity().getContent();
     }
 
-    void synoClearTask(String url, String id, String username)
-            throws IOException {
-        List<NameValuePair> lnvp = new ArrayList<>();
+    void synoClearTask(String url, String id, String username) throws IOException {
+        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
         lnvp.add(new BasicNameValuePair("id", id));
         lnvp.add(new BasicNameValuePair("action", "clear"));
         lnvp.add(new BasicNameValuePair("username", username));
