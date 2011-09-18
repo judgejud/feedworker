@@ -595,7 +595,7 @@ public class GuiCore {
      * @return Arraylist di stringhe
      */
     private ArrayList<String> addLinks(JTable jt) {
-        ArrayList<String> alLinks = new ArrayList<>();
+        ArrayList<String> alLinks = new ArrayList<String>();
         for (int i = 0; i < jt.getRowCount(); i++) {
             if (jt.getValueAt(i, 3) == Boolean.TRUE)
                 alLinks.add(jt.getValueAt(i, 0).toString());
