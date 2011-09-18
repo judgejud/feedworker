@@ -87,7 +87,7 @@ public class paneReminder extends paneAbstract{
     private void jbRemoveRowMouseClicked() {
         int rows = jtable.getRowCount();
         if (rows > 0){
-            ArrayList<Integer> numbers = new ArrayList<>();
+            ArrayList<Integer> numbers = new ArrayList<Integer>();
             for (int i=rows-1; i>-1; i--){
                 if (Boolean.parseBoolean(jtable.getValueAt(i, 2).toString())){
                     int row = jtable.convertRowIndexToModel(i);
