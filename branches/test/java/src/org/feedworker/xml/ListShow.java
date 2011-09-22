@@ -8,12 +8,12 @@ import javax.swing.ImageIcon;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
-
 /**
  *
- * @author Administrator
+ * @author Luca
  */
 public class ListShow extends AbstractXML{
+    private final String TAG_SHOW_CATEGORY = "CATEGORY";
     private final String TAG_SHOW_ROOT = "SHOW";
     private final String TAG_SHOW_NAME = "NAME";
     private final String TAG_SHOW_THUMBNAIL = "THUMBNAIL";
