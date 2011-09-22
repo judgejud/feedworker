@@ -19,14 +19,14 @@ import org.jdesktop.swingx.JXTaskPaneContainer;
  *
  * @author Administrator
  */
-public class tabInternalShow extends JScrollPane implements TabbedPaneEventListener{
+public class tabShowInfo extends JScrollPane implements TabbedPaneEventListener{
     private JEditorPane jepShow, jepActors;
     private JXTaskPane taskShow, taskActors, taskEpisodes;
     private JXTaskPaneContainer container;
     private JTabbedPane tabEpisodes;
     private GuiCore core = GuiCore.getInstance();
     
-    public tabInternalShow(String name) {
+    public tabShowInfo(String name) {
         super();
         setName(name);
         setPreferredSize(new Dimension(700, 600));

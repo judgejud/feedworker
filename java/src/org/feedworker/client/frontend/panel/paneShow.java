@@ -1,52 +1,43 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.DefaultListCellRenderer;
 
-import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
-import javax.swing.ListSelectionModel;
 
 import org.feedworker.client.frontend.events.ComboboxEvent;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
 import org.feedworker.client.frontend.events.EditorPaneEvent;
 import org.feedworker.client.frontend.events.EditorPaneEventListener;
-import org.feedworker.client.frontend.events.ListEvent;
-import org.feedworker.client.frontend.events.ListEventListener;
 
 import org.jfacility.javax.swing.ButtonTabComponent;
-import org.jfacility.javax.swing.Swing;
 
 /**TODO: lista ordinata e senza duplicati,
  * @author luca
  */
 public class paneShow extends paneAbstract implements ComboboxEventListener, 
-                                    EditorPaneEventListener, ListEventListener {
+                                                        EditorPaneEventListener{
     
     private static paneShow jpanel = null;
-    private JList jlSeries;
-    private JTabbedPane jtpShows;
+    private JTabbedPane jtpShows, jtpList;
     private JComboBox jcbShows;
-    private DefaultListModel listModel;
+    private JPopupMenu menu = new JPopupMenu("Popup");
     
     private paneShow(){
         super("Show");
         initializePanel();
         initializeButtons();
-        core.setListListener(this);
         core.setComboboxListener(this);
         core.setEditorPaneListener(this);
     }
@@ -65,7 +56,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jbImport.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.importNameListFromMyItasa();
+                importFromMyItasa();
             }
         });
         
@@ -75,8 +66,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jbSave.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                if (listModel.getSize()>0)
-                    proxy.saveList(listModel.toArray());
+                //if (jlSeries.getSizeModel()>0)
+                    //proxy.saveList(jlSeries.getArrayModel());
             }
         });
         
@@ -86,29 +77,50 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jbRemove.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                int index = jlSeries.getSelectedIndex();
-                if (index>-1)
-                    listModel.remove(index);
+                //jlSeries.removeSelectedItem();
             }
         });
         
-        listModel = new DefaultListModel();
-        jlSeries = new JList(listModel);
-        jlSeries.setCellRenderer(new GraphicList());
-        jlSeries.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        jlSeries.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-        jlSeries.setVisibleRowCount(-1);
+        jtpList = new JTabbedPane();
+        jtpList.setPreferredSize(new Dimension(190, 850));
+        jtpList.setMinimumSize(new Dimension(190, 600));
+        
+        /*
         jlSeries.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (evt.getClickCount() == 2) // Double-click 
-                    newTabShow(((Object[]) jlSeries.getSelectedValue())[0], false);
+                    newTabShow(jlSeries.getListSelectedValue(), false);
+            }
+            @Override
+            public void mousePressed(MouseEvent ev) {
+                if (ev.isPopupTrigger())
+                    menu.show(ev.getComponent(), ev.getX(), ev.getY());
+            }
+            @Override
+            public void mouseReleased(MouseEvent ev) {
+                if (ev.isPopupTrigger())
+                    menu.show(ev.getComponent(), ev.getX(), ev.getY());
             }
         });
-        
-        JScrollPane jspList = new JScrollPane(jlSeries);
-        jspList.setPreferredSize(new Dimension(190,850));
-        jspList.setMinimumSize(new Dimension(190,590));
+        */
+        JMenuItem item = new JMenuItem("Test1");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Menu item Test1");
+            }
+        });
+        menu.add(item);
+
+        item = new JMenuItem("Test2");
+        item.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Menu item Test2");
+            }
+        });
+        menu.add(item);
         
         JPanel jpWest = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -125,7 +137,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
-        jpWest.add(jspList, gbc);
+        jpWest.add(jtpList, gbc);
         
         jtpShows = new JTabbedPane();
         
@@ -147,7 +159,9 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jbAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                proxy.requestSingleAddList(jcbShows.getSelectedItem());
+                if (jtpShows.getSelectedIndex()>-1)
+                    proxy.requestSingleAddList(jtpList.getSelectedComponent().getName(), 
+                                                    jcbShows.getSelectedItem());
             }
         });
         
@@ -209,23 +223,17 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     }
     
     private void newTabShow(Object name, boolean refresh){
-        tabInternalShow pane;
+        tabShowInfo pane;
         if (!refresh){
-            pane = (tabInternalShow) core.addNewTabShow(name);
+            pane = core.addNewTabShow(name);
             if (!jtpShows.isAncestorOf(pane)) {
                 jtpShows.addTab(name.toString(), pane);
                 jtpShows.setTabComponentAt(jtpShows.getTabCount() - 1,
                         new ButtonTabComponent(jtpShows));
             }
         } else
-            pane = (tabInternalShow) core.refreshTabShow(name);
+            pane = core.refreshTabShow(name);
         jtpShows.setSelectedComponent(pane);
-    }
-
-    @Override
-    public void objReceived(ListEvent evt) {
-        for (int i=0; i<evt.getArray().length; i++)
-            listModel.addElement(evt.getArray()[i]);
     }
 
     @Override
@@ -238,28 +246,16 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
 
     @Override
     public void objReceived(EditorPaneEvent evt) {
-        tabInternalShow pane = (tabInternalShow) core.addNewTabShow(evt.getDest());
+        tabShowInfo pane = (tabShowInfo) core.addNewTabShow(evt.getDest());
         if (evt.getTable().equals("show"))
             pane.setHtmlShow(evt.getHtml());
         else if (evt.getTable().equals("actors"))
             pane.setHtmlActors(evt.getHtml());
     }
     
-    class GraphicList extends DefaultListCellRenderer{
-        @Override
-        public Component getListCellRendererComponent(JList list, Object value, 
-                            int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel label = (JLabel) super.getListCellRendererComponent(list, value, 
-                                                    index, isSelected, cellHasFocus);
-            label.setPreferredSize(new Dimension(55, 55));
-            Object values[] = (Object[]) value;
-            label.setName(values[0].toString());
-            label.setOpaque(false);
-            setName(values[0].toString());
-            label.setText(null);
-            label.setToolTipText(values[0].toString());          
-            label.setIcon(Swing.scaleImageARGB((ImageIcon)values[1], 55, 55));
-            return label;
-        }
+    private void importFromMyItasa() {
+        tabShowList pane = core.addNewTabListMyItasa("myItasa");
+        if (pane!=null)
+            jtpList.addTab(pane.getName(), pane);
     }
 } //end class

@@ -256,7 +256,11 @@ public class ItasaOnline extends AbstractQueryXML{
     public ItasaUser login(String user, String pwd) throws JDOMException, IOException, 
                                                                     ItasaException, Exception{
         ArrayList params = new ArrayList();
+        if (user.contains("Ø"))
+            user.replaceAll("Ø", "%C3%98");
         params.add(PARAM_USERNAME + user);
+        if (pwd.contains("Ø"))
+            pwd.replaceAll("Ø", "%C3%98");
         params.add(PARAM_PASSWORD + pwd);
         connectHttps(composeUrl(URL_LOGIN, params));
         checkStatus();

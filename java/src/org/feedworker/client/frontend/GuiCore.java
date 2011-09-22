@@ -23,13 +23,14 @@ import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
-import org.feedworker.client.frontend.panel.tabInternalShow;
+import org.feedworker.client.frontend.panel.tabShowInfo;
+import org.feedworker.client.frontend.panel.tabShowList;
 import org.feedworker.core.ManageListener;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
-
 import org.feedworker.util.Common;
+
 import org.jfacility.java.awt.AWT;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemProperty;
@@ -63,7 +64,7 @@ public class GuiCore {
     private final String IMAGE_SEE = "see.png";
     private final String IMAGE_SELECT1 = "select1.png";
     private final String IMAGE_SELECT2 = "select2.png";
-    private final String IMAGE_UNDO = "undo.png";
+    private final String IMAGE_UNDO = "undo1.png";
     private final String IMAGE_WWW = "www.png";
     
     private final FileNameExtensionFilter fnfeZIP =
@@ -71,8 +72,10 @@ public class GuiCore {
     
     private static GuiCore core = null;
     private Mediator proxy = Mediator.getIstance();
-    private TreeMap<Object, tabInternalShow> mapPaneShows = 
-                                    new TreeMap<Object, tabInternalShow>();
+    private TreeMap<Object, tabShowInfo> mapPaneShows = 
+                                    new TreeMap<Object, tabShowInfo>();
+    private TreeMap<Object, tabShowList> mapListShows = 
+                                    new TreeMap<Object, tabShowList>();
     private ApplicationSettings prop = proxy.getSettings();
     
     public static GuiCore getInstance(){
@@ -119,25 +122,33 @@ public class GuiCore {
             proxy.searchTV(tv);
     }
     
-    public tabInternalShow addNewTabShow(Object name){
-        tabInternalShow pane;
+    public tabShowInfo addNewTabShow(Object name){
+        tabShowInfo pane;
         if (!mapPaneShows.containsKey(name)){
-            pane = new tabInternalShow(name.toString());
+            pane = new tabShowInfo(name.toString());
             mapPaneShows.put(name, pane);
             proxy.infoShow(name.toString());
         } else 
-           pane = (tabInternalShow) mapPaneShows.get(name);
+           pane = (tabShowInfo) mapPaneShows.get(name);
         return pane;
     }
     
-    public tabInternalShow refreshTabShow(Object name){
-        tabInternalShow pane = (tabInternalShow) mapPaneShows.get(name);
+    public tabShowInfo refreshTabShow(Object name){
+        tabShowInfo pane = (tabShowInfo) mapPaneShows.get(name);
         pane.reset();
         proxy.infoShow(name.toString());
         return pane;
     }
     
-    
+    public tabShowList addNewTabListMyItasa(String name){
+        if (!mapListShows.containsKey(name)){
+            tabShowList pane = new tabShowList(name);
+            mapListShows.put(name, pane);
+            proxy.importNameListFromMyItasa();
+            return pane;
+        } else
+            return null;
+    }
     
     /**Pulisce la tabella specificata dai check
      *

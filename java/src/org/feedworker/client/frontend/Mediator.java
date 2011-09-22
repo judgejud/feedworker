@@ -49,7 +49,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "414 by "
+                + "419 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -226,7 +226,7 @@ public class Mediator {
     }
 
     ArrayList<String[]> getPropertiesInfo(){
-        ArrayList<String[]> array = new ArrayList<String[]>();
+        ArrayList<String[]> array = new ArrayList<>();
         array.add(new String[]{"File calendario", "calendar.xml"});
         array.add(new String[]{"File impostazioni", prop.getSettingsFilename()});
         array.add(new String[]{"File regole", "rules.xml"});
@@ -315,8 +315,8 @@ public class Mediator {
         core.saveList(toArray);
     }
 
-    public void requestSingleAddList(Object selectedItem) {
-        core.requestSingleAddList(selectedItem);
+    public void requestSingleAddList(String tab, Object selectedItem) {
+        core.requestSingleAddList(tab, selectedItem);
     }
 
     void openWebsite(String url) {

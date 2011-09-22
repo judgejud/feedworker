@@ -157,8 +157,8 @@ public class ManageListener {
         }
     }
     
-    public static synchronized void fireListEvent(Object from, Object[][] array) {
-        ListEvent event = new ListEvent(from, array);
+    public static synchronized void fireListEvent(Object from, String dest, Object[][] array) {
+        ListEvent event = new ListEvent(from, dest, array);
         Iterator listeners = listenerList.iterator();
         while (listeners.hasNext()) {
             ListEventListener myel = (ListEventListener) listeners.next();

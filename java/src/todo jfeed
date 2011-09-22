@@ -1,6 +1,4 @@
 IMPLEMENTARE
--salvare in automatico l'ultima data di aggiornamento se myitasa down auto is true
--fare caricamento show sotto thread
 -feed rss sotto thread
 -fare caricamento xml sotto thread
 -sistemare la tabella reminder aggiungendo un undo last remove
@@ -32,3 +30,4 @@ http://thetvdb.com/wiki/index.php?title=Programmers_API?
 
 VERIFICARE LE IMPLEMENTAZIONI
 mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
+salvare in automatico l'ultima data di aggiornamento se myitasa down auto is true
