@@ -64,6 +64,11 @@ public class tabShowList extends JScrollPane implements
     void addItem(Object elem){
         model.addElement(elem);
     }
+    
+    void rename(String name){
+        setName(name);
+        list.setName(name);
+    }
 
     @Override
     public void objReceived(TabbedPaneEvent evt) {

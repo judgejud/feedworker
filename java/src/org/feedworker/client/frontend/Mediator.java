@@ -307,8 +307,8 @@ public class Mediator {
         core.requestInfoShow(name);
     }
 
-    public void importNameListFromMyItasa() {
-        core.listImportNameTvFromMyItasa();
+    public void importNameListFromMyItasa(String from) {
+        core.listImportNameTvFromMyItasa(from);
     }
 
     public void saveList(Object[] toArray) {

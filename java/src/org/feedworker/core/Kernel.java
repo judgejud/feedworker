@@ -808,7 +808,8 @@ public class Kernel implements PropertyChangeListener {
                         importTaskList.getProgress());
                 if (importTaskList.isDone() && !importTaskList.isCancelled()) {
                     try {
-                        ManageListener.fireListEvent(this, "myItasa", importTaskList.get());
+                        ManageListener.fireListEvent(this, importTaskList.getDest(), 
+                                importTaskList.get());
                     } catch (Exception e) {
                         error.launch(e, getClass());
                     }
@@ -959,10 +960,12 @@ public class Kernel implements PropertyChangeListener {
         ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
     }
 
-    private void loginItasa(String username, String pwd) {
+    private boolean loginItasa(String username, String pwd) {
+        boolean login = false;
         if (user==null){
             try {
                 user = new ItasaOnline().login(username, pwd);
+                login = true;
             } catch (JDOMException ex) {
                 error.launch(ex, this.getClass());
             } catch (IOException ex) {
@@ -972,7 +975,9 @@ public class Kernel implements PropertyChangeListener {
             } catch (Exception ex) {
                 error.launch(ex, this.getClass());
             }
-        }
+        } else 
+            login = true;
+        return login;
     }
     
     public void checkLoginItasa(String username, String pwd) {
@@ -1037,8 +1042,7 @@ public class Kernel implements PropertyChangeListener {
     }
 
     public void calendarImportNameTvFromMyItasa() {
-        loginItasa(prop.getItasaUsername(), prop.getItasaPassword());
-        if (user!=null){
+        if (loginItasa(prop.getItasaUsername(), prop.getItasaPassword())){
             if (user.isMyitasa()){
                 ArrayList<String> myShows = null;
                 try {
@@ -1159,9 +1163,8 @@ public class Kernel implements PropertyChangeListener {
                                     new Object[][]{{serial, new ImageIcon(file)}});
     }
     
-    public void listImportNameTvFromMyItasa() {
-        loginItasa(prop.getItasaUsername(), prop.getItasaPassword());
-        if (user!=null){
+    public void listImportNameTvFromMyItasa(String dest) {
+        if (loginItasa(prop.getItasaUsername(), prop.getItasaPassword())){
             if (user.isMyitasa()){
                 ArrayList<String> myShows = null;
                 try {
@@ -1178,7 +1181,7 @@ public class Kernel implements PropertyChangeListener {
                 if (myShows!=null && myShows.size()>0){
                     ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_SHOW,
                         myShows.size());
-                    importTaskList = new ImportTaskList(myShows);
+                    importTaskList = new ImportTaskList(myShows, dest);
                     importTaskList.addPropertyChangeListener(this);
                     importTaskList.execute();
                 }
@@ -1189,7 +1192,6 @@ public class Kernel implements PropertyChangeListener {
     
     private String downloadImage(String link) throws MalformedURLException, 
                                                                     IOException{
-        //System.out.println(link);
         String[] split = link.split("/");
         String temp = split[split.length-1].replaceAll(":", "");
         temp = temp.replaceAll("%20", " ");
@@ -1356,8 +1358,14 @@ public class Kernel implements PropertyChangeListener {
     
     class ImportTaskList extends SwingWorker<Object[][], Void> {
         private ArrayList<String> myShows; 
-        public ImportTaskList(ArrayList<String> array){
+        private String dest;
+        public ImportTaskList(ArrayList<String> array, String _dest){
             myShows = array; 
+            dest = _dest;
+        }
+
+        public String getDest() {
+            return dest;
         }
         
         @Override

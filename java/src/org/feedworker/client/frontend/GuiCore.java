@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import java.util.TreeSet;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -24,7 +25,6 @@ import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.client.frontend.panel.tabShowInfo;
-import org.feedworker.client.frontend.panel.tabShowList;
 import org.feedworker.core.ManageListener;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
@@ -74,8 +74,7 @@ public class GuiCore {
     private Mediator proxy = Mediator.getIstance();
     private TreeMap<Object, tabShowInfo> mapPaneShows = 
                                     new TreeMap<Object, tabShowInfo>();
-    private TreeMap<Object, tabShowList> mapListShows = 
-                                    new TreeMap<Object, tabShowList>();
+    private TreeSet<String> setListShows = new TreeSet<String>();
     private ApplicationSettings prop = proxy.getSettings();
     
     public static GuiCore getInstance(){
@@ -140,14 +139,14 @@ public class GuiCore {
         return pane;
     }
     
-    public tabShowList addNewTabListMyItasa(String name){
-        if (!mapListShows.containsKey(name)){
-            tabShowList pane = new tabShowList(name);
-            mapListShows.put(name, pane);
-            proxy.importNameListFromMyItasa();
-            return pane;
-        } else
-            return null;
+    public boolean checkTabListShow(String name){
+        if (!setListShows.contains(name)){
+            setListShows.add(name);
+            return true;
+        } else{
+            printAlert("nome tab esistente");
+            return false;
+        }
     }
     
     /**Pulisce la tabella specificata dai check
