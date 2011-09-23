@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -12,6 +13,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
@@ -77,7 +79,27 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jbRemove.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                //jlSeries.removeSelectedItem();
+                ((tabShowList)jtpList.getSelectedComponent()).removeSelectedItem();
+            }
+        });
+        
+        JButton jbAddCategory = new JButton("+");
+        jbAddCategory.setBorder(BORDER);
+        jbAddCategory.setToolTipText("Aggiungi categoria");
+        jbAddCategory.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                addCat();
+            }
+        });
+        
+        JButton jbRenameCategory = new JButton("Rename");
+        jbRenameCategory.setBorder(BORDER);
+        jbRenameCategory.setToolTipText("Rinomina categoria");
+        jbRenameCategory.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                renameCat();
             }
         });
         
@@ -134,9 +156,13 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jpWest.add(jbSave, gbc);
         gbc.gridx = ++x;
         jpWest.add(jbRemove, gbc);
+        gbc.gridx = ++x;
+        jpWest.add(jbAddCategory, gbc);
+        gbc.gridx = ++x;
+        jpWest.add(jbRenameCategory, gbc);
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 3;
+        gbc.gridwidth = 5;
         jpWest.add(jtpList, gbc);
         
         jtpShows = new JTabbedPane();
@@ -159,7 +185,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jbAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                if (jtpShows.getSelectedIndex()>-1)
+                if (jtpShows.getSelectedIndex()>-1 && jtpList.getSelectedIndex()>-1)
                     proxy.requestSingleAddList(jtpList.getSelectedComponent().getName(), 
                                                     jcbShows.getSelectedItem());
             }
@@ -254,8 +280,27 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     }
     
     private void importFromMyItasa() {
-        tabShowList pane = core.addNewTabListMyItasa("myItasa");
-        if (pane!=null)
+        if (jtpList.getSelectedIndex()>-1)
+            proxy.importNameListFromMyItasa(jtpList.getSelectedComponent().getName());
+        else
+            proxy.printAlert("Selezionare/aggiungere una categoria per poter importare");
+    }
+    
+    private void addCat(){
+        String cat = JOptionPane.showInputDialog(this, "Dare un nome alla categoria/tab");
+        if (cat!=null && core.checkTabListShow(cat)) {
+            tabShowList pane = new tabShowList(cat);
             jtpList.addTab(pane.getName(), pane);
+        }
+    }
+    
+    private void renameCat(){
+        if (jtpList.getSelectedIndex()>-1){
+            String cat = JOptionPane.showInputDialog(this, "Dare un nome alla categoria/tab");
+            if (cat!=null && core.checkTabListShow(cat)) {
+                jtpList.setTitleAt(jtpList.getSelectedIndex(), cat);
+                ((tabShowList)jtpList.getSelectedComponent()).rename(cat);
+            }
+        }
     }
 } //end class
