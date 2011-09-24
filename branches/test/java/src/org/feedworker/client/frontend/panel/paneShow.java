@@ -1,7 +1,6 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,14 +22,15 @@ import org.feedworker.client.frontend.events.ComboboxEventListener;
 import org.feedworker.client.frontend.events.EditorPaneEvent;
 import org.feedworker.client.frontend.events.EditorPaneEventListener;
 
+import org.feedworker.client.frontend.events.TabbedPaneEvent;
+import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 import org.jfacility.javax.swing.ButtonTabComponent;
 
 /**TODO: lista ordinata e senza duplicati,
  * @author luca
  */
 public class paneShow extends paneAbstract implements ComboboxEventListener, 
-                                                        EditorPaneEventListener{
-    
+                                    EditorPaneEventListener, TabbedPaneEventListener{
     private static paneShow jpanel = null;
     private JTabbedPane jtpShows, jtpList;
     private JComboBox jcbShows;
@@ -42,6 +42,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         initializeButtons();
         core.setComboboxListener(this);
         core.setEditorPaneListener(this);
+        core.setTabbedPaneListener(this);
     }
     
     public static paneShow getPanel(){
@@ -73,10 +74,10 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbRemove = new JButton(core.getIconRemove());
-        jbRemove.setBorder(BORDER);
-        jbRemove.setToolTipText("Rimuovi selezionato");
-        jbRemove.addMouseListener(new MouseAdapter() {
+        JButton jbRemoveSerie = new JButton(core.getIconRemove());
+        jbRemoveSerie.setBorder(BORDER);
+        jbRemoveSerie.setToolTipText("Rimuove serie selezionata");
+        jbRemoveSerie.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 ((tabShowList)jtpList.getSelectedComponent()).removeSelectedItem();
@@ -93,13 +94,24 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbRenameCategory = new JButton("Rename");
+        JButton jbRenameCategory = new JButton("R");
         jbRenameCategory.setBorder(BORDER);
-        jbRenameCategory.setToolTipText("Rinomina categoria");
+        jbRenameCategory.setToolTipText("Rinomina la categoria selezionata");
         jbRenameCategory.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 renameCat();
+            }
+        });
+        
+        JButton jbRemoveCategory = new JButton("-");
+        jbRemoveCategory.setBorder(BORDER);
+        jbRemoveCategory.setToolTipText("Rimuove la categoria selezionata e le serie "
+                + "presenti in essa");
+        jbRemoveCategory.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                removeCat();
             }
         });
         
@@ -155,14 +167,16 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         gbc.gridx = ++x;
         jpWest.add(jbSave, gbc);
         gbc.gridx = ++x;
-        jpWest.add(jbRemove, gbc);
+        jpWest.add(jbRemoveSerie, gbc);
         gbc.gridx = ++x;
         jpWest.add(jbAddCategory, gbc);
         gbc.gridx = ++x;
         jpWest.add(jbRenameCategory, gbc);
+        gbc.gridx = ++x;
+        jpWest.add(jbRemoveCategory, gbc);
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 5;
+        gbc.gridwidth = ++x;
         jpWest.add(jtpList, gbc);
         
         jtpShows = new JTabbedPane();
@@ -181,13 +195,14 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         
         JButton jbAdd = new JButton(core.getIconAdd());
         jbAdd.setBorder(BORDER);
-        jbAdd.setToolTipText("Aggiunge il rigo selezionato alle mie serie");
+        jbAdd.setToolTipText("Aggiunge il rigo selezionato della combobox alla "
+                            + "categoria attiva");
         jbAdd.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                if (jtpShows.getSelectedIndex()>-1 && jtpList.getSelectedIndex()>-1)
+                if (jcbShows.getSelectedIndex()>-1 && jtpList.getSelectedIndex()>-1)
                     proxy.requestSingleAddList(jtpList.getSelectedComponent().getName(), 
-                                                    jcbShows.getSelectedItem());
+                                                jcbShows.getSelectedItem());
             }
         });
         
@@ -301,6 +316,21 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
                 jtpList.setTitleAt(jtpList.getSelectedIndex(), cat);
                 ((tabShowList)jtpList.getSelectedComponent()).rename(cat);
             }
+        }
+    }
+    
+    private void removeCat() {
+        if (jtpList.getSelectedIndex()>-1 && core.requestRemoveSeries(this,false)==0)
+            jtpList.remove(jtpList.getSelectedComponent());
+    }
+
+    @Override
+    public void objReceived(TabbedPaneEvent evt) {
+        for (int i=0; i<evt.getName().size(); i++){
+            String cat = evt.getName().get(i);
+            core.checkTabListShow(cat);
+            tabShowList pane = new tabShowList(cat);
+            jtpList.addTab(pane.getName(), pane);
         }
     }
 } //end class
