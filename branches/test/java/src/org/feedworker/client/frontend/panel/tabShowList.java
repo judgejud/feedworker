@@ -15,8 +15,6 @@ import javax.swing.ListSelectionModel;
 import org.feedworker.client.frontend.GuiCore;
 import org.feedworker.client.frontend.events.ListEvent;
 import org.feedworker.client.frontend.events.ListEventListener;
-import org.feedworker.client.frontend.events.TabbedPaneEvent;
-import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 
 import org.jfacility.javax.swing.Swing;
 
@@ -25,8 +23,7 @@ import org.jdesktop.swingx.JXList;
  *
  * @author Administrator
  */
-public class tabShowList extends JScrollPane implements 
-                                    TabbedPaneEventListener, ListEventListener{
+public class tabShowList extends JScrollPane implements ListEventListener{
     private DefaultListModel model = new DefaultListModel();
     private JXList list = new JXList(model);
 
@@ -40,10 +37,9 @@ public class tabShowList extends JScrollPane implements
         list.setLayoutOrientation(JXList.HORIZONTAL_WRAP);
         list.setVisibleRowCount(-1);
         GuiCore.getInstance().setListListener(this);
-        
     }
 
-    Object[] getArrayModel(){
+    public Object[] getArrayModel(){
         return model.toArray();
     }
     
@@ -69,10 +65,9 @@ public class tabShowList extends JScrollPane implements
         setName(name);
         list.setName(name);
     }
-
-    @Override
-    public void objReceived(TabbedPaneEvent evt) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    
+    JXList getComponentList(){
+        return list;
     }
 
     @Override

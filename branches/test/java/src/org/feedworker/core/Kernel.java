@@ -1132,17 +1132,6 @@ public class Kernel implements PropertyChangeListener {
         t.start();
     }
 
-    public void saveList(Object[] toArray) {
-        try {
-            new ListShow(FILE_MYLIST, false).writeList(toArray);
-            printOk("Lista salvata");
-        } catch (IOException ex) {
-            error.launch(ex, getClass());
-        } catch (JDOMException ex) {
-            error.launch(ex, getClass());
-        }
-    }
-
     public void requestSingleAddList(String tab, Object serial) {
         ItasaOnline i = new ItasaOnline();
         String file = null;
@@ -1225,6 +1214,17 @@ public class Kernel implements PropertyChangeListener {
         } catch (URISyntaxException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
+            error.launch(ex, getClass());
+        }
+    }
+
+    public void saveList(TreeMap<String, Object[]> map) {
+        try {
+            new ListShow(FILE_MYLIST, false).writeList(map);
+            printOk("Lista/e salvata/e");
+        } catch (IOException ex) {
+            error.launch(ex, getClass());
+        } catch (JDOMException ex) {
             error.launch(ex, getClass());
         }
     }

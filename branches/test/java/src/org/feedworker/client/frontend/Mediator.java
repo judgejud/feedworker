@@ -49,7 +49,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "421 by "
+                + "422 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -311,10 +311,6 @@ public class Mediator {
         core.listImportNameTvFromMyItasa(from);
     }
 
-    public void saveList(Object[] toArray) {
-        core.saveList(toArray);
-    }
-
     public void requestSingleAddList(String tab, Object selectedItem) {
         core.requestSingleAddList(tab, selectedItem);
     }
@@ -358,5 +354,9 @@ public class Mediator {
 
     void backup(String name) {
         core.backup(name);
+    }
+
+    void saveList(TreeMap<String, Object[]> map) {
+        core.saveList(map);
     }
 }
