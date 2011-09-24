@@ -513,10 +513,12 @@ public class GuiCore {
         return Common.getResourceImageButton(IMAGE_WWW);
     }
     
-    public int requestRemoveSeries(Component from){
-        return JOptionPane.showConfirmDialog(from, 
-                                "Vuoi eliminare le serie dalla tabella?", "Info", 
-                                JOptionPane.YES_NO_OPTION);
+    public int requestRemoveSeries(Component from, boolean table){
+        String msg = "Vuoi eliminare le serie dalla tabella?";
+        if (!table)
+            msg = "Vuoi eliminare le serie e la categoria selezionata?";
+        return JOptionPane.showConfirmDialog(from, msg, "Info", 
+                                            JOptionPane.YES_NO_OPTION);
     }
     
     Image getIconFeedNew() {

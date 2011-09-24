@@ -62,6 +62,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import java.util.Set;
 /**Motore di Feedworker
  * 
  * @author luca
@@ -562,11 +563,13 @@ public class Kernel implements PropertyChangeListener {
         }
         try {
             ListShow xml = new ListShow(FILE_MYLIST, true);
-            Object[][] array = xml.initializeReader();
-            /*TODO FIX
-            if (array!=null && array.length > 0) 
-               ManageListener.fireListEvent(this, array);
-             */
+            TreeMap<String, Object[][]> map = xml.initializeReader();
+            if (map!=null){
+                ArrayList<String> array = new ArrayList<String>(map.keySet());
+                ManageListener.fireTabbedPaneEvent(this, array, null);
+                for (int i=0; i<array.size(); i++)
+                    ManageListener.fireListEvent(this, array.get(i), map.get(array.get(i)));
+            }
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
