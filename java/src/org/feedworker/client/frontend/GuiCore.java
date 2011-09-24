@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableModel;
@@ -25,6 +26,7 @@ import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.client.frontend.panel.tabShowInfo;
+import org.feedworker.client.frontend.panel.tabShowList;
 import org.feedworker.core.ManageListener;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
@@ -716,5 +718,12 @@ public class GuiCore {
     
     private void printAlert(String msg){
         proxy.printAlert(msg);
+    }
+
+    public void saveList(JTabbedPane jtp) {
+        TreeMap<String, Object[]> map = new TreeMap<String, Object[]>();
+        for (int i=0; i<jtp.getTabCount(); i++)
+            map.put(jtp.getTitleAt(i), ((tabShowList) jtp.getComponentAt(i)).getArrayModel());
+        proxy.saveList(map);
     }
 }
