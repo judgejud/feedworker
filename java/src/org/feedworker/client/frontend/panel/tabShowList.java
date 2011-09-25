@@ -3,6 +3,7 @@ package org.feedworker.client.frontend.panel;
 import java.awt.Component;
 import java.awt.Dimension;
 
+import java.awt.Point;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -64,6 +65,10 @@ public class tabShowList extends JScrollPane implements ListEventListener{
     void rename(String name){
         setName(name);
         list.setName(name);
+    }
+    
+    void setListPointSelection(Point p){
+        list.setSelectedIndex(list.locationToIndex(p));
     }
     
     JXList getComponentList(){

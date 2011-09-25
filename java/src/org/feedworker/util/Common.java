@@ -168,7 +168,7 @@ public class Common {
     }
     
     public static ImageIcon getResourceImageButton(String name) {
-        return Swing.scaleImageARGB(getImage(name), 20, 20);
+        return Swing.scaleImageARGB(getImage(name), 24, 24);
     }
 
     public static Image getResourceImage(String name) {
