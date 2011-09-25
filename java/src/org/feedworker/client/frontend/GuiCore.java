@@ -66,6 +66,9 @@ public class GuiCore {
     private final String IMAGE_SEE = "see.png";
     private final String IMAGE_SELECT1 = "select1.png";
     private final String IMAGE_SELECT2 = "select2.png";
+    private final String IMAGE_TAB_ADD = "tab_add.png";
+    private final String IMAGE_TAB_DEL = "tab_del.png";
+    private final String IMAGE_TAB_EDIT = "tab_edit.png";
     private final String IMAGE_UNDO = "undo1.png";
     private final String IMAGE_WWW = "www.png";
     
@@ -333,29 +336,6 @@ public class GuiCore {
             proxy.synoDownloadRedirectory(al);
     }
     
-    void checkMenuNotify(int i, boolean value) {
-        boolean check = true;
-        if (i==2){
-            if (!Lang.verifyTextNotNull(prop.getMailTO())||
-                    !Lang.verifyTextNotNull(prop.getMailSMTP())) {
-                check = false;
-                proxy.printAlert("Per usare le notifiche email devono essere "
-                        + "impostati i campi MailTO & SMTP");
-            }
-        }
-        if (i==3){
-            if (!Lang.verifyTextNotNull(prop.getGoogleUser())||
-                    !Lang.verifyTextNotNull(prop.getGooglePwd()) || 
-                    !Lang.verifyTextNotNull(prop.getGoogleCalendar())) {
-                check = false;
-                proxy.printAlert("Per usare le notifiche sms devono essere "
-                        + "impostati i campi Google User Password Calendar");
-            }
-        }
-        if (check)
-            proxy.setPropNotify(i,value);
-    }
-    
     public void searchSubItasa(Object show, Object version, boolean complete, 
                                 String season, String episode) {
         try{
@@ -426,6 +406,21 @@ public class GuiCore {
             proxy.printOk("Impostazioni salvate in " + prop.getSettingsFilename());
         }
         return save;
+    }
+    
+    public int requestRemoveSeries(Component from, boolean table){
+        String msg = "Vuoi eliminare le serie dalla tabella?";
+        if (!table)
+            msg = "Vuoi eliminare le serie e la categoria selezionata?";
+        return JOptionPane.showConfirmDialog(from, msg, "Info", 
+                                            JOptionPane.YES_NO_OPTION);
+    }
+    
+    public void saveList(JTabbedPane jtp) {
+        TreeMap<String, Object[]> map = new TreeMap<String, Object[]>();
+        for (int i=0; i<jtp.getTabCount(); i++)
+            map.put(jtp.getTitleAt(i), ((tabShowList) jtp.getComponentAt(i)).getArrayModel());
+        proxy.saveList(map);
     }
     
     public ImageIcon getIconAdd() {
@@ -507,20 +502,24 @@ public class GuiCore {
         return Common.getResourceImageButton(IMAGE_SELECT2);
     }
     
+    public ImageIcon getIconTabAdd() {
+        return Common.getResourceImageButton(IMAGE_TAB_ADD);
+    }
+    
+    public ImageIcon getIconTabDel() {
+        return Common.getResourceImageButton(IMAGE_TAB_DEL);
+    }
+    
+    public ImageIcon getIconTabEdit() {
+        return Common.getResourceImageButton(IMAGE_TAB_EDIT);
+    }
+        
     public ImageIcon getIconUndo() {
         return Common.getResourceImageButton(IMAGE_UNDO);
     }
     
     public ImageIcon getIconWWW() {
         return Common.getResourceImageButton(IMAGE_WWW);
-    }
-    
-    public int requestRemoveSeries(Component from, boolean table){
-        String msg = "Vuoi eliminare le serie dalla tabella?";
-        if (!table)
-            msg = "Vuoi eliminare le serie e la categoria selezionata?";
-        return JOptionPane.showConfirmDialog(from, msg, "Info", 
-                                            JOptionPane.YES_NO_OPTION);
     }
     
     Image getIconFeedNew() {
@@ -533,6 +532,29 @@ public class GuiCore {
     
     String getOperationEnableButton() {
         return ENABLE_BUTTON;
+    }
+    
+    void checkMenuNotify(int i, boolean value) {
+        boolean check = true;
+        if (i==2){
+            if (!Lang.verifyTextNotNull(prop.getMailTO())||
+                    !Lang.verifyTextNotNull(prop.getMailSMTP())) {
+                check = false;
+                proxy.printAlert("Per usare le notifiche email devono essere "
+                        + "impostati i campi MailTO & SMTP");
+            }
+        }
+        if (i==3){
+            if (!Lang.verifyTextNotNull(prop.getGoogleUser())||
+                    !Lang.verifyTextNotNull(prop.getGooglePwd()) || 
+                    !Lang.verifyTextNotNull(prop.getGoogleCalendar())) {
+                check = false;
+                proxy.printAlert("Per usare le notifiche sms devono essere "
+                        + "impostati i campi Google User Password Calendar");
+            }
+        }
+        if (check)
+            proxy.setPropNotify(i,value);
     }
     
     void invokeBackup(Component parent) {
@@ -718,12 +740,5 @@ public class GuiCore {
     
     private void printAlert(String msg){
         proxy.printAlert(msg);
-    }
-
-    public void saveList(JTabbedPane jtp) {
-        TreeMap<String, Object[]> map = new TreeMap<String, Object[]>();
-        for (int i=0; i<jtp.getTabCount(); i++)
-            map.put(jtp.getTitleAt(i), ((tabShowList) jtp.getComponentAt(i)).getArrayModel());
-        proxy.saveList(map);
     }
 }

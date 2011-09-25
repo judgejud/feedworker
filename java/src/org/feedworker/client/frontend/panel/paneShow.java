@@ -24,6 +24,7 @@ import org.feedworker.client.frontend.events.EditorPaneEventListener;
 
 import org.feedworker.client.frontend.events.TabbedPaneEvent;
 import org.feedworker.client.frontend.events.TabbedPaneEventListener;
+import org.jdesktop.swingx.JXList;
 import org.jfacility.javax.swing.ButtonTabComponent;
 
 /**TODO: lista ordinata e senza duplicati,
@@ -84,7 +85,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbAddCategory = new JButton("+");
+        JButton jbAddCategory = new JButton(core.getIconTabAdd());
         jbAddCategory.setBorder(BORDER);
         jbAddCategory.setToolTipText("Aggiungi categoria");
         jbAddCategory.addMouseListener(new MouseAdapter() {
@@ -94,7 +95,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbRenameCategory = new JButton("R");
+        JButton jbRenameCategory = new JButton(core.getIconTabEdit());
         jbRenameCategory.setBorder(BORDER);
         jbRenameCategory.setToolTipText("Rinomina la categoria selezionata");
         jbRenameCategory.addMouseListener(new MouseAdapter() {
@@ -104,7 +105,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             }
         });
         
-        JButton jbRemoveCategory = new JButton("-");
+        JButton jbRemoveCategory = new JButton(core.getIconTabDel());
         jbRemoveCategory.setBorder(BORDER);
         jbRemoveCategory.setToolTipText("Rimuove la categoria selezionata e le serie "
                 + "presenti in essa");
@@ -121,23 +122,29 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jtpList.setPreferredSize(new Dimension(190, 850));
         jtpList.setMinimumSize(new Dimension(190, 600));
         
-        JMenuItem item = new JMenuItem("Test1");
-        item.addActionListener(new ActionListener() {
+        JMenuItem jmi = new JMenuItem("Sposta in");
+        jmi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Menu item Test1");
+                
+                System.out.println(e.getID());
+                System.out.println(e.getModifiers());                
+                System.out.println(e.getWhen());
+                System.out.println(e.hashCode());
+                System.out.println(e.paramString());
             }
         });
-        menu.add(item);
+        menu.add(jmi);
 
-        item = new JMenuItem("Test2");
-        item.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Menu item Test2");
-            }
+        jmi = new JMenuItem("Rimuovi");
+        jmi.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                JXList list = ((tabShowList)jtpList.getSelectedComponent()).getComponentList();
+                int index = list.locationToIndex(e.getPoint());
+                System.out.println("Double clicked on Item " + index);
+            }    
         });
-        menu.add(item);
+        menu.add(jmi);
         
         JPanel jpWest = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
