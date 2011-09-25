@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,7 +25,6 @@ import org.feedworker.client.frontend.events.EditorPaneEventListener;
 
 import org.feedworker.client.frontend.events.TabbedPaneEvent;
 import org.feedworker.client.frontend.events.TabbedPaneEventListener;
-import org.jdesktop.swingx.JXList;
 import org.jfacility.javax.swing.ButtonTabComponent;
 
 /**TODO: lista ordinata e senza duplicati,
@@ -35,12 +35,13 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     private static paneShow jpanel = null;
     private JTabbedPane jtpShows, jtpList;
     private JComboBox jcbShows;
-    private JPopupMenu menu = new JPopupMenu("Popup");
+    private JPopupMenu menu;
     
     private paneShow(){
         super("Show");
         initializePanel();
         initializeButtons();
+        createPopupMenu();
         core.setComboboxListener(this);
         core.setEditorPaneListener(this);
         core.setTabbedPaneListener(this);
@@ -72,16 +73,6 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             public void mouseClicked(MouseEvent evt) {
                 if (jtpList.getSelectedIndex()>-1)
                     core.saveList(jtpList);
-            }
-        });
-        
-        JButton jbRemoveSerie = new JButton(core.getIconRemove());
-        jbRemoveSerie.setBorder(BORDER);
-        jbRemoveSerie.setToolTipText("Rimuove serie selezionata");
-        jbRemoveSerie.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                ((tabShowList)jtpList.getSelectedComponent()).removeSelectedItem();
             }
         });
         
@@ -122,30 +113,6 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jtpList.setPreferredSize(new Dimension(190, 850));
         jtpList.setMinimumSize(new Dimension(190, 600));
         
-        JMenuItem jmi = new JMenuItem("Sposta in");
-        jmi.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                
-                System.out.println(e.getID());
-                System.out.println(e.getModifiers());                
-                System.out.println(e.getWhen());
-                System.out.println(e.hashCode());
-                System.out.println(e.paramString());
-            }
-        });
-        menu.add(jmi);
-
-        jmi = new JMenuItem("Rimuovi");
-        jmi.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                JXList list = ((tabShowList)jtpList.getSelectedComponent()).getComponentList();
-                int index = list.locationToIndex(e.getPoint());
-                System.out.println("Double clicked on Item " + index);
-            }    
-        });
-        menu.add(jmi);
-        
         JPanel jpWest = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         int x=-1;
@@ -156,8 +123,6 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jpWest.add(jbImport, gbc);
         gbc.gridx = ++x;
         jpWest.add(jbSave, gbc);
-        gbc.gridx = ++x;
-        jpWest.add(jbRemoveSerie, gbc);
         gbc.gridx = ++x;
         jpWest.add(jbAddCategory, gbc);
         gbc.gridx = ++x;
@@ -253,6 +218,41 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         jpAction.add(jbClose, gbcAction);
     }
     
+    private void createPopupMenu(){
+        menu = new JPopupMenu("Popup");
+        JMenuItem jmiRemove = new JMenuItem("Rimuovi");
+        jmiRemove.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((tabShowList)jtpList.getSelectedComponent()).removeSelectedItem();
+            }
+        });
+        menu.add(jmiRemove);
+    }
+    
+    private void createDynamicSubmenu(){
+        if (menu.getComponentCount()>1)
+            menu.remove(1);
+        JMenu submenu = new JMenu("Sposta in");
+        JMenuItem jmi = null;
+        String name = jtpList.getSelectedComponent().getName();
+        for (int i=0; i<jtpList.getTabCount(); i++){
+            String tab = jtpList.getTitleAt(i);
+            if (!name.equalsIgnoreCase(tab)){
+                jmi = new JMenuItem(tab);
+                jmi.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        //TODO
+                        System.out.println(((tabShowList)jtpList.getSelectedComponent()).getListSelectedValue());
+                    }
+                });
+                submenu.add(jmi);
+            }
+        }
+        menu.add(submenu);
+    }
+    
     private void newTabShow(Object name, boolean refresh){
         tabShowInfo pane;
         if (!refresh){
@@ -322,15 +322,24 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
                         if (evt.getClickCount() == 2) // Double-click 
                             newTabShow(pane.getListSelectedValue(), false);
                     }
+                    /*
                     @Override
                     public void mousePressed(MouseEvent ev) {
-                        if (ev.isPopupTrigger())
+                        if (ev.isPopupTrigger()){
+                            createDynamicSubmenu();
+                            pane.setListPointSelection(ev.getPoint());
                             menu.show(ev.getComponent(), ev.getX(), ev.getY());
+                        }
                     }
+                     * 
+                     */
                     @Override
                     public void mouseReleased(MouseEvent ev) {
-                        if (ev.isPopupTrigger())
+                        if (ev.isPopupTrigger()){
+                            createDynamicSubmenu();
+                            pane.setListPointSelection(ev.getPoint());
                             menu.show(ev.getComponent(), ev.getX(), ev.getY());
+                        }
                     }
                 });
                 jtpList.addTab(pane.getName(), pane);
