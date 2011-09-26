@@ -300,6 +300,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
         if (cat!=null && core.checkTabListShow(cat)) {
             tabShowList pane = new tabShowList(cat);
             jtpList.addTab(pane.getName(), pane);
+            pane.setListMouseListener(getListMouseAdapter(jtpList.getTabCount() - 1));
         }
     }
     
@@ -319,25 +320,31 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             for (int i=0; i<evt.getName().size(); i++){
                 String cat = evt.getName().get(i);
                 core.checkTabListShow(cat);
-                final tabShowList pane = new tabShowList(cat);
-                MouseAdapter ma = new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent evt) {
-                        if (evt.getClickCount() == 2) // Double-click 
-                            newTabShow(pane.getListSelectedValue(), false);
-                    }
-                    @Override
-                    public void mouseReleased(MouseEvent ev) {
-                        if (ev.isPopupTrigger()){
-                            createDynamicSubmenu();
-                            pane.setListPointSelection(ev.getPoint());
-                            menu.show(ev.getComponent(), ev.getX(), ev.getY());
-                        }
-                    }
-                };
-                pane.setListMouseListener(ma);
+                tabShowList pane = new tabShowList(cat);
                 jtpList.addTab(pane.getName(), pane);
+                pane.setListMouseListener(getListMouseAdapter(jtpList.getTabCount() - 1));
             }
         }
+    }
+    
+    private MouseAdapter getListMouseAdapter(final int index){
+        return new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent ev) {
+                if (ev.getClickCount() == 2){ // Double-click 
+                    tabShowList pane = (tabShowList) jtpList.getComponentAt(index);
+                    newTabShow(pane.getListSelectedValue(), false);
+                }
+            }
+            @Override
+            public void mouseReleased(MouseEvent ev) {
+                if (ev.isPopupTrigger()){
+                    createDynamicSubmenu();
+                    tabShowList pane = (tabShowList) jtpList.getComponentAt(index);
+                    pane.setListPointSelection(ev.getPoint());
+                    menu.show(ev.getComponent(), ev.getX(), ev.getY());
+                }
+            }
+        };  
     }
 } //end class

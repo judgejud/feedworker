@@ -52,7 +52,6 @@ public class ListShow extends AbstractXML{
     public TreeMap<String, Object[][]> initializeReader() throws JDOMException, IOException {
         TreeMap<String, Object[][]> map = convert();
         if (map==null){
-            //TODO FIXME
             if (sizeRootChildren() > 0){
                 map = new TreeMap<String, Object[][]>();
                 Iterator iterCat = iteratorRootChildren();
