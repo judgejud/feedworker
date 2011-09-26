@@ -240,11 +240,15 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
             String tab = jtpList.getTitleAt(i);
             if (!name.equalsIgnoreCase(tab)){
                 jmi = new JMenuItem(tab);
+                jmi.setActionCommand(Integer.toString(i));
                 jmi.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        //TODO
-                        System.out.println(((tabShowList)jtpList.getSelectedComponent()).getListSelectedValue());
+                        tabShowList tab = (tabShowList)jtpList.getSelectedComponent();
+                        Object[] clone = tab.getListCloneSelectedValue();
+                        int j = Integer.parseInt(e.getActionCommand());
+                        ((tabShowList)jtpList.getComponentAt(j)).addItem(clone);
+                        tab.removeSelectedItem();
                     }
                 });
                 submenu.add(jmi);
@@ -316,23 +320,12 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
                 String cat = evt.getName().get(i);
                 core.checkTabListShow(cat);
                 final tabShowList pane = new tabShowList(cat);
-                pane.getComponentList().addMouseListener(new MouseAdapter() {
+                MouseAdapter ma = new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent evt) {
                         if (evt.getClickCount() == 2) // Double-click 
                             newTabShow(pane.getListSelectedValue(), false);
                     }
-                    /*
-                    @Override
-                    public void mousePressed(MouseEvent ev) {
-                        if (ev.isPopupTrigger()){
-                            createDynamicSubmenu();
-                            pane.setListPointSelection(ev.getPoint());
-                            menu.show(ev.getComponent(), ev.getX(), ev.getY());
-                        }
-                    }
-                     * 
-                     */
                     @Override
                     public void mouseReleased(MouseEvent ev) {
                         if (ev.isPopupTrigger()){
@@ -341,7 +334,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
                             menu.show(ev.getComponent(), ev.getX(), ev.getY());
                         }
                     }
-                });
+                };
+                pane.setListMouseListener(ma);
                 jtpList.addTab(pane.getName(), pane);
             }
         }

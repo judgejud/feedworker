@@ -49,7 +49,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "424 by "
+                + "425 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -226,7 +226,7 @@ public class Mediator {
     }
 
     ArrayList<String[]> getPropertiesInfo(){
-        ArrayList<String[]> array = new ArrayList<>();
+        ArrayList<String[]> array = new ArrayList<String[]>();
         array.add(new String[]{"File calendario", "calendar.xml"});
         array.add(new String[]{"File impostazioni", prop.getSettingsFilename()});
         array.add(new String[]{"File regole", "rules.xml"});
