@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -58,6 +59,10 @@ public class tabShowList extends JScrollPane implements ListEventListener{
         return ((Object[])list.getSelectedValue())[0];
     }
     
+    Object[] getListCloneSelectedValue(){
+        return ((Object[])list.getSelectedValue());
+    }
+    
     void addItem(Object elem){
         model.addElement(elem);
     }
@@ -71,8 +76,8 @@ public class tabShowList extends JScrollPane implements ListEventListener{
         list.setSelectedIndex(list.locationToIndex(p));
     }
     
-    JXList getComponentList(){
-        return list;
+    void setListMouseListener(MouseAdapter ma){
+        list.addMouseListener(ma);
     }
 
     @Override
