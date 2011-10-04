@@ -22,9 +22,9 @@ import org.feedworker.client.frontend.events.ComboboxEvent;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
 import org.feedworker.client.frontend.events.EditorPaneEvent;
 import org.feedworker.client.frontend.events.EditorPaneEventListener;
-
 import org.feedworker.client.frontend.events.TabbedPaneEvent;
 import org.feedworker.client.frontend.events.TabbedPaneEventListener;
+
 import org.jfacility.javax.swing.ButtonTabComponent;
 
 /**TODO: lista ordinata e senza duplicati,

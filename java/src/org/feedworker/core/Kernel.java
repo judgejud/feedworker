@@ -62,7 +62,6 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import java.util.Set;
 /**Motore di Feedworker
  * 
  * @author luca
@@ -113,6 +112,7 @@ public class Kernel implements PropertyChangeListener {
     private TreeSet tsIdCalendar;
     private ItasaOnline itasa;
     private ItasaUser user;
+    private Http loginItasa;
     private static boolean debug_flag;
 
     /**
@@ -146,6 +146,9 @@ public class Kernel implements PropertyChangeListener {
                     + "Itemid=6&func=fileinfo&id=";
             for (int i=0; i<als.size(); i++)
                 als.set(i, url+als.get(i));
+        }
+        if (loginItasa!=null){
+            //TODO
         }
         DownloadThread dt = new DownloadThread(mapRules, xmlReminder, als, itasa, false);
         Thread t = new Thread(dt, "Thread download");
