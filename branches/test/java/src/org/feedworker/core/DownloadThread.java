@@ -19,6 +19,8 @@ import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
+import org.feedworker.util.GCalNotifierSms;
+import org.feedworker.util.Mail;
 import org.feedworker.util.Samba;
 import org.feedworker.xml.Reminder;
 
@@ -30,8 +32,6 @@ import jcifs.smb.SmbException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
-import org.feedworker.util.GCalNotifierSms;
-import org.feedworker.util.Mail;
 /**
  * 
  * @author luca

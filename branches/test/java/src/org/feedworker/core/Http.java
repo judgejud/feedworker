@@ -95,8 +95,8 @@ class Http {
         getCookiesItasa();
     } // end doPost
 
-    HttpEntity requestGetEntity(String link, boolean itasa)
-            throws IndexOutOfBoundsException, IOException {
+    HttpEntity requestGetEntity(String link, boolean itasa) throws 
+                                        IndexOutOfBoundsException, IOException {
         long lenght = -1;
         int temp = 0;
         while (lenght == -1) {

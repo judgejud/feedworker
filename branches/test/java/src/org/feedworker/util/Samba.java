@@ -47,6 +47,10 @@ public class Samba {
         auth = new NtlmPasswordAuthentication(domain, username, password);
         pathBase = SMB + ip + "/" + cartella + "/";
     }
+    
+    public boolean isDir(String path) throws MalformedURLException, SmbException{
+        return new SmbFile(path, auth).exists();
+    }
 
     public boolean moveFromLocal(File local, String path) throws IOException {
         boolean verify = false;

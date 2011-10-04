@@ -16,7 +16,7 @@ public class testJsoup {
     private final static String ADDRESS_SUBSF = "http://www.subsfactory.it/";
     
     private static Document connectItasa(String user, String pwd, int timeout) throws IOException{
-        TreeMap<String, String> keyvals = new TreeMap<>();
+        TreeMap<String, String> keyvals = new TreeMap<String, String>();
         keyvals.put("username", user);
         keyvals.put("passwd", pwd);
         keyvals.put("remember", "yes");
