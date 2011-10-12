@@ -47,11 +47,22 @@ public class DownloadThread implements Runnable {
     private ManageException error = ManageException.getIstance();
     private TreeMap<KeyRule, ValueRule> mapRules;
     private Reminder xmlReminder;
+    private Http http_itasa;
 
     DownloadThread(TreeMap<KeyRule, ValueRule> map, Reminder xml, 
                             ArrayList<String> _als, boolean _itasa, boolean _autoitasa) {
         als = _als;
         itasa = _itasa;
+        mapRules = map;
+        xmlReminder = xml;
+        autoItasa = _autoitasa;
+    }
+    
+    DownloadThread(TreeMap<KeyRule, ValueRule> map, Reminder xml, 
+                            ArrayList<String> _als, Http _itasa, boolean _autoitasa) {
+        als = _als;
+        itasa = true;
+        http_itasa = _itasa;
         mapRules = map;
         xmlReminder = xml;
         autoItasa = _autoitasa;

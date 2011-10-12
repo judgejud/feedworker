@@ -275,6 +275,15 @@ public class paneSetting extends paneAbstract {
                                                     + "sub myItasa all'avvio");
         jtfItasaUser = new JTextField(20);
         jpfItasa = new JPasswordField(20);
+        jbCheckItasaLogin = new JButton("Check login");
+        jbCheckItasaLogin.setBorder(BORDER);
+        jbCheckItasaLogin.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                proxy.checkLoginItasa(jtfItasaUser.getText(), 
+                        jpfItasa.getPassword());
+            }
+        });
         jbCheckItasaApi = new JButton("Check login API");
         jbCheckItasaApi.setBorder(BORDER);
         jbCheckItasaApi.addMouseListener(new MouseAdapter() {
@@ -317,7 +326,10 @@ public class paneSetting extends paneAbstract {
         task.add(jlIpwd);
         task.add(jpfItasa);
         
-        task.add(jbCheckItasaApi);
+        temp = new JPanel();
+        temp.add(jbCheckItasaLogin);
+        temp.add(jbCheckItasaApi);
+        task.add(temp);
         return task;
     }
 

@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
-import java.util.Comparator;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -14,7 +13,6 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import javax.swing.SortOrder;
 import org.feedworker.client.frontend.GuiCore;
 import org.feedworker.client.frontend.events.ListEvent;
 import org.feedworker.client.frontend.events.ListEventListener;
@@ -39,11 +37,6 @@ public class tabShowList extends JScrollPane implements ListEventListener{
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         list.setLayoutOrientation(JXList.HORIZONTAL_WRAP);
         list.setVisibleRowCount(-1);
-     
-        list.setAutoCreateRowSorter(true);
-        list.setSortOrder(SortOrder.ASCENDING);
-        list.setComparator(new ValueComparator());
-     
         
         setViewportView(list);
         GuiCore.getInstance().setListListener(this);
@@ -94,12 +87,6 @@ public class tabShowList extends JScrollPane implements ListEventListener{
             for (int i=0; i<evt.getArray().length; i++)
                 model.addElement(evt.getArray()[i]);
         }
-     
-        list.resetSortOrder();
-        list.toggleSortOrder();
-        list.validate();
-        
-     
     }
     
     class GraphicList extends DefaultListCellRenderer{
@@ -114,14 +101,14 @@ public class tabShowList extends JScrollPane implements ListEventListener{
             Object values[] = (Object[]) value;
             String text = values[0].toString();
             label.setName(text);
-            label.setToolTipText(text);
-            //label.setText(text);
             label.setText(null);
             label.setIcon(Swing.scaleImageARGB((ImageIcon)values[1], dim, dim));
+            label.setToolTipText(text);
             return label;
         }
     }
 }
+/*
 class ValueComparator<T> implements Comparator<T> {
     @Override    
     public int compare(Object o1, Object o2) {
@@ -130,7 +117,16 @@ class ValueComparator<T> implements Comparator<T> {
         return s1.compareTo(s2);
     }
 }
-/*
+
+class ValueComparator<Component> implements Comparator<Component> {
+    @Override    
+    public int compare(Component o1, Component o2) {
+        String s1 = ((JLabel)o1).getName().toLowerCase();
+        String s2 = ((JLabel)o2).getName().toLowerCase();
+        return s1.compareTo(s2);
+    }
+}
+
 class ValueComparator implements Comparator<GraphicList> {
     @Override
     public int compare(GraphicList t, GraphicList t1) {

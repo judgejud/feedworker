@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -21,6 +22,8 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
@@ -28,6 +31,7 @@ import javax.swing.SwingWorker;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.apache.http.client.ClientProtocolException;
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.TextPaneEvent;
@@ -147,10 +151,11 @@ public class Kernel implements PropertyChangeListener {
             for (int i=0; i<als.size(); i++)
                 als.set(i, url+als.get(i));
         }
-        if (loginItasa!=null){
+        DownloadThread dt = null;
+        if (itasa && loginItasaHttp()){
             //TODO
         }
-        DownloadThread dt = new DownloadThread(mapRules, xmlReminder, als, itasa, false);
+        dt = new DownloadThread(mapRules, xmlReminder, als, itasa, false);
         Thread t = new Thread(dt, "Thread download");
         t.start();
     }
@@ -965,8 +970,26 @@ public class Kernel implements PropertyChangeListener {
     private void printOk(String msg) {
         ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
     }
+    
+    private boolean loginItasaHttp(){
+        boolean login = false;
+        if (loginItasa==null){
+            loginItasa = new Http();
+            try {
+                loginItasa.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
+            } catch (UnsupportedEncodingException ex) {
+                ex.printStackTrace();
+            } catch (ClientProtocolException ex) {
+                ex.printStackTrace();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        } else 
+            login = true;
+        return login;
+    }
 
-    private boolean loginItasa(String username, String pwd) {
+    private boolean loginItasaAPI(String username, String pwd) {
         boolean login = false;
         if (user==null){
             try {
@@ -986,7 +1009,7 @@ public class Kernel implements PropertyChangeListener {
         return login;
     }
     
-    public void checkLoginItasa(String username, String pwd) {
+    public void checkLoginItasaAPI(String username, String pwd) {
         try {
             new ItasaOnline().login(username, pwd);
             printOk("CheckLogin Itasa: ok");
@@ -1048,7 +1071,7 @@ public class Kernel implements PropertyChangeListener {
     }
 
     public void calendarImportNameTvFromMyItasa() {
-        if (loginItasa(prop.getItasaUsername(), prop.getItasaPassword())){
+        if (loginItasaAPI(prop.getItasaUsername(), prop.getItasaPassword())){
             if (user.isMyitasa()){
                 ArrayList<String> myShows = null;
                 try {
@@ -1159,7 +1182,7 @@ public class Kernel implements PropertyChangeListener {
     }
     
     public void listImportNameTvFromMyItasa(String dest) {
-        if (loginItasa(prop.getItasaUsername(), prop.getItasaPassword())){
+        if (loginItasaAPI(prop.getItasaUsername(), prop.getItasaPassword())){
             if (user.isMyitasa()){
                 ArrayList<String> myShows = null;
                 try {
@@ -1229,6 +1252,20 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass());
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
+        }
+    }
+
+    public void checkLoginItasa(String user, String pwd) {
+        Http h = new Http();
+        try {
+            if (h.testConnectItasa(user, pwd))
+                printOk("Check login Itasa ok");
+            else
+                printAlert("Check login Itasa: Utente e/o password errata");
+        } catch (ClientProtocolException ex) {
+            error.launch(ex, null);
+        } catch (IOException ex) {
+            error.launch(ex, null);
         }
     }
 
