@@ -1,4 +1,3 @@
-
 package org.feedworker.core;
 
 //IMPORT JAVA
@@ -75,6 +74,29 @@ class Http {
      */
     void connectItasa(String user, String pwd) throws UnsupportedEncodingException,
                                             ClientProtocolException, IOException {
+        response = client.execute(setPostItasa(user, pwd));
+        entity = response.getEntity();
+        consumeEntity();
+        getCookiesItasa();
+    } // end doPost
+    
+    /**
+     * effettua la connessione ad itasa con user e pwd
+     *
+     * @param user
+     * @param pwd
+     */
+    boolean testConnectItasa(String user, String pwd) throws ClientProtocolException, 
+                                                                    IOException {
+        HttpResponse res = client.execute(setPostItasa(user, pwd));
+        String value = res.getHeaders("Location")[0].getValue();
+        if (value.equals("http://www.italiansubs.net/index.php?option=com_user"))
+            return true;
+        else
+            return false;
+    } // end doPost
+    
+    private HttpPost setPostItasa(String user, String pwd) throws UnsupportedEncodingException{
         HttpPost post = new HttpPost(ADDRESS_ITASA);
         // parametri presi dall'html form action del sito
         List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
@@ -89,11 +111,8 @@ class Http {
         //per vedere la stringa che manda in POST
         //BufferedReader br = new BufferedReader(new InputStreamReader(post.getEntity().getContent()));
         //System.out.println(br.readLine());
-        response = client.execute(post);
-        entity = response.getEntity();
-        consumeEntity();
-        getCookiesItasa();
-    } // end doPost
+        return post;
+    }
 
     HttpEntity requestGetEntity(String link, boolean itasa) throws 
                                         IndexOutOfBoundsException, IOException {

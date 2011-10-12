@@ -270,7 +270,7 @@ public class Mediator {
     }
     
     public void checkLoginItasaApi(String user, char[] password) {
-        core.checkLoginItasa(user,new String(password));
+        core.checkLoginItasaAPI(user,new String(password));
     }
 
     public void removeReminders(ArrayList<Integer> numbers) {
@@ -358,5 +358,9 @@ public class Mediator {
 
     void saveList(TreeMap<String, Object[]> map) {
         core.saveList(map);
+    }
+
+    public void checkLoginItasa(String user, char[] password) {
+        core.checkLoginItasa(user, new String(password));
     }
 }
