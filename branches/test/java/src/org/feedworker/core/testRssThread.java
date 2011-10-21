@@ -81,7 +81,7 @@ public class testRssThread implements Runnable{
         RssParser rss = null;
         ArrayList<Object[]> matrice = null;
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
-        Http http = new Http(connection_Timeout);
+        HttpOther http = new HttpOther(connection_Timeout);
         try {
             InputStream ist = http.getStreamRss(url);
             if (ist != null) {

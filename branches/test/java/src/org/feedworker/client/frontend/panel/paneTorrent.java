@@ -58,8 +58,10 @@ public class paneTorrent extends paneAbstract {
         jbDown.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                if (jbDown.isEnabled())
+                if (jbDown.isEnabled()){
                     core.downloadTorrent(jtTorrent1, jtTorrent2);
+                    cleanTables();
+                }
             }
         });
 
@@ -81,8 +83,7 @@ public class paneTorrent extends paneAbstract {
         jbClean.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                core.cleanSelect(jtTorrent1,3);
-                core.cleanSelect(jtTorrent2,3);
+                cleanTables();
             }
         });
 
@@ -111,5 +112,10 @@ public class paneTorrent extends paneAbstract {
         jbDown.setEnabled(e);
         jbClean.setEnabled(e);
         jbCopyLinks.setEnabled(e);
+    }
+    
+    private void cleanTables(){
+        core.cleanSelect(jtTorrent1,3);
+        core.cleanSelect(jtTorrent2,3);
     }
 }

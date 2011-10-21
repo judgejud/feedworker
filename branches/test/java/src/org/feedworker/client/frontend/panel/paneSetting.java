@@ -38,7 +38,7 @@ public class paneSetting extends paneAbstract {
             jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
             jcbPaneShow, jcbTorrent;
     private JButton jbSaveSettings, jbAnnullaSettings, jbDestSub, jbDestTorrent, 
-            jbCheckItasaApi, jbCheckItasaLogin,  jbCheckSamba;
+            jbCheckItasaApi, jbCheckItasaLogin, jbCheckSamba;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf,
             jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp,

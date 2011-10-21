@@ -41,28 +41,17 @@ public class DownloadThread implements Runnable {
     private final String SPLIT_POINT = "\\.";
     private final String[] QUALITY = Quality.toArray();
     private ArrayList<String> als;
-    private boolean itasa;
     private boolean autoItasa;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
     private TreeMap<KeyRule, ValueRule> mapRules;
     private Reminder xmlReminder;
-    private Http http_itasa;
-
-    DownloadThread(TreeMap<KeyRule, ValueRule> map, Reminder xml, 
-                            ArrayList<String> _als, boolean _itasa, boolean _autoitasa) {
-        als = _als;
-        itasa = _itasa;
-        mapRules = map;
-        xmlReminder = xml;
-        autoItasa = _autoitasa;
-    }
+    private HttpAbstract http;
     
     DownloadThread(TreeMap<KeyRule, ValueRule> map, Reminder xml, 
-                            ArrayList<String> _als, Http _itasa, boolean _autoitasa) {
-        als = _als;
-        itasa = true;
-        http_itasa = _itasa;
+                            ArrayList<String> _als, HttpAbstract _http, boolean _autoitasa) {
+        als = _als;        
+        http = _http;
         mapRules = map;
         xmlReminder = xml;
         autoItasa = _autoitasa;
@@ -191,17 +180,14 @@ public class DownloadThread implements Runnable {
 
     @Override
     public void run() {
-        int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
-        Http http = new Http(connection_Timeout);
         ArrayList<File> alFile = new ArrayList<File>();
         ArrayList<Object[]> alReminder = new ArrayList<Object[]>();
         ArrayList<String> alNotify = new ArrayList<String>();
         boolean sub = false;
         try {
-            if (itasa)
-                http.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
             for (int i = 0; i < als.size(); i++) {
-                HttpEntity entity = http.requestGetEntity(als.get(i), itasa);
+                //HttpEntity entity = http.requestGetEntity(als.get(i), itasa);
+                HttpEntity entity = http.requestGetEntity(als.get(i));
                 if (entity != null) {
                     if (entity.getContentLength() != -1) {
                         String n = http.getNameFile();
@@ -227,11 +213,10 @@ public class DownloadThread implements Runnable {
         } catch (IllegalArgumentException ex) {
             error.launch(ex, this.getClass());
         } catch (StringIndexOutOfBoundsException ex) {
-            error.launch(ex, this.getClass(), itasa);
+            error.launch(ex, this.getClass(), http instanceof HttpItasa);
         } catch (IOException ex) {
             error.launch(ex, this.getClass(), null);
-        }        
-        http.closeClient();
+        }
         analyzeDest(alFile);
         if (sub && prop.isEnableNotifyAudioSub())
             try {
@@ -305,14 +290,11 @@ public class DownloadThread implements Runnable {
         return null;
     }
 
-    /**
-     * Effettua l'analisi del nome del file restituendo l'oggetto filtro da
+    /**Effettua l'analisi del nome del file restituendo l'oggetto filtro da
      * confrontare
      *
-     * @param name
-     *            nome del file da analizzare
-     * @param split
-     *            stringa col quale effettuare lo split del nome del file
+     * @param name nome del file da analizzare
+     * @param split stringa col quale effettuare lo split del nome del file
      * @return oggetto filtro
      */
     private KeyRule parsingNamefile(String namefile, String split) {

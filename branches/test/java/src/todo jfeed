@@ -18,7 +18,6 @@ introdurre trama singola puntata (da che fonte?)
 fare calendario per data (tutte, serie che si seguono)
 evitare i doppioni delle serie nelle liste show ()
 
-
 CORREZIONI:
 -correggere il comparator negli show, con il tooltip della label che non corrisponde
 -migliorare il fire alla reminder considerando la regola delete.

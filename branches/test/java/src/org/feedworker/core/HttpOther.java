@@ -5,146 +5,75 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.params.ClientPNames;
-import org.apache.http.client.params.CookiePolicy;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
 
 /**Gestisce le interazioni http lato client (metodi post e get)
  * 
  * @author luca judge
  */
-class Http {
-
-    private final String ADDRESS_ITASA = "http://www.italiansubs.net/index.php";
+class HttpOther extends HttpAbstract{
     private final String ADDRESS_SUBSF = "http://www.subsfactory.it/";
     private final String TORRENT_ZOINK = "http://torrent.zoink.it/";
     private final String TORRENT_BTCHAT = "http://www.bt-chat.com/";
     private final String TORRENT_MININOVA = "http://www.mininova.org/";
-    private final String TAG_ITASA = "<h2><br /><center>";
     private final String TAG_SUBSF = "<td align=\"center\" class=\"functions\" width=\"100%\"><a href";
-    private DefaultHttpClient client;
-    private HttpResponse response;
-    private HttpEntity entity;
-    private HttpGet get;
-    private CookieStore cookies;
-    private String namefile;
-
-    /** Costruttore, inizializza il client http
-     *
-     */
-    Http() {
-        client = new DefaultHttpClient(new BasicHttpParams());
-    }
+    //private CookieStore cookies;
 
     /**Costruttore, inizializza il client http con timeout
      *
      * @param timeout tempo di scadenza connessione
      */
-    Http(int timeout) {
-        HttpParams my_httpParams = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(my_httpParams, timeout);
-        HttpConnectionParams.setSoTimeout(my_httpParams, timeout);
-        client = new DefaultHttpClient(my_httpParams);
+    HttpOther(int timeout) {
+        super(timeout);
+    }
+    
+    /**Costruttore, inizializza il client http con timeout
+     *
+     * @param timeout tempo di scadenza connessione
+     */
+    HttpOther() {
+        super();
+    }
+    
+    InputStream getStreamRss(String oldUrl) throws IOException{
+        get = new HttpGet(oldUrl);
+        response = client.execute(get);
+        return response.getEntity().getContent();
     }
 
-    /**
-     * effettua la connessione ad itasa con user e pwd
-     *
-     * @param user
-     * @param pwd
-     */
-    void connectItasa(String user, String pwd) throws UnsupportedEncodingException,
-                                            ClientProtocolException, IOException {
-        response = client.execute(setPostItasa(user, pwd));
-        entity = response.getEntity();
-        consumeEntity();
-        getCookiesItasa();
-    } // end doPost
-    
-    /**
-     * effettua la connessione ad itasa con user e pwd
-     *
-     * @param user
-     * @param pwd
-     */
-    boolean testConnectItasa(String user, String pwd) throws ClientProtocolException, 
+    @Override
+    HttpEntity requestGetEntity(String link) throws IndexOutOfBoundsException, 
                                                                     IOException {
-        HttpResponse res = client.execute(setPostItasa(user, pwd));
-        String value = res.getHeaders("Location")[0].getValue();
-        if (value.equals("http://www.italiansubs.net/index.php?option=com_user"))
-            return true;
-        else
-            return false;
-    } // end doPost
-    
-    private HttpPost setPostItasa(String user, String pwd) throws UnsupportedEncodingException{
-        HttpPost post = new HttpPost(ADDRESS_ITASA);
-        // parametri presi dall'html form action del sito
-        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
-        lnvp.add(new BasicNameValuePair("username", user));
-        lnvp.add(new BasicNameValuePair("passwd", pwd));
-        lnvp.add(new BasicNameValuePair("remember", "yes"));
-        lnvp.add(new BasicNameValuePair("Submit", "Login"));
-        lnvp.add(new BasicNameValuePair("option", "com_user"));
-        lnvp.add(new BasicNameValuePair("task", "login"));
-        lnvp.add(new BasicNameValuePair("silent", "true"));
-        post.setEntity(new UrlEncodedFormEntity(lnvp, HTTP.UTF_8));
-        //per vedere la stringa che manda in POST
-        //BufferedReader br = new BufferedReader(new InputStreamReader(post.getEntity().getContent()));
-        //System.out.println(br.readLine());
-        return post;
-    }
-
-    HttpEntity requestGetEntity(String link, boolean itasa) throws 
-                                        IndexOutOfBoundsException, IOException {
         long lenght = -1;
         int temp = 0;
         while (lenght == -1) {
             ++temp;
             consumeEntity();
-            client.setCookieStore(cookies);
+            //client.setCookieStore(cookies);
             get = new HttpGet(link);
             response = client.execute(get);
             entity = response.getEntity();
-            String url = null;
-            if (itasa)
-                url = readInputStreamURL(entity.getContent(), TAG_ITASA, 2);
-            else{
-                url = readInputStreamURL(entity.getContent(), TAG_SUBSF, 8);
-                url = url.replaceAll("amp;", "");
-            }
+            String url = readInputStreamURL(entity.getContent(), TAG_SUBSF, 8);
+            url = url.replaceAll("amp;", "");
             consumeEntity();
             if (url != null) {
                 get = new HttpGet(url);
-                client.setCookieStore(cookies);
+                //client.setCookieStore(cookies);
                 response = client.execute(get);
                 entity = response.getEntity();
                 lenght = entity.getContentLength();
-                if (lenght != -1) {
-                    if (itasa)
-                        getAttachement(response.getAllHeaders(), ADDRESS_ITASA);
-                    else
-                        getAttachement(response.getAllHeaders(), ADDRESS_SUBSF);
-                }
+                if (lenght != -1)
+                    getAttachement(response.getAllHeaders(), ADDRESS_SUBSF);
                 get = null;
                 response = null;
                 if (temp == 26)
@@ -180,22 +109,6 @@ class Http {
         return is;
     }
 
-    InputStream getStreamRss(String oldUrl) throws IOException{
-        get = new HttpGet(oldUrl);
-        response = client.execute(get);
-        return response.getEntity().getContent();
-    }
-
-    private void getCookiesItasa() throws IOException {
-        client.getParams().setParameter(ClientPNames.COOKIE_POLICY,
-                CookiePolicy.BROWSER_COMPATIBILITY);
-        get = new HttpGet(ADDRESS_ITASA);
-        response = client.execute(get);
-        entity = response.getEntity();
-        consumeEntity();
-        cookies = client.getCookieStore();
-    }
-
     private String readInputStreamURL(InputStream is, String tag, int start)
             throws StringIndexOutOfBoundsException, IOException {
         String search = null;
@@ -227,31 +140,21 @@ class Http {
         return search;
     }
 
-    private void getAttachement(Header[] head, String from) throws IndexOutOfBoundsException {
+    @Override
+    protected void getAttachement(Header[] head, String from) throws IndexOutOfBoundsException {
         int i;
         for (i = 0; i < head.length; i++) {
             if (head[i].getName().equalsIgnoreCase("Content-Disposition"))
                 break;
         }
         String attachement = head[i].getValue();
-        if (from.equalsIgnoreCase(ADDRESS_ITASA)) {
-            namefile = attachement.substring(21);
-        } else if (from.equalsIgnoreCase(ADDRESS_SUBSF)) {
+        if (from.equalsIgnoreCase(ADDRESS_SUBSF))
             namefile = attachement.substring(22, attachement.length() - 1);
-        } else if (from.equalsIgnoreCase(TORRENT_MININOVA)) {
+        else if (from.equalsIgnoreCase(TORRENT_MININOVA))
             namefile = attachement.substring(18, attachement.length() - 1);
-        } else if (from.equalsIgnoreCase(TORRENT_BTCHAT)) {
+        else if (from.equalsIgnoreCase(TORRENT_BTCHAT))
             namefile = attachement.substring(22, attachement.length() - 1);
-        }
-    }
-
-    /**
-     * restituisce il nome e l'estensione del file che si sta scaricando
-     *
-     * @return nome & estensione
-     */
-    String getNameFile() {
-        return namefile;
+        
     }
 
     private String convertUrlEncoding(String old) {
@@ -302,36 +205,5 @@ class Http {
         HttpPost post = new HttpPost(url);
         post.setEntity(new UrlEncodedFormEntity(lnvp, HTTP.UTF_8));
         client.execute(post);
-    }
-
-    InputStream synoStatus(String url, String id) throws IllegalStateException,
-                                                                IOException {
-        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
-        lnvp.add(new BasicNameValuePair("id", id));
-        lnvp.add(new BasicNameValuePair("action", "getall"));
-        HttpPost post = new HttpPost(url);
-        post.setEntity(new UrlEncodedFormEntity(lnvp, HTTP.UTF_8));
-        HttpResponse res = client.execute(post);
-        return res.getEntity().getContent();
-    }
-
-    void synoClearTask(String url, String id, String username) throws IOException {
-        List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
-        lnvp.add(new BasicNameValuePair("id", id));
-        lnvp.add(new BasicNameValuePair("action", "clear"));
-        lnvp.add(new BasicNameValuePair("username", username));
-        HttpPost post = new HttpPost(url);
-        post.setEntity(new UrlEncodedFormEntity(lnvp, HTTP.UTF_8));
-        client.execute(post);
-    }
-
-    /** Chiude il client http e dealloca le risorse usate */
-    void closeClient() {
-        client.getConnectionManager().shutdown();
-    }
-    
-    private void consumeEntity() throws IOException{
-        if (entity != null)
-            EntityUtils.consume(entity);
     }
 }// end Http
