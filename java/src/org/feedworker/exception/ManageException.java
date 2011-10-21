@@ -317,23 +317,20 @@ public class ManageException {
             printError(ex, c);
     }
     
-    /**
-     * Analizza l'errore IndexOutOfBoundsException
+    /**Analizza l'errore IndexOutOfBoundsException
      *
-     * @param ex
-     *            IndexOutOfBoundsException
-     * @param c
-     *            classe di provenienza
-     * @param text
-     *            eventuale testo da stampare
+     * @param ex IndexOutOfBoundsException
+     * @param c classe di provenienza
+     * @param text eventuale testo da stampare
      */
     public void launch(IndexOutOfBoundsException ex, Class c, boolean flag_itasa) {
         String msg = ex.getMessage();
         String error01 = "String index out of range: -1";
-        if (flag_itasa && msg.equals(error01)) {
+        //TODO: gestire l'eventuale errore del numero dei sub downloadati
+        if (flag_itasa && msg.equals(error01))
             printAlert("Bisogna essere registrati ad italiansubs per scaricare i sottotitoli. "
                     + "Controlla username e/o password", true);
-        } else
+        else
             printError(ex, c);
     }
 

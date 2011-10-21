@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -22,8 +21,6 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
@@ -116,7 +113,7 @@ public class Kernel implements PropertyChangeListener {
     private TreeSet tsIdCalendar;
     private ItasaOnline itasa;
     private ItasaUser user;
-    private Http loginItasa;
+    private HttpItasa httpItasa;
     private static boolean debug_flag;
 
     /**
@@ -145,19 +142,26 @@ public class Kernel implements PropertyChangeListener {
      * @param itasa
      */
     public void downloadSub(ArrayList<String> als, boolean itasa, boolean id) {
-        if (id){
-            String url = "http://www.italiansubs.net/index.php?option=com_remository&"
-                    + "Itemid=6&func=fileinfo&id=";
-            for (int i=0; i<als.size(); i++)
-                als.set(i, url+als.get(i));
-        }
         DownloadThread dt = null;
         if (itasa && loginItasaHttp()){
-            //TODO
+            if (id){
+                String url = "http://www.italiansubs.net/index.php?option=com_remository&"
+                        + "Itemid=6&func=fileinfo&id=";
+                for (int i=0; i<als.size(); i++)
+                    als.set(i, url+als.get(i));
+            }
+            dt = new DownloadThread(mapRules, xmlReminder, als, httpItasa, false);
+        } else if (!itasa){
+            HttpOther http = new HttpOther(Lang.stringToInt(prop.getHttpTimeout())*1000);
+            dt = new DownloadThread(mapRules, xmlReminder, als, http, false);
+        } else if (httpItasa==null)
+            printAlert("Non posso procedere al download per problemi di login ad itasa, "
+                    + "controllare user e password");
+        if (dt!=null){
+            Thread t = new Thread(dt, "Thread download");
+            t.start();
+            
         }
-        dt = new DownloadThread(mapRules, xmlReminder, als, itasa, false);
-        Thread t = new Thread(dt, "Thread download");
-        t.start();
     }
 
     /**effettua il download automatico di myitasa comprende le fasi anche di
@@ -169,12 +173,16 @@ public class Kernel implements PropertyChangeListener {
         prop.setLastDateTimeRefresh(Common.actualTime());
         prop.writeOnlyLastDate();
         DownloadThread dt = null;
-        if (first)
-            dt = new DownloadThread(mapRules, xmlReminder, links, true, false);
-        else
-            dt = new DownloadThread(mapRules, xmlReminder, links, true, true);
-        Thread t = new Thread(dt, "AutoItasa");
-        t.start();
+        if (loginItasaHttp()){
+            if (first)
+                dt = new DownloadThread(mapRules, xmlReminder, links, httpItasa, false);
+            else
+                dt = new DownloadThread(mapRules, xmlReminder, links, httpItasa, true);
+            Thread t = new Thread(dt, "AutoItasa");
+            t.start();
+        } else 
+            printAlert("Non posso procedere al download per problemi di login ad itasa, "
+                    + "controllare user e password");
     }
 
     /**Scarica i torrent
@@ -182,8 +190,9 @@ public class Kernel implements PropertyChangeListener {
      * @param als arraylist di link
      */
     public void downloadTorrent(ArrayList<String> als) {
+        //TODO:creare il thread
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
-        Http http = new Http(connection_Timeout);
+        HttpOther http = new HttpOther(connection_Timeout);
         try {
             for (int i = 0; i < als.size(); i++) {
                 InputStream is = http.getTorrent(als.get(i));
@@ -275,7 +284,7 @@ public class Kernel implements PropertyChangeListener {
         RssParser rss = null;
         ArrayList<Object[]> matrice = null;
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
-        Http http = new Http(connection_Timeout);
+        HttpOther http = new HttpOther(connection_Timeout);
         try {
             InputStream ist = http.getStreamRss(urlRss);
             if (ist != null) {
@@ -640,7 +649,6 @@ public class Kernel implements PropertyChangeListener {
         return id;
     }
 
-
     /**
      * Effettua l'inserimento dei link al download redirectory del synology
      * 
@@ -648,7 +656,7 @@ public class Kernel implements PropertyChangeListener {
      *            Arraylist di link
      */
     public void synoDownloadRedirectory(ArrayList<String> link) {
-        Http http = new Http();
+        HttpOther http = new HttpOther();
         String url = "http://" + prop.getCifsShareLocation()
                 + ":5000/download/download_redirector.cgi";
         try {
@@ -656,11 +664,10 @@ public class Kernel implements PropertyChangeListener {
                     prop.getCifsShareUsername(), prop.getCifsSharePassword());
             http.closeClient();
             if (Lang.verifyTextNotNull(synoID)) {
-                for (int i = 0; i < link.size(); i++) {
-                    http = new Http();
+                http = new HttpOther();
+                for (int i = 0; i < link.size(); i++)
                     http.synoAddLink(url, synoID, link.get(i));
-                    http.closeClient();
-                }
+                http.closeClient();
                 printSynology("link inviati al download redirectory Synology");
             }
         } catch (IOException ex) {
@@ -973,16 +980,20 @@ public class Kernel implements PropertyChangeListener {
     
     private boolean loginItasaHttp(){
         boolean login = false;
-        if (loginItasa==null){
-            loginItasa = new Http();
+        if (httpItasa==null){
             try {
-                loginItasa.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
-            } catch (UnsupportedEncodingException ex) {
-                ex.printStackTrace();
+                httpItasa = new HttpItasa(Integer.parseInt(prop.getHttpTimeout())*1000);
+                if (httpItasa.testConnectItasa(prop.getItasaUsername(), prop.getItasaPassword())){
+                    httpItasa.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
+                    login = true;
+                } else
+                    httpItasa = null;
             } catch (ClientProtocolException ex) {
                 ex.printStackTrace();
+                httpItasa = null;
             } catch (IOException ex) {
                 ex.printStackTrace();
+                httpItasa = null;
             }
         } else 
             login = true;
@@ -1256,7 +1267,7 @@ public class Kernel implements PropertyChangeListener {
     }
 
     public void checkLoginItasa(String user, String pwd) {
-        Http h = new Http();
+        HttpItasa h = new HttpItasa(6000);
         try {
             if (h.testConnectItasa(user, pwd))
                 printOk("Check login Itasa ok");
