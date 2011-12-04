@@ -56,14 +56,14 @@ public class RssParser {
      *
      * @return arraylist del feed "parsato"
      */
-    public ArrayList<Object[]> read() {
+    public ArrayList<Object[]> readRss() {
         List rawEntryList = feed.getEntries();
         ArrayList<Object[]> structuredEntryList = new ArrayList<Object[]>();
         for (int i = 0; i < rawEntryList.size(); i++) {
             SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
             String temp = rawEntry.getTitle();
             if (Lang.verifyTextNotNull(temp) && !temp.equalsIgnoreCase(" ")){
-                Object[] structuredEntry = new Object[5];
+                Object[] structuredEntry = new Object[4];
                 structuredEntry[0] = rawEntry.getLink();
                 structuredEntry[1] = Common.dateTimeString(rawEntry.getPublishedDate());
                 structuredEntry[2] = temp;
@@ -71,6 +71,38 @@ public class RssParser {
                 structuredEntryList.add(structuredEntry);
             }
         }
+        return structuredEntryList;
+    }
+    
+    public ArrayList<Object[]> readRssBlog() {
+        List rawEntryList = feed.getEntries();
+        ArrayList<Object[]> structuredEntryList = new ArrayList<Object[]>();
+        for (int i = 0; i < rawEntryList.size(); i++) {
+            SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
+            String title = rawEntry.getTitle();
+            if (Lang.verifyTextNotNull(title) && !title.equalsIgnoreCase(" ")){
+                Object[] structuredEntry = new Object[6];
+                structuredEntry[0] = rawEntry.getUri();
+                structuredEntry[1] = Common.dateTimeString(rawEntry.getPublishedDate());
+                structuredEntry[2] = title;
+                structuredEntry[3] = rawEntry.getAuthor();
+                structuredEntry[4] = rawEntry.getDescription().getValue();
+                structuredEntry[5] = rawEntry.getCategories();
+                structuredEntryList.add(structuredEntry);
+            }
+        }
+        return structuredEntryList;
+    }
+    
+    /**effettua la lettura del feed e restituisce le informazioni
+     *
+     * @return arraylist del feed "parsato"
+     */
+    public ArrayList<String> readTitleBlog() {
+        List rawEntryList = feed.getEntries();
+        ArrayList<String> structuredEntryList = new ArrayList<String>();
+        for (int i = 0; i < rawEntryList.size(); i++)
+            structuredEntryList.add(((SyndEntry) rawEntryList.get(i)).getTitle());
         return structuredEntryList;
     }
 }// end class

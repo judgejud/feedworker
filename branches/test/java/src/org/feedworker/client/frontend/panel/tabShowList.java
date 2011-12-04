@@ -84,8 +84,8 @@ public class tabShowList extends JScrollPane implements ListEventListener{
     @Override
     public void objReceived(ListEvent evt) {
         if (evt.getName().equals(list.getName())){
-            for (int i=0; i<evt.getArray().length; i++)
-                model.addElement(evt.getArray()[i]);
+            for (int i=0; i<evt.getMatrix().length; i++)
+                model.addElement(evt.getMatrix()[i]);
         }
     }
     

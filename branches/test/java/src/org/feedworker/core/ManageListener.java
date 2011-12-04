@@ -81,8 +81,8 @@ public class ManageListener {
         }
     }
     
-    public static synchronized void fireFrameEvent(Object from, boolean _icontray) {
-        FrameEvent event = new FrameEvent(from, _icontray);
+    public static synchronized void fireFrameEvent(Object from, boolean _icontray, String msg) {
+        FrameEvent event = new FrameEvent(from, _icontray, msg);
         Iterator listeners = listenerFrame.iterator();
         while (listeners.hasNext()) {
             FrameEventListener myel = (FrameEventListener) listeners.next();
@@ -157,7 +157,18 @@ public class ManageListener {
         }
     }
     
-    public static synchronized void fireListEvent(Object from, String dest, Object[][] array) {
+    public static synchronized void fireListEvent(Object from, String dest, 
+                                                                Object[][] array) {
+        ListEvent event = new ListEvent(from, dest, array);
+        Iterator listeners = listenerList.iterator();
+        while (listeners.hasNext()) {
+            ListEventListener myel = (ListEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
+    public static synchronized void fireListEvent(Object from, String dest, 
+                                                    ArrayList<Object[]> array) {
         ListEvent event = new ListEvent(from, dest, array);
         Iterator listeners = listenerList.iterator();
         while (listeners.hasNext()) {

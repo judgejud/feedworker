@@ -6,8 +6,8 @@ package org.feedworker.client.frontend.panel;
  */
 public class paneMyItasa extends paneAbstract{
 
-    public paneMyItasa(String name) {
-        super(name);
+    public paneMyItasa() {
+        super("MyItasa");
     }
 
     @Override
