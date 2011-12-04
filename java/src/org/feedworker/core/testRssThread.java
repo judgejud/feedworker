@@ -88,7 +88,7 @@ public class testRssThread implements Runnable{
                 File ft = File.createTempFile("rss", ".xml");
                 Io.downloadSingle(ist, ft);
                 rss = new RssParser(ft);
-                matrice = rss.read();
+                matrice = rss.readRss();
                 ft.delete();
                 boolean continua = true;
                 if (data != null) {

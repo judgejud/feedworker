@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.net.URISyntaxException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
@@ -62,6 +61,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     private paneReminder jpReminder;
     private paneCalendar jpCalendar;
     private paneShow jpShow;
+    private paneBlog jpBlog;
     private jdResultSearchTv resultSearchTvJD;
     private ProgressDialog progressBar;
     private EnhancedSystemTray systemTray;
@@ -89,6 +89,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         this.setLayout(new BorderLayout());
         mainJTP = new JTabbedPane();
         mainJTP.setPreferredSize(TAB_SIZE);
+        mainJTP.setBorder(null);
         this.add(mainJTP, BorderLayout.CENTER);
         
         jpCalendar = paneCalendar.getPanel();
@@ -100,6 +101,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         jpDestination = paneSubtitleDest.getPanel();
         jpTorrent = paneTorrent.getPanel();
         jpShow = paneShow.getPanel();
+        jpBlog = paneBlog.getPanel();
         
         mainJTP.addTab("Itasa", jpItasa);
         if (prop.isSubsfactoryOption()) {
@@ -120,6 +122,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             checkAddTab(jpShow, false);
         if (prop.isEnablePaneLog())
             checkAddTab(jpLog, false);
+        checkAddTab(jpBlog, true);
         
         statusBar = new paneStatusBar();
         add(statusBar, BorderLayout.SOUTH);
@@ -140,7 +143,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         pack();
     }
 
-    public void initializeSystemTray() throws URISyntaxException {
+    public void initializeSystemTray(){
         if (systemTray != null)
             systemTray.showSystemTray();
         else
@@ -618,7 +621,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             }
         }
         if ((evt.isIcontray()) && (!this.isVisible()))
-            systemTray.notifyIncomingFeed();
+            systemTray.notifyIncomingFeed(evt.getMsg());
         if (evt.getMenu()!=null && evt.getMenu().length>0){
             String[][] menu = evt.getMenu();
             JMenuItem[] jmiLink = new JMenuItem[menu.length];

@@ -51,7 +51,6 @@ abstract class paneAbstract extends JPanel {
         gbcAction.gridy = 0;
         gbcAction.insets = BUTTON_SPACE_INSETS;
         gbcAction.anchor = GridBagConstraints.NORTHWEST;
-        
     }
 
     /** inizializza il pannello */

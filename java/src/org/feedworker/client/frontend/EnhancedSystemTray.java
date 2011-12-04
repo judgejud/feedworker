@@ -3,6 +3,7 @@ package org.feedworker.client.frontend;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.SystemTray;
+import java.awt.TrayIcon.MessageType;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +21,7 @@ public class EnhancedSystemTray {
     private Image iconNormal, iconNew;
     private TrayIcon trayIcon;
     private Mediator proxy = Mediator.getIstance();
+    private int itasa, myitasa, eztv, btchat, subsfactory;
 
     private EnhancedSystemTray(Window owner) {
         this.owner = owner;
@@ -36,6 +38,11 @@ public class EnhancedSystemTray {
             trayIcon.setImage(iconNormal);
             trayIcon.setToolTip(" FeedWorker ");
             tray.add(trayIcon);
+            itasa = 0;
+            myitasa = 0;
+            eztv = 0;
+            btchat = 0;
+            subsfactory = 0;
         } catch (AWTException e) {
             proxy.printError(e);
         }
@@ -63,8 +70,13 @@ public class EnhancedSystemTray {
         return m;
     }
 
-    public void notifyIncomingFeed() {
-        trayIcon.setToolTip(" FeedWorker - ci sono nuovi feed :) ");
+    public void notifyIncomingFeed(String msg) {
+        String[] split = msg.split("|");
+        itasa += Integer.parseInt(split[0]);
+        myitasa += Integer.parseInt(split[1]);
+        msg = "Nuovi feed itasa: " + itasa + "\nNuovi feed myitasa: " + myitasa;
+        trayIcon.displayMessage("FeedWorker", msg, MessageType.INFO);
+        trayIcon.setToolTip(msg);
         trayIcon.setImage(iconNew);
     }
 }

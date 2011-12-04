@@ -268,6 +268,7 @@ public class ItasaOnline extends AbstractQueryXML{
         if (isStatusSuccess()){
             Element item = (Element) getDescendantsZero(1).next();
             String id = item.getChild(TAG_USER_ID).getText();
+            System.out.println(id);
             String authcode = item.getChild(TAG_USER_AUTHCODE).getText();
             String hasmyitasa = item.getChild(TAG_USER_HASMYITASA).getText();
             boolean myitasa = false;

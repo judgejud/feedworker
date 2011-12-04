@@ -16,6 +16,7 @@ public class TextPaneEvent extends EventObject {
     public static final String FEED_MYSUBSF = "F_MYSUBSF";
     public static final String FEED_EZTV = "F_EZTV";
     public static final String FEED_BTCHAT = "F_BTCHAT";
+    public static final String FEED_BLOG = "F_BLOG";
     public static final String SUB = "SUB";
     public static final String SYNOLOGY = "SYNOLOGY";
     public static final String DAY_SERIAL = "DAY_SERIAL";

@@ -8,7 +8,7 @@ import java.util.EventObject;
  */
 public class FrameEvent extends EventObject {
 
-    private String operaz;
+    private String operaz, msg;
     private int max;
     private boolean icontray;
     private String[][] menu;
@@ -29,9 +29,10 @@ public class FrameEvent extends EventObject {
      * @param source oggetto sorgente
      * @param icontray stato dell'icontray
      */
-    public FrameEvent(Object source, boolean icontray) {
+    public FrameEvent(Object source, boolean icontray, String msg) {
         super(source);
         this.icontray = icontray;
+        this.msg = msg;
     }
 
     public FrameEvent(Object o, String[][] menu) {
@@ -53,5 +54,9 @@ public class FrameEvent extends EventObject {
 
     public String[][] getMenu() {
         return menu;
+    }
+
+    public String getMsg() {
+        return msg;
     }
 }

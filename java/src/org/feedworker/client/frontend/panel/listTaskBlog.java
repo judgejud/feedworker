@@ -1,32 +1,28 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.panel;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JList;
-
 import javax.swing.JScrollPane;
-import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+
+import org.feedworker.client.frontend.events.ListEvent;
+import org.feedworker.client.frontend.events.ListEventListener;
+
 import org.jdesktop.beans.AbstractBean;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.JXList.DelegatingRenderer;
@@ -44,21 +40,25 @@ import org.jdesktop.swingx.rollover.RolloverRenderer;
  *
  * @author luca judge
  */
-public class taskpane {
-    static JXList list;
-    public static void main (String[] args) {
-        JFrame frame = new JFrame();
-        frame.setLayout(new BorderLayout());
+class listTaskBlog extends JScrollPane implements ListEventListener{
+    private JXList list = null;
+    private DefaultListModel model = new ContentListeningListModel();
+    
+    public listTaskBlog(String name){
+        super();
+        setName(name);
         list = new JXList() {
             @Override
             protected ListRolloverController createLinkController() {
                 return new XXListRolloverController();
             }
         };
+        setViewportView(list);
+        
         list.setCellRenderer(createRolloverRenderer());
         list.setFixedCellHeight(-1);
         list.setRolloverEnabled(true);
-        ListModel model = createTaskPaneModel(10);
+        
         ListDataListener listener = new ListDataListener() {
             @Override
             public void contentsChanged(ListDataEvent e) {
@@ -67,27 +67,17 @@ public class taskpane {
                 list.revalidate();
                 list.repaint();
             }
-
             @Override
-            public void intervalAdded(ListDataEvent e) {
-            // TODO Auto-generated method stub
-            }
-
+            public void intervalAdded(ListDataEvent e) {}
             @Override
-            public void intervalRemoved(ListDataEvent e) {
-            // TODO Auto-generated method stub
-            }
+            public void intervalRemoved(ListDataEvent e) {}
         };
-        model.addListDataListener(listener);
-        list.setModel(model); 
         
-        frame.add(new JScrollPane(list), BorderLayout.CENTER);
-        frame.setMinimumSize(new Dimension(300,200));
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        model.addListDataListener(listener);
+        list.setModel(model);
     }
     
-    private static LiveTaskPaneListRenderer createRolloverRenderer() {
+    private LiveTaskPaneListRenderer createRolloverRenderer() {
         LiveTaskPaneListRenderer renderer = new LiveTaskPaneListRenderer();
         StringValue sv = new StringValue() {
             @Override
@@ -100,38 +90,22 @@ public class taskpane {
         renderer.getComponentProvider().setStringValue(sv);
         return renderer;
     }
-    
-    private static ListModel createTaskPaneModel(int count) {
-        final DefaultListModel l = new ContentListeningListModel();
-        for (int i = 0; i < count; i++) {
-            SampleTaskPaneModel item = new SampleTaskPaneModel();
-            item.setExpanded(false);
-            item.setTitle("TaskPane - " + i);
-            List<Action> actions = createItemList(i);
-            item.setActions(actions);
-            l.addElement(item);
-        }
-        return l;
-    }
-    
-    private static List<Action> createItemList(int i) {
-        List<Action> items = new ArrayList<Action>();
-        for (int j = 0; j < i; j++)
-            items.add(createAction(i, j));
-        return items;
-    }
 
-    private static Action createAction(int i, int j) {
-        Action action = new AbstractAction("taskPane - " + i + " :: action at - " + j) {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
+    @Override
+    public void objReceived(ListEvent evt) {
+        if (evt.getName().equals(getName())){
+            ArrayList<Object[]> items = evt.getArrayList();
+            for (int i = 0; i < items.size(); i++) { 
+                Object[] obj = items.get(i);
+                SampleTaskPaneModel task = new SampleTaskPaneModel();
+                task.setExpanded(false);
+                task.setTitle(obj[2].toString());
+                //TODO editorpane
+                model.addElement(task);
             }
-        };
-        return action;
+        }
     }
 }
-
 /**
 * implementation of rolloverController which adds the live
 * renderer to the list. This version uses the SwingX
@@ -256,10 +230,10 @@ interface LiveRolloverRenderer extends RolloverRenderer {
 }
 
 /**
-023.* a quick implementation of a rollover-enabled ListCellRenderer using a
-024.* JXTaskPane. Also has experimental support for a real live component,
-025.* added to the list on cell-enter and removed on cell-exit.
-026.*/
+* a quick implementation of a rollover-enabled ListCellRenderer using a
+* JXTaskPane. Also has experimental support for a real live component,
+* added to the list on cell-enter and removed on cell-exit.
+*/
 class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements 
                                                         LiveRolloverRenderer {
     private AbstractHyperlinkAction<SampleTaskPaneModel> linkAction;
@@ -360,9 +334,9 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
     //--------------------- utility methods for both live and dead component
     private void configureTaskPane(JXTaskPane taskPane, SampleTaskPaneModel model) {
         taskPane.removeAll();
-        for (Action item : model.getActions())
+        //for (Action item : model.getActions())
         // obviously this is a no-no in the real world
-            taskPane.add(item);
+        //    taskPane.add(item);
         taskPane.setTitle(getString(model));
         taskPane.setCollapsed(!model.isExpanded());
         getTaskPaneModelLinkAction().setTarget(model);
@@ -414,23 +388,12 @@ class LiveListCellContext extends ListCellContext {
 }
 
 /**
-10.* a quick@dirty model ... just to have something to show.
-11.*/
+* a quick@dirty model ... just to have something to show.
+*/
 class SampleTaskPaneModel extends AbstractBean {
     private boolean expanded;
     private String title;
-    private List<Action> actions;
-
-    public List<Action> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<Action> actions) {
-        List<Action> old = getActions();
-        this.actions = actions;
-        firePropertyChange("actions", old, getActions());
-    }
-
+    
     public boolean isExpanded() {
         return expanded;
     }

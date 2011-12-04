@@ -1,6 +1,5 @@
 package org.feedworker.client.frontend.panel;
 //IMPORT JAVA
-import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -173,7 +172,6 @@ public class paneSetting extends paneAbstract {
 
         temp = new JPanel();
         JLabel jlLocal = new JLabel("Percorso locale standard");
-        jlLocal.setForeground(Color.magenta);
         temp.add(jlLocal);
         temp.add(jbDestSub);
         task.add(temp);
@@ -190,7 +188,6 @@ public class paneSetting extends paneAbstract {
         task.add(temp);
         
         task.add(jcbRunIconized);
-        
         return task;
     }
     
@@ -215,33 +212,23 @@ public class paneSetting extends paneAbstract {
         task.setCollapsed(true);
         
         JLabel jlDomain = new JLabel("Samba Dominio");
-        jlDomain.setForeground(Color.blue);
         task.add(jlDomain);
-        
         task.add(jtfSambaDomain);
         
         JLabel jlSip = new JLabel("Samba IP");
-        jlSip.setForeground(Color.blue);
         task.add(jlSip);
-        
         task.add(jtfSambaIP);
 
         JLabel jlSdir = new JLabel("Samba cartella condivisa");
-        jlSdir.setForeground(Color.blue);
         task.add(jlSdir);
-
         task.add(jtfSambaDir);
 
         JLabel jlSuser = new JLabel("Samba Username");
-        jlSuser.setForeground(Color.blue);
         task.add(jlSuser);
-
         task.add(jtfSambaUser);
 
         JLabel jlSpwd = new JLabel("Samba Password");
-        jlSpwd.setForeground(Color.blue);
         task.add(jlSpwd);
-        
         task.add(jpfSamba);
         
         task.add(jbCheckSamba);
@@ -299,12 +286,10 @@ public class paneSetting extends paneAbstract {
         task.setCollapsed(true);
 
         JLabel jlItasa = new JLabel("RSS Itasa");
-        jlItasa.setForeground(Color.magenta);
         task.add(jlItasa);
         task.add(jtfRssItasa);
 
         JLabel jlMyItasa = new JLabel("RSS myItasa");
-        jlMyItasa.setForeground(Color.magenta);
         task.add(jlMyItasa);
         task.add(jtfRssMyItasa);
 
@@ -317,12 +302,10 @@ public class paneSetting extends paneAbstract {
         task.add(jcbDownloadMyitasaStartup);
 
         JLabel jlIuser = new JLabel("Username");
-        jlIuser.setForeground(Color.red);
         task.add(jlIuser);
         task.add(jtfItasaUser);
 
         JLabel jlIpwd = new JLabel("Password");
-        jlIpwd.setForeground(Color.red);
         task.add(jlIpwd);
         task.add(jpfItasa);
         

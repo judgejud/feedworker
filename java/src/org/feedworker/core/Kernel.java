@@ -75,6 +75,7 @@ public class Kernel implements PropertyChangeListener {
     public final String BTCHAT = "Btchat";
     public final String MYITASA = "MyItasa";
     public final String MYSUBSF = "MySubsf";
+    public final String BLOG = "Blog";
     public final String SEARCH_TV = "SearchTV";
     public final String SUBTITLE_DEST = "SubtitleDest";
     public final String CALENDAR = "Calendar";
@@ -96,11 +97,14 @@ public class Kernel implements PropertyChangeListener {
     private final File FILE_LINK_ITASA = new File("link_itasa.xml");    
     // PRIVATE STATIC VARIABLES
     private static Kernel core = null;
+    private static boolean debug_flag;
     // PRIVATE VARIABLES
+    private String lastItasa=null, lastMyItasa=null, lastSubsf=null,
+            lastEztv=null, lastBtchat=null, lastMySubsf=null, lastBlog=null;
+    private int countItasa, countMyitasa, countSubsf, countMysubsf, countEztv, countBtchat;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Timer timer;
-    private String lastItasa = null, lastMyItasa = null, lastSubsf = null,
-            lastEztv = null, lastBtchat = null, lastMySubsf = null;
+    
     private TreeMap<KeyRule, ValueRule> mapRules;
     private TreeMap<String, String> mapShowItasa;
     private ManageException error = ManageException.getIstance();
@@ -114,7 +118,7 @@ public class Kernel implements PropertyChangeListener {
     private ItasaOnline itasa;
     private ItasaUser user;
     private HttpItasa httpItasa;
-    private static boolean debug_flag;
+    
 
     /**
      * Restituisce l'istanza corrente del kernel
@@ -172,8 +176,8 @@ public class Kernel implements PropertyChangeListener {
     private void downItasaAuto(ArrayList<String> links, boolean first) {
         prop.setLastDateTimeRefresh(Common.actualTime());
         prop.writeOnlyLastDate();
-        DownloadThread dt = null;
         if (loginItasaHttp()){
+            DownloadThread dt = null;
             if (first)
                 dt = new DownloadThread(mapRules, xmlReminder, links, httpItasa, false);
             else
@@ -291,7 +295,7 @@ public class Kernel implements PropertyChangeListener {
                 File ft = File.createTempFile("rss", ".xml");
                 Io.downloadSingle(ist, ft);
                 rss = new RssParser(ft);
-                matrice = rss.read();
+                matrice = rss.readRss();
                 ft.delete();
                 boolean continua = true;
                 if (data != null) {
@@ -360,6 +364,50 @@ public class Kernel implements PropertyChangeListener {
         }
         return matrice;
     }
+    
+    private ArrayList<Object[]> getFeedBlog(String urlRss, String data) {
+        RssParser rss = null;
+        ArrayList<Object[]> matrice = null;
+        int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
+        HttpOther http = new HttpOther(connection_Timeout);
+        try {
+            InputStream ist = http.getStreamRss(urlRss);
+            if (ist != null) {
+                File ft = File.createTempFile("rss", ".xml");
+                Io.downloadSingle(ist, ft);
+                rss = new RssParser(ft);
+                matrice = rss.readRssBlog();
+                ft.delete();
+                boolean continua = true;
+                if (data != null) {
+                    Date confronta = Common.stringDateTime(data);
+                    for (int i = matrice.size() - 1; i >= 0; i--) {
+                        String date_matrix = String.valueOf(matrice.get(i)[1]);
+                        if (confronta.before(Common.stringDateTime(date_matrix))) {
+                            if (continua) {
+                                ManageListener.fireTextPaneEvent(this,
+                                    "Nuovo/i feed " + BLOG,
+                                    TextPaneEvent.FEED_BLOG, true);
+                                continua = false;
+                            }
+                        } else // if confronta after
+                            matrice.remove(i);
+                    } //end for
+                }
+            }
+        } catch (ParseException ex) {
+            error.launch(ex, getClass());
+        } catch (ParsingFeedException ex) {
+            error.launch(ex, getClass(), BLOG);
+        } catch (FeedException ex) {
+            error.launch(ex, getClass(), BLOG);
+        } catch (IllegalArgumentException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass(), BLOG);
+        }
+        return matrice;
+    }
 
     /** Esegue gli rss */
     public void runRss(boolean autoloaddownload) {
@@ -369,6 +417,7 @@ public class Kernel implements PropertyChangeListener {
             runSubsfactory(true);
             if (prop.isTorrentOption())
                 runTorrent(true);
+            runBlog(true);
             prop.setLastDateTimeRefresh(temp);
             int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
             runTimer(delay);
@@ -394,6 +443,8 @@ public class Kernel implements PropertyChangeListener {
                         icontray = true;
                     if (prop.isTorrentOption() && runTorrent(false))
                         icontray = true;
+                    if (runBlog(false))
+                        icontray = true;
                     if ((icontray) && (prop.isEnableNotifyAudioRss())) {
                         try {
                             AudioPlay.playFeedWav();
@@ -405,7 +456,8 @@ public class Kernel implements PropertyChangeListener {
                             error.launch(ex, getClass(), null);
                         }
                     }
-                    ManageListener.fireFrameEvent(this, icontray);
+                    String msg = countItasa + "|" + countMyitasa;
+                    ManageListener.fireFrameEvent(this, icontray, msg);
                 }// end run
             }, delay, delay);
         } catch (IllegalStateException ex) {
@@ -420,13 +472,16 @@ public class Kernel implements PropertyChangeListener {
      */
     private boolean runItasa(boolean first, boolean autoloaddownload) {
         boolean status = false;
+        countItasa = countMyitasa = 0;
         ArrayList<Object[]> feedIta, feedMyita;
         if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
             feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA,
                     false, first);
             if ((feedIta != null) && (feedIta.size() > 0)) {
-                if (!first)
+                if (!first){
                     status = true;
+                    countItasa = feedIta.size();
+                }
                 lastItasa = (String) feedIta.get(0)[1];
                 ManageListener.fireTableEvent(this, feedIta, ITASA);
             }
@@ -441,10 +496,29 @@ public class Kernel implements PropertyChangeListener {
                 feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
                     MYITASA, prop.isAutoDownloadMyItasa(), first);
             if ((feedMyita != null) && (feedMyita.size() > 0)) {
-                if (!first)
+                if (!first){
                     status = true;
+                    countMyitasa = feedMyita.size();
+                }
                 lastMyItasa = (String) feedMyita.get(0)[1];
                 ManageListener.fireTableEvent(this, feedMyita, MYITASA);
+            }
+        }
+        return status;
+    }
+    
+    private boolean runBlog(boolean first) {
+        //TODO: sostituire url con prop.getblog 1volta creato
+        String url = "http://feeds.feedburner.com/itasa-blog";
+        boolean status = false;
+        ArrayList<Object[]> feedBlog;
+        if (Lang.verifyTextNotNull(url)) {
+            feedBlog = getFeedBlog(url, lastBlog);
+            if ((feedBlog != null) && (feedBlog.size() > 0)) {
+                if (!first)
+                    status = true;
+                lastBlog = (String) feedBlog.get(0)[1];
+                ManageListener.fireListEvent(this, BLOG, feedBlog);
             }
         }
         return status;
@@ -452,8 +526,7 @@ public class Kernel implements PropertyChangeListener {
 
     /**Esegue la parte rss subsfactory
      * 
-     * @param first
-     *            primo lancio
+     * @param first primo lancio
      * @return true se ci sono nuovi feed, false altrimenti
      */
     private boolean runSubsfactory(boolean first) {
@@ -464,9 +537,8 @@ public class Kernel implements PropertyChangeListener {
                 subsf = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf,
                         SUBSF, false, first);
                 if ((subsf != null) && (subsf.size() > 0)) {
-                    if (!first) {
+                    if (!first)
                         status = true;
-                    }
                     lastSubsf = (String) subsf.get(0)[1];
                     ManageListener.fireTableEvent(this, subsf, SUBSF);
                 }
@@ -486,11 +558,9 @@ public class Kernel implements PropertyChangeListener {
         return status;
     }
 
-    /**
-     * Esegue la parte rss torrent
+    /**Esegue la parte rss torrent
      * 
-     * @param first
-     *            primo lancio
+     * @param first primo lancio
      * @return true se ci sono nuovi feed, false altrimenti
      */
     private boolean runTorrent(boolean first) {
@@ -628,7 +698,9 @@ public class Kernel implements PropertyChangeListener {
         printOk("Timer in fase di reinizializzazione.");
         runItasa(false, true);
         runSubsfactory(false);
-        runTorrent(false);
+        if (prop.isTorrentOption())
+            runTorrent(false);
+        runBlog(false);
         stopAndRestartTimer();
         printOk("Timer restart ok.");
     }
@@ -664,10 +736,11 @@ public class Kernel implements PropertyChangeListener {
                     prop.getCifsShareUsername(), prop.getCifsSharePassword());
             http.closeClient();
             if (Lang.verifyTextNotNull(synoID)) {
-                http = new HttpOther();
-                for (int i = 0; i < link.size(); i++)
+                for (int i = 0; i < link.size(); i++){
+                    http = new HttpOther();
                     http.synoAddLink(url, synoID, link.get(i));
-                http.closeClient();
+                    http.closeClient();
+                }
                 printSynology("link inviati al download redirectory Synology");
             }
         } catch (IOException ex) {
@@ -1011,7 +1084,7 @@ public class Kernel implements PropertyChangeListener {
             } catch (IOException ex) {
                 error.launch(ex, this.getClass());
             } catch (ItasaException ex) {
-                printAlert("Login itasa: " + ex.getMessage());
+                printAlert("Login itasa API: " + ex.getMessage());
             } catch (Exception ex) {
                 error.launch(ex, this.getClass());
             }
@@ -1021,15 +1094,16 @@ public class Kernel implements PropertyChangeListener {
     }
     
     public void checkLoginItasaAPI(String username, String pwd) {
+        String msg = "CheckLogin Itasa API: "; 
         try {
             new ItasaOnline().login(username, pwd);
-            printOk("CheckLogin Itasa: ok");
+            printOk(msg + "ok");
         } catch (JDOMException ex) {
             error.launch(ex, this.getClass());
         } catch (IOException ex) {
             error.launch(ex, this.getClass());
         } catch (ItasaException ex) {
-            printAlert("Login itasa: " + ex.getMessage());
+            printAlert(msg + ex.getMessage());
         } catch (Exception ex) {
             error.launch(ex, this.getClass());
         }
@@ -1268,11 +1342,12 @@ public class Kernel implements PropertyChangeListener {
 
     public void checkLoginItasa(String user, String pwd) {
         HttpItasa h = new HttpItasa(6000);
+        String msg = "Check login Itasa: ";
         try {
             if (h.testConnectItasa(user, pwd))
-                printOk("Check login Itasa ok");
+                printOk(msg + "ok");
             else
-                printAlert("Check login Itasa: Utente e/o password errata");
+                printAlert(msg + "Utente e/o password errata");
         } catch (ClientProtocolException ex) {
             error.launch(ex, null);
         } catch (IOException ex) {

@@ -2,7 +2,6 @@ package org.feedworker.client;
 
 import java.awt.EventQueue;
 import java.awt.Image;
-import java.net.URISyntaxException;
 
 import javax.swing.JOptionPane;
 
@@ -105,13 +104,8 @@ public class FeedWorkerClient {
                             splash.close();
                             if (!ApplicationSettings.getIstance().isEnabledIconizedRun())
                                 jframe.setVisible(true);
-                            else {
-                                try {
-                                    jframe.initializeSystemTray();
-                                } catch (URISyntaxException ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
+                            else
+                                jframe.initializeSystemTray();
                         }//end run
                     }); //end runnable EventQueue.invokeLater
                 } catch (AlreadyStartedApplicationException e) {
