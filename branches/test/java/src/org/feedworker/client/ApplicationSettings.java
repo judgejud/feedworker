@@ -32,7 +32,7 @@ public class ApplicationSettings {
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
             enableNotifyMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
             enablePaneSearchSubItasa, enablePaneReminder, reminderOption, enablePaneTorrent,
-            enablePaneCalendar, enableNotifySms, enablePaneShow;
+            enablePaneCalendar, enableNotifySms, enablePaneShow, blogOption, enablePaneBlog;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -70,6 +70,7 @@ public class ApplicationSettings {
                             getBooleanDecryptedValue("IS_AUTO_DOWNLOAD_MYITASA"));
                 setAutoLoadDownloadMyItasa(
                         getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
+                setBlogOption(getBooleanDecryptedValue("BLOG"));
                 //SUBSFATORY
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
                 setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
@@ -95,6 +96,7 @@ public class ApplicationSettings {
                                     getBooleanDecryptedValue("ENABLE_PANE_SUB_DEST"));
                 setEnablePaneTorrent(getBooleanDecryptedValue("ENABLE_PANE_TORRENT"));
                 setEnablePaneShow(getBooleanDecryptedValue("ENABLE_PANE_SHOW"));
+                setEnablePaneBlog(getBooleanDecryptedValue("ENABLE_PANE_BLOG"));
                 //ADVISOR SETTINGS
                 setMailTO(getDecryptedValue("MAIL_TO"));
                 setMailSMTP(getDecryptedValue("MAIL_SMTP"));
@@ -174,6 +176,7 @@ public class ApplicationSettings {
             propertiesCrypting("ITASA_PASSWORD", itasaPassword);
             propertiesCrypting("IS_AUTO_DOWNLOAD_MYITASA", autoDownloadMyItasa);
             propertiesCrypting("IS_AUTO_LOAD_DOWNLOAD_MYITASA", autoLoadDownloadMyItasa);
+            propertiesCrypting("BLOG", blogOption);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -246,6 +249,7 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_PANE_REMINDER", enablePaneReminder);
             propertiesCrypting("ENABLE_PANE_TORRENT", enablePaneTorrent);
             propertiesCrypting("ENABLE_PANE_SHOW", enablePaneShow);
+            propertiesCrypting("ENABLE_PANE_BLOG", enablePaneBlog);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -679,5 +683,21 @@ public class ApplicationSettings {
 
     public void setEnablePaneShow(boolean enablePaneShow) {
         this.enablePaneShow = enablePaneShow;
+    }
+
+    public boolean isBlogOption() {
+        return blogOption;
+    }
+
+    public void setBlogOption(boolean blogOption) {
+        this.blogOption = blogOption;
+    }
+
+    public boolean isEnablePaneBlog() {
+        return enablePaneBlog;
+    }
+
+    public void setEnablePaneBlog(boolean enablePaneBlog) {
+        this.enablePaneBlog = enablePaneBlog;
     }
 }// end class

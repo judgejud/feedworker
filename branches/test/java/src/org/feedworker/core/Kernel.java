@@ -101,7 +101,8 @@ public class Kernel implements PropertyChangeListener {
     // PRIVATE VARIABLES
     private String lastItasa=null, lastMyItasa=null, lastSubsf=null,
             lastEztv=null, lastBtchat=null, lastMySubsf=null, lastBlog=null;
-    private int countItasa, countMyitasa, countSubsf, countMysubsf, countEztv, countBtchat;
+    private int countItasa, countMyitasa, countSubsf, countMysubsf, countEztv, 
+            countBtchat, countBlog;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Timer timer;
     
@@ -414,10 +415,12 @@ public class Kernel implements PropertyChangeListener {
         if (!prop.isApplicationFirstTimeUsed()) {
             String temp = Common.actualTime();
             runItasa(true, autoloaddownload);
-            runSubsfactory(true);
+            if (prop.isSubsfactoryOption())
+                runSubsfactory(true);
             if (prop.isTorrentOption())
                 runTorrent(true);
-            runBlog(true);
+            if (prop.isBlogOption())
+                runBlog(true);
             prop.setLastDateTimeRefresh(temp);
             int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
             runTimer(delay);
@@ -508,9 +511,9 @@ public class Kernel implements PropertyChangeListener {
     }
     
     private boolean runBlog(boolean first) {
+        boolean status = false;
         //TODO: sostituire url con prop.getblog 1volta creato
         String url = "http://feeds.feedburner.com/itasa-blog";
-        boolean status = false;
         ArrayList<Object[]> feedBlog;
         if (Lang.verifyTextNotNull(url)) {
             feedBlog = getFeedBlog(url, lastBlog);
@@ -531,28 +534,26 @@ public class Kernel implements PropertyChangeListener {
      */
     private boolean runSubsfactory(boolean first) {
         boolean status = false;
-        if (prop.isSubsfactoryOption()) {
-            ArrayList<Object[]> subsf, mysubsf;
-            if (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL())) {
-                subsf = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf,
-                        SUBSF, false, first);
-                if ((subsf != null) && (subsf.size() > 0)) {
-                    if (!first)
-                        status = true;
-                    lastSubsf = (String) subsf.get(0)[1];
-                    ManageListener.fireTableEvent(this, subsf, SUBSF);
-                }
+        ArrayList<Object[]> subsf, mysubsf;
+        if (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL())) {
+            subsf = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf,
+                    SUBSF, false, first);
+            if ((subsf != null) && (subsf.size() > 0)) {
+                if (!first)
+                    status = true;
+                lastSubsf = (String) subsf.get(0)[1];
+                ManageListener.fireTableEvent(this, subsf, SUBSF);
             }
-            if (Lang.verifyTextNotNull(prop.getMySubsfactoryFeedUrl())) {
-                mysubsf = getFeedRss(prop.getMySubsfactoryFeedUrl(),
-                        lastMySubsf, MYSUBSF, false, first);
-                if ((mysubsf != null) && (mysubsf.size() > 0)) {
-                    if (!first) {
-                        status = true;
-                    }
-                    lastMySubsf = (String) mysubsf.get(0)[1];
-                    ManageListener.fireTableEvent(this, mysubsf, MYSUBSF);
+        }
+        if (Lang.verifyTextNotNull(prop.getMySubsfactoryFeedUrl())) {
+            mysubsf = getFeedRss(prop.getMySubsfactoryFeedUrl(),
+                    lastMySubsf, MYSUBSF, false, first);
+            if ((mysubsf != null) && (mysubsf.size() > 0)) {
+                if (!first) {
+                    status = true;
                 }
+                lastMySubsf = (String) mysubsf.get(0)[1];
+                ManageListener.fireTableEvent(this, mysubsf, MYSUBSF);
             }
         }
         return status;
@@ -697,10 +698,12 @@ public class Kernel implements PropertyChangeListener {
     public void bruteRefreshRSS() {
         printOk("Timer in fase di reinizializzazione.");
         runItasa(false, true);
-        runSubsfactory(false);
+        if (prop.isSubsfactoryOption())
+            runSubsfactory(false);
         if (prop.isTorrentOption())
             runTorrent(false);
-        runBlog(false);
+        if (prop.isBlogOption())
+            runBlog(false);
         stopAndRestartTimer();
         printOk("Timer restart ok.");
     }
