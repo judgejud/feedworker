@@ -35,7 +35,7 @@ public class paneSetting extends paneAbstract {
     private JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
             jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
             jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
-            jcbPaneShow, jcbTorrent;
+            jcbPaneShow, jcbTorrent, jcbPaneBlog, jcbBlogItasa;
     private JButton jbSaveSettings, jbAnnullaSettings, jbDestSub, jbDestTorrent, 
             jbCheckItasaApi, jbCheckItasaLogin, jbCheckSamba;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
@@ -281,6 +281,8 @@ public class paneSetting extends paneAbstract {
             }
         });
         
+        jcbBlogItasa = new JCheckBox("Abilita Blog");
+        
         JXTaskPane task = new JXTaskPane();
         task.setTitle("ItalianSubs");
         task.setCollapsed(true);
@@ -313,6 +315,8 @@ public class paneSetting extends paneAbstract {
         temp.add(jbCheckItasaLogin);
         temp.add(jbCheckItasaApi);
         task.add(temp);
+        
+        task.add(jcbBlogItasa);
         return task;
     }
 
@@ -398,6 +402,7 @@ public class paneSetting extends paneAbstract {
     }
     
     private JXTaskPane initTaskPaneVisibilePane(){
+        jcbPaneBlog = new JCheckBox("Blog");
         jcbPaneCalendar = new JCheckBox("Calendar");
         jcbPaneLog = new JCheckBox("Log");
         jcbPaneReminder = new JCheckBox("Reminder");
@@ -411,6 +416,7 @@ public class paneSetting extends paneAbstract {
         task.setTitle("Visible Pane at Startup");
         task.setCollapsed(true);
         
+        task.add(jcbPaneBlog);
         task.add(jcbPaneCalendar);
         task.add(jcbPaneLog);
         task.add(jcbPaneReminder);

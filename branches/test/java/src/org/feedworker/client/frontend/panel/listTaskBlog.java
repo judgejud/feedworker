@@ -1,7 +1,7 @@
 package org.feedworker.client.frontend.panel;
 
-import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListDataEvent;
@@ -24,7 +25,6 @@ import org.feedworker.client.frontend.events.ListEvent;
 import org.feedworker.client.frontend.events.ListEventListener;
 
 import org.jdesktop.beans.AbstractBean;
-import org.jdesktop.swingx.JXEditorPane;
 import org.jdesktop.swingx.JXList;
 import org.jdesktop.swingx.JXList.DelegatingRenderer;
 import org.jdesktop.swingx.JXTaskPane;
@@ -95,18 +95,21 @@ class listTaskBlog extends JScrollPane implements ListEventListener{
     @Override
     public void objReceived(ListEvent evt) {
         if (evt.getName().equals(getName())){
+            String start = "<html><head></head><body><font size=\"4\">" +
+                            "<table width=\"95%\"><tr>" + 
+                            "<td width=\"10%\"><b>Autore</b></font></td><td>";
+            String mid = "</td></tr><tr><td width=\"10%\"><b>"; 
+            String end = "</td></tr></table></font></body></html>";
             ArrayList<Object[]> items = evt.getArrayList();
-            for (int i = 0; i < items.size(); i++) { 
+            for (int i = 0; i < items.size(); i++) {
                 Object[] obj = items.get(i);
                 SampleTaskPaneModel task = new SampleTaskPaneModel();
                 task.setExpanded(false);
-                task.setTitle(obj[1].toString() + " " + 
-                        obj[2].toString());
-                JXEditorPane pane = new JXEditorPane();
-                pane.setText(obj[4].toString());
-                pane.setEditable(false);
-                //TODO: vedere come aggiungere l'editor al task
-                
+                task.setTitle(obj[1].toString() + " " + obj[2].toString());
+                String html = start +  obj[3].toString();
+                html += mid + "Descrizione</b></td><td>" + obj[4].toString();
+                html += end;
+                task.setText(html);
                 model.addElement(task);
             }
         }
@@ -250,8 +253,10 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
     public LiveTaskPaneProvider() {
         super();
         liveTaskPane = createRendererComponent();
-        liveTaskPane.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(Color.RED), liveTaskPane.getBorder()));
+        //liveTaskPane.setBorder(null);
+        liveTaskPane.setBorder(BorderFactory.createCompoundBorder(null, 
+                                                        liveTaskPane.getBorder()));
+            //BorderFactory.createLineBorder(Color.RED), liveTaskPane.getBorder()));
     }
     // ----------- implement RolloverRenderer
     @Override
@@ -337,6 +342,12 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
     //--------------------- utility methods for both live and dead component
     private void configureTaskPane(JXTaskPane taskPane, SampleTaskPaneModel model) {
         taskPane.removeAll();
+        JEditorPane jep = new JEditorPane();
+        jep.setContentType("text/html");
+        jep.setText(model.getText());
+        //jep.setEditable(false);
+        jep.setPreferredSize(new Dimension(900,200));
+        taskPane.add(new JScrollPane(jep));
         taskPane.setTitle(getString(model));
         taskPane.setCollapsed(!model.isExpanded());
     }
@@ -352,8 +363,8 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
             linkAction = new AbstractHyperlinkAction<SampleTaskPaneModel>() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    boolean expanded = getTarget().isExpanded();
-                    getTarget().setExpanded(!expanded);
+//                    boolean expanded = getTarget().isExpanded();
+//                    getTarget().setExpanded(!expanded);
                 }
             };
         }
@@ -391,7 +402,7 @@ class LiveListCellContext extends ListCellContext {
 */
 class SampleTaskPaneModel extends AbstractBean {
     private boolean expanded;
-    private String title;
+    private String title, text, url;
     
     public boolean isExpanded() {
         return expanded;
@@ -411,6 +422,26 @@ class SampleTaskPaneModel extends AbstractBean {
         String old = getTitle();
         this.title = title;
         firePropertyChange("title", old, getTitle());
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        String old = getText();
+        this.text = text;
+        firePropertyChange("text", old, getText());
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        String old = getUrl();
+        this.url = url;
+        firePropertyChange("url", old, getUrl());
     }
 } //end SampleTaskPaneModel
 

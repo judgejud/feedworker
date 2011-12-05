@@ -81,13 +81,12 @@ public class RssParser {
             SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
             String title = rawEntry.getTitle();
             if (Lang.verifyTextNotNull(title) && !title.equalsIgnoreCase(" ")){
-                Object[] structuredEntry = new Object[6];
+                Object[] structuredEntry = new Object[5];
                 structuredEntry[0] = rawEntry.getUri();
                 structuredEntry[1] = Common.dateTimeString(rawEntry.getPublishedDate());
                 structuredEntry[2] = title;
                 structuredEntry[3] = rawEntry.getAuthor();
                 structuredEntry[4] = rawEntry.getDescription().getValue();
-                structuredEntry[5] = rawEntry.getCategories();
                 structuredEntryList.add(structuredEntry);
             }
         }

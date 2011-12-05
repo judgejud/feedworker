@@ -316,6 +316,15 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             }
         });
         
+        JMenuItem jmiWindowBlog = new JMenuItem(" Blog ");
+        jmiWindowShow.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpBlog, true);
+            }
+        });
+        
+        jmWindowTab.add(jmiWindowBlog);
         jmWindowTab.add(jmiWindowCalendar);
         jmWindowTab.add(jmiWindowLog);
         jmWindowTab.add(jmiWindowReminder);
