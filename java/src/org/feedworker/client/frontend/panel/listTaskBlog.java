@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
@@ -115,6 +116,7 @@ class listTaskBlog extends JScrollPane implements ListEventListener{
                 html += mid + "Descrizione</b></td><td>" + obj[4].toString();
                 html += end;
                 task.setText(html);
+                task.setUrl(obj[0].toString());
                 model.addElement(task);
             }
         }
@@ -345,26 +347,27 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
     // the "usual suspects" didn't help ... leave it for now...
     }
     //--------------------- utility methods for both live and dead component
-    private void configureTaskPane(JXTaskPane taskPane, final SampleTaskPaneModel model) {
-        taskPane.removeAll();
+    private void configureTaskPane(JXTaskPane taskPane, SampleTaskPaneModel model) {
         JEditorPane jep = new JEditorPane();
         jep.setContentType("text/html");
         jep.setText(model.getText());
-        //jep.setEditable(false);
         jep.setPreferredSize(new Dimension(900,150));
-        taskPane.add(new JScrollPane(jep));
-        taskPane.setTitle(getString(model));
-        taskPane.setCollapsed(!model.isExpanded());
+        final String url = model.getUrl();
         JButton jbBrowse = new JButton(GuiCore.getInstance().getIconWWW());
+        jbBrowse.setName(url);
         jbBrowse.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         jbBrowse.setToolTipText("Visualizza l'articolo corrente del blog nel browser");
         jbBrowse.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                Mediator.getIstance().openFormTV(model.getUrl());
+                Mediator.getIstance().openWebsite(url);
             }
         });
-        taskPane.add(jbBrowse);
+        taskPane.removeAll();
+        taskPane.add(new JPanel().add(jbBrowse));
+        taskPane.add(new JScrollPane(jep));
+        taskPane.setTitle(getString(model));
+        taskPane.setCollapsed(!model.isExpanded());
     }
 
     private void unconfigureTaskPane(JXTaskPane taskPane, Object value) {
