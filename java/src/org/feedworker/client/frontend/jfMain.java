@@ -122,7 +122,8 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             checkAddTab(jpShow, false);
         if (prop.isEnablePaneLog())
             checkAddTab(jpLog, false);
-        checkAddTab(jpBlog, true);
+        if (prop.isEnablePaneBlog())
+            checkAddTab(jpBlog, false);
         
         statusBar = new paneStatusBar();
         add(statusBar, BorderLayout.SOUTH);

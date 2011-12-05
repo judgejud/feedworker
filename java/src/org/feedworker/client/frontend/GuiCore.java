@@ -371,7 +371,7 @@ public class GuiCore {
             boolean paneSetting, boolean paneSubDest, boolean paneReminder, 
             boolean reminder, String googleUser, String googlePwd, String googleCalendar, 
             boolean paneTorrent, boolean paneCalendar, boolean torrentOption, 
-            boolean paneShow) {
+            boolean paneShow, boolean blog, boolean paneBlog) {
                 
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -390,12 +390,12 @@ public class GuiCore {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                     sambaUser, sambaPwd, time, timeout, 
                     advancedDownload, runIconized, reminder);
-            setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa);
+            setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa, blog);
             setPropSubsf(subsf, mySubsf);
             setPropTorrent(torrentDest, torrentOption);
             setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
-                            paneReminder, paneTorrent, paneCalendar, paneShow);
+                            paneReminder, paneTorrent, paneCalendar, paneShow, paneBlog);
             proxy.writeSettings();
             if (!prop.isApplicationFirstTimeUsed() && first) {
                 ManageListener.fireFrameEvent(this, ENABLE_BUTTON);
@@ -584,13 +584,14 @@ public class GuiCore {
     }
 
     private void setPropItasa(String itasa, String myitasa, String user,
-            String pwd, boolean auto, boolean autoload) {
+            String pwd, boolean auto, boolean autoload, boolean blog) {
         prop.setItasaFeedURL(itasa);
         prop.setMyitasaFeedURL(myitasa);
         prop.setItasaUsername(user);
         prop.setItasaPassword(pwd);
         prop.setAutoDownloadMyItasa(auto);
         prop.setAutoLoadDownloadMyItasa(autoload);
+        prop.setBlogOption(blog);
     }
     
     private void setPropSubsf(String subsf, String mySubsf){
@@ -609,7 +610,7 @@ public class GuiCore {
     
     private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
                                     boolean subdest, boolean reminder, boolean torrent,
-                                    boolean calendar, boolean show){
+                                    boolean calendar, boolean show, boolean blog){
         prop.setEnablePaneCalendar(calendar);
         prop.setEnablePaneLog(log);
         prop.setEnablePaneSearchSubItasa(search);
@@ -618,6 +619,7 @@ public class GuiCore {
         prop.setEnablePaneReminder(reminder);
         prop.setEnablePaneTorrent(torrent);
         prop.setEnablePaneShow(show);
+        prop.setEnablePaneBlog(blog);
     }
     
     private void setPropTorrent(String dest, boolean option){

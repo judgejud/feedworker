@@ -14,13 +14,18 @@ import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import org.feedworker.client.frontend.GuiCore;
+import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.ListEvent;
 import org.feedworker.client.frontend.events.ListEventListener;
 
@@ -340,16 +345,26 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
     // the "usual suspects" didn't help ... leave it for now...
     }
     //--------------------- utility methods for both live and dead component
-    private void configureTaskPane(JXTaskPane taskPane, SampleTaskPaneModel model) {
+    private void configureTaskPane(JXTaskPane taskPane, final SampleTaskPaneModel model) {
         taskPane.removeAll();
         JEditorPane jep = new JEditorPane();
         jep.setContentType("text/html");
         jep.setText(model.getText());
         //jep.setEditable(false);
-        jep.setPreferredSize(new Dimension(900,200));
+        jep.setPreferredSize(new Dimension(900,150));
         taskPane.add(new JScrollPane(jep));
         taskPane.setTitle(getString(model));
         taskPane.setCollapsed(!model.isExpanded());
+        JButton jbBrowse = new JButton(GuiCore.getInstance().getIconWWW());
+        jbBrowse.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        jbBrowse.setToolTipText("Visualizza l'articolo corrente del blog nel browser");
+        jbBrowse.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                Mediator.getIstance().openFormTV(model.getUrl());
+            }
+        });
+        taskPane.add(jbBrowse);
     }
 
     private void unconfigureTaskPane(JXTaskPane taskPane, Object value) {

@@ -92,16 +92,4 @@ public class RssParser {
         }
         return structuredEntryList;
     }
-    
-    /**effettua la lettura del feed e restituisce le informazioni
-     *
-     * @return arraylist del feed "parsato"
-     */
-    public ArrayList<String> readTitleBlog() {
-        List rawEntryList = feed.getEntries();
-        ArrayList<String> structuredEntryList = new ArrayList<String>();
-        for (int i = 0; i < rawEntryList.size(); i++)
-            structuredEntryList.add(((SyndEntry) rawEntryList.get(i)).getTitle());
-        return structuredEntryList;
-    }
 }// end class

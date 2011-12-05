@@ -27,8 +27,7 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class paneSetting extends paneAbstract {
-    private final String[] timeout = new String[]{"3", "6", "9", "12", "15", "18"};
-    private final String[] minuti = new String[]{"3", "6", "10", "15", "20", "30", "45"};
+    private final String[] time = new String[]{"2", "4", "6", "8", "10", "15", "20"};
     private static paneSetting jpanel = null;
     private JComboBox jcbMinuti, jcbTimeout;
     private JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
@@ -114,7 +113,8 @@ public class paneSetting extends paneAbstract {
                 jcbReminder.isSelected(), jtfGoogleUser.getText(), 
                 new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), 
                 jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected(), 
-                jcbTorrent.isSelected(), jcbPaneShow.isSelected());
+                jcbTorrent.isSelected(), jcbPaneShow.isSelected(), jcbBlogItasa.isSelected(), 
+                jcbPaneBlog.isSelected());
             }
         });
         
@@ -131,9 +131,10 @@ public class paneSetting extends paneAbstract {
     }
     
     private JXTaskPane initTaskPaneGeneral() {
-        jcbMinuti = new JComboBox(new DefaultComboBoxModel(minuti));
+        DefaultComboBoxModel combo = new DefaultComboBoxModel(time);
+        jcbMinuti = new JComboBox(combo);
         jcbMinuti.setSelectedIndex(2);
-        jcbTimeout = new JComboBox(new DefaultComboBoxModel(timeout));
+        jcbTimeout = new JComboBox(combo);
         jcbTimeout.setSelectedIndex(2);
         jrbDirLocal = new JRadioButton("HD locale");
         jrbDirLocal.setSelected(true);
@@ -483,6 +484,7 @@ public class paneSetting extends paneAbstract {
         jpfItasa.setText(prop.getItasaPassword());
         jrbDownAuto.setSelected(prop.isAutoDownloadMyItasa());
         jrbDownManual.setSelected(!prop.isAutoDownloadMyItasa());
+        jcbBlogItasa.setSelected(prop.isBlogOption());
         settingItasaDownloadStartup();
     }
     
@@ -515,6 +517,7 @@ public class paneSetting extends paneAbstract {
     }
     
     private void settingsPaneVisibleValue(){
+        jcbPaneBlog.setSelected(prop.isEnablePaneBlog());
         jcbPaneCalendar.setSelected(prop.isEnablePaneCalendar());
         jcbPaneLog.setSelected(prop.isEnablePaneLog());
         jcbPaneReminder.setSelected(prop.isEnablePaneReminder());
