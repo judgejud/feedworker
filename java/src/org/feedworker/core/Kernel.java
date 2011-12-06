@@ -438,6 +438,7 @@ public class Kernel implements PropertyChangeListener {
             timer.scheduleAtFixedRate(new TimerTask()  {
                 @Override
                 public void run() {
+                    System.out.println(Common.actualTime());
                     boolean icontray = false;
                     prop.setLastDateTimeRefresh(Common.actualTime());
                     if (runItasa(false,true))
@@ -446,7 +447,7 @@ public class Kernel implements PropertyChangeListener {
                         icontray = true;
                     if (prop.isTorrentOption() && runTorrent(false))
                         icontray = true;
-                    if (runBlog(false))
+                    if (prop.isBlogOption() && runBlog(false))
                         icontray = true;
                     if ((icontray) && (prop.isEnableNotifyAudioRss())) {
                         try {
@@ -459,7 +460,9 @@ public class Kernel implements PropertyChangeListener {
                             error.launch(ex, getClass(), null);
                         }
                     }
-                    String msg = countItasa + "|" + countMyitasa;
+                    String msg = countItasa + ":" + countMyitasa + ":" + countBlog +
+                            ":" + countEztv + ":" + countBtchat + ":" + countSubsf + 
+                            ":" + countMysubsf;
                     ManageListener.fireFrameEvent(this, icontray, msg);
                 }// end run
             }, delay, delay);
@@ -475,7 +478,8 @@ public class Kernel implements PropertyChangeListener {
      */
     private boolean runItasa(boolean first, boolean autoloaddownload) {
         boolean status = false;
-        countItasa = countMyitasa = 0;
+        countItasa = 0;
+        countMyitasa = 0;
         ArrayList<Object[]> feedIta, feedMyita;
         if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
             feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA,
@@ -515,11 +519,14 @@ public class Kernel implements PropertyChangeListener {
         //TODO: sostituire url con prop.getblog 1volta creato
         String url = "http://feeds.feedburner.com/itasa-blog";
         ArrayList<Object[]> feedBlog;
+        countBlog = 0;
         if (Lang.verifyTextNotNull(url)) {
             feedBlog = getFeedBlog(url, lastBlog);
             if ((feedBlog != null) && (feedBlog.size() > 0)) {
-                if (!first)
+                if (!first){
                     status = true;
+                    countBlog = feedBlog.size();
+                }
                 lastBlog = (String) feedBlog.get(0)[1];
                 ManageListener.fireListEvent(this, BLOG, feedBlog);
             }
@@ -534,13 +541,17 @@ public class Kernel implements PropertyChangeListener {
      */
     private boolean runSubsfactory(boolean first) {
         boolean status = false;
+        countSubsf = 0;
+        countMysubsf = 0;
         ArrayList<Object[]> subsf, mysubsf;
         if (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL())) {
             subsf = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf,
                     SUBSF, false, first);
             if ((subsf != null) && (subsf.size() > 0)) {
-                if (!first)
+                if (!first){
                     status = true;
+                    countSubsf = subsf.size();
+                }
                 lastSubsf = (String) subsf.get(0)[1];
                 ManageListener.fireTableEvent(this, subsf, SUBSF);
             }
@@ -551,6 +562,7 @@ public class Kernel implements PropertyChangeListener {
             if ((mysubsf != null) && (mysubsf.size() > 0)) {
                 if (!first) {
                     status = true;
+                    countMysubsf = mysubsf.size();
                 }
                 lastMySubsf = (String) mysubsf.get(0)[1];
                 ManageListener.fireTableEvent(this, mysubsf, MYSUBSF);
@@ -566,23 +578,27 @@ public class Kernel implements PropertyChangeListener {
      */
     private boolean runTorrent(boolean first) {
         boolean status = false;
-        if (prop.isTorrentOption()) {
-            ArrayList<Object[]> feedEz, feedBt;
-            feedEz = getFeedRss(RSS_TORRENT_EZTV, lastEztv, EZTV, false, first);
-            feedBt = getFeedRss(RSS_TORRENT_BTCHAT, lastBtchat, BTCHAT, false,
-                    first);
-            if ((feedEz != null) && (feedEz.size() > 0)) {
-                if (!first)
-                    status = true;
-                lastEztv = (String) feedEz.get(0)[1];
-                ManageListener.fireTableEvent(this, feedEz, EZTV);
+        ArrayList<Object[]> feedEz, feedBt;
+        countBtchat = 0;
+        countEztv = 0;
+        feedEz = getFeedRss(RSS_TORRENT_EZTV, lastEztv, EZTV, false, first);
+        feedBt = getFeedRss(RSS_TORRENT_BTCHAT, lastBtchat, BTCHAT, false,
+                first);
+        if ((feedEz != null) && (feedEz.size() > 0)) {
+            if (!first){
+                status = true;
+                countEztv = feedEz.size();
             }
-            if ((feedBt != null) && (feedBt.size() > 0)) {
-                if (!first)
-                    status = true;
-                lastBtchat = (String) feedBt.get(0)[1];
-                ManageListener.fireTableEvent(this, feedBt, BTCHAT);
+            lastEztv = (String) feedEz.get(0)[1];
+            ManageListener.fireTableEvent(this, feedEz, EZTV);
+        }
+        if ((feedBt != null) && (feedBt.size() > 0)) {
+            if (!first){
+                status = true;
+                countBtchat = feedBt.size();
             }
+            lastBtchat = (String) feedBt.get(0)[1];
+            ManageListener.fireTableEvent(this, feedBt, BTCHAT);
         }
         return status;
     }

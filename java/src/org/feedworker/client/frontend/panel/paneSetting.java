@@ -131,10 +131,9 @@ public class paneSetting extends paneAbstract {
     }
     
     private JXTaskPane initTaskPaneGeneral() {
-        DefaultComboBoxModel combo = new DefaultComboBoxModel(time);
-        jcbMinuti = new JComboBox(combo);
+        jcbMinuti = new JComboBox(new DefaultComboBoxModel(time));
         jcbMinuti.setSelectedIndex(2);
-        jcbTimeout = new JComboBox(combo);
+        jcbTimeout = new JComboBox(new DefaultComboBoxModel(time));
         jcbTimeout.setSelectedIndex(2);
         jrbDirLocal = new JRadioButton("HD locale");
         jrbDirLocal.setSelected(true);

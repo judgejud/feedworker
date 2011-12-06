@@ -17,6 +17,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -363,8 +364,11 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
                 Mediator.getIstance().openWebsite(url);
             }
         });
+        JPanel jp = new JPanel();
+        jp.add(jbBrowse);
+        jp.add(new JLabel());
         taskPane.removeAll();
-        taskPane.add(new JPanel().add(jbBrowse));
+        taskPane.add(jp);
         taskPane.add(new JScrollPane(jep));
         taskPane.setTitle(getString(model));
         taskPane.setCollapsed(!model.isExpanded());

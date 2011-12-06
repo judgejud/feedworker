@@ -21,7 +21,7 @@ public class EnhancedSystemTray {
     private Image iconNormal, iconNew;
     private TrayIcon trayIcon;
     private Mediator proxy = Mediator.getIstance();
-    private int itasa, myitasa, eztv, btchat, subsfactory;
+    private int itasa, myitasa, eztv, btchat, subsf, blog, mysubsf;
 
     private EnhancedSystemTray(Window owner) {
         this.owner = owner;
@@ -40,9 +40,11 @@ public class EnhancedSystemTray {
             tray.add(trayIcon);
             itasa = 0;
             myitasa = 0;
+            blog = 0;
             eztv = 0;
             btchat = 0;
-            subsfactory = 0;
+            subsf = 0;
+            mysubsf = 0;
         } catch (AWTException e) {
             proxy.printError(e);
         }
@@ -71,10 +73,43 @@ public class EnhancedSystemTray {
     }
 
     public void notifyIncomingFeed(String msg) {
-        String[] split = msg.split("|");
-        itasa += Integer.parseInt(split[0]);
-        myitasa += Integer.parseInt(split[1]);
-        msg = "Nuovi feed itasa: " + itasa + "\nNuovi feed myitasa: " + myitasa;
+        String[] split = msg.split(":");
+        try {
+            itasa += Integer.parseInt(split[0]);
+        } catch (NumberFormatException npe){}
+        try {
+            myitasa += Integer.parseInt(split[1]);
+        } catch (NumberFormatException npe){}
+        try {
+            blog += Integer.parseInt(split[2]);
+        } catch (NumberFormatException npe){}
+        try {
+            eztv += Integer.parseInt(split[3]);
+        } catch (NumberFormatException npe){}
+        try {
+            btchat += Integer.parseInt(split[4]);
+        } catch (NumberFormatException npe){}
+        try {
+            subsf += Integer.parseInt(split[5]);
+        } catch (NumberFormatException npe){}
+        try {
+            mysubsf += Integer.parseInt(split[6]);
+        } catch (NumberFormatException npe){}
+        msg = "";
+        if (itasa>0)
+            msg += "Nuovi feed itasa: " + itasa + "\n";
+        if (myitasa>0)
+            msg += "Nuovi feed myitasa: " + myitasa + "\n";
+        if (blog>0)
+            msg += "Nuovi feed blog: " + blog + "\n";
+        if (subsf>0)
+            msg += "Nuovi feed subsfactory: " + subsf + "\n";
+        if (mysubsf>0)
+            msg += "Nuovi feed mySubsfactory: " + mysubsf + "\n";
+        if (eztv>0)
+            msg += "Nuovi feed eztv: " + eztv + "\n";
+        if (btchat>0)
+            msg += "Nuovi feed btchat: " + btchat + "\n";
         trayIcon.displayMessage("FeedWorker", msg, MessageType.INFO);
         trayIcon.setToolTip(msg);
         trayIcon.setImage(iconNew);
