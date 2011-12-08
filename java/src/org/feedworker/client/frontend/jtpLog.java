@@ -26,7 +26,8 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
     private StyledDocument mysd;
     private Style styleOK, styleError, styleAlert, styleSub, styleTorrent,
             styleFeedItasa, styleFeedMyItasa, styleFeedSubsf, styleFeedMySubsf,
-            styleFeedEztv, styleFeedBtchat, styleSynology, styleDaySerial;
+            styleFeedEztv, styleFeedBtchat, styleSynology, styleDaySerial, styleItasaBlog, 
+            styleItasaPM;
     
     private boolean flag_msg_normal;
     
@@ -57,10 +58,13 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
         styleTorrent = mysd.addStyle("StyleTorrent", null);
         styleSynology = mysd.addStyle("StyleSynology", null);
         styleDaySerial = mysd.addStyle("StyleDaySerial", null);
+        styleItasaBlog = mysd.addStyle("StyleItasaBlog", null);
+        styleItasaPM = mysd.addStyle("StyleItasaPM", null);
         // Italic
         StyleConstants.setItalic(styleFeedMyItasa, true);
         StyleConstants.setItalic(styleFeedMySubsf, true);
         StyleConstants.setItalic(styleFeedBtchat, true);
+        StyleConstants.setItalic(styleItasaPM, true);
         // Bold
         // StyleConstants.setBold(style, false);
         // Font family
@@ -77,6 +81,8 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
         StyleConstants.setFontFamily(styleTorrent, "SansSerif");
         StyleConstants.setFontFamily(styleSynology, "SansSerif");
         StyleConstants.setFontFamily(styleDaySerial, "SansSerif");
+        StyleConstants.setFontFamily(styleItasaBlog, "SansSerif");
+        StyleConstants.setFontFamily(styleItasaPM, "SansSerif");
         // Font size
         StyleConstants.setFontSize(styleOK, dim);
         StyleConstants.setFontSize(styleError, dim);
@@ -91,6 +97,8 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
         StyleConstants.setFontSize(styleTorrent, dim);
         StyleConstants.setFontSize(styleSynology, dim);
         StyleConstants.setFontSize(styleDaySerial, dim);
+        StyleConstants.setFontSize(styleItasaBlog, dim);
+        StyleConstants.setFontSize(styleItasaPM, dim);
         // Foreground color
         StyleConstants.setForeground(styleOK, Color.green);
         StyleConstants.setForeground(styleError, Color.red);
@@ -105,6 +113,9 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
         StyleConstants.setForeground(styleTorrent, Color.magenta);
         StyleConstants.setForeground(styleSynology, GOLD);
         StyleConstants.setForeground(styleDaySerial, Color.pink);
+        StyleConstants.setForeground(styleItasaBlog, Color.blue);
+        StyleConstants.setForeground(styleItasaPM, Color.blue);
+        
     }
 
     /**Aggiunge alla textpane il testo con stile OK
@@ -221,6 +232,14 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
     private void appendDaySerial(String msg) {
         append(msg, styleDaySerial);
     }
+    
+    private void appendItasaBlog(String msg) {
+        append(msg, styleItasaBlog);
+    }
+    
+    private void appendItasaPM(String msg) {
+        append(msg, styleItasaBlog);
+    }
 
     /**
      * Aggiunge alla textpane il testo con stile da applicare
@@ -234,8 +253,7 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
         try {
             mysd.insertString(0, Common.actualTime() + " " + msg + "\n", s);
             this.setCaretPosition(0);
-        } catch (BadLocationException ex) {
-        }
+        } catch (BadLocationException ex) {}
     }
 
     @Override
@@ -263,6 +281,10 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
                 appendSynology(evt.getMsg());
             else if (evt.getType().equals(TextPaneEvent.DAY_SERIAL))
                 appendDaySerial(evt.getMsg());
+            else if (evt.getType().equals(TextPaneEvent.FEED_BLOG))
+                appendItasaBlog(evt.getMsg());
+            else if (evt.getType().equals(TextPaneEvent.ITASA_PM))
+                appendItasaPM(evt.getMsg());
         } else if (!flag_msg_normal){
             if (evt.getType().equals(TextPaneEvent.ERROR))
                 appendError(evt.getMsg());
