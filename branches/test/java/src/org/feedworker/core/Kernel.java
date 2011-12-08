@@ -546,9 +546,11 @@ public class Kernel implements PropertyChangeListener {
     
     private boolean runItasaPM(boolean first){
         boolean status = false;
-        if (loginItasaXmlRPC()){
+        if (!first && loginItasaXmlRPC()){
             try {
-                ManageListener.fireFrameEvent(this, ITASA_PM, xmlrpc.getMessage());
+                int c = xmlrpc.getMessage();
+                if (c>0)
+                    ManageListener.fireFrameEvent(this, ITASA_PM, c);
             } catch (XmlRpcException ex) {
                 ex.printStackTrace();
             }
