@@ -102,11 +102,11 @@ class listTaskBlog extends JScrollPane implements ListEventListener{
     @Override
     public void objReceived(ListEvent evt) {
         if (evt.getName().equals(getName())){
-            String start = "<html><head></head><body><font size=\"4\">" +
-                            "<table width=\"95%\"><tr>" + 
-                            "<td width=\"10%\"><b>Autore</b></font></td><td>";
+            String start = "<html><head></head><body>" +
+                            "<table width=\"98%\"><tr>" + 
+                            "<td width=\"9%\"><b>Autore</b><</td><td>";
             String mid = "</td></tr><tr><td width=\"10%\"><b>"; 
-            String end = "</td></tr></table></font></body></html>";
+            String end = "</td></tr></table></body></html>";
             ArrayList<Object[]> items = evt.getArrayList();
             for (int i = 0; i < items.size(); i++) {
                 Object[] obj = items.get(i);
@@ -114,11 +114,12 @@ class listTaskBlog extends JScrollPane implements ListEventListener{
                 task.setExpanded(false);
                 task.setTitle(obj[1].toString() + " " + obj[2].toString());
                 String html = start +  obj[3].toString();
-                html += mid + "Descrizione</b></td><td>" + obj[4].toString();
+                html += mid + "Descrizione</b></td><td align=\"justify\">" + obj[4].toString();
                 html += end;
                 task.setText(html);
                 task.setUrl(obj[0].toString());
-                model.addElement(task);
+                model.insertElementAt(task, i);
+                //model.addElement(task);
             }
         }
     }

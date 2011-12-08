@@ -34,9 +34,8 @@ public class paneSetting extends paneAbstract {
     private JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
             jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
             jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
-            jcbPaneShow, jcbTorrent, jcbPaneBlog, jcbBlogItasa;
-    private JButton jbSaveSettings, jbAnnullaSettings, jbDestSub, jbDestTorrent, 
-            jbCheckItasaApi, jbCheckItasaLogin, jbCheckSamba;
+            jcbPaneShow, jcbTorrent, jcbPaneBlog, jcbItasaBlog, jcbItasaPM;
+    private JButton jbDestSub;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf,
             jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp,
@@ -87,10 +86,10 @@ public class paneSetting extends paneAbstract {
 
     @Override
     void initializeButtons() {
-        jbSaveSettings = new JButton(core.getIconSave());
+        JButton jbSaveSettings = new JButton(core.getIconSave());
         jbSaveSettings.setToolTipText("Salva");
         jbSaveSettings.setBorder(BORDER);
-        jbAnnullaSettings = new JButton(core.getIconUndo());
+        JButton jbAnnullaSettings = new JButton(core.getIconUndo());
         jbAnnullaSettings.setToolTipText("Annulla");
         jbAnnullaSettings.setBorder(BORDER);
         
@@ -113,8 +112,8 @@ public class paneSetting extends paneAbstract {
                 jcbReminder.isSelected(), jtfGoogleUser.getText(), 
                 new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), 
                 jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected(), 
-                jcbTorrent.isSelected(), jcbPaneShow.isSelected(), jcbBlogItasa.isSelected(), 
-                jcbPaneBlog.isSelected());
+                jcbTorrent.isSelected(), jcbPaneShow.isSelected(), jcbItasaBlog.isSelected(), 
+                jcbPaneBlog.isSelected(), jcbItasaPM.isSelected());
             }
         });
         
@@ -197,7 +196,7 @@ public class paneSetting extends paneAbstract {
         jtfSambaDir = new JTextField(20);
         jtfSambaUser = new JTextField(20);
         jpfSamba = new JPasswordField(20);
-        jbCheckSamba = new JButton(" Test connessione Samba ");
+        JButton jbCheckSamba = new JButton(" Test connessione Samba ");
         jbCheckSamba.setBorder(BORDER);
         jbCheckSamba.addMouseListener(new MouseAdapter() {
             @Override
@@ -262,7 +261,8 @@ public class paneSetting extends paneAbstract {
                                                     + "sub myItasa all'avvio");
         jtfItasaUser = new JTextField(20);
         jpfItasa = new JPasswordField(20);
-        jbCheckItasaLogin = new JButton("Check login");
+        
+        JButton jbCheckItasaLogin = new JButton("Check login");
         jbCheckItasaLogin.setBorder(BORDER);
         jbCheckItasaLogin.addMouseListener(new MouseAdapter() {
             @Override
@@ -271,7 +271,8 @@ public class paneSetting extends paneAbstract {
                         jpfItasa.getPassword());
             }
         });
-        jbCheckItasaApi = new JButton("Check login API");
+        
+        JButton jbCheckItasaApi = new JButton("Check login API");
         jbCheckItasaApi.setBorder(BORDER);
         jbCheckItasaApi.addMouseListener(new MouseAdapter() {
             @Override
@@ -281,7 +282,19 @@ public class paneSetting extends paneAbstract {
             }
         });
         
-        jcbBlogItasa = new JCheckBox("Abilita Blog");
+        JButton jbCheckItasaPM = new JButton("Check login Forum");
+        jbCheckItasaPM.setBorder(BORDER);
+        jbCheckItasaPM.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                proxy.checkLoginItasaPM(jtfItasaUser.getText(), 
+                        jpfItasa.getPassword());
+            }
+        });
+        
+        jcbItasaBlog = new JCheckBox("Abilita Blog");
+        
+        jcbItasaPM = new JCheckBox("Abilita controllo messaggi privati forum");
         
         JXTaskPane task = new JXTaskPane();
         task.setTitle("ItalianSubs");
@@ -302,6 +315,9 @@ public class paneSetting extends paneAbstract {
         task.add(temp);
 
         task.add(jcbDownloadMyitasaStartup);
+        
+        task.add(jcbItasaBlog);
+        task.add(jcbItasaPM);
 
         JLabel jlIuser = new JLabel("Username");
         task.add(jlIuser);
@@ -314,9 +330,10 @@ public class paneSetting extends paneAbstract {
         temp = new JPanel();
         temp.add(jbCheckItasaLogin);
         temp.add(jbCheckItasaApi);
+        temp.add(jbCheckItasaPM);
         task.add(temp);
         
-        task.add(jcbBlogItasa);
+        
         return task;
     }
 
@@ -324,7 +341,7 @@ public class paneSetting extends paneAbstract {
     private JXTaskPane initTaskPaneTorrent() {
         jcbTorrent = new JCheckBox("Abilita feed torrent");
         jtfDestTorrent = new JTextField(25);
-        jbDestTorrent = new JButton("Seleziona directory");
+        JButton jbDestTorrent = new JButton("Seleziona directory");
         jbDestTorrent.setToolTipText("Seleziona la directory per i "
                 + "download dei .torrent");
         jbDestTorrent.setBorder(BORDER);
@@ -483,7 +500,8 @@ public class paneSetting extends paneAbstract {
         jpfItasa.setText(prop.getItasaPassword());
         jrbDownAuto.setSelected(prop.isAutoDownloadMyItasa());
         jrbDownManual.setSelected(!prop.isAutoDownloadMyItasa());
-        jcbBlogItasa.setSelected(prop.isBlogOption());
+        jcbItasaBlog.setSelected(prop.isItasaBlog());
+        jcbItasaPM.setSelected(prop.isItasaPM());
         settingItasaDownloadStartup();
     }
     
