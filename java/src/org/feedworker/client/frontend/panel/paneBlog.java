@@ -1,5 +1,7 @@
 package org.feedworker.client.frontend.panel;
 
+import org.feedworker.client.frontend.component.listTaskBlog;
+
 /**
  *
  * @author Administrator

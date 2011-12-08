@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend.panel;
+package org.feedworker.client.frontend.component;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -48,7 +48,7 @@ import org.jdesktop.swingx.rollover.RolloverRenderer;
  *
  * @author luca judge
  */
-class listTaskBlog extends JScrollPane implements ListEventListener{
+public class listTaskBlog extends JScrollPane implements ListEventListener{
     private JXList list = null;
     private DefaultListModel model = new ContentListeningListModel();
     

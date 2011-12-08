@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend.panel;
+package org.feedworker.client.frontend.component;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -24,11 +24,11 @@ import org.jdesktop.swingx.JXList;
  *
  * @author Administrator
  */
-public class tabShowList extends JScrollPane implements ListEventListener{
+public class listShow extends JScrollPane implements ListEventListener{
     private DefaultListModel model = new DefaultListModel();
     private JXList list = new JXList(model);
 
-    public tabShowList(String name) {
+    public listShow(String name) {
         super();
         setName(name);
         
@@ -50,34 +50,34 @@ public class tabShowList extends JScrollPane implements ListEventListener{
         return model.getSize();
     }
     
-    void removeSelectedItem(){
+    public void removeSelectedItem(){
         int index = list.getSelectedIndex();
         if (index>-1)
             model.remove(index);
     }
     
-    Object getListSelectedValue(){
+    public Object getListSelectedValue(){
         return ((Object[])list.getSelectedValue())[0];
     }
     
-    Object[] getListCloneSelectedValue(){
+    public Object[] getListCloneSelectedValue(){
         return ((Object[])list.getSelectedValue());
     }
     
-    void addItem(Object elem){
+    public void addItem(Object elem){
         model.addElement(elem);
     }
     
-    void rename(String name){
+    public void rename(String name){
         setName(name);
         list.setName(name);
     }
     
-    void setListPointSelection(Point p){
+    public void setListPointSelection(Point p){
         list.setSelectedIndex(list.locationToIndex(p));
     }
     
-    void setListMouseListener(MouseAdapter ma){
+    public void setListMouseListener(MouseAdapter ma){
         list.addMouseListener(ma);
     }
 
