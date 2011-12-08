@@ -371,7 +371,7 @@ public class GuiCore {
             boolean paneSetting, boolean paneSubDest, boolean paneReminder, 
             boolean reminder, String googleUser, String googlePwd, String googleCalendar, 
             boolean paneTorrent, boolean paneCalendar, boolean torrentOption, 
-            boolean paneShow, boolean blog, boolean paneBlog) {
+            boolean paneShow, boolean blog, boolean paneBlog, boolean itasapm) {
                 
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -390,7 +390,7 @@ public class GuiCore {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                     sambaUser, sambaPwd, time, timeout, 
                     advancedDownload, runIconized, reminder);
-            setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa, blog);
+            setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa, blog, itasapm);
             setPropSubsf(subsf, mySubsf);
             setPropTorrent(torrentDest, torrentOption);
             setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
@@ -584,14 +584,15 @@ public class GuiCore {
     }
 
     private void setPropItasa(String itasa, String myitasa, String user,
-            String pwd, boolean auto, boolean autoload, boolean blog) {
+            String pwd, boolean auto, boolean autoload, boolean blog, boolean pm) {
         prop.setItasaFeedURL(itasa);
         prop.setMyitasaFeedURL(myitasa);
         prop.setItasaUsername(user);
         prop.setItasaPassword(pwd);
         prop.setAutoDownloadMyItasa(auto);
         prop.setAutoLoadDownloadMyItasa(autoload);
-        prop.setBlogOption(blog);
+        prop.setItasaBlog(blog);
+        prop.setItasaPM(pm);
     }
     
     private void setPropSubsf(String subsf, String mySubsf){

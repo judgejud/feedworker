@@ -63,6 +63,8 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import org.apache.xmlrpc.XmlRpcException;
+import org.feedworker.xml.XmlRPC;
 /**Motore di Feedworker
  * 
  * @author luca
@@ -119,6 +121,7 @@ public class Kernel implements PropertyChangeListener {
     private ItasaOnline itasa;
     private ItasaUser user;
     private HttpItasa httpItasa;
+    private XmlRPC xmlrpc;
     
 
     /**
@@ -419,8 +422,8 @@ public class Kernel implements PropertyChangeListener {
                 runSubsfactory(true);
             if (prop.isTorrentOption())
                 runTorrent(true);
-            if (prop.isBlogOption())
-                runBlog(true);
+            if (prop.isItasaBlog())
+                runItasaBlog(true);
             prop.setLastDateTimeRefresh(temp);
             int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
             runTimer(delay);
@@ -447,7 +450,7 @@ public class Kernel implements PropertyChangeListener {
                         icontray = true;
                     if (prop.isTorrentOption() && runTorrent(false))
                         icontray = true;
-                    if (prop.isBlogOption() && runBlog(false))
+                    if (prop.isItasaBlog() && runItasaBlog(false))
                         icontray = true;
                     if ((icontray) && (prop.isEnableNotifyAudioRss())) {
                         try {
@@ -514,7 +517,7 @@ public class Kernel implements PropertyChangeListener {
         return status;
     }
     
-    private boolean runBlog(boolean first) {
+    private boolean runItasaBlog(boolean first) {
         boolean status = false;
         //TODO: sostituire url con prop.getblog 1volta creato
         String url = "http://feeds.feedburner.com/itasa-blog";
@@ -531,6 +534,13 @@ public class Kernel implements PropertyChangeListener {
                 ManageListener.fireListEvent(this, BLOG, feedBlog);
             }
         }
+        return status;
+    }
+    
+    private boolean runItasaPM(boolean first){
+        boolean status = false;
+        int countPM = 0;
+        
         return status;
     }
 
@@ -718,8 +728,8 @@ public class Kernel implements PropertyChangeListener {
             runSubsfactory(false);
         if (prop.isTorrentOption())
             runTorrent(false);
-        if (prop.isBlogOption())
-            runBlog(false);
+        if (prop.isItasaBlog())
+            runItasaBlog(false);
         stopAndRestartTimer();
         printOk("Timer restart ok.");
     }
@@ -1112,6 +1122,25 @@ public class Kernel implements PropertyChangeListener {
         return login;
     }
     
+    private boolean loginItasaXmlRPC(){
+        boolean login = false;
+        if (xmlrpc==null){
+            try {
+                xmlrpc = new XmlRPC();
+                if (xmlrpc.testConn(prop.getItasaUsername(), prop.getItasaPassword()))
+                    login = true;
+            } catch (MalformedURLException ex) {
+                ex.printStackTrace();
+                xmlrpc = null;
+            } catch (XmlRpcException ex) {
+                ex.printStackTrace();
+                xmlrpc = null;
+            } 
+        } else 
+            login = true;
+        return login;
+    }
+    
     public void checkLoginItasaAPI(String username, String pwd) {
         String msg = "CheckLogin Itasa API: "; 
         try {
@@ -1126,6 +1155,18 @@ public class Kernel implements PropertyChangeListener {
         } catch (Exception ex) {
             error.launch(ex, this.getClass());
         }
+    }
+    
+    public void checkLoginItasaPM(String username, String pwd) {
+        String msg = "CheckLogin Itasa Forum messaggi privati: "; 
+        try {
+            new XmlRPC().testConn(username, pwd);
+            printOk(msg + "ok");
+        } catch (MalformedURLException ex) {
+            error.launch(ex, this.getClass());
+        } catch (XmlRpcException ex) {
+            error.launch(ex, this.getClass());
+        } 
     }
 
     public void removeReminders(ArrayList<Integer> numbers) {

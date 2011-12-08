@@ -43,12 +43,12 @@ public class Show {
     public String getHtmlShow(){
         String html = new String("<html><body><center><img src=\""+banner+"\"></img><br>"
                 + "<h1>"+name+"</h1></center>");
-        html += "<table width=\"97%\" cellspacing=\"2\" cellpadding=\"2\">";
+        html += "<table width=\"96%\" cellspacing=\"2\" cellpadding=\"2\">";
         html += "<tr><td><b>Genere/i</b></td><td>";
         for (int i=0; i<genres.size(); i++)
             html += genres.get(i) + " ";
         html += "</td></tr>";
-        html += "<tr><td valign=\"top\"><b>Trama</b></td><td>"+plot+"</td></tr>";
+        html += "<tr><td valign=\"top\"><b>Trama</b></td><td align=\"justify\">"+plot+"</td></tr>";
         html += "<tr><td><b>Network</b></td><td>"+network+"</td></tr>";
         html += "<tr><td><b>Stagioni</b></td><td>"+season+"</td></tr>";
         html += "<tr><td><b>Status</b></td><td>"+Translate.Status(status)+"</td></tr>";

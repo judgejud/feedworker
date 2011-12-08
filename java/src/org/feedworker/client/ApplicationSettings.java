@@ -32,7 +32,8 @@ public class ApplicationSettings {
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
             enableNotifyMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
             enablePaneSearchSubItasa, enablePaneReminder, reminderOption, enablePaneTorrent,
-            enablePaneCalendar, enableNotifySms, enablePaneShow, blogOption, enablePaneBlog;
+            enablePaneCalendar, enableNotifySms, enablePaneShow, itasaBlog, enablePaneBlog, 
+            itasaPM;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -70,7 +71,8 @@ public class ApplicationSettings {
                             getBooleanDecryptedValue("IS_AUTO_DOWNLOAD_MYITASA"));
                 setAutoLoadDownloadMyItasa(
                         getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
-                setBlogOption(getBooleanDecryptedValue("BLOG"));
+                setItasaBlog(getBooleanDecryptedValue("ITASA_BLOG"));
+                setItasaPM(getBooleanDecryptedValue("ITASA_PM"));
                 //SUBSFATORY
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
                 setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
@@ -176,7 +178,8 @@ public class ApplicationSettings {
             propertiesCrypting("ITASA_PASSWORD", itasaPassword);
             propertiesCrypting("IS_AUTO_DOWNLOAD_MYITASA", autoDownloadMyItasa);
             propertiesCrypting("IS_AUTO_LOAD_DOWNLOAD_MYITASA", autoLoadDownloadMyItasa);
-            propertiesCrypting("BLOG", blogOption);
+            propertiesCrypting("ITASA_BLOG", itasaBlog);
+            propertiesCrypting("ITASA_PM", itasaPM);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -685,12 +688,12 @@ public class ApplicationSettings {
         this.enablePaneShow = enablePaneShow;
     }
 
-    public boolean isBlogOption() {
-        return blogOption;
+    public boolean isItasaBlog() {
+        return itasaBlog;
     }
 
-    public void setBlogOption(boolean blogOption) {
-        this.blogOption = blogOption;
+    public void setItasaBlog(boolean itasaBlog) {
+        this.itasaBlog = itasaBlog;
     }
 
     public boolean isEnablePaneBlog() {
@@ -699,5 +702,13 @@ public class ApplicationSettings {
 
     public void setEnablePaneBlog(boolean enablePaneBlog) {
         this.enablePaneBlog = enablePaneBlog;
+    }
+
+    public boolean isItasaPM() {
+        return itasaPM;
+    }
+
+    public void setItasaPM(boolean itasaPM) {
+        this.itasaPM = itasaPM;
     }
 }// end class
