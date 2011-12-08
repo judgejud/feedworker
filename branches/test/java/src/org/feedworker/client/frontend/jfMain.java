@@ -626,8 +626,15 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
                         proxy.stopImportRefresh();
                     }
                 });
-            } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationProgressIncrement())) {
+            } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationProgressIncrement()))
                 progressBar.setProgress(evt.getMax());
+            else if (evt.getOperaz().equalsIgnoreCase(proxy.getItasaPM())){
+                int n = JOptionPane.showConfirmDialog(this, "Hai " + evt.getMax() + 
+                        "nuovi messaggi privati", "Vuoi leggerli sul sito?",
+                        JOptionPane.YES_NO_OPTION);
+                System.out.println(n);
+                if (n==JOptionPane.YES_OPTION)
+                    proxy.openWebsiteItasaPM();
             }
         }
         if ((evt.isIcontray()) && (!this.isVisible()))

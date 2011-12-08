@@ -129,6 +129,10 @@ public class Mediator {
     String getOperationProgressIncrement() {
         return core.OPERATION_PROGRESS_INCREMENT;
     }
+    
+    String getItasaPM(){
+        return core.ITASA_PM;
+    }
 
     void runRss() {
         core.runRss(true);
@@ -317,6 +321,10 @@ public class Mediator {
 
     public void openWebsite(String url) {
         core.openWebsite(url);
+    }
+    
+    public void openWebsiteItasaPM() {
+        core.openWebsiteItasaPM();
     }
 
     void downloadSub(ArrayList<String> alLinks, boolean itasa, boolean id) {

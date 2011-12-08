@@ -29,6 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.apache.http.client.ClientProtocolException;
+
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.TextPaneEvent;
@@ -64,7 +65,7 @@ import org.xml.sax.SAXException;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 import org.apache.xmlrpc.XmlRpcException;
-import org.feedworker.xml.XmlRPC;
+import org.feedworker.xml.XmlRP;
 /**Motore di Feedworker
  * 
  * @author luca
@@ -78,6 +79,7 @@ public class Kernel implements PropertyChangeListener {
     public final String MYITASA = "MyItasa";
     public final String MYSUBSF = "MySubsf";
     public final String BLOG = "Blog";
+    public final String ITASA_PM = "Itasa_PM";
     public final String SEARCH_TV = "SearchTV";
     public final String SUBTITLE_DEST = "SubtitleDest";
     public final String CALENDAR = "Calendar";
@@ -86,6 +88,7 @@ public class Kernel implements PropertyChangeListener {
     public final String OPERATION_FOCUS = "Focus";
     public final String OPERATION_PROGRESS_SHOW = "ProgressShow";
     public final String OPERATION_PROGRESS_INCREMENT = "ProgressIncrement";
+    
     // PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
@@ -121,7 +124,7 @@ public class Kernel implements PropertyChangeListener {
     private ItasaOnline itasa;
     private ItasaUser user;
     private HttpItasa httpItasa;
-    private XmlRPC xmlrpc;
+    private XmlRP xmlrpc;
     
 
     /**
@@ -424,6 +427,8 @@ public class Kernel implements PropertyChangeListener {
                 runTorrent(true);
             if (prop.isItasaBlog())
                 runItasaBlog(true);
+            if (prop.isItasaPM())
+                runItasaPM(true);
             prop.setLastDateTimeRefresh(temp);
             int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
             runTimer(delay);
@@ -451,6 +456,8 @@ public class Kernel implements PropertyChangeListener {
                     if (prop.isTorrentOption() && runTorrent(false))
                         icontray = true;
                     if (prop.isItasaBlog() && runItasaBlog(false))
+                        icontray = true;
+                    if (prop.isItasaPM() && runItasaPM(false))
                         icontray = true;
                     if ((icontray) && (prop.isEnableNotifyAudioRss())) {
                         try {
@@ -539,8 +546,13 @@ public class Kernel implements PropertyChangeListener {
     
     private boolean runItasaPM(boolean first){
         boolean status = false;
-        int countPM = 0;
-        
+        if (loginItasaXmlRPC()){
+            try {
+                ManageListener.fireFrameEvent(this, ITASA_PM, xmlrpc.getMessage());
+            } catch (XmlRpcException ex) {
+                ex.printStackTrace();
+            }
+        }
         return status;
     }
 
@@ -1126,7 +1138,7 @@ public class Kernel implements PropertyChangeListener {
         boolean login = false;
         if (xmlrpc==null){
             try {
-                xmlrpc = new XmlRPC();
+                xmlrpc = new XmlRP();
                 if (xmlrpc.testConn(prop.getItasaUsername(), prop.getItasaPassword()))
                     login = true;
             } catch (MalformedURLException ex) {
@@ -1160,7 +1172,7 @@ public class Kernel implements PropertyChangeListener {
     public void checkLoginItasaPM(String username, String pwd) {
         String msg = "CheckLogin Itasa Forum messaggi privati: "; 
         try {
-            new XmlRPC().testConn(username, pwd);
+            new XmlRP().testConn(username, pwd);
             printOk(msg + "ok");
         } catch (MalformedURLException ex) {
             error.launch(ex, this.getClass());
@@ -1412,6 +1424,17 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, null);
         } catch (IOException ex) {
             error.launch(ex, null);
+        }
+    }
+
+    public void openWebsiteItasaPM() {
+        String url = "http://www.italiansubs.net/forum/index.php?action=pm";
+        try {
+            SystemFileManager.browse(url);
+        } catch (URISyntaxException ex) {
+            error.launch(ex, getClass());
+        } catch (IOException ex) {
+            error.launch(ex, getClass());
         }
     }
 

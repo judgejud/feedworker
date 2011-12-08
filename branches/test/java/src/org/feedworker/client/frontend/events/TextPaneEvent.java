@@ -20,6 +20,7 @@ public class TextPaneEvent extends EventObject {
     public static final String SUB = "SUB";
     public static final String SYNOLOGY = "SYNOLOGY";
     public static final String DAY_SERIAL = "DAY_SERIAL";
+    public static final String ITASA_PM = "ITASA_PM";
 
     private String msg;
     private String type;
