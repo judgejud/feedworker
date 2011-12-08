@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend.panel;
+package org.feedworker.client.frontend.component;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,14 +19,14 @@ import org.jdesktop.swingx.JXTaskPaneContainer;
  *
  * @author Administrator
  */
-public class tabShowInfo extends JScrollPane implements TabbedPaneEventListener{
+public class taskpaneShowInfo extends JScrollPane implements TabbedPaneEventListener{
     private JEditorPane jepShow, jepActors;
     private JXTaskPane taskShow, taskActors, taskEpisodes;
     private JXTaskPaneContainer container;
     private JTabbedPane tabEpisodes;
     private GuiCore core = GuiCore.getInstance();
     
-    public tabShowInfo(String name) {
+    public taskpaneShowInfo(String name) {
         super();
         setName(name);
         setPreferredSize(new Dimension(700, 600));

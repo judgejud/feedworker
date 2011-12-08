@@ -20,13 +20,13 @@ import org.apache.xmlrpc.client.XmlRpcTransportFactory;
  *
  * @author luca judge
  */
-public class XmlRP {
+public class XmlRPC {
     // Very simple cookie storage
     private final LinkedHashMap<String, String> cookies = new LinkedHashMap<String, String>();
     private final String url = "http://www.italiansubs.net/forum/mobiquo/mobiquo.php";
     private XmlRpcClient client;
 
-    public XmlRP() throws MalformedURLException {
+    public XmlRPC() throws MalformedURLException {
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
         client = new XmlRpcClient();
         config.setServerURL(new URL(url));

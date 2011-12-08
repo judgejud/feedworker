@@ -65,7 +65,7 @@ import org.xml.sax.SAXException;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 import org.apache.xmlrpc.XmlRpcException;
-import org.feedworker.xml.XmlRP;
+import org.feedworker.xml.XmlRPC;
 /**Motore di Feedworker
  * 
  * @author luca
@@ -124,7 +124,7 @@ public class Kernel implements PropertyChangeListener {
     private ItasaOnline itasa;
     private ItasaUser user;
     private HttpItasa httpItasa;
-    private XmlRP xmlrpc;
+    private XmlRPC xmlrpc;
     
 
     /**
@@ -1140,7 +1140,7 @@ public class Kernel implements PropertyChangeListener {
         boolean login = false;
         if (xmlrpc==null){
             try {
-                xmlrpc = new XmlRP();
+                xmlrpc = new XmlRPC();
                 if (xmlrpc.testConn(prop.getItasaUsername(), prop.getItasaPassword()))
                     login = true;
             } catch (MalformedURLException ex) {
@@ -1174,7 +1174,7 @@ public class Kernel implements PropertyChangeListener {
     public void checkLoginItasaPM(String username, String pwd) {
         String msg = "CheckLogin Itasa Forum messaggi privati: "; 
         try {
-            new XmlRP().testConn(username, pwd);
+            new XmlRPC().testConn(username, pwd);
             printOk(msg + "ok");
         } catch (MalformedURLException ex) {
             error.launch(ex, this.getClass());

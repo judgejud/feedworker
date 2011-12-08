@@ -25,8 +25,8 @@ import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
-import org.feedworker.client.frontend.panel.tabShowInfo;
-import org.feedworker.client.frontend.panel.tabShowList;
+import org.feedworker.client.frontend.component.taskpaneShowInfo;
+import org.feedworker.client.frontend.component.listShow;
 import org.feedworker.core.ManageListener;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
@@ -77,8 +77,8 @@ public class GuiCore {
     
     private static GuiCore core = null;
     private Mediator proxy = Mediator.getIstance();
-    private TreeMap<Object, tabShowInfo> mapPaneShows = 
-                                    new TreeMap<Object, tabShowInfo>();
+    private TreeMap<Object, taskpaneShowInfo> mapPaneShows = 
+                                    new TreeMap<Object, taskpaneShowInfo>();
     private TreeSet<String> setListShows = new TreeSet<String>();
     private ApplicationSettings prop = proxy.getSettings();
     
@@ -126,19 +126,19 @@ public class GuiCore {
             proxy.searchTV(tv);
     }
     
-    public tabShowInfo addNewTabShow(Object name){
-        tabShowInfo pane;
+    public taskpaneShowInfo addNewTabShow(Object name){
+        taskpaneShowInfo pane;
         if (!mapPaneShows.containsKey(name)){
-            pane = new tabShowInfo(name.toString());
+            pane = new taskpaneShowInfo(name.toString());
             mapPaneShows.put(name, pane);
             proxy.infoShow(name.toString());
         } else 
-           pane = (tabShowInfo) mapPaneShows.get(name);
+           pane = (taskpaneShowInfo) mapPaneShows.get(name);
         return pane;
     }
     
-    public tabShowInfo refreshTabShow(Object name){
-        tabShowInfo pane = (tabShowInfo) mapPaneShows.get(name);
+    public taskpaneShowInfo refreshTabShow(Object name){
+        taskpaneShowInfo pane = (taskpaneShowInfo) mapPaneShows.get(name);
         pane.reset();
         proxy.infoShow(name.toString());
         return pane;
@@ -419,7 +419,7 @@ public class GuiCore {
     public void saveList(JTabbedPane jtp) {
         TreeMap<String, Object[]> map = new TreeMap<String, Object[]>();
         for (int i=0; i<jtp.getTabCount(); i++)
-            map.put(jtp.getTitleAt(i), ((tabShowList) jtp.getComponentAt(i)).getArrayModel());
+            map.put(jtp.getTitleAt(i), ((listShow) jtp.getComponentAt(i)).getArrayModel());
         proxy.saveList(map);
     }
     
