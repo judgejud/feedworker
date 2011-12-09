@@ -12,20 +12,20 @@ import org.feedworker.client.frontend.table.tableCalendar;
  *
  * @author luca
  */
-public class paneCalendar extends paneAbstract{
+public class paneCalendarShow extends paneAbstract{
 
-    private static paneCalendar jpanel = null;
+    private static paneCalendarShow jpanel = null;
     private tableCalendar jtable;
 
-    private paneCalendar(){
-        super("Calendar");
+    private paneCalendarShow(){
+        super("CalendarShow");
         initializePanel();
         initializeButtons();
     }
 
-    public static paneCalendar getPanel(){
+    public static paneCalendarShow getPanel(){
         if (jpanel==null)
-            jpanel = new paneCalendar();
+            jpanel = new paneCalendarShow();
         return jpanel;
     }
 

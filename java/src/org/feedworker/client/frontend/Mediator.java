@@ -49,7 +49,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "441 by "
+                + "442 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -114,7 +114,7 @@ public class Mediator {
         return core.TABLE_SEARCH_SUB;
     }
 
-    String getSearchTV() {
+    public String getSearchTV() {
         return core.SEARCH_TV;
     }
 
@@ -245,7 +245,7 @@ public class Mediator {
         core.detailedSearchShow(tv);
     }
 
-    void searchIdTv(ArrayList<Object[]> id) {
+    public void searchIdTv(ArrayList<Object[]> id) {
         core.searchIdTv(id);
     }
 

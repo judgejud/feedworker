@@ -6,14 +6,14 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
-import org.feedworker.client.frontend.jtpLog;
+import org.feedworker.client.frontend.component.textLog;
 /**
  *
  * @author luca
  */
 public class paneLog extends paneAbstract{
     
-    private jtpLog logWest, logEast;
+    private textLog logWest, logEast;
     
     public paneLog(){
         super("Log");
@@ -25,7 +25,7 @@ public class paneLog extends paneAbstract{
 
     @Override
     void initializePanel() {
-        logWest = new jtpLog(true);
+        logWest = new textLog(true);
         JScrollPane jspWest = new JScrollPane(logWest);
         jspWest.setPreferredSize(TABLE_SCROLL_SIZE);
         jspWest.setAutoscrolls(true);
@@ -33,7 +33,7 @@ public class paneLog extends paneAbstract{
         
         jpCenter.add(RIGID_AREA);
         
-        logEast = new jtpLog(false);
+        logEast = new textLog(false);
         JScrollPane jspEast = new JScrollPane(logEast);
         jspEast.setPreferredSize(TABLE_SCROLL_SIZE);
         jspEast.setAutoscrolls(true);

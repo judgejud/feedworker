@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.component;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -12,6 +12,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.feedworker.client.frontend.GuiCore;
+import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.table.tableResultSearchTvRage;
 import org.jfacility.java.lang.Lang;
 
@@ -19,21 +21,21 @@ import org.jfacility.java.lang.Lang;
  *
  * @author luca
  */
-class jdResultSearchTv extends JDialog implements ActionListener{
-    private static jdResultSearchTv dialog;
+public class dialogResultSearchTv extends JDialog implements ActionListener{
+    private static dialogResultSearchTv dialog;
     private Mediator proxy = Mediator.getIstance();
     private tableResultSearchTvRage table;
     private JButton jbAdd = new JButton(" Aggiunge ");
     private JButton jbCancel = new JButton(" Annulla ");
     private JButton jbSearch = new JButton(" Nuova Ricerca");
 
-    public static jdResultSearchTv getDialog(){
+    public static dialogResultSearchTv getDialog(){
         if (dialog==null)
-            dialog = new jdResultSearchTv();
+            dialog = new dialogResultSearchTv();
         return dialog;
     }
 
-    private jdResultSearchTv(){
+    private dialogResultSearchTv(){
         setTitle("Risultati ricerca serie tv");
         setModal(true);
         setPreferredSize(new Dimension(550,350));

@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend;
 
 //IMPORT JAVA
+import org.feedworker.client.frontend.component.dialogResultSearchTv;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -39,7 +40,7 @@ import org.opensanskrit.widget.SystemInfoDialog;
  * 
  * @author luca judge
  */
-public class jfMain extends JFrame implements WindowListener, FrameEventListener {
+public class frameMain extends JFrame implements WindowListener, FrameEventListener {
     //VARIABLES PRIVATE FINAL
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
@@ -59,16 +60,17 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
     private paneSearchSubItasa jpSearch;
     private paneStatusBar statusBar;
     private paneReminder jpReminder;
-    private paneCalendar jpCalendar;
+    private paneCalendarShow jpCalendarShow;
+    private paneCalendarDay jpCalendarDay;
     private paneShow jpShow;
     private paneBlog jpBlog;
-    private jdResultSearchTv resultSearchTvJD;
+    private dialogResultSearchTv resultSearchTvJD;
     private ProgressDialog progressBar;
     private EnhancedSystemTray systemTray;
     private JMenu jmItasa;
 
     /** Costruttore */
-    public jfMain() {
+    public frameMain() {
         super();
         proxy = Mediator.getIstance();
         core = GuiCore.getInstance();
@@ -92,7 +94,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         mainJTP.setBorder(null);
         this.add(mainJTP, BorderLayout.CENTER);
         
-        jpCalendar = paneCalendar.getPanel();
+        jpCalendarShow = paneCalendarShow.getPanel();
         jpItasa = paneItasa.getPanel();
         jpLog = new paneLog();
         jpReminder = paneReminder.getPanel();
@@ -102,16 +104,18 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         jpTorrent = paneTorrent.getPanel();
         jpShow = paneShow.getPanel();
         jpBlog = paneBlog.getPanel();
+        jpCalendarDay = paneCalendarDay.getPanel();
         
         mainJTP.addTab("Itasa", jpItasa);
         if (prop.isSubsfactoryOption()) {
             jpSubsfactory = paneSubsfactory.getPanel();
             mainJTP.addTab("Subsfactory", jpSubsfactory);
         }
+        checkAddTab(jpCalendarDay, true);
         if (prop.isEnablePaneTorrent())
             checkAddTab(jpTorrent, false);
         if (prop.isEnablePaneCalendar())
-            checkAddTab(jpCalendar, false);
+            checkAddTab(jpCalendarShow, false);
         if (prop.isEnablePaneSearchSubItasa())
             checkAddTab(jpSearch, false);
         if (prop.isEnablePaneReminder())
@@ -140,7 +144,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             proxy.printOk("Ciao " + prop.getItasaUsername()
                     + ", impostazioni caricate.");
         }
-        resultSearchTvJD = jdResultSearchTv.getDialog();
+        resultSearchTvJD = dialogResultSearchTv.getDialog();
         pack();
     }
 
@@ -179,7 +183,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         jmiBackup.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                core.invokeBackup(jfMain.this);
+                core.invokeBackup(frameMain.this);
             }
         });
         fileJM.add(jmiBackup);
@@ -197,10 +201,10 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         closeJMI.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                WindowEvent we = new WindowEvent(jfMain.this,
+                WindowEvent we = new WindowEvent(frameMain.this,
                         WindowEvent.WINDOW_CLOSING);
                 we.setSource(new JMenuItem());
-                jfMain.this.dispatchEvent(we);
+                frameMain.this.dispatchEvent(we);
             }
         });
         fileJM.add(closeJMI);
@@ -293,11 +297,19 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             }
         });
         
-        JMenuItem jmiWindowCalendar = new JMenuItem(" Calendar ");
-        jmiWindowCalendar.addActionListener(new ActionListener()  {
+        JMenuItem jmiWindowCalendarShow = new JMenuItem(" Calendar Show ");
+        jmiWindowCalendarShow.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpCalendar, true);
+                checkAddTab(jpCalendarShow, true);
+            }
+        });
+        
+        JMenuItem jmiWindowCalendarDay = new JMenuItem(" Calendar Day ");
+        jmiWindowCalendarDay.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpCalendarDay, true);
             }
         });
         
@@ -326,7 +338,8 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
         });
         
         jmWindowTab.add(jmiWindowBlog);
-        jmWindowTab.add(jmiWindowCalendar);
+        jmWindowTab.add(jmiWindowCalendarDay);
+        jmWindowTab.add(jmiWindowCalendarShow);
         jmWindowTab.add(jmiWindowLog);
         jmWindowTab.add(jmiWindowReminder);
         jmWindowTab.add(jmiWindowSearch);
@@ -413,7 +426,7 @@ public class jfMain extends JFrame implements WindowListener, FrameEventListener
             menuItems[i].addActionListener(new ActionListener()  {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    proxy.changeRuntimeLaf(e.getActionCommand(),jfMain.this);
+                    proxy.changeRuntimeLaf(e.getActionCommand(),frameMain.this);
                 }
             });
             bg.add(menuItems[i]);
