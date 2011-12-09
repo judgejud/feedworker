@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend;
+package org.feedworker.client.frontend.component;
 
 //IMPORT JAVA
 import java.awt.Color;
@@ -17,7 +17,7 @@ import org.feedworker.util.Common;
  * 
  * @author luca
  */
-public class jtpLog extends JTextPane implements TextPaneEventListener {
+public class textLog extends JTextPane implements TextPaneEventListener {
     // PRIVATE FINAL
 
     private final Color GOLD = new Color(255, 215, 0);
@@ -32,7 +32,7 @@ public class jtpLog extends JTextPane implements TextPaneEventListener {
     private boolean flag_msg_normal;
     
     /**Costruttore Inizializza la myjtextpane */
-    public jtpLog(boolean flag) {
+    public textLog(boolean flag) {
         super();
         this.setEditable(false);
         this.setBackground(Color.black);

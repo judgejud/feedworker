@@ -5,7 +5,7 @@ import java.awt.Image;
 
 import javax.swing.JOptionPane;
 
-import org.feedworker.client.frontend.jfMain;
+import org.feedworker.client.frontend.frameMain;
 import org.feedworker.core.Kernel;
 import org.feedworker.util.Common;
 import org.feedworker.exception.Logging;
@@ -94,7 +94,7 @@ public class FeedWorkerClient {
                         @Override
                         public void run() {                        
                             splash.updateStartupState("Loading GUI ...");
-                            jfMain jframe = new jfMain();
+                            frameMain jframe = new frameMain();
                             splash.updateStartupState("Loading xml ...");
                             core.loadXml();
                             core.loadItasaSeries();
