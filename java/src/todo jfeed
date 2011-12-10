@@ -2,7 +2,7 @@ IMPLEMENTARE
 -feed rss sotto thread
 -fare caricamento xml sotto thread
 -sistemare la tabella reminder aggiungendo un undo last remove
-
+*fare calendario per data (tutte, serie che si seguono)
 ripristino files backuppati
 destinazione avanzata in mixed mode
 aggiungere versioning automatico all'applicazione
@@ -15,7 +15,6 @@ introdurre diverse tipologie di rinomina
 introdurre news itasa
 introdurre myitasa
 introdurre trama singola puntata (da che fonte?)
-fare calendario per data (tutte, serie che si seguono)
 evitare i doppioni delle serie nelle liste show ()
 
 CORREZIONI:

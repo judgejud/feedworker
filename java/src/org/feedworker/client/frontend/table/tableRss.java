@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend.table;
 
 //IMPORT JAVA
+import org.feedworker.client.frontend.component.labelCellColorRenderer;
 import java.awt.Color;
 import java.awt.Component;
 

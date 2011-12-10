@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend.table;
 
 //IMPORT JAVA
+import org.feedworker.client.frontend.component.labelCellColorRenderer;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
