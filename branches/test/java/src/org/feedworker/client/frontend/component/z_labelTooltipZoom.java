@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend.table;
+package org.feedworker.client.frontend.component;
 
 import java.awt.Font;
 import javax.swing.JToolTip;
@@ -7,10 +7,10 @@ import javax.swing.JToolTip;
  *
  * @author Administrator
  */
-class labelTooltipZoom extends JToolTip{
+class z_labelTooltipZoom extends JToolTip{
     private final Font font = new Font("Arial", Font.PLAIN, 14);
     
-    public labelTooltipZoom(String text) {
+    public z_labelTooltipZoom(String text) {
         super();
         this.setFont(font);
         this.setTipText(text);

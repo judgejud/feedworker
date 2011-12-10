@@ -28,6 +28,7 @@ import javax.swing.SwingWorker;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import net.fortuna.ical4j.data.ParserException;
 import org.apache.http.client.ClientProtocolException;
 
 import org.feedworker.client.ApplicationSettings;
@@ -64,6 +65,7 @@ import org.xml.sax.SAXException;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
+import java.io.FileInputStream;
 import org.apache.xmlrpc.XmlRpcException;
 import org.feedworker.xml.XmlRPC;
 /**Motore di Feedworker
@@ -94,6 +96,8 @@ public class Kernel implements PropertyChangeListener {
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
     private final String LINK_SCHEDA_ITASA =
             "http://www.italiansubs.net/index.php?option=com_info&Itemid=12&idserie=";
+    private final String ITASA_CALENDAR_ICS =
+                        "http://www.italiansubs.net/icalendar/calendars/itasa.ics";
     private final File FILE_RULE = new File("rules.xml");
     private final File FILE_CALENDAR = new File("calendar.xml");
     private final File FILE_REMINDER = new File("reminder.xml");
@@ -634,6 +638,13 @@ public class Kernel implements PropertyChangeListener {
             timer.purge();
         }
         runTimer(Lang.stringToInt(prop.getRefreshInterval()) * 60000);
+    }
+    //TODO finire calendario ics
+    private void parseCalendarICS() throws FileNotFoundException, IOException, ParserException{
+        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getHttpTimeout()) * 1000;
+        HttpOther http = new HttpOther(connection_Timeout);
+        CalendarICS cal = new CalendarICS(http.getStreamRss(ITASA_CALENDAR_ICS));
+        cal.getData();
     }
 
     /**Sostituisce la treemap delle regole con quella creata dal mediator

@@ -1,4 +1,4 @@
-package org.feedworker.client.frontend.table;
+package org.feedworker.client.frontend.component;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -19,7 +19,7 @@ import org.jfacility.javax.swing.Swing;
  *
  * @author luca
  */
-class labelCellColorRenderer extends JLabel implements TableCellRenderer {
+public class labelCellColorRenderer extends JLabel implements TableCellRenderer {
     private final Font font = new Font("Arial", Font.PLAIN, 11);
     @Override
     public Component getTableCellRendererComponent(JTable table,

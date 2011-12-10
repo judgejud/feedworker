@@ -66,7 +66,6 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String TAG_SHOW_ID = "id";
     private final String TAG_SHOW_ID_TVRAGE = "id_tvrage";
     private final String TAG_SHOW_STATUS = "status";
-    //private final String TAG_SHOW_THUMBNAIL = "folder_thumb";
     private final String TAG_SHOW_ACTORS = "actors";
     private final String TAG_SHOW_ACTOR_NAME = "name";
     private final String TAG_SHOW_ACTOR_AS = "as";
@@ -96,6 +95,7 @@ public class ItasaOnline extends AbstractQueryXML{
                                     URL_BASE + "/shows/" + STRING_REPLACE + "/folderThumb?";
     
     private final String URL_SHOW_LIST = URL_BASE + "/shows/?";
+    
     private final String URL_SUBTITLE_SINGLE = 
                                 URL_BASE + "/subtitles/" + STRING_REPLACE + "?"; 
     private final String URL_SUBTITLE_SHOW = URL_BASE + "/subtitles?"; //    
@@ -268,7 +268,6 @@ public class ItasaOnline extends AbstractQueryXML{
         if (isStatusSuccess()){
             Element item = (Element) getDescendantsZero(1).next();
             String id = item.getChild(TAG_USER_ID).getText();
-            System.out.println(id);
             String authcode = item.getChild(TAG_USER_AUTHCODE).getText();
             String hasmyitasa = item.getChild(TAG_USER_HASMYITASA).getText();
             boolean myitasa = false;
@@ -435,19 +434,20 @@ public class ItasaOnline extends AbstractQueryXML{
     private boolean isStatusFail(){
         return status.equals(STATUS_FAIL);
     }
-/*    
+/*
     public static void main (String[] args){
+        
         ItasaOnline i = new ItasaOnline();
         try {
             
             //ItasaUser iu = i.login("judge", "qwerty");
-              if (iu.isMyitasa()){
+            /*
+            if (iu.isMyitasa()){
                 i.myItasaLastSub(iu.getAuthcode());
                 i.myItasaShows(iu.getAuthcode());
             }
-              //i.showList();
-            i.showSingle("1363", true);
-            
+            //i.showList();
+            //i.showSingle("1363", true);
             //i.subtitleSingle("20000");
             //i.subtitleListByIdShow(1363,"720p",1);
             //i.searchSubtitleCompletedByIdShow(134,null,1);
@@ -465,5 +465,6 @@ public class ItasaOnline extends AbstractQueryXML{
             ex.printStackTrace();
         }
     }
-*/
+
+ */
 }

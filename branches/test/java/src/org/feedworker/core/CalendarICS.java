@@ -1,0 +1,62 @@
+package org.feedworker.core;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import net.fortuna.ical4j.data.CalendarBuilder;
+import net.fortuna.ical4j.data.ParserException;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Component;
+import net.fortuna.ical4j.model.Property;
+
+/**
+ *
+ * @author luca judge
+ */
+public class CalendarICS {
+    private Calendar calendar;
+    
+    public CalendarICS(FileInputStream fis) throws ParserException, IOException{
+        calendar = new CalendarBuilder().build(fis);
+    }
+    
+    public CalendarICS(InputStream is) throws ParserException, IOException{
+        calendar = new CalendarBuilder().build(is);
+    }
+    
+    public Object[] getData(){
+        ArrayList<String> date = new ArrayList<String>();
+        ArrayList<String> shows = new ArrayList<String>();
+        ArrayList<ArrayList<String>> matrix = new ArrayList<ArrayList<String>>();
+        String newDay = null, oldDay = null, show=null;
+        for (Iterator i = calendar.getComponents().iterator(); i.hasNext();) {
+            Component component = (Component) i.next();
+            if (component.getName().equals("VEVENT")){
+                for (Iterator j = component.getProperties().iterator(); j.hasNext();) {
+                    Property property = (Property) j.next();
+                    if (property.getName().equals("SUMMARY"))
+                        show = property.getValue();
+                    else if (property.getName().equals("DTSTART")){
+                        newDay = getDate(property.getValue());
+                        shows.add(show);
+                        break;
+                    }
+                }
+                if (!newDay.equals(oldDay)){
+                    date.add(newDay);
+                    matrix.add(shows);
+                    oldDay = newDay;
+                    shows = new ArrayList<String>();
+                }
+            }
+        }
+        return new Object[]{date, matrix};
+    }
+    
+    private String getDate(String d){
+        return d.substring(6, 8) + "/" + d.substring(4, 6);
+    }
+}

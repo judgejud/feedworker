@@ -27,6 +27,7 @@ public class TvRage extends AbstractQueryXML{
     private final String URL_TVRAGE_EPISODE_LIST = URL_TVRAGE + 
                                                     "/episode_list.php?sid=";
     private final String URL_TVRAGE_SHOW_INFO = URL_TVRAGE + "/showinfo.php?sid=";
+    
     private final String TAG_SHOW_ID = "showid";
     private final String TAG_NAME = "name";
     private final String TAG_SEASON = "seasons";
