@@ -1,4 +1,4 @@
-package org.feedworker.core;
+package org.feedworker.core.thread;
 
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
@@ -12,6 +12,10 @@ import java.util.TreeMap;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.core.http.HttpOther;
+import org.feedworker.core.Kernel;
+import org.feedworker.core.ManageListener;
+import org.feedworker.core.RssParser;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
@@ -83,7 +87,7 @@ public class testRssThread implements Runnable{
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
         HttpOther http = new HttpOther(connection_Timeout);
         try {
-            InputStream ist = http.getStreamRss(url);
+            InputStream ist = http.getStream(url);
             if (ist != null) {
                 File ft = File.createTempFile("rss", ".xml");
                 Io.downloadSingle(ist, ft);

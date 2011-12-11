@@ -1,8 +1,7 @@
-package org.feedworker.core;
+package org.feedworker.core.http;
 
 //IMPORT JAVA
 import java.io.IOException;
-import java.io.InputStream;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -18,7 +17,7 @@ import org.apache.http.util.EntityUtils;
  * 
  * @author luca judge
  */
-abstract class HttpAbstract {
+public abstract class HttpAbstract {
     protected DefaultHttpClient client;
     protected HttpResponse response;
     protected HttpEntity entity;
@@ -48,12 +47,12 @@ abstract class HttpAbstract {
      *
      * @return nome & estensione
      */
-    String getNameFile() {
+    public String getNameFile() {
         return namefile;
     }
 
     /** Chiude il client http e dealloca le risorse usate */
-    void closeClient() {
+    public void closeClient() {
         client.getConnectionManager().shutdown();
     }
     
@@ -62,7 +61,7 @@ abstract class HttpAbstract {
             EntityUtils.consume(entity);
     }
     
-    abstract HttpEntity requestGetEntity(String link) throws 
+    public abstract HttpEntity requestGetEntity(String link) throws 
                                             IndexOutOfBoundsException, IOException;
     
     protected abstract void getAttachement(Header[] head, String from) throws 

@@ -1,20 +1,24 @@
 package org.feedworker.client.frontend.panel;
 
+import java.util.ArrayList;
+import org.feedworker.client.frontend.GuiCore;
 import org.feedworker.client.frontend.component.canvasCalendar;
+import org.feedworker.client.frontend.events.CanvasEvent;
+import org.feedworker.client.frontend.events.CanvasEventListener;
 
 /**
  *
  * @author luca judge
  */
-public class paneCalendarDay extends paneAbstract{
+public class paneCalendarDay extends paneAbstract implements CanvasEventListener{
     
     private static paneCalendarDay jpanel = null;
     
     private paneCalendarDay(){
         super("CalendarDay");
-        //TODO
         initializePanel();
         initializeButtons();
+        GuiCore.getInstance().setCanvasListener(this);
     }
 
     public static paneCalendarDay getPanel(){
@@ -24,12 +28,17 @@ public class paneCalendarDay extends paneAbstract{
     }
 
     @Override
-    void initializePanel() {
-        jpCenter.add(new canvasCalendar());
-    }
+    void initializePanel() {}
 
     @Override
     void initializeButtons() {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        remove(jpAction);
+    }
+
+    @Override
+    public void objReceived(CanvasEvent evt) {
+        ArrayList<String> date = (ArrayList<String>) evt.getArray()[0];
+        ArrayList<ArrayList<String>> shows = (ArrayList<ArrayList<String>>) evt.getArray()[1];
+        jpCenter.add(new canvasCalendar(date, shows));
     }
 }

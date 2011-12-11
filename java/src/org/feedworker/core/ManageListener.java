@@ -21,6 +21,7 @@ public class ManageListener {
     private static List listenerEditorPane = new ArrayList();
     private static List listenerList = new ArrayList();
     private static List listenerTabbedPane = new ArrayList();
+    private static List listenerCanvas = new ArrayList();
 
     public static synchronized void addTableEventListener(
                                                     TableEventListener listener) {
@@ -59,6 +60,11 @@ public class ManageListener {
     public static synchronized void addTabbedPaneEventListener(
                                                     TabbedPaneEventListener listener) {
         listenerTabbedPane.add(listener);
+    }
+    
+    public static synchronized void addCanvasEventListener(
+                                                    CanvasEventListener listener) {
+        listenerCanvas.add(listener);
     }
 
     public static synchronized void fireTableEvent(Object from, ArrayList<Object[]> alObj, 
@@ -183,6 +189,15 @@ public class ManageListener {
         Iterator listeners = listenerTabbedPane.iterator();
         while (listeners.hasNext()) {
             TabbedPaneEventListener myel = (TabbedPaneEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
+    public static synchronized void fireCanvasEvent(Object from, Object[] array) {
+        CanvasEvent event = new CanvasEvent(from, array);
+        Iterator listeners = listenerCanvas.iterator();
+        while (listeners.hasNext()) {
+            CanvasEventListener myel = (CanvasEventListener) listeners.next();
             myel.objReceived(event);
         }
     }

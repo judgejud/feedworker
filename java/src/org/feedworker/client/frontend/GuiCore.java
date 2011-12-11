@@ -17,6 +17,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableModel;
 
 import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.frontend.component.taskpaneShowInfo;
+import org.feedworker.client.frontend.component.listShow;
+import org.feedworker.client.frontend.events.CanvasEventListener;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
 import org.feedworker.client.frontend.events.EditorPaneEventListener;
 import org.feedworker.client.frontend.events.FrameEventListener;
@@ -25,8 +28,6 @@ import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
-import org.feedworker.client.frontend.component.taskpaneShowInfo;
-import org.feedworker.client.frontend.component.listShow;
 import org.feedworker.core.ManageListener;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
@@ -118,6 +119,10 @@ public class GuiCore {
     
     public void setTabbedPaneListener(TabbedPaneEventListener listener) {
         ManageListener.addTabbedPaneEventListener(listener);
+    }
+    
+    public void setCanvasListener(CanvasEventListener listener) {
+        ManageListener.addCanvasEventListener(listener);
     }
     
     public void addNewSerial(){

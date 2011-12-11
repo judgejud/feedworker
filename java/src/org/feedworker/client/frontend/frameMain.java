@@ -641,6 +641,7 @@ public class frameMain extends JFrame implements WindowListener, FrameEventListe
                 });
             } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationProgressIncrement()))
                 progressBar.setProgress(evt.getMax());
+            //TODO:rimuovere optionpane e fare come per i feed
             else if (evt.getOperaz().equalsIgnoreCase(proxy.getItasaPM())){
                 int n = JOptionPane.showConfirmDialog(this, "Hai " + evt.getMax() + 
                         " nuovi messaggi privati", "Vuoi leggerli sul sito?",

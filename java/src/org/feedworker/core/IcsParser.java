@@ -2,7 +2,6 @@ package org.feedworker.core;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -16,17 +15,13 @@ import net.fortuna.ical4j.model.Property;
  *
  * @author luca judge
  */
-public class CalendarICS {
+public class IcsParser {
     private Calendar calendar;
     
-    public CalendarICS(FileInputStream fis) throws ParserException, IOException{
+    public IcsParser(FileInputStream fis) throws ParserException, IOException{
         calendar = new CalendarBuilder().build(fis);
     }
-    
-    public CalendarICS(InputStream is) throws ParserException, IOException{
-        calendar = new CalendarBuilder().build(is);
-    }
-    
+
     public Object[] getData(){
         ArrayList<String> date = new ArrayList<String>();
         ArrayList<String> shows = new ArrayList<String>();

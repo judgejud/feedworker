@@ -1,9 +1,10 @@
-package org.feedworker.core;
+package org.feedworker.core.thread;
 
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.ArrayList;
 
+import org.feedworker.core.ManageListener;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.exception.ManageException;
 import org.feedworker.object.Show;

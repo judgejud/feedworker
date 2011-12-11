@@ -7,59 +7,30 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import org.feedworker.client.frontend.events.CanvasEvent;
+import org.feedworker.client.frontend.events.CanvasEventListener;
 
 import edu.umd.cs.piccolo.PCanvas;
 import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 import edu.umd.cs.piccolo.util.PPaintContext;
-
+import org.feedworker.client.frontend.GuiCore;
 /**
  *
  * @author luca judge
  */
-public class canvasCalendar extends PCanvas {
-    private final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 12);
-    private final int maxcount = 49;
+public class canvasCalendar extends PCanvas{
+    private final Font DEFAULT_FONT = new Font("Arial", Font.PLAIN, 13);
     private CalendarNode calendarNode;
     
-    public canvasCalendar() {
-        int day, month;
-
-        GregorianCalendar cal = new GregorianCalendar();
-        day = cal.get(Calendar.DAY_OF_MONTH);
-        cal.set(Calendar.DAY_OF_MONTH, --day);
-        month = cal.get(Calendar.MONTH)+1;
-
-        int count = 0;
-        ArrayList<String> date = new ArrayList<String>();
-        ArrayList<ArrayList<String>> shows = new ArrayList<ArrayList<String>>();
-
-        ArrayList<String> lines = new ArrayList<String>();
-        lines.add("7:00 AM Walk the dog.");
-        lines.add("9:30 AM Meet John for Breakfast.");
-        lines.add("12:00 PM Lunch with Peter.");
-        lines.add("3:00 PM Research Demo.");
-        lines.add("6:00 PM Pickup Sarah from gymnastics.");
-        lines.add("7:00 PM Pickup Tommy from karate.");
-
-        while (count < maxcount){
-            shows.add(lines);
-            day = cal.get(Calendar.DAY_OF_MONTH);
-            month = cal.get(Calendar.MONTH)+1;
-            date.add(day + "/" + month);
-            count++;
-            cal.set(Calendar.DAY_OF_MONTH, ++day);
-        }
-
+    public canvasCalendar(ArrayList<String> date, ArrayList<ArrayList<String>> shows) {
         calendarNode = new CalendarNode(date, shows);
         getLayer().addChild(calendarNode);
 
         setZoomEventHandler(null);
         setPanEventHandler(null);
-
+        
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent arg0) {
@@ -68,13 +39,13 @@ public class canvasCalendar extends PCanvas {
             }
         });
     }
-    
+
     class CalendarNode extends PNode {
         int DEFAULT_ANIMATION_MILLIS = 250;
         float FOCUS_SIZE_PERCENT = 0.65f;
         int daysExpanded = 0;
         int weeksExpanded = 0;
-        int numDays=7, numWeeks=7;
+        int numDays=7, numWeeks=8;
         
         public CalendarNode(ArrayList<String> dateString, ArrayList<ArrayList<String>> shows) {
             int count = 0;
