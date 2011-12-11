@@ -1,4 +1,4 @@
-package org.feedworker.core;
+package org.feedworker.core.http;
 
 //IMPORT JAVA
 import java.io.BufferedReader;
@@ -27,7 +27,7 @@ import org.apache.http.protocol.HTTP;
  * 
  * @author luca judge
  */
-class HttpItasa extends HttpAbstract{
+public class HttpItasa extends HttpAbstract{
 
     private final String ADDRESS_ITASA = "http://www.italiansubs.net/index.php";
     private final String TAG_ITASA = "<h2><br /><center>";
@@ -37,7 +37,7 @@ class HttpItasa extends HttpAbstract{
      *
      * @param timeout tempo di scadenza connessione
      */
-    HttpItasa(int timeout) {
+    public HttpItasa(int timeout) {
         super(timeout);
     }
 
@@ -47,7 +47,7 @@ class HttpItasa extends HttpAbstract{
      * @param user
      * @param pwd
      */
-    void connectItasa(String user, String pwd) throws UnsupportedEncodingException,
+    public void connectItasa(String user, String pwd) throws UnsupportedEncodingException,
                                             ClientProtocolException, IOException {
         
         response = client.execute(setPostItasa(user, pwd));
@@ -62,7 +62,7 @@ class HttpItasa extends HttpAbstract{
      * @param user
      * @param pwd
      */
-    boolean testConnectItasa(String user, String pwd) throws ClientProtocolException, 
+    public boolean testConnectItasa(String user, String pwd) throws ClientProtocolException, 
                                                                     IOException {
         HttpItasa temp = new HttpItasa(10000);
         HttpResponse res = temp.client.execute(setPostItasa(user, pwd));
@@ -94,7 +94,7 @@ class HttpItasa extends HttpAbstract{
     }
 
     @Override
-    HttpEntity requestGetEntity(String link) throws IndexOutOfBoundsException, IOException {
+    public HttpEntity requestGetEntity(String link) throws IndexOutOfBoundsException, IOException {
         long lenght = -1;
         int temp = 0;
         while (lenght == -1) {

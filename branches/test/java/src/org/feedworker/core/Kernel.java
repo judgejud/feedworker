@@ -28,12 +28,14 @@ import javax.swing.SwingWorker;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
-import net.fortuna.ical4j.data.ParserException;
-import org.apache.http.client.ClientProtocolException;
-
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
 import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.core.http.HttpOther;
+import org.feedworker.core.http.Https;
+import org.feedworker.core.http.HttpItasa;
+import org.feedworker.core.thread.ShowThread;
+import org.feedworker.core.thread.DownloadThread;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.exception.ManageException;
 import org.feedworker.object.*;
@@ -41,14 +43,7 @@ import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
 import org.feedworker.util.ResourceLocator;
 import org.feedworker.util.Samba;
-import org.feedworker.xml.Calendar;
-import org.feedworker.xml.ItasaOnline;
-import org.feedworker.xml.ItasaOffline;
-import org.feedworker.xml.ListShow;
-import org.feedworker.xml.Reminder;
-import org.feedworker.xml.RuleDestination;
-import org.feedworker.xml.TvRage;
-import org.feedworker.xml.XPathCalendar;
+import org.feedworker.xml.*;
 
 import org.jfacility.Io;
 import org.jfacility.Util;
@@ -58,16 +53,19 @@ import org.jfacility.java.lang.SystemFileManager;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 import org.opensanskrit.exception.UnableRestartApplicationException;
 
-import jcifs.smb.SmbException;
-
-import org.jdom.JDOMException;
-import org.xml.sax.SAXException;
-
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
-import java.io.FileInputStream;
+
+import jcifs.smb.SmbException;
+
+import org.apache.http.client.ClientProtocolException;
 import org.apache.xmlrpc.XmlRpcException;
-import org.feedworker.xml.XmlRPC;
+
+import org.feedworker.core.thread.IcsThread;
+import org.jdom.JDOMException;
+
+import org.xml.sax.SAXException;
+
 /**Motore di Feedworker
  * 
  * @author luca
@@ -90,7 +88,6 @@ public class Kernel implements PropertyChangeListener {
     public final String OPERATION_FOCUS = "Focus";
     public final String OPERATION_PROGRESS_SHOW = "ProgressShow";
     public final String OPERATION_PROGRESS_INCREMENT = "ProgressIncrement";
-    
     // PRIVATE FINAL VARIABLES
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
@@ -301,7 +298,7 @@ public class Kernel implements PropertyChangeListener {
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
         HttpOther http = new HttpOther(connection_Timeout);
         try {
-            InputStream ist = http.getStreamRss(urlRss);
+            InputStream ist = http.getStream(urlRss);
             if (ist != null) {
                 File ft = File.createTempFile("rss", ".xml");
                 Io.downloadSingle(ist, ft);
@@ -382,7 +379,7 @@ public class Kernel implements PropertyChangeListener {
         int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
         HttpOther http = new HttpOther(connection_Timeout);
         try {
-            InputStream ist = http.getStreamRss(urlRss);
+            InputStream ist = http.getStream(urlRss);
             if (ist != null) {
                 File ft = File.createTempFile("rss", ".xml");
                 Io.downloadSingle(ist, ft);
@@ -433,6 +430,7 @@ public class Kernel implements PropertyChangeListener {
                 runItasaBlog(true);
             if (prop.isItasaPM())
                 runItasaPM(true);
+            parseCalendarICS();
             prop.setLastDateTimeRefresh(temp);
             int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
             runTimer(delay);
@@ -639,12 +637,11 @@ public class Kernel implements PropertyChangeListener {
         }
         runTimer(Lang.stringToInt(prop.getRefreshInterval()) * 60000);
     }
-    //TODO finire calendario ics
-    private void parseCalendarICS() throws FileNotFoundException, IOException, ParserException{
-        int connection_Timeout = Lang.stringToInt(ApplicationSettings.getIstance().getHttpTimeout()) * 1000;
-        HttpOther http = new HttpOther(connection_Timeout);
-        CalendarICS cal = new CalendarICS(http.getStreamRss(ITASA_CALENDAR_ICS));
-        cal.getData();
+
+    private void parseCalendarICS(){
+        IcsThread it = new IcsThread(ITASA_CALENDAR_ICS);
+        Thread t = new Thread(it, "ItasaCalendarIcs");
+        t.start();
     }
 
     /**Sostituisce la treemap delle regole con quella creata dal mediator

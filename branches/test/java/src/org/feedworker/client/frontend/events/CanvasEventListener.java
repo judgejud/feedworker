@@ -3,9 +3,9 @@ package org.feedworker.client.frontend.events;
 import java.util.EventListener;
 /**
  *
- * @author Administrator
+ * @author luca judge
  */
-public interface ComboboxEventListener extends EventListener {
+public interface CanvasEventListener extends EventListener {
     /** intercetta l'evento editorpane e lo gestisce */
-    public void objReceived(ComboboxEvent evt);
+    public void objReceived(CanvasEvent evt);
 }

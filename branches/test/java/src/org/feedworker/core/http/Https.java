@@ -1,4 +1,4 @@
-package org.feedworker.core;
+package org.feedworker.core.http;
 //IMPORT JAVA
 import java.io.InputStream;
 import java.net.URL;

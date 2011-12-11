@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeMap;
 
-import org.feedworker.core.Https;
+import org.feedworker.core.http.Https;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.object.ItasaUser;
 import org.feedworker.object.News;

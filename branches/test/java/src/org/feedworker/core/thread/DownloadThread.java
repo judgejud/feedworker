@@ -1,4 +1,4 @@
-package org.feedworker.core;
+package org.feedworker.core.thread;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +32,10 @@ import jcifs.smb.SmbException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
+import org.feedworker.core.http.HttpAbstract;
+import org.feedworker.core.http.HttpItasa;
+import org.feedworker.core.Kernel;
+import org.feedworker.core.ManageListener;
 /**
  * 
  * @author luca
@@ -48,7 +52,7 @@ public class DownloadThread implements Runnable {
     private Reminder xmlReminder;
     private HttpAbstract http;
     
-    DownloadThread(TreeMap<KeyRule, ValueRule> map, Reminder xml, 
+    public DownloadThread(TreeMap<KeyRule, ValueRule> map, Reminder xml, 
                             ArrayList<String> _als, HttpAbstract _http, boolean _autoitasa) {
         als = _als;        
         http = _http;

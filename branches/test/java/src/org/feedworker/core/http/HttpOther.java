@@ -1,4 +1,4 @@
-package org.feedworker.core;
+package org.feedworker.core.http;
 
 //IMPORT JAVA
 import java.io.BufferedReader;
@@ -21,7 +21,7 @@ import org.apache.http.protocol.HTTP;
  * 
  * @author luca judge
  */
-class HttpOther extends HttpAbstract{
+public class HttpOther extends HttpAbstract{
     private final String ADDRESS_SUBSF = "http://www.subsfactory.it/";
     private final String TORRENT_ZOINK = "http://torrent.zoink.it/";
     private final String TORRENT_BTCHAT = "http://www.bt-chat.com/";
@@ -33,7 +33,7 @@ class HttpOther extends HttpAbstract{
      *
      * @param timeout tempo di scadenza connessione
      */
-    HttpOther(int timeout) {
+    public HttpOther(int timeout) {
         super(timeout);
     }
     
@@ -41,18 +41,18 @@ class HttpOther extends HttpAbstract{
      *
      * @param timeout tempo di scadenza connessione
      */
-    HttpOther() {
+    public HttpOther() {
         super();
     }
     
-    InputStream getStreamRss(String oldUrl) throws IOException{
+    public InputStream getStream(String oldUrl) throws IOException{
         get = new HttpGet(oldUrl);
         response = client.execute(get);
         return response.getEntity().getContent();
     }
 
     @Override
-    HttpEntity requestGetEntity(String link) throws IndexOutOfBoundsException, 
+    public HttpEntity requestGetEntity(String link) throws IndexOutOfBoundsException, 
                                                                     IOException {
         long lenght = -1;
         int temp = 0;
@@ -86,7 +86,7 @@ class HttpOther extends HttpAbstract{
         return entity;
     }
 
-    InputStream getTorrent(String oldUrl) throws IOException {
+    public InputStream getTorrent(String oldUrl) throws IOException {
         InputStream is = null;
         if (oldUrl.substring(0, TORRENT_ZOINK.length()).equalsIgnoreCase(
                 TORRENT_ZOINK)) {
@@ -164,7 +164,7 @@ class HttpOther extends HttpAbstract{
         return url;
     }
     
-    String synoConnectGetID(String url, String user, String pwd)
+    public String synoConnectGetID(String url, String user, String pwd)
             throws IOException {
         String id = null;
         String searchID = "   \"id\" : \"";
@@ -197,7 +197,7 @@ class HttpOther extends HttpAbstract{
      * @param link link da aggiungere
      * @throws IOException
      */
-    void synoAddLink(String url, String id, String link) throws IOException {
+    public void synoAddLink(String url, String id, String link) throws IOException {
         List<NameValuePair> lnvp = new ArrayList<NameValuePair>();
         lnvp.add(new BasicNameValuePair("id", id));
         lnvp.add(new BasicNameValuePair("action", "addurl"));
