@@ -12,7 +12,6 @@ import java.awt.event.WindowListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -28,6 +27,7 @@ import org.feedworker.client.frontend.events.FrameEvent;
 import org.feedworker.client.frontend.events.FrameEventListener;
 import org.feedworker.client.frontend.panel.*;
 
+import org.jdesktop.swingx.JXFrame;
 import org.jfacility.java.awt.AWT;
 import org.jfacility.javax.swing.ButtonTabComponent;
 
@@ -40,7 +40,7 @@ import org.opensanskrit.widget.SystemInfoDialog;
  * 
  * @author luca judge
  */
-public class frameMain extends JFrame implements WindowListener, FrameEventListener {
+public class frameMain extends JXFrame implements WindowListener, FrameEventListener {
     //VARIABLES PRIVATE FINAL
     private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
@@ -642,14 +642,6 @@ public class frameMain extends JFrame implements WindowListener, FrameEventListe
                 });
             } else if (evt.getOperaz().equalsIgnoreCase(proxy.getOperationProgressIncrement()))
                 progressBar.setProgress(evt.getMax());
-            //TODO:rimuovere optionpane e fare come per i feed
-            else if (evt.getOperaz().equalsIgnoreCase(proxy.getItasaPM())){
-                int n = JOptionPane.showConfirmDialog(this, "Hai " + evt.getMax() + 
-                        " nuovi messaggi privati", "Vuoi leggerli sul sito?",
-                        JOptionPane.YES_NO_OPTION);
-                if (n==JOptionPane.YES_OPTION)
-                    proxy.openWebsiteItasaPM();
-            }
         }
         if ((evt.isIcontray()) && (!this.isVisible()))
             systemTray.notifyIncomingFeed(evt.getMsg());

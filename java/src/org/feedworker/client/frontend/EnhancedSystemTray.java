@@ -21,7 +21,7 @@ public class EnhancedSystemTray {
     private Image iconNormal, iconNew;
     private TrayIcon trayIcon;
     private Mediator proxy = Mediator.getIstance();
-    private int itasa, myitasa, eztv, btchat, subsf, blog, mysubsf;
+    private int itasa, myitasa, eztv, btchat, subsf, blog, mysubsf, itasaPM;
 
     private EnhancedSystemTray(Window owner) {
         this.owner = owner;
@@ -45,6 +45,7 @@ public class EnhancedSystemTray {
             btchat = 0;
             subsf = 0;
             mysubsf = 0;
+            itasaPM = 0;
         } catch (AWTException e) {
             proxy.printError(e);
         }
@@ -95,6 +96,9 @@ public class EnhancedSystemTray {
         try {
             mysubsf += Integer.parseInt(split[6]);
         } catch (NumberFormatException npe){}
+        try {
+            itasaPM = Integer.parseInt(split[7]);
+        } catch (NumberFormatException npe){}
         msg = "";
         if (itasa>0)
             msg += "Nuovi feed itasa: " + itasa + "\n";
@@ -102,6 +106,8 @@ public class EnhancedSystemTray {
             msg += "Nuovi feed myitasa: " + myitasa + "\n";
         if (blog>0)
             msg += "Nuovi feed blog: " + blog + "\n";
+        if (itasaPM>0)
+            msg += "Nuovi Messaggi privati: " + itasaPM + "\n";
         if (subsf>0)
             msg += "Nuovi feed subsfactory: " + subsf + "\n";
         if (mysubsf>0)
