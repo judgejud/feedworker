@@ -108,7 +108,7 @@ public class Kernel implements PropertyChangeListener {
     private String lastItasa=null, lastMyItasa=null, lastSubsf=null,
             lastEztv=null, lastBtchat=null, lastMySubsf=null, lastBlog=null;
     private int countItasa, countMyitasa, countSubsf, countMysubsf, countEztv, 
-            countBtchat, countBlog;
+            countBtchat, countBlog, countPM;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Timer timer;
     
@@ -471,9 +471,9 @@ public class Kernel implements PropertyChangeListener {
                             error.launch(ex, getClass(), null);
                         }
                     }
-                    String msg = countItasa + ":" + countMyitasa + ":" + countBlog +
+                    String msg = countItasa + ":" + countMyitasa + ":" + countBlog + 
                             ":" + countEztv + ":" + countBtchat + ":" + countSubsf + 
-                            ":" + countMysubsf;
+                            ":" + countMysubsf + ":" + countPM;
                     ManageListener.fireFrameEvent(this, icontray, msg);
                 }// end run
             }, delay, delay);
@@ -549,9 +549,13 @@ public class Kernel implements PropertyChangeListener {
         boolean status = false;
         if (!first && loginItasaXmlRPC()){
             try {
-                int c = xmlrpc.getMessage();
-                if (c>0)
-                    ManageListener.fireFrameEvent(this, ITASA_PM, c);
+                countPM = xmlrpc.getMessage();
+                if (countPM > 0){
+                    status = true;
+                    ManageListener.fireTextPaneEvent(this,
+                                    "Sono presenti dei messaggi privati",
+                                    TextPaneEvent.ITASA_PM, true);
+                }
             } catch (XmlRpcException ex) {
                 ex.printStackTrace();
             }
