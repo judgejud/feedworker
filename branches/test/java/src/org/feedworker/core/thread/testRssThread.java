@@ -129,15 +129,12 @@ public class testRssThread implements Runnable{
                                 }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2]))
-                                    && download) {
+                            if ((isNotStagione((String) matrice.get(i)[2]))&& download)
                                 downItasaAuto(matrice.get(i)[0]);
-                            }
                         } else if (first && from.equals(core.MYITASA)) {
                             // non deve fare nulla
-                        } else {// if confronta after
+                        } else // if confronta after
                             matrice.remove(i);
-                        }
                     }
                 }
             }

@@ -34,7 +34,8 @@ public class paneSetting extends paneAbstract {
     private JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
             jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
             jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
-            jcbPaneShow, jcbTorrent, jcbPaneBlog, jcbItasaBlog, jcbItasaPM;
+            jcbPaneShow, jcbTorrent, jcbPaneBlog, jcbItasaBlog, jcbItasaPM, 
+            jcbPaneCalendarDay, jcbCalendarDay ;
     private JButton jbDestSub;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf,
@@ -113,7 +114,8 @@ public class paneSetting extends paneAbstract {
                 new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), 
                 jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected(), 
                 jcbTorrent.isSelected(), jcbPaneShow.isSelected(), jcbItasaBlog.isSelected(), 
-                jcbPaneBlog.isSelected(), jcbItasaPM.isSelected());
+                jcbPaneBlog.isSelected(), jcbItasaPM.isSelected(), 
+                jcbPaneCalendarDay.isSelected(), jcbCalendarDay.isSelected());
             }
         });
         
@@ -296,16 +298,16 @@ public class paneSetting extends paneAbstract {
         
         jcbItasaPM = new JCheckBox("Abilita controllo messaggi privati forum");
         
+        jcbCalendarDay = new JCheckBox("Abilita Calendario giornaliero");
+        
         JXTaskPane task = new JXTaskPane();
         task.setTitle("ItalianSubs");
         task.setCollapsed(true);
 
-        JLabel jlItasa = new JLabel("RSS Itasa");
-        task.add(jlItasa);
+        task.add(new JLabel("RSS Itasa"));
         task.add(jtfRssItasa);
 
-        JLabel jlMyItasa = new JLabel("RSS myItasa");
-        task.add(jlMyItasa);
+        task.add(new JLabel("RSS myItasa"));
         task.add(jtfRssMyItasa);
 
         JPanel temp = new JPanel();
@@ -318,13 +320,12 @@ public class paneSetting extends paneAbstract {
         
         task.add(jcbItasaBlog);
         task.add(jcbItasaPM);
+        task.add(jcbCalendarDay);
 
-        JLabel jlIuser = new JLabel("Username");
-        task.add(jlIuser);
+        task.add(new JLabel("Username"));
         task.add(jtfItasaUser);
 
-        JLabel jlIpwd = new JLabel("Password");
-        task.add(jlIpwd);
+        task.add(new JLabel("Password"));
         task.add(jpfItasa);
         
         temp = new JPanel();
@@ -332,7 +333,6 @@ public class paneSetting extends paneAbstract {
         temp.add(jbCheckItasaApi);
         temp.add(jbCheckItasaPM);
         task.add(temp);
-        
         
         return task;
     }
@@ -420,7 +420,8 @@ public class paneSetting extends paneAbstract {
     
     private JXTaskPane initTaskPaneVisibilePane(){
         jcbPaneBlog = new JCheckBox("Blog");
-        jcbPaneCalendar = new JCheckBox("Calendar");
+        jcbPaneCalendarDay = new JCheckBox("Calendar Day");
+        jcbPaneCalendar = new JCheckBox("Calendar Show");
         jcbPaneLog = new JCheckBox("Log");
         jcbPaneReminder = new JCheckBox("Reminder");
         jcbPaneSearchSubItasa = new JCheckBox("Search Subtitle Itasa");
@@ -434,6 +435,7 @@ public class paneSetting extends paneAbstract {
         task.setCollapsed(true);
         
         task.add(jcbPaneBlog);
+        task.add(jcbPaneCalendarDay);
         task.add(jcbPaneCalendar);
         task.add(jcbPaneLog);
         task.add(jcbPaneReminder);
@@ -502,6 +504,7 @@ public class paneSetting extends paneAbstract {
         jrbDownManual.setSelected(!prop.isAutoDownloadMyItasa());
         jcbItasaBlog.setSelected(prop.isItasaBlog());
         jcbItasaPM.setSelected(prop.isItasaPM());
+        jcbCalendarDay.setSelected(prop.isCalendarDay());
         settingItasaDownloadStartup();
     }
     
@@ -535,6 +538,7 @@ public class paneSetting extends paneAbstract {
     
     private void settingsPaneVisibleValue(){
         jcbPaneBlog.setSelected(prop.isEnablePaneBlog());
+        jcbPaneCalendarDay.setSelected(prop.isEnablePaneCalendarDay());
         jcbPaneCalendar.setSelected(prop.isEnablePaneCalendar());
         jcbPaneLog.setSelected(prop.isEnablePaneLog());
         jcbPaneReminder.setSelected(prop.isEnablePaneReminder());

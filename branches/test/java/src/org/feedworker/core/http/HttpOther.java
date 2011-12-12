@@ -59,7 +59,6 @@ public class HttpOther extends HttpAbstract{
         while (lenght == -1) {
             ++temp;
             consumeEntity();
-            //client.setCookieStore(cookies);
             get = new HttpGet(link);
             response = client.execute(get);
             entity = response.getEntity();
@@ -68,7 +67,6 @@ public class HttpOther extends HttpAbstract{
             consumeEntity();
             if (url != null) {
                 get = new HttpGet(url);
-                //client.setCookieStore(cookies);
                 response = client.execute(get);
                 entity = response.getEntity();
                 lenght = entity.getContentLength();

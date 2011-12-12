@@ -111,9 +111,10 @@ public class frameMain extends JFrame implements WindowListener, FrameEventListe
             jpSubsfactory = paneSubsfactory.getPanel();
             mainJTP.addTab("Subsfactory", jpSubsfactory);
         }
-        checkAddTab(jpCalendarDay, true);
         if (prop.isEnablePaneTorrent())
             checkAddTab(jpTorrent, false);
+        if (prop.isEnablePaneCalendarDay())
+            checkAddTab(jpCalendarDay, false);
         if (prop.isEnablePaneCalendar())
             checkAddTab(jpCalendarShow, false);
         if (prop.isEnablePaneSearchSubItasa())
@@ -330,7 +331,7 @@ public class frameMain extends JFrame implements WindowListener, FrameEventListe
         });
         
         JMenuItem jmiWindowBlog = new JMenuItem(" Blog ");
-        jmiWindowShow.addActionListener(new ActionListener()  {
+        jmiWindowBlog.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 checkAddTab(jpBlog, true);

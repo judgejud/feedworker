@@ -4,14 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import net.fortuna.ical4j.data.ParserException;
+
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.core.IcsParser;
 import org.feedworker.core.ManageListener;
 import org.feedworker.core.http.HttpOther;
+
 import org.jfacility.Io;
 import org.jfacility.java.lang.Lang;
 
+import net.fortuna.ical4j.data.ParserException;
 /**
  *
  * @author luca judge
@@ -33,7 +35,6 @@ public class IcsThread implements Runnable{
             Io.downloadSingle(is, f);
             IcsParser cal = new IcsParser(new FileInputStream(f));
             Object[] o = cal.getData();
-            System.out.println("firecanvas");
             ManageListener.fireCanvasEvent(this, o);
         } catch (ParserException ex) {
             ex.printStackTrace();

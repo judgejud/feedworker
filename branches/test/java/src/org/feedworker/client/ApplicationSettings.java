@@ -33,7 +33,7 @@ public class ApplicationSettings {
             enableNotifyMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
             enablePaneSearchSubItasa, enablePaneReminder, reminderOption, enablePaneTorrent,
             enablePaneCalendar, enableNotifySms, enablePaneShow, itasaBlog, enablePaneBlog, 
-            itasaPM;
+            itasaPM, calendarDay, enablePaneCalendarDay;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -73,6 +73,7 @@ public class ApplicationSettings {
                         getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
                 setItasaBlog(getBooleanDecryptedValue("ITASA_BLOG"));
                 setItasaPM(getBooleanDecryptedValue("ITASA_PM"));
+                setCalendarDay(getBooleanDecryptedValue("CALENDAR_DAY"));
                 //SUBSFATORY
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
                 setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
@@ -99,6 +100,7 @@ public class ApplicationSettings {
                 setEnablePaneTorrent(getBooleanDecryptedValue("ENABLE_PANE_TORRENT"));
                 setEnablePaneShow(getBooleanDecryptedValue("ENABLE_PANE_SHOW"));
                 setEnablePaneBlog(getBooleanDecryptedValue("ENABLE_PANE_BLOG"));
+                setEnablePaneCalendarDay(getBooleanDecryptedValue("ENABLE_PANE_CALENDAR_DAY"));
                 //ADVISOR SETTINGS
                 setMailTO(getDecryptedValue("MAIL_TO"));
                 setMailSMTP(getDecryptedValue("MAIL_SMTP"));
@@ -180,6 +182,7 @@ public class ApplicationSettings {
             propertiesCrypting("IS_AUTO_LOAD_DOWNLOAD_MYITASA", autoLoadDownloadMyItasa);
             propertiesCrypting("ITASA_BLOG", itasaBlog);
             propertiesCrypting("ITASA_PM", itasaPM);
+            propertiesCrypting("CALENDAR_DAY", calendarDay);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -253,6 +256,7 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_PANE_TORRENT", enablePaneTorrent);
             propertiesCrypting("ENABLE_PANE_SHOW", enablePaneShow);
             propertiesCrypting("ENABLE_PANE_BLOG", enablePaneBlog);
+            propertiesCrypting("ENABLE_PANE_CALENDAR_DAY", enablePaneCalendarDay);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -710,5 +714,21 @@ public class ApplicationSettings {
 
     public void setItasaPM(boolean itasaPM) {
         this.itasaPM = itasaPM;
+    }
+
+    public boolean isCalendarDay() {
+        return calendarDay;
+    }
+
+    public void setCalendarDay(boolean calendarDay) {
+        this.calendarDay = calendarDay;
+    }
+
+    public boolean isEnablePaneCalendarDay() {
+        return enablePaneCalendarDay;
+    }
+
+    public void setEnablePaneCalendarDay(boolean enablePaneCalendarDay) {
+        this.enablePaneCalendarDay = enablePaneCalendarDay;
     }
 }// end class

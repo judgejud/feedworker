@@ -1,7 +1,5 @@
 package org.feedworker.client.frontend.panel;
 
-import org.feedworker.client.frontend.component.listTaskBlog;
-
 /**
  *
  * @author Administrator
@@ -9,13 +7,11 @@ import org.feedworker.client.frontend.component.listTaskBlog;
 public class paneBlog extends paneAbstract{
     
     private static paneBlog jpanel = null;
-    private listTaskBlog listBlog;
-
+    
     private paneBlog() {
         super("Blog");
         initializePanel();
         initializeButtons();
-        core.setListListener(listBlog);
     }
     
     public static paneBlog getPanel(){
@@ -26,8 +22,7 @@ public class paneBlog extends paneAbstract{
 
     @Override
     void initializePanel() {
-        listBlog = new listTaskBlog("Blog");
-        jpCenter.add(listBlog);
+        
     }
 
     @Override
