@@ -172,7 +172,6 @@ public class Kernel implements PropertyChangeListener {
         if (dt!=null){
             Thread t = new Thread(dt, "Thread download");
             t.start();
-            
         }
     }
 
@@ -430,7 +429,8 @@ public class Kernel implements PropertyChangeListener {
                 runItasaBlog(true);
             if (prop.isItasaPM())
                 runItasaPM(true);
-            parseCalendarICS();
+            if (prop.isCalendarDay())
+                parseCalendarICS();
             prop.setLastDateTimeRefresh(temp);
             int delay = Lang.stringToInt(prop.getRefreshInterval()) * 60000;
             runTimer(delay);
@@ -448,7 +448,6 @@ public class Kernel implements PropertyChangeListener {
             timer.scheduleAtFixedRate(new TimerTask()  {
                 @Override
                 public void run() {
-                    System.out.println(Common.actualTime());
                     boolean icontray = false;
                     prop.setLastDateTimeRefresh(Common.actualTime());
                     if (runItasa(false,true))

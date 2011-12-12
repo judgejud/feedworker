@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend.panel;
 
 import java.util.ArrayList;
+import javax.swing.JPanel;
 import org.feedworker.client.frontend.GuiCore;
 import org.feedworker.client.frontend.component.canvasCalendar;
 import org.feedworker.client.frontend.events.CanvasEvent;

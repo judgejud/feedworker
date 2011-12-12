@@ -58,9 +58,8 @@ public class tableReminder extends tableAbstract {
         if (this.getName().equalsIgnoreCase(evt.getNameTableDest())) {
             DefaultTableModel dtm = (DefaultTableModel) getModel();
             int size = evt.getArray().size();
-            int start = dtm.getRowCount();
             for (int i = 0; i < size; i++)
-                dtm.insertRow(i+start, evt.getArray().get(i));
+                dtm.insertRow(i, evt.getArray().get(i));
             getColumn(columnNames[1]).setCellRenderer(new labelCellColorRenderer());
         }
     }

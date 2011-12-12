@@ -10,12 +10,12 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
-
 /**
  *
  * @author luca judge
  */
 public class IcsParser {
+    
     private Calendar calendar;
     
     public IcsParser(FileInputStream fis) throws ParserException, IOException{
@@ -36,6 +36,7 @@ public class IcsParser {
                         show = property.getValue();
                     else if (property.getName().equals("DTSTART")){
                         newDay = getDate(property.getValue());
+                        shows.add("");
                         shows.add(show);
                         break;
                     }

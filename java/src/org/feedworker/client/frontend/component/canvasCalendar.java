@@ -7,15 +7,11 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 
-import org.feedworker.client.frontend.events.CanvasEvent;
-import org.feedworker.client.frontend.events.CanvasEventListener;
-
 import edu.umd.cs.piccolo.PCanvas;
 import edu.umd.cs.piccolo.PNode;
 import edu.umd.cs.piccolo.event.PBasicInputEventHandler;
 import edu.umd.cs.piccolo.event.PInputEvent;
 import edu.umd.cs.piccolo.util.PPaintContext;
-import org.feedworker.client.frontend.GuiCore;
 /**
  *
  * @author luca judge
@@ -155,7 +151,7 @@ public class canvasCalendar extends PCanvas{
             this.lines = lines;
             this.week = week;
             this.day = day;
-            this.date =  date;
+            this.date =  "\n" + date;
             setPaint(Color.BLACK);
         }
 

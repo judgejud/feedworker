@@ -49,7 +49,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "444 by "
+                + "445 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
