@@ -410,7 +410,6 @@ public class ItasaOnline extends AbstractQueryXML{
     private void connectHttps(String url) throws JDOMParseException, JDOMException, 
                                                         IOException, Exception {
         try {
-            //Https_1 h = Https_1.getInstance();
             document = new SAXBuilder().build(Https.getInstance().connection(url));
         } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();

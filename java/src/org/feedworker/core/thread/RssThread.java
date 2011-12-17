@@ -1,7 +1,5 @@
 package org.feedworker.core.thread;
 
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.ParsingFeedException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,91 +10,76 @@ import java.util.TreeMap;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.TextPaneEvent;
+import org.feedworker.core.http.HttpItasa;
 import org.feedworker.core.http.HttpOther;
 import org.feedworker.core.Kernel;
 import org.feedworker.core.ManageListener;
 import org.feedworker.core.RssParser;
+import org.feedworker.exception.ManageException;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
-import org.feedworker.exception.ManageException;
+import org.feedworker.xml.Reminder;
+
 import org.jfacility.Io;
 import org.jfacility.java.lang.Lang;
 
-/**TODO: terminare la trasformazione del feed rss sotto 3d
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.ParsingFeedException;
+/**
  *
  * @author luca
  */
-public class testRssThread implements Runnable{
+public class RssThread implements Runnable{
     
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
     private Kernel core = Kernel.getIstance();
+    private boolean loginItasa, download, first;
+    private String url, data, from, lastDate;
     private TreeMap<KeyRule, ValueRule> map;
-    private String url, data, from;
-    private boolean download, first;
+    private Reminder xml;
+    private HttpItasa http;
+    private int count;
 
-    testRssThread(TreeMap<KeyRule, ValueRule> map, String urlRss, String data, 
-                String from, boolean download, boolean first) {
-        this.map = map;
-        this.url = urlRss;
+    public RssThread(String data, String url, String from, boolean login, 
+            boolean download, boolean first, TreeMap<KeyRule, ValueRule> map, 
+            HttpItasa http, Reminder xml) {
+        loginItasa = login;
         this.data = data;
+        this.url = url;
         this.from = from;
+        this.download = download;
+        this.first = first;
+        this.map = map;
+        this.xml = xml;
+        this.http = http;
     }
     
-    /**Verifica se il nome non presenta la parola "stagione"
-     * 
-     * @param name nome da controllare
-     * @return risultato controllo
-     */
-    private boolean isNotStagione(String name) {
-        boolean check = true;
-        String[] array = name.split(" ");
-        for (int i = 0; i < array.length; i++) {
-            String confronta = array[i].toLowerCase();
-            if (confronta.equals("stagione") || confronta.equals("season")
-                    || confronta.equals("completa")) {
-                check = false;
-                break;
-            }
-        }
-        return check;
+    public RssThread(String data, String url, String from) {
+        this.data = data;
+        this.url = url;
+        this.from = from;
+        first = false;
+        download = false;
     }
-    
-    /**
-     * effettua il download automatico di myitasa comprende le fasi anche di
-     * estrazione zip e analizzazione percorso definitivo.
-     * 
-     * @param link
-     *            link da analizzare
-     */
-    private void downItasaAuto(Object link) {
-        ArrayList<String> als = new ArrayList<String>();
-        als.add(link.toString());
-        /*
-        DownloadThread dt = new DownloadThread(map, als, true);
-        Thread t = new Thread(dt, "AutoItasa");
-        t.start();
-         */
-    }
-    
+
     @Override
     public void run() {
-        RssParser rss = null;
-        ArrayList<Object[]> matrice = null;
-        int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
-        HttpOther http = new HttpOther(connection_Timeout);
-        try {
+        try {            
+            int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
+            HttpOther http = new HttpOther(connection_Timeout);
             InputStream ist = http.getStream(url);
             if (ist != null) {
                 File ft = File.createTempFile("rss", ".xml");
                 Io.downloadSingle(ist, ft);
-                rss = new RssParser(ft);
-                matrice = rss.readRss();
+                RssParser rss = new RssParser(ft);
+                ArrayList<Object[]> matrice = rss.readRss();
                 ft.delete();
                 boolean continua = true;
                 if (data != null) {
                     Date confronta = Common.stringDateTime(data);
+                    ArrayList<String> links = new ArrayList<String>();
                     for (int i = matrice.size() - 1; i >= 0; i--) {
                         String date_matrix = String.valueOf(matrice.get(i)[1]);
                         if (confronta.before(Common.stringDateTime(date_matrix))) {
@@ -129,13 +112,26 @@ public class testRssThread implements Runnable{
                                 }
                                 continua = false;
                             }
-                            if ((isNotStagione((String) matrice.get(i)[2]))&& download)
-                                downItasaAuto(matrice.get(i)[0]);
+                            if (download){
+                                if ((isNotStagione((String) matrice.get(i)[2])))
+                                    links.add((String)matrice.get(i)[0]);
+                                else 
+                                    ManageListener.fireTextPaneEvent(this,
+                                            "Nuovo/i feed " + from,
+                                            TextPaneEvent.FEED_MYITASA, true);
+                            }
                         } else if (first && from.equals(core.MYITASA)) {
                             // non deve fare nulla
                         } else // if confronta after
                             matrice.remove(i);
-                    }
+                    }//end for
+                    if (links.size()>0)
+                        downItasaAuto(links, first);
+                }
+                count = matrice.size();
+                if (matrice!=null && count>0){
+                    ManageListener.fireTableEvent(this, matrice, from);
+                    lastDate = (String) matrice.get(0)[1];
                 }
             }
         } catch (ParseException ex) {
@@ -149,7 +145,50 @@ public class testRssThread implements Runnable{
         } catch (IOException ex) {
             error.launch(ex, getClass(), from);
         }
+    }
+    
+    /**Verifica se il nome non presenta la parola "stagione"
+     * 
+     * @param name nome da controllare
+     * @return risultato controllo
+     */
+    private boolean isNotStagione(String name) {
+        boolean check = true;
+        String[] array = name.split(" ");
+        for (int i = 0; i < array.length; i++) {
+            String confronta = array[i].toLowerCase();
+            if (confronta.equals("stagione") || confronta.equals("season")
+                    || confronta.equals("completa")) {
+                check = false;
+                break;
+            }
+        }
+        return check;
+    }
+    
+    private void downItasaAuto(ArrayList<String> links, boolean first) {
+        prop.setLastDateTimeRefresh(Common.actualTime());
+        prop.writeOnlyLastDate();
+        if (loginItasa){
+            DownloadThread dt = null;
+            if (first)
+                dt = new DownloadThread(map, xml, links, http, false);
+            else
+                dt = new DownloadThread(map, xml, links, http, true);
+            Thread t = new Thread(dt, "AutoItasa");
+            t.start();
+        } else {
+            String msg = "Non posso procedere al download per problemi di login ad itasa, "
+                    + "controllare user e password";
+            ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT, true);
+        }
+    }
 
-        //return matrice; fare il fire 
+    public synchronized int getCount() {
+        return count;
+    }
+
+    public synchronized String getLastDate() {
+        return lastDate;
     }
 }

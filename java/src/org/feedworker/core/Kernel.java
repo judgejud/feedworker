@@ -12,9 +12,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -36,6 +34,7 @@ import org.feedworker.core.http.Https;
 import org.feedworker.core.http.HttpItasa;
 import org.feedworker.core.thread.ShowThread;
 import org.feedworker.core.thread.DownloadThread;
+import org.feedworker.core.thread.IcsThread;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.exception.ManageException;
 import org.feedworker.object.*;
@@ -53,15 +52,14 @@ import org.jfacility.java.lang.SystemFileManager;
 import org.opensanskrit.exception.NotAvailableLookAndFeelException;
 import org.opensanskrit.exception.UnableRestartApplicationException;
 
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.ParsingFeedException;
-
 import jcifs.smb.SmbException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.xmlrpc.XmlRpcException;
 
-import org.feedworker.core.thread.IcsThread;
+import org.feedworker.core.thread.DownloadTorrentThread;
+import org.feedworker.core.thread.RssBlogThread;
+import org.feedworker.core.thread.RssThread;
 import org.jdom.JDOMException;
 
 import org.xml.sax.SAXException;
@@ -116,7 +114,7 @@ public class Kernel implements PropertyChangeListener {
     private TreeMap<String, String> mapShowItasa;
     private ManageException error = ManageException.getIstance();
     private Calendar xmlCalendar;
-    private RuleDestination xmlSubDest;
+    
     private Reminder xmlReminder;
     private ImportTaskList importTaskList;
     private ImportTaskCalendar importTaskCalendar;
@@ -201,27 +199,9 @@ public class Kernel implements PropertyChangeListener {
      * @param als arraylist di link
      */
     public void downloadTorrent(ArrayList<String> als) {
-        //TODO:creare il thread
-        int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
-        HttpOther http = new HttpOther(connection_Timeout);
-        try {
-            for (int i = 0; i < als.size(); i++) {
-                InputStream is = http.getTorrent(als.get(i));
-                if (is != null) {
-                    File f = new File(prop.getTorrentDestinationFolder()
-                            + File.separator + http.getNameFile());
-                    Io.downloadSingle(is, f);
-                    ManageListener.fireTextPaneEvent(this,
-                            "Scaricato: " + http.getNameFile(),
-                            TextPaneEvent.TORRENT, true);
-                } else {
-                    printAlert("Non posso gestire " + als.get(i).split(".")[1]);
-                }
-            }
-        } catch (IOException ex) {
-            error.launch(ex, getClass(), null);
-        }
-        http.closeClient();
+        DownloadTorrentThread dt = new DownloadTorrentThread(als);
+        Thread t = new Thread(dt, "Torrent");
+        t.start();
     }
 
     /**testa la connessione a samba
@@ -235,6 +215,7 @@ public class Kernel implements PropertyChangeListener {
      */
     public boolean testSamba(String ip, String dir, String dom, String user,
             String pwd) {
+        //TODO: thread
         boolean test = false;
         Samba.resetInstance();
         Samba s = Samba.getIstance(ip, dir, dom, user, pwd);
@@ -279,141 +260,6 @@ public class Kernel implements PropertyChangeListener {
         if (prop.isApplicationFirstTimeUsed())
             prop.writeApplicationFirstTimeUsedFalse();
         prop.writeGeneralSettings();
-    }
-
-    /**Restituisce l'arraylist contenente i feed rss
-     * 
-     * @param urlRss url rss da analizzare
-     * @param data data da confrontare
-     * @param from  provenienza
-     * @param download download automatico
-     * @param first
-     * @return arraylist di feed(array di oggetti)
-     */
-    private ArrayList<Object[]> getFeedRss(String urlRss, String data,
-            String from, boolean autodownload, boolean first) {
-        RssParser rss = null;
-        ArrayList<Object[]> matrice = null;
-        int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
-        HttpOther http = new HttpOther(connection_Timeout);
-        try {
-            InputStream ist = http.getStream(urlRss);
-            if (ist != null) {
-                File ft = File.createTempFile("rss", ".xml");
-                Io.downloadSingle(ist, ft);
-                rss = new RssParser(ft);
-                matrice = rss.readRss();
-                ft.delete();
-                boolean continua = true;
-                if (data != null) {
-                    Date confronta = Common.stringDateTime(data);
-                    ArrayList<String> links = new ArrayList<String>();
-                    for (int i = matrice.size() - 1; i >= 0; i--) {
-                        String date_matrix = String.valueOf(matrice.get(i)[1]);
-                        if (confronta.before(Common.stringDateTime(date_matrix))) {
-                            if (continua) {
-                                if (from.equals(ITASA)) {
-                                    ManageListener.fireTextPaneEvent(this,
-                                            "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_ITASA, true);
-                                } else if (from.equals(MYITASA)
-                                        && !prop.isAutoDownloadMyItasa()) {
-                                    ManageListener.fireTextPaneEvent(this,
-                                            "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_MYITASA, true);
-                                } else if (from.equals(SUBSF)) {
-                                    ManageListener.fireTextPaneEvent(this,
-                                            "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_SUBSF,true);
-                                } else if (from.equals(MYSUBSF)) {
-                                    ManageListener.fireTextPaneEvent(this,
-                                            "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_MYSUBSF, true);
-                                } else if (from.equals(EZTV)) {
-                                    ManageListener.fireTextPaneEvent(this,
-                                            "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_EZTV, true);
-                                } else if (from.equals(BTCHAT)) {
-                                    ManageListener.fireTextPaneEvent(this,
-                                            "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_BTCHAT, true);
-                                }
-                                continua = false;
-                            }
-                            if (autodownload){
-                                if ((isNotStagione(matrice.get(i)[2])))
-                                    links.add((String)matrice.get(i)[0]);
-                                else 
-                                    ManageListener.fireTextPaneEvent(this,
-                                            "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_MYITASA, true);
-                            }
-                            
-                        } else if (first && from.equals(MYITASA)) {
-                            // non deve fare nulla
-                        } else // if confronta after
-                            matrice.remove(i);
-                    } //end for
-                    if (links.size()>0)
-                        downItasaAuto(links, first);
-                }
-            }
-        } catch (ParseException ex) {
-            error.launch(ex, getClass());
-        } catch (ParsingFeedException ex) {
-            error.launch(ex, getClass(), from);
-        } catch (FeedException ex) {
-            error.launch(ex, getClass(), from);
-        } catch (IllegalArgumentException ex) {
-            error.launch(ex, getClass());
-        } catch (IOException ex) {
-            error.launch(ex, getClass(), from);
-        }
-        return matrice;
-    }
-    
-    private ArrayList<Object[]> getFeedBlog(String urlRss, String data) {
-        RssParser rss = null;
-        ArrayList<Object[]> matrice = null;
-        int connection_Timeout = Lang.stringToInt(prop.getHttpTimeout()) * 1000;
-        HttpOther http = new HttpOther(connection_Timeout);
-        try {
-            InputStream ist = http.getStream(urlRss);
-            if (ist != null) {
-                File ft = File.createTempFile("rss", ".xml");
-                Io.downloadSingle(ist, ft);
-                rss = new RssParser(ft);
-                matrice = rss.readRssBlog();
-                ft.delete();
-                boolean continua = true;
-                if (data != null) {
-                    Date confronta = Common.stringDateTime(data);
-                    for (int i = matrice.size() - 1; i >= 0; i--) {
-                        String date_matrix = String.valueOf(matrice.get(i)[1]);
-                        if (confronta.before(Common.stringDateTime(date_matrix))) {
-                            if (continua) {
-                                ManageListener.fireTextPaneEvent(this,
-                                    "Nuovo/i feed " + BLOG,
-                                    TextPaneEvent.FEED_BLOG, true);
-                                continua = false;
-                            }
-                        } else // if confronta after
-                            matrice.remove(i);
-                    } //end for
-                }
-            }
-        } catch (ParseException ex) {
-            error.launch(ex, getClass());
-        } catch (ParsingFeedException ex) {
-            error.launch(ex, getClass(), BLOG);
-        } catch (FeedException ex) {
-            error.launch(ex, getClass(), BLOG);
-        } catch (IllegalArgumentException ex) {
-            error.launch(ex, getClass());
-        } catch (IOException ex) {
-            error.launch(ex, getClass(), BLOG);
-        }
-        return matrice;
     }
 
     /** Esegue gli rss */
@@ -491,35 +337,48 @@ public class Kernel implements PropertyChangeListener {
         boolean status = false;
         countItasa = 0;
         countMyitasa = 0;
-        ArrayList<Object[]> feedIta, feedMyita;
         if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
-            feedIta = getFeedRss(prop.getItasaFeedURL(), lastItasa, ITASA,
-                    false, first);
-            if ((feedIta != null) && (feedIta.size() > 0)) {
+            RssThread rt = new RssThread(lastItasa, prop.getItasaFeedURL(), ITASA);
+            Thread t = new Thread(rt, ITASA);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (rt.getCount()>0){
+                lastItasa = rt.getLastDate();
                 if (!first){
                     status = true;
-                    countItasa = feedIta.size();
+                    countItasa = rt.getCount();
                 }
-                lastItasa = (String) feedIta.get(0)[1];
-                ManageListener.fireTableEvent(this, feedIta, ITASA);
             }
         }
         if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
             if (first && prop.isAutoLoadDownloadMyItasa())
                 lastMyItasa = prop.getLastDateTimeRefresh();
+            RssThread rt;
             if (first && !autoloaddownload)
-                feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
-                    MYITASA, autoloaddownload, first);
+                rt = new RssThread(lastMyItasa, prop.getMyitasaFeedURL(), MYITASA, 
+                        loginItasaHttp(), autoloaddownload, first, mapRules, 
+                                                        httpItasa, xmlReminder);
             else
-                feedMyita = getFeedRss(prop.getMyitasaFeedURL(), lastMyItasa,
-                    MYITASA, prop.isAutoDownloadMyItasa(), first);
-            if ((feedMyita != null) && (feedMyita.size() > 0)) {
+                rt = new RssThread(lastMyItasa, prop.getMyitasaFeedURL(), MYITASA, 
+                        loginItasaHttp(), prop.isAutoDownloadMyItasa(), first, mapRules, 
+                                                        httpItasa, xmlReminder);
+            Thread t = new Thread(rt, MYITASA);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (rt.getCount()>0){
+                lastMyItasa = rt.getLastDate();
                 if (!first){
                     status = true;
-                    countMyitasa = feedMyita.size();
+                    countMyitasa = rt.getCount();
                 }
-                lastMyItasa = (String) feedMyita.get(0)[1];
-                ManageListener.fireTableEvent(this, feedMyita, MYITASA);
             }
         }
         return status;
@@ -527,19 +386,21 @@ public class Kernel implements PropertyChangeListener {
     
     private boolean runItasaBlog(boolean first) {
         boolean status = false;
-        //TODO: sostituire url con prop.getblog 1volta creato
         String url = "http://feeds.feedburner.com/itasa-blog";
-        ArrayList<Object[]> feedBlog;
         countBlog = 0;
-        if (Lang.verifyTextNotNull(url)) {
-            feedBlog = getFeedBlog(url, lastBlog);
-            if ((feedBlog != null) && (feedBlog.size() > 0)) {
-                if (!first){
-                    status = true;
-                    countBlog = feedBlog.size();
-                }
-                lastBlog = (String) feedBlog.get(0)[1];
-                ManageListener.fireListEvent(this, BLOG, feedBlog);
+        RssBlogThread rt = new RssBlogThread(lastBlog, url);
+        Thread t = new Thread(rt, BLOG);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        if (rt.getCount()>0){
+            lastBlog = rt.getLastDate();
+            if (!first){
+                status = true;
+                countBlog = rt.getCount();
             }
         }
         return status;
@@ -572,29 +433,39 @@ public class Kernel implements PropertyChangeListener {
         boolean status = false;
         countSubsf = 0;
         countMysubsf = 0;
-        ArrayList<Object[]> subsf, mysubsf;
         if (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL())) {
-            subsf = getFeedRss(prop.getSubsfactoryFeedURL(), lastSubsf,
-                    SUBSF, false, first);
-            if ((subsf != null) && (subsf.size() > 0)) {
+            RssThread rt = new RssThread(lastSubsf, prop.getSubsfactoryFeedURL(), SUBSF);
+            Thread t = new Thread(rt, SUBSF);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (rt.getCount()>0){
+                lastSubsf = rt.getLastDate();
                 if (!first){
                     status = true;
-                    countSubsf = subsf.size();
+                    countSubsf = rt.getCount();
                 }
-                lastSubsf = (String) subsf.get(0)[1];
-                ManageListener.fireTableEvent(this, subsf, SUBSF);
             }
         }
         if (Lang.verifyTextNotNull(prop.getMySubsfactoryFeedUrl())) {
-            mysubsf = getFeedRss(prop.getMySubsfactoryFeedUrl(),
-                    lastMySubsf, MYSUBSF, false, first);
-            if ((mysubsf != null) && (mysubsf.size() > 0)) {
-                if (!first) {
+            RssThread rt = new RssThread(lastMySubsf, 
+                                        prop.getMySubsfactoryFeedUrl(), MYSUBSF);
+            Thread t = new Thread(rt, MYSUBSF);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (rt.getCount()>0){
+                lastMySubsf = rt.getLastDate();
+                if (!first){
                     status = true;
-                    countMysubsf = mysubsf.size();
+                    countMysubsf = rt.getCount();
                 }
-                lastMySubsf = (String) mysubsf.get(0)[1];
-                ManageListener.fireTableEvent(this, mysubsf, MYSUBSF);
             }
         }
         return status;
@@ -607,27 +478,33 @@ public class Kernel implements PropertyChangeListener {
      */
     private boolean runTorrent(boolean first) {
         boolean status = false;
-        ArrayList<Object[]> feedEz, feedBt;
         countBtchat = 0;
         countEztv = 0;
-        feedEz = getFeedRss(RSS_TORRENT_EZTV, lastEztv, EZTV, false, first);
-        feedBt = getFeedRss(RSS_TORRENT_BTCHAT, lastBtchat, BTCHAT, false,
-                first);
-        if ((feedEz != null) && (feedEz.size() > 0)) {
-            if (!first){
-                status = true;
-                countEztv = feedEz.size();
-            }
-            lastEztv = (String) feedEz.get(0)[1];
-            ManageListener.fireTableEvent(this, feedEz, EZTV);
+        RssThread rtE = new RssThread(lastEztv, RSS_TORRENT_EZTV, EZTV);
+        RssThread rtB = new RssThread(lastBtchat, RSS_TORRENT_BTCHAT, BTCHAT);
+        Thread tE = new Thread(rtE, EZTV);
+        Thread tB = new Thread(rtB, BTCHAT);
+        tE.start();
+        tB.start();
+        try {
+            tE.join();
+            tB.join();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
         }
-        if ((feedBt != null) && (feedBt.size() > 0)) {
+        if (rtE.getCount()>0){
+            lastEztv = rtE.getLastDate();
             if (!first){
                 status = true;
-                countBtchat = feedBt.size();
+                countEztv = rtE.getCount();
             }
-            lastBtchat = (String) feedBt.get(0)[1];
-            ManageListener.fireTableEvent(this, feedBt, BTCHAT);
+        }
+        if (rtB.getCount()>0){
+            lastBtchat = rtB.getLastDate();
+            if (!first){
+                status = true;
+                countBtchat = rtB.getCount();
+            }
         }
         return status;
     }
@@ -666,7 +543,7 @@ public class Kernel implements PropertyChangeListener {
     /** Carica gli xml */
     public void loadXml() {
         try {
-            xmlSubDest = new RuleDestination(FILE_RULE, true);
+            RuleDestination xmlSubDest = new RuleDestination(FILE_RULE, true);
             ArrayList temp = xmlSubDest.initializeReader();
             mapRules = (TreeMap<KeyRule, ValueRule>) temp.get(0);
             if (mapRules != null)

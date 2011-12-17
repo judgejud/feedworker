@@ -40,6 +40,7 @@ public class Https {
     public InputStream connection(String url) throws Exception {
         URL u = new URL(url);
         HttpsURLConnection conn = (HttpsURLConnection) u.openConnection();
+        conn.setRequestProperty("User-Agent", "FeedWorker 448");
         conn.setHostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String arg0, SSLSession arg1) {

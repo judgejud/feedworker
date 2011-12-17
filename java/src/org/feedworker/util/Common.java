@@ -24,8 +24,12 @@ public class Common {
             "yyyy-MM-dd", Locale.ITALY);
     private static SimpleDateFormat sdfItalian = new SimpleDateFormat(
             "dd/MM/yyyy", Locale.ITALY);
+    private static SimpleDateFormat sdfItalian2 = new SimpleDateFormat(
+            "EEE dd/MM", Locale.ITALY);
     private static SimpleDateFormat sdfDateTime = new SimpleDateFormat(
-            "dd/MM/yyyy HH:mm:ss", Locale.ITALY);
+            "dd/MM/yyyy HH:mm:ss", Locale.ITALY);    
+    private static SimpleDateFormat sdfICS = new SimpleDateFormat(
+            "yyyyMMdd'T'", Locale.ITALY);
 
     /**
      * Restituisce la data ed ora attuale
@@ -147,6 +151,14 @@ public class Common {
 
     public static String stringToAmerican(String s) throws ParseException {
         return dateStringAmerican(stringDate(s));
+    }
+    
+    public static Date stringIcsToDate(String s) throws ParseException {
+        return sdfICS.parse(s);
+    }
+    
+    public static String dateIcsToString(Date d) {
+        return sdfItalian2.format(d);
     }
 
     /**
