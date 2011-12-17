@@ -22,6 +22,7 @@ public class EnhancedSystemTray {
     private TrayIcon trayIcon;
     private Mediator proxy = Mediator.getIstance();
     private int itasa, myitasa, eztv, btchat, subsf, blog, mysubsf, itasaPM;
+    private String msg;
 
     private EnhancedSystemTray(Window owner) {
         this.owner = owner;
@@ -58,23 +59,39 @@ public class EnhancedSystemTray {
     }
 
     private JPopupMenu createJPopupMenu() {
-        JPopupMenu m = new JPopupMenu();
-        final JMenuItem exitItem = new JMenuItem(" Esci ");
-        exitItem.addActionListener(new ActionListener()  {
+        JPopupMenu menu = new JPopupMenu();
+        final JMenuItem jmiExit = new JMenuItem(" Esci ");
+        jmiExit.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 WindowEvent we = new WindowEvent(owner,
                         WindowEvent.WINDOW_CLOSING);
-                we.setSource(exitItem);
+                we.setSource(jmiExit);
                 owner.dispatchEvent(we);
             }
         });
-        m.add(exitItem);
-        return m;
+        final JMenuItem jmiResetMP = new JMenuItem(" Azzera conteggio mp");
+        jmiResetMP.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                msg = msg.replaceFirst("Nuovi Messaggi privati: " + itasaPM + "\n", "");
+                itasaPM = 0;
+                if (!msg.equals("")){
+                    trayIcon.displayMessage("FeedWorker", msg, MessageType.INFO);
+                    trayIcon.setToolTip(msg);
+                } else {
+                    trayIcon.setImage(iconNormal);
+                    trayIcon.setToolTip(" FeedWorker ");
+                }
+            }
+        });
+        menu.add(jmiResetMP);
+        menu.add(jmiExit);
+        return menu;
     }
 
-    public void notifyIncomingFeed(String msg) {
-        String[] split = msg.split(":");
+    public void notifyIncomingFeed(String _msg) {
+        String[] split = _msg.split(":");
         try {
             itasa += Integer.parseInt(split[0]);
         } catch (NumberFormatException npe){}

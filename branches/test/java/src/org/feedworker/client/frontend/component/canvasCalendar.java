@@ -38,7 +38,7 @@ public class canvasCalendar extends PCanvas{
 
     class CalendarNode extends PNode {
         int DEFAULT_ANIMATION_MILLIS = 250;
-        float FOCUS_SIZE_PERCENT = 0.65f;
+        float FOCUS_SIZE_PERCENT = 0.60f;
         int daysExpanded = 0;
         int weeksExpanded = 0;
         int numDays=7, numWeeks=8;
@@ -194,7 +194,7 @@ public class canvasCalendar extends PCanvas{
             if (hasWidthFocus && hasHeightFocus) {
                 paintContext.pushClip(getBoundsReference());
                 for (int i = 0; i < lines.size(); i++) {
-                    y += 10;
+                    y += 17;
                     g2.drawString((String)lines.get(i), x, y);
                 }
                 paintContext.popClip(getBoundsReference());
