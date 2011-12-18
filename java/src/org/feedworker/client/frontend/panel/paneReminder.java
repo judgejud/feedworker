@@ -19,6 +19,7 @@ public class paneReminder extends paneAbstract{
     
     private static paneReminder jpanel = null;
     private tableReminder jtable;
+    private JButton jbUndo;
 
     public static paneReminder getPanel() {
         if (jpanel == null)
@@ -67,12 +68,14 @@ public class paneReminder extends paneAbstract{
             }
         });
         
-        JButton jbUndo = new JButton(core.getIconUndo());
+        jbUndo = new JButton(core.getIconUndo());
         jbUndo.setToolTipText("Annulla ultima rimozione");
         jbUndo.setBorder(BORDER);
+        jbUndo.setEnabled(false);
         jbUndo.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
+                jbUndo.setEnabled(false);
                 proxy.undoLastRemoveReminder();
             }
         });
@@ -88,20 +91,19 @@ public class paneReminder extends paneAbstract{
         int rows = jtable.getRowCount();
         if (rows > 0){
             ArrayList<Integer> numbers = new ArrayList<Integer>();
+            DefaultTableModel dtm = (DefaultTableModel) jtable.getModel();
+            ArrayList<Object[]> removed = new ArrayList<Object[]>();
             for (int i=rows-1; i>-1; i--){
                 if (Boolean.parseBoolean(jtable.getValueAt(i, 2).toString())){
                     int row = jtable.convertRowIndexToModel(i);
                     numbers.add(row);
-                    
-                    ((DefaultTableModel) jtable.getModel()).removeRow(row);
+                    removed.add(new Object[]{dtm.getValueAt(row, 0), 
+                                dtm.getValueAt(row, 1), false});
+                    dtm.removeRow(row);
                 }
             }
-            proxy.removeReminders(numbers);
+            jbUndo.setEnabled(true);
+            proxy.removeReminders(numbers, removed);
         }
-    }
-    
-    //TODO
-    private void jbUndoMouseClicked(){
-        
     }
 }

@@ -109,12 +109,10 @@ public class Kernel implements PropertyChangeListener {
             countBtchat, countBlog, countPM;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Timer timer;
-    
     private TreeMap<KeyRule, ValueRule> mapRules;
     private TreeMap<String, String> mapShowItasa;
     private ManageException error = ManageException.getIstance();
     private Calendar xmlCalendar;
-    
     private Reminder xmlReminder;
     private ImportTaskList importTaskList;
     private ImportTaskCalendar importTaskCalendar;
@@ -124,7 +122,7 @@ public class Kernel implements PropertyChangeListener {
     private ItasaUser user;
     private HttpItasa httpItasa;
     private XmlRPC xmlrpc;
-    
+    private ArrayList<Object[]> removeReminder;
 
     /**
      * Restituisce l'istanza corrente del kernel
@@ -571,7 +569,6 @@ public class Kernel implements PropertyChangeListener {
             ArrayList<Object[]> temp = xmlReminder.readingDocument();
             if (temp.size() > 0) 
                 ManageListener.fireTableEvent(this, temp, REMINDER);
-            
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
@@ -601,25 +598,6 @@ public class Kernel implements PropertyChangeListener {
         } catch (IOException ex) {
             error.launch(ex, getClass(), null);
         }
-    }
-
-    /** Verifica se il nome non presenta la parola "stagione"
-     * 
-     * @param name nome da controllare
-     * @return risultato controllo
-     */
-    private boolean isNotStagione(Object obj) {
-        boolean check = true;
-        String[] array = ((String) obj).split(" ");
-        for (int i = 0; i < array.length; i++) {
-            String confronta = array[i].toLowerCase();
-            if (confronta.equals("stagione") || confronta.equals("season")
-                    || confronta.equals("completa")) {
-                check = false;
-                break;
-            }
-        }
-        return check;
     }
 
     /** Effettua l'aggiornamento dei feed forzato */
@@ -1071,19 +1049,31 @@ public class Kernel implements PropertyChangeListener {
         } 
     }
 
-    public void removeReminders(ArrayList<Integer> numbers) {
+    public void removeReminders(ArrayList<Integer> numbers, ArrayList<Object[]> removed) {
         try {
             for (int i=0; i<numbers.size(); i++)
                 xmlReminder.removeItem(numbers.get(i).intValue());
             xmlReminder.write();
+            removeReminder = removed;
         } catch (IOException ex) {
             error.launch(ex, getClass());
+        }
+    }
+    
+    public void undoLastRemoveReminder(){
+        try {
+            for (int i=0; i<removeReminder.size(); i++)
+                xmlReminder.addItem(removeReminder.get(i));
+            xmlReminder.write();
+            ManageListener.fireTableEvent(this, removeReminder, REMINDER);
+            removeReminder = null;
+        } catch (IOException ex) {
+            error.launch(ex, null);
         }
     }
 
     public void searchSubItasa(Object show, Object version, boolean complete, 
                                                 String season, String episode) {
-
         String id = mapShowItasa.get(show);
         String _version = null;
         String query = null;

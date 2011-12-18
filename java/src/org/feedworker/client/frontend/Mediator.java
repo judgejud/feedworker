@@ -277,8 +277,8 @@ public class Mediator {
         core.checkLoginItasaAPI(user,new String(password));
     }
 
-    public void removeReminders(ArrayList<Integer> numbers) {
-        core.removeReminders(numbers);
+    public void removeReminders(ArrayList<Integer> numbers, ArrayList<Object[]> removed) {
+        core.removeReminders(numbers, removed);
     }
 
     public void refreshSingleCalendar(Object value) {
@@ -290,7 +290,7 @@ public class Mediator {
     }
 
     public void undoLastRemoveReminder() {
-        
+        core.undoLastRemoveReminder();
     }
     
     void printLastDate() {

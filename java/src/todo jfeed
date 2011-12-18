@@ -1,7 +1,8 @@
 IMPLEMENTARE
 -fare caricamento xml sotto thread
--sistemare la tabella reminder aggiungendo un undo last remove
 -fare 1thread per il test connect samba
+introdurre diverse tipologie di rinomina, eliminare la delete e fare il tuto come un'unica combobox operazione
+introdurre news itasa
 
 ripristino files backuppati
 destinazione avanzata in mixed mode
@@ -10,8 +11,6 @@ aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
 introdurre set per i reminder in modo che non ci siano duplicati (treeset)?
 migrazione account itasa da 1vecchio a 1nuovo per quanto riguarda la lista di serial tv myitasa
 specificare altri suoni
-introdurre diverse tipologie di rinomina, eliminare la delete e fare il tuto come un'unica combobox operazione
-introdurre news itasa
 introdurre myitasa
 introdurre trama singola puntata (da che fonte?)
 evitare i doppioni delle serie nelle liste show
