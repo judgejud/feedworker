@@ -64,6 +64,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
     private paneCalendarDay jpCalendarDay;
     private paneShow jpShow;
     private paneBlog jpBlog;
+    private paneIrc jpIrc;
     private dialogResultSearchTv resultSearchTvJD;
     private ProgressDialog progressBar;
     private EnhancedSystemTray systemTray;
@@ -105,6 +106,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jpShow = paneShow.getPanel();
         jpBlog = paneBlog.getPanel();
         jpCalendarDay = paneCalendarDay.getPanel();
+        jpIrc = paneIrc.getPanel();
         
         mainJTP.addTab("Itasa", jpItasa);
         if (prop.isSubsfactoryOption()) {
@@ -112,35 +114,36 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
             mainJTP.addTab("Subsfactory", jpSubsfactory);
         }
         if (prop.isEnablePaneTorrent())
-            checkAddTab(jpTorrent, false);
+            checkAddTab(jpTorrent, false, null);
         if (prop.isEnablePaneCalendarDay())
-            checkAddTab(jpCalendarDay, false);
+            checkAddTab(jpCalendarDay, false, "Calendario Itasa giornaliero");
         if (prop.isEnablePaneCalendar())
-            checkAddTab(jpCalendarShow, false);
+            checkAddTab(jpCalendarShow, false, "Calendario TvRage show");
         if (prop.isEnablePaneSearchSubItasa())
-            checkAddTab(jpSearch, false);
+            checkAddTab(jpSearch, false, null);
         if (prop.isEnablePaneReminder())
-            checkAddTab(jpReminder, false);
+            checkAddTab(jpReminder, false, null);
         if (prop.isEnablePaneSubDestination())
-            checkAddTab(jpDestination, false);
+            checkAddTab(jpDestination, false, null);
         if (prop.isEnablePaneShow())
-            checkAddTab(jpShow, false);
+            checkAddTab(jpShow, false, null);
         if (prop.isEnablePaneLog())
-            checkAddTab(jpLog, false);
+            checkAddTab(jpLog, false, null);
         if (prop.isEnablePaneBlog())
-            checkAddTab(jpBlog, false);
+            checkAddTab(jpBlog, false, null);
+        mainJTP.addTab("Irc", jpIrc);
         
         statusBar = new paneStatusBar();
         add(statusBar, BorderLayout.SOUTH);
 
         if (prop.isApplicationFirstTimeUsed()) {
-            checkAddTab(jpSettings,true);
+            checkAddTab(jpSettings,true, null);
             changeEnabledButton(false);
             proxy.printAlert("Benvenuto al primo utilizzo :) Per poter usare il client, "
                     + "devi configurare le impostazioni");
         } else {
             if (prop.isEnablePaneSetting())
-                checkAddTab(jpSettings, false);
+                checkAddTab(jpSettings, false, null);
             jpSettings.settingsValue();
             proxy.printOk("Ciao " + prop.getItasaUsername()
                     + ", impostazioni caricate.");
@@ -262,7 +265,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowSubDest.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpDestination,true);
+                checkAddTab(jpDestination,true, null);
             }
         });
         
@@ -270,7 +273,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowSetting.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpSettings, true);
+                checkAddTab(jpSettings, true, null);
             }
         });
         
@@ -278,7 +281,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowLog.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpLog, true);
+                checkAddTab(jpLog, true, null);
             }
         });
         
@@ -286,7 +289,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowReminder.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpReminder, true);
+                checkAddTab(jpReminder, true, null);
             }
         });
         
@@ -294,7 +297,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowSearch.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpSearch, true);
+                checkAddTab(jpSearch, true, null);
             }
         });
         
@@ -302,7 +305,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowCalendarShow.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpCalendarShow, true);
+                checkAddTab(jpCalendarShow, true, "Calendario TvRage show");
             }
         });
         
@@ -310,7 +313,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowCalendarDay.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpCalendarDay, true);
+                checkAddTab(jpCalendarDay, true, "Calendario Itasa giornaliero");
             }
         });
         
@@ -318,7 +321,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowTorrent.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpTorrent, true);
+                checkAddTab(jpTorrent, true, null);
             }
         });
         
@@ -326,7 +329,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowShow.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpShow, true);
+                checkAddTab(jpShow, true, null);
             }
         });
         
@@ -334,7 +337,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowBlog.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpBlog, true);
+                checkAddTab(jpBlog, true, null);
             }
         });
         
@@ -683,11 +686,13 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
      * @param pane
      * @param visible 
      */
-    private void checkAddTab(JPanel pane, boolean visible) {
+    private void checkAddTab(JPanel pane, boolean visible, String tooltip) {
         if (!mainJTP.isAncestorOf(pane)) {
             mainJTP.addTab(pane.getName(), pane);
             mainJTP.setTabComponentAt(mainJTP.getTabCount() - 1,
                     new ButtonTabComponent(mainJTP));
+            if (tooltip!=null)
+                mainJTP.setToolTipTextAt(mainJTP.getTabCount() - 1, tooltip);
             if (visible)
                 mainJTP.setSelectedComponent(pane);
         }

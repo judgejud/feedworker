@@ -3,7 +3,7 @@ IMPLEMENTARE
 -fare 1thread per il test connect samba
 introdurre diverse tipologie di rinomina, eliminare la delete e fare il tuto come un'unica combobox operazione
 introdurre news itasa
-
+controllare che gli show con icon unknown sono stati aggiornati di icon
 ripristino files backuppati
 destinazione avanzata in mixed mode
 aggiungere versioning automatico all'applicazione
@@ -16,6 +16,7 @@ introdurre trama singola puntata (da che fonte?)
 evitare i doppioni delle serie nelle liste show
 
 CORREZIONI:
+controllare che non esca l'avviso della stampa se l'app è al primo avvio
 -correggere il comparator negli show, con il tooltip della label che non corrisponde
 -migliorare il fire alla reminder considerando la regola delete.
 -The system cannot find the path specified. 
@@ -34,5 +35,3 @@ properties sotto jfacility?
 http://thetvdb.com/wiki/index.php?title=Programmers_API?
 
 VERIFICARE LE IMPLEMENTAZIONI
-mancato "nuovo feed myitasa" per la stagione completa quando il download automatico è attivo.
-salvare in automatico l'ultima data di aggiornamento se myitasa down auto is true
