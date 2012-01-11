@@ -131,6 +131,7 @@ public class ManageException {
         String msg = ex.getMessage();
         String error01 = "Failed to open file://" + 
                 ApplicationSettings.getIstance().getCifsShareLocation();
+        String error02 = "Failed to open http://";
         if (msg.startsWith(error01))
             printAlert("Impossibile trovare/aprire il path desiderato, controllare "
                     + "l'esistenza del path o i permessi per accedervi ", true);

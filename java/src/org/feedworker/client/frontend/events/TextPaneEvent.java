@@ -22,8 +22,7 @@ public class TextPaneEvent extends EventObject {
     public static final String DAY_SERIAL = "DAY_SERIAL";
     public static final String ITASA_PM = "ITASA_PM";
 
-    private String msg;
-    private String type;
+    private String msg, type;
 
     public TextPaneEvent(Object source, String _msg, String _type) {
         super(source);

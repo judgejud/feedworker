@@ -102,6 +102,7 @@ public class Kernel implements PropertyChangeListener {
     // PRIVATE STATIC VARIABLES
     private static Kernel core = null;
     private static boolean debug_flag;
+    private static String[] lastDates;
     // PRIVATE VARIABLES
     private String lastItasa=null, lastMyItasa=null, lastSubsf=null,
             lastEztv=null, lastBtchat=null, lastMySubsf=null, lastBlog=null;
@@ -123,6 +124,7 @@ public class Kernel implements PropertyChangeListener {
     private HttpItasa httpItasa;
     private XmlRPC xmlrpc;
     private ArrayList<Object[]> removeReminder;
+//    private Irc irc;
 
     /**
      * Restituisce l'istanza corrente del kernel
@@ -169,27 +171,6 @@ public class Kernel implements PropertyChangeListener {
             Thread t = new Thread(dt, "Thread download");
             t.start();
         }
-    }
-
-    /**effettua il download automatico di myitasa comprende le fasi anche di
-     * estrazione zip e analizzazione percorso definitivo.
-     * 
-     * @param link link da analizzare
-     */
-    private void downItasaAuto(ArrayList<String> links, boolean first) {
-        prop.setLastDateTimeRefresh(Common.actualTime());
-        prop.writeOnlyLastDate();
-        if (loginItasaHttp()){
-            DownloadThread dt = null;
-            if (first)
-                dt = new DownloadThread(mapRules, xmlReminder, links, httpItasa, false);
-            else
-                dt = new DownloadThread(mapRules, xmlReminder, links, httpItasa, true);
-            Thread t = new Thread(dt, "AutoItasa");
-            t.start();
-        } else 
-            printAlert("Non posso procedere al download per problemi di login ad itasa, "
-                    + "controllare user e password");
     }
 
     /**Scarica i torrent
@@ -1316,6 +1297,35 @@ public class Kernel implements PropertyChangeListener {
         } catch (IOException ex) {
             error.launch(ex, getClass());
         }
+    }
+    
+    public void connectIrc() {
+        Irc.getInstance("judge_test");
+    }
+    
+    public void joinChan(String name){
+        Irc i = Irc.getInstance();
+        if (i!=null && i.isConnected())
+            i.joinChannel(name);
+    }
+    
+    public void disconnectIrc(){
+        Irc i = Irc.getInstance();
+        if (i != null)
+            i.disconnect();
+    }
+    
+    public boolean isConnectedIrc(){
+        Irc i = Irc.getInstance();
+        if (i==null)
+            return false;
+        return i.isConnected();
+    }
+
+    public void sendIrcMessage(String name, String text) {
+        Irc i = Irc.getInstance();
+        if (i!=null && i.isConnected())
+            i.sendMessage(name, text);
     }
 
     class ImportTaskCalendar extends SwingWorker<ArrayList<Object[]>, Void> {

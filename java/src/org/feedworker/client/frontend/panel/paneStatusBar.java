@@ -10,29 +10,30 @@ import java.awt.SystemColor;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import org.feedworker.client.frontend.GuiCore;
 import org.feedworker.client.frontend.events.StatusBarEvent;
 import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.util.Common;
+
+import org.jdesktop.swingx.JXPanel;
 /**
  *
  * @author luca
  */
-public class paneStatusBar extends JPanel implements StatusBarEventListener{
+public class paneStatusBar extends JXPanel implements StatusBarEventListener{
     private JLabel jlText = new JLabel();
 
     public paneStatusBar() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(10, 23));
         jlText.setFont(new Font("Arial", Font.BOLD, 12));
-        JPanel leftPanel = new JPanel(new BorderLayout());
+        JXPanel leftPanel = new JXPanel(new BorderLayout());
         
         leftPanel.add(jlText, BorderLayout.SOUTH);
         leftPanel.setOpaque(false);
         
-        JPanel rightPanel = new JPanel(new BorderLayout());
+        JXPanel rightPanel = new JXPanel(new BorderLayout());
         rightPanel.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.SOUTH);
         rightPanel.setOpaque(false);
 

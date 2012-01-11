@@ -35,13 +35,13 @@ public class paneSetting extends paneAbstract {
             jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
             jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
             jcbPaneShow, jcbTorrent, jcbPaneBlog, jcbItasaBlog, jcbItasaPM, 
-            jcbPaneCalendarDay, jcbCalendarDay ;
+            jcbPaneCalendarDay, jcbCalendarDay, jcbPaneIrc;
     private JButton jbDestSub;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf,
             jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp,
-            jtfGoogleUser, jtfGoogleCalendar;
-    private JPasswordField jpfSamba, jpfItasa, jpfGoogle;
+            jtfGoogleUser, jtfGoogleCalendar, jtfIrcServer, jtfIrcNick;
+    private JPasswordField jpfSamba, jpfItasa, jpfGoogle, jpfIrc;
     private ButtonGroup bgLocalSamba, bgDownItasa;
     private ApplicationSettings prop;
 
@@ -64,13 +64,15 @@ public class paneSetting extends paneAbstract {
         tpcWest.add(initTaskPaneGeneral());
         tpcWest.add(initTaskPaneSamba());
         tpcWest.add(initTaskPaneVisibilePane());
-        if (prop.isSubsfactoryOption())
-            tpcWest.add(initTaskPaneSubsfactory());
-                
+        tpcWest.add(initTaskPaneIrc());
+        
         JXTaskPaneContainer tpcEast = new JXTaskPaneContainer();
         tpcEast.add(initTaskPaneItalianSubs());
-        tpcEast.add(initTaskPaneAlert());
+        if (prop.isSubsfactoryOption())
+            tpcEast.add(initTaskPaneSubsfactory());
         tpcEast.add(initTaskPaneTorrent());
+        tpcEast.add(initTaskPaneAlert());
+        
 
         JScrollPane jspWest = new JScrollPane(tpcWest);
         jspWest.setPreferredSize(TABLE_SCROLL_SIZE);
@@ -418,10 +420,26 @@ public class paneSetting extends paneAbstract {
         return task;
     }
     
+    private JXTaskPane initTaskPaneIrc(){
+        JXTaskPane task = new JXTaskPane();
+        task.setTitle("IRC");
+        task.setCollapsed(true);
+        
+        task.add(new JLabel("Server irc"));
+        task.add(jtfIrcServer);
+        task.add(new JLabel("Nickname"));
+        task.add(jtfIrcNick);
+        task.add(new JLabel("Password"));
+        task.add(jpfIrc);
+        
+        return task;
+    }
+    
     private JXTaskPane initTaskPaneVisibilePane(){
         jcbPaneBlog = new JCheckBox("Blog");
         jcbPaneCalendarDay = new JCheckBox("Calendar Day");
         jcbPaneCalendar = new JCheckBox("Calendar Show");
+        jcbPaneIrc = new JCheckBox("Irc"); 
         jcbPaneLog = new JCheckBox("Log");
         jcbPaneReminder = new JCheckBox("Reminder");
         jcbPaneSearchSubItasa = new JCheckBox("Search Subtitle Itasa");
@@ -437,6 +455,7 @@ public class paneSetting extends paneAbstract {
         task.add(jcbPaneBlog);
         task.add(jcbPaneCalendarDay);
         task.add(jcbPaneCalendar);
+        task.add(jcbPaneIrc);
         task.add(jcbPaneLog);
         task.add(jcbPaneReminder);
         task.add(jcbPaneSearchSubItasa);
@@ -471,6 +490,7 @@ public class paneSetting extends paneAbstract {
         settingsItasaValue();
         settingsPaneVisibleValue();
         settingsTorrentValue();
+        settingsIrcValue();
         if (prop.isSubsfactoryOption())
             settingsSubsfactoryValue();
     }
@@ -521,6 +541,11 @@ public class paneSetting extends paneAbstract {
     private void settingsTorrentValue() {
         jcbTorrent.setSelected(prop.isTorrentOption());
         jtfDestTorrent.setText(prop.getTorrentDestinationFolder());
+    }
+    
+    private void settingsIrcValue() {
+        jtfIrcServer.setText("irc.azzurra.org");
+        jtfIrcServer.setEnabled(false);
     }
 
     private void settingsSubsfactoryValue() {

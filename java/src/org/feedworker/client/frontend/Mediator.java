@@ -49,7 +49,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "448 by "
+                + "450 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -374,5 +374,25 @@ public class Mediator {
 
     public void checkLoginItasaPM(String user, char[] password) {
         core.checkLoginItasaPM(user, new String(password));
+    }
+
+    public void connectIrc() {
+        core.connectIrc();
+    }
+
+    public void joinChan(String name) {
+        core.joinChan(name);
+    }
+    
+    public void disconnectIrc(){
+        core.disconnectIrc();
+    }
+    
+    public boolean isConnectedIrc(){
+        return core.isConnectedIrc();
+    }
+
+    public void sendIrcMessage(String name, String text) {
+        core.sendIrcMessage(name, text);
     }
 }
