@@ -42,7 +42,8 @@ import org.opensanskrit.widget.SystemInfoDialog;
  */
 public class frameMain extends JXFrame implements WindowListener, FrameEventListener {
     //VARIABLES PRIVATE FINAL
-    private final Dimension SCREEN_SIZE = new Dimension(1024, 768);
+    private final Dimension SCREEN_SIZE_V768 = new Dimension(1024, 768);
+    private final Dimension SCREEN_SIZE_V600 = new Dimension(1024, 600);
     private final Dimension TAB_SIZE = new Dimension(1024, 580);
     private final Font FONT = new Font("Arial", Font.PLAIN, 12);
     //VARIABLES PRIVATE
@@ -71,15 +72,18 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
     private JMenu jmItasa;
 
     /** Costruttore */
-    public frameMain() {
+    public frameMain(int h) {
         super();
         proxy = Mediator.getIstance();
         core = GuiCore.getInstance();
         prop = proxy.getSettings();
         systemTray = EnhancedSystemTray.getInstance(this);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setPreferredSize(SCREEN_SIZE);
-        setMinimumSize(SCREEN_SIZE);
+        setMinimumSize(SCREEN_SIZE_V600);
+        if (h < 768)
+            setPreferredSize(SCREEN_SIZE_V600);
+        else 
+            setPreferredSize(SCREEN_SIZE_V768);
         setTitle(proxy.getTitle());
         setIconImage(proxy.getApplicationIcon());
         initializeMenuBar();
@@ -115,23 +119,25 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         }
         if (prop.isEnablePaneTorrent())
             checkAddTab(jpTorrent, false, null);
+        if (prop.isEnablePaneBlog())
+            checkAddTab(jpBlog, false, null);
+        if (prop.isEnablePaneSearchSubItasa())
+            checkAddTab(jpSearch, false, null);
+        if (prop.isEnablePaneSubDestination())
+            checkAddTab(jpDestination, false, null);
+        if (prop.isEnablePaneReminder())
+            checkAddTab(jpReminder, false, null);
         if (prop.isEnablePaneCalendarDay())
             checkAddTab(jpCalendarDay, false, "Calendario Itasa giornaliero");
         if (prop.isEnablePaneCalendar())
-            checkAddTab(jpCalendarShow, false, "Calendario TvRage show");
-        if (prop.isEnablePaneSearchSubItasa())
-            checkAddTab(jpSearch, false, null);
-        if (prop.isEnablePaneReminder())
-            checkAddTab(jpReminder, false, null);
-        if (prop.isEnablePaneSubDestination())
-            checkAddTab(jpDestination, false, null);
+            checkAddTab(jpCalendarShow, false, "Calendario TvRage show");       
         if (prop.isEnablePaneShow())
             checkAddTab(jpShow, false, null);
+        //if (prop.isEnablePaneIRC())
+            checkAddTab(jpIrc, false, null);
+        //mainJTP.addTab("Irc", jpIrc);
         if (prop.isEnablePaneLog())
             checkAddTab(jpLog, false, null);
-        if (prop.isEnablePaneBlog())
-            checkAddTab(jpBlog, false, null);
-        mainJTP.addTab("Irc", jpIrc);
         
         statusBar = new paneStatusBar();
         add(statusBar, BorderLayout.SOUTH);
@@ -341,9 +347,18 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
             }
         });
         
+        JMenuItem jmiWindowIrc = new JMenuItem(" Irc ");
+        jmiWindowIrc.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpIrc, true, null);
+            }
+        });
+        
         jmWindowTab.add(jmiWindowBlog);
         jmWindowTab.add(jmiWindowCalendarDay);
         jmWindowTab.add(jmiWindowCalendarShow);
+        jmWindowTab.add(jmiWindowIrc);
         jmWindowTab.add(jmiWindowLog);
         jmWindowTab.add(jmiWindowReminder);
         jmWindowTab.add(jmiWindowSearch);

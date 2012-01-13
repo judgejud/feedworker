@@ -124,7 +124,6 @@ public class Kernel implements PropertyChangeListener {
     private HttpItasa httpItasa;
     private XmlRPC xmlrpc;
     private ArrayList<Object[]> removeReminder;
-//    private Irc irc;
 
     /**
      * Restituisce l'istanza corrente del kernel
@@ -1300,7 +1299,11 @@ public class Kernel implements PropertyChangeListener {
     }
     
     public void connectIrc() {
-        Irc.getInstance("judge_test");
+        try {
+            Irc.getInstance("judge_test", null);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     
     public void joinChan(String name){

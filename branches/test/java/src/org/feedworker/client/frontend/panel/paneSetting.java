@@ -421,12 +421,16 @@ public class paneSetting extends paneAbstract {
     }
     
     private JXTaskPane initTaskPaneIrc(){
+        jtfIrcServer = new JTextField();
+        jtfIrcNick = new JTextField();
+        jpfIrc = new JPasswordField();
+        
         JXTaskPane task = new JXTaskPane();
         task.setTitle("IRC");
         task.setCollapsed(true);
         
-        task.add(new JLabel("Server irc"));
-        task.add(jtfIrcServer);
+        //task.add(new JLabel("Server irc"));
+        //task.add(jtfIrcServer);
         task.add(new JLabel("Nickname"));
         task.add(jtfIrcNick);
         task.add(new JLabel("Password"));

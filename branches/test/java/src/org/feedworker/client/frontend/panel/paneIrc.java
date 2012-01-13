@@ -1,20 +1,25 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
+
 import org.feedworker.client.frontend.GuiCore;
 import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.ListEvent;
@@ -22,6 +27,7 @@ import org.feedworker.client.frontend.events.ListEventListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 
+import org.jdesktop.swingx.JXList;
 
 /**
  *
@@ -57,6 +63,7 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
         
         text = new JTextPane();
         text.setEditable(false);
+        text.setContentType("text/html");
         sd = (StyledDocument) text.getDocument();
         jspText = new JScrollPane(text);
     }
@@ -116,7 +123,7 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
         if (proxy.isConnectedIrc()){
             if (!tab.isAncestorOf(chanItaliansubs)){
                 String name = "#italiansubs";
-                chanItaliansubs = new paneChan(name);
+                chanItaliansubs = new paneChan(name, true);
                 tab.addTab(name, chanItaliansubs);
                 proxy.joinChan(name);
             }
@@ -127,7 +134,7 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
         if (proxy.isConnectedIrc()){
             if (!tab.isAncestorOf(chanItasaCastle)){
                 String name = "#itasa-castle";
-                chanItasaCastle = new paneChan(name);
+                chanItasaCastle = new paneChan(name, true);
                 tab.addTab(name, chanItasaCastle);
                 proxy.joinChan(name);
             }
@@ -155,18 +162,18 @@ class paneChan extends JPanel implements ListEventListener, TextPaneEventListene
     private JTextPane textpane;
     private StyledDocument sd;
     private JTextField textfield;
-    private JList list;
+    private JXList list;
     private DefaultListModel model;
 
-    public paneChan(String name) {
+    public paneChan(String name, boolean _list) {
         super(new BorderLayout());
         setName(name);
-        init();
+        init(_list);
         GuiCore.getInstance().setTextPaneListener(this);
         GuiCore.getInstance().setListListener(this);
     }
     
-    private void init(){
+    private void init(boolean _list){
         textpane = new JTextPane();
         textpane.setEditable(false);
         sd = (StyledDocument) textpane.getDocument();
@@ -183,16 +190,45 @@ class paneChan extends JPanel implements ListEventListener, TextPaneEventListene
         textfield.setFocusable(true);
         add(textfield, BorderLayout.SOUTH);
         
-        model = new DefaultListModel();
-        list = new JList(model);
-        add(new JScrollPane(list), BorderLayout.EAST);
+        if (_list){
+            model = new DefaultListModel();
+            list = new JXList(model);
+            list.addMouseListener(new MouseAdapter() {
+            @Override
+                public void mouseReleased(MouseEvent ev) {
+                    if (ev.isPopupTrigger())                    
+                        createPopupMenu().show(ev.getComponent(), ev.getX(), ev.getY());
+                }
+            });
+            add(new JScrollPane(list), BorderLayout.EAST);
+        }
+    }
+    
+    private JPopupMenu createPopupMenu(){
+        JPopupMenu menu = new JPopupMenu("Popup");
+        JMenuItem jmiChat = new JMenuItem("Dialoga in privato");
+        jmiChat.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(list.getSelectedValue());
+                /*
+                listShow tab = (listShow)jtpList.getSelectedComponent();
+                Object[] clone = tab.getListCloneSelectedValue();
+                int j = Integer.parseInt(e.getActionCommand());
+                ((listShow)jtpList.getComponentAt(j)).addItem(clone);
+                tab.removeSelectedItem();
+                 * 
+                 */
+            }
+        });
+        menu.add(jmiChat);
+        return menu;
     }
     
     private void sendMessage(){
         String text = textfield.getText();
         if (text!=null){
             Mediator.getIstance().sendIrcMessage(getName(), text);
-            //irc.getCore().sendMessage();
             addMsgTextPane(text);
             textfield.setText(null);
         }
