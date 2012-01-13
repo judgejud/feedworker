@@ -3,6 +3,7 @@ package org.feedworker.client;
 import java.awt.EventQueue;
 import java.awt.Image;
 
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 import org.feedworker.client.frontend.frameMain;
@@ -94,7 +95,8 @@ public class FeedWorkerClient {
                         @Override
                         public void run() {                        
                             splash.updateStartupState("Loading GUI ...");
-                            frameMain jframe = new frameMain();
+                            frameMain jframe = new frameMain(
+                                    (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight());
                             splash.updateStartupState("Loading xml ...");
                             core.loadXml();
                             core.loadItasaSeries();

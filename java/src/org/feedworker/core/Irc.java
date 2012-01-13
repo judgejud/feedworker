@@ -1,106 +1,165 @@
 package org.feedworker.core;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import jerklib.Channel;
-import jerklib.ConnectionManager;
-import jerklib.Profile;
-import jerklib.Session;
-import jerklib.events.IRCEvent;
-import jerklib.events.IRCEvent.Type;
-import jerklib.events.JoinCompleteEvent;
-import jerklib.events.MessageEvent;
-import jerklib.listeners.IRCEventListener;
+
+import org.schwering.irc.lib.IRCConnection;
+import org.schwering.irc.lib.IRCEventAdapter;
+import org.schwering.irc.lib.IRCEventListener;
+import org.schwering.irc.lib.IRCModeParser;
+import org.schwering.irc.lib.IRCUser;
 
 /**
  *
  * @author luca judge
  */
-public class Irc implements IRCEventListener{
+public class Irc extends IRCEventAdapter implements IRCEventListener{
     private final String server = "irc.azzurra.org";
+    private final int[] port = new int[] { 6664, 6665, 6666, 6667, 6668, 6669 };
     private static Irc irc;
     private static String nick, pwd;
-    private ConnectionManager manager;
-    private Session session;
-    private boolean connected;
-    private HashMap<String, Channel> chan;
+    private IRCConnection conn;
+    private int MOTD1 = 372, MOTD2 = 375, MOTD3 = 376, TOPIC = 332, USERLIST = 353,
+            NAMES = 366, I333 = 333;
+    private String last_join_chan;
 
-    private Irc() {
-        connected = false;
-        /*
-         * ConnectionManager takes a Profile to use for new connections.
-         */
-        manager = new ConnectionManager(new Profile(nick));
-        /*
-         * One instance of ConnectionManager can connect to many IRC networks.
-         * ConnectionManager#requestConnection(String) will return a Session object.
-         * The Session is the main way users will interact with this library and IRC
-         * networks
-         */
-        session = manager.requestConnection(server);
-        session.addIRCEventListener(this);
-        chan = new HashMap<String, Channel>();
+    private Irc() throws IOException {
+        conn = new IRCConnection(server, port, pwd, nick, "Mr. Foobar", "foo@bar.com"); 
+        conn.addIRCEventListener(this); 
+        conn.setDaemon(true);
+        conn.setColors(false); 
+        conn.setPong(true); 
+        conn.connect(); 
     }
     
     static Irc getInstance(){
         return irc;
     }
     
-    static Irc getInstance(String _nick){
+    static Irc getInstance(String _nick, String _pwd) throws IOException{
         if (irc==null){
             nick = _nick;
+            pwd = _pwd;
             irc = new Irc();
         }
         return irc;
     }
     
     void disconnect(){
-        session.close("ciao");
+        conn.doQuit("ciao");
         irc = null;
     }
     
     void joinChannel(String name){
-        session.join(name);
-    }
-
-    void connectedTrue() {
-        connected = true;
+        conn.doJoin(name);
     }
 
     boolean isConnected() {
-        return connected;
+        return conn.isConnected();
     }
     
     void sendMessage(String name, String msg){
-        chan.get(name).say(msg);
+        conn.doPrivmsg(name, msg);
     }
-    
-    @Override
-    public void receiveEvent(IRCEvent e) {
-        Type t = e.getType();
-        if (t == Type.CONNECT_COMPLETE){
-            ManageListener.fireTextPaneEvent(this, "Connessione al server irc Azzurra completata", 
+    /*
+    public void onConnect() {
+        System.out.println("Connected successfully.");
+        ManageListener.fireTextPaneEvent(this, "Connessione al server irc Azzurra completata", 
                                                 "Azzurra", true);
-            irc.connectedTrue();
-        } else if (e.getType() == Type.JOIN_COMPLETE) {
-            JoinCompleteEvent jce = (JoinCompleteEvent) e;
-            Channel c = jce.getChannel();
-            if (!chan.containsKey(c.getName()))
-                chan.put(c.getName(), c);
-            ManageListener.fireTextPaneEvent(this, c.getTopic(), c.getName(), false);
-            List l = c.getNicks();
+    }
+    */
+    @Override
+    public void onDisconnected() {
+        System.out.println("Disconnected.");
+    }
+
+    @Override
+    public void onError(String msg) {
+        System.out.println("ERROR: "+ msg);
+    }
+
+    @Override
+    public void onError(int num, String msg) {
+        System.out.println("Error #"+ num +": "+ msg);
+    }
+
+    @Override
+    public void onInvite(String chan, IRCUser user, String nickPass) {
+        System.out.println("INVITE: "+ user.getNick() +" invites "+ nickPass +" to "+ chan);
+    }
+
+    @Override
+    public void onJoin(String chan, IRCUser user) {
+        if (nick.equalsIgnoreCase(user.getNick())){
+            last_join_chan = chan;
+        }else
+            ManageListener.fireTextPaneEvent(this, user.getNick() + " è entrato/a", chan, false);
+        // add the nickname to the nickname-table
+    }
+
+    @Override
+    public void onKick(String chan, IRCUser user, String nickPass, String msg) {
+        System.out.println("KICK: "+ user.getNick() 
+            +" kicks "+ nickPass +"("+ msg +")");
+        // remove the nickname from the nickname-table
+    }
+
+    @Override
+    public void onMode(String chan, IRCUser user, IRCModeParser modeParser) {
+        System.out.println("MODE: "+ user.getNick() 
+            +" changes modes in "+ chan +": "+ modeParser.getLine());
+        // some operations with the modes
+    }
+
+    @Override
+    public void onNick(IRCUser user, String nickNew) {
+        System.out.println("NICK: "+ user.getNick() +" is now known as "+ nickNew);
+        // update the nickname in the nickname-table
+    }
+
+    @Override
+    public void onPart(String chan, IRCUser user, String msg) {
+        System.out.println("PART: "+ user.getNick() 
+            +" parts from "+ chan +"("+ msg +")");
+        // remove the nickname from the nickname-table
+    }
+
+    @Override
+    public void onPrivmsg(String target, IRCUser user, String msg) {        
+        String message = "<" + user.getNick() + ">" + ": " + msg;
+        ManageListener.fireTextPaneEvent(this, message, target, false);
+    }
+
+    @Override
+    public void onQuit(IRCUser user, String msg) {
+        System.out.println("QUIT: "+ user.getNick() +" ("+ 
+            user.getUsername() +"@"+ user.getHost() +") ("+ msg +")");
+        // remove the nickname from the nickname-table
+    }
+
+    @Override
+    public void onReply(int num, String value, String msg) {
+        if (num == TOPIC)
+            ManageListener.fireTextPaneEvent(this, msg+"\n", last_join_chan, false);
+        else if (num == USERLIST){
+            List l = Arrays.asList(msg.split(" "));
             Collections.sort(l);
             ArrayList temp = new ArrayList();
             temp.add(l.toArray());
-            ManageListener.fireListEvent(this, c.getName(), temp);
-        } else if (t == Type.CHANNEL_MESSAGE) {
-            MessageEvent cme = (MessageEvent) e;
-            String msg = "<" + cme.getNick() + ">" + ":" + cme.getMessage();
-            ManageListener.fireTextPaneEvent(this, msg, cme.getChannel().getName(), false);
-        } else if (t == Type.MOTD || t == Type.TOPIC){//ignorare gli eventi
-        } else 
-            ManageListener.fireTextPaneEvent(this, e.getRawEventData(), "Azzurra", false);
+            ManageListener.fireListEvent(this, last_join_chan, temp);
+        } else if (num != MOTD1 && num != MOTD2 && num != MOTD3 && num != I333 
+                && num != NAMES){
+            ManageListener.fireTextPaneEvent(this, msg, "Azzurra", false);
+            System.out.println("Reply #"+ num +": "+ msg);
+        }
+    }
+
+    @Override
+    public void onTopic(String chan, IRCUser user, String topic) {
+        System.out.println("TOPIC: "+ user.getNick() 
+            +" changes topic of "+ chan +" into: "+ topic);
     }
 }
