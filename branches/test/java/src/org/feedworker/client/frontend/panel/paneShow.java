@@ -1,7 +1,5 @@
 package org.feedworker.client.frontend.panel;
 
-import org.feedworker.client.frontend.component.listShow;
-import org.feedworker.client.frontend.component.taskpaneShowInfo;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -20,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 
+import org.feedworker.client.frontend.component.listShow;
+import org.feedworker.client.frontend.component.taskpaneShowInfo;
 import org.feedworker.client.frontend.events.ComboboxEvent;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
 import org.feedworker.client.frontend.events.EditorPaneEvent;

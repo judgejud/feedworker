@@ -27,7 +27,7 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     private String last_join_chan;
 
     private Irc() throws IOException {
-        conn = new IRCConnection(server, port, pwd, nick, "Mr. Foobar", "foo@bar.com"); 
+        conn = new IRCConnection(server, port, pwd, nick, null, null); 
         conn.addIRCEventListener(this); 
         conn.setDaemon(true);
         conn.setColors(false); 
@@ -93,17 +93,21 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
 
     @Override
     public void onJoin(String chan, IRCUser user) {
-        if (nick.equalsIgnoreCase(user.getNick())){
+        if (nick.equalsIgnoreCase(user.getNick()))
             last_join_chan = chan;
-        }else
+        else
             ManageListener.fireTextPaneEvent(this, user.getNick() + " è entrato/a", chan, false);
         // add the nickname to the nickname-table
     }
 
     @Override
     public void onKick(String chan, IRCUser user, String nickPass, String msg) {
-        System.out.println("KICK: "+ user.getNick() 
-            +" kicks "+ nickPass +"("+ msg +")");
+        if (!nickPass.equalsIgnoreCase(nick))
+            ManageListener.fireTextPaneEvent(this, user.getNick() + " ha espulso/a " + nickPass, chan, false);
+        else{
+            System.out.println("KICK: "+ user.getNick() +" kicks "+ nickPass + " from " + chan 
+                +" ("+ msg +")");
+        }
         // remove the nickname from the nickname-table
     }
 
@@ -122,9 +126,8 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
 
     @Override
     public void onPart(String chan, IRCUser user, String msg) {
-        System.out.println("PART: "+ user.getNick() 
-            +" parts from "+ chan +"("+ msg +")");
-        // remove the nickname from the nickname-table
+        ManageListener.fireTextPaneEvent(this, user.getNick() + " è uscito/a", chan, false);
+        //TODO: remove the nickname from the nickname-table
     }
 
     @Override
@@ -139,14 +142,14 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
             user.getUsername() +"@"+ user.getHost() +") ("+ msg +")");
         // remove the nickname from the nickname-table
     }
-
+    
     @Override
     public void onReply(int num, String value, String msg) {
         if (num == TOPIC)
             ManageListener.fireTextPaneEvent(this, msg+"\n", last_join_chan, false);
         else if (num == USERLIST){
             List l = Arrays.asList(msg.split(" "));
-            Collections.sort(l);
+            //Collections.sort(l);
             ArrayList temp = new ArrayList();
             temp.add(l.toArray());
             ManageListener.fireListEvent(this, last_join_chan, temp);

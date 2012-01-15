@@ -25,7 +25,7 @@ public class ApplicationSettings {
             applicationLookAndFeel, torrentDestinationFolder,
             cifsShareLocation, cifsSharePath, cifsShareUsername,
             cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, mySubsfactoryFeedUrl,
-            httpTimeout, mailTO, mailSMTP, googleUser, googlePwd, googleCalendar;
+            httpTimeout, mailTO, mailSMTP, googleUser, googlePwd, googleCalendar, ircNick, ircPwd;
     private boolean subsfactoryOption, torrentOption, 
             autoDownloadMyItasa, enableNotifyAudioRss, enableNotifyAudioSub, 
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
@@ -33,7 +33,7 @@ public class ApplicationSettings {
             enableNotifyMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
             enablePaneSearchSubItasa, enablePaneReminder, reminderOption, enablePaneTorrent,
             enablePaneCalendar, enableNotifySms, enablePaneShow, itasaBlog, enablePaneBlog, 
-            itasaPM, calendarDay, enablePaneCalendarDay;
+            itasaPM, calendarDay, enablePaneCalendarDay, enablePaneIrc;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -112,6 +112,9 @@ public class ApplicationSettings {
                 setEnableNotifyAudioSub(getBooleanDecryptedValue("ENABLE_NOTIFY_AUDIO_SUB"));
                 setEnableNotifyMail(getBooleanDecryptedValue("ENABLE_NOTIFY_MAIL"));
                 setEnableNotifySms(getBooleanDecryptedValue("ENABLE_NOTIFY_SMS"));
+                //IRC SETTINGS
+                setIrcNick(getDecryptedValue("IRC_NICK"));
+                setIrcPwd(getDecryptedValue("IRC_PWD"));
             } else
                 loadDefaultSettings();
         } catch (GeneralSecurityException e) {
@@ -164,7 +167,6 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_ADVANCED_DOWNLOAD",enableAdvancedDownload);
             propertiesCrypting("ENABLE_ICONIZED_RUN", enableIconizedRun);
             propertiesCrypting("ENABLE_REMINDER", reminderOption);
-            storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -194,7 +196,6 @@ public class ApplicationSettings {
         try {
             propertiesCrypting("SUBSFACTORY_FEED_URL", subsfactoryFeedURL);
             propertiesCrypting("MYSUBSFACTORY_FEED_URL", mySubsfactoryFeedUrl);
-            //storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -214,7 +215,6 @@ public class ApplicationSettings {
         }
     }
     
-    
     public void writeAdvisorSettings() {
         try {
             propertiesCrypting("MAIL_TO", mailTO);
@@ -222,7 +222,6 @@ public class ApplicationSettings {
             propertiesCrypting("GOOGLE_CALENDAR", googleCalendar);
             propertiesCrypting("GOOGLE_PWD", googlePwd);
             propertiesCrypting("GOOGLE_USER", googleUser);
-            //storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -236,7 +235,6 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_NOTIFY_AUDIO_SUB", enableNotifyAudioSub);
             propertiesCrypting("ENABLE_NOTIFY_MAIL", enableNotifyMail);
             propertiesCrypting("ENABLE_NOTIFY_SMS", enableNotifySms);
-            storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -244,7 +242,17 @@ public class ApplicationSettings {
         }
     }// end write
     
-    /** Scrive i settaggi su file */
+    public void writeIrcSettings() {
+        try {
+            propertiesCrypting("IRC_NICK", ircNick);
+            propertiesCrypting("IRC_PWD", ircPwd);
+        } catch (GeneralSecurityException e) {
+            error.launch(e, getClass());
+        } catch (IOException e) {
+            error.launch(e, getClass(), null);
+        }
+    }// end write
+    
     public void writePaneVisibleSetting() {
         try {
             propertiesCrypting("ENABLE_PANE_CALENDAR", enablePaneCalendar);
@@ -277,8 +285,8 @@ public class ApplicationSettings {
         }
     }
 
-    private void propertiesCrypting(String property, boolean value)
-                                    throws GeneralSecurityException, IOException {
+    private void propertiesCrypting(String property, boolean value) throws 
+                                            GeneralSecurityException, IOException {
         properties.setProperty(propertyEncrypter.encrypt(property),
                                     valueEncrypter.encrypt(Boolean.toString(value)));
     }
@@ -387,12 +395,9 @@ public class ApplicationSettings {
         this.mailSMTP = mailSMTP;
     }
     
-    
-
     public String getItasaUsername() {
-        if (itasaUsername == null) {
+        if (itasaUsername == null)
             itasaUsername = "";
-        }
         return itasaUsername;
     }
 
@@ -401,9 +406,8 @@ public class ApplicationSettings {
     }
 
     public String getItasaPassword() {
-        if (itasaPassword == null) {
+        if (itasaPassword == null)
             itasaPassword = "";
-        }
         return itasaPassword;
     }
 
@@ -412,9 +416,8 @@ public class ApplicationSettings {
     }
 
     public String getItasaFeedURL() {
-        if (itasaFeedURL == null) {
+        if (itasaFeedURL == null)
             itasaFeedURL = "";
-        }
         return itasaFeedURL;
     }
 
@@ -423,9 +426,8 @@ public class ApplicationSettings {
     }
 
     public String getMyitasaFeedURL() {
-        if (myitasaFeedURL == null) {
+        if (myitasaFeedURL == null)
             myitasaFeedURL = "";
-        }
         return myitasaFeedURL;
     }
 
@@ -730,5 +732,29 @@ public class ApplicationSettings {
 
     public void setEnablePaneCalendarDay(boolean enablePaneCalendarDay) {
         this.enablePaneCalendarDay = enablePaneCalendarDay;
+    }
+
+    public boolean isEnablePaneIrc() {
+        return enablePaneIrc;
+    }
+
+    public void setEnablePaneIrc(boolean enablePaneIrc) {
+        this.enablePaneIrc = enablePaneIrc;
+    }
+
+    public String getIrcNick() {
+        return ircNick;
+    }
+
+    public void setIrcNick(String ircNick) {
+        this.ircNick = ircNick;
+    }
+
+    public String getIrcPwd() {
+        return ircPwd;
+    }
+
+    public void setIrcPwd(String ircPwd) {
+        this.ircPwd = ircPwd;
     }
 }// end class

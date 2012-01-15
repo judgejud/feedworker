@@ -83,6 +83,9 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
             @Override
             public void mouseClicked(MouseEvent evt) {
                 proxy.disconnectIrc();
+                for (int i=tab.getTabCount()-1; i>0; i--)
+                    tab.remove(tab.getComponent(i));
+                addMsgTextPane("Disconnessione effettuata");
             }
         });
         
@@ -109,7 +112,6 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
         jpAction.add(jbJoinItaliansubs);
         jpAction.add(jbJoinItasaCastle);
         jpAction.add(jbRenameNick);
-        
     }
     
     private void connect(){
@@ -193,11 +195,14 @@ class paneChan extends JPanel implements ListEventListener, TextPaneEventListene
         if (_list){
             model = new DefaultListModel();
             list = new JXList(model);
+            
             list.addMouseListener(new MouseAdapter() {
             @Override
                 public void mouseReleased(MouseEvent ev) {
-                    if (ev.isPopupTrigger())                    
+                    if (ev.isPopupTrigger()){
+                        list.setSelectedIndex(list.locationToIndex(ev.getPoint()));
                         createPopupMenu().show(ev.getComponent(), ev.getX(), ev.getY());
+                    }
                 }
             });
             add(new JScrollPane(list), BorderLayout.EAST);
@@ -211,14 +216,6 @@ class paneChan extends JPanel implements ListEventListener, TextPaneEventListene
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println(list.getSelectedValue());
-                /*
-                listShow tab = (listShow)jtpList.getSelectedComponent();
-                Object[] clone = tab.getListCloneSelectedValue();
-                int j = Integer.parseInt(e.getActionCommand());
-                ((listShow)jtpList.getComponentAt(j)).addItem(clone);
-                tab.removeSelectedItem();
-                 * 
-                 */
             }
         });
         menu.add(jmiChat);
@@ -256,5 +253,13 @@ class paneChan extends JPanel implements ListEventListener, TextPaneEventListene
     public void objReceived(TextPaneEvent evt) {
         if (evt.getType().equals(this.getName()))
             addMsgTextPane(evt.getMsg());
+    }
+}
+
+class ListOrder implements Comparable<ListOrder>{
+
+    @Override
+    public int compareTo(ListOrder t) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

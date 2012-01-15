@@ -370,14 +370,15 @@ public class GuiCore {
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
             String time, String timeout,
             boolean advancedDownload, boolean runIconized, String itasa,
-            String myitasa, String user, String pwd, boolean autoMyitasa,
+            String myitasa, String itasaUser, String itasaPwd, boolean autoMyitasa,
             boolean autoLoadMyItasa, String subsf, String mySubsf, String torrentDest,
             String mailTO,  String smtp, boolean paneLog, boolean paneSearch, 
             boolean paneSetting, boolean paneSubDest, boolean paneReminder, 
             boolean reminder, String googleUser, String googlePwd, String googleCalendar, 
             boolean paneTorrent, boolean paneCalendar, boolean torrentOption, 
             boolean paneShow, boolean blog, boolean paneBlog, boolean itasapm, 
-            boolean paneCalendarDay, boolean calendarDay) {
+            boolean paneCalendarDay, boolean calendarDay, boolean paneIrc, String ircNick, 
+            String ircPwd) {
                 
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -386,17 +387,18 @@ public class GuiCore {
                 sambaUser, sambaPwd)) {
             save = true;
             if (save)
-                save = checkSaveItasa(itasa, myitasa, user, pwd);
+                save = checkSaveItasa(itasa, myitasa, itasaUser, itasaPwd);
             if (prop.isSubsfactoryOption() && save)
                 save = checkSaveSubsf(subsf, mySubsf);
-            if (prop.isTorrentOption() && save)
-                checkSaveTorrent(torrentDest);
+            if (prop.isTorrentOption() && save && !Lang.verifyTextNotNull(torrentDest))
+                proxy.printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai "
+                    + "scaricare .torrent");
         }
         if (save) {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                     sambaUser, sambaPwd, time, timeout, 
                     advancedDownload, runIconized, reminder);
-            setPropItasa(itasa, myitasa, user, pwd, autoMyitasa, autoLoadMyItasa, 
+            setPropItasa(itasa, myitasa, itasaUser, itasaPwd, autoMyitasa, autoLoadMyItasa, 
                         blog, itasapm, calendarDay);
             setPropSubsf(subsf, mySubsf);
             setPropTorrent(torrentDest, torrentOption);
@@ -404,6 +406,7 @@ public class GuiCore {
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
                             paneReminder, paneTorrent, paneCalendar, paneShow, 
                             paneBlog, paneCalendarDay);
+            setPropIRc(ircNick, ircPwd);
             proxy.writeSettings();
             if (!prop.isApplicationFirstTimeUsed() && first) {
                 ManageListener.fireFrameEvent(this, ENABLE_BUTTON);
@@ -640,6 +643,11 @@ public class GuiCore {
         prop.setTorrentOption(option);
     }
     
+    private void setPropIRc(String nick, String pwd){
+        prop.setIrcNick(nick);
+        prop.setIrcPwd(pwd);
+    }
+    
     /**Aggiunge i link corrispondenti al true della colonna download nell'arraylist
      *
      * @param jt jtable su cui operare
@@ -652,17 +660,6 @@ public class GuiCore {
                 alLinks.add(jt.getValueAt(i, 0).toString());
         }
         return alLinks;
-    }
-    
-    /**verifica impostazioni torrent
-     *
-     * @return booleano che le impostazioni sono ok
-     */
-    private boolean checkSaveTorrent(String text) {
-        if (!Lang.verifyTextNotNull(text))
-            proxy.printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai "
-                    + "scaricare .torrent");
-        return true;
     }
 
     /**verifica impostazioni subsf

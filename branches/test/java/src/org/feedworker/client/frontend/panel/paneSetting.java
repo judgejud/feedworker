@@ -117,7 +117,8 @@ public class paneSetting extends paneAbstract {
                 jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected(), 
                 jcbTorrent.isSelected(), jcbPaneShow.isSelected(), jcbItasaBlog.isSelected(), 
                 jcbPaneBlog.isSelected(), jcbItasaPM.isSelected(), 
-                jcbPaneCalendarDay.isSelected(), jcbCalendarDay.isSelected());
+                jcbPaneCalendarDay.isSelected(), jcbCalendarDay.isSelected(), jcbPaneIrc.isSelected(),
+                jtfIrcNick.getText(), new String(jpfIrc.getPassword()));
             }
         });
         
@@ -230,8 +231,7 @@ public class paneSetting extends paneAbstract {
         task.add(jlSuser);
         task.add(jtfSambaUser);
 
-        JLabel jlSpwd = new JLabel("Samba Password");
-        task.add(jlSpwd);
+        task.add(new JLabel("Samba Password"));
         task.add(jpfSamba);
         
         task.add(jbCheckSamba);
@@ -421,7 +421,7 @@ public class paneSetting extends paneAbstract {
     }
     
     private JXTaskPane initTaskPaneIrc(){
-        jtfIrcServer = new JTextField();
+        //jtfIrcServer = new JTextField();
         jtfIrcNick = new JTextField();
         jpfIrc = new JPasswordField();
         
@@ -548,8 +548,10 @@ public class paneSetting extends paneAbstract {
     }
     
     private void settingsIrcValue() {
-        jtfIrcServer.setText("irc.azzurra.org");
-        jtfIrcServer.setEnabled(false);
+        //jtfIrcServer.setText("irc.azzurra.org");
+        //jtfIrcServer.setEnabled(false);
+        jtfIrcNick.setText(prop.getIrcNick());
+        jpfIrc.setText(prop.getIrcPwd());
     }
 
     private void settingsSubsfactoryValue() {
@@ -569,6 +571,7 @@ public class paneSetting extends paneAbstract {
         jcbPaneBlog.setSelected(prop.isEnablePaneBlog());
         jcbPaneCalendarDay.setSelected(prop.isEnablePaneCalendarDay());
         jcbPaneCalendar.setSelected(prop.isEnablePaneCalendar());
+        jcbPaneIrc.setSelected(prop.isEnablePaneIrc());
         jcbPaneLog.setSelected(prop.isEnablePaneLog());
         jcbPaneReminder.setSelected(prop.isEnablePaneReminder());
         jcbPaneSearchSubItasa.setSelected(prop.isEnablePaneSearchSubItasa());
