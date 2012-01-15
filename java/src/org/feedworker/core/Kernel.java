@@ -233,6 +233,7 @@ public class Kernel implements PropertyChangeListener {
         prop.writeAdvisorSettings();
         prop.writePaneVisibleSetting();
         prop.writeTorrentSettings();
+        prop.writeIrcSettings();
         if (prop.isSubsfactoryOption())
             prop.writeSubsfactorySettings();
         if (prop.isApplicationFirstTimeUsed())
@@ -1299,8 +1300,11 @@ public class Kernel implements PropertyChangeListener {
     }
     
     public void connectIrc() {
+        String nick = prop.getIrcNick();
+        if (!Lang.verifyTextNotNull(nick))
+            nick = "GuestFeedworker";
         try {
-            Irc.getInstance("judge_test", null);
+            Irc.getInstance(nick, prop.getIrcPwd());
         } catch (IOException ex) {
             ex.printStackTrace();
         }

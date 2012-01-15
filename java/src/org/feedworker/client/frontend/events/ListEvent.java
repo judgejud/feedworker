@@ -9,7 +9,7 @@ import java.util.EventObject;
 public class ListEvent extends EventObject{
     private Object[][] matrix;
     private ArrayList<Object[]> array;
-    private String name;
+    private String name, oper;
 
     public ListEvent(Object source, String name, Object[][] array) {
         super(source);
@@ -27,6 +27,10 @@ public class ListEvent extends EventObject{
         return name;
     }
 
+    public String getOper() {
+        return oper;
+    }
+    
     public Object[][] getMatrix() {
         return matrix;
     }
