@@ -1,10 +1,7 @@
 package org.feedworker.core;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import org.schwering.irc.lib.IRCConnection;
 import org.schwering.irc.lib.IRCEventAdapter;
@@ -49,8 +46,10 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     }
     
     void disconnect(){
-        conn.doQuit("ciao");
-        irc = null;
+        if (irc!=null){
+            conn.doQuit("ciao");
+            irc = null;
+        }
     }
     
     void joinChannel(String name){
@@ -95,16 +94,19 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     public void onJoin(String chan, IRCUser user) {
         if (nick.equalsIgnoreCase(user.getNick()))
             last_join_chan = chan;
-        else
+        else{
             ManageListener.fireTextPaneEvent(this, user.getNick() + " è entrato/a", chan, false);
-        // add the nickname to the nickname-table
+            ManageListener.fireListIrcEvent(this, chan, "user_join", user.getNick());
+        }
     }
 
     @Override
     public void onKick(String chan, IRCUser user, String nickPass, String msg) {
-        if (!nickPass.equalsIgnoreCase(nick))
+        if (!nickPass.equalsIgnoreCase(nick)){
+            ManageListener.fireListIrcEvent(this, chan, "user_kick", user.getNick());
             ManageListener.fireTextPaneEvent(this, user.getNick() + " ha espulso/a " + nickPass, chan, false);
-        else{
+            
+        } else{
             System.out.println("KICK: "+ user.getNick() +" kicks "+ nickPass + " from " + chan 
                 +" ("+ msg +")");
         }
@@ -115,6 +117,7 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     public void onMode(String chan, IRCUser user, IRCModeParser modeParser) {
         System.out.println("MODE: "+ user.getNick() 
             +" changes modes in "+ chan +": "+ modeParser.getLine());
+        
         // some operations with the modes
     }
 
@@ -127,7 +130,7 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     @Override
     public void onPart(String chan, IRCUser user, String msg) {
         ManageListener.fireTextPaneEvent(this, user.getNick() + " è uscito/a", chan, false);
-        //TODO: remove the nickname from the nickname-table
+        ManageListener.fireListIrcEvent(this, chan, "user_part", user.getNick());
     }
 
     @Override
@@ -138,8 +141,10 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
 
     @Override
     public void onQuit(IRCUser user, String msg) {
-        System.out.println("QUIT: "+ user.getNick() +" ("+ 
-            user.getUsername() +"@"+ user.getHost() +") ("+ msg +")");
+        ManageListener.fireTextPaneEvent(this, user.getNick() + " è uscito/a", "all", false);
+        ManageListener.fireListIrcEvent(this, "all", "quit", user.getNick());
+        //System.out.println("QUIT: "+ user.getNick() +" ("+ 
+        //    user.getUsername() +"@"+ user.getHost() +") ("+ msg +")");
         // remove the nickname from the nickname-table
     }
     
@@ -148,11 +153,9 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
         if (num == TOPIC)
             ManageListener.fireTextPaneEvent(this, msg+"\n", last_join_chan, false);
         else if (num == USERLIST){
-            List l = Arrays.asList(msg.split(" "));
-            //Collections.sort(l);
-            ArrayList temp = new ArrayList();
-            temp.add(l.toArray());
-            ManageListener.fireListEvent(this, last_join_chan, temp);
+            Object[] array = msg.split(" ");
+            Arrays.sort(array);
+            ManageListener.fireListIrcEvent(this, last_join_chan, "join", array);
         } else if (num != MOTD1 && num != MOTD2 && num != MOTD3 && num != I333 
                 && num != NAMES){
             ManageListener.fireTextPaneEvent(this, msg, "Azzurra", false);

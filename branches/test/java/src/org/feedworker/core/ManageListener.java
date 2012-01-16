@@ -173,6 +173,24 @@ public class ManageListener {
         }
     }
     
+    public static synchronized void fireListIrcEvent(Object from, String dest, String oper, String nick) {
+        ListEvent event = new ListEvent(from, dest, oper, nick);
+        Iterator listeners = listenerList.iterator();
+        while (listeners.hasNext()) {
+            ListEventListener myel = (ListEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
+    public static synchronized void fireListIrcEvent(Object from, String dest, String oper, Object[] nicks) {
+        ListEvent event = new ListEvent(from, dest, oper, nicks);
+        Iterator listeners = listenerList.iterator();
+        while (listeners.hasNext()) {
+            ListEventListener myel = (ListEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
     public static synchronized void fireListEvent(Object from, String dest, 
                                                     ArrayList<Object[]> array) {
         ListEvent event = new ListEvent(from, dest, array);

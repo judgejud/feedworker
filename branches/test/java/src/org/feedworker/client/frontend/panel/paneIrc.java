@@ -243,23 +243,40 @@ class paneChan extends JPanel implements ListEventListener, TextPaneEventListene
     @Override
     public void objReceived(ListEvent evt) {
         if (evt.getName().equals(this.getName())){
-            Object[] array = evt.getArrayList().get(0);
-            for (int i=0; i<array.length; i++)
-                model.addElement(array[i]);
+            String oper = evt.getOper();
+            if (oper.equalsIgnoreCase("join")){
+                for (int i=0; i<evt.getArray().length; i++)
+                    model.addElement(evt.getArray()[i]);
+            } else if (oper.equalsIgnoreCase("user_join"))
+                model.addElement(evt.getNick());
+            else if (oper.equalsIgnoreCase("user_part") || oper.equalsIgnoreCase("user_kick"))
+                removeNick(evt.getNick());
+        } else if (evt.getName().equals("all")){
+            String oper = evt.getOper();
+            if (oper.equalsIgnoreCase("quit"))
+                removeNick(evt.getNick());
         }
+    }
+    
+    private void removeNick(String nick){
+        if (model.removeElement(nick)){}
+        else if (model.removeElement("@"+nick)){}
+        else if (model.removeElement("%"+nick)){}
+        else if (model.removeElement("+"+nick)){}
+    }
+    
+    public boolean checkNick(String nick){
+        boolean check = false;
+        System.out.println(model.indexOf(nick));
+        System.out.println(model.indexOf("@" + nick));
+        System.out.println(model.indexOf("%" + nick));
+        System.out.println(model.indexOf("+" + nick));
+        return check;
     }
 
     @Override
     public void objReceived(TextPaneEvent evt) {
         if (evt.getType().equals(this.getName()))
             addMsgTextPane(evt.getMsg());
-    }
-}
-
-class ListOrder implements Comparable<ListOrder>{
-
-    @Override
-    public int compareTo(ListOrder t) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
