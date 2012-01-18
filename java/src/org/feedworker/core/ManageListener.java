@@ -211,6 +211,15 @@ public class ManageListener {
         }
     }
     
+    public static synchronized void fireTabbedPaneEvent(Object from, String name, String dest) {
+        TabbedPaneEvent event = new TabbedPaneEvent(from, name, dest);
+        Iterator listeners = listenerTabbedPane.iterator();
+        while (listeners.hasNext()) {
+            TabbedPaneEventListener myel = (TabbedPaneEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
     public static synchronized void fireCanvasEvent(Object from, Object[] array) {
         CanvasEvent event = new CanvasEvent(from, array);
         Iterator listeners = listenerCanvas.iterator();

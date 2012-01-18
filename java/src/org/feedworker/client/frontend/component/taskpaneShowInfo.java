@@ -87,8 +87,8 @@ public class taskpaneShowInfo extends JScrollPane implements TabbedPaneEventList
     @Override
     public void objReceived(TabbedPaneEvent evt) {
         if (evt.getDest().equalsIgnoreCase(this.getName())){
-            for (int i=0; i<evt.getName().size(); i++){
-                String name = evt.getName().get(i);
+            for (int i=0; i<evt.getArray().size(); i++){
+                String name = evt.getArray().get(i);
                 tableEpisode table = new tableEpisode(this.getName() + name);
                 tabEpisodes.addTab(name, new JScrollPane(table));
                 core.setTableListener(table);

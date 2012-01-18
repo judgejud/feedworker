@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -20,12 +20,14 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
-import org.feedworker.client.frontend.GuiCore;
-import org.feedworker.client.frontend.Mediator;
 import org.feedworker.client.frontend.events.ListEvent;
 import org.feedworker.client.frontend.events.ListEventListener;
+import org.feedworker.client.frontend.events.TabbedPaneEvent;
+import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
+
+import org.jfacility.java.lang.Lang;
 
 import org.jdesktop.swingx.JXList;
 
@@ -33,21 +35,20 @@ import org.jdesktop.swingx.JXList;
  *
  * @author luca judge
  */
-public class paneIrc extends paneAbstract implements TextPaneEventListener{
+public class paneIrc extends paneAbstract implements TextPaneEventListener, TabbedPaneEventListener{
     private final String AZZURRA = "Azzurra";
     
     private static paneIrc pane;
-    private JTabbedPane tab;
-    private JTextPane text;
-    private JScrollPane jspText;
-    private StyledDocument sd;
+    private JTabbedPane tab;   
     private paneChan chanItaliansubs, chanItasaCastle;
+    private paneConsole jpConsole;
 
     private paneIrc(String name) {
         super(name);
         initializeButtons();
         initializePanel();
         core.setTextPaneListener(this);
+        core.setTabbedPaneListener(this);
     }
     
     public static paneIrc getPanel(){
@@ -60,12 +61,7 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
     void initializePanel() {
         tab = new JTabbedPane();
         jpCenter.add(tab);
-        
-        text = new JTextPane();
-        text.setEditable(false);
-        text.setContentType("text/html");
-        sd = (StyledDocument) text.getDocument();
-        jspText = new JScrollPane(text);
+        jpConsole = new paneConsole(AZZURRA);
     }
 
     @Override
@@ -85,7 +81,6 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
                 proxy.disconnectIrc();
                 for (int i=tab.getTabCount()-1; i>0; i--)
                     tab.remove(tab.getComponent(i));
-                addMsgTextPane("Disconnessione effettuata");
             }
         });
         
@@ -106,6 +101,16 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
         });
         
         JButton jbRenameNick = new JButton("Cambia nick");
+        jbRenameNick.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                if (proxy.isConnectedIrc()){
+                    String nick = JOptionPane.showInputDialog("Inserire nuovo nick");
+                    if (Lang.verifyTextNotNull(nick))
+                        proxy.changeIrcNick(nick);
+                }
+            }
+        });
         
         jpAction.add(jbConnect);
         jpAction.add(jbDisconnect);
@@ -115,19 +120,20 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
     }
     
     private void connect(){
-        if (!tab.isAncestorOf(jspText))
-            tab.addTab("Azzurra", jspText);
+        if (!tab.isAncestorOf(jpConsole)){
+            jpConsole = new paneConsole(AZZURRA);
+            tab.addTab("Azzurra", jpConsole);
+        }
         proxy.connectIrc();
-        addMsgTextPane("Connessione al server azzurra in corso... \n");
     }
     
     private void joinItaliansubs(){
         if (proxy.isConnectedIrc()){
             if (!tab.isAncestorOf(chanItaliansubs)){
                 String name = "#italiansubs";
-                chanItaliansubs = new paneChan(name, true);
+                chanItaliansubs = new paneChan(name);
                 tab.addTab(name, chanItaliansubs);
-                proxy.joinChan(name);
+                proxy.joinIrcChan(name);
             }
         }
     }
@@ -136,20 +142,59 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
         if (proxy.isConnectedIrc()){
             if (!tab.isAncestorOf(chanItasaCastle)){
                 String name = "#itasa-castle";
-                chanItasaCastle = new paneChan(name, true);
+                chanItasaCastle = new paneChan(name);
                 tab.addTab(name, chanItasaCastle);
-                proxy.joinChan(name);
+                proxy.joinIrcChan(name);
             }
         }
     }
 
     @Override
     public void objReceived(TextPaneEvent evt) {
-        if (evt.getType().equals(AZZURRA))
+        if (evt.getType().equals("quit")){
+            String nick = evt.getMsg().split(" ")[0].toString();
+            if (chanItaliansubs!=null && chanItaliansubs.checkNick(nick))
+                chanItaliansubs.addMsgTextPane(evt.getMsg());
+            if (chanItasaCastle!=null && chanItasaCastle.checkNick(nick))
+                chanItasaCastle.addMsgTextPane(evt.getMsg());
+        }
+        if (evt.getType().equals("nick")){
+            String nick = evt.getMsg().split(" ")[0].toString();
+            if (chanItaliansubs!=null && chanItaliansubs.checkNick(nick))
+                chanItaliansubs.addMsgTextPane(evt.getMsg());
+            if (chanItasaCastle!=null && chanItasaCastle.checkNick(nick))
+                chanItasaCastle.addMsgTextPane(evt.getMsg());
+        }
+    }
+
+    @Override
+    public void objReceived(TabbedPaneEvent evt) {
+        if (evt.getDest()!=null && evt.getDest().equals("addPrivate")){
+            panePrivate pane = new panePrivate(evt.getName());
+            tab.addTab(evt.getName(), pane);
+            //tab.setTabComponentAt(tab.getTabCount() - 1, new ButtonTabComponent(tab));
+        }
+    }
+}
+
+class paneConsole extends paneAbstract implements TextPaneEventListener{
+    private JTextPane text;
+    private StyledDocument sd;
+
+    public paneConsole(String name) {
+        super(name);
+        remove(jpAction);
+        initializePanel();
+        core.setTextPaneListener(this);
+    }
+    
+    @Override
+    public void objReceived(TextPaneEvent evt) {
+        if (evt.getType().equals(this.getName()))
             addMsgTextPane(evt.getMsg());
     }
     
-    private void addMsgTextPane(String msg){
+    protected void addMsgTextPane(String msg){
         try {
             sd.insertString(sd.getLength(), msg + "\n", null);
             text.setCaretPosition(sd.getLength());
@@ -157,30 +202,25 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener{
             ex.printStackTrace();
         }
     }
-    
+
+    @Override
+    void initializePanel() {
+        text = new JTextPane();
+        text.setEditable(false);
+        text.setContentType("text/html");
+        sd = (StyledDocument) text.getDocument();
+        jpCenter.add(new JScrollPane(text), BorderLayout.CENTER);
+    }
+
+    @Override
+    void initializeButtons() {}
 }
 
-class paneChan extends JPanel implements ListEventListener, TextPaneEventListener{
-    private JTextPane textpane;
-    private StyledDocument sd;
+class panePrivate extends paneConsole{
     private JTextField textfield;
-    private JXList list;
-    private DefaultListModel model;
-
-    public paneChan(String name, boolean _list) {
-        super(new BorderLayout());
-        setName(name);
-        init(_list);
-        GuiCore.getInstance().setTextPaneListener(this);
-        GuiCore.getInstance().setListListener(this);
-    }
     
-    private void init(boolean _list){
-        textpane = new JTextPane();
-        textpane.setEditable(false);
-        sd = (StyledDocument) textpane.getDocument();
-        add(new JScrollPane(textpane), BorderLayout.CENTER);
-        
+    public panePrivate(String name) {
+        super(name);
         textfield = new JTextField();
         textfield.addKeyListener(new KeyAdapter(){
             @Override
@@ -191,22 +231,39 @@ class paneChan extends JPanel implements ListEventListener, TextPaneEventListene
         });
         textfield.setFocusable(true);
         add(textfield, BorderLayout.SOUTH);
-        
-        if (_list){
-            model = new DefaultListModel();
-            list = new JXList(model);
-            
-            list.addMouseListener(new MouseAdapter() {
-            @Override
-                public void mouseReleased(MouseEvent ev) {
-                    if (ev.isPopupTrigger()){
-                        list.setSelectedIndex(list.locationToIndex(ev.getPoint()));
-                        createPopupMenu().show(ev.getComponent(), ev.getX(), ev.getY());
-                    }
-                }
-            });
-            add(new JScrollPane(list), BorderLayout.EAST);
+    }
+    
+    private void sendMessage(){
+        String text = textfield.getText();
+        if (Lang.verifyTextNotNull(text)){
+            proxy.sendIrcMessage(getName(), text);
+            addMsgTextPane(text);
+            textfield.setText(null);
         }
+    }
+    
+}
+
+class paneChan extends panePrivate implements ListEventListener{
+    private JXList list;
+    private DefaultListModel model;
+
+    public paneChan(String name) {
+        super(name);
+        model = new DefaultListModel();
+        list = new JXList(model);
+
+        list.addMouseListener(new MouseAdapter() {
+        @Override
+            public void mouseReleased(MouseEvent ev) {
+                if (ev.isPopupTrigger()){
+                    list.setSelectedIndex(list.locationToIndex(ev.getPoint()));
+                    createPopupMenu().show(ev.getComponent(), ev.getX(), ev.getY());
+                }
+            }
+        });
+        add(new JScrollPane(list), BorderLayout.EAST);
+        core.setListListener(this);
     }
     
     private JPopupMenu createPopupMenu(){
@@ -215,29 +272,11 @@ class paneChan extends JPanel implements ListEventListener, TextPaneEventListene
         jmiChat.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(list.getSelectedValue());
+                core.checkAddprivateIrc(list.getSelectedValue().toString());
             }
         });
         menu.add(jmiChat);
         return menu;
-    }
-    
-    private void sendMessage(){
-        String text = textfield.getText();
-        if (text!=null){
-            Mediator.getIstance().sendIrcMessage(getName(), text);
-            addMsgTextPane(text);
-            textfield.setText(null);
-        }
-    }
-    
-    private void addMsgTextPane(String msg){
-        try {
-            sd.insertString(sd.getLength(), msg + "\n", null);
-            textpane.setCaretPosition(sd.getLength());
-        } catch (BadLocationException ex) {
-            ex.printStackTrace();
-        }
     }
 
     @Override
@@ -251,10 +290,27 @@ class paneChan extends JPanel implements ListEventListener, TextPaneEventListene
                 model.addElement(evt.getNick());
             else if (oper.equalsIgnoreCase("user_part") || oper.equalsIgnoreCase("user_kick"))
                 removeNick(evt.getNick());
+            else if (oper.equalsIgnoreCase("+v")){
+                removeNick(evt.getNick());
+                model.addElement("+" + evt.getNick());
+            } else if (oper.equalsIgnoreCase("+h")){
+                removeNick(evt.getNick());
+                model.addElement("%" + evt.getNick());
+            } else if (oper.equalsIgnoreCase("+o")){
+                removeNick(evt.getNick());
+                model.addElement("@" + evt.getNick());
+            }
         } else if (evt.getName().equals("all")){
             String oper = evt.getOper();
             if (oper.equalsIgnoreCase("quit"))
                 removeNick(evt.getNick());
+            else if (oper.equalsIgnoreCase("nick")){
+                String[] nick = evt.getNick().split(" ");
+                if (checkNick(nick[0])){
+                    removeNick(nick[0]);
+                    model.addElement(nick[1]);
+                }
+            }
         }
     }
     
@@ -266,17 +322,14 @@ class paneChan extends JPanel implements ListEventListener, TextPaneEventListene
     }
     
     public boolean checkNick(String nick){
-        boolean check = false;
-        System.out.println(model.indexOf(nick));
-        System.out.println(model.indexOf("@" + nick));
-        System.out.println(model.indexOf("%" + nick));
-        System.out.println(model.indexOf("+" + nick));
-        return check;
-    }
-
-    @Override
-    public void objReceived(TextPaneEvent evt) {
-        if (evt.getType().equals(this.getName()))
-            addMsgTextPane(evt.getMsg());
+        if (model.indexOf(nick)>-1)
+            return true;
+        else if (model.indexOf("@" + nick)>-1)
+            return true;
+        else if (model.indexOf("%" + nick)>-1)
+            return true;
+        else if (model.indexOf("+" + nick)>-1)
+            return true;
+        return false;
     }
 }

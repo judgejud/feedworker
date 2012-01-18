@@ -1,7 +1,6 @@
 package org.feedworker.client.frontend;
 
 //IMPORT JAVA
-import org.feedworker.client.frontend.component.dialogResultSearchTv;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -23,11 +22,11 @@ import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
 import org.feedworker.client.ApplicationSettings;
+import org.feedworker.client.frontend.component.dialogResultSearchTv;
 import org.feedworker.client.frontend.events.FrameEvent;
 import org.feedworker.client.frontend.events.FrameEventListener;
 import org.feedworker.client.frontend.panel.*;
 
-import org.jdesktop.swingx.JXFrame;
 import org.jfacility.java.awt.AWT;
 import org.jfacility.javax.swing.ButtonTabComponent;
 
@@ -36,6 +35,7 @@ import org.opensanskrit.widget.ProgressEvent;
 import org.opensanskrit.widget.interfaces.ProgressListener;
 import org.opensanskrit.widget.SystemInfoDialog;
 
+import org.jdesktop.swingx.JXFrame;
 /**GUI
  * 
  * @author luca judge

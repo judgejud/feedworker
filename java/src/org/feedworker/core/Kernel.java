@@ -1335,6 +1335,12 @@ public class Kernel implements PropertyChangeListener {
             i.sendMessage(name, text);
     }
 
+    public void renameIrcNick(String nick) {
+        Irc i = Irc.getInstance();
+        if (i!=null && i.isConnected())
+            i.changeNick(nick);
+    }
+
     class ImportTaskCalendar extends SwingWorker<ArrayList<Object[]>, Void> {
         private boolean myitasa;
         private ArrayList<String> myShows; 
