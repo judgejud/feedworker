@@ -49,7 +49,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "452 by "
+                + "454 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -380,7 +380,7 @@ public class Mediator {
         core.connectIrc();
     }
 
-    public void joinChan(String name) {
+    public void joinIrcChan(String name) {
         core.joinChan(name);
     }
     
@@ -394,5 +394,9 @@ public class Mediator {
 
     public void sendIrcMessage(String name, String text) {
         core.sendIrcMessage(name, text);
+    }
+
+    public void changeIrcNick(String nick) {
+        core.renameIrcNick(nick);
     }
 }

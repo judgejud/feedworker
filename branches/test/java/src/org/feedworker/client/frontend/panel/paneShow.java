@@ -319,8 +319,8 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
     @Override
     public void objReceived(TabbedPaneEvent evt) {
         if (evt.getDest()==null){
-            for (int i=0; i<evt.getName().size(); i++){
-                String cat = evt.getName().get(i);
+            for (int i=0; i<evt.getArray().size(); i++){
+                String cat = evt.getArray().get(i);
                 core.checkTabListShow(cat);
                 listShow pane = new listShow(cat);
                 jtpList.addTab(pane.getName(), pane);

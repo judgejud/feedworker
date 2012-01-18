@@ -8,6 +8,7 @@ import org.schwering.irc.lib.IRCEventAdapter;
 import org.schwering.irc.lib.IRCEventListener;
 import org.schwering.irc.lib.IRCModeParser;
 import org.schwering.irc.lib.IRCUser;
+import org.schwering.irc.lib.IRCUtil;
 
 /**
  *
@@ -24,8 +25,12 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     private String last_join_chan;
 
     private Irc() throws IOException {
+        ManageListener.fireTextPaneEvent(this, "Connessione al server irc Azzurra in corso...", 
+                                                "Azzurra", false);
         conn = new IRCConnection(server, port, pwd, nick, null, null); 
         conn.addIRCEventListener(this); 
+        conn.setEncoding("ISO-8859-1");
+        //conn.setEncoding("UTF-8");
         conn.setDaemon(true);
         conn.setColors(false); 
         conn.setPong(true); 
@@ -46,10 +51,8 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     }
     
     void disconnect(){
-        if (irc!=null){
-            conn.doQuit("ciao");
-            irc = null;
-        }
+        if (irc!=null && conn != null)
+            conn.doQuit();
     }
     
     void joinChannel(String name){
@@ -63,6 +66,10 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     void sendMessage(String name, String msg){
         conn.doPrivmsg(name, msg);
     }
+    
+    void changeNick(String nick) {
+        conn.doNick(nick);
+    }
     /*
     public void onConnect() {
         System.out.println("Connected successfully.");
@@ -72,7 +79,9 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     */
     @Override
     public void onDisconnected() {
-        System.out.println("Disconnected.");
+        ManageListener.fireTextPaneEvent(this, "Disconnessione dal server completata.", 
+                                                "Azzurra", false);
+        irc = null;
     }
 
     @Override
@@ -115,16 +124,20 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
 
     @Override
     public void onMode(String chan, IRCUser user, IRCModeParser modeParser) {
+        String[] temp = modeParser.getLine().split(" ");
+        ManageListener.fireListIrcEvent(this, chan, temp[0], temp[1]);
         System.out.println("MODE: "+ user.getNick() 
             +" changes modes in "+ chan +": "+ modeParser.getLine());
-        
-        // some operations with the modes
     }
 
     @Override
     public void onNick(IRCUser user, String nickNew) {
-        System.out.println("NICK: "+ user.getNick() +" is now known as "+ nickNew);
-        // update the nickname in the nickname-table
+        if (nick.equalsIgnoreCase(user.getNick()))
+            nick = nickNew;
+        ManageListener.fireTextPaneEvent(this, 
+                            user.getNick() + " ha cambiato il nick in " + nickNew, 
+                            "nick", false);
+        ManageListener.fireListIrcEvent(this, "all", "nick", user.getNick() + " " + nickNew);
     }
 
     @Override
@@ -136,16 +149,16 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     @Override
     public void onPrivmsg(String target, IRCUser user, String msg) {        
         String message = "<" + user.getNick() + ">" + ": " + msg;
-        ManageListener.fireTextPaneEvent(this, message, target, false);
+        if (IRCUtil.isChan(target))
+            ManageListener.fireTextPaneEvent(this, message, target, false);
+        else
+            ManageListener.fireTextPaneEvent(this, message, user.getNick(), false);
     }
 
     @Override
     public void onQuit(IRCUser user, String msg) {
-        ManageListener.fireTextPaneEvent(this, user.getNick() + " è uscito/a", "all", false);
+        ManageListener.fireTextPaneEvent(this, user.getNick() + " è uscito/a", "quit", false);
         ManageListener.fireListIrcEvent(this, "all", "quit", user.getNick());
-        //System.out.println("QUIT: "+ user.getNick() +" ("+ 
-        //    user.getUsername() +"@"+ user.getHost() +") ("+ msg +")");
-        // remove the nickname from the nickname-table
     }
     
     @Override
@@ -165,7 +178,6 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
 
     @Override
     public void onTopic(String chan, IRCUser user, String topic) {
-        System.out.println("TOPIC: "+ user.getNick() 
-            +" changes topic of "+ chan +" into: "+ topic);
+        ManageListener.fireTextPaneEvent(this, topic+"\n", chan, false);
     }
 }
