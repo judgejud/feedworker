@@ -30,6 +30,7 @@ import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.jfacility.java.lang.Lang;
 
 import org.jdesktop.swingx.JXList;
+import org.jfacility.javax.swing.ButtonTabComponent;
 
 /**
  *
@@ -169,10 +170,25 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
 
     @Override
     public void objReceived(TabbedPaneEvent evt) {
-        if (evt.getDest()!=null && evt.getDest().equals("addPrivate")){
-            panePrivate pane = new panePrivate(evt.getName());
-            tab.addTab(evt.getName(), pane);
-            //tab.setTabComponentAt(tab.getTabCount() - 1, new ButtonTabComponent(tab));
+        if (evt.getDest()!=null){
+            if (evt.getDest().equals("query") && tab.indexOfTab(evt.getName())==-1){
+                paneQuery pane = new paneQuery(evt.getName());
+                tab.addTab(evt.getName(), pane);
+                tab.setTabComponentAt(tab.getTabCount() - 1, new ButtonTabComponent(tab));
+            } else if (evt.getDest().equals("close")) {
+                if (evt.getName().equals(chanItaliansubs.getName())){
+                    tab.remove(chanItaliansubs);
+                    chanItaliansubs = null;
+                } else if (evt.getName().equals(chanItasaCastle.getName())){
+                    tab.remove(chanItasaCastle);
+                    chanItasaCastle = null;
+                }
+            } else if (evt.getDest().equals("nick")){
+                String[] name = evt.getName().split(" ");
+                int i = tab.indexOfTab(name[0]);
+                if (i>-1)
+                    tab.setTitleAt(i, name[1]);
+            }
         }
     }
 }
@@ -216,10 +232,10 @@ class paneConsole extends paneAbstract implements TextPaneEventListener{
     void initializeButtons() {}
 }
 
-class panePrivate extends paneConsole{
+class paneQuery extends paneConsole{
     private JTextField textfield;
     
-    public panePrivate(String name) {
+    public paneQuery(String name) {
         super(name);
         textfield = new JTextField();
         textfield.addKeyListener(new KeyAdapter(){
@@ -244,7 +260,7 @@ class panePrivate extends paneConsole{
     
 }
 
-class paneChan extends panePrivate implements ListEventListener{
+class paneChan extends paneQuery implements ListEventListener{
     private JXList list;
     private DefaultListModel model;
 
@@ -272,11 +288,19 @@ class paneChan extends panePrivate implements ListEventListener{
         jmiChat.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                core.checkAddprivateIrc(list.getSelectedValue().toString());
+                action();
             }
         });
         menu.add(jmiChat);
         return menu;
+    }
+    
+    private void action(){
+        String name = list.getSelectedValue().toString();
+        char c = name.charAt(0);
+        if (c == '+' || c == '@' || c == '%')
+            name = name.substring(1);
+        core.checkQueryIrc(name);
     }
 
     @Override
@@ -299,6 +323,9 @@ class paneChan extends panePrivate implements ListEventListener{
             } else if (oper.equalsIgnoreCase("+o")){
                 removeNick(evt.getNick());
                 model.addElement("@" + evt.getNick());
+            } else if (oper.substring(0,1).equalsIgnoreCase("-")){
+                removeNick(evt.getNick());
+                model.addElement(evt.getNick());
             }
         } else if (evt.getName().equals("all")){
             String oper = evt.getOper();

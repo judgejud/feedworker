@@ -80,8 +80,7 @@ public class GuiCore {
     private Mediator proxy = Mediator.getIstance();
     private TreeMap<Object, taskpaneShowInfo> mapPaneShows = 
                                     new TreeMap<Object, taskpaneShowInfo>();
-    private TreeSet<String> setListShows = new TreeSet<String>(), 
-            setPrivateIrc = new TreeSet<String>();
+    private TreeSet<String> setListShows = new TreeSet<String>();
     private ApplicationSettings prop = proxy.getSettings();
     
     public static GuiCore getInstance(){
@@ -755,13 +754,7 @@ public class GuiCore {
         proxy.printAlert(msg);
     }
 
-    public void checkAddprivateIrc(String name) {
-        char c = name.charAt(0);
-        if (c == '+' || c == '@' || c == '%')
-            name = name.substring(1);
-        if (!setPrivateIrc.contains(name)){
-            setPrivateIrc.add(name);
-            ManageListener.fireTabbedPaneEvent(this, name, "addPrivate");
-        }
+    public void checkQueryIrc(String name) {
+        ManageListener.fireTabbedPaneEvent(this, name, "query");
     }
 }
