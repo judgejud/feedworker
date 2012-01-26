@@ -133,9 +133,8 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
             checkAddTab(jpCalendarShow, false, "Calendario TvRage show");       
         if (prop.isEnablePaneShow())
             checkAddTab(jpShow, false, null);
-        //if (prop.isEnablePaneIRC())
+        if (prop.isEnablePaneIrc())
             checkAddTab(jpIrc, false, null);
-        //mainJTP.addTab("Irc", jpIrc);
         if (prop.isEnablePaneLog())
             checkAddTab(jpLog, false, null);
         

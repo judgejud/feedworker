@@ -405,7 +405,7 @@ public class GuiCore {
             setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
                             paneReminder, paneTorrent, paneCalendar, paneShow, 
-                            paneBlog, paneCalendarDay);
+                            paneBlog, paneCalendarDay, paneIrc);
             setPropIRc(ircNick, ircPwd);
             proxy.writeSettings();
             if (!prop.isApplicationFirstTimeUsed() && first) {
@@ -625,7 +625,7 @@ public class GuiCore {
     private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
                                     boolean subdest, boolean reminder, boolean torrent,
                                     boolean calendar, boolean show, boolean blog, 
-                                    boolean calendarDay){
+                                    boolean calendarDay, boolean irc){
         prop.setEnablePaneCalendar(calendar);
         prop.setEnablePaneLog(log);
         prop.setEnablePaneSearchSubItasa(search);
@@ -636,6 +636,7 @@ public class GuiCore {
         prop.setEnablePaneShow(show);
         prop.setEnablePaneBlog(blog);
         prop.setEnablePaneCalendarDay(calendarDay);
+        prop.setEnablePaneIrc(irc);
     }
     
     private void setPropTorrent(String dest, boolean option){
