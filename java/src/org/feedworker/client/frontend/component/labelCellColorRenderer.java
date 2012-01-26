@@ -20,7 +20,7 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class labelCellColorRenderer extends JLabel implements TableCellRenderer {
-    private final Font font = new Font("Arial", Font.PLAIN, 11);
+    private final Font font = new Font("Arial", Font.PLAIN, 12);
     @Override
     public Component getTableCellRendererComponent(JTable table,
             Object value, boolean isSelected, boolean hasFocus, int row,

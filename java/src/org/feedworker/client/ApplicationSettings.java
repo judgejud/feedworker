@@ -101,6 +101,7 @@ public class ApplicationSettings {
                 setEnablePaneShow(getBooleanDecryptedValue("ENABLE_PANE_SHOW"));
                 setEnablePaneBlog(getBooleanDecryptedValue("ENABLE_PANE_BLOG"));
                 setEnablePaneCalendarDay(getBooleanDecryptedValue("ENABLE_PANE_CALENDAR_DAY"));
+                setEnablePaneIrc(getBooleanDecryptedValue("ENABLE_PANE_IRC"));
                 //ADVISOR SETTINGS
                 setMailTO(getDecryptedValue("MAIL_TO"));
                 setMailSMTP(getDecryptedValue("MAIL_SMTP"));
@@ -265,6 +266,7 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_PANE_SHOW", enablePaneShow);
             propertiesCrypting("ENABLE_PANE_BLOG", enablePaneBlog);
             propertiesCrypting("ENABLE_PANE_CALENDAR_DAY", enablePaneCalendarDay);
+            propertiesCrypting("ENABLE_PANE_IRC", enablePaneIrc);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
