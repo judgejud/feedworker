@@ -8,10 +8,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.util.Iterator;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -20,6 +24,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
+import org.feedworker.client.frontend.component.textChat;
 import org.feedworker.client.frontend.events.ListEvent;
 import org.feedworker.client.frontend.events.ListEventListener;
 import org.feedworker.client.frontend.events.TabbedPaneEvent;
@@ -28,9 +33,9 @@ import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 
 import org.jfacility.java.lang.Lang;
+import org.jfacility.javax.swing.ButtonTabComponent;
 
 import org.jdesktop.swingx.JXList;
-import org.jfacility.javax.swing.ButtonTabComponent;
 
 /**
  *
@@ -67,7 +72,9 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
 
     @Override
     void initializeButtons() {
-        JButton jbConnect = new JButton("Connect Azzurra");
+        JButton jbConnect = new JButton(core.getIconConnectIrc());
+        jbConnect.setBorder(BORDER);
+        jbConnect.setToolTipText("Connessione al server irc Azzurra");
         jbConnect.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -75,7 +82,9 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
             }
         });
         
-        JButton jbDisconnect = new JButton("Disconnect Azzurra");
+        JButton jbDisconnect = new JButton(core.getIconDisconnect());
+        jbDisconnect.setBorder(BORDER);
+        jbDisconnect.setToolTipText("Disconnessione da Irc Azzurra");
         jbDisconnect.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -85,7 +94,9 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
             }
         });
         
-        JButton jbJoinItaliansubs = new JButton("Join #italiansubs");
+        JButton jbJoinItaliansubs = new JButton(core.getIconJoinItaliansubs());
+        jbJoinItaliansubs.setBorder(BORDER);
+        jbJoinItaliansubs.setToolTipText("Entra nel canale #italiansubs");
         jbJoinItaliansubs.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -93,7 +104,9 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
             }
         });
         
-        JButton jbJoinItasaCastle = new JButton("Join #itasa-castle");
+        JButton jbJoinItasaCastle = new JButton(core.getIconJoinItasaCastle());
+        jbJoinItasaCastle.setBorder(BORDER);
+        jbJoinItasaCastle.setToolTipText("Entra nel canale #itasa-castle");
         jbJoinItasaCastle.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -102,6 +115,8 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
         });
         
         JButton jbRenameNick = new JButton("Cambia nick");
+        jbRenameNick.setBorder(BORDER);
+        jbRenameNick.setToolTipText("Cambia nick");
         jbRenameNick.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -113,11 +128,17 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
             }
         });
         
-        jpAction.add(jbConnect);
-        jpAction.add(jbDisconnect);
-        jpAction.add(jbJoinItaliansubs);
-        jpAction.add(jbJoinItasaCastle);
-        jpAction.add(jbRenameNick);
+        int x = 0;
+        jpAction.add(jbConnect, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbDisconnect, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbJoinItaliansubs, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbJoinItasaCastle, gbcAction);
+        gbcAction.gridx = ++x;
+        jpAction.add(jbRenameNick, gbcAction);
+        gbcAction.gridx = ++x;
     }
     
     private void connect(){
@@ -155,16 +176,16 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
         if (evt.getType().equals("quit")){
             String nick = evt.getMsg().split(" ")[0].toString();
             if (chanItaliansubs!=null && chanItaliansubs.checkNick(nick))
-                chanItaliansubs.addMsgTextPane(evt.getMsg());
+                chanItaliansubs.addChatMessage(evt.getMsg());
             if (chanItasaCastle!=null && chanItasaCastle.checkNick(nick))
-                chanItasaCastle.addMsgTextPane(evt.getMsg());
+                chanItasaCastle.addChatMessage(evt.getMsg());
         }
         if (evt.getType().equals("nick")){
             String nick = evt.getMsg().split(" ")[0].toString();
             if (chanItaliansubs!=null && chanItaliansubs.checkNick(nick))
-                chanItaliansubs.addMsgTextPane(evt.getMsg());
+                chanItaliansubs.addChatMessage(evt.getMsg());
             if (chanItasaCastle!=null && chanItasaCastle.checkNick(nick))
-                chanItasaCastle.addMsgTextPane(evt.getMsg());
+                chanItasaCastle.addChatMessage(evt.getMsg());
         }
     }
 
@@ -223,7 +244,6 @@ class paneConsole extends paneAbstract implements TextPaneEventListener{
     void initializePanel() {
         text = new JTextPane();
         text.setEditable(false);
-        text.setContentType("text/html");
         sd = (StyledDocument) text.getDocument();
         jpCenter.add(new JScrollPane(text), BorderLayout.CENTER);
     }
@@ -232,11 +252,33 @@ class paneConsole extends paneAbstract implements TextPaneEventListener{
     void initializeButtons() {}
 }
 
-class paneQuery extends paneConsole{
+
+class paneQuery extends paneAbstract implements TextPaneEventListener{
     private JTextField textfield;
+    private textChat chat;
     
     public paneQuery(String name) {
         super(name);
+        initializePanel();
+        core.setTextPaneListener(this);
+    }
+    
+    private void sendMessage(){
+        String text = textfield.getText();
+        if (Lang.verifyTextNotNull(text)){
+            proxy.sendIrcMessage(getName(), text);
+            addChatMessage(text);
+            textfield.setText(null);
+        }
+    }
+
+    @Override
+    void initializePanel() {
+        remove(jpAction);
+        
+        chat = new textChat();
+        jpCenter.add(new JScrollPane(chat), BorderLayout.CENTER);
+        
         textfield = new JTextField();
         textfield.addKeyListener(new KeyAdapter(){
             @Override
@@ -245,27 +287,68 @@ class paneQuery extends paneConsole{
                     sendMessage();
             }
         });
+        
+        JPanel pane = new JPanel();
+        pane.setLayout(new BorderLayout());
         textfield.setFocusable(true);
-        add(textfield, BorderLayout.SOUTH);
+        pane.add(textfield, BorderLayout.CENTER);
+        pane.add(getPaneSmiley(),BorderLayout.SOUTH);
+        add(pane, BorderLayout.SOUTH);
     }
     
-    private void sendMessage(){
-        String text = textfield.getText();
-        if (Lang.verifyTextNotNull(text)){
-            proxy.sendIrcMessage(getName(), text);
-            addMsgTextPane(text);
-            textfield.setText(null);
+    private JPanel getPaneSmiley(){
+        JPanel jpSmiley = new JPanel();
+        Iterator<String> string = proxy.getMapEmoticons().keySet().iterator();
+        Iterator<ImageIcon> image = proxy.getMapEmoticons().values().iterator();
+        while (string.hasNext()){
+            String key = string.next();
+            ImageIcon value = image.next();
+            final JLabel label = new JLabel(value);
+            label.setName(key);
+            label.setToolTipText(key);
+            jpSmiley.add(label);
+            label.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    addTextSmiley(label.getName());
+                }
+            });
+        }
+        return jpSmiley;
+    }
+    
+    void addChatMessage(String msg){
+        try {
+            chat.addMessage(msg + " \n");
+        } catch (BadLocationException ex) {
+            ex.printStackTrace();
         }
     }
     
+    public void addTextSmiley(String smiley){
+        textfield.setText(textfield.getText() + " " + smiley + " ");
+    }
+
+    @Override
+    public void objReceived(TextPaneEvent evt) {
+        if (evt.getType().equals(this.getName()))
+            addChatMessage(evt.getMsg());
+    }
+    
+    @Override
+    void initializeButtons() {}
 }
 
 class paneChan extends paneQuery implements ListEventListener{
     private JXList list;
     private DefaultListModel model;
+    private JLabel topic;
 
     public paneChan(String name) {
         super(name);
+        topic = new JLabel();
+        add(topic, BorderLayout.NORTH);
+        
         model = new DefaultListModel();
         list = new JXList(model);
 
@@ -348,7 +431,7 @@ class paneChan extends paneQuery implements ListEventListener{
         else if (model.removeElement("+"+nick)){}
     }
     
-    public boolean checkNick(String nick){
+    boolean checkNick(String nick){
         if (model.indexOf(nick)>-1)
             return true;
         else if (model.indexOf("@" + nick)>-1)
@@ -358,5 +441,9 @@ class paneChan extends paneQuery implements ListEventListener{
         else if (model.indexOf("+" + nick)>-1)
             return true;
         return false;
+    }
+    
+    void setTopic(String text){
+        topic.setText(text);
     }
 }

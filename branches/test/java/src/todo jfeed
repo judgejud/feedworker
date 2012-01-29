@@ -1,6 +1,7 @@
 IMPLEMENTARE
--fare caricamento xml sotto thread
--fare 1thread per il test connect samba
+*irc2: introdurre faccine(? come?)
+fare caricamento xml sotto thread
+fare 1thread per il test connect samba
 introdurre diverse tipologie di rinomina, eliminare la delete e fare il tuto come un'unica combobox operazione
 introdurre news itasa
 controllare che gli show con icon unknown sono stati aggiornati di icon
@@ -16,15 +17,14 @@ introdurre trama singola puntata (da che fonte?)
 evitare i doppioni delle serie nelle liste show
 inserire nel blog bottone copia link
 irc: highlights quando qlkn ha scritto 1msg 
-irc2: introdurre faccine(? come?)
 irc3: fare il sorted dei nick nel chan
 
 CORREZIONI:
 irc: sistemare cambio nick che fa "perdere" il permesso in chan, 
 controllare che non esca l'avviso della stampa se l'app è al primo avvio
--correggere il comparator negli show, con il tooltip della label che non corrisponde
--migliorare il fire alla reminder considerando la regola delete.
--The system cannot find the path specified. 
+correggere il comparator negli show, con il tooltip della label che non corrisponde
+migliorare il fire alla reminder considerando la regola delete.
+The system cannot find the path specified. 
 (download di 1sub che corrisponde alla regola ma non trova il path di destinazione, farlo andare in quello predefinito)
 org.feedworker.util.Samba.moveFromLocal(Samba.java:61)
 org.feedworker.core.DownloadThread.analyzeDest(DownloadThread.java:118)

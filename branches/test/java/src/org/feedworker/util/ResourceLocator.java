@@ -14,6 +14,7 @@ import org.jfacility.java.lang.SystemProperty;
 public class ResourceLocator {
     private static String curDir;
     private final static String RESOURCES = "/org/feedworker/resource/";
+    private final static String EMOTICONS = RESOURCES + "emoticon/";
     private final static String THUMBNAIL_SHOW = "thumbnail";
 
     /**
@@ -45,6 +46,10 @@ public class ResourceLocator {
      */
     public static String getResourcePath() {
         return RESOURCES;
+    }
+    
+    public static String getEmoticonPath() {
+        return EMOTICONS;
     }
 
     /**
