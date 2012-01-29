@@ -2,6 +2,7 @@ package org.feedworker.client.frontend.component;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -430,6 +431,7 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
         JEditorPane jep = new JEditorPane();
         jep.setContentType("text/html");
         jep.setText(model.getText());
+        jep.setFont(new Font("Arial", Font.PLAIN, 13));
         jep.setPreferredSize(new Dimension(900,150));
         final String url = model.getUrl();
         JButton jbBrowse = new JButton(GuiCore.getInstance().getIconWWW());

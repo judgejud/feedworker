@@ -3,14 +3,19 @@ package org.feedworker.client.frontend;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.TreeMap;
 
 import java.util.TreeSet;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -72,6 +77,10 @@ public class GuiCore {
     private final String IMAGE_TAB_EDIT = "tab_edit.png";
     private final String IMAGE_UNDO = "undo1.png";
     private final String IMAGE_WWW = "www.png";
+    private final String IMAGE_CONNECT_IRC = "irc.png";
+    private final String IMAGE_DISCONNECT = "disconnect.png";
+    private final String IMAGE_JOIN_ITALIANSUBS = "join_itasa.png";
+    private final String IMAGE_JOIN_ITASA_CASTLE = "join_castle.png";
     
     private final FileNameExtensionFilter fnfeZIP =
                                 new FileNameExtensionFilter("ZIP file", "zip");
@@ -82,6 +91,7 @@ public class GuiCore {
                                     new TreeMap<Object, taskpaneShowInfo>();
     private TreeSet<String> setListShows = new TreeSet<String>();
     private ApplicationSettings prop = proxy.getSettings();
+    private JPanel jpSmiley;
     
     public static GuiCore getInstance(){
         if (core==null)
@@ -531,6 +541,22 @@ public class GuiCore {
     
     public ImageIcon getIconWWW() {
         return Common.getResourceImageButton(IMAGE_WWW);
+    }
+    
+    public ImageIcon getIconConnectIrc() {
+        return Common.getResourceImageButton(IMAGE_CONNECT_IRC);
+    }
+    
+    public ImageIcon getIconDisconnect() {
+        return Common.getResourceImageButton(IMAGE_DISCONNECT);
+    }
+    
+    public ImageIcon getIconJoinItaliansubs() {
+        return Common.getResourceImageButton(IMAGE_JOIN_ITALIANSUBS);
+    }
+    
+    public ImageIcon getIconJoinItasaCastle() {
+        return Common.getResourceImageButton(IMAGE_JOIN_ITASA_CASTLE);
     }
     
     Image getIconFeedNew() {

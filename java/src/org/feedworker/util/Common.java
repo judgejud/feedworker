@@ -2,6 +2,7 @@ package org.feedworker.util;
 
 //IMPORT JAVA
 import java.awt.Image;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -190,6 +191,11 @@ public class Common {
 
     public static String getResourcePath(String name) {
         return ResourceLocator.getResourcePath() + name;
+    }
+    
+    public static ImageIcon getEmoticon(String name){
+        URL u = ResourceLocator.convertStringToURL(ResourceLocator.getEmoticonPath() + name);
+        return new ImageIcon(u);
     }
     
     public static int getStatus(String text){

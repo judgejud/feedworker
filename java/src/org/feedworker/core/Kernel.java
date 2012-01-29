@@ -1300,6 +1300,7 @@ public class Kernel implements PropertyChangeListener {
     }
     
     public void connectIrc() {
+        Emoticon.getInstance();
         String nick = prop.getIrcNick();
         if (!Lang.verifyTextNotNull(nick))
             nick = "GuestFeedworker";

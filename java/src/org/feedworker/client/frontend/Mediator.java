@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import org.feedworker.client.ApplicationSettings;
@@ -22,6 +23,7 @@ import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 
 import com.sun.syndication.io.FeedException;
+import org.feedworker.object.Emoticon;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -49,7 +51,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "456 by "
+                + "457 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -398,5 +400,9 @@ public class Mediator {
 
     public void changeIrcNick(String nick) {
         core.renameIrcNick(nick);
+    }
+
+    public TreeMap<String, ImageIcon> getMapEmoticons() {
+        return Emoticon.getInstance().getMap();
     }
 }
