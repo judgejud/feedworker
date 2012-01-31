@@ -23,6 +23,7 @@ import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 
 import com.sun.syndication.io.FeedException;
+import java.util.Iterator;
 import org.feedworker.object.Emoticon;
 
 /**
@@ -51,7 +52,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "457 by "
+                + "459 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -401,8 +402,12 @@ public class Mediator {
     public void changeIrcNick(String nick) {
         core.renameIrcNick(nick);
     }
-
-    public TreeMap<String, ImageIcon> getMapEmoticons() {
-        return Emoticon.getInstance().getMap();
+    
+    public Iterator<String> getIteratorEmoString(){
+        return Emoticon.getInstance().getEmoString();
+    }
+    
+    public Iterator<ImageIcon> getIteratorEmoIcon(){
+        return Emoticon.getInstance().getEmoIcon();
     }
 }

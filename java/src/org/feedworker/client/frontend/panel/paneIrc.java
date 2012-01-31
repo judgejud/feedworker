@@ -1,6 +1,7 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -24,7 +25,7 @@ import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
-import org.feedworker.client.frontend.component.textChat;
+import org.feedworker.client.frontend.component.editorChat;
 import org.feedworker.client.frontend.events.ListEvent;
 import org.feedworker.client.frontend.events.ListEventListener;
 import org.feedworker.client.frontend.events.TabbedPaneEvent;
@@ -67,7 +68,15 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
     void initializePanel() {
         tab = new JTabbedPane();
         jpCenter.add(tab);
-        jpConsole = new paneConsole(AZZURRA);
+        
+        tab.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                int i = tab.getSelectedIndex();
+                tab.setForegroundAt(i, Color.black);
+                
+            }
+        });
     }
 
     @Override
@@ -155,9 +164,11 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
                 String name = "#italiansubs";
                 chanItaliansubs = new paneChan(name);
                 tab.addTab(name, chanItaliansubs);
+                tab.setSelectedComponent(chanItaliansubs);
                 proxy.joinIrcChan(name);
             }
-        }
+        } else 
+            proxy.printAlert("Effettuare prima la connessione ad irc");
     }
     
     private void joinItasaCastle(){
@@ -166,25 +177,26 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
                 String name = "#itasa-castle";
                 chanItasaCastle = new paneChan(name);
                 tab.addTab(name, chanItasaCastle);
+                tab.setSelectedComponent(chanItasaCastle);
                 proxy.joinIrcChan(name);
             }
-        }
+        } else 
+            proxy.printAlert("Effettuare prima la connessione ad irc");
     }
 
     @Override
     public void objReceived(TextPaneEvent evt) {
         if (evt.getType().equals("quit")){
             String nick = evt.getMsg().split(" ")[0].toString();
-            if (chanItaliansubs!=null && chanItaliansubs.checkNick(nick))
+            if (chanItaliansubs!=null && (chanItaliansubs.checkNick(nick)!=null))
                 chanItaliansubs.addChatMessage(evt.getMsg());
-            if (chanItasaCastle!=null && chanItasaCastle.checkNick(nick))
+            if (chanItasaCastle!=null && chanItasaCastle.checkNick(nick)!=null)
                 chanItasaCastle.addChatMessage(evt.getMsg());
-        }
-        if (evt.getType().equals("nick")){
+        } else if (evt.getType().equals("nick")){
             String nick = evt.getMsg().split(" ")[0].toString();
-            if (chanItaliansubs!=null && chanItaliansubs.checkNick(nick))
+            if (chanItaliansubs!=null && chanItaliansubs.checkNick(nick)!=null)
                 chanItaliansubs.addChatMessage(evt.getMsg());
-            if (chanItasaCastle!=null && chanItasaCastle.checkNick(nick))
+            if (chanItasaCastle!=null && chanItasaCastle.checkNick(nick)!=null)
                 chanItasaCastle.addChatMessage(evt.getMsg());
         }
     }
@@ -255,7 +267,7 @@ class paneConsole extends paneAbstract implements TextPaneEventListener{
 
 class paneQuery extends paneAbstract implements TextPaneEventListener{
     private JTextField textfield;
-    private textChat chat;
+    private editorChat chat;
     
     public paneQuery(String name) {
         super(name);
@@ -267,7 +279,7 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
         String text = textfield.getText();
         if (Lang.verifyTextNotNull(text)){
             proxy.sendIrcMessage(getName(), text);
-            addChatMessage(text);
+            addChatMessage("- " + text);
             textfield.setText(null);
         }
     }
@@ -276,7 +288,7 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
     void initializePanel() {
         remove(jpAction);
         
-        chat = new textChat();
+        chat = new editorChat();
         jpCenter.add(new JScrollPane(chat), BorderLayout.CENTER);
         
         textfield = new JTextField();
@@ -298,8 +310,8 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
     
     private JPanel getPaneSmiley(){
         JPanel jpSmiley = new JPanel();
-        Iterator<String> string = proxy.getMapEmoticons().keySet().iterator();
-        Iterator<ImageIcon> image = proxy.getMapEmoticons().values().iterator();
+        Iterator<String> string = proxy.getIteratorEmoString();
+        Iterator<ImageIcon> image = proxy.getIteratorEmoIcon();
         while (string.hasNext()){
             String key = string.next();
             ImageIcon value = image.next();
@@ -331,8 +343,15 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
 
     @Override
     public void objReceived(TextPaneEvent evt) {
-        if (evt.getType().equals(this.getName()))
+        if (evt.getType().equals(this.getName())){
             addChatMessage(evt.getMsg());
+            if (getParent() instanceof JTabbedPane){
+                JTabbedPane tab = (JTabbedPane) getParent();
+                int i = tab.indexOfTab(getName());
+                if (tab.getSelectedIndex()!=i)
+                    tab.setForegroundAt(i, Color.blue);  
+            }
+        }
     }
     
     @Override
@@ -342,16 +361,12 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
 class paneChan extends paneQuery implements ListEventListener{
     private JXList list;
     private DefaultListModel model;
-    private JLabel topic;
 
     public paneChan(String name) {
         super(name);
-        topic = new JLabel();
-        add(topic, BorderLayout.NORTH);
-        
+
         model = new DefaultListModel();
         list = new JXList(model);
-
         list.addMouseListener(new MouseAdapter() {
         @Override
             public void mouseReleased(MouseEvent ev) {
@@ -416,9 +431,10 @@ class paneChan extends paneQuery implements ListEventListener{
                 removeNick(evt.getNick());
             else if (oper.equalsIgnoreCase("nick")){
                 String[] nick = evt.getNick().split(" ");
-                if (checkNick(nick[0])){
+                String check = checkNick(nick[0]);
+                if (check!=null){
                     removeNick(nick[0]);
-                    model.addElement(nick[1]);
+                    model.addElement(check+nick[1]);
                 }
             }
         }
@@ -431,19 +447,15 @@ class paneChan extends paneQuery implements ListEventListener{
         else if (model.removeElement("+"+nick)){}
     }
     
-    boolean checkNick(String nick){
+    String checkNick(String nick){
         if (model.indexOf(nick)>-1)
-            return true;
+            return "";
         else if (model.indexOf("@" + nick)>-1)
-            return true;
+            return "@";
         else if (model.indexOf("%" + nick)>-1)
-            return true;
+            return "%";
         else if (model.indexOf("+" + nick)>-1)
-            return true;
-        return false;
-    }
-    
-    void setTopic(String text){
-        topic.setText(text);
+            return "+";
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package org.feedworker.object;
 
+import java.util.Iterator;
 import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
@@ -39,8 +40,12 @@ public class Emoticon {
         map.put(":S", Common.getEmoticon("worried.gif"));
         map.put(":Y", Common.getEmoticon("yawn.gif"));
     }
-
-    public TreeMap<String, ImageIcon> getMap() {
-        return map;
+    
+    public Iterator<String> getEmoString(){
+        return map.keySet().iterator();
+    }
+    
+    public Iterator<ImageIcon> getEmoIcon(){
+        return map.values().iterator();
     }
 }

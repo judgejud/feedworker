@@ -1,7 +1,6 @@
 package org.feedworker.client.frontend.component;
 
 import java.util.Iterator;
-import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
@@ -21,20 +20,18 @@ import org.feedworker.client.frontend.Mediator;
  *
  * @author luca judge
  */
-public class textChat extends JEditorPane{
+public class editorChat extends JEditorPane{
     private StyledDocument sd;
     private int start, end;
     private String text;    
-    private TreeMap<String, ImageIcon> map = null;
+    
 
-    public textChat() {
+    public editorChat() {
         super();
         setEditorKit(new StyledEditorKit());
         setEditable(false);
         sd = (StyledDocument) getDocument();
-        map = Mediator.getIstance().getMapEmoticons();
-        initListener();
-        
+        initListener();        
     }
     
     public void addMessage(String message) throws BadLocationException{
@@ -50,11 +47,11 @@ public class textChat extends JEditorPane{
                     @Override
                     public void run() {
                         if (e.getDocument() instanceof StyledDocument) {
-                            Iterator<String> iter = map.keySet().iterator();
+                            Iterator<String> iterString = Mediator.getIstance().getIteratorEmoString();
+                            Iterator<ImageIcon> iterIcon = Mediator.getIstance().getIteratorEmoIcon();
                             try {
-                                while(iter.hasNext()){
-                                    String key = iter.next();
-                                    searchText(e, key, map.get(key));
+                                while(iterString.hasNext()){
+                                    searchText(e, iterString.next(), iterIcon.next());
                                 }
                             } catch (BadLocationException e1) {
                                 e1.printStackTrace();
@@ -71,18 +68,20 @@ public class textChat extends JEditorPane{
     }
     
     private void searchText(DocumentEvent e, String search, ImageIcon img) throws BadLocationException{
-        start = Utilities.getRowStart(this, Math.max(0, e.getOffset()-1));    
-        end = Utilities.getWordStart(this, e.getOffset() + e.getLength());
-        text = sd.getText(start, end-start);
-        int i = text.indexOf(search);
-        while(i>=0) {
-            SimpleAttributeSet attrs = new SimpleAttributeSet(sd.getCharacterElement(start+i).getAttributes());
-            if (StyleConstants.getIcon(attrs) == null) {
-                StyleConstants.setIcon(attrs, img);
-                sd.remove(start+i, 2);
-                sd.insertString(start+i, search, attrs);
+        try{
+            start = Utilities.getRowStart(this, Math.max(0, e.getOffset()-1));    
+            end = Utilities.getWordStart(this, e.getOffset() + e.getLength());
+            text = sd.getText(start, end-start);
+            int i = text.indexOf(search);
+            while(i>=0) {
+                SimpleAttributeSet attrs = new SimpleAttributeSet(sd.getCharacterElement(start+i).getAttributes());
+                if (StyleConstants.getIcon(attrs) == null) {
+                    StyleConstants.setIcon(attrs, img);
+                    sd.remove(start+i, 2);
+                    sd.insertString(start+i, search, attrs);
+                }
+                i = text.indexOf(search, i+2);
             }
-            i = text.indexOf(search, i+2);
-        }
+        } catch (NullPointerException ex){}
     }
 }

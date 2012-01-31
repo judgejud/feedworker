@@ -115,7 +115,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         mainJTP.addTab("Itasa", jpItasa);
         if (prop.isSubsfactoryOption()) {
             jpSubsfactory = paneSubsfactory.getPanel();
-            mainJTP.addTab("Subsfactory", jpSubsfactory);
+            checkAddTab(jpSubsfactory, false, null);
         }
         if (prop.isEnablePaneTorrent())
             checkAddTab(jpTorrent, false, null);

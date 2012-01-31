@@ -1,5 +1,4 @@
 IMPLEMENTARE
-*irc2: introdurre faccine(? come?)
 fare caricamento xml sotto thread
 fare 1thread per il test connect samba
 introdurre diverse tipologie di rinomina, eliminare la delete e fare il tuto come un'unica combobox operazione
@@ -16,11 +15,12 @@ introdurre myitasa
 introdurre trama singola puntata (da che fonte?)
 evitare i doppioni delle serie nelle liste show
 inserire nel blog bottone copia link
-irc: highlights quando qlkn ha scritto 1msg 
+irc2: tasto tabulazione che fa scegliere il nick a cui riferirsi
 irc3: fare il sorted dei nick nel chan
+irc4: timestamp del msg
+irc5: type del msg
 
 CORREZIONI:
-irc: sistemare cambio nick che fa "perdere" il permesso in chan, 
 controllare che non esca l'avviso della stampa se l'app è al primo avvio
 correggere il comparator negli show, con il tooltip della label che non corrisponde
 migliorare il fire alla reminder considerando la regola delete.

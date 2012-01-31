@@ -155,8 +155,12 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     }
 
     @Override
-    public void onPrivmsg(String target, IRCUser user, String msg) {        
-        String message = "<" + user.getNick() + ">" + ": " + msg;
+    public void onPrivmsg(String target, IRCUser user, String msg) {
+        String message;
+        if (msg.startsWith("ACTION"))
+            message = "* " + user.getNick() + msg.substring(6);
+        else
+            message = "<" + user.getNick() + ">: " + msg;
         if (IRCUtil.isChan(target))
             ManageListener.fireTextPaneEvent(this, message, target, false);
         else{
@@ -173,10 +177,9 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
     
     @Override
     public void onReply(int num, String value, String msg) {
-        /*
         if (num == TOPIC)
             ManageListener.fireTextPaneEvent(this, msg+"\n", last_join_chan, false);
-        else*/ if (num == USERLIST){
+        else if (num == USERLIST){
             Object[] array = msg.split(" ");
             Arrays.sort(array);
             ManageListener.fireListIrcEvent(this, last_join_chan, "join", array);
