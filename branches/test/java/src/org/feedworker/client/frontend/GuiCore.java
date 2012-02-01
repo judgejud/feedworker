@@ -3,17 +3,13 @@ package org.feedworker.client.frontend;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.TreeMap;
 
 import java.util.TreeSet;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -81,6 +77,7 @@ public class GuiCore {
     private final String IMAGE_DISCONNECT = "disconnect.png";
     private final String IMAGE_JOIN_ITALIANSUBS = "join_itasa.png";
     private final String IMAGE_JOIN_ITASA_CASTLE = "join_castle.png";
+    private final String IMAGE_NICK = "nick.png";
     
     private final FileNameExtensionFilter fnfeZIP =
                                 new FileNameExtensionFilter("ZIP file", "zip");
@@ -565,6 +562,10 @@ public class GuiCore {
     
     Image getIconFeedNormal() {
         return Common.getResourceIcon(IMAGE_FEED_NORMAL);
+    }
+    
+    public ImageIcon getIconNick() {
+        return Common.getResourceImageButton(IMAGE_NICK);
     }
     
     String getOperationEnableButton() {
