@@ -123,7 +123,7 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
             }
         });
         
-        JButton jbRenameNick = new JButton("Cambia nick");
+        JButton jbRenameNick = new JButton(core.getIconNick());
         jbRenameNick.setBorder(BORDER);
         jbRenameNick.setToolTipText("Cambia nick");
         jbRenameNick.addMouseListener(new MouseAdapter() {

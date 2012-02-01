@@ -2,8 +2,8 @@ package org.feedworker.client;
 
 import java.awt.EventQueue;
 import java.awt.Image;
-
 import java.awt.Toolkit;
+
 import javax.swing.JOptionPane;
 
 import org.feedworker.client.frontend.frameMain;
@@ -93,7 +93,7 @@ public class FeedWorkerClient {
 
                     EventQueue.invokeLater(new Runnable() {
                         @Override
-                        public void run() {                        
+                        public void run() {    
                             splash.updateStartupState("Loading GUI ...");
                             frameMain jframe = new frameMain(
                                     (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight());

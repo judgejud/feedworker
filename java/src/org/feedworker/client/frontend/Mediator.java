@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
@@ -18,13 +19,12 @@ import org.feedworker.core.Kernel;
 import org.feedworker.core.ManageListener;
 import org.feedworker.core.RssParser;
 import org.feedworker.exception.ManageException;
+import org.feedworker.object.Emoticon;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 
 import com.sun.syndication.io.FeedException;
-import java.util.Iterator;
-import org.feedworker.object.Emoticon;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
