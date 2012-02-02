@@ -31,6 +31,7 @@ import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
 import org.feedworker.core.ManageListener;
 import org.feedworker.object.KeyRule;
+import org.feedworker.object.Operation;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
@@ -265,60 +266,47 @@ public class GuiCore {
             String season = jtable.getValueAt(r, ++c).toString();
             String quality = (String) jtable.getValueAt(r, ++c);
             String path = (String) jtable.getValueAt(r, ++c);
-            boolean rename = false, delete = false;
-            try {
-                rename = Boolean.parseBoolean(jtable.getValueAt(r, ++c).toString());
-            } catch (NullPointerException e) {
-            }
-            try {
-                delete = Boolean.parseBoolean(jtable.getValueAt(r, ++c).toString());
-            } catch (NullPointerException e) {
-            }
-            if (rename && delete) {
-                proxy.printAlert("Riga: " + r + " non possono coesistere entrambi "
-                                + "i flag true di rename e delete");
-                _break = true;
-                break;
-            } else {
-                if (Lang.verifyTextNotNull(name)) {
-                    if (delete || Lang.verifyTextNotNull(path)) {
-                        try {
-                            if (Lang.verifyTextNotNull(season)) {
-                                int s = Lang.stringToInt(season);
-                                season = Lang.intToString(s);
-                            } else {
-                                proxy.printAlert("Riga: " + r
-                                        + " immettere un numero alla stagione");
-                                _break = true;
-                                break;
-                            }
-                            KeyRule key = new KeyRule(name, season, quality);
-                            ValueRule value = new ValueRule(path, rename, delete);
-                            if (!temp.containsKey(key)) {
-                                temp.put(key, value);
-                            } else {
-                                proxy.printAlert("Riga: " + r + " trovato "
-                                        + "duplicato, si prega di correggerlo");
-                                _break = true;
-                                break;
-                            }
-                        } catch (NumberFormatException ex) {
-                            proxy.getError().launch(ex, getClass(), Lang.intToString(r));
+            String oper = (String) jtable.getValueAt(r, ++c);
+            if (oper==null)
+                oper = "";
+            if (Lang.verifyTextNotNull(name)) {
+                if (oper.equalsIgnoreCase(Operation.DELETE.toString()) || Lang.verifyTextNotNull(path)) {
+                    try {
+                        if (Lang.verifyTextNotNull(season)) {
+                            int s = Lang.stringToInt(season);
+                            season = Lang.intToString(s);
+                        } else {
+                            proxy.printAlert("Riga: " + r
+                                    + " immettere un numero alla stagione");
                             _break = true;
                             break;
                         }
-                    } else {
-                        proxy.printAlert("Riga: " + r
-                                + " immettere la destinazione per la regola/sub");
+                        KeyRule key = new KeyRule(name, season, quality);
+                        ValueRule value = new ValueRule(path, oper);
+                        if (!temp.containsKey(key)) {
+                            temp.put(key, value);
+                        } else {
+                            proxy.printAlert("Riga: " + r + " trovato "
+                                    + "duplicato, si prega di correggerlo");
+                            _break = true;
+                            break;
+                        }
+                    } catch (NumberFormatException ex) {
+                        proxy.getError().launch(ex, getClass(), Lang.intToString(r));
                         _break = true;
                         break;
                     }
                 } else {
                     proxy.printAlert("Riga: " + r
-                            + " immettere il nome della regola/sub/serie");
+                            + " immettere la destinazione per la regola/sub");
                     _break = true;
                     break;
                 }
+            } else {
+                proxy.printAlert("Riga: " + r
+                        + " immettere il nome della regola/sub/serie");
+                _break = true;
+                break;
             }
         } //end for
         if (!_break)

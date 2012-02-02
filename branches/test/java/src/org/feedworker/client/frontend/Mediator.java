@@ -25,6 +25,7 @@ import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 
 import com.sun.syndication.io.FeedException;
+import org.feedworker.object.Operation;
 
 /**
  * Classe mediatrice tra gui e kernel, detta anche kernel della gui.
@@ -52,7 +53,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "459 by "
+                + "461 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -182,6 +183,10 @@ public class Mediator {
 
     public String[] getQualityEnum() {
         return Quality.toArray();
+    }
+    
+    public String[] getOperationEnum() {
+        return Operation.toArray();
     }
 
     void bruteRefresh() {
