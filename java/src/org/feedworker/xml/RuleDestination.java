@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import org.feedworker.object.KeyRule;
+import org.feedworker.object.Operation;
 import org.feedworker.object.ValueRule;
 
 import org.jdom.Element;
@@ -26,6 +27,8 @@ public class RuleDestination extends AbstractXML{
     private final String TAG_RULE_PATH = "PATH";
     private final String TAG_RULE_RENAME = "RENAME";
     private final String TAG_RULE_DELETE = "DELETE";
+    private final String TAG_RULE_OPERATION = "OPERATION";
+    
     
     public RuleDestination(File f, boolean read) throws JDOMException, IOException{
         initialize(f, read);
@@ -42,50 +45,18 @@ public class RuleDestination extends AbstractXML{
             while (it.hasNext()) {
                 KeyRule key = (KeyRule) it.next();
                 ValueRule value = map.get(key);
-                addRule(key.getName(), key.getSeason(), key.getQuality(),
-                        value.getPath(), value.isRename(), value.isDelete());
+                Element rule = new Element(TAG_RULE_ROOT);
+                rule.addContent(new Element(TAG_RULE_NAME).setText(key.getName()));
+                rule.addContent(new Element(TAG_RULE_SEASON).setText(key.getSeason()));
+                rule.addContent(new Element(TAG_RULE_QUALITY).setText(key.getQuality()));
+                rule.addContent(new Element(TAG_RULE_PATH).setText(value.getPath()));
+                rule.addContent(new Element(TAG_RULE_OPERATION).setText(value.getOperation()));
+                root.addContent(rule);
             }
             write();
         }
     }
-
-    /**Aggiunge regola
-     *
-     * @param _name nome serie
-     * @param _season stagione
-     * @param _version versione
-     * @param _path percorso
-     */
-    private void addRule(String _name, String _season, String _version,
-            String _path, boolean _rename, boolean _delete) {
-        Element rule = new Element(TAG_RULE_ROOT);
-        Element name = new Element(TAG_RULE_NAME);
-        name.setText(_name);
-
-        Element season = new Element(TAG_RULE_SEASON);
-        season.setText(_season);
-
-        Element quality = new Element(TAG_RULE_QUALITY);
-        quality.setText(_version);
-
-        Element path = new Element(TAG_RULE_PATH);
-        path.setText(_path);
-
-        Element rename = new Element(TAG_RULE_RENAME);
-        rename.setText(Boolean.toString(_rename));
-
-        Element delete = new Element(TAG_RULE_DELETE);
-        delete.setText(Boolean.toString(_delete));
-
-        rule.addContent(name);
-        rule.addContent(season);
-        rule.addContent(quality);
-        rule.addContent(path);
-        rule.addContent(rename);
-        rule.addContent(delete);
-        root.addContent(rule);
-    }
-
+    
     /**Inizializza la lettura dell'xml e restituisce la map ordinata come
      * treemap
      *
@@ -107,15 +78,26 @@ public class RuleDestination extends AbstractXML{
                 String season = rule.getChild(TAG_RULE_SEASON).getText();
                 String quality = rule.getChild(TAG_RULE_QUALITY).getText();
                 String path = rule.getChild(TAG_RULE_PATH).getText();
-                boolean rename = false, delete = false;
+                String operation;
                 try{
-                    rename = Boolean.parseBoolean(rule.getChild(TAG_RULE_RENAME).getText());
-                } catch (NullPointerException npe) {}
-                try{
-                    delete = Boolean.parseBoolean(rule.getChild(TAG_RULE_DELETE).getText());
-                } catch (NullPointerException npe) {}
-                map.put(new KeyRule(name, season, quality), new ValueRule(path, rename, delete));
-                matrix.add(new Object[]{name, season, quality, path, rename,delete});
+                    operation = rule.getChild(TAG_RULE_OPERATION).getText();
+                } catch (NullPointerException npe) {
+                    boolean rename = false, delete = false;
+                    try{
+                        rename = Boolean.parseBoolean(rule.getChild(TAG_RULE_RENAME).getText());
+                    } catch (NullPointerException np) {}
+                    try{
+                        delete = Boolean.parseBoolean(rule.getChild(TAG_RULE_DELETE).getText());
+                    } catch (NullPointerException np) {}
+                    if (rename)
+                        operation = Operation.TRUNCATE.toString();
+                    else if (delete)
+                        operation = Operation.DELETE.toString();
+                    else 
+                        operation = null;
+                }
+                map.put(new KeyRule(name, season, quality), new ValueRule(path, operation));
+                matrix.add(new Object[]{name, season, quality, path, operation});
             }
         }
         global.add(map);

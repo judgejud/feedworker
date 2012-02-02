@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -15,6 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import org.feedworker.client.frontend.table.tableSubtitleDest;
+
 import org.jfacility.javax.swing.Swing;
 
 /**
@@ -70,6 +72,16 @@ public class paneSubtitleDest extends paneAbstract {
             }
         });
         
+        JButton jbCloneRow = new JButton("clona riga");
+        jbCloneRow.setToolTipText("Crea duplicato riga selezionata della tabella");
+        jbCloneRow.setBorder(BORDER);
+        jbCloneRow.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                jbCloneRowMouseClicked();
+            }
+        });
+        
         JButton jbRemoveAll = new JButton(core.getIconRemoveAll());
         jbRemoveAll.setToolTipText("Rimuove tutte le serie dalla tabella");
         jbRemoveAll.setBorder(BORDER);
@@ -106,6 +118,8 @@ public class paneSubtitleDest extends paneAbstract {
         gbcAction.gridx = ++x;
         jpAction.add(jbRemoveRow, gbcAction);
         gbcAction.gridx = ++x;
+        jpAction.add(jbCloneRow, gbcAction);
+        gbcAction.gridx = ++x;
         jpAction.add(jbRemoveAll, gbcAction);
         gbcAction.gridx = ++x;
         jpAction.add(jbSaveRules, gbcAction);
@@ -141,7 +155,7 @@ public class paneSubtitleDest extends paneAbstract {
 
     private void jbAddRowMouseClicked() {
         DefaultTableModel dtm = (DefaultTableModel) jtable.getModel();
-        dtm.insertRow(0, new Object[]{null, 1, "normale", null, null, null, false});
+        dtm.insertRow(0, new Object[]{null, 1, "normale", null, null});
     }
 
     private void jbRemoveRowMouseClicked() {
@@ -166,5 +180,15 @@ public class paneSubtitleDest extends paneAbstract {
     private void jmiOpenFolderClicked(Point p){
         int row = jtable.rowAtPoint(p);
         proxy.openFolder(jtable.getValueAt(row, 3).toString());
+    }
+    
+    private void jbCloneRowMouseClicked() {
+        int row = jtable.getSelectedRow();
+        if (row > -1){
+            row = jtable.convertRowIndexToModel(row);
+            DefaultTableModel model = (DefaultTableModel)jtable.getModel();
+            Vector copy = (Vector)model.getDataVector().elementAt(row);
+            model.insertRow(0, (Vector)copy.clone());
+        }
     }
 }

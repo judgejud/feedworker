@@ -6,24 +6,18 @@ package org.feedworker.object;
  */
 public class ValueRule {
 
-    private String path;
-    private boolean rename, delete;
+    private String path, operation;
 
-    public ValueRule(String path, boolean ren, boolean del) {
+    public ValueRule(String path, String operation) {
         this.path = path;
-        this.rename = ren;
-        this.delete = del;
+        this.operation = operation;
+    }
+
+    public String getOperation() {
+        return operation;
     }
 
     public String getPath() {
         return path;
-    }
-
-    public boolean isRename() {
-        return rename;
-    }
-
-    public boolean isDelete() {
-        return delete;
     }
 }

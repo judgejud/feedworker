@@ -36,6 +36,7 @@ import org.feedworker.core.http.HttpAbstract;
 import org.feedworker.core.http.HttpItasa;
 import org.feedworker.core.Kernel;
 import org.feedworker.core.ManageListener;
+import org.feedworker.object.Operation;
 /**
  * 
  * @author luca
@@ -174,7 +175,7 @@ public class DownloadThread implements Runnable {
     
     private boolean deleteFile(KeyRule key, File filesub, String namesub){
         if (prop.isEnabledAdvancedDownload() && key!=null && 
-                                                mapRules.get(key).isDelete()){
+                mapRules.get(key).getOperation().equalsIgnoreCase(Operation.DELETE.toString())){
             filesub.delete();
             printAlert(namesub + " cancellato per la regola DELETE");
             return true;
@@ -269,7 +270,7 @@ public class DownloadThread implements Runnable {
 
     private String rename(KeyRule key, String namesub) throws NullPointerException{
         String newname = null;
-        if (mapRules.get(key).isRename()) {
+        if (mapRules.get(key).getOperation().equalsIgnoreCase(Operation.TRUNCATE.toString())){
             String from = key.getName().replaceAll(" ", ".") + ".";
             newname = namesub.split(SPLIT_SUB)[0].toLowerCase().replaceFirst(
                     from, "");
