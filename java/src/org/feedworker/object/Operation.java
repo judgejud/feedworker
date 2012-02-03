@@ -6,7 +6,7 @@ package org.feedworker.object;
  */
 public enum Operation {
     
-    DELETE("Elimina sub"), TRUNCATE("Tronca sub");
+    DELETE("Elimina sub"), TRUNCATE("Tronca sub"), EQUAL_VIDEO("Rinomina sub uguale nome video");
     
     private String oper;
 
@@ -20,6 +20,6 @@ public enum Operation {
     }
     
     public static String[] toArray(){
-        return new String[]{null, DELETE.toString(), TRUNCATE.toString()};
+        return new String[]{null, DELETE.toString(), TRUNCATE.toString(), EQUAL_VIDEO.toString()};
     }
 }

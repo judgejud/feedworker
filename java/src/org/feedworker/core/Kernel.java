@@ -32,9 +32,12 @@ import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.core.http.HttpOther;
 import org.feedworker.core.http.Https;
 import org.feedworker.core.http.HttpItasa;
-import org.feedworker.core.thread.ShowThread;
 import org.feedworker.core.thread.DownloadThread;
+import org.feedworker.core.thread.DownloadTorrentThread;
 import org.feedworker.core.thread.IcsThread;
+import org.feedworker.core.thread.RssBlogThread;
+import org.feedworker.core.thread.RssThread;
+import org.feedworker.core.thread.ShowThread;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.exception.ManageException;
 import org.feedworker.object.*;
@@ -57,9 +60,6 @@ import jcifs.smb.SmbException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.xmlrpc.XmlRpcException;
 
-import org.feedworker.core.thread.DownloadTorrentThread;
-import org.feedworker.core.thread.RssBlogThread;
-import org.feedworker.core.thread.RssThread;
 import org.jdom.JDOMException;
 
 import org.xml.sax.SAXException;
@@ -611,11 +611,9 @@ public class Kernel implements PropertyChangeListener {
         return id;
     }
 
-    /**
-     * Effettua l'inserimento dei link al download redirectory del synology
+    /**Effettua l'inserimento dei link al download redirectory del synology
      * 
-     * @param link
-     *            Arraylist di link
+     * @param link Arraylist di link
      */
     public void synoDownloadRedirectory(ArrayList<String> link) {
         HttpOther http = new HttpOther();
@@ -1516,26 +1514,3 @@ public class Kernel implements PropertyChangeListener {
         }
     }//end class ImportTaskList
 } //END class Kernel
-
-    // TODO: non usata, se sarà implementata, cambiare la parte di stampa
-    /**
-     * effuetta la stampa dei file con l'estensione e la directory in cui
-     * cercare
-     * 
-     * @param dir
-     *            directory su cui effettuare la ricerca
-     * @param ext
-     *            estensione dei file da cercare
-     */
-/*
-    private void listDir(String dir, String ext) {
-        // Get list of names
-        String[] list = new File(dir).list(new ExtensionFilter(ext));
-        // Sort it (Data Structuring chapter))
-        Arrays.sort(list);
-        for (int i = 0; i < list.length; i++) {
-            System.out.println(list[i]);
-        }
-    }
- * 
- */
