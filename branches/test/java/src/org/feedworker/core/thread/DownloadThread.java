@@ -79,7 +79,7 @@ public class DownloadThread implements Runnable {
                         if (autoItasa && !sub)
                             sub=true;
                     } else
-                        printAlert("Sessione scaduta");
+                        ManageListener.fireTextPaneEvent(this, "Sessione scaduta", TextPaneEvent.ALERT, true);
                 }
             } //end for
         } catch (UnsupportedEncodingException ex) {
@@ -168,9 +168,5 @@ public class DownloadThread implements Runnable {
         } catch (IOException ex) {
             error.launch(ex, null);
         }
-    }
-    
-    private void printAlert(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT, true);
     }
 }

@@ -2,14 +2,16 @@ package org.feedworker.client.frontend.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import java.util.Iterator;
+
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -73,8 +75,11 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
             @Override
             public void mouseClicked(MouseEvent evt) {
                 int i = tab.getSelectedIndex();
-                tab.setForegroundAt(i, Color.black);
-                
+                Component c = tab.getTabComponentAt(i);
+                if (c instanceof ButtonTabComponent)
+                    ((ButtonTabComponent)c).setForegroundTab(Color.black);
+                else 
+                    tab.setForegroundAt(i, Color.black);
             }
         });
     }
@@ -256,6 +261,7 @@ class paneConsole extends paneAbstract implements TextPaneEventListener{
     void initializePanel() {
         text = new JTextPane();
         text.setEditable(false);
+        text.setFont(new Font("Arial", Font.PLAIN, 13));
         sd = (StyledDocument) text.getDocument();
         jpCenter.add(new JScrollPane(text), BorderLayout.CENTER);
     }
@@ -348,8 +354,13 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
             if (getParent() instanceof JTabbedPane){
                 JTabbedPane tab = (JTabbedPane) getParent();
                 int i = tab.indexOfTab(getName());
-                if (tab.getSelectedIndex()!=i)
-                    tab.setForegroundAt(i, Color.blue);  
+                if (tab.getSelectedIndex()!=i){
+                    Component c = tab.getTabComponentAt(i);
+                    if (c instanceof ButtonTabComponent)
+                        ((ButtonTabComponent)c).setForegroundTab(Color.blue);
+                    else
+                        tab.setForegroundAt(i, Color.blue);  
+                }
             }
         }
     }

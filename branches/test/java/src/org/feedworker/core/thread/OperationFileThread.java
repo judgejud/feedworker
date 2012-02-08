@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.TreeMap;
 
 import org.feedworker.client.ApplicationSettings;
@@ -34,6 +35,10 @@ class OperationFileThread implements Runnable{
     private ManageException error = ManageException.getIstance();
     private TreeMap<KeyRule, ValueRule> mapRules;
     private ArrayList<File> arraySub;
+    private File filesub;
+    private String namesub;
+    private KeyRule key;
+    
 
     public OperationFileThread(TreeMap<KeyRule, ValueRule> mapRules, ArrayList<File> arraySub) {
         this.mapRules = mapRules;
@@ -56,9 +61,7 @@ class OperationFileThread implements Runnable{
                         prop.getCifsShareUsername(),
                         prop.getCifsSharePassword());
                 for (int i = 0; i < arraySub.size(); i++) {
-                    File filesub = arraySub.get(i);
-                    String namesub = filesub.getName();
-                    KeyRule key = parsingNamefile(namesub, SPLIT_SUB);
+                    setKey(i);
                     if (!deleteFile(key, filesub, namesub)){
                         dest = returnPath(key);
                         if (prop.isEnabledAdvancedDownload()){
@@ -67,21 +70,23 @@ class OperationFileThread implements Runnable{
                             } catch (NullPointerException e){}
                         } else 
                             dest = null;
-                        s.moveFromLocal(filesub, dest);
-                        if (newName != null) {
-                            String oldName = dest + File.separator + filesub.getName();
-                            s.moveFile(oldName, dest, newName);
+                        try{
+                            s.moveFromLocal(filesub, dest);
+                            if (newName != null) {
+                                String oldName = dest + File.separator + filesub.getName();
+                                s.moveFile(oldName, dest, newName);
+                            }
+                        } catch (IOException e){
+                            printAlert("percorso samba \"" +  dest + "\" non trovato");
+                            s.moveFromLocal(filesub, null);
+                            newName = null; 
                         }
-                        if (dest == null)
-                            dest = "";
-                        String msg;
                         if (newName==null)
-                            msg = "Estratto " + arraySub.get(i).getName()
-                                + " nella cartella condivisa samba\\" + dest ;
+                            printSub("Estratto " + arraySub.get(i).getName() + 
+                                    " nella cartella condivisa samba\\") ;
                         else
-                            msg = "Estratto " + arraySub.get(i).getName() + " e rinominato in "
-                                + newName + " nella cartella condivisa samba\\" + dest ;
-                        printSub(msg);
+                            printSub("Estratto " + arraySub.get(i).getName() + " e rinominato in "
+                                + newName + " nella cartella condivisa samba\\" + dest);
                     }
                 }
             } catch (SmbException ex) {
@@ -91,9 +96,7 @@ class OperationFileThread implements Runnable{
             }
         } else {
             for (int i = 0; i < arraySub.size(); i++) {
-                File filesub = arraySub.get(i);
-                String namesub = filesub.getName();
-                KeyRule key = parsingNamefile(namesub, SPLIT_SUB);
+                setKey(i);
                 if (!deleteFile(key, filesub, namesub)){
                     String dest = returnPath(key);
                     if (dest == null || !prop.isEnabledAdvancedDownload())
@@ -106,8 +109,14 @@ class OperationFileThread implements Runnable{
                         if (newName == null) {
                             Io.moveFile(filesub, dest);
                         } else {
-                            Io.moveFile(filesub, dest, newName);
-                            msg += " e rinominato in " + newName;
+                            try{
+                                Io.moveFile(filesub, dest, newName);
+                                msg += " e rinominato in " + newName;
+                            } catch (IOException e){
+                                Io.moveFile(filesub, prop.getSubtitleDestinationFolder());
+                                printAlert(dest + " non esistente, verificarlo.");
+                                dest = prop.getSubtitleDestinationFolder();
+                            }
                         }
                         msg += " nel seguente percorso: " + dest;
                         printSub(msg);
@@ -117,6 +126,12 @@ class OperationFileThread implements Runnable{
                 }
             }
         }
+    }
+    
+    private void setKey(int i){
+        filesub = arraySub.get(i);
+        namesub = filesub.getName();
+        key = parsingNamefile(namesub, SPLIT_SUB);
     }
     
     private boolean deleteFile(KeyRule key, File filesub, String namesub){
@@ -131,16 +146,40 @@ class OperationFileThread implements Runnable{
     
     private String rename(KeyRule key, String namesub) throws NullPointerException{
         String newname = null;
-        if (mapRules.get(key).getOperation().equalsIgnoreCase(Operation.TRUNCATE.toString())){
+        String oper = mapRules.get(key).getOperation();
+        if (oper.equalsIgnoreCase(Operation.TRUNCATE.toString())){
             String from = key.getName().replaceAll(" ", ".") + ".";
-            newname = namesub.split(SPLIT_SUB)[0].toLowerCase().replaceFirst(
-                    from, "");
+            newname = namesub.split(SPLIT_SUB)[0].toLowerCase().replaceFirst(from, "");
             String ext = namesub.substring(namesub.length() - 4);
             if (newname.substring(0, 1).equalsIgnoreCase("s"))
                 newname = newname.substring(4);
             else if (newname.substring(0, 1).equalsIgnoreCase("e"))
                 newname = newname.substring(1);
             newname += ext;
+        } else if (oper.equalsIgnoreCase(Operation.EQUAL_VIDEO.toString())){
+            //TODO
+            String path = returnPath(key);
+            String qual = key.getQuality();
+            System.out.println(namesub.toLowerCase());
+            if (prop.isLocalFolder()){
+                if (qual.equals(Quality.NORMAL.toString()) || 
+                        qual.equals(Quality.DVDRIP.toString())){
+                    List<String> list = listDir(path, "avi");
+                    for (int i=0; i<list.size(); i++){
+                       System.out.println(list.get(i).toLowerCase());
+                        //if (true)
+                        //    break;
+                    }
+                } else if (qual.equals(Quality._720p.toString()) || 
+                        qual.equals(Quality.WEB_DL.toString())){
+                    List<String> list = listDir(path, "mkv");
+                    for (int i=0; i<list.size(); i++){
+                       System.out.println(list.get(i).toLowerCase());
+                        //if (true)
+                        //    break;
+                    }
+                }
+            }
         }
         return newname;
     }
@@ -253,13 +292,8 @@ class OperationFileThread implements Runnable{
      * @param dir directory su cui effettuare la ricerca
      * @param ext estensione dei file da cercare
      */
-    private void listDir(String dir, String ext) {
-        // Get list of names
-        String[] list = new File(dir).list(new ExtensionFilter(ext));
-        Arrays.sort(list);
-        for (int i = 0; i < list.length; i++) {
-            System.out.println(list[i]);
-        }
+    private List<String> listDir(String dir, String ext) {
+        return Arrays.asList(new File(dir).list(new ExtensionFilter(ext)));
     }
     
     private void printSub(String msg) {

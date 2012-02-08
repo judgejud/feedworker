@@ -29,7 +29,6 @@ public class RuleDestination extends AbstractXML{
     private final String TAG_RULE_DELETE = "DELETE";
     private final String TAG_RULE_OPERATION = "OPERATION";
     
-    
     public RuleDestination(File f, boolean read) throws JDOMException, IOException{
         initialize(f, read);
     }

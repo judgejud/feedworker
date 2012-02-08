@@ -1,5 +1,6 @@
 package org.feedworker.client.frontend.component;
 
+import java.awt.Font;
 import java.util.Iterator;
 
 import javax.swing.ImageIcon;
@@ -28,6 +29,7 @@ public class editorChat extends JEditorPane{
 
     public editorChat() {
         super();
+        setFont(new Font("Arial", Font.PLAIN, 13));
         setEditorKit(new StyledEditorKit());
         setEditable(false);
         sd = (StyledDocument) getDocument();
