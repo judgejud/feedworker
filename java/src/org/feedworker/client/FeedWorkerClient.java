@@ -31,7 +31,7 @@ public class FeedWorkerClient {
     private static Kernel core;
     private static Application feedWorker;
     private static ApplicationSettings feedWorkerSettings;
-    private static int iteration = 11;
+    private static int iteration = 10;
     private static boolean debug, autodownload;
 
     public static Application getApplication() {
@@ -84,8 +84,6 @@ public class FeedWorkerClient {
                     } catch (NotAvailableLookAndFeelException e) {
                         laf.setLookAndFeel();
                     }
-                    splash.updateStartupState("Loading Application settings ...");
-                    ApplicationSettings.getIstance();
                     splash.updateStartupState("Preparing Application logging ...");
                     Logging.getIstance();
                     splash.updateStartupState("Running ...");
@@ -102,9 +100,10 @@ public class FeedWorkerClient {
                             core.loadItasaSeries();
                             splash.updateStartupState("Initializing RSS...");
                             core.runRss(auto);
-                            core.searchDay(0);
+                            if (!feedWorkerSettings.isApplicationFirstTimeUsed())
+                                core.searchDay(0);
                             splash.close();
-                            if (!ApplicationSettings.getIstance().isEnabledIconizedRun())
+                            if (!feedWorkerSettings.isEnabledIconizedRun())
                                 jframe.setVisible(true);
                             else
                                 jframe.initializeSystemTray();

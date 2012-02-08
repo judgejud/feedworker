@@ -1,8 +1,10 @@
 IMPLEMENTARE
-fare caricamento xml sotto thread
+*introdurre diverse tipologi di rinomina
+inserire nel blog bottone copia link
 fare 1thread per il test connect samba
-introdurre diverse tipologie di rinomina, eliminare la delete e fare il tuto come un'unica combobox operazione
+irc1: timestamp del msg
 introdurre news itasa
+fare caricamento xml sotto thread
 controllare che gli show con icon unknown sono stati aggiornati di icon
 ripristino files backuppati
 destinazione avanzata in mixed mode
@@ -14,21 +16,14 @@ specificare altri suoni
 introdurre myitasa
 introdurre trama singola puntata (da che fonte?)
 evitare i doppioni delle serie nelle liste show
-inserire nel blog bottone copia link
 irc2: tasto tabulazione che fa scegliere il nick a cui riferirsi
 irc3: fare il sorted dei nick nel chan
-irc4: timestamp del msg
-irc5: type del msg
+irc4: type del msg
 
 CORREZIONI:
-controllare che non esca l'avviso della stampa se l'app è al primo avvio
+irc segnalare il fatto che per il privato l'utente è andato...
 correggere il comparator negli show, con il tooltip della label che non corrisponde
 migliorare il fire alla reminder considerando la regola delete.
-The system cannot find the path specified. 
-(download di 1sub che corrisponde alla regola ma non trova il path di destinazione, farlo andare in quello predefinito)
-org.feedworker.util.Samba.moveFromLocal(Samba.java:61)
-org.feedworker.core.DownloadThread.analyzeDest(DownloadThread.java:118)
-org.feedworker.core.DownloadThread.run(DownloadThread.java:224)
 
 PUNTI INTERROGATIVI
 aspectj? log4j?
@@ -40,3 +35,4 @@ properties sotto jfacility?
 http://thetvdb.com/wiki/index.php?title=Programmers_API?
 
 VERIFICARE LE IMPLEMENTAZIONI
+controllare che non esca l'avviso della stampa se l'app è al primo avvio
