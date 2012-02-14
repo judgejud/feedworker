@@ -12,10 +12,16 @@ import org.jfacility.java.lang.SystemProperty;
  * @author Luca
  */
 public class ResourceLocator {
+    private static final File FILE_RULE = new File("xml" + File.separator +"rules.xml");
+    private static final File FILE_CALENDAR = new File("xml" + File.separator +"calendar.xml");
+    private static final File FILE_REMINDER = new File("xml" + File.separator + "reminder.xml");
+    private static final File FILE_MYLIST = new File("xml" + File.separator + "mylist.xml");
+    private static final File FILE_ITASA = new File("xml" + File.separator + "itasa.xml");
+    private static final File FILE_LINK_ITASA = new File("xml" + File.separator + "link_itasa.xml");
+    private static final String RESOURCES = "/org/feedworker/resource/";
+    private static final String EMOTICONS = RESOURCES + "emoticon/";
+    private static final String THUMBNAIL_SHOW = "thumbnail";
     private static String curDir;
-    private final static String RESOURCES = "/org/feedworker/resource/";
-    private final static String EMOTICONS = RESOURCES + "emoticon/";
-    private final static String THUMBNAIL_SHOW = "thumbnail";
 
     /**
      * Restituisce il percorso di lavoro corrente comprensivo di primo
@@ -61,5 +67,29 @@ public class ResourceLocator {
      */
     public static URL convertStringToURL(String path) {
         return ResourceLocator.class.getResource(path);
+    }
+
+    public static File getFILE_CALENDAR() {
+        return FILE_CALENDAR;
+    }
+
+    public static File getFILE_ITASA() {
+        return FILE_ITASA;
+    }
+
+    public static File getFILE_LINK_ITASA() {
+        return FILE_LINK_ITASA;
+    }
+
+    public static File getFILE_MYLIST() {
+        return FILE_MYLIST;
+    }
+
+    public static File getFILE_REMINDER() {
+        return FILE_REMINDER;
+    }
+
+    public static File getFILE_RULE() {
+        return FILE_RULE;
     }
 }// end class

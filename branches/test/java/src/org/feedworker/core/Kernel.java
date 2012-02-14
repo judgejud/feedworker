@@ -60,6 +60,7 @@ import jcifs.smb.SmbException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.xmlrpc.XmlRpcException;
 
+import org.feedworker.exception.TvrageException;
 import org.jdom.JDOMException;
 
 import org.xml.sax.SAXException;
@@ -93,12 +94,12 @@ public class Kernel implements PropertyChangeListener {
             "http://www.italiansubs.net/index.php?option=com_info&Itemid=12&idserie=";
     private final String ITASA_CALENDAR_ICS =
                         "http://www.italiansubs.net/icalendar/calendars/itasa.ics";
-    private final File FILE_RULE = new File("rules.xml");
-    private final File FILE_CALENDAR = new File("calendar.xml");
-    private final File FILE_REMINDER = new File("reminder.xml");
-    private final File FILE_MYLIST = new File("mylist.xml");
-    private final File FILE_ITASA = new File("itasa.xml");
-    private final File FILE_LINK_ITASA = new File("link_itasa.xml");    
+    private final File FILE_RULE = ResourceLocator.getFILE_RULE();
+    private final File FILE_CALENDAR = ResourceLocator.getFILE_CALENDAR();
+    private final File FILE_REMINDER = ResourceLocator.getFILE_REMINDER();
+    private final File FILE_MYLIST = ResourceLocator.getFILE_MYLIST();
+    private final File FILE_ITASA = ResourceLocator.getFILE_ITASA();
+    private final File FILE_LINK_ITASA = ResourceLocator.getFILE_LINK_ITASA();
     // PRIVATE STATIC VARIABLES
     private static Kernel core = null;
     private static boolean debug_flag;
@@ -522,6 +523,7 @@ public class Kernel implements PropertyChangeListener {
     /** Carica gli xml */
     public void loadXml() {
         try {
+            checkPath(FILE_RULE);
             RuleDestination xmlSubDest = new RuleDestination(FILE_RULE, true);
             ArrayList temp = xmlSubDest.initializeReader();
             mapRules = (TreeMap<KeyRule, ValueRule>) temp.get(0);
@@ -534,6 +536,7 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass(), null);
         }
         try {
+            checkPath(FILE_CALENDAR);
             xmlCalendar = new Calendar(FILE_CALENDAR, true);
             ArrayList temp = xmlCalendar.readingDocument();
             tsIdCalendar = (TreeSet) temp.get(0);
@@ -546,6 +549,7 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass(), null);
         }
         try {
+            checkPath(FILE_REMINDER);
             xmlReminder = new Reminder(FILE_REMINDER, true);
             ArrayList<Object[]> temp = xmlReminder.readingDocument();
             if (temp.size() > 0) 
@@ -556,6 +560,7 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass(), null);
         }
         try {
+            checkPath(FILE_MYLIST);
             ListShow xml = new ListShow(FILE_MYLIST, true);
             TreeMap<String, Object[][]> map = xml.initializeReader();
             if (map!=null){
@@ -570,6 +575,7 @@ public class Kernel implements PropertyChangeListener {
             error.launch(ex, getClass(), null);
         }
         try {
+            checkPath(FILE_LINK_ITASA);
             ItasaOffline xml = new ItasaOffline(FILE_LINK_ITASA, true);
             String[][] array = xml.initializeReaderLink();
             if (array!=null && array.length > 0)
@@ -593,6 +599,16 @@ public class Kernel implements PropertyChangeListener {
             runItasaBlog(false);
         stopAndRestartTimer();
         printOk("Timer restart ok.");
+    }
+    
+    private void checkPath(File f) throws IOException{
+        if (!f.exists()){
+            File old = new File(f.getName());
+            File dir = new File(f.getParent());
+            if (!dir.exists())
+                dir.mkdir();
+            Io.moveFile(old, f.getParent());
+        }
     }
 
     private String getSynoId(InputStream is) {
@@ -1437,7 +1453,12 @@ public class Kernel implements PropertyChangeListener {
                     while (iter.hasNext() && !this.isCancelled()) {
                         Long index = iter.next();
                         id = tmRefresh.get(index);
-                        Object[] array = setArray(t, t.showInfo_byID(id), true);
+                        Object[] array;
+                        try {
+                            array = setArray(t, t.showInfo_byID(id), true);
+                        } catch (TvrageException te){
+                            array = setArrayException();
+                        }
                         if (debug_flag)
                             System.out.println(id + " " + array[1]);
                         xmlClone.removeShowTv(index.intValue() - 1);
@@ -1447,7 +1468,12 @@ public class Kernel implements PropertyChangeListener {
                     if (!this.isCancelled())
                         xmlCalendar.reverseDataCloning(xmlClone);
                 } else { // REFRESH SINGLE
-                    Object[] array = setArray(t, t.showInfo_byID(id), true);
+                    Object[] array;
+                    try {
+                        array = setArray(t, t.showInfo_byID(id), true);
+                    } catch (TvrageException te){
+                        array = setArrayException();
+                    }
                     xmlClone.removeShowTv(row-1);
                     xmlClone.addShowTV(array);
                     setProgress(++progress);
@@ -1467,6 +1493,27 @@ public class Kernel implements PropertyChangeListener {
                 error.launch(ex, null);
             }
             return null;
+        }
+        
+        private Object[] setArrayException(){
+            Object[] values = new Object[10];
+            values[0] = id;
+            values[6] = values[9] = null;
+            values[3] = values[4] = values[5] = values[7] = values[8] = "";
+            values[2] = -1;
+            try {
+                values[1] = XPathCalendar.queryIdShow(id);
+            } catch (SAXException ex) {
+                error.launch(ex, null);
+            } catch (ParserConfigurationException ex) {
+                error.launch(ex, null);
+            } catch (IOException ex) {
+                error.launch(ex, null);
+            } catch (XPathExpressionException ex) {
+                error.launch(ex, null);
+            }
+            printAlert("Tvrage errore: non esiste lo show " + values[1] + " avente id " + id);
+            return values;
         }
     } //end class RefreshTask
     

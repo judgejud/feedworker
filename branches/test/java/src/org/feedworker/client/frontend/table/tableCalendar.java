@@ -21,7 +21,7 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class tableCalendar extends tableAbstract{
-    private final String[] nameCols = {"ID tvrage", "Serie", "Stato", "Giorno", 
+    private final String[] nameCols = {"ID", "Serie", "Stato", "Giorno", 
                                         "Last Ep", "Titolo", "Data", 
                                         "Next Ep", "Titolo", "Data" };
 
@@ -71,7 +71,7 @@ public class tableCalendar extends tableAbstract{
 
     @Override
     protected void lockColumns() {
-        Swing.setTableDimensionLockColumn(this, 0, -1); //id tvrage
+        Swing.setTableDimensionLockColumn(this, 0, 40); //id tvrage
         Swing.setTableDimensionLockColumn(this, 2, -1); //stato
         Swing.setTableDimensionLockColumn(this, 3, 70);
         Swing.setTableDimensionLockColumn(this, 4, 65); //last ep

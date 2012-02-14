@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.feedworker.exception.TvrageException;
 import org.feedworker.util.Common;
 import org.feedworker.util.Translate;
 
@@ -40,8 +41,8 @@ public class TvRage extends AbstractQueryXML{
     private final String TAG_EP_NUM = "epnum";
 
     public ArrayList<Object[]> readingDetailedSearch_byShow(String show, boolean stop, 
-                                                                    boolean statusString)
-                throws JDOMException, IOException{
+                                                            boolean statusString)
+                                                    throws JDOMException, IOException{
         buildUrl(URL_TVRAGE_DETAILED_SEARCH + show);
         ArrayList<Object[]> matrix = null;
         if (sizeRootChildren()>0){
@@ -174,22 +175,25 @@ public class TvRage extends AbstractQueryXML{
         return values;
     }
     
-    public Object[] showInfo_byID(String id) throws JDOMException, IOException{
+    public Object[] showInfo_byID(String id) throws JDOMException, IOException, TvrageException{
         buildUrl(URL_TVRAGE_SHOW_INFO + id);
         Iterator iterator = document.getContent().iterator();
         Object[] show = new Object[5];
         show[0] = id;
-        while (iterator.hasNext()) {
-            Element item = (Element) iterator.next();
-            show[1] = item.getChild(TAG_SHOWNAME).getText();
-            show[2] = item.getChild(TAG_SEASON).getText();
-            show[3] = item.getChild(TAG_STATUS).getText();
-            try{
-                show[4] = Translate.Day(item.getChild(TAG_AIRDAY).getText());
-            } catch(NullPointerException e){
-                show[4] ="";
+        if (sizeRootChildren()>0){
+            while (iterator.hasNext()) {
+                Element item = (Element) iterator.next();
+                show[1] = item.getChild(TAG_SHOWNAME).getText();
+                show[2] = item.getChild(TAG_SEASON).getText();
+                show[3] = item.getChild(TAG_STATUS).getText();
+                try{
+                    show[4] = Translate.Day(item.getChild(TAG_AIRDAY).getText());
+                } catch(NullPointerException e){
+                    show[4] ="";
+                }
             }
-        }
+        } else
+            throw new TvrageException(id);
         return show;
     }
 /*    

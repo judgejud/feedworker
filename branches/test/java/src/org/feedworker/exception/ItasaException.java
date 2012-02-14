@@ -1,5 +1,4 @@
 package org.feedworker.exception;
-
 /**
  *
  * @author luca
