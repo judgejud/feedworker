@@ -15,17 +15,17 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.feedworker.util.Common;
+import org.feedworker.util.ResourceLocator;
 
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
+import org.xml.sax.SAXException;
 /**
  *
  * @author luca
  */
 public class XPathCalendar {
-    
-    private static final File FILE_NAME = new File("calendar.xml");
+    private static final File FILE_NAME = ResourceLocator.getFILE_CALENDAR();
     private static DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     private static XPath xpath = XPathFactory.newInstance().newXPath();
     private static TreeMap<Long, String> array;
@@ -49,6 +49,16 @@ public class XPathCalendar {
             } catch (ParseException e){
                 return null;
             }
+        } else
+            return null;
+    }
+    
+    public static String queryIdShow(String id) throws SAXException, 
+            ParserConfigurationException, IOException, XPathExpressionException{
+        if (FILE_NAME.exists()){
+            String query = "//SHOW[ID_TVRAGE='" + id + "']/SHOW/text()";
+            NodeList nodes = initializeXPathNode(query);
+            return nodes.item(0).getNodeValue();
         } else
             return null;
     }
