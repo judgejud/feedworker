@@ -36,6 +36,7 @@ public class paneCalendarDay extends paneAbstract implements CanvasEventListener
         remove(jpAction);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void objReceived(CanvasEvent evt) {
         ArrayList<String> date = (ArrayList<String>) evt.getArray()[0];

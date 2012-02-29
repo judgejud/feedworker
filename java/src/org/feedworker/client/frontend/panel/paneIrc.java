@@ -371,12 +371,12 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
 
 class paneChan extends paneQuery implements ListEventListener{
     private JXList list;
-    private DefaultListModel model;
+    private DefaultListModel<Object> model;
 
     public paneChan(String name) {
         super(name);
 
-        model = new DefaultListModel();
+        model = new DefaultListModel<Object>();
         list = new JXList(model);
         list.addMouseListener(new MouseAdapter() {
         @Override

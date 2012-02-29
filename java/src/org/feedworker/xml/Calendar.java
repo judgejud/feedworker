@@ -98,10 +98,11 @@ public class Calendar extends AbstractXML{
         return calendar;
     }
 
+    @SuppressWarnings("unchecked")
     public ArrayList readingDocument() throws JDOMException, IOException{
         ArrayList global = new ArrayList();
         ArrayList<Object[]> al = new ArrayList<Object[]>();
-        TreeSet ts = new TreeSet();
+        TreeSet<Object> ts = new TreeSet<Object>();
         if (sizeRootChildren() > 0){
             Iterator iter = iteratorRootChildren();
             while (iter.hasNext()) {

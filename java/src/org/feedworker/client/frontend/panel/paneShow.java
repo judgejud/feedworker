@@ -36,7 +36,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
                                     EditorPaneEventListener, TabbedPaneEventListener{
     private static paneShow jpanel = null;
     private JTabbedPane jtpShows, jtpList;
-    private JComboBox jcbShows;
+    private JComboBox<Object> jcbShows;
     private JPopupMenu menu;
     
     private paneShow(){
@@ -147,7 +147,7 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
 
     @Override
     void initializeButtons() {
-        jcbShows = new JComboBox();
+        jcbShows = new JComboBox<Object>();
         jcbShows.setMaximumRowCount(20);
         
         JButton jbAdd = new JButton(core.getIconAdd());

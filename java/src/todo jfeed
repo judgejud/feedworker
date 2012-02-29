@@ -21,7 +21,6 @@ irc3: fare il sorted dei nick nel chan
 irc4: type del msg
 
 CORREZIONI:
-*terminare la jdomexception per id non più esistente
 irc segnalare il fatto che per il privato l'utente è andato...
 correggere il comparator negli show, con il tooltip della label che non corrisponde
 migliorare il fire alla reminder considerando la regola delete.
