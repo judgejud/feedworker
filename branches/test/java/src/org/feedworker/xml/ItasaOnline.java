@@ -125,7 +125,7 @@ public class ItasaOnline extends AbstractQueryXML{
             String network = item.getChild(TAG_SHOW_NETWORK).getText();
             String _status = item.getChild(TAG_SHOW_STATUS).getText();
             String tvrage = item.getChild(TAG_SHOW_ID_TVRAGE).getText();
-            ArrayList genres = new ArrayList();
+            ArrayList<String> genres = new ArrayList<String>();
             Iterator it = item.getChild(TAG_SHOW_GENRES).getChildren().iterator();
             while (it.hasNext()){
                 genres.add(((Element) it.next()).getText());
@@ -195,7 +195,7 @@ public class ItasaOnline extends AbstractQueryXML{
    
     public ArrayList<Subtitle> subtitleListByIdShow(int idShow, String _version, int page) 
                         throws JDOMException, IOException, ItasaException, Exception{
-        ArrayList params = new ArrayList();
+        ArrayList<String> params = new ArrayList<String>();
         params.add(PARAM_SHOW_ID + idShow);
         if (_version!=null)
             params.add(PARAM_VERSION + _version);
@@ -222,7 +222,7 @@ public class ItasaOnline extends AbstractQueryXML{
 
     public ArrayList<Subtitle> subtitleSearch(String id, String _version, String query, int page) 
                                 throws JDOMException, IOException, ItasaException, Exception{
-        ArrayList params = new ArrayList();
+        ArrayList<String> params = new ArrayList<String>();
         params.add(PARAM_SHOW_ID + id);
         if (_version!=null)
             params.add(PARAM_VERSION + _version);
@@ -255,7 +255,7 @@ public class ItasaOnline extends AbstractQueryXML{
     
     public ItasaUser login(String user, String pwd) throws JDOMException, IOException, 
                                                                     ItasaException, Exception{
-        ArrayList params = new ArrayList();
+        ArrayList<String> params = new ArrayList<String>();
         if (user.contains("Ø"))
             user.replaceAll("Ø", "%C3%98");
         params.add(PARAM_USERNAME + user);
@@ -281,7 +281,7 @@ public class ItasaOnline extends AbstractQueryXML{
     
     //TODO: decidere come restituire gli show
     public void myItasaShows(String authcode) throws JDOMException, IOException, Exception{
-        ArrayList params = new ArrayList();
+        ArrayList<String> params = new ArrayList<String>();
         params.add(PARAM_AUTHCODE + authcode);
         connectHttps(composeUrl(URL_MYITASA_SHOWS, params));
         checkStatus();
@@ -298,7 +298,7 @@ public class ItasaOnline extends AbstractQueryXML{
     
     public ArrayList<String> myItasaShowsName(String authcode) 
                                     throws JDOMException, IOException, Exception{
-        ArrayList params = new ArrayList();
+        ArrayList<String> params = new ArrayList<String>();
         params.add(PARAM_AUTHCODE + authcode);
         connectHttps(composeUrl(URL_MYITASA_SHOWS, params));
         checkStatus();
@@ -313,7 +313,7 @@ public class ItasaOnline extends AbstractQueryXML{
     }
     
     public ArrayList<News> newsList(int page) throws JDOMException, IOException, Exception{
-        ArrayList params = new ArrayList();
+        ArrayList<String> params = new ArrayList<String>();
         if (page>0)
             params.add(PARAM_PAGE + page);
         connectHttps(composeUrl(URL_NEWS, params));
@@ -367,7 +367,7 @@ public class ItasaOnline extends AbstractQueryXML{
      * che impiega troppo
      */
     private void myItasaLastSub(String authcode) throws JDOMException, IOException, Exception{
-        ArrayList params = new ArrayList();
+        ArrayList<String> params = new ArrayList<String>();
         params.add(PARAM_AUTHCODE + authcode);
         connectHttps(composeUrl(URL_MYITASA_LAST_SUB, params));
     }
@@ -378,7 +378,7 @@ public class ItasaOnline extends AbstractQueryXML{
      * @param params parametri da aggiungere per la query
      * @return 
      */
-    private String composeUrl(final String url, ArrayList params){
+    private String composeUrl(final String url, ArrayList<String> params){
         String newUrl = url + API_KEY;
         if (params!=null)
             for (int i=0; i<params.size(); i++)

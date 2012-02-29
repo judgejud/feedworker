@@ -521,6 +521,7 @@ public class Kernel implements PropertyChangeListener {
     }
 
     /** Carica gli xml */
+    @SuppressWarnings("unchecked")
     public void loadXml() {
         try {
             checkPath(FILE_RULE);
@@ -604,10 +605,12 @@ public class Kernel implements PropertyChangeListener {
     private void checkPath(File f) throws IOException{
         if (!f.exists()){
             File old = new File(f.getName());
-            File dir = new File(f.getParent());
-            if (!dir.exists())
-                dir.mkdir();
-            Io.moveFile(old, f.getParent());
+            if (old.exists()){
+                File dir = new File(f.getParent());
+                if (!dir.exists())
+                    dir.mkdir();
+                Io.moveFile(old, f.getParent());
+            }
         }
     }
 
@@ -813,6 +816,7 @@ public class Kernel implements PropertyChangeListener {
         }
     }
     
+    @SuppressWarnings("unchecked")
     private void fireCalendar(){
         try {
             xmlCalendar = new Calendar(FILE_CALENDAR, true);
@@ -1375,7 +1379,7 @@ public class Kernel implements PropertyChangeListener {
         public ArrayList<Object[]> doInBackground() {
             int progress = 0;
             ArrayList<Object[]> alObjs = new ArrayList<Object[]>();
-            TreeSet ts = new TreeSet();
+            TreeSet<Object> ts = new TreeSet<Object>();
             setProgress(progress);
             try {
                 TvRage t = new TvRage();
@@ -1408,7 +1412,7 @@ public class Kernel implements PropertyChangeListener {
             return alObjs;
         }
         
-        private void importShow(String name, TvRage t, TreeSet ts, ArrayList<Object[]> al) 
+        private void importShow(String name, TvRage t, TreeSet<Object> ts, ArrayList<Object[]> al) 
                                                 throws JDOMException, IOException{
             ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(
                                                                 name, true, false);

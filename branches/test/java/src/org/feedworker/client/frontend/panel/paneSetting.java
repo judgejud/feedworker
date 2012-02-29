@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -27,7 +28,7 @@ import org.jfacility.javax.swing.Swing;
  * @author luca
  */
 public class paneSetting extends paneAbstract {
-    private final String[] time = new String[]{"2", "4", "6", "8", "10", "15", "20"};
+    
     private static paneSetting jpanel = null;
     private JComboBox jcbMinuti, jcbTimeout;
     private JRadioButton jrbDirLocal, jrbDirSamba, jrbDownAuto, jrbDownManual;
@@ -135,9 +136,12 @@ public class paneSetting extends paneAbstract {
     }
     
     private JXTaskPane initTaskPaneGeneral() {
-        jcbMinuti = new JComboBox(new DefaultComboBoxModel(time));
+        String[] time = new String[]{"2", "4", "6", "8", "10", "15", "20"};
+        DefaultComboBoxModel<String> modelTime = new DefaultComboBoxModel<String>(time);
+        DefaultComboBoxModel<String> modelMin = new DefaultComboBoxModel<String>(time);
+        jcbMinuti = new JComboBox(modelMin);
         jcbMinuti.setSelectedIndex(2);
-        jcbTimeout = new JComboBox(new DefaultComboBoxModel(time));
+        jcbTimeout = new JComboBox(modelTime);
         jcbTimeout.setSelectedIndex(2);
         jrbDirLocal = new JRadioButton("HD locale");
         jrbDirLocal.setSelected(true);

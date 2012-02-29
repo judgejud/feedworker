@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -21,6 +23,7 @@ import org.feedworker.util.Samba;
 import org.jfacility.Io;
 import org.jfacility.java.lang.Lang;
 
+import org.apache.commons.io.FileUtils;
 import jcifs.smb.SmbException;
 /**
  *
@@ -131,7 +134,7 @@ class OperationFileThread implements Runnable{
     private void setKey(int i){
         filesub = arraySub.get(i);
         namesub = filesub.getName();
-        key = parsingNamefile(namesub, SPLIT_SUB);
+        key = parsingNamefileSub(namesub, SPLIT_SUB);
     }
     
     private boolean deleteFile(KeyRule key, File filesub, String namesub){
@@ -144,44 +147,90 @@ class OperationFileThread implements Runnable{
         return false;
     }
     
-    private String rename(KeyRule key, String namesub) throws NullPointerException{
+    private String rename(KeyRule k, String name) throws NullPointerException{
         String newname = null;
-        String oper = mapRules.get(key).getOperation();
-        if (oper.equalsIgnoreCase(Operation.TRUNCATE.toString())){
-            String from = key.getName().replaceAll(" ", ".") + ".";
-            newname = namesub.split(SPLIT_SUB)[0].toLowerCase().replaceFirst(from, "");
-            String ext = namesub.substring(namesub.length() - 4);
-            if (newname.substring(0, 1).equalsIgnoreCase("s"))
-                newname = newname.substring(4);
-            else if (newname.substring(0, 1).equalsIgnoreCase("e"))
-                newname = newname.substring(1);
-            newname += ext;
-        } else if (oper.equalsIgnoreCase(Operation.EQUAL_VIDEO.toString())){
-            //TODO
-            String path = returnPath(key);
-            String qual = key.getQuality();
-            System.out.println(namesub.toLowerCase());
+        String oper = mapRules.get(k).getOperation();
+        if (oper.equalsIgnoreCase(Operation.TRUNCATE.toString()))
+            newname = truncate(k, name);
+        else if (oper.equalsIgnoreCase(Operation.EQUAL_VIDEO.toString())){
+            String path = returnPath(k);
+            //String qual = k.getQuality();
+            String[] extensions = {"avi", "mp4", "mkv"};
+            System.out.println(name.toLowerCase());
             if (prop.isLocalFolder()){
-                if (qual.equals(Quality.NORMAL.toString()) || 
-                        qual.equals(Quality.DVDRIP.toString())){
-                    List<String> list = listDir(path, "avi");
-                    for (int i=0; i<list.size(); i++){
-                       System.out.println(list.get(i).toLowerCase());
-                        //if (true)
-                        //    break;
-                    }
-                } else if (qual.equals(Quality._720p.toString()) || 
-                        qual.equals(Quality.WEB_DL.toString())){
-                    List<String> list = listDir(path, "mkv");
-                    for (int i=0; i<list.size(); i++){
-                       System.out.println(list.get(i).toLowerCase());
-                        //if (true)
-                        //    break;
+                Collection<File> files = FileUtils.listFiles(new File(path), extensions, false);
+                /*
+                File dir = new File(".");
+                FileFilter fileFilter = new WildcardFileFilter("sample*.java");
+                File[] files = dir.listFiles(fileFilter);
+                for (int i = 0; i < files.length; i++) {
+                   System.out.println(files[i]);
+                }
+
+                To solve your issue with the TestX folders, I would first iterate through the list of folders:
+
+                File[] dirs = new File(".").listFiles(new WildcardFileFilter("Test*.java");
+                for (int i=0; i<dirs.length; i++) {
+                   File dir = dirs[i];
+                   if (dir.isDirectory()) {
+                       File[] files = dir.listFiles(new WildcardFileFilter("sample*.java"));
+                   }
+                }
+                 */
+                String temp = searchVideo(files.iterator(), k, name);
+                if (temp!=null)
+                    newname = temp.substring(0, temp.length()-4) + name.split("sub.itasa")[1];
+            }
+        } 
+        return newname;
+    }
+    
+    private String searchVideo(Iterator<File> list, KeyRule k, String name){
+        boolean notFound = true;
+        String ret = null;
+        while (list.hasNext() && notFound){
+            String file = list.next().getName();
+            String video = file.toLowerCase();
+            System.out.println(file);
+            if (video.startsWith(k.getName().replaceAll(" ", ".")) ||
+                                                video.startsWith(k.getName())) {
+                int lenght = k.getName().split(" ").length;
+                String[] temp = video.split(SPLIT_POINT);
+                if (temp[lenght].equals(splitPoint(name, lenght))){
+                    System.out.println(video);
+                    for (int j=lenght+1; j<temp.length; j++){
+                        String match = temp[j].toLowerCase();
+                        System.out.println(match + " " + k.getQuality());
+                        /*
+                        if (match.equals("hdtv") || match.equals("dvdrip") || 
+                                match.equals("hr") ||  match.equals("720p") ||  
+                                match.equals("web-dl") ||  match.equals("web")){
+                         */
+                        if (match.equals(k.getQuality())){
+                            ret = file;
+                            notFound = false;
+                            break;
+                        }
                     }
                 }
             }
         }
-        return newname;
+        return ret;
+    }
+    
+    private String truncate (KeyRule k, String name){
+        String from = k.getName().replaceAll(" ", ".") + ".";
+        String file = name.split(SPLIT_SUB)[0].toLowerCase().replaceFirst(from, "");
+        String ext = name.substring(name.length() - 4);
+        if (file.substring(0, 1).equalsIgnoreCase("s"))
+            file = file.substring(4);
+        else if (file.substring(0, 1).equalsIgnoreCase("e"))
+            file = file.substring(1);
+        return file + ext;
+    }
+    
+    private String splitPoint(String split, int lenght){
+        return split.split(SPLIT_POINT)[lenght];
     }
 
     /**Restituisce il percorso della chiave ad esso associato nella treemap
@@ -202,10 +251,10 @@ class OperationFileThread implements Runnable{
      * @param split stringa col quale effettuare lo split del nome del file
      * @return oggetto filtro
      */
-    private KeyRule parsingNamefile(String namefile, String split) {
+    private KeyRule parsingNamefileSub(String namefile, String split) {
         String[] temp = (namefile.split(split))[0].split(SPLIT_POINT);
         int pos = temp.length - 1;
-        String version = searchVersion(temp[pos]);
+        String version = searchVersionSub(temp[pos]);
         pos = searchPosSeries(temp);
         String serieNum = "1";
         if (pos > -1)
@@ -274,7 +323,7 @@ class OperationFileThread implements Runnable{
      * @param text testo da confrontare
      * @return versione video/sub
      */
-    private String searchVersion(String text) {
+    private String searchVersionSub(String text) {
         String version = null;
         for (int i = 0; i < QUALITY.length; i++) {
             if (text.toLowerCase().equalsIgnoreCase(QUALITY[i])) {

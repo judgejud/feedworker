@@ -1,6 +1,7 @@
 package org.feedworker.core;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.Iterator;
 import java.util.List;
 
@@ -13,15 +14,15 @@ import org.feedworker.object.Subtitle;
  */
 public class ManageListener {
 
-    private static List listenerTable = new ArrayList();
-    private static List listenerFrame = new ArrayList();
-    private static List listenerTextPane = new ArrayList();
-    private static List listenerStatusBar = new ArrayList();
-    private static List listenerComboBox = new ArrayList();
-    private static List listenerEditorPane = new ArrayList();
-    private static List listenerList = new ArrayList();
-    private static List listenerTabbedPane = new ArrayList();
-    private static List listenerCanvas = new ArrayList();
+    private static List<EventListener> listenerTable = new ArrayList<EventListener>();
+    private static List<EventListener> listenerFrame = new ArrayList<EventListener>();
+    private static List<EventListener> listenerTextPane = new ArrayList<EventListener>();
+    private static List<EventListener> listenerStatusBar = new ArrayList<EventListener>();
+    private static List<EventListener> listenerComboBox = new ArrayList<EventListener>();
+    private static List<EventListener> listenerEditorPane = new ArrayList<EventListener>();
+    private static List<EventListener> listenerList = new ArrayList<EventListener>();
+    private static List<EventListener> listenerTabbedPane = new ArrayList<EventListener>();
+    private static List<EventListener> listenerCanvas = new ArrayList<EventListener>();
 
     public static synchronized void addTableEventListener(
                                                     TableEventListener listener) {

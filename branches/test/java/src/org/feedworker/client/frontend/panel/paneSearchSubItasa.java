@@ -1,8 +1,8 @@
 package org.feedworker.client.frontend.panel;
 
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -22,7 +22,7 @@ import org.feedworker.client.frontend.table.tableResultSearchSub;
 public class paneSearchSubItasa extends paneAbstract implements ComboboxEventListener{
     private static paneSearchSubItasa jpanel = null;
     
-    private JComboBox jcbShow, jcbVersion;
+    private JComboBox<Object> jcbShow, jcbVersion;
     private JCheckBox jcbComplete;
     private JTextField jtfSeason, jtfEpisode;
     private tableResultSearchSub jtable;
@@ -49,9 +49,9 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
 
     @Override
     void initializeButtons() {
-        jcbShow = new JComboBox();
+        jcbShow = new JComboBox<Object>();
         jcbShow.setMaximumRowCount(20);
-        jcbVersion = new JComboBox(proxy.getQualityEnum());
+        jcbVersion = new JComboBox<Object>(proxy.getQualityEnum());
         jcbVersion.removeItemAt(jcbVersion.getItemCount()-1);
         jcbComplete = new JCheckBox("Stagione completa");
         jtfSeason = new JTextField(3);
@@ -62,9 +62,9 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
         JButton jbSearch = new JButton(core.getIconSearch());
         jbSearch.setToolTipText("Ricerca");
         jbSearch.setBorder(BORDER);
-        jbSearch.addMouseListener(new MouseAdapter() {
+        jbSearch.addActionListener(new ActionListener()  {
             @Override
-            public void mouseClicked(MouseEvent evt) {
+            public void actionPerformed(ActionEvent e) {
                 jbSearchMouseClicked();
             }
         });
@@ -72,9 +72,9 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
         JButton jbReset = new JButton(core.getIconReset());
         jbReset.setToolTipText("Reset");
         jbReset.setBorder(BORDER);
-        jbReset.addMouseListener(new MouseAdapter() {
+        jbReset.addActionListener(new ActionListener()  {
             @Override
-            public void mouseClicked(MouseEvent evt) {
+            public void actionPerformed(ActionEvent e) {
                 jbResetMouseClicked();
             }
         });
@@ -82,9 +82,9 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
         JButton jbDownload = new JButton(core.getIconDownload());
         jbDownload.setToolTipText("Download");
         jbDownload.setBorder(BORDER);
-        jbDownload.addMouseListener(new MouseAdapter() {
+        jbDownload.addActionListener(new ActionListener()  {
             @Override
-            public void mouseClicked(MouseEvent evt) {
+            public void actionPerformed(ActionEvent e) {
                 core.downloadSub(jtable, null, true, true);
                 core.cleanSelect(jtable,3);
             }
@@ -93,9 +93,9 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
         JButton jbPulisci = new JButton(core.getIconClean1());
         jbPulisci.setToolTipText("Pulisci");
         jbPulisci.setBorder(BORDER);
-        jbPulisci.addMouseListener(new MouseAdapter() {
+        jbPulisci.addActionListener(new ActionListener()  {
             @Override
-            public void mouseClicked(MouseEvent evt) {
+            public void actionPerformed(ActionEvent e) {
                 core.cleanSelect(jtable, 3);
             }
         });

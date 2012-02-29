@@ -26,6 +26,7 @@ public class ShowThread implements Runnable {
         this.id = id;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void run() {
         ItasaOnline i = new ItasaOnline();

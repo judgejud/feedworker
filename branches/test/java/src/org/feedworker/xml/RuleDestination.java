@@ -63,6 +63,7 @@ public class RuleDestination extends AbstractXML{
      * @throws JDOMException
      * @throws IOException
      */
+    @SuppressWarnings("unchecked")
     public ArrayList initializeReader() throws JDOMException, IOException {
         ArrayList global = new ArrayList();
         TreeMap<KeyRule, ValueRule> map = null;
