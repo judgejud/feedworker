@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,7 +19,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -51,7 +51,7 @@ import org.jdesktop.swingx.rollover.RolloverRenderer;
  */
 public class listTaskBlog extends JScrollPane implements ListEventListener{
     private JXList list = null;
-    private DefaultListModel model = new ContentListeningListModel();
+    private DefaultListModel<SampleTaskPaneModel> model = new ContentListeningListModel();
     
     public listTaskBlog(String name){
         super();
@@ -59,7 +59,7 @@ public class listTaskBlog extends JScrollPane implements ListEventListener{
         list = new JXList() {
             @Override
             protected ListRolloverController createLinkController() {
-                return new XXListRolloverController();
+                return new XXListRolloverController<JXList>();
             }
         };
         setViewportView(list);
@@ -174,11 +174,11 @@ class SampleTaskPaneModel extends AbstractBean {
     }
 } //end SampleTaskPaneModel
 
-class ContentListeningListModel extends DefaultListModel {
+class ContentListeningListModel extends DefaultListModel<SampleTaskPaneModel> {
     private PropertyChangeListener p;
     
     @Override
-    public void insertElementAt(Object item, int i){
+    public void insertElementAt(SampleTaskPaneModel item, int i){
         super.insertElementAt(item, i);
         if (item instanceof AbstractBean)
             ((AbstractBean) item).addPropertyChangeListener(getPropertyChangeListener());
@@ -438,15 +438,26 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
         jbBrowse.setName(url);
         jbBrowse.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         jbBrowse.setToolTipText("Visualizza l'articolo corrente del blog nel browser");
-        jbBrowse.addMouseListener(new MouseAdapter() {
+        jbBrowse.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent evt) {
+            public void actionPerformed(ActionEvent e) {
                 Mediator.getIstance().openWebsite(url);
+            }
+        });
+        JButton jbCopyUrl = new JButton(GuiCore.getInstance().getIconCopy());
+        jbCopyUrl.setName(url);
+        jbCopyUrl.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        jbCopyUrl.setToolTipText("Copia l'url dell'articolo nella clipboard");
+        jbCopyUrl.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //TODO
+                //GuiCore.getInstance().openWebsite(url);
             }
         });
         JPanel jp = new JPanel();
         jp.add(jbBrowse);
-        jp.add(new JLabel());
+        jp.add(jbCopyUrl);
         taskPane.removeAll();
         taskPane.add(jp);
         taskPane.add(new JScrollPane(jep));

@@ -12,15 +12,15 @@ import org.feedworker.client.frontend.table.tableRss;
  * 
  * @author luca
  */
-public class paneItasa extends paneAbstract {
+public class paneItasaRss extends paneAbstract {
 
-    private static paneItasa jpanel = null;
+    private static paneItasaRss jpanel = null;
     private JButton jbAllItasa, jbDown, jbClean, jbAllMyItasa;
     private tableRss jtItasa, jtMyItasa;
 
     /** Costruttore privato */
-    private paneItasa() {
-        super("Italiansubs");
+    private paneItasaRss() {
+        super("ItasaRss");
         initializePanel();
         initializeButtons();
         core.setTableListener(jtItasa);
@@ -32,9 +32,9 @@ public class paneItasa extends paneAbstract {
      *
      * @return pannello itasa
      */
-    public static paneItasa getPanel() {
+    public static paneItasaRss getPanel() {
         if (jpanel == null)
-            jpanel = new paneItasa();
+            jpanel = new paneItasaRss();
         return jpanel;
     }
 

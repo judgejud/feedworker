@@ -4,7 +4,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ButtonGroup;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -36,10 +35,11 @@ public class paneSetting extends paneAbstract {
             jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
             jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
             jcbPaneShow, jcbTorrent, jcbPaneBlog, jcbItasaBlog, jcbItasaPM, 
-            jcbPaneCalendarDay, jcbCalendarDay, jcbPaneIrc;
+            jcbPaneCalendarDay, jcbCalendarDay, jcbPaneIrc, jcbItasaRss, jcbMyItasaRss,
+            jcbItasaNews;
     private JButton jbDestSub;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
-            jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf,
+            jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf, 
             jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp,
             jtfGoogleUser, jtfGoogleCalendar, jtfIrcServer, jtfIrcNick;
     private JPasswordField jpfSamba, jpfItasa, jpfGoogle, jpfIrc;
@@ -119,7 +119,8 @@ public class paneSetting extends paneAbstract {
                 jcbTorrent.isSelected(), jcbPaneShow.isSelected(), jcbItasaBlog.isSelected(), 
                 jcbPaneBlog.isSelected(), jcbItasaPM.isSelected(), 
                 jcbPaneCalendarDay.isSelected(), jcbCalendarDay.isSelected(), jcbPaneIrc.isSelected(),
-                jtfIrcNick.getText(), new String(jpfIrc.getPassword()));
+                jtfIrcNick.getText(), new String(jpfIrc.getPassword()), jcbItasaRss.isSelected(), 
+                jcbMyItasaRss.isSelected(), jcbItasaNews.isSelected());
             }
         });
         
@@ -245,8 +246,13 @@ public class paneSetting extends paneAbstract {
 
     /** inizializza il pannello dei settaggi itasa */
     private JXTaskPane initTaskPaneItalianSubs() {
+        jcbItasaNews = new JCheckBox("Abilita news Itasa");
+        jcbItasaRss = new JCheckBox("Abilita rss Itasa");
         jtfRssItasa = new JTextField(25);
+        jtfRssItasa.setToolTipText("Immettere l'url per il feed rss Itasa");
+        jcbMyItasaRss = new JCheckBox("Abilita rss myItasa");
         jtfRssMyItasa = new JTextField(25);
+        jtfRssMyItasa.setToolTipText("Immettere l'url per il feed rss myItasa");
         jrbDownAuto = new JRadioButton("Automatico");
         jrbDownAuto.addMouseListener(new MouseAdapter() {
             @Override
@@ -309,11 +315,11 @@ public class paneSetting extends paneAbstract {
         JXTaskPane task = new JXTaskPane();
         task.setTitle("ItalianSubs");
         task.setCollapsed(true);
-
-        task.add(new JLabel("RSS Itasa"));
+        
+        task.add(jcbItasaNews);
+        task.add(jcbItasaRss);
         task.add(jtfRssItasa);
-
-        task.add(new JLabel("RSS myItasa"));
+        task.add(jcbMyItasaRss);
         task.add(jtfRssMyItasa);
 
         JPanel temp = new JPanel();

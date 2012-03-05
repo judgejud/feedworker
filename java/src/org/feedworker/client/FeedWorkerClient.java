@@ -31,7 +31,6 @@ public class FeedWorkerClient {
     private static Kernel core;
     private static Application feedWorker;
     private static ApplicationSettings feedWorkerSettings;
-    private static int iteration = 10;
     private static boolean debug, autodownload;
 
     public static Application getApplication() {
@@ -44,6 +43,7 @@ public class FeedWorkerClient {
         for (int i=0; i<args.length; i++)
             verifyParams(args[i].toLowerCase());
         if (JVM.isRuntimeJavaSun() || JVM.isRuntimeOpenJDK()){
+            int iteration = 13;
             final SplashableWindow splash;
             final Image splashImage = Common.getResourceImage("SplashImage.png");
             splash = SplashScreen.getInstance(iteration, splashImage);
@@ -92,16 +92,21 @@ public class FeedWorkerClient {
                     EventQueue.invokeLater(new Runnable() {
                         @Override
                         public void run() {    
-                            splash.updateStartupState("Loading GUI ...");
+                            splash.updateStartupState("Loading GUI...");
                             frameMain jframe = new frameMain(
                                     (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight());
-                            splash.updateStartupState("Loading xml ...");
+                            splash.updateStartupState("Loading xml...");
                             core.loadXml();
+                            splash.updateStartupState("Loading Itasa show...");
                             core.loadItasaSeries();
                             splash.updateStartupState("Initializing RSS...");
                             core.runRss(auto);
-                            if (!feedWorkerSettings.isApplicationFirstTimeUsed())
+                            splash.updateStartupState("Initializing Itasa News...");
+                            core.runItasaNews();
+                            if (!feedWorkerSettings.isApplicationFirstTimeUsed()){
+                                splash.updateStartupState("Searching show today...");
                                 core.searchDay(0);
+                            }
                             splash.close();
                             if (!feedWorkerSettings.isEnabledIconizedRun())
                                 jframe.setVisible(true);

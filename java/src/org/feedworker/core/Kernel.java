@@ -19,6 +19,8 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
@@ -40,6 +42,7 @@ import org.feedworker.core.thread.RssThread;
 import org.feedworker.core.thread.ShowThread;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.exception.ManageException;
+import org.feedworker.exception.TvrageException;
 import org.feedworker.object.*;
 import org.feedworker.util.AudioPlay;
 import org.feedworker.util.Common;
@@ -60,7 +63,6 @@ import jcifs.smb.SmbException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.xmlrpc.XmlRpcException;
 
-import org.feedworker.exception.TvrageException;
 import org.jdom.JDOMException;
 
 import org.xml.sax.SAXException;
@@ -262,6 +264,20 @@ public class Kernel implements PropertyChangeListener {
             runTimer(delay);
         }
     }
+    
+    public void runItasaNews(){
+        ItasaOnline i = new ItasaOnline();
+        try {
+            i.newsList(1);
+            
+        } catch (JDOMException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     /**esegue gli rss sotto timer
      * 
@@ -317,6 +333,7 @@ public class Kernel implements PropertyChangeListener {
         boolean status = false;
         countItasa = 0;
         countMyitasa = 0;
+        
         if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
             RssThread rt = new RssThread(lastItasa, prop.getItasaFeedURL(), ITASA);
             Thread t = new Thread(rt, ITASA);
