@@ -54,7 +54,8 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
     //private Panels
     private paneSetting jpSettings;
     private paneSubtitleDest jpDestination;
-    private paneItasa jpItasa;
+    private paneItasaRss jpItasaRss;
+    private paneItasaNews jpItasaNews;
     private paneTorrent jpTorrent;
     private paneSubsfactory jpSubsfactory;
     private paneLog jpLog;
@@ -100,7 +101,8 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         this.add(mainJTP, BorderLayout.CENTER);
         
         jpCalendarShow = paneCalendarShow.getPanel();
-        jpItasa = paneItasa.getPanel();
+        jpItasaNews = paneItasaNews.getPanel();
+        jpItasaRss = paneItasaRss.getPanel();
         jpLog = new paneLog();
         jpReminder = paneReminder.getPanel();
         jpSearch = paneSearchSubItasa.getPanel();
@@ -112,7 +114,8 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jpCalendarDay = paneCalendarDay.getPanel();
         jpIrc = paneIrc.getPanel();
         
-        mainJTP.addTab("Itasa", jpItasa);
+        mainJTP.addTab("Itasa News", jpItasaNews);
+        mainJTP.addTab("Itasa Rss", jpItasaRss);
         if (prop.isSubsfactoryOption()) {
             jpSubsfactory = paneSubsfactory.getPanel();
             checkAddTab(jpSubsfactory, false, null);
@@ -684,11 +687,10 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
     /**risponde all'evento di cambiare lo stato (abilitato/disabilitato) dei
      * bottoni
      * 
-     * @param e
-     *            stato
+     * @param e stato
      */
     protected void changeEnabledButton(boolean e) {
-        jpItasa.setButtonEnabled(e);
+        jpItasaRss.setButtonEnabled(e);
         if (prop.isSubsfactoryOption())
             jpSubsfactory.setEnableButton(e);
         if (prop.isTorrentOption())

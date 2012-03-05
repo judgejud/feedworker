@@ -51,6 +51,7 @@ public class taskpaneShowInfo extends JScrollPane implements TabbedPaneEventList
 
         taskShow = new JXTaskPane();
         taskShow.setTitle("Info Show");
+        taskShow.setCollapsed(true);
         taskShow.add(jepShow);
 
         taskActors = new JXTaskPane();

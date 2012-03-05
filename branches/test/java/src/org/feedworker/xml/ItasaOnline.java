@@ -312,27 +312,25 @@ public class ItasaOnline extends AbstractQueryXML{
         return showsName;
     }
     
-    public ArrayList<News> newsList(int page) throws JDOMException, IOException, Exception{
+    public ArrayList<Object[]> newsList(int page) throws JDOMException, IOException, Exception{
         ArrayList<String> params = new ArrayList<String>();
         if (page>0)
             params.add(PARAM_PAGE + page);
         connectHttps(composeUrl(URL_NEWS, params));
         checkStatus();
-        ArrayList<News> container = null;
+        ArrayList<Object[]> container = new ArrayList<Object[]>();
         if (isStatusSuccess()){
             Iterator iter =  getDescendantsZero(2);
-            container = new ArrayList<News>();
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
                 String id = item.getChild(TAG_NEWS_ID).getText();
-                String showId = item.getChild(TAG_NEWS_SHOWID).getText();
-                String showName = item.getChild(TAG_NEWS_SHOWNAME).getText();
-                String image = item.getChild(TAG_NEWS_IMAGE).getText();
-                String date = item.getChild(TAG_NEWS_SUBMITDATE).getText();
+                String text = item.getChild(TAG_NEWS_SHOWNAME).getText();
                 String thumb = item.getChild(TAG_NEWS_THUMB).getText();
                 Iterator temp = item.getChild(TAG_NEWS_EPISODES).getChildren().iterator();
-                String episode = ((Element) temp.next()).getText();
-                container.add(new News(id, showId, showName, image, date, thumb, episode));
+                while (temp.hasNext()){
+                    text += " " + ((Element)temp.next()).getText();
+                }
+                container.add(new Object[]{id, text, thumb});
             }
         } else 
             throw new ItasaException("NewsList: "+ error);
@@ -384,7 +382,7 @@ public class ItasaOnline extends AbstractQueryXML{
             for (int i=0; i<params.size(); i++)
                 newUrl+= OPERATOR_AND + params.get(i).toString();
         //per vedere la stringa che genera come url per la chiamata all'api itasa
-        //System.out.println(newUrl);
+        System.out.println(newUrl);
         return newUrl;
     }
     
@@ -433,9 +431,8 @@ public class ItasaOnline extends AbstractQueryXML{
     private boolean isStatusFail(){
         return status.equals(STATUS_FAIL);
     }
-/*
+    
     public static void main (String[] args){
-        
         ItasaOnline i = new ItasaOnline();
         try {
             
@@ -445,6 +442,7 @@ public class ItasaOnline extends AbstractQueryXML{
                 i.myItasaLastSub(iu.getAuthcode());
                 i.myItasaShows(iu.getAuthcode());
             }
+            */
             //i.showList();
             //i.showSingle("1363", true);
             //i.subtitleSingle("20000");
@@ -452,8 +450,10 @@ public class ItasaOnline extends AbstractQueryXML{
             //i.searchSubtitleCompletedByIdShow(134,null,1);
             //i.searchSubtitleEpisodeByIdShow(134,"1x01",1);
             
-            //i.newsList(1);
-            //i.newsSingle("10503");
+            i.newsList(1);
+            //https://api.italiansubs.net/api/rest/news?apikey=436e566f3d09b217cf687fa5bad5effc&page=1
+            //i.newsSingle("13589");
+            //https://api.italiansubs.net/api/rest/news/13589?apikey=436e566f3d09b217cf687fa5bad5effc
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
@@ -465,5 +465,5 @@ public class ItasaOnline extends AbstractQueryXML{
         }
     }
 
- */
+
 }

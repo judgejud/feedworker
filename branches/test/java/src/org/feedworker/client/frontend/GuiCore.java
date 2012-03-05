@@ -373,7 +373,7 @@ public class GuiCore {
             boolean paneTorrent, boolean paneCalendar, boolean torrentOption, 
             boolean paneShow, boolean blog, boolean paneBlog, boolean itasapm, 
             boolean paneCalendarDay, boolean calendarDay, boolean paneIrc, String ircNick, 
-            String ircPwd) {
+            String ircPwd, boolean itasaRss, boolean myItasaRss, boolean itasaNews) {
                 
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -382,7 +382,7 @@ public class GuiCore {
                 sambaUser, sambaPwd)) {
             save = true;
             if (save)
-                save = checkSaveItasa(itasa, myitasa, itasaUser, itasaPwd);
+                save = checkSaveItasa(itasaRss, itasa, myItasaRss, myitasa, itasaUser, itasaPwd);
             if (prop.isSubsfactoryOption() && save)
                 save = checkSaveSubsf(subsf, mySubsf);
             if (prop.isTorrentOption() && save && !Lang.verifyTextNotNull(torrentDest))
@@ -394,7 +394,7 @@ public class GuiCore {
                     sambaUser, sambaPwd, time, timeout, 
                     advancedDownload, runIconized, reminder);
             setPropItasa(itasa, myitasa, itasaUser, itasaPwd, autoMyitasa, autoLoadMyItasa, 
-                        blog, itasapm, calendarDay);
+                        blog, itasapm, calendarDay, itasaRss, myItasaRss, itasaNews);
             setPropSubsf(subsf, mySubsf);
             setPropTorrent(torrentDest, torrentOption);
             setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
@@ -611,7 +611,7 @@ public class GuiCore {
 
     private void setPropItasa(String itasa, String myitasa, String user,
             String pwd, boolean auto, boolean autoload, boolean blog, boolean pm, 
-            boolean cal) {
+            boolean cal, boolean itasaRss, boolean myItasaRss, boolean news) {
         prop.setItasaFeedURL(itasa);
         prop.setMyitasaFeedURL(myitasa);
         prop.setItasaUsername(user);
@@ -621,6 +621,7 @@ public class GuiCore {
         prop.setItasaBlog(blog);
         prop.setItasaPM(pm);
         prop.setCalendarDay(cal);
+        
     }
     
     private void setPropSubsf(String subsf, String mySubsf){
@@ -705,14 +706,17 @@ public class GuiCore {
      *
      * @return booleano che le impostazioni sono ok
      */
-    private boolean checkSaveItasa(String itasa, String myitasa, String user, String pwd) {
+    private boolean checkSaveItasa(boolean itasaRss, String itasa, boolean myitasaRss, 
+                                        String myitasa, String user, String pwd) {
         boolean check = true;
         try {
-            if (!Lang.verifyTextNotNull(itasa) && !Lang.verifyTextNotNull(myitasa)) {
+            //if (!Lang.verifyTextNotNull(itasa) && !Lang.verifyTextNotNull(myitasa)) {
+            //if ((itasaRss && !Lang.verifyTextNotNull(itasa)) || (myitasaRss && !Lang.verifyTextNotNull(myitasa))) {
+            if ((itasaRss && itasa.isEmpty()) || (myitasaRss && myitasa.isEmpty())) {
                 printAlert("Avviso: Non immettendo link RSS itasa e/o myitasa " + 
                         "non potrai usare i feed italiansubs");
             } else {
-                if (Lang.verifyTextNotNull(itasa))
+                if (itasaRss && Lang.verifyTextNotNull(itasa))
                     check = proxy.testRss(itasa, "itasa");
                 if (check) {
                     if (Lang.verifyTextNotNull(myitasa))

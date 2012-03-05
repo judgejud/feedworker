@@ -79,9 +79,11 @@ class OperationFileThread implements Runnable{
                                 String oldName = dest + File.separator + filesub.getName();
                                 s.moveFile(oldName, dest, newName);
                             }
+                            filesub.delete();
                         } catch (IOException e){
                             printAlert("percorso samba \"" +  dest + "\" non trovato");
                             s.moveFromLocal(filesub, null);
+                            filesub.delete();
                             newName = null; 
                         }
                         if (newName==null)

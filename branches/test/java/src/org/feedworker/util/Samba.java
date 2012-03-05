@@ -80,7 +80,6 @@ public class Samba {
             if (out != null)
                 out.close();
         }
-        local.delete();
         return verify;
     }
 
