@@ -18,7 +18,8 @@ public class paneCalendarShow extends paneAbstract{
     private tableCalendar jtable;
 
     private paneCalendarShow(){
-        super("CalendarShow");
+        super("");
+        setName(proxy.getNameTableCalendarShow());
         initializePanel();
         initializeButtons();
     }
@@ -31,7 +32,7 @@ public class paneCalendarShow extends paneAbstract{
 
     @Override
     void initializePanel() {
-        jtable = new tableCalendar(proxy.getNameTableCalendar());
+        jtable = new tableCalendar(getName());
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
         jpCenter.add(jScrollTable1);

@@ -108,8 +108,8 @@ public class Mediator {
         return core.SUBTITLE_DEST;
     }
 
-    public String getNameTableCalendar() {
-        return core.CALENDAR;
+    public String getNameTableCalendarShow() {
+        return core.CALENDAR_SHOW;
     }
     
     public String getNameTableSearchSub() {

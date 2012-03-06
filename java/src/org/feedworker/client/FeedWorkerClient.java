@@ -102,7 +102,7 @@ public class FeedWorkerClient {
                             splash.updateStartupState("Initializing RSS...");
                             core.runRss(auto);
                             splash.updateStartupState("Initializing Itasa News...");
-                            core.runItasaNews();
+                            core.runItasaNews(true);
                             if (!feedWorkerSettings.isApplicationFirstTimeUsed()){
                                 splash.updateStartupState("Searching show today...");
                                 core.searchDay(0);

@@ -1,12 +1,14 @@
 package org.feedworker.xml;
 
 import java.io.IOException;
+import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeMap;
 
+import javax.swing.ImageIcon;
 import org.feedworker.core.http.Https;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.object.ItasaUser;
@@ -47,12 +49,18 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String TAG_COUNT = "count";
     //TAG NEWS
     private final String TAG_NEWS_ID = "id";
-    private final String TAG_NEWS_SHOWID = "show_id";
     private final String TAG_NEWS_SHOWNAME = "show_name";
     private final String TAG_NEWS_IMAGE = "image";
     private final String TAG_NEWS_SUBMITDATE = "submit_date";
     private final String TAG_NEWS_THUMB = "thumb";
     private final String TAG_NEWS_EPISODES = "episodes";
+    private final String TAG_NEWS_TRANSLATION = "translation";
+    private final String TAG_NEWS_SYNC = "sync";
+    private final String TAG_NEWS_RESYNC = "resync";
+    private final String TAG_NEWS_INFO = "info";
+    private final String TAG_NEWS_IMAGEBY = "image_by";
+    private final String TAG_NEWS_SUBMITTEDBY = "submitted_by";
+    private final String TAG_NEWS_SUBTITLES = "subtitles";
     //TAG SHOW
     private final String TAG_SHOW_PLOT = "plot";
     private final String TAG_SHOW_GENRES = "genres";
@@ -184,7 +192,7 @@ public class ItasaOnline extends AbstractQueryXML{
             String name = item.getChild(TAG_SUBTITLE_NAME).getText();
             String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
             String filename  = item.getChild(TAG_SUBTITLE_FILENAME).getText();
-            String filesize  = item.getChild(TAG_SUBTITLE_FILESIZE).getText();
+            String filesize  = item.getChild(TAG_SUBTITLE_FILESIZE).getText();  
             String date = item.getChild(TAG_SUBTITLE_SUBMIT_DATE).getText();
             String description  = item.getChild(TAG_SUBTITLE_DESCRIPTION).getText();
             sub = new Subtitle(name, version, filename, filesize, date, description);
@@ -312,25 +320,27 @@ public class ItasaOnline extends AbstractQueryXML{
         return showsName;
     }
     
-    public ArrayList<Object[]> newsList(int page) throws JDOMException, IOException, Exception{
+    public ArrayList<Object[]> newsList(int idStart) throws JDOMException, IOException, Exception{
         ArrayList<String> params = new ArrayList<String>();
-        if (page>0)
-            params.add(PARAM_PAGE + page);
         connectHttps(composeUrl(URL_NEWS, params));
         checkStatus();
         ArrayList<Object[]> container = new ArrayList<Object[]>();
         if (isStatusSuccess()){
             Iterator iter =  getDescendantsZero(2);
-            while (iter.hasNext()){
+            boolean next = true;
+            while (next && iter.hasNext()){
                 Element item = (Element) iter.next();
                 String id = item.getChild(TAG_NEWS_ID).getText();
-                String text = item.getChild(TAG_NEWS_SHOWNAME).getText();
-                String thumb = item.getChild(TAG_NEWS_THUMB).getText();
-                Iterator temp = item.getChild(TAG_NEWS_EPISODES).getChildren().iterator();
-                while (temp.hasNext()){
-                    text += " " + ((Element)temp.next()).getText();
-                }
-                container.add(new Object[]{id, text, thumb});
+                if (Integer.parseInt(id)>idStart){
+                    String text = item.getChild(TAG_NEWS_SHOWNAME).getText();
+                    String thumb = item.getChild(TAG_NEWS_THUMB).getText();
+                    Iterator temp = item.getChild(TAG_NEWS_EPISODES).getChildren().iterator();
+                    while (temp.hasNext()){
+                        text += " " + ((Element)temp.next()).getText();
+                    }
+                    container.add(new Object[]{id, text, new ImageIcon(new URL(thumb))});
+                } else 
+                    next = false;
             }
         } else 
             throw new ItasaException("NewsList: "+ error);
@@ -342,20 +352,24 @@ public class ItasaOnline extends AbstractQueryXML{
         checkStatus();
         News news = null;
         if (isStatusSuccess()){
-            /*
-            Iterator iter =  getDescendantsZero(2);
-            while (iter.hasNext()){
-                Element item = (Element) iter.next();
-                //String id = item.getChild(TAG_NEWS_ID).getText();
-                String showId = item.getChild(TAG_NEWS_SHOWID).getText();
-                String showName = item.getChild(TAG_NEWS_SHOWNAME).getText();
-                String image = item.getChild(TAG_NEWS_IMAGE).getText();
-                String date = item.getChild(TAG_NEWS_SUBMITDATE).getText();
-                String thumb = item.getChild(TAG_NEWS_THUMB).getText();
-                Iterator temp = item.getChild(TAG_NEWS_EPISODES).getChildren().iterator();
-                String episode = ((Element) temp.next()).getText();
+            Iterator iter = ((Element) document.getRootElement().getChildren().get(0))
+                .getChildren().iterator();
+            Element item = (Element) iter.next();
+            String image = item.getChild(TAG_NEWS_IMAGE).getText();
+            String date = item.getChild(TAG_NEWS_SUBMITDATE).getText();
+            String translation = item.getChild(TAG_NEWS_TRANSLATION).getText();
+            String sync = item.getChild(TAG_NEWS_SYNC).getText();
+            String resync = item.getChild(TAG_NEWS_RESYNC).getText();
+            String info = item.getChild(TAG_NEWS_INFO).getText();
+            String imageBy = item.getChild(TAG_NEWS_IMAGEBY).getText();
+            String submitted = item.getChild(TAG_NEWS_SUBMITTEDBY).getText();
+            Iterator temp = item.getChild(TAG_NEWS_SUBTITLES).getChildren().iterator();
+            ArrayList<String> subtitles = new ArrayList<String>();
+            while (temp.hasNext()){
+                Element e = (Element)temp.next();
+                subtitles.add(e.getChild("id").getText());
             }
-            */
+            news = new News(image, date, translation, sync, resync, info, imageBy, submitted, subtitles);
         } else 
             throw new ItasaException("NewsList: "+ error);
         return news;
@@ -449,11 +463,9 @@ public class ItasaOnline extends AbstractQueryXML{
             //i.subtitleListByIdShow(1363,"720p",1);
             //i.searchSubtitleCompletedByIdShow(134,null,1);
             //i.searchSubtitleEpisodeByIdShow(134,"1x01",1);
-            
-            i.newsList(1);
-            //https://api.italiansubs.net/api/rest/news?apikey=436e566f3d09b217cf687fa5bad5effc&page=1
-            //i.newsSingle("13589");
-            //https://api.italiansubs.net/api/rest/news/13589?apikey=436e566f3d09b217cf687fa5bad5effc
+            //i.newsList(0);
+            i.newsSingle("13617");
+            //https://api.italiansubs.net/api/rest/news/13617?apikey=436e566f3d09b217cf687fa5bad5effc
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
