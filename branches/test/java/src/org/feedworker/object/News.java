@@ -1,22 +1,25 @@
 package org.feedworker.object;
 
+import java.util.ArrayList;
 /**
  *
  * @author luca
  */
-public class News {
-    
-    private String id, showId, name, image, date, thumb, episode;
+public class News {    
+    private String image, date, translation, sync, resync, info, imageby, submitted;
+    private ArrayList<String> subtitles;
 
-    public News(String id, String showId, String name, String image, String date, 
-            String thumb, String episode) {
-        this.id = id;
-        this.showId = showId;
-        this.name = name;
+    public News(String image, String date, String translation, String sync, 
+                String resync, String info, String imageby, String submitted, 
+                ArrayList<String> subtitles) {
         this.image = image;
         this.date = date;
-        this.thumb = thumb;
-        this.episode = episode;
+        this.translation = translation;
+        this.sync = sync;
+        this.resync = resync;
+        this.info = info;
+        this.imageby = imageby;
+        this.submitted = submitted;
+        this.subtitles = subtitles;
     }
-
 }

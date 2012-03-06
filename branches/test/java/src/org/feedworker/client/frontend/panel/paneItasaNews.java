@@ -1,7 +1,15 @@
 package org.feedworker.client.frontend.panel;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JScrollPane;
+
 import org.feedworker.client.frontend.component.listNews;
 
+import org.jdesktop.swingx.JXPanel;;
 /**
  *
  * @author luca judge
@@ -29,13 +37,23 @@ public class paneItasaNews extends paneAbstract{
 
     @Override
     void initializePanel() {
-        list = new listNews("Itasa News");
-        jpCenter.add(list);
+        JXPanel pane = new JXPanel(new BorderLayout());
+        list = new listNews(getName());
+        list.setPreferredSize(new Dimension(1000, 230));
+        list.setListMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent ev) {
+                if (ev.getClickCount() == 2){ // Double-click 
+                    System.out.println(list.getListSelectedValue());
+                }
+            }
+        });
+        pane.add(new JScrollPane(list), BorderLayout.NORTH);
+        jpCenter.add(pane);
     }
 
     @Override
     void initializeButtons() {
-    
+        remove(jpAction);
     }
-    
 }

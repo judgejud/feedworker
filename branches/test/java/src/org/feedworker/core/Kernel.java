@@ -19,8 +19,6 @@ import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
@@ -63,6 +61,7 @@ import jcifs.smb.SmbException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.xmlrpc.XmlRpcException;
 
+import org.feedworker.core.thread.NewsThread;
 import org.jdom.JDOMException;
 
 import org.xml.sax.SAXException;
@@ -83,8 +82,9 @@ public class Kernel implements PropertyChangeListener {
     public final String ITASA_PM = "Itasa_PM";
     public final String SEARCH_TV = "SearchTV";
     public final String SUBTITLE_DEST = "SubtitleDest";
-    public final String CALENDAR = "Calendar";
+    public final String CALENDAR_SHOW = "CalendarShow";
     public final String REMINDER = "Reminder";
+    public final String ITASA_NEWS = "ItasaNews";
     public final String TABLE_SEARCH_SUB = "SearchSub";
     public final String OPERATION_FOCUS = "Focus";
     public final String OPERATION_PROGRESS_SHOW = "ProgressShow";
@@ -110,7 +110,7 @@ public class Kernel implements PropertyChangeListener {
     private String lastItasa=null, lastMyItasa=null, lastSubsf=null,
             lastEztv=null, lastBtchat=null, lastMySubsf=null, lastBlog=null;
     private int countItasa, countMyitasa, countSubsf, countMysubsf, countEztv, 
-            countBtchat, countBlog, countPM;
+            countBtchat, countBlog, countPM, lastNewsID=0, countNews;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Timer timer;
     private TreeMap<KeyRule, ValueRule> mapRules;
@@ -248,7 +248,7 @@ public class Kernel implements PropertyChangeListener {
     public void runRss(boolean autoloaddownload) {
         if (!prop.isApplicationFirstTimeUsed()) {
             String temp = Common.actualTime();
-            runItasa(true, autoloaddownload);
+            runItasaRss(true, autoloaddownload);
             if (prop.isSubsfactoryOption())
                 runSubsfactory(true);
             if (prop.isTorrentOption())
@@ -265,18 +265,25 @@ public class Kernel implements PropertyChangeListener {
         }
     }
     
-    public void runItasaNews(){
-        ItasaOnline i = new ItasaOnline();
+    public boolean runItasaNews(boolean first) {
+        boolean status = false;
+        countNews = 0;
+        NewsThread nt = new NewsThread(lastNewsID);
+        Thread t = new Thread(nt, ITASA_NEWS);
+        t.start();
         try {
-            i.newsList(1);
-            
-        } catch (JDOMException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (Exception ex) {
+            t.join();
+        } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
+        if (nt.getCount()>0){
+            lastNewsID = nt.getLastId();
+            if (!first){
+                status = true;
+                countNews = nt.getCount();
+            }
+        }
+        return status;
     }
 
     /**esegue gli rss sotto timer
@@ -292,7 +299,7 @@ public class Kernel implements PropertyChangeListener {
                 public void run() {
                     boolean icontray = false;
                     prop.setLastDateTimeRefresh(Common.actualTime());
-                    if (runItasa(false,true))
+                    if (runItasaRss(false,true))
                         icontray = true;
                     if (runSubsfactory(false))
                         icontray = true;
@@ -329,7 +336,7 @@ public class Kernel implements PropertyChangeListener {
      * @param first primo lancio
      * @return true se ci sono nuovi feed, false altrimenti
      */
-    private boolean runItasa(boolean first, boolean autoloaddownload) {
+    private boolean runItasaRss(boolean first, boolean autoloaddownload) {
         boolean status = false;
         countItasa = 0;
         countMyitasa = 0;
@@ -560,7 +567,7 @@ public class Kernel implements PropertyChangeListener {
             tsIdCalendar = (TreeSet) temp.get(0);
             if (tsIdCalendar.size() > 0) 
                 ManageListener.fireTableEvent(this,
-                        (ArrayList<Object[]>) temp.get(1), CALENDAR);
+                        (ArrayList<Object[]>) temp.get(1), CALENDAR_SHOW);
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
@@ -608,7 +615,7 @@ public class Kernel implements PropertyChangeListener {
     /** Effettua l'aggiornamento dei feed forzato */
     public void bruteRefreshRSS() {
         printOk("Timer in fase di reinizializzazione.");
-        runItasa(false, true);
+        runItasaRss(false, true);
         if (prop.isSubsfactoryOption())
             runSubsfactory(false);
         if (prop.isTorrentOption())
@@ -738,7 +745,7 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
             xmlCalendar.write();
-            ManageListener.fireTableEvent(this, al, CALENDAR);
+            ManageListener.fireTableEvent(this, al, CALENDAR_SHOW);
         } catch (JDOMException ex) {
             error.launch(ex, null);
         } catch (IOException ex) {
@@ -798,7 +805,7 @@ public class Kernel implements PropertyChangeListener {
                 if (importTaskCalendar.isDone() && !importTaskCalendar.isCancelled()) {
                     try {
                         ManageListener.fireTableEvent(this, importTaskCalendar.get(), 
-                                                                            CALENDAR);
+                                                                            CALENDAR_SHOW);
                     } catch (Exception e) {
                         error.launch(e, getClass());
                     }
@@ -841,7 +848,7 @@ public class Kernel implements PropertyChangeListener {
             tsIdCalendar = (TreeSet) temp.get(0);
             if (tsIdCalendar.size() > 0)
                 ManageListener.fireTableEvent(this,
-                            (ArrayList<Object[]>) temp.get(1), CALENDAR);
+                            (ArrayList<Object[]>) temp.get(1), CALENDAR_SHOW);
         } catch (Exception e) {
             error.launch(e, this.getClass());
         }
