@@ -51,7 +51,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "465 by "
+                + "468 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -412,5 +412,9 @@ public class Mediator {
     
     public Iterator<ImageIcon> getIteratorEmoIcon(){
         return Emoticon.getInstance().getEmoIcon();
+    }
+
+    public void singleNews(Object listSelectedValue) {
+        core.singleNews(listSelectedValue);
     }
 }

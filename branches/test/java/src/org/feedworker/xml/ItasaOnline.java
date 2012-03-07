@@ -193,15 +193,13 @@ public class ItasaOnline extends AbstractQueryXML{
             String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
             String filename  = item.getChild(TAG_SUBTITLE_FILENAME).getText();
             String filesize  = item.getChild(TAG_SUBTITLE_FILESIZE).getText();  
-            String date = item.getChild(TAG_SUBTITLE_SUBMIT_DATE).getText();
-            String description  = item.getChild(TAG_SUBTITLE_DESCRIPTION).getText();
-            sub = new Subtitle(name, version, filename, filesize, date, description);
+            sub = new Subtitle(id, name, version, filename, filesize);
         } else
             throw new ItasaException("subtitleSingle: "+ error);
         return sub;
     }
    
-    public ArrayList<Subtitle> subtitleListByIdShow(int idShow, String _version, int page) 
+    public ArrayList<String> subtitleListByIdShow(int idShow, String _version, int page) 
                         throws JDOMException, IOException, ItasaException, Exception{
         ArrayList<String> params = new ArrayList<String>();
         params.add(PARAM_SHOW_ID + idShow);
@@ -211,24 +209,20 @@ public class ItasaOnline extends AbstractQueryXML{
             params.add(PARAM_PAGE + page);
         connectHttps(composeUrl(URL_SUBTITLE_SHOW, params));
         checkStatus();
-        ArrayList<Subtitle>  subs = null;
+        ArrayList<String> list = null;
         if (isStatusSuccess()){
-            subs = new ArrayList<Subtitle>();
+            list = new ArrayList<String>();
             Iterator iter = getDescendantsZero(2);
             while (iter.hasNext()){
                 Element item = (Element) iter.next();
-                String id = item.getChild(TAG_SUBTITLE_ID).getText();
-                String name = item.getChild(TAG_SUBTITLE_NAME).getText();
-                String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
-                Subtitle sub = new Subtitle(id, name, version);
-                subs.add(sub);
+                list.add(item.getChild(TAG_SUBTITLE_ID).getText());
             }
         } else
             throw new ItasaException("subtitleListByIdShow: "+ error);
-        return subs;
+        return list;
     }
 
-    public ArrayList<Subtitle> subtitleSearch(String id, String _version, String query, int page) 
+    public ArrayList<String> subtitleSearch(String id, String _version, String query, int page) 
                                 throws JDOMException, IOException, ItasaException, Exception{
         ArrayList<String> params = new ArrayList<String>();
         params.add(PARAM_SHOW_ID + id);
@@ -240,25 +234,21 @@ public class ItasaOnline extends AbstractQueryXML{
             params.add(PARAM_PAGE + page);
         connectHttps(composeUrl(URL_SUBTITLE_SEARCH, params));
         checkStatus();
-        ArrayList<Subtitle>  subs = null;
+        ArrayList<String> list = null;
         if (isStatusSuccess()){
             if (getResponseCount()>0){
-                subs = new ArrayList<Subtitle>();
+                list = new ArrayList<String>();
                 Iterator iter = getDescendantsZero(2);
                 while (iter.hasNext()){
                     Element item = (Element) iter.next();
-                    String idSub = item.getChild(TAG_SUBTITLE_ID).getText();
-                    String name = item.getChild(TAG_SUBTITLE_NAME).getText();
-                    String version = item.getChild(TAG_SUBTITLE_VERSION).getText();
-                    Subtitle sub = new Subtitle(idSub, name, version);
-                    subs.add(sub);
+                    list.add(item.getChild(TAG_SUBTITLE_ID).getText());
                 }
             } else
                 throw new ItasaException("subtitleSearch: "
                         + "non ci sono sottotitoli che rispondono ai criteri di ricerca");
         } else
             throw new ItasaException("subtitleSearch: "+ error);
-        return subs;
+        return list;
     }
     
     public ItasaUser login(String user, String pwd) throws JDOMException, IOException, 
@@ -356,10 +346,10 @@ public class ItasaOnline extends AbstractQueryXML{
                 .getChildren().iterator();
             Element item = (Element) iter.next();
             String image = item.getChild(TAG_NEWS_IMAGE).getText();
-            String date = item.getChild(TAG_NEWS_SUBMITDATE).getText();
+            //String date = item.getChild(TAG_NEWS_SUBMITDATE).getText();
             String translation = item.getChild(TAG_NEWS_TRANSLATION).getText();
             String sync = item.getChild(TAG_NEWS_SYNC).getText();
-            String resync = item.getChild(TAG_NEWS_RESYNC).getText();
+            //String resync = item.getChild(TAG_NEWS_RESYNC).getText();
             String info = item.getChild(TAG_NEWS_INFO).getText();
             String imageBy = item.getChild(TAG_NEWS_IMAGEBY).getText();
             String submitted = item.getChild(TAG_NEWS_SUBMITTEDBY).getText();
@@ -369,7 +359,7 @@ public class ItasaOnline extends AbstractQueryXML{
                 Element e = (Element)temp.next();
                 subtitles.add(e.getChild("id").getText());
             }
-            news = new News(image, date, translation, sync, resync, info, imageBy, submitted, subtitles);
+            news = new News(image, translation, sync, info, imageBy, submitted, subtitles);
         } else 
             throw new ItasaException("NewsList: "+ error);
         return news;
@@ -396,7 +386,7 @@ public class ItasaOnline extends AbstractQueryXML{
             for (int i=0; i<params.size(); i++)
                 newUrl+= OPERATOR_AND + params.get(i).toString();
         //per vedere la stringa che genera come url per la chiamata all'api itasa
-        System.out.println(newUrl);
+        //System.out.println(newUrl);
         return newUrl;
     }
     
@@ -459,12 +449,16 @@ public class ItasaOnline extends AbstractQueryXML{
             */
             //i.showList();
             //i.showSingle("1363", true);
-            //i.subtitleSingle("20000");
+            i.subtitleSingle("20000");
+            //https://api.italiansubs.net/api/rest/subtitles/20000?apikey=436e566f3d09b217cf687fa5bad5effc
             //i.subtitleListByIdShow(1363,"720p",1);
+            //https://api.italiansubs.net/api/rest/subtitles?apikey=436e566f3d09b217cf687fa5bad5effc&show_id=1363&version=720p&page=1
             //i.searchSubtitleCompletedByIdShow(134,null,1);
-            //i.searchSubtitleEpisodeByIdShow(134,"1x01",1);
+            //i.subtitleSearch("134", null, "1x01", 1);
+            //https://api.italiansubs.net/api/rest/subtitles/search?apikey=436e566f3d09b217cf687fa5bad5effc&show_id=134&q=1x01&page=1
             //i.newsList(0);
-            i.newsSingle("13617");
+            //https://api.italiansubs.net/api/rest/news?apikey=436e566f3d09b217cf687fa5bad5effc
+            //i.newsSingle("13617");
             //https://api.italiansubs.net/api/rest/news/13617?apikey=436e566f3d09b217cf687fa5bad5effc
         } catch (JDOMException ex) {
             ex.printStackTrace();
