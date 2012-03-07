@@ -5,9 +5,11 @@ import java.awt.Dimension;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JScrollPane;
 
 import org.feedworker.client.frontend.component.listNews;
+import org.feedworker.client.frontend.component.taskpaneNews;
 
 import org.jdesktop.swingx.JXPanel;;
 /**
@@ -18,6 +20,7 @@ public class paneItasaNews extends paneAbstract{
     
     private static paneItasaNews jpanel = null;
     private listNews list;
+    private taskpaneNews task;
 
     private paneItasaNews() {
         super("ItasaNews");
@@ -42,13 +45,16 @@ public class paneItasaNews extends paneAbstract{
         list.setPreferredSize(new Dimension(1000, 230));
         list.setListMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent ev) {
+            public void mouseClicked(MouseEvent ev) {                
                 if (ev.getClickCount() == 2){ // Double-click 
-                    System.out.println(list.getListSelectedValue());
+                    proxy.singleNews(list.getListSelectedValue());
+                    task.tableRemoveAllRows();
                 }
             }
         });
         pane.add(new JScrollPane(list), BorderLayout.NORTH);
+        task = new taskpaneNews();
+        pane.add(task, BorderLayout.CENTER);
         jpCenter.add(pane);
     }
 

@@ -283,11 +283,14 @@ public class paneShow extends paneAbstract implements ComboboxEventListener,
 
     @Override
     public void objReceived(EditorPaneEvent evt) {
-        taskpaneShowInfo pane = (taskpaneShowInfo) core.addNewTabShow(evt.getDest());
-        if (evt.getTable().equals("show"))
-            pane.setHtmlShow(evt.getHtml());
-        else if (evt.getTable().equals("actors"))
-            pane.setHtmlActors(evt.getHtml());
+        String t = evt.getTable();
+        if (t!=null){
+            taskpaneShowInfo pane = (taskpaneShowInfo) core.addNewTabShow(evt.getDest());
+            if (t.equals("show"))
+                pane.setHtmlShow(evt.getHtml());
+            else if (t.equals("actors"))
+                pane.setHtmlActors(evt.getHtml());
+        }
     }
     
     private void importFromMyItasa() {

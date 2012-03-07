@@ -2,10 +2,11 @@ package org.feedworker.core.thread;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import org.feedworker.core.ManageListener;
 import org.feedworker.xml.ItasaOnline;
-import org.jdom.JDOMException;
 
+import org.jdom.JDOMException;
 /**
  *
  * @author luca judge

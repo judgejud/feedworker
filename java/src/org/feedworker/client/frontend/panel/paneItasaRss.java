@@ -118,7 +118,7 @@ public class paneItasaRss extends paneAbstract {
 
     private void jbDownMouseClicked() {
         if (jbDown.isEnabled()) {
-            core.downloadSub(jtItasa, jtMyItasa, true, false);
+            core.downloadSub(jtItasa, jtMyItasa, true, false, 3);
             jbCleanMouseClicked();
         }
     }

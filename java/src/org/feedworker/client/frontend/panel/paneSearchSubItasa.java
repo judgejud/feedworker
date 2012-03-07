@@ -85,7 +85,7 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
         jbDownload.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                core.downloadSub(jtable, null, true, true);
+                core.downloadSub(jtable, null, true, true,3);
                 core.cleanSelect(jtable,3);
             }
         });

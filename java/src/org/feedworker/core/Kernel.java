@@ -62,6 +62,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.xmlrpc.XmlRpcException;
 
 import org.feedworker.core.thread.NewsThread;
+import org.feedworker.core.thread.SubtitleThread;
 import org.jdom.JDOMException;
 
 import org.xml.sax.SAXException;
@@ -86,6 +87,7 @@ public class Kernel implements PropertyChangeListener {
     public final String REMINDER = "Reminder";
     public final String ITASA_NEWS = "ItasaNews";
     public final String TABLE_SEARCH_SUB = "SearchSub";
+    public final String TASKPANE_NEWS = "taskpaneNews";
     public final String OPERATION_FOCUS = "Focus";
     public final String OPERATION_PROGRESS_SHOW = "ProgressShow";
     public final String OPERATION_PROGRESS_INCREMENT = "ProgressIncrement";
@@ -1116,9 +1118,13 @@ public class Kernel implements PropertyChangeListener {
                 query = "x" + episode;
         }
         try {
-            ArrayList<Subtitle> array = itasa.subtitleSearch(id, _version, query, -1);
-            if (array.size()>0)
-                ManageListener.fireTableEvent(this, TABLE_SEARCH_SUB, array);
+            ArrayList<String> listID = itasa.subtitleSearch(id, _version, query, -1);
+            if (listID.size()>0){
+                SubtitleThread st = new SubtitleThread(listID, TABLE_SEARCH_SUB, true);
+                Thread t = new Thread(st, "Thread Subtitle");
+                printOk("Ricerca sottotitoli in corso, potrebbe impiegare 1po'...");
+                t.start();
+            }
         } catch (JDOMException ex) {
             error.launch(ex, getClass());
         } catch (IOException ex) {
@@ -1382,6 +1388,23 @@ public class Kernel implements PropertyChangeListener {
         Irc i = Irc.getInstance();
         if (i!=null && i.isConnected())
             i.changeNick(nick);
+    }
+
+    public void singleNews(Object id) {
+        ItasaOnline i = new ItasaOnline();
+        try {
+            News n = i.newsSingle(id.toString());
+            SubtitleThread st = new SubtitleThread(n.getSubtitles(), TASKPANE_NEWS, false);
+            Thread t = new Thread(st, "Thread Subtitle");
+            t.start();
+            ManageListener.fireEditorPaneEvent(this, n.getHtmlNews(), TASKPANE_NEWS, null);
+        } catch (JDOMException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     class ImportTaskCalendar extends SwingWorker<ArrayList<Object[]>, Void> {

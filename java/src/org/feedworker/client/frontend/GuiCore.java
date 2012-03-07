@@ -229,11 +229,11 @@ public class GuiCore {
         return col;
     }
     
-    public void downloadSub(JTable jt1, JTable jt2, boolean itasa, boolean id) {
+    public void downloadSub(JTable jt1, JTable jt2, boolean itasa, boolean id, int col) {
         ArrayList<String> alLinks = new ArrayList<String>();
-        alLinks = addLinks(jt1);
+        alLinks = addLinks(jt1,col);
         if (jt2!=null)
-            alLinks.addAll(addLinks(jt2));
+            alLinks.addAll(addLinks(jt2,col));
         if (alLinks.size() > 0)
             proxy.downloadSub(alLinks, itasa, id);
         else {
@@ -246,8 +246,8 @@ public class GuiCore {
     
     public void downloadTorrent(JTable jt1, JTable jt2) {
         if (Lang.verifyTextNotNull(prop.getTorrentDestinationFolder())) {
-            ArrayList<String> alLinks = addLinks(jt1);
-            alLinks.addAll(addLinks(jt2));
+            ArrayList<String> alLinks = addLinks(jt1,3);
+            alLinks.addAll(addLinks(jt2,3));
             if (alLinks.size() > 0)
                 proxy.downloadTorrent(alLinks);
             else
@@ -670,10 +670,10 @@ public class GuiCore {
      * @param jt jtable su cui operare
      * @return Arraylist di stringhe
      */
-    private ArrayList<String> addLinks(JTable jt) {
+    private ArrayList<String> addLinks(JTable jt, int col) {
         ArrayList<String> alLinks = new ArrayList<String>();
         for (int i = 0; i < jt.getRowCount(); i++) {
-            if (jt.getValueAt(i, 3) == Boolean.TRUE)
+            if (jt.getValueAt(i, col) == Boolean.TRUE)
                 alLinks.add(jt.getValueAt(i, 0).toString());
         }
         return alLinks;
