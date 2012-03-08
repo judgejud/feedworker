@@ -51,7 +51,7 @@ public class listNews extends JScrollPane implements ListEventListener{
     public void objReceived(ListEvent evt) {
         if (evt.getName().equals(list.getName())){
             for (int i=0; i<evt.getArrayList().size(); i++)
-                model.addElement(evt.getArrayList().get(i));
+                model.insertElementAt(evt.getArrayList().get(i),i);
         }
     }
     

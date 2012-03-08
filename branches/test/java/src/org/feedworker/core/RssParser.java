@@ -4,7 +4,10 @@ package org.feedworker.core;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.feedworker.util.Common;
@@ -16,15 +19,12 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
-
 /**
  * 
  * @author luca judge
  */
 public class RssParser {
-
     private SyndFeed feed;
-
     /**Costruttore
      *
      * @param f File da trasformare in xmlreader
@@ -74,6 +74,32 @@ public class RssParser {
         return structuredEntryList;
     }
     
+    public ArrayList<Object[]> readRssBlog(String temp) throws ParseException {
+        Iterator iterator = feed.getEntries().iterator();
+        ArrayList<Object[]> list = new ArrayList<Object[]>();
+        boolean continued = true;
+        Date confronta = null;
+        if (temp!=null)
+            confronta = Common.stringDateTime(temp);
+        while (continued && iterator.hasNext()) {
+            SyndEntry rawEntry = (SyndEntry) iterator.next();
+            Date rawDate = rawEntry.getPublishedDate();
+            if (confronta==null || confronta.before(rawDate)){
+                String title = rawEntry.getTitle();
+                if (Lang.verifyTextNotNull(title) && !title.equalsIgnoreCase(" ")){
+                    Object[] structuredEntry = new Object[5];
+                    structuredEntry[0] = rawEntry.getUri();
+                    structuredEntry[1] = Common.dateTimeString(rawDate);
+                    structuredEntry[2] = title;
+                    structuredEntry[3] = rawEntry.getAuthor();
+                    structuredEntry[4] = rawEntry.getDescription().getValue();
+                    list.add(structuredEntry);
+                }
+            }
+        }
+        return list;
+    }
+    /*
     public ArrayList<Object[]> readRssBlog() {
         List rawEntryList = feed.getEntries();
         ArrayList<Object[]> structuredEntryList = new ArrayList<Object[]>();
@@ -92,4 +118,5 @@ public class RssParser {
         }
         return structuredEntryList;
     }
+    */
 }// end class

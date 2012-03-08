@@ -1,8 +1,9 @@
 IMPLEMENTARE
-*introdurre news itasa
-*inserire nel blog bottone copia link
--introdurre diverse tipologi di rinomina
+*inserire nel blog bottone copia link (terminare)
 fare 1thread per il test connect samba
+introdurre myitasa
+evitare i doppioni delle serie nelle liste show
+introdurre diverse tipologi di rinomina
 irc1: timestamp del msg
 fare caricamento xml sotto thread
 controllare che gli show con icon unknown sono stati aggiornati di icon
@@ -13,9 +14,7 @@ aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
 introdurre set per i reminder in modo che non ci siano duplicati (treeset)?
 migrazione account itasa da 1vecchio a 1nuovo per quanto riguarda la lista di serial tv myitasa
 specificare altri suoni
-introdurre myitasa
 introdurre trama singola puntata (da che fonte?)
-evitare i doppioni delle serie nelle liste show
 irc2: tasto tabulazione che fa scegliere il nick a cui riferirsi
 irc3: fare il sorted dei nick nel chan
 irc4: type del msg

@@ -27,7 +27,7 @@ public class News {
     public String getHtmlNews(){
         String html = new String("<html><body>");
         html += "<table width=\"96%\" cellspacing=\"1\" cellpadding=\"1\">";
-        html += "<tr><td rowspan=\"5\"><img src=\""+image+"\"></img></td>";
+        html += "<tr><td width=\"210\" rowspan=\"5\"><img src=\""+image+"\"></img></td>";
         html += "<td>"+ info + "</td></tr>";
         html += "<tr><td><b>Revisione</b>: "+ submitted +" </td></tr>";
         html += "<tr><td><b>Traduzione</b>: "+ translation +"</td></tr>";

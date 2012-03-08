@@ -17,11 +17,10 @@ import javax.swing.JTextField;
 
 import org.feedworker.client.ApplicationSettings;
 
-import org.jdesktop.swingx.JXTaskPane;
-import org.jdesktop.swingx.JXTaskPaneContainer;
-
 import org.jfacility.javax.swing.Swing;
 
+import org.jdesktop.swingx.JXTaskPane;
+import org.jdesktop.swingx.JXTaskPaneContainer;
 /**
  *
  * @author luca
@@ -530,6 +529,7 @@ public class paneSetting extends paneAbstract {
     }
 
     private void settingsItasaValue() {
+        jcbItasaNews.setSelected(prop.isItasaNews());
         jtfRssItasa.setText(prop.getItasaFeedURL());
         jtfRssMyItasa.setText(prop.getMyitasaFeedURL());
         jtfItasaUser.setText(prop.getItasaUsername());

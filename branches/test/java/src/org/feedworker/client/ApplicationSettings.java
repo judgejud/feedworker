@@ -33,7 +33,7 @@ public class ApplicationSettings {
             enableNotifyMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
             enablePaneSearchSubItasa, enablePaneReminder, reminderOption, enablePaneTorrent,
             enablePaneCalendar, enableNotifySms, enablePaneShow, itasaBlog, enablePaneBlog, 
-            itasaPM, calendarDay, enablePaneCalendarDay, enablePaneIrc;
+            itasaPM, calendarDay, enablePaneCalendarDay, enablePaneIrc, itasaNews;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -73,6 +73,7 @@ public class ApplicationSettings {
                         getBooleanDecryptedValue("IS_AUTO_LOAD_DOWNLOAD_MYITASA"));
                 setItasaBlog(getBooleanDecryptedValue("ITASA_BLOG"));
                 setItasaPM(getBooleanDecryptedValue("ITASA_PM"));
+                setItasaNews(getBooleanDecryptedValue("ITASA_NEWS"));
                 setCalendarDay(getBooleanDecryptedValue("CALENDAR_DAY"));
                 //SUBSFATORY
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
@@ -186,6 +187,7 @@ public class ApplicationSettings {
             propertiesCrypting("ITASA_BLOG", itasaBlog);
             propertiesCrypting("ITASA_PM", itasaPM);
             propertiesCrypting("CALENDAR_DAY", calendarDay);
+            propertiesCrypting("ITASA_NEWS", itasaNews);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -758,5 +760,13 @@ public class ApplicationSettings {
 
     public void setIrcPwd(String ircPwd) {
         this.ircPwd = ircPwd;
+    }
+    
+    public boolean isItasaNews() {
+        return itasaNews;
+    }
+
+    public void setItasaNews(boolean itasaNews) {
+        this.itasaNews = itasaNews;
     }
 }// end class

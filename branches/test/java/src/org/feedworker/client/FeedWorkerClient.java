@@ -102,11 +102,11 @@ public class FeedWorkerClient {
                             splash.updateStartupState("Initializing RSS...");
                             core.runRss(auto);
                             splash.updateStartupState("Initializing Itasa News...");
-                            core.runItasaNews(true);
-                            if (!feedWorkerSettings.isApplicationFirstTimeUsed()){
-                                splash.updateStartupState("Searching show today...");
+                            if (!feedWorkerSettings.isApplicationFirstTimeUsed())
+                                core.runItasaNews(true);
+                            splash.updateStartupState("Searching show today...");
+                            if (!feedWorkerSettings.isApplicationFirstTimeUsed())
                                 core.searchDay(0);
-                            }
                             splash.close();
                             if (!feedWorkerSettings.isEnabledIconizedRun())
                                 jframe.setVisible(true);
