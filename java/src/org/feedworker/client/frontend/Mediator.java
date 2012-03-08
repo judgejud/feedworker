@@ -51,7 +51,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "468 by "
+                + "469 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -134,10 +134,6 @@ public class Mediator {
     
     String getItasaPM(){
         return core.ITASA_PM;
-    }
-
-    void runRss() {
-        core.runRss(true);
     }
 
     /**chiama nel kernel la chiusura applicazione
@@ -360,10 +356,6 @@ public class Mediator {
     void searchSubItasa(Object show, Object version, boolean complete, 
                                                 String season, String episode) {
         core.searchSubItasa(show, version, complete, season, episode);
-    }
-
-    void writeSettings() {
-        core.writeProp();
     }
 
     void backup(String name) {

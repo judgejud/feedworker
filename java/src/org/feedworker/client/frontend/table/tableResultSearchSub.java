@@ -20,7 +20,7 @@ public class tableResultSearchSub extends tableAbstract{
         super(name);
         DefaultTableModel dtm = new DefaultTableModel(null, nameCols) {
             Class[] types = new Class[]{Integer.class, String.class, String.class,
-                String.class, String.class, String.class, Boolean.class};
+                String.class, String.class, Boolean.class};
             @Override
             public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
@@ -33,7 +33,7 @@ public class tableResultSearchSub extends tableAbstract{
         setModel(dtm);
         lockColumns();
         Swing.tableSorter(this);
-        super.setMouseClickBoolean(5, 0);
+        super.setMouseClickBoolean(nameCols.length-1, 0);
     }
     
     @Override
@@ -52,7 +52,7 @@ public class tableResultSearchSub extends tableAbstract{
             ArrayList<Subtitle> array = evt.getArraySubtitle();
             for (int i = 0; i < array.size(); i++){
                 dtm.insertRow(i, array.get(i).toArray());
-                dtm.setValueAt(false, i, 5);
+                dtm.setValueAt(false, i, nameCols.length-1);
             }
         }
     }

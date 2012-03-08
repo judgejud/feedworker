@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
+
 import org.feedworker.core.http.Https;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.object.ItasaUser;
@@ -20,7 +21,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.JDOMParseException;
 import org.jdom.input.SAXBuilder;
-
 /**
  *
  * @author luca
@@ -51,12 +51,10 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String TAG_NEWS_ID = "id";
     private final String TAG_NEWS_SHOWNAME = "show_name";
     private final String TAG_NEWS_IMAGE = "image";
-    private final String TAG_NEWS_SUBMITDATE = "submit_date";
     private final String TAG_NEWS_THUMB = "thumb";
     private final String TAG_NEWS_EPISODES = "episodes";
     private final String TAG_NEWS_TRANSLATION = "translation";
     private final String TAG_NEWS_SYNC = "sync";
-    private final String TAG_NEWS_RESYNC = "resync";
     private final String TAG_NEWS_INFO = "info";
     private final String TAG_NEWS_IMAGEBY = "image_by";
     private final String TAG_NEWS_SUBMITTEDBY = "submitted_by";
@@ -84,8 +82,8 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String TAG_SUBTITLE_VERSION = "version";
     private final String TAG_SUBTITLE_FILENAME = "filename";
     private final String TAG_SUBTITLE_FILESIZE = "filesize";
-    private final String TAG_SUBTITLE_DESCRIPTION = "description";
-    private final String TAG_SUBTITLE_SUBMIT_DATE = "submit_date";
+//    private final String TAG_SUBTITLE_DESCRIPTION = "description";
+//    private final String TAG_SUBTITLE_SUBMIT_DATE = "submit_date";
     //TAG USER
     private final String TAG_USER_AUTHCODE = "authcode";
     private final String TAG_USER_ID = "id";
@@ -100,14 +98,12 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String URL_SHOW_SINGLE = 
                                     URL_BASE + "/shows/" + STRING_REPLACE + "?";
     private final String URL_SHOW_THUMBNAIL = 
-                                    URL_BASE + "/shows/" + STRING_REPLACE + "/folderThumb?";
-    
+                                    URL_BASE + "/shows/" + STRING_REPLACE + "/folderThumb?";    
     private final String URL_SHOW_LIST = URL_BASE + "/shows/?";
-    
+    private final String URL_SUBTITLE_SEARCH = URL_BASE + "/subtitles/search?"; //
     private final String URL_SUBTITLE_SINGLE = 
                                 URL_BASE + "/subtitles/" + STRING_REPLACE + "?"; 
-    private final String URL_SUBTITLE_SHOW = URL_BASE + "/subtitles?"; //    
-    private final String URL_SUBTITLE_SEARCH = URL_BASE + "/subtitles/search?"; //
+//    private final String URL_SUBTITLE_SHOW = URL_BASE + "/subtitles?"; //    
     
     private final String LINK_ITASA = 
         "http://www.italiansubs.net/index.php?option=com_info&Itemid=12&idserie=";
@@ -198,7 +194,7 @@ public class ItasaOnline extends AbstractQueryXML{
             throw new ItasaException("subtitleSingle: "+ error);
         return sub;
     }
-   
+/*    
     public ArrayList<String> subtitleListByIdShow(int idShow, String _version, int page) 
                         throws JDOMException, IOException, ItasaException, Exception{
         ArrayList<String> params = new ArrayList<String>();
@@ -221,7 +217,7 @@ public class ItasaOnline extends AbstractQueryXML{
             throw new ItasaException("subtitleListByIdShow: "+ error);
         return list;
     }
-
+ */
     public ArrayList<String> subtitleSearch(String id, String _version, String query, int page) 
                                 throws JDOMException, IOException, ItasaException, Exception{
         ArrayList<String> params = new ArrayList<String>();
@@ -435,18 +431,15 @@ public class ItasaOnline extends AbstractQueryXML{
     private boolean isStatusFail(){
         return status.equals(STATUS_FAIL);
     }
-    
+/*    
     public static void main (String[] args){
         ItasaOnline i = new ItasaOnline();
         try {
-            
             //ItasaUser iu = i.login("judge", "qwerty");
-            /*
             if (iu.isMyitasa()){
                 i.myItasaLastSub(iu.getAuthcode());
                 i.myItasaShows(iu.getAuthcode());
             }
-            */
             //i.showList();
             //i.showSingle("1363", true);
             i.subtitleSingle("20000");
@@ -470,6 +463,5 @@ public class ItasaOnline extends AbstractQueryXML{
             ex.printStackTrace();
         }
     }
-
-
+    */
 }

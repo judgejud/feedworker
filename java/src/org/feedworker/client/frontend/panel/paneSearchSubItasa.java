@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 import org.feedworker.client.frontend.events.ComboboxEvent;
 import org.feedworker.client.frontend.events.ComboboxEventListener;
 import org.feedworker.client.frontend.table.tableResultSearchSub;
-
 /**
  *
  * @author luca
@@ -85,8 +84,8 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
         jbDownload.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                core.downloadSub(jtable, null, true, true,3);
-                core.cleanSelect(jtable,3);
+                core.downloadSub(jtable, null, true, true, jtable.getColumnCount()-1);
+                core.cleanSelect(jtable, jtable.getColumnCount()-1);
             }
         });
         
@@ -96,7 +95,7 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
         jbPulisci.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                core.cleanSelect(jtable, 3);
+                core.cleanSelect(jtable, jtable.getColumnCount()-1);
             }
         });
         

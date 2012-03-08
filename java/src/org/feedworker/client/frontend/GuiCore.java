@@ -7,11 +7,10 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
-
 import java.util.TreeSet;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -29,6 +28,7 @@ import org.feedworker.client.frontend.events.StatusBarEventListener;
 import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 import org.feedworker.client.frontend.events.TableEventListener;
 import org.feedworker.client.frontend.events.TextPaneEventListener;
+import org.feedworker.core.Kernel;
 import org.feedworker.core.ManageListener;
 import org.feedworker.object.KeyRule;
 import org.feedworker.object.Operation;
@@ -89,7 +89,7 @@ public class GuiCore {
                                     new TreeMap<Object, taskpaneShowInfo>();
     private TreeSet<String> setListShows = new TreeSet<String>();
     private ApplicationSettings prop = proxy.getSettings();
-    private JPanel jpSmiley;
+    private Kernel kernel = Kernel.getIstance();
     
     public static GuiCore getInstance(){
         if (core==null)
@@ -402,10 +402,10 @@ public class GuiCore {
                             paneReminder, paneTorrent, paneCalendar, paneShow, 
                             paneBlog, paneCalendarDay, paneIrc);
             setPropIRc(ircNick, ircPwd);
-            proxy.writeSettings();
+            kernel.writeProp();
             if (!prop.isApplicationFirstTimeUsed() && first) {
                 ManageListener.fireFrameEvent(this, ENABLE_BUTTON);
-                proxy.runRss();
+                kernel.runRss(true);
             } else if (Lang.verifyTextNotNull(oldMin) && 
                         !oldMin.equalsIgnoreCase(prop.getRefreshInterval()))
                 proxy.restartRss();
@@ -621,6 +621,7 @@ public class GuiCore {
         prop.setItasaBlog(blog);
         prop.setItasaPM(pm);
         prop.setCalendarDay(cal);
+        prop.setItasaNews(news);
         
     }
     

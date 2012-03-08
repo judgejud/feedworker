@@ -50,8 +50,8 @@ public class taskpaneNews extends JScrollPane implements EditorPaneEventListener
         jbDown.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                core.downloadSub(jtSub, null, true, true,5);
-                core.cleanSelect(jtSub,6);
+                core.downloadSub(jtSub, null, true, true, jtSub.getColumnCount()-1);
+                core.cleanSelect(jtSub, jtSub.getColumnCount()-1);
             }
         });
 
@@ -61,7 +61,7 @@ public class taskpaneNews extends JScrollPane implements EditorPaneEventListener
         jbClean.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                core.cleanSelect(jtSub,5);
+                core.cleanSelect(jtSub, jtSub.getColumnCount()-1);
             }
         });
         

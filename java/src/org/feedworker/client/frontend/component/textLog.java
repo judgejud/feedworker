@@ -19,15 +19,16 @@ import org.feedworker.util.Common;
  */
 public class textLog extends JTextPane implements TextPaneEventListener {
     // PRIVATE FINAL
-
     private final Color GOLD = new Color(255, 215, 0);
+    private final Color SKY_BLUE = new Color(153, 203, 255);
+    private final Color DODGER_BLUE = new Color(30, 144, 255);
     private final Color HELIOTROPE = new Color(223, 115, 255);
     // PRIVATE
     private StyledDocument mysd;
     private Style styleOK, styleError, styleAlert, styleSub, styleTorrent,
             styleFeedItasa, styleFeedMyItasa, styleFeedSubsf, styleFeedMySubsf,
             styleFeedEztv, styleFeedBtchat, styleSynology, styleDaySerial, styleItasaBlog, 
-            styleItasaPM;
+            styleItasaPM, styleItasaNews;
     
     private boolean flag_msg_normal;
     
@@ -60,6 +61,7 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         styleDaySerial = mysd.addStyle("StyleDaySerial", null);
         styleItasaBlog = mysd.addStyle("StyleItasaBlog", null);
         styleItasaPM = mysd.addStyle("StyleItasaPM", null);
+        styleItasaNews = mysd.addStyle("StyleItasaNews", null);
         // Italic
         StyleConstants.setItalic(styleFeedMyItasa, true);
         StyleConstants.setItalic(styleFeedMySubsf, true);
@@ -83,6 +85,7 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         StyleConstants.setFontFamily(styleDaySerial, "SansSerif");
         StyleConstants.setFontFamily(styleItasaBlog, "SansSerif");
         StyleConstants.setFontFamily(styleItasaPM, "SansSerif");
+        StyleConstants.setFontFamily(styleItasaNews, "SansSerif");
         // Font size
         StyleConstants.setFontSize(styleOK, dim);
         StyleConstants.setFontSize(styleError, dim);
@@ -99,6 +102,7 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         StyleConstants.setFontSize(styleDaySerial, dim);
         StyleConstants.setFontSize(styleItasaBlog, dim);
         StyleConstants.setFontSize(styleItasaPM, dim);
+        StyleConstants.setFontSize(styleItasaNews, dim);
         // Foreground color
         StyleConstants.setForeground(styleOK, Color.green);
         StyleConstants.setForeground(styleError, Color.red);
@@ -113,8 +117,9 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         StyleConstants.setForeground(styleTorrent, Color.magenta);
         StyleConstants.setForeground(styleSynology, GOLD);
         StyleConstants.setForeground(styleDaySerial, Color.pink);
-        StyleConstants.setForeground(styleItasaBlog, Color.blue);
-        StyleConstants.setForeground(styleItasaPM, Color.blue);
+        StyleConstants.setForeground(styleItasaBlog, SKY_BLUE);
+        StyleConstants.setForeground(styleItasaPM, SKY_BLUE);
+        StyleConstants.setForeground(styleItasaNews, DODGER_BLUE);
         
     }
 
@@ -222,8 +227,7 @@ public class textLog extends JTextPane implements TextPaneEventListener {
 
     /**Aggiunge alla textpane il testo con stile VIDEO
      *
-     * @param msg
-     *            testo da aggiungere
+     * @param msg testo da aggiungere
      */
     private void appendSynology(String msg) {
         append(msg, styleSynology);
@@ -238,7 +242,11 @@ public class textLog extends JTextPane implements TextPaneEventListener {
     }
     
     private void appendItasaPM(String msg) {
-        append(msg, styleItasaBlog);
+        append(msg, styleItasaPM);
+    }
+    
+    private void appendItasaNews(String msg) {
+        append(msg, styleItasaNews);
     }
 
     /**
@@ -285,6 +293,8 @@ public class textLog extends JTextPane implements TextPaneEventListener {
                 appendItasaBlog(evt.getMsg());
             else if (evt.getType().equals(TextPaneEvent.ITASA_PM))
                 appendItasaPM(evt.getMsg());
+            else if (evt.getType().equals(TextPaneEvent.ITASA_NEWS))
+                appendItasaNews(evt.getMsg());
         } else if (!flag_msg_normal){
             if (evt.getType().equals(TextPaneEvent.ERROR))
                 appendError(evt.getMsg());

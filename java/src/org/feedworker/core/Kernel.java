@@ -270,28 +270,29 @@ public class Kernel implements PropertyChangeListener {
     public boolean runItasaNews(boolean first) {
         boolean status = false;
         countNews = 0;
-        NewsThread nt = new NewsThread(lastNewsID);
-        Thread t = new Thread(nt, ITASA_NEWS);
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-        if (nt.getCount()>0){
-            lastNewsID = nt.getLastId();
-            if (!first){
-                status = true;
-                countNews = nt.getCount();
+        if (prop.isItasaNews()){
+            NewsThread nt = new NewsThread(lastNewsID);
+            Thread t = new Thread(nt, ITASA_NEWS);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (nt.getCount()>0){
+                lastNewsID = nt.getLastId();
+                if (!first){
+                    status = true;
+                    countNews = nt.getCount();
+                }
             }
         }
         return status;
     }
 
-    /**esegue gli rss sotto timer
+    /**esegue le operazioni di aggiornamento sotto timer
      * 
-     * @param delay
-     *            tempo in secondi per il timer
+     * @param delay tempo in secondi per il timer
      */
     private void runTimer(int delay) {
         timer = new Timer();
@@ -311,6 +312,8 @@ public class Kernel implements PropertyChangeListener {
                         icontray = true;
                     if (prop.isItasaPM() && runItasaPM(false))
                         icontray = true;
+                    if (prop.isItasaNews() && runItasaNews(false))
+                        icontray = true;
                     if ((icontray) && (prop.isEnableNotifyAudioRss())) {
                         try {
                             AudioPlay.playFeedWav();
@@ -324,7 +327,7 @@ public class Kernel implements PropertyChangeListener {
                     }
                     String msg = countItasa + ":" + countMyitasa + ":" + countBlog + 
                             ":" + countEztv + ":" + countBtchat + ":" + countSubsf + 
-                            ":" + countMysubsf + ":" + countPM;
+                            ":" + countMysubsf + ":" + countPM + ":" + countNews;
                     ManageListener.fireFrameEvent(this, icontray, msg);
                 }// end run
             }, delay, delay);
