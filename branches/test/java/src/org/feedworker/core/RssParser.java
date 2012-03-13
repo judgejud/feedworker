@@ -99,24 +99,4 @@ public class RssParser {
         }
         return list;
     }
-    /*
-    public ArrayList<Object[]> readRssBlog() {
-        List rawEntryList = feed.getEntries();
-        ArrayList<Object[]> structuredEntryList = new ArrayList<Object[]>();
-        for (int i = 0; i < rawEntryList.size(); i++) {
-            SyndEntry rawEntry = (SyndEntry) rawEntryList.get(i);
-            String title = rawEntry.getTitle();
-            if (Lang.verifyTextNotNull(title) && !title.equalsIgnoreCase(" ")){
-                Object[] structuredEntry = new Object[5];
-                structuredEntry[0] = rawEntry.getUri();
-                structuredEntry[1] = Common.dateTimeString(rawEntry.getPublishedDate());
-                structuredEntry[2] = title;
-                structuredEntry[3] = rawEntry.getAuthor();
-                structuredEntry[4] = rawEntry.getDescription().getValue();
-                structuredEntryList.add(structuredEntry);
-            }
-        }
-        return structuredEntryList;
-    }
-    */
 }// end class

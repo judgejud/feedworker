@@ -137,7 +137,8 @@ public class Calendar extends AbstractXML{
         global.add(al);
         return global;
     }
-    
+
+    //TODO: cambiare il nome del metodo xkè l'override non permette il rilancio di eccezioni
     @Override
     public Calendar clone(){
         Calendar clone=null;

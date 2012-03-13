@@ -47,8 +47,9 @@ public class RssBlogThread implements Runnable{
                 ft.delete();
                 count = matrice.size();
                 if (count>0){
-                    ManageListener.fireTextPaneEvent(this, "Nuovo/i feed Blog",
-                                    TextPaneEvent.FEED_BLOG, true);
+                    if (lastDate!=null)
+                        ManageListener.fireTextPaneEvent(this, "Nuovo/i feed Blog",
+                                                        TextPaneEvent.FEED_BLOG, true);
                     ManageListener.fireListEvent(this, blog, matrice);
                     lastDate = (String) matrice.get(0)[1];
                 }
@@ -65,55 +66,7 @@ public class RssBlogThread implements Runnable{
             error.launch(ex, getClass(), blog);
         }
     }
-    /*
-    @Override
-    public void run() {
-        String blog = "Blog";
-        try {
-            HttpOther http = new HttpOther(Lang.stringToInt(ApplicationSettings.getIstance().
-                                                    getHttpTimeout()) * 1000);
-            InputStream ist = http.getStream(url);
-            if (ist != null) {
-                File ft = File.createTempFile("rss", ".xml");
-                Io.downloadSingle(ist, ft);
-                RssParser rss = new RssParser(ft);
-                ArrayList<Object[]> matrice = rss.readRssBlog();
-                ft.delete();
-                boolean continua = true;
-                if (data != null) {
-                    Date confronta = Common.stringDateTime(data);
-                    for (int i = matrice.size() - 1; i >= 0; i--) {
-                        String date_matrix = String.valueOf(matrice.get(i)[1]);
-                        if (confronta.before(Common.stringDateTime(date_matrix))) {
-                            if (continua) {
-                                ManageListener.fireTextPaneEvent(this,
-                                    "Nuovo/i feed Blog",
-                                    TextPaneEvent.FEED_BLOG, true);
-                                continua = false;
-                            }
-                        } else // if confronta after
-                            matrice.remove(i);
-                    } //end for
-                }
-                count = matrice.size();
-                if (matrice!=null && count>0){
-                    ManageListener.fireListEvent(this, blog, matrice);
-                    lastDate = (String) matrice.get(0)[1];
-                }
-            }
-        } catch (ParseException ex) {
-            error.launch(ex, getClass());
-        } catch (ParsingFeedException ex) {
-            error.launch(ex, getClass(), blog);
-        } catch (FeedException ex) {
-            error.launch(ex, getClass(), blog);
-        } catch (IllegalArgumentException ex) {
-            error.launch(ex, getClass());
-        } catch (IOException ex) {
-            error.launch(ex, getClass(), blog);
-        }
-    }
-    */
+    
     public synchronized int getCount() {
         return count;
     }
