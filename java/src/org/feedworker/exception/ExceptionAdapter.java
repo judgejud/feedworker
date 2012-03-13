@@ -33,7 +33,6 @@ public class ExceptionAdapter extends RuntimeException {
             s.print(stackTrace);
         }
     }
-
     public void rethrow() throws Exception {
         throw originalException;
     }

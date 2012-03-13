@@ -26,9 +26,10 @@ public class NewsThread implements Runnable{
             ArrayList<Object[]> array = i.newsList(id);
             count = array.size();
             if (count>0){
+                if (id>0)
+                    ManageListener.fireTextPaneEvent(this,"Nuovo/i news itasa",
+                                                    TextPaneEvent.ITASA_NEWS,true);
                 id = Integer.parseInt(array.get(0)[0].toString());
-                ManageListener.fireTextPaneEvent(this,"Nuovo/i news itasa",
-                                            TextPaneEvent.ITASA_NEWS,true);
                 ManageListener.fireListEvent(this, "ItasaNews", array);
             }
         } catch (JDOMException ex) {
