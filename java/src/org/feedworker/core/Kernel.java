@@ -239,6 +239,7 @@ public class Kernel implements PropertyChangeListener {
         prop.writePaneVisibleSetting();
         prop.writeTorrentSettings();
         prop.writeIrcSettings();
+        prop.writeShowSettings();
         if (prop.isSubsfactoryOption())
             prop.writeSubsfactorySettings();
         if (prop.isApplicationFirstTimeUsed())
@@ -804,6 +805,7 @@ public class Kernel implements PropertyChangeListener {
         String evtName = evt.getSource().getClass().getName();
         String className = this.getClass().getName();
         if (evtName.equalsIgnoreCase(className + "$ImportTaskCalendar")) {
+            System.out.println(evt.getPropertyName());
             if (evt.getPropertyName().equals("progress")) {
                 ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_INCREMENT, 
                         importTaskCalendar.getProgress());
@@ -962,12 +964,13 @@ public class Kernel implements PropertyChangeListener {
         }
     }
     
-    public void stopImportRefreshCalendar() {
-        if (importTaskCalendar!=null && 
-                    importTaskCalendar.getState()==SwingWorker.StateValue.STARTED)
+    public void stopImportRefresh() {
+        if (importTaskCalendar!=null && importTaskCalendar.getState()==SwingWorker.StateValue.STARTED)
             importTaskCalendar.cancel(true);
         else if (refreshTask!=null && refreshTask.getState()==SwingWorker.StateValue.STARTED)
             refreshTask.cancel(true);
+        else if (importTaskList!=null && importTaskList.getState()==SwingWorker.StateValue.STARTED)
+            importTaskList.cancel(true);
     }
 
     /**
@@ -1587,7 +1590,12 @@ public class Kernel implements PropertyChangeListener {
         public Object[][] doInBackground() {
             int progress = 0;
             ItasaOnline i = new ItasaOnline();
-            String serial=null, temp, thumbnail, file=null;
+            String serial=null, temp, thumbnail, file=null, unknown=null;
+            try {
+                unknown = downloadImage("http://www.italiansubs.net/varie/ico/unknown.png");
+            } catch (IOException ex) {
+                error.launch(ex, getClass());
+            }
             Object[][] array = new Object[myShows.size()][2];
             while (progress<myShows.size() && !this.isCancelled()) {
                 try {
@@ -1596,12 +1604,7 @@ public class Kernel implements PropertyChangeListener {
                     thumbnail = Https.getInstance().getLocationRedirect(temp);
                     file = downloadImage(thumbnail);
                 } catch (FileNotFoundException ex) {
-                    thumbnail = "http://www.italiansubs.net/varie/ico/unknown.png";
-                    try {
-                        file = downloadImage(thumbnail);
-                    } catch (IOException e) {
-                        error.launch(e, getClass());
-                    }
+                    file = unknown;
                 } catch (IOException ex) {
                     error.launch(ex, getClass());
                 } catch (Exception ex) {

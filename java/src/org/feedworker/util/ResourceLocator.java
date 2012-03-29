@@ -12,8 +12,9 @@ import org.jfacility.java.lang.SystemProperty;
  * @author Luca
  */
 public class ResourceLocator {
-    private static final File FILE_RULE = new File("xml" + File.separator +"rules.xml");
-    private static final File FILE_CALENDAR = new File("xml" + File.separator +"calendar.xml");
+
+    private static final File FILE_RULE = new File("xml" + File.separator + "rules.xml");
+    private static final File FILE_CALENDAR = new File("xml" + File.separator + "calendar.xml");
     private static final File FILE_REMINDER = new File("xml" + File.separator + "reminder.xml");
     private static final File FILE_MYLIST = new File("xml" + File.separator + "mylist.xml");
     private static final File FILE_ITASA = new File("xml" + File.separator + "itasa.xml");
@@ -32,7 +33,7 @@ public class ResourceLocator {
     public static String getWorkspace() {
         return curDir;
     }
-    
+
     public static String getThumbnailShows() {
         return curDir + THUMBNAIL_SHOW + File.separator;
     }
@@ -53,7 +54,7 @@ public class ResourceLocator {
     public static String getResourcePath() {
         return RESOURCES;
     }
-    
+
     public static String getEmoticonPath() {
         return EMOTICONS;
     }

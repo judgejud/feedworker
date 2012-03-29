@@ -104,9 +104,9 @@ public class listTaskBlog extends JScrollPane implements ListEventListener{
     public void objReceived(ListEvent evt) {
         if (evt.getName().equals(getName())){
             String start = "<html><head></head><body>" +
-                            "<table width=\"98%\"><tr>" + 
+                            "<table width=\"99%\"><tr>" + 
                             "<td width=\"9%\"><b>Autore</b><</td><td>";
-            String mid = "</td></tr><tr><td width=\"10%\"><b>"; 
+            String mid = "</td></tr><tr><td width=\"9%\"><b>"; 
             String end = "</td></tr></table></body></html>";
             ArrayList<Object[]> items = evt.getArrayList();
             for (int i = 0; i < items.size(); i++) {
@@ -120,7 +120,6 @@ public class listTaskBlog extends JScrollPane implements ListEventListener{
                 task.setText(html);
                 task.setUrl(obj[0].toString());
                 model.insertElementAt(task, i);
-                //model.addElement(task);
             }
         }
     }
@@ -432,7 +431,8 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
         jep.setContentType("text/html");
         jep.setText(model.getText());
         jep.setFont(new Font("Arial", Font.PLAIN, 13));
-        jep.setPreferredSize(new Dimension(900,150));
+        jep.setPreferredSize(new Dimension(900,180));
+        jep.setEditable(false);
         final String url = model.getUrl();
         JButton jbBrowse = new JButton(GuiCore.getInstance().getIconWWW());
         jbBrowse.setName(url);
@@ -451,8 +451,7 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
         jbCopyUrl.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO
-                //GuiCore.getInstance().openWebsite(url);
+                GuiCore.getInstance().copy(url);
             }
         });
         JPanel jp = new JPanel();
@@ -460,7 +459,7 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
         jp.add(jbCopyUrl);
         taskPane.removeAll();
         taskPane.add(jp);
-        taskPane.add(new JScrollPane(jep));
+        taskPane.add(jep);
         taskPane.setTitle(getString(model));
         taskPane.setCollapsed(!model.isExpanded());
     }
