@@ -197,10 +197,7 @@ public class GuiCore {
                 jt2.setValueAt(false, i, 3);
             }
         }
-        if (!text.equalsIgnoreCase("")) {
-            AWT.setClipboard(text);
-            proxy.printOk("link copiati nella clipboard");
-        }
+        copy(text);
     }
     
     public Color searchVersion(String text) {
@@ -373,7 +370,8 @@ public class GuiCore {
             boolean paneTorrent, boolean paneCalendar, boolean torrentOption, 
             boolean paneShow, boolean blog, boolean paneBlog, boolean itasapm, 
             boolean paneCalendarDay, boolean calendarDay, boolean paneIrc, String ircNick, 
-            String ircPwd, boolean itasaRss, boolean myItasaRss, boolean itasaNews) {
+            String ircPwd, boolean itasaRss, boolean myItasaRss, boolean itasaNews, 
+            boolean noDuplicateAll, boolean noDuplicateSingle) {
                 
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -401,7 +399,8 @@ public class GuiCore {
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
                             paneReminder, paneTorrent, paneCalendar, paneShow, 
                             paneBlog, paneCalendarDay, paneIrc);
-            setPropIRc(ircNick, ircPwd);
+            setPropIrc(ircNick, ircPwd);
+            setPropShow(noDuplicateAll, noDuplicateSingle);
             kernel.writeProp();
             if (!prop.isApplicationFirstTimeUsed() && first) {
                 ManageListener.fireFrameEvent(this, ENABLE_BUTTON);
@@ -424,9 +423,43 @@ public class GuiCore {
     
     public void saveList(JTabbedPane jtp) {
         TreeMap<String, Object[]> map = new TreeMap<String, Object[]>();
-        for (int i=0; i<jtp.getTabCount(); i++)
-            map.put(jtp.getTitleAt(i), ((listShow) jtp.getComponentAt(i)).getArrayModel());
-        proxy.saveList(map);
+        boolean save = true;
+        int i = 0;
+        int count = jtp.getTabCount();
+        if (prop.isShowNoDuplicateAll() || prop.isShowNoDuplicateSingle()){
+            TreeMap<String,String> tmGlobal = new TreeMap<String,String>();
+            while(save && i<count){
+                Object[] obj = ((listShow) jtp.getComponentAt(i)).getArrayModel();
+                String tab = jtp.getTitleAt(i);
+                TreeSet<String> tsSingle = new TreeSet<String>();
+                int j=0;
+                while(save && j<obj.length){
+                    String name = ((Object[])obj[j])[0].toString();
+                    if (save && prop.isShowNoDuplicateSingle()){
+                        if (tsSingle.contains(name)){
+                            save = false;
+                            printAlert("Show - doppione trovato nella categoria "+ tab + ": "+ name);
+                        } else
+                            tsSingle.add(name);
+                    }
+                    if (save && prop.isShowNoDuplicateAll()){
+                        if (tmGlobal.containsKey(name)){
+                            save = false;
+                            printAlert("Show - doppione trovato nelle categorie "+ tab + 
+                                    " & " + tmGlobal.get(name) + ": "+ name );
+                        } else
+                            tmGlobal.put(name,tab);
+                    }
+                    j++;
+                }
+                i++;
+            }
+        } else {
+            for (; i<count; i++)
+                map.put(jtp.getTitleAt(i), ((listShow) jtp.getComponentAt(i)).getArrayModel());
+        }
+        if (save)
+            proxy.saveList(map);
     }
     
     public ImageIcon getIconAdd() {
@@ -661,9 +694,14 @@ public class GuiCore {
         prop.setTorrentOption(option);
     }
     
-    private void setPropIRc(String nick, String pwd){
+    private void setPropIrc(String nick, String pwd){
         prop.setIrcNick(nick);
         prop.setIrcPwd(pwd);
+    }
+    
+    private void setPropShow(boolean all, boolean single){
+        prop.setShowNoDuplicateAll(all);
+        prop.setShowNoDuplicateSingle(single);
     }
     
     /**Aggiunge i link corrispondenti al true della colonna download nell'arraylist
@@ -777,5 +815,17 @@ public class GuiCore {
 
     public void checkQueryIrc(String name) {
         ManageListener.fireTabbedPaneEvent(this, name, "query");
+    }
+    
+    public void copy(String text){
+        if (!text.equalsIgnoreCase("")) {
+            AWT.setClipboard(text);
+            proxy.printOk("testo/link copiato/i nella clipboard");
+        }
+    }
+    
+    public void copySeasonEpisode(String text){
+        //TODO copySeasonEpisode
+        copy(text);
     }
 }

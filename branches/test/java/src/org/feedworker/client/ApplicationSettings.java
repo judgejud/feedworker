@@ -33,7 +33,8 @@ public class ApplicationSettings {
             enableNotifyMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
             enablePaneSearchSubItasa, enablePaneReminder, reminderOption, enablePaneTorrent,
             enablePaneCalendar, enableNotifySms, enablePaneShow, itasaBlog, enablePaneBlog, 
-            itasaPM, calendarDay, enablePaneCalendarDay, enablePaneIrc, itasaNews;
+            itasaPM, calendarDay, enablePaneCalendarDay, enablePaneIrc, itasaNews, 
+            showNoDuplicateAll, showNoDuplicateSingle;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -117,6 +118,9 @@ public class ApplicationSettings {
                 //IRC SETTINGS
                 setIrcNick(getDecryptedValue("IRC_NICK"));
                 setIrcPwd(getDecryptedValue("IRC_PWD"));
+                //SHOW SETTINGS 
+                setShowNoDuplicateAll(getBooleanDecryptedValue("ENABLE_SHOW_CONTROL_ALL_DUPLICATE"));
+                setShowNoDuplicateSingle(getBooleanDecryptedValue("ENABLE_SHOW_CONTROL_SINGLE_DUPLICATE"));
             } else
                 loadDefaultSettings();
         } catch (GeneralSecurityException e) {
@@ -249,6 +253,17 @@ public class ApplicationSettings {
         try {
             propertiesCrypting("IRC_NICK", ircNick);
             propertiesCrypting("IRC_PWD", ircPwd);
+        } catch (GeneralSecurityException e) {
+            error.launch(e, getClass());
+        } catch (IOException e) {
+            error.launch(e, getClass(), null);
+        }
+    }// end write
+    
+    public void writeShowSettings() {
+        try {
+            propertiesCrypting("ENABLE_SHOW_CONTROL_ALL_DUPLICATE", showNoDuplicateAll);
+            propertiesCrypting("ENABLE_SHOW_CONTROL_SINGLE_DUPLICATE", showNoDuplicateSingle);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -768,5 +783,21 @@ public class ApplicationSettings {
 
     public void setItasaNews(boolean itasaNews) {
         this.itasaNews = itasaNews;
+    }
+
+    public boolean isShowNoDuplicateAll() {
+        return showNoDuplicateAll;
+    }
+
+    public void setShowNoDuplicateAll(boolean showNoDuplicateAll) {
+        this.showNoDuplicateAll = showNoDuplicateAll;
+    }
+
+    public boolean isShowNoDuplicateSingle() {
+        return showNoDuplicateSingle;
+    }
+
+    public void setShowNoDuplicateSingle(boolean showNoDuplicateSingle) {
+        this.showNoDuplicateSingle = showNoDuplicateSingle;
     }
 }// end class

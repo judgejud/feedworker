@@ -1,5 +1,6 @@
 package org.feedworker.client.frontend.panel;
 //IMPORT JAVA
+import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -9,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -19,6 +19,7 @@ import org.feedworker.client.ApplicationSettings;
 
 import org.jfacility.javax.swing.Swing;
 
+import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 /**
@@ -35,7 +36,7 @@ public class paneSetting extends paneAbstract {
             jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
             jcbPaneShow, jcbTorrent, jcbPaneBlog, jcbItasaBlog, jcbItasaPM, 
             jcbPaneCalendarDay, jcbCalendarDay, jcbPaneIrc, jcbItasaRss, jcbMyItasaRss,
-            jcbItasaNews;
+            jcbItasaNews, jcbShowNoDuplicateAll, jcbShowNoDuplicateSingle;
     private JButton jbDestSub;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf, 
@@ -64,6 +65,7 @@ public class paneSetting extends paneAbstract {
         tpcWest.add(initTaskPaneGeneral());
         tpcWest.add(initTaskPaneSamba());
         tpcWest.add(initTaskPaneVisibilePane());
+        tpcWest.add(initTaskPaneShow());
         tpcWest.add(initTaskPaneIrc());
         
         JXTaskPaneContainer tpcEast = new JXTaskPaneContainer();
@@ -119,7 +121,8 @@ public class paneSetting extends paneAbstract {
                 jcbPaneBlog.isSelected(), jcbItasaPM.isSelected(), 
                 jcbPaneCalendarDay.isSelected(), jcbCalendarDay.isSelected(), jcbPaneIrc.isSelected(),
                 jtfIrcNick.getText(), new String(jpfIrc.getPassword()), jcbItasaRss.isSelected(), 
-                jcbMyItasaRss.isSelected(), jcbItasaNews.isSelected());
+                jcbMyItasaRss.isSelected(), jcbItasaNews.isSelected(), 
+                jcbShowNoDuplicateAll.isSelected(), jcbShowNoDuplicateSingle.isSelected());
             }
         });
         
@@ -166,19 +169,19 @@ public class paneSetting extends paneAbstract {
         task.setTitle("General");
         task.setCollapsed(true);
         
-        JPanel temp = new JPanel();
+        JXPanel temp = new JXPanel(new FlowLayout(FlowLayout.LEFT));
         temp.add(new JLabel("Aggiorna RSS"));
         temp.add(jcbMinuti);
         temp.add(new JLabel("minuti"));
         task.add(temp);
 
-        temp = new JPanel();
+        temp = new JXPanel(new FlowLayout(FlowLayout.LEFT));
         temp.add(new JLabel("Destinazione Sub"));
         temp.add(jrbDirLocal);
         temp.add(jrbDirSamba);
         task.add(temp);
 
-        temp = new JPanel();
+        temp = new JXPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel jlLocal = new JLabel("Percorso locale standard");
         temp.add(jlLocal);
         temp.add(jbDestSub);
@@ -189,7 +192,7 @@ public class paneSetting extends paneAbstract {
         
         task.add(jcbReminder);
 
-        temp = new JPanel();
+        temp = new JXPanel(new FlowLayout(FlowLayout.LEFT));
         temp.add(new JLabel("Timeout"));
         temp.add(jcbTimeout);
         temp.add(new JLabel("secondi"));
@@ -321,7 +324,7 @@ public class paneSetting extends paneAbstract {
         task.add(jcbMyItasaRss);
         task.add(jtfRssMyItasa);
 
-        JPanel temp = new JPanel();
+        JXPanel temp = new JXPanel(new FlowLayout(FlowLayout.LEFT));
         temp.add(new JLabel("myItasa download sub"));
         temp.add(jrbDownAuto);
         temp.add(jrbDownManual);
@@ -339,7 +342,7 @@ public class paneSetting extends paneAbstract {
         task.add(new JLabel("Password"));
         task.add(jpfItasa);
         
-        temp = new JPanel();
+        temp = new JXPanel(new FlowLayout(FlowLayout.LEFT));
         temp.add(jbCheckItasaLogin);
         temp.add(jbCheckItasaApi);
         temp.add(jbCheckItasaPM);
@@ -362,9 +365,9 @@ public class paneSetting extends paneAbstract {
                 jbDestTorrentMouseClicked();
             }
         });
-        JPanel temp = new JPanel();
-        temp.add(jtfDestTorrent);
+        JXPanel temp = new JXPanel(new FlowLayout(FlowLayout.LEFT));
         temp.add(jbDestTorrent);
+        temp.add(jtfDestTorrent);
         
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Torrent");
@@ -464,7 +467,6 @@ public class paneSetting extends paneAbstract {
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Visible Pane at Startup");
         task.setCollapsed(true);
-        
         task.add(jcbPaneBlog);
         task.add(jcbPaneCalendarDay);
         task.add(jcbPaneCalendar);
@@ -476,6 +478,17 @@ public class paneSetting extends paneAbstract {
         task.add(jcbPaneShow);
         task.add(jcbPaneSubDest);
         task.add(jcbPaneTorrent);
+        return task;
+    }
+    
+    private JXTaskPane initTaskPaneShow(){
+        jcbShowNoDuplicateAll = new JCheckBox("Abilita controllo globale per i duplicati");
+        jcbShowNoDuplicateSingle = new JCheckBox("Abilita controllo singola categoria per i duplicati");
+        JXTaskPane task = new JXTaskPane();
+        task.setTitle("Show");
+        task.setCollapsed(true);
+        task.add(jcbShowNoDuplicateAll);
+        task.add(jcbShowNoDuplicateSingle);
         return task;
     }
 
@@ -504,6 +517,7 @@ public class paneSetting extends paneAbstract {
         settingsPaneVisibleValue();
         settingsTorrentValue();
         settingsIrcValue();
+        settingsShowValue();
         if (prop.isSubsfactoryOption())
             settingsSubsfactoryValue();
     }
@@ -562,6 +576,11 @@ public class paneSetting extends paneAbstract {
         //jtfIrcServer.setEnabled(false);
         jtfIrcNick.setText(prop.getIrcNick());
         jpfIrc.setText(prop.getIrcPwd());
+    }
+    
+    private void settingsShowValue() {
+        jcbShowNoDuplicateAll.setSelected(prop.isShowNoDuplicateAll());
+        jcbShowNoDuplicateSingle.setSelected(prop.isShowNoDuplicateSingle());
     }
 
     private void settingsSubsfactoryValue() {

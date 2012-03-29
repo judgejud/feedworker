@@ -51,7 +51,7 @@ public class Mediator {
     String getTitle() {
         return getApplicationName() + " revision "
                 //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "470 by "
+                + "471 by "
                 + FeedWorkerClient.getApplication().getAuthor();
     }
     
@@ -272,7 +272,7 @@ public class Mediator {
     }
     
     public void stopImportRefresh() {
-    	core.stopImportRefreshCalendar();
+    	core.stopImportRefresh();
     }
     
     public void checkLoginItasaApi(String user, char[] password) {
