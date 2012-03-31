@@ -26,8 +26,10 @@ public class paneBlog extends paneAbstract{
 
     @Override
     void initializePanel() {
-        listBlog = new listTaskBlog(getName());
-        jpCenter.add(listBlog);
+        if (core.isJava17()){
+            listBlog = new listTaskBlog(getName());
+            jpCenter.add(listBlog);
+        }
     }
 
     @Override

@@ -312,7 +312,6 @@ public class paneSetting extends paneAbstract {
         if (!core.isJava17()){
             jcbItasaBlog = new JCheckBox("Abilita Blog*");
             jcbItasaBlog.setToolTipText("Questa funzionalità richiede java 1.7");
-            jcbItasaBlog.setSelected(false);
             jcbItasaBlog.setEnabled(false);
         }
         
@@ -556,7 +555,10 @@ public class paneSetting extends paneAbstract {
         jpfItasa.setText(prop.getItasaPassword());
         jrbDownAuto.setSelected(prop.isAutoDownloadMyItasa());
         jrbDownManual.setSelected(!prop.isAutoDownloadMyItasa());
-        jcbItasaBlog.setSelected(prop.isItasaBlog());
+        if (core.isJava17())
+            jcbItasaBlog.setSelected(prop.isItasaBlog());
+        else
+            jcbItasaBlog.setSelected(false);
         jcbItasaPM.setSelected(prop.isItasaPM());
         jcbCalendarDay.setSelected(prop.isCalendarDay());
         settingItasaDownloadStartup();
