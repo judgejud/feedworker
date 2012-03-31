@@ -308,9 +308,10 @@ public class paneSetting extends paneAbstract {
             }
         });
         
-        jcbItasaBlog = new JCheckBox("Abilita Blog*");
-        jcbItasaBlog.setToolTipText("Questa funzionalità richiede java 1.7");
+        jcbItasaBlog = new JCheckBox("Abilita Blog");
         if (!core.isJava17()){
+            jcbItasaBlog = new JCheckBox("Abilita Blog*");
+            jcbItasaBlog.setToolTipText("Questa funzionalità richiede java 1.7");
             jcbItasaBlog.setSelected(false);
             jcbItasaBlog.setEnabled(false);
         }
