@@ -51,7 +51,7 @@ import org.jdesktop.swingx.rollover.RolloverRenderer;
  */
 public class listTaskBlog extends JScrollPane implements ListEventListener{
     private JXList list = null;
-    private DefaultListModel<SampleTaskPaneModel> model = new ContentListeningListModel();
+    private DefaultListModel model = new ContentListeningListModel();
     
     public listTaskBlog(String name){
         super();
