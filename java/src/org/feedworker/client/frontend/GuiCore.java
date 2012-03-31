@@ -829,8 +829,11 @@ public class GuiCore {
         }
     }
     
-    public void copySeasonEpisode(String text){
-        //TODO copySeasonEpisode
+    public void copySeasonEpisode(TableModel tm){
+        String text = "";
+        for (int i=0; i<tm.getRowCount(); i++)
+            text += tm.getValueAt(i, 1) + " \"" + tm.getValueAt(i, 3) + "\" " +
+                    tm.getValueAt(i, 2) +"\n";
         copy(text);
     }
     

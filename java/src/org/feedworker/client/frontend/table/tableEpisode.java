@@ -1,9 +1,10 @@
 package org.feedworker.client.frontend.table;
 
 import javax.swing.table.DefaultTableModel;
-import org.feedworker.client.frontend.events.TableEvent;
-import org.jfacility.javax.swing.Swing;
 
+import org.feedworker.client.frontend.events.TableEvent;
+
+import org.jfacility.javax.swing.Swing;
 /**
  *
  * @author Administrator

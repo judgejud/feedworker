@@ -3,15 +3,22 @@ package org.feedworker.client.frontend.component;
 import java.awt.Color;
 import java.awt.Dimension;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import javax.swing.JViewport;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 import org.feedworker.client.frontend.GuiCore;
 import org.feedworker.client.frontend.events.TabbedPaneEvent;
 import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 import org.feedworker.client.frontend.table.tableEpisode;
 
+import org.jdesktop.swingx.JXButton;
+import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 
@@ -47,6 +54,18 @@ public class taskpaneShowInfo extends JScrollPane implements TabbedPaneEventList
         jepActors.setOpaque(false);
         jepActors.setEditable(false);
         
+        JXButton jbCopy = new JXButton(core.getIconCopy());
+        jbCopy.setToolTipText("Copia la stagione selezionata nella clipboard");
+        jbCopy.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+        jbCopy.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                copySeasonEpisodes();
+            }
+        });
+        JXPanel jpTemp = new JXPanel();
+        jpTemp.add(jbCopy);
+        
         tabEpisodes = new JTabbedPane();
 
         taskShow = new JXTaskPane();
@@ -62,6 +81,7 @@ public class taskpaneShowInfo extends JScrollPane implements TabbedPaneEventList
         taskEpisodes = new JXTaskPane();
         taskEpisodes.setTitle("Episode List");
         taskEpisodes.setCollapsed(true);
+        taskEpisodes.add(jpTemp);
         taskEpisodes.add(tabEpisodes);
 
         container.add(taskShow);
@@ -94,6 +114,13 @@ public class taskpaneShowInfo extends JScrollPane implements TabbedPaneEventList
                 tabEpisodes.addTab(name, new JScrollPane(table));
                 core.setTableListener(table);
             }
+        }
+    }
+    
+    private void copySeasonEpisodes() {
+        if (tabEpisodes.getComponentCount()>0){
+            JViewport jsp = ((JScrollPane) tabEpisodes.getSelectedComponent()).getViewport();
+            core.copySeasonEpisode(((tableEpisode) jsp.getComponent(0)).getModel());
         }
     }
 }
