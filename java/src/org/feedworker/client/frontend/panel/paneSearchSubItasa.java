@@ -21,7 +21,7 @@ import org.feedworker.client.frontend.table.tableResultSearchSub;
 public class paneSearchSubItasa extends paneAbstract implements ComboboxEventListener{
     private static paneSearchSubItasa jpanel = null;
     
-    private JComboBox<Object> jcbShow, jcbVersion;
+    private JComboBox jcbShow, jcbVersion;
     private JCheckBox jcbComplete;
     private JTextField jtfSeason, jtfEpisode;
     private tableResultSearchSub jtable;
@@ -48,9 +48,9 @@ public class paneSearchSubItasa extends paneAbstract implements ComboboxEventLis
 
     @Override
     void initializeButtons() {
-        jcbShow = new JComboBox<Object>();
+        jcbShow = new JComboBox();
         jcbShow.setMaximumRowCount(20);
-        jcbVersion = new JComboBox<Object>(proxy.getQualityEnum());
+        jcbVersion = new JComboBox(proxy.getQualityEnum());
         jcbVersion.removeItemAt(jcbVersion.getItemCount()-1);
         jcbComplete = new JCheckBox("Stagione completa");
         jtfSeason = new JTextField(3);

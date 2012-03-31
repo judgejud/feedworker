@@ -37,6 +37,7 @@ import org.feedworker.object.ValueRule;
 import org.feedworker.util.Common;
 
 import org.jfacility.java.awt.AWT;
+import org.jfacility.java.lang.JVM;
 import org.jfacility.java.lang.Lang;
 import org.jfacility.java.lang.SystemProperty;
 import org.jfacility.javax.swing.Swing;
@@ -52,6 +53,7 @@ public class GuiCore {
     private final String IMAGE_ADD = "add.png";
     private final String IMAGE_CLEAN1 = "clean1.png";
     private final String IMAGE_CLEAN2 = "clean2.png";
+    private final String IMAGE_CLONE = "clone.png";
     private final String IMAGE_CLOSE = "close.png";
     private final String IMAGE_COPY_LINK = "clipboard.png";
     private final String IMAGE_DOWNLOAD = "download.png";
@@ -475,6 +477,10 @@ public class GuiCore {
         return Common.getResourceImageButton(IMAGE_CLEAN2);
     }
     
+    public ImageIcon getIconClone() {
+        return Common.getResourceImageButton(IMAGE_CLONE);
+    }
+    
     public ImageIcon getIconClose() {
         return Common.getResourceImageButton(IMAGE_CLOSE);
     }
@@ -826,5 +832,10 @@ public class GuiCore {
     public void copySeasonEpisode(String text){
         //TODO copySeasonEpisode
         copy(text);
+    }
+    
+    public boolean isJava17(){
+        JVM jvm = new JVM();
+        return jvm.isOrLater(17);
     }
 }

@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import java.util.Vector;
+
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -72,7 +72,7 @@ public class paneSubtitleDest extends paneAbstract {
             }
         });
         
-        JButton jbCloneRow = new JButton("clona riga");
+        JButton jbCloneRow = new JButton(core.getIconClone());
         jbCloneRow.setToolTipText("Crea duplicato riga selezionata della tabella");
         jbCloneRow.setBorder(BORDER);
         jbCloneRow.addMouseListener(new MouseAdapter() {

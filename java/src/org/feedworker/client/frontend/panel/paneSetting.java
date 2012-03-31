@@ -140,8 +140,8 @@ public class paneSetting extends paneAbstract {
     
     private JXTaskPane initTaskPaneGeneral() {
         String[] time = new String[]{"2", "4", "6", "8", "10", "15", "20"};
-        DefaultComboBoxModel<String> modelTime = new DefaultComboBoxModel<String>(time);
-        DefaultComboBoxModel<String> modelMin = new DefaultComboBoxModel<String>(time);
+        DefaultComboBoxModel modelTime = new DefaultComboBoxModel(time);
+        DefaultComboBoxModel modelMin = new DefaultComboBoxModel(time);
         jcbMinuti = new JComboBox(modelMin);
         jcbMinuti.setSelectedIndex(2);
         jcbTimeout = new JComboBox(modelTime);
@@ -308,7 +308,12 @@ public class paneSetting extends paneAbstract {
             }
         });
         
-        jcbItasaBlog = new JCheckBox("Abilita Blog");
+        jcbItasaBlog = new JCheckBox("Abilita Blog*");
+        jcbItasaBlog.setToolTipText("Questa funzionalità richiede java 1.7");
+        if (!core.isJava17()){
+            jcbItasaBlog.setSelected(false);
+            jcbItasaBlog.setEnabled(false);
+        }
         
         jcbItasaPM = new JCheckBox("Abilita controllo messaggi privati forum");
         
