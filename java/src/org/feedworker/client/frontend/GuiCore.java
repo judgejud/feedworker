@@ -450,6 +450,7 @@ public class GuiCore {
                         } else
                             tmGlobal.put(name,tab);
                     }
+                    map.put(jtp.getTitleAt(i), ((listShow) jtp.getComponentAt(i)).getArrayModel());
                     j++;
                 }
                 i++;
@@ -799,12 +800,10 @@ public class GuiCore {
                 printAlert("INPUT OBBLIGATORIO: L'utente Samba non può essere vuoto.");
             else if (!Lang.verifyTextNotNull(sambaPwd))
                 printAlert("INPUT OBBLIGATORIO: La password Samba non può essere vuota.");
-            else if (!proxy.testSamba(sambaIP, sambaDir, sambaDomain,
-                    sambaUser, sambaPwd)) {
+            else if (!proxy.testSamba(sambaIP, sambaDir, sambaDomain, sambaUser, sambaPwd))
                 printAlert("Impossibile connettermi al server/dir condivisa Samba");
-            } else {
+            else
                 check = true;
-            }
         }
         return check;
     }

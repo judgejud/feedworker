@@ -1,12 +1,10 @@
 IMPLEMENTARE
-*inserire nel blog bottone copia link (terminare)
 *inserire bottone copia dati puntate ultima stagione negli show
+*introdurre set per i reminder in modo che non ci siano duplicati (treeset)?
 *tvdb
 fare 1thread per il test connect samba
-introdurre set per i reminder in modo che non ci siano duplicati (treeset)?
 controllare che gli show con icon unknown sono stati aggiornati di icon
 introdurre myitasa
-evitare i doppioni delle serie nelle liste show
 introdurre diverse tipologi di rinomina
 irc1: timestamp del msg
 fare caricamento xml sotto thread

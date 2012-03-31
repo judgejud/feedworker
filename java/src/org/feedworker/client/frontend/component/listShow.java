@@ -25,7 +25,7 @@ import org.jdesktop.swingx.JXList;
  * @author Administrator
  */
 public class listShow extends JScrollPane implements ListEventListener{
-    private DefaultListModel<Object> model = new DefaultListModel<Object>();
+    private DefaultListModel model = new DefaultListModel();
     private JXList list = new JXList(model);
 
     public listShow(String name) {
