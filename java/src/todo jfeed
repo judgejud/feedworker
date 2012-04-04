@@ -1,10 +1,9 @@
 IMPLEMENTARE
-*inserire bottone copia dati puntate ultima stagione negli show
-*introdurre set per i reminder in modo che non ci siano duplicati (treeset)?
+*treeset reminder
 *tvdb
+introdurre trama singola puntata (da che fonte? tvdb?)
 fare 1thread per il test connect samba
 controllare che gli show con icon unknown sono stati aggiornati di icon
-introdurre myitasa
 introdurre diverse tipologi di rinomina
 irc1: timestamp del msg
 fare caricamento xml sotto thread
@@ -14,9 +13,8 @@ aggiungere versioning automatico all'applicazione
 aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
 migrazione account itasa da 1vecchio a 1nuovo per quanto riguarda la lista di serial tv myitasa
 specificare altri suoni
-introdurre trama singola puntata (da che fonte?)
 irc2: tasto tabulazione che fa scegliere il nick a cui riferirsi
-irc3: fare il sorted dei nick nel chan
+irc3: fare il sorted dei nick nel chan(comparator?)
 irc4: type del msg
 
 CORREZIONI:
@@ -25,6 +23,7 @@ correggere il comparator negli show, con il tooltip della label che non corrispo
 migliorare il fire alla reminder considerando la regola delete.
 
 PUNTI INTERROGATIVI
+myitasa?
 aspectj? log4j?
 feature proxy http? 
 esiste evento "arresta sistema"? e come intercettarlo???

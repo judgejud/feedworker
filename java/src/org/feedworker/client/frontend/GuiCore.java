@@ -373,7 +373,7 @@ public class GuiCore {
             boolean paneShow, boolean blog, boolean paneBlog, boolean itasapm, 
             boolean paneCalendarDay, boolean calendarDay, boolean paneIrc, String ircNick, 
             String ircPwd, boolean itasaRss, boolean myItasaRss, boolean itasaNews, 
-            boolean noDuplicateAll, boolean noDuplicateSingle) {
+            boolean noDuplicateAll, boolean noDuplicateSingle, String ircServer) {
                 
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -401,7 +401,7 @@ public class GuiCore {
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
                             paneReminder, paneTorrent, paneCalendar, paneShow, 
                             paneBlog, paneCalendarDay, paneIrc);
-            setPropIrc(ircNick, ircPwd);
+            setPropIrc(ircNick, ircPwd, ircServer);
             setPropShow(noDuplicateAll, noDuplicateSingle);
             kernel.writeProp();
             if (!prop.isApplicationFirstTimeUsed() && first) {
@@ -701,9 +701,10 @@ public class GuiCore {
         prop.setTorrentOption(option);
     }
     
-    private void setPropIrc(String nick, String pwd){
+    private void setPropIrc(String nick, String pwd, String server){
         prop.setIrcNick(nick);
         prop.setIrcPwd(pwd);
+        prop.setIrcServer(server);
     }
     
     private void setPropShow(boolean all, boolean single){

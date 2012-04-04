@@ -25,6 +25,8 @@ import org.feedworker.object.Operation;
 import org.feedworker.object.Quality;
 import org.feedworker.object.ValueRule;
 
+import org.opensanskrit.application.Application;
+
 import com.sun.syndication.io.FeedException;
 /**Classe mediatrice tra gui e kernel, detta anche kernel della gui.
  * 
@@ -49,10 +51,10 @@ public class Mediator {
 
     //TODO: ripristinare col getbuildernumber
     String getTitle() {
-        return getApplicationName() + " revision "
-                //+ FeedWorkerClient.getApplication().getBuildNumber() + " by "
-                + "475 by "
-                + FeedWorkerClient.getApplication().getAuthor();
+        Application app = FeedWorkerClient.getApplication();
+        return app.getName() + " revision "
+                //+ app.getBuildNumber() + " by "
+                + "476 by " + app.getAuthor();
     }
     
     ManageException getError(){
@@ -211,10 +213,6 @@ public class Mediator {
         core.closeApp(true);
     }
 
-    public String getNameApp() {
-        return FeedWorkerClient.getApplication().getName();
-    }
-
     public String[] getAvailableLAF() {
         return FeedWorkerClient.getApplication().getLookAndFeelInstance().getAvailableLAF();
     }
@@ -225,10 +223,6 @@ public class Mediator {
 
     Image getApplicationIcon() {
         return FeedWorkerClient.getApplication().getIcon();
-    }
-
-    String getApplicationName() {
-        return FeedWorkerClient.getApplication().getName();
     }
 
     ArrayList<String[]> getPropertiesInfo(){
@@ -303,8 +297,7 @@ public class Mediator {
         core.setWriteLaf(laf, parent);
     }
 
-    public void checkSamba(String domain, String dir, String ip, String user, 
-            char[] password) {
+    public void checkSamba(String domain, String dir, String ip, String user, char[] password) {
         if (core.testSamba(ip, dir, domain, user, new String(password)))
             printOk("Test connessione samba ok");
     }

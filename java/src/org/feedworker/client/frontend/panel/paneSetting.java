@@ -122,7 +122,8 @@ public class paneSetting extends paneAbstract {
                 jcbPaneCalendarDay.isSelected(), jcbCalendarDay.isSelected(), jcbPaneIrc.isSelected(),
                 jtfIrcNick.getText(), new String(jpfIrc.getPassword()), jcbItasaRss.isSelected(), 
                 jcbMyItasaRss.isSelected(), jcbItasaNews.isSelected(), 
-                jcbShowNoDuplicateAll.isSelected(), jcbShowNoDuplicateSingle.isSelected());
+                jcbShowNoDuplicateAll.isSelected(), jcbShowNoDuplicateSingle.isSelected(),
+                jtfIrcServer.getText());
             }
         });
         
@@ -438,7 +439,8 @@ public class paneSetting extends paneAbstract {
     }
     
     private JXTaskPane initTaskPaneIrc(){
-        //jtfIrcServer = new JTextField();
+        jtfIrcServer = new JTextField();
+        jtfIrcServer.setToolTipText("Se non viene immesso il server irc, verrà usato irc.azzurra.org");
         jtfIrcNick = new JTextField();
         jpfIrc = new JPasswordField();
         
@@ -446,8 +448,8 @@ public class paneSetting extends paneAbstract {
         task.setTitle("IRC");
         task.setCollapsed(true);
         
-        //task.add(new JLabel("Server irc"));
-        //task.add(jtfIrcServer);
+        task.add(new JLabel("Server irc"));
+        task.add(jtfIrcServer);
         task.add(new JLabel("Nickname"));
         task.add(jtfIrcNick);
         task.add(new JLabel("Password"));
@@ -580,8 +582,7 @@ public class paneSetting extends paneAbstract {
     }
     
     private void settingsIrcValue() {
-        //jtfIrcServer.setText("irc.azzurra.org");
-        //jtfIrcServer.setEnabled(false);
+        jtfIrcServer.setText(prop.getIrcServer());
         jtfIrcNick.setText(prop.getIrcNick());
         jpfIrc.setText(prop.getIrcPwd());
     }
