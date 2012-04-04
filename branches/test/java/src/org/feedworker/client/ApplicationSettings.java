@@ -25,7 +25,8 @@ public class ApplicationSettings {
             applicationLookAndFeel, torrentDestinationFolder,
             cifsShareLocation, cifsSharePath, cifsShareUsername,
             cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, mySubsfactoryFeedUrl,
-            httpTimeout, mailTO, mailSMTP, googleUser, googlePwd, googleCalendar, ircNick, ircPwd;
+            httpTimeout, mailTO, mailSMTP, googleUser, googlePwd, googleCalendar, 
+            ircNick, ircPwd, ircServer;
     private boolean subsfactoryOption, torrentOption, 
             autoDownloadMyItasa, enableNotifyAudioRss, enableNotifyAudioSub, 
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
@@ -118,6 +119,7 @@ public class ApplicationSettings {
                 //IRC SETTINGS
                 setIrcNick(getDecryptedValue("IRC_NICK"));
                 setIrcPwd(getDecryptedValue("IRC_PWD"));
+                setIrcServer(getDecryptedValue("IRC_SERVER"));
                 //SHOW SETTINGS 
                 setShowNoDuplicateAll(getBooleanDecryptedValue("ENABLE_SHOW_CONTROL_ALL_DUPLICATE"));
                 setShowNoDuplicateSingle(getBooleanDecryptedValue("ENABLE_SHOW_CONTROL_SINGLE_DUPLICATE"));
@@ -253,6 +255,7 @@ public class ApplicationSettings {
         try {
             propertiesCrypting("IRC_NICK", ircNick);
             propertiesCrypting("IRC_PWD", ircPwd);
+            propertiesCrypting("IRC_SERVER", ircServer);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -799,5 +802,13 @@ public class ApplicationSettings {
 
     public void setShowNoDuplicateSingle(boolean showNoDuplicateSingle) {
         this.showNoDuplicateSingle = showNoDuplicateSingle;
+    }
+
+    public String getIrcServer() {
+        return ircServer;
+    }
+
+    public void setIrcServer(String ircServer) {
+        this.ircServer = ircServer;
     }
 }// end class

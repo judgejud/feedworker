@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 import org.feedworker.util.Common;
 
@@ -31,18 +32,23 @@ public class Reminder extends AbstractXML{
         ArrayList<Object[]> al = new ArrayList<Object[]>();
         if (sizeRootChildren() > 0){
             Iterator iter = iteratorRootChildren();
+            TreeSet ts = new TreeSet();
             while (iter.hasNext()) {
                 Element reminder = (Element) iter.next();
-                Object[] obj = new Object[3];
-                int i=-1;
-                Date d = null;
-                try {
-                    d = Common.stringDate(reminder.getChild(TAG_REMINDER_DATE).getText());
-                } catch (ParseException ex) {}
-                obj[++i] = d;
-                obj[++i] = reminder.getChild(TAG_REMINDER_SUBTITLE).getText();
-                obj[++i] = false;
-                al.add(obj);
+                String text = reminder.getChild(TAG_REMINDER_SUBTITLE).getText();
+                if (!ts.contains(text)){
+                    int i=-1;
+                    Date d = null;
+                    try {
+                        d = Common.stringDate(reminder.getChild(TAG_REMINDER_DATE).getText());
+                    } catch (ParseException ex) {}
+                    Object[] obj = new Object[3];
+                    obj[++i] = d;
+                    obj[++i] = text;
+                    obj[++i] = false;
+                    al.add(obj);
+                    ts.add(text);
+                }
             }
         }
         return al;

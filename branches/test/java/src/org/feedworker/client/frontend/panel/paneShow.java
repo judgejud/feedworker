@@ -29,7 +29,7 @@ import org.feedworker.client.frontend.events.TabbedPaneEventListener;
 
 import org.jfacility.javax.swing.ButtonTabComponent;
 
-/**TODO: lista ordinata e senza duplicati,
+/**TODO: lista ordinata
  * @author luca
  */
 public class paneShow extends paneAbstract implements ComboboxEventListener, 

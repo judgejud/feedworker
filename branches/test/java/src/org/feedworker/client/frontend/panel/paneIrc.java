@@ -10,6 +10,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import javax.swing.DefaultListModel;
@@ -18,12 +19,13 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SortOrder;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
@@ -39,6 +41,7 @@ import org.jfacility.java.lang.Lang;
 import org.jfacility.javax.swing.ButtonTabComponent;
 
 import org.jdesktop.swingx.JXList;
+import org.jdesktop.swingx.JXPanel;
 
 /**
  *
@@ -88,7 +91,7 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
     void initializeButtons() {
         JButton jbConnect = new JButton(core.getIconConnectIrc());
         jbConnect.setBorder(BORDER);
-        jbConnect.setToolTipText("Connessione al server irc Azzurra");
+        jbConnect.setToolTipText("Connessione al server irc Azzurra selezionato");
         jbConnect.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -248,13 +251,19 @@ class paneConsole extends paneAbstract implements TextPaneEventListener{
             addMsgTextPane(evt.getMsg());
     }
     
-    protected void addMsgTextPane(String msg){
-        try {
-            sd.insertString(sd.getLength(), msg + "\n", null);
-            text.setCaretPosition(sd.getLength());
-        } catch (BadLocationException ex) {
-            ex.printStackTrace();
-        }
+    protected synchronized void addMsgTextPane(final String msg){
+        Runnable  runnable = new Runnable() {
+            @Override
+            public void run(){
+                try {
+                    sd.insertString(sd.getLength(), msg + "\n", null);
+                    text.setCaretPosition(sd.getLength());
+                } catch (BadLocationException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+        SwingUtilities.invokeLater(runnable);
     }
 
     @Override
@@ -306,7 +315,7 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
             }
         });
         
-        JPanel pane = new JPanel();
+        JXPanel pane = new JXPanel();
         pane.setLayout(new BorderLayout());
         textfield.setFocusable(true);
         pane.add(textfield, BorderLayout.CENTER);
@@ -314,8 +323,8 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
         add(pane, BorderLayout.SOUTH);
     }
     
-    private JPanel getPaneSmiley(){
-        JPanel jpSmiley = new JPanel();
+    private JXPanel getPaneSmiley(){
+        JXPanel jpSmiley = new JXPanel();
         Iterator<String> string = proxy.getIteratorEmoString();
         Iterator<ImageIcon> image = proxy.getIteratorEmoIcon();
         while (string.hasNext()){
@@ -377,6 +386,9 @@ class paneChan extends paneQuery implements ListEventListener{
         super(name);
         model = new DefaultListModel();
         list = new JXList(model);
+        list.setComparator(new ListComparator());
+        list.setAutoCreateRowSorter(true);
+        list.setSortOrder(SortOrder.ASCENDING); 
         list.addMouseListener(new MouseAdapter() {
         @Override
             public void mouseReleased(MouseEvent ev) {
@@ -467,5 +479,37 @@ class paneChan extends paneQuery implements ListEventListener{
         else if (model.indexOf("+" + nick)>-1)
             return "+";
         return null;
+    }
+    
+    class ListComparator implements Comparator<String> {
+        //TODO: testare
+        @Override
+        public int compare(String s1, String s2) {
+            System.out.println(s1 + " " + s2);
+            String l1 = s1.substring(0, 1);
+            String l2 = s2.substring(0, 1);
+            String r1 = s1.substring(1);
+            String r2 = s2.substring(1);
+            if (l1.equalsIgnoreCase("@") && l2.equalsIgnoreCase("@"))
+                return r1.compareTo(r2);
+            else if (l1.equalsIgnoreCase("@") && l2.equalsIgnoreCase("%"))
+                return +1;
+            else if (l1.equalsIgnoreCase("@") && l2.equalsIgnoreCase("+"))
+                return +1;
+            else if (l1.equalsIgnoreCase("@") && !(l2.equalsIgnoreCase("+") || l2.equalsIgnoreCase("%")))
+                return -1;
+            else if (l1.equalsIgnoreCase("%") && l2.equalsIgnoreCase("%"))
+                return r1.compareTo(r2);
+            else if (l1.equalsIgnoreCase("%") && l2.equalsIgnoreCase("+"))
+                return -1;
+            else if (l1.equalsIgnoreCase("%") && !(l2.equalsIgnoreCase("+") || l2.equalsIgnoreCase("@")))
+                return -1;
+            else if (l1.equalsIgnoreCase("+") && l2.equalsIgnoreCase("+"))
+                return r1.compareTo(r2);
+            else if (l1.equalsIgnoreCase("+") && !(l2.equalsIgnoreCase("@") || l2.equalsIgnoreCase("%")))
+                return -1;
+            else
+                return 0;
+        }
     }
 }

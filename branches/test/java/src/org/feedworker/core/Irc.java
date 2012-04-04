@@ -15,17 +15,17 @@ import org.schwering.irc.lib.IRCUtil;
  * @author luca judge
  */
 public class Irc extends IRCEventAdapter implements IRCEventListener{
-    private final String server = "irc.azzurra.org";
+    //private final String server = "irc.azzurra.org";
     private final int[] port = new int[] { 6664, 6665, 6666, 6667, 6668, 6669 };
     private static Irc irc;
-    private static String nick, pwd;
+    private static String nick, pwd, server;
     private IRCConnection conn;
     private int MOTD1 = 372, MOTD2 = 375, MOTD3 = 376, TOPIC = 332, USERLIST = 353,
             NAMES = 366, I333 = 333;
     private String last_join_chan;
 
     private Irc() throws IOException {
-        ManageListener.fireTextPaneEvent(this, "Connessione al server irc Azzurra in corso...", 
+        ManageListener.fireTextPaneEvent(this, "Connessione al server irc " + server + " in corso...", 
                                                 "Azzurra", false);
         conn = new IRCConnection(server, port, pwd, nick, "FeedWorkerItasa", null); 
         conn.addIRCEventListener(this); 
@@ -41,10 +41,14 @@ public class Irc extends IRCEventAdapter implements IRCEventListener{
         return irc;
     }
     
-    static Irc getInstance(String _nick, String _pwd) throws IOException{
+    static Irc getInstance(String _nick, String _pwd, String _server) throws IOException{
         if (irc==null){
             nick = _nick;
             pwd = _pwd;
+            if (_server==null || _server.equalsIgnoreCase(""))
+                server = "irc.azzurra.org";
+            else
+                server = _server;
             irc = new Irc();
         }
         return irc;

@@ -35,9 +35,11 @@ import org.feedworker.core.http.HttpItasa;
 import org.feedworker.core.thread.DownloadThread;
 import org.feedworker.core.thread.DownloadTorrentThread;
 import org.feedworker.core.thread.IcsThread;
+import org.feedworker.core.thread.NewsThread;
 import org.feedworker.core.thread.RssBlogThread;
 import org.feedworker.core.thread.RssThread;
 import org.feedworker.core.thread.ShowThread;
+import org.feedworker.core.thread.SubtitleThread;
 import org.feedworker.exception.ItasaException;
 import org.feedworker.exception.ManageException;
 import org.feedworker.exception.TvrageException;
@@ -61,8 +63,6 @@ import jcifs.smb.SmbException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.xmlrpc.XmlRpcException;
 
-import org.feedworker.core.thread.NewsThread;
-import org.feedworker.core.thread.SubtitleThread;
 import org.jdom.JDOMException;
 
 import org.xml.sax.SAXException;
@@ -123,7 +123,7 @@ public class Kernel implements PropertyChangeListener {
     private ImportTaskList importTaskList;
     private ImportTaskCalendar importTaskCalendar;
     private RefreshTask refreshTask;
-    private TreeSet tsIdCalendar;
+    private TreeSet tsIdCalendar, tsReminder;
     private ItasaOnline itasa;
     private ItasaUser user;
     private HttpItasa httpItasa;
@@ -534,7 +534,7 @@ public class Kernel implements PropertyChangeListener {
         t.start();
     }
 
-    /**Sostituisce la treemap delle regole con quella creata dal mediator
+    /**Sostituisce la treemap delle regole con quella creata da guicore
      * 
      * @param temp treepam regole
      */
@@ -698,6 +698,8 @@ public class Kernel implements PropertyChangeListener {
             files.add(FILE_RULE);
         if (s.exists())
             files.add(s);
+        if (FILE_MYLIST.exists())
+            files.add(FILE_MYLIST);
         if (files.size() > 0) {
             if (!name.substring(name.length() - 4).toLowerCase().equalsIgnoreCase(".zip")) {
                 name += ".zip";
@@ -805,7 +807,7 @@ public class Kernel implements PropertyChangeListener {
         String evtName = evt.getSource().getClass().getName();
         String className = this.getClass().getName();
         if (evtName.equalsIgnoreCase(className + "$ImportTaskCalendar")) {
-            System.out.println(evt.getPropertyName());
+            //System.out.println(evt.getPropertyName());
             if (evt.getPropertyName().equals("progress")) {
                 ManageListener.fireFrameEvent(this, OPERATION_PROGRESS_INCREMENT, 
                         importTaskCalendar.getProgress());
@@ -1359,9 +1361,9 @@ public class Kernel implements PropertyChangeListener {
         if (!Lang.verifyTextNotNull(nick))
             nick = "GuestFeedworker";
         try {
-            Irc.getInstance(nick, prop.getIrcPwd());
+            Irc.getInstance(nick, prop.getIrcPwd(), prop.getIrcServer());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            error.launch(ex, this.getClass());
         }
     }
     
