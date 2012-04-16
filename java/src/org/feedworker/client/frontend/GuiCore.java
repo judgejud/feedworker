@@ -3,16 +3,21 @@ package org.feedworker.client.frontend;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableModel;
 
@@ -841,5 +846,17 @@ public class GuiCore {
     public boolean isJava17(){
         JVM jvm = new JVM();
         return jvm.isOrLater(17);
+    }
+    
+    public void setPasteClipboard(JTextField text){
+        String temp = "";
+        try {
+            temp = AWT.getClipboard();
+        } catch (UnsupportedFlavorException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        text.setText(temp);
     }
 }

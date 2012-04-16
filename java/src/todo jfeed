@@ -1,25 +1,27 @@
 IMPLEMENTARE
 *treeset reminder
 *tvdb
+*irc1: fare il sorted dei nick nel chan(comparator?)
+vedere di fare la fire dei sub scaricati o cmq dei sub myitasa alla systemtrayicon
+jmf: player video
 introdurre trama singola puntata (da che fonte? tvdb?)
 fare 1thread per il test connect samba
 controllare che gli show con icon unknown sono stati aggiornati di icon
 introdurre diverse tipologi di rinomina
-irc1: timestamp del msg
+irc2: timestamp del msg
 fare caricamento xml sotto thread
 ripristino files backuppati
 destinazione avanzata in mixed mode
 aggiungere versioning automatico all'applicazione
 aggiungere l'avviso che sta "lavorando" i nuovi sub usciti all'avvio.
-migrazione account itasa da 1vecchio a 1nuovo per quanto riguarda la lista di serial tv myitasa
 specificare altri suoni
-irc2: tasto tabulazione che fa scegliere il nick a cui riferirsi
-irc3: fare il sorted dei nick nel chan(comparator?)
+irc3: tasto tabulazione che fa scegliere il nick a cui riferirsi
 irc4: type del msg
+migrazione account itasa da 1vecchio a 1nuovo per quanto riguarda la lista di serial tv myitasa
 
 CORREZIONI:
+*correggere il comparator negli show, con il tooltip della label che non corrisponde
 irc segnalare il fatto che per il privato l'utente è andato...
-correggere il comparator negli show, con il tooltip della label che non corrisponde
 migliorare il fire alla reminder considerando la regola delete.
 
 PUNTI INTERROGATIVI
