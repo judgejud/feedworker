@@ -1,22 +1,14 @@
 package org.feedworker.client.frontend.panel;
 //IMPORT JAVA
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import org.feedworker.client.ApplicationSettings;
-
 import org.jfacility.javax.swing.Swing;
 
 import org.jdesktop.swingx.JXPanel;
@@ -249,12 +241,38 @@ public class paneSetting extends paneAbstract {
 
     /** inizializza il pannello dei settaggi itasa */
     private JXTaskPane initTaskPaneItalianSubs() {
+        final JPopupMenu menu = new JPopupMenu("Popup");
+        JMenuItem jmiPaste = new JMenuItem("Incolla");
+        jmiPaste.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPopupMenu j = (JPopupMenu) ((JMenuItem) e.getSource()).getParent();
+                core.setPasteClipboard((JTextField) j.getInvoker());
+            }
+        });
+        menu.add(jmiPaste);
+        
         jcbItasaNews = new JCheckBox("Abilita news Itasa");
         jcbItasaRss = new JCheckBox("Abilita rss Itasa");
         jtfRssItasa = new JTextField(25);
+        jtfRssItasa.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent ev) {
+                if (ev.isPopupTrigger())
+                    menu.show(ev.getComponent(), ev.getX(), ev.getY());
+            }
+        });
+            
         jtfRssItasa.setToolTipText("Immettere l'url per il feed rss Itasa");
         jcbMyItasaRss = new JCheckBox("Abilita rss myItasa");
         jtfRssMyItasa = new JTextField(25);
+        jtfRssMyItasa.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent ev) {
+                if (ev.isPopupTrigger())
+                    menu.show(ev.getComponent(), ev.getX(), ev.getY());
+            }
+        });
         jtfRssMyItasa.setToolTipText("Immettere l'url per il feed rss myItasa");
         jrbDownAuto = new JRadioButton("Automatico");
         jrbDownAuto.addMouseListener(new MouseAdapter() {
