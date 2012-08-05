@@ -318,12 +318,8 @@ public class ItasaOnline extends AbstractQueryXML{
                 Element item = (Element) iter.next();
                 String id = item.getChild(TAG_NEWS_ID).getText();
                 if (Integer.parseInt(id)>idStart){
-                    String text = item.getChild(TAG_NEWS_SHOWNAME).getText();
                     String thumb = item.getChild(TAG_NEWS_THUMB).getText();
-                    Iterator temp = item.getChild(TAG_NEWS_EPISODES).getChildren().iterator();
-                    while (temp.hasNext()){
-                        text += " " + ((Element)temp.next()).getText();
-                    }
+                    String text = getNameShowEpisodes(item);
                     container.add(new Object[]{id, text, new ImageIcon(new URL(thumb))});
                 } else 
                     next = false;
@@ -331,6 +327,15 @@ public class ItasaOnline extends AbstractQueryXML{
         } else 
             throw new ItasaException("NewsList: "+ error);
         return container;
+    }
+    
+    private String getNameShowEpisodes(Element item){
+        String text = item.getChild(TAG_NEWS_SHOWNAME).getText();
+        Iterator temp = item.getChild(TAG_NEWS_EPISODES).getChildren().iterator();
+        while (temp.hasNext()){
+            text += " " + ((Element)temp.next()).getText();
+        }
+        return text;
     }
     
     public News newsSingle(String id) throws JDOMException, IOException, Exception{
@@ -341,6 +346,7 @@ public class ItasaOnline extends AbstractQueryXML{
             Iterator iter = ((Element) document.getRootElement().getChildren().get(0))
                 .getChildren().iterator();
             Element item = (Element) iter.next();
+            String title = getNameShowEpisodes(item);
             String image = item.getChild(TAG_NEWS_IMAGE).getText();
             //String date = item.getChild(TAG_NEWS_SUBMITDATE).getText();
             String translation = item.getChild(TAG_NEWS_TRANSLATION).getText();
@@ -355,7 +361,7 @@ public class ItasaOnline extends AbstractQueryXML{
                 Element e = (Element)temp.next();
                 subtitles.add(e.getChild("id").getText());
             }
-            news = new News(image, translation, sync, info, imageBy, submitted, subtitles);
+            news = new News(title, image, translation, sync, info, imageBy, submitted, subtitles);
         } else 
             throw new ItasaException("NewsList: "+ error);
         return news;

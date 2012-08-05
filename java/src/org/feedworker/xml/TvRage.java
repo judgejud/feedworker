@@ -42,7 +42,7 @@ public class TvRage extends AbstractQueryXML{
 
     public ArrayList<Object[]> readingDetailedSearch_byShow(String show, boolean stop, 
                                                             boolean statusString)
-                                                    throws JDOMException, IOException{
+                                                    throws JDOMException, IOException, ConnectException{
         buildUrl(URL_TVRAGE_DETAILED_SEARCH + show);
         ArrayList<Object[]> matrix = null;
         if (sizeRootChildren()>0){
@@ -175,7 +175,7 @@ public class TvRage extends AbstractQueryXML{
         return values;
     }
     
-    public Object[] showInfo_byID(String id) throws JDOMException, IOException, TvrageException{
+    public Object[] showInfo_byID(String id) throws JDOMException, IOException, TvrageException, ConnectException{
         buildUrl(URL_TVRAGE_SHOW_INFO + id);
         Iterator iterator = document.getContent().iterator();
         Object[] show = new Object[5];
