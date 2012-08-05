@@ -23,6 +23,7 @@ public class Reminder extends AbstractXML{
     private final String TAG_REMINDER_ROOT = "REMINDER";
     private final String TAG_REMINDER_DATE = "DATE";
     private final String TAG_REMINDER_SUBTITLE = "SUBTITLE";
+    private TreeSet<String> ts;
 
     public Reminder(File f, boolean read) throws JDOMException, IOException{
         initialize(f, read);
@@ -32,23 +33,21 @@ public class Reminder extends AbstractXML{
         ArrayList<Object[]> al = new ArrayList<Object[]>();
         if (sizeRootChildren() > 0){
             Iterator iter = iteratorRootChildren();
-            TreeSet ts = new TreeSet();
+            ts = new TreeSet<String>();
             while (iter.hasNext()) {
                 Element reminder = (Element) iter.next();
                 String text = reminder.getChild(TAG_REMINDER_SUBTITLE).getText();
-                if (!ts.contains(text)){
-                    int i=-1;
-                    Date d = null;
-                    try {
-                        d = Common.stringDate(reminder.getChild(TAG_REMINDER_DATE).getText());
-                    } catch (ParseException ex) {}
-                    Object[] obj = new Object[3];
-                    obj[++i] = d;
-                    obj[++i] = text;
-                    obj[++i] = false;
-                    al.add(obj);
-                    ts.add(text);
-                }
+                int i=-1;
+                Date d = null;
+                try {
+                    d = Common.stringDate(reminder.getChild(TAG_REMINDER_DATE).getText());
+                } catch (ParseException ex) {}
+                Object[] obj = new Object[3];
+                obj[++i] = d;
+                obj[++i] = text;
+                obj[++i] = false;
+                al.add(obj);
+                ts.add(text);
             }
         }
         return al;
@@ -69,5 +68,9 @@ public class Reminder extends AbstractXML{
     
     public void removeItem(int row) throws IOException{
         root.getChildren().remove(row);
+    }
+
+    public TreeSet<String> getTs() {
+        return ts;
     }
 }

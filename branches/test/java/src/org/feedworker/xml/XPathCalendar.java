@@ -80,7 +80,7 @@ public class XPathCalendar {
         } catch (ParseException e){e.printStackTrace();}
         array  = new TreeMap<Long, String>();
         //data > nextdate
-        String query = "//SHOW[translate('" + day + "', '-', '') > "
+        String query = "//SHOW[translate('" + day + "', '-', '') >= "
                 + "translate(NEXT_DATE, '-', '')]/ID_TVRAGE/text()";
         addToArray(initializeXPathNode(query));
         //query next date blank

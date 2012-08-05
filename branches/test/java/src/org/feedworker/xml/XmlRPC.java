@@ -51,6 +51,11 @@ public class XmlRPC {
         return Integer.parseInt(box.get("unread_count").toString());
     }
     
+    public boolean sendMessage(Object[] params) throws XmlRpcException {
+        HashMap result = (HashMap) client.execute("create_message", params);
+        return Boolean.parseBoolean(result.get("result").toString());
+    }
+    
     private XmlRpcTransportFactory getSetCookies(){
         return new XmlRpcTransportFactory() {
             @Override
