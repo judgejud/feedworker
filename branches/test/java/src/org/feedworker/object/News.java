@@ -6,11 +6,12 @@ import java.util.ArrayList;
  * @author luca
  */
 public class News {    
-    private String image, translation, sync, info, imageby, submitted;
+    private String title, image, translation, sync, info, imageby, submitted;
     private ArrayList<String> subtitles;
 
-    public News(String image, String translation, String sync, String info, 
+    public News(String title, String image, String translation, String sync, String info, 
             String imageby, String submitted, ArrayList<String> subtitles) {
+        this.title = title;
         this.image = image;
         this.translation = translation;
         this.sync = sync;
@@ -35,5 +36,13 @@ public class News {
         html += "<tr><td><b>Immagine by</b>: "+ imageby +" </td></tr>";
         html += "</table></body></html>";
         return html;
+    }
+
+    public String getSubmitted() {
+        return submitted;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }
