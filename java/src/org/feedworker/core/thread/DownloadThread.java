@@ -68,9 +68,13 @@ public class DownloadThread implements Runnable {
                     if (entity.getContentLength() != -1) {
                         String n = http.getNameFile();
                         int l = n.length();
-                        File f = File.createTempFile(n.substring(0, l - 4), n.substring(l - 4));
+                        String ext = n.substring(l - 4);
+                        File f = File.createTempFile(n.substring(0, l - 4), ext);
                         Io.downloadSingle(entity.getContent(), f);
-                        alFile.addAll(extract(f));
+                        if (ext.equals(".srt"))
+                            alFile.add(f);
+                        else
+                            alFile.addAll(extract(f));
                         String temp = f.getName().split(".sub.")[0].replaceAll("\\.", " ");
                         if (prop.isReminderOption())
                             alReminder.add(new Object[]{Common.actualDate(), temp, false});

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.core.ManageListener;
+import org.feedworker.exception.ManageException;
 import org.feedworker.xml.ItasaOnline;
 
 import org.jdom.JDOMException;
@@ -33,11 +34,11 @@ public class NewsThread implements Runnable{
                 ManageListener.fireListEvent(this, "ItasaNews", array);
             }
         } catch (JDOMException ex) {
-            ex.printStackTrace();
+            ManageException.getIstance().launch(ex, getClass());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            ManageException.getIstance().launch(ex, getClass());
         } catch (Exception ex) {
-            ex.printStackTrace();
+            ManageException.getIstance().launch(ex, getClass());
         }
     }
     
