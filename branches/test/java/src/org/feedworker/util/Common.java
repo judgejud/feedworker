@@ -31,9 +31,10 @@ public class Common {
             "dd/MM/yyyy HH:mm:ss", Locale.ITALY);    
     private static SimpleDateFormat sdfICS = new SimpleDateFormat(
             "yyyyMMdd'T'", Locale.ITALY);
+    private static SimpleDateFormat sdf = new SimpleDateFormat(
+            "yyyyMMdd_HHmm", Locale.ITALY);
 
-    /**
-     * Restituisce la data ed ora attuale
+    /**Restituisce la data ed ora attuale
      * 
      * @return Stringa gg/mm/aaaa - hh:mm:ss
      */
@@ -66,8 +67,7 @@ public class Common {
     /**
      * Trasforma una stringa data ora in una data
      * 
-     * @param s
-     *            stringa dd/MM/yyyy HH:mm:ss
+     * @param s stringa dd/MM/yyyy HH:mm:ss
      * @return data nel tipo Date
      * @throws ParseException
      */
@@ -158,12 +158,15 @@ public class Common {
         return sdfICS.parse(s);
     }
     
+    public static String dateToStringDate(Date d) {
+        return sdf.format(d);
+    }
+    
     public static String dateIcsToString(Date d) {
         return sdfItalian2.format(d);
     }
 
-    /**
-     * Restituisce l'icona per la systemtraybar
+    /**Restituisce l'icona per la systemtraybar
      * 
      * @param name
      * @return icona
