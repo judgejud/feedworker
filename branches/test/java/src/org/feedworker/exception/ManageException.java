@@ -3,6 +3,7 @@ package org.feedworker.exception;
 //IMPORT JAVA
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
@@ -15,19 +16,17 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
+import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.events.TextPaneEvent;
 import org.feedworker.core.ManageListener;
+
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.ParsingFeedException;
 
 import jcifs.smb.SmbException;
 
 import org.jdom.JDOMException;
 import org.xml.sax.SAXException;
-
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.ParsingFeedException;
-import java.net.ConnectException;
-import org.feedworker.client.ApplicationSettings;
-
 /**
  * Stampa nella textpane i messaggi d'errore se è un messaggio d'errore "rosso"
  * scrive nel file di log lo stacktrace.
@@ -76,10 +75,8 @@ public class ManageException {
     /**
      * Analizza l'errore GeneralSecurityException
      *
-     * @param ex
-     *            GeneralSecurityException
-     * @param c
-     *            classe di provenienza
+     * @param ex GeneralSecurityException
+     * @param c classe di provenienza
      */
     public void launch(GeneralSecurityException ex, Class c) {
         printError(ex, c);
@@ -125,8 +122,6 @@ public class ManageException {
         }
     }
 
-    
-
     public void launch(IOException ex, Class c) {
         String msg = ex.getMessage();
         String error01 = "Failed to open file://" + 
@@ -164,23 +159,24 @@ public class ManageException {
         String error07 = "rss.bt-chat.com";
         String error08 = "ezrss.it";
 
-        if (msg.equals(error01)) {
+        if (msg.equals(error01))
             printAlert("Il sistema non trova il seguente percorso " + text, true);
-        } else if (msg.equals(error04)) {
+        else if (msg.equals(error04))
             printAlert("Timeout di lettura " + text, false);
-        } else if (msg.equals(error05) || msg.equals(error06)
-                || msg.equals(error07) || msg.equals(error08)) {
-            printAlert("Connessione con " + msg
-                    + " assente. verificare la connessione alla rete.", true);
-        } else if (msg.length() < error02.length()) {
+        else if (msg.equals(error05) || msg.equals(error06) || msg.equals(error07) 
+                                                            || msg.equals(error08))
+            printAlert("Connessione con " + msg + " assente. verificare la " + 
+                                                "connessione alla rete.", true);
+        else if (msg.length() < error02.length())
             printError(ex, c);
-        } else if (msg.substring(0, error02.length()).equals(error02)) {
+        else if (msg.substring(0, error02.length()).equals(error02))
             printAlert("Non posso collegarmi a " + text, false);
-        } else if (msg.substring(0, error03.length()).equals(error03)) {
+        else if (msg.substring(0, error03.length()).equals(error03))
             printAlert("Non posso collegarmi a " + text, false);
-        } else {
+        else if (text!=null)
+            printError(ex, text);
+        else
             printError(ex, c);
-        }
     }
 
     /**
@@ -387,6 +383,12 @@ public class ManageException {
     private void printError(Exception e, Class c) {
         ManageListener.fireTextPaneEvent(this, e.getMessage(), TextPaneEvent.ERROR, true);
         //Logging.getIstance().printClass(c);
+        Logging.getIstance().printError(e);
+    }
+    
+    private void printError(Exception e, String text) {
+        ManageListener.fireTextPaneEvent(this, e.getMessage() + " - " + text, 
+                                                        TextPaneEvent.ERROR, true);
         Logging.getIstance().printError(e);
     }
 }
