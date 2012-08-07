@@ -27,6 +27,7 @@ import javax.swing.JTextPane;
 import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.StyledDocument;
 
 import org.feedworker.client.frontend.component.editorChat;
@@ -131,6 +132,16 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
             }
         });
         
+        JButton jbJoinOther = new JButton("join other");
+        jbJoinOther.setBorder(BORDER);
+        jbJoinOther.setToolTipText("Entra nel canale da specificare");
+        jbJoinOther.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                joinOtherChan();
+            }
+        });
+        
         JButton jbRenameNick = new JButton(core.getIconNick());
         jbRenameNick.setBorder(BORDER);
         jbRenameNick.setToolTipText("Cambia nick");
@@ -145,6 +156,16 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
             }
         });
         
+        JButton jbSaveChat = new JButton(core.getIconSave());
+        jbSaveChat.setBorder(BORDER);
+        jbSaveChat.setToolTipText("Salva la conversazione del tab attivo");
+        jbSaveChat.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                saveChat();
+            }
+        });
+        
         int x = 0;
         jpAction.add(jbConnect, gbcAction);
         gbcAction.gridx = ++x;
@@ -154,8 +175,11 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
         gbcAction.gridx = ++x;
         jpAction.add(jbJoinItasaCastle, gbcAction);
         gbcAction.gridx = ++x;
+        jpAction.add(jbJoinOther, gbcAction);
+        gbcAction.gridx = ++x;
         jpAction.add(jbRenameNick, gbcAction);
         gbcAction.gridx = ++x;
+        jpAction.add(jbSaveChat, gbcAction);
     }
     
     private void connect(){
@@ -190,6 +214,29 @@ public class paneIrc extends paneAbstract implements TextPaneEventListener, Tabb
             }
         } else 
             proxy.printAlert("Effettuare prima la connessione ad irc");
+    }
+    
+    private void joinOtherChan() {
+        if (proxy.isConnectedIrc()){
+            String chan = JOptionPane.showInputDialog("Inserire il nome del canale");
+            if (chan!=null && !chan.equalsIgnoreCase("")){
+                if (!chan.substring(0, 1).equals("#"))
+                    chan = "#" + chan;
+                //TODO:terminare
+            }
+        } else 
+            proxy.printAlert("Effettuare prima la connessione ad irc");
+    }
+    
+    private void saveChat(){
+        Component c = tab.getSelectedComponent();
+        if (c instanceof paneQuery){
+            Document doc = ((paneQuery)c).getDocument();
+            if (doc!=null){
+                String name = tab.getTitleAt(tab.getSelectedIndex());
+                proxy.saveChat(name, doc);
+            }
+        }
     }
 
     @Override
@@ -337,7 +384,7 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
             label.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent evt) {
-                    addTextSmiley(label.getName());
+                    textfield.setText(textfield.getText() + " " + label.getName() + " ");
                 }
             });
         }
@@ -352,10 +399,10 @@ class paneQuery extends paneAbstract implements TextPaneEventListener{
         }
     }
     
-    public void addTextSmiley(String smiley){
-        textfield.setText(textfield.getText() + " " + smiley + " ");
+    Document getDocument(){
+        return chat.getDocument();
     }
-
+    
     @Override
     public void objReceived(TextPaneEvent evt) {
         if (evt.getType().equals(this.getName())){
