@@ -10,8 +10,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -62,6 +60,7 @@ public class GuiCore {
     private final String IMAGE_CLOSE = "close.png";
     private final String IMAGE_COPY_LINK = "clipboard.png";
     private final String IMAGE_DOWNLOAD = "download.png";
+    private final String IMAGE_EMAIL = "email.png";
     private final String IMAGE_FOLDER = "folder.png";
     private final String IMAGE_IMPORT1 = "import1.png";
     private final String IMAGE_IMPORT2 = "import2.png";
@@ -496,6 +495,10 @@ public class GuiCore {
     
     public ImageIcon getIconDownload() {
         return Common.getResourceImageButton(IMAGE_DOWNLOAD);
+    }
+    
+    public ImageIcon getIconEmail() {
+        return Common.getResourceImageButton(IMAGE_EMAIL);
     }
     
     public ImageIcon getIconFolder() {

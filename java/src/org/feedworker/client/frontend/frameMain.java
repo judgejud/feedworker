@@ -67,6 +67,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
     private paneShow jpShow;
     private paneBlog jpBlog;
     private paneIrc jpIrc;
+    private panePlayer jpPlayer;
     private dialogResultSearchTv resultSearchTvJD;
     private ProgressDialog progressBar;
     private EnhancedSystemTray systemTray;
@@ -113,9 +114,11 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jpBlog = paneBlog.getPanel();
         jpCalendarDay = paneCalendarDay.getPanel();
         jpIrc = paneIrc.getPanel();
+        jpPlayer = panePlayer.getPanel();
         
         mainJTP.addTab("Itasa News", jpItasaNews);
         mainJTP.addTab("Itasa Rss", jpItasaRss);
+        mainJTP.addTab("Player Video", jpPlayer);
         if (prop.isSubsfactoryOption()) {
             jpSubsfactory = paneSubsfactory.getPanel();
             checkAddTab(jpSubsfactory, false, null);
