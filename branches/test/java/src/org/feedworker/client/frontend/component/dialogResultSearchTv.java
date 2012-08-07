@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -42,6 +44,13 @@ public class dialogResultSearchTv extends JDialog implements ActionListener{
         setLocation(100, 100);
         getContentPane().setLayout(new BorderLayout());
         table = new tableResultSearchTvRage(proxy.getSearchTV());
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount()==2)
+                    add();
+            }
+        });
         JScrollPane jScrollTable1 = new JScrollPane(table);
         jScrollTable1.setAutoscrolls(true);
         getContentPane().add(jScrollTable1, BorderLayout.CENTER);
@@ -59,26 +68,30 @@ public class dialogResultSearchTv extends JDialog implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if(ae.getSource() == jbAdd){
-            int[] row = table.getSelectedRows();
-            int max = row.length;
-            if (max>0){
-                ArrayList<Object[]> array = new ArrayList<Object[]>(max);
-                for (int i=0; i<max; i++){
-                    Object[] obj = new Object[5];
-                    for (int j=0; j<5; j++)
-                        obj[j]=table.getValueAt(row[i], j);
-                    array.add(obj);
-                }
-                proxy.searchIdTv(array);
-            }
-            dispose();
-        } else if(ae.getSource() == jbSearch){
+        if(ae.getSource() == jbAdd)
+            add();
+        else if(ae.getSource() == jbSearch){
             dispose();
             String tv = JOptionPane.showInputDialog(null,"Inserire nome serie tv");
             if (Lang.verifyTextNotNull(tv))
                 proxy.searchTV(tv);
         } else if(ae.getSource() == jbCancel)
             dispose();
+    }
+    
+    private void add(){
+        int[] row = table.getSelectedRows();
+        int max = row.length;
+        if (max>0){
+            ArrayList<Object[]> array = new ArrayList<Object[]>(max);
+            for (int i=0; i<max; i++){
+                Object[] obj = new Object[5];
+                for (int j=0; j<5; j++)
+                    obj[j]=table.getValueAt(row[i], j);
+                array.add(obj);
+            }
+            proxy.searchIdTv(array);
+        }
+        dispose();
     }
 }

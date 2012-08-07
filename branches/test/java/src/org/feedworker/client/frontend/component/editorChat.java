@@ -23,9 +23,6 @@ import org.feedworker.client.frontend.Mediator;
  */
 public class editorChat extends JEditorPane{
     private StyledDocument sd;
-    private int start, end;
-    private String text;    
-    
 
     public editorChat() {
         super();
@@ -71,9 +68,9 @@ public class editorChat extends JEditorPane{
     
     private void searchText(DocumentEvent e, String search, ImageIcon img) throws BadLocationException{
         try{
-            start = Utilities.getRowStart(this, Math.max(0, e.getOffset()-1));    
-            end = Utilities.getWordStart(this, e.getOffset() + e.getLength());
-            text = sd.getText(start, end-start);
+            int start = Utilities.getRowStart(this, Math.max(0, e.getOffset()-1));    
+            int end = Utilities.getWordStart(this, e.getOffset() + e.getLength());
+            String text = sd.getText(start, end-start);
             int i = text.indexOf(search);
             while(i>=0) {
                 SimpleAttributeSet attrs = new SimpleAttributeSet(sd.getCharacterElement(start+i).getAttributes());
