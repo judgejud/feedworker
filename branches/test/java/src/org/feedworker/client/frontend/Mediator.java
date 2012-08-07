@@ -11,6 +11,7 @@ import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.text.Document;
 
 import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.FeedWorkerClient;
@@ -54,7 +55,7 @@ public class Mediator {
         Application app = FeedWorkerClient.getApplication();
         return app.getName() + " revision "
                 //+ app.getBuildNumber() + " by "
-                + "476 by " + app.getAuthor();
+                + "486 by " + app.getAuthor();
     }
     
     ManageException getError(){
@@ -401,5 +402,14 @@ public class Mediator {
 
     public void singleNews(Object listSelectedValue) {
         core.singleNews(listSelectedValue);
+    }
+
+    public void sendPrivateMessage(String user, String sub, String txt) {
+        String[] username = user.split(",");
+        core.sendMessage(username, sub, txt);
+    }
+
+    public void saveChat(String name, Document doc) {
+        core.saveChat(name, doc);
     }
 }
