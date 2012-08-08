@@ -3,10 +3,7 @@ package org.feedworker.core;
 import java.awt.Frame;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -23,6 +20,10 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.SwingWorker;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 
@@ -61,6 +62,7 @@ import org.opensanskrit.exception.UnableRestartApplicationException;
 import jcifs.smb.SmbException;
 
 import org.apache.http.client.ClientProtocolException;
+
 import org.apache.xmlrpc.XmlRpcException;
 
 import org.jdom.JDOMException;
@@ -291,234 +293,6 @@ public class Kernel implements PropertyChangeListener {
         return status;
     }
 
-    /**esegue le operazioni di aggiornamento sotto timer
-     * 
-     * @param delay tempo in secondi per il timer
-     */
-    private void runTimer(int delay) {
-        timer = new Timer();
-        try {
-            timer.scheduleAtFixedRate(new TimerTask()  {
-                @Override
-                public void run() {
-                    boolean icontray = false;
-                    prop.setLastDateTimeRefresh(Common.actualTime());
-                    if (runItasaRss(false,true))
-                        icontray = true;
-                    if (runSubsfactory(false))
-                        icontray = true;
-                    if (prop.isTorrentOption() && runTorrent(false))
-                        icontray = true;
-                    if (prop.isItasaBlog() && runItasaBlog(false))
-                        icontray = true;
-                    if (prop.isItasaPM() && runItasaPM(false))
-                        icontray = true;
-                    if (prop.isItasaNews() && runItasaNews(false))
-                        icontray = true;
-                    if ((icontray) && (prop.isEnableNotifyAudioRss())) {
-                        try {
-                            AudioPlay.playFeedWav();
-                        } catch (UnsupportedAudioFileException ex) {
-                            error.launch(ex, getClass());
-                        } catch (LineUnavailableException ex) {
-                            error.launch(ex, getClass());
-                        } catch (IOException ex) {
-                            error.launch(ex, getClass(), null);
-                        }
-                    }
-                    String msg = countItasa + ":" + countMyitasa + ":" + countBlog + 
-                            ":" + countEztv + ":" + countBtchat + ":" + countSubsf + 
-                            ":" + countMysubsf + ":" + countPM + ":" + countNews;
-                    ManageListener.fireFrameEvent(this, icontray, msg);
-                }// end run
-            }, delay, delay);
-        } catch (IllegalStateException ex) {
-            error.launch(ex, getClass());
-        }
-    }
-
-    /**Esegue la parte rss itasa
-     * 
-     * @param first primo lancio
-     * @return true se ci sono nuovi feed, false altrimenti
-     */
-    private boolean runItasaRss(boolean first, boolean autoloaddownload) {
-        boolean status = false;
-        countItasa = 0;
-        countMyitasa = 0;
-        
-        if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
-            RssThread rt = new RssThread(lastItasa, prop.getItasaFeedURL(), ITASA);
-            Thread t = new Thread(rt, ITASA);
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-            if (rt.getCount()>0){
-                lastItasa = rt.getLastDate();
-                if (!first){
-                    status = true;
-                    countItasa = rt.getCount();
-                }
-            }
-        }
-        if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
-            if (first && prop.isAutoLoadDownloadMyItasa())
-                lastMyItasa = prop.getLastDateTimeRefresh();
-            RssThread rt;
-            if (first && !autoloaddownload)
-                rt = new RssThread(lastMyItasa, prop.getMyitasaFeedURL(), MYITASA, 
-                        loginItasaHttp(), autoloaddownload, first, mapRules, 
-                                                        httpItasa, xmlReminder);
-            else
-                rt = new RssThread(lastMyItasa, prop.getMyitasaFeedURL(), MYITASA, 
-                        loginItasaHttp(), prop.isAutoDownloadMyItasa(), first, mapRules, 
-                                                        httpItasa, xmlReminder);
-            Thread t = new Thread(rt, MYITASA);
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-            if (rt.getCount()>0){
-                lastMyItasa = rt.getLastDate();
-                if (!first){
-                    status = true;
-                    countMyitasa = rt.getCount();
-                }
-            }
-        }
-        return status;
-    }
-    
-    private boolean runItasaBlog(boolean first) {
-        boolean status = false;
-        String url = "http://feeds.feedburner.com/itasa-blog";
-        countBlog = 0;
-        RssBlogThread rt = new RssBlogThread(lastBlog, url);
-        Thread t = new Thread(rt, BLOG);
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-        if (rt.getCount()>0){
-            lastBlog = rt.getLastDate();
-            if (!first){
-                status = true;
-                countBlog = rt.getCount();
-            }
-        }
-        return status;
-    }
-    
-    private boolean runItasaPM(boolean first){
-        boolean status = false;
-        if (!first && loginItasaXmlRPC()){
-            try {
-                countPM = xmlrpc.getMessage();
-                if (countPM > 0){
-                    status = true;
-                    ManageListener.fireTextPaneEvent(this,
-                                    "Sono presenti dei messaggi privati",
-                                    TextPaneEvent.ITASA_PM, true);
-                }
-            } catch (XmlRpcException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return status;
-    }
-
-    /**Esegue la parte rss subsfactory
-     * 
-     * @param first primo lancio
-     * @return true se ci sono nuovi feed, false altrimenti
-     */
-    private boolean runSubsfactory(boolean first) {
-        boolean status = false;
-        countSubsf = 0;
-        countMysubsf = 0;
-        if (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL())) {
-            RssThread rt = new RssThread(lastSubsf, prop.getSubsfactoryFeedURL(), SUBSF);
-            Thread t = new Thread(rt, SUBSF);
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-            if (rt.getCount()>0){
-                lastSubsf = rt.getLastDate();
-                if (!first){
-                    status = true;
-                    countSubsf = rt.getCount();
-                }
-            }
-        }
-        if (Lang.verifyTextNotNull(prop.getMySubsfactoryFeedUrl())) {
-            RssThread rt = new RssThread(lastMySubsf, 
-                                        prop.getMySubsfactoryFeedUrl(), MYSUBSF);
-            Thread t = new Thread(rt, MYSUBSF);
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-            if (rt.getCount()>0){
-                lastMySubsf = rt.getLastDate();
-                if (!first){
-                    status = true;
-                    countMysubsf = rt.getCount();
-                }
-            }
-        }
-        return status;
-    }
-
-    /**Esegue la parte rss torrent
-     * 
-     * @param first primo lancio
-     * @return true se ci sono nuovi feed, false altrimenti
-     */
-    private boolean runTorrent(boolean first) {
-        boolean status = false;
-        countBtchat = 0;
-        countEztv = 0;
-        RssThread rtE = new RssThread(lastEztv, RSS_TORRENT_EZTV, EZTV);
-        RssThread rtB = new RssThread(lastBtchat, RSS_TORRENT_BTCHAT, BTCHAT);
-        Thread tE = new Thread(rtE, EZTV);
-        Thread tB = new Thread(rtB, BTCHAT);
-        tE.start();
-        tB.start();
-        try {
-            tE.join();
-            tB.join();
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-        if (rtE.getCount()>0){
-            lastEztv = rtE.getLastDate();
-            if (!first){
-                status = true;
-                countEztv = rtE.getCount();
-            }
-        }
-        if (rtB.getCount()>0){
-            lastBtchat = rtB.getLastDate();
-            if (!first){
-                status = true;
-                countBtchat = rtB.getCount();
-            }
-        }
-        return status;
-    }
-
     /**Interrompe il timer attuale e ne fa partire uno nuovo col nuovo intervallo*/
     public void stopAndRestartTimer() {
         if (timer!=null){
@@ -526,12 +300,6 @@ public class Kernel implements PropertyChangeListener {
             timer.purge();
         }
         runTimer(Lang.stringToInt(prop.getRefreshInterval()) * 60000);
-    }
-
-    private void parseCalendarICS(){
-        IcsThread it = new IcsThread(ITASA_CALENDAR_ICS);
-        Thread t = new Thread(it, "ItasaCalendarIcs");
-        t.start();
     }
 
     /**Sostituisce la treemap delle regole con quella creata da guicore
@@ -583,6 +351,7 @@ public class Kernel implements PropertyChangeListener {
             checkPath(FILE_REMINDER);
             xmlReminder = new Reminder(FILE_REMINDER, true);
             ArrayList<Object[]> temp = xmlReminder.readingDocument();
+            tsReminder = xmlReminder.getTs();
             if (temp.size() > 0) 
                 ManageListener.fireTableEvent(this, temp, REMINDER);
         } catch (JDOMException ex) {
@@ -632,32 +401,18 @@ public class Kernel implements PropertyChangeListener {
         printOk("Timer restart ok.");
     }
     
-    private void checkPath(File f) throws IOException{
-        if (!f.exists()){
-            File old = new File(f.getName());
-            if (old.exists()){
-                File dir = new File(f.getParent());
-                if (!dir.exists())
-                    dir.mkdir();
-                Io.moveFile(old, f.getParent());
+    public void sendMessage(String[] username, String subject, String text){
+        if (loginItasaXmlRPC()){
+            try {
+                Object[] params = new Object[]{username, subject.getBytes(), text.getBytes()};
+                if (xmlrpc.sendMessage(params))
+                    printOk("Messaggio privato inviato ad " +username[0]);
+                else
+                    printAlert("Errore nell'invio del messaggio privato");
+            } catch (XmlRpcException ex) {
+                ex.printStackTrace();
             }
         }
-    }
-
-    private String getSynoId(InputStream is) {
-        String id = null;
-        /*
-         * JSONValue value = JSONParser.parse(jSon); JSONArray arr =
-         * value.isArray(); for (int i = 0; i < arr.size(); i++) { JSONObject
-         * obj = arr.get(I).isObject(); if (obj != null)
-         * recordList.add(getProductAsRecord(obj, false)); }
-         * record.setAttribute("id", JSONUtil.getLong("id", prodObj));
-         * record.setAttribute("code", JSONUtil.getString("code", prodObj));
-         * record.setAttribute("name", JSONUtil.getString("name", prodObj));
-         * record.setAttribute("creationDate", JSONUtil.getDate("creationDate",
-         * prodObj));
-         */
-        return id;
     }
 
     /**Effettua l'inserimento dei link al download redirectory del synology
@@ -723,8 +478,7 @@ public class Kernel implements PropertyChangeListener {
     public void detailedSearchShow(String tv) {
         TvRage t = new TvRage();
         try {
-            ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv, false, 
-                                                                            true);
+            ArrayList<Object[]> array = t.readingDetailedSearch_byShow(tv, false, true);
             if (array != null) {
                 ManageListener.fireTableEvent(this, array, SEARCH_TV);
                 ManageListener.fireFrameEvent(this, SEARCH_TV);
@@ -732,6 +486,8 @@ public class Kernel implements PropertyChangeListener {
                 printAlert("La ricerca di " + tv + " non ha prodotto risultati");
                 ManageListener.fireFrameEvent(this, OPERATION_FOCUS);
             }
+        } catch (ConnectException ex) {
+            ex.printStackTrace();
         } catch (JDOMException ex) {
             error.launch(ex, null);
         } catch (IOException ex) {
@@ -756,25 +512,13 @@ public class Kernel implements PropertyChangeListener {
             ManageListener.fireTableEvent(this, al, CALENDAR_SHOW);
         } catch (JDOMException ex) {
             error.launch(ex, null);
+        } catch (ConnectException ex) {
+            ex.printStackTrace();
         } catch (IOException ex) {
             error.launch(ex, null);
         } catch (IndexOutOfBoundsException ex) {
             printAlert("XML " + show[1].toString() + " non valido");
         }
-    }
-
-    private Object[] setArray(TvRage t, Object[] show, boolean status) throws 
-                                    ConnectException, JDOMException, IOException {
-        Object[] array = t.readingEpisodeList_byID(show[0].toString(),
-                show[2].toString());
-        array[0] = show[0];
-        array[1] = show[1];
-        if (status)
-            array[2] = Common.getStatus((String) show[3]);
-        else
-            array[2] = show[3];
-        array[3] = show[4];
-        return array;
     }
 
     public void removeShowTv(int row, Object id) {
@@ -849,20 +593,6 @@ public class Kernel implements PropertyChangeListener {
         }
     }
     
-    @SuppressWarnings("unchecked")
-    private void fireCalendar(){
-        try {
-            xmlCalendar = new Calendar(FILE_CALENDAR, true);
-            ArrayList temp = xmlCalendar.readingDocument();
-            tsIdCalendar = (TreeSet) temp.get(0);
-            if (tsIdCalendar.size() > 0)
-                ManageListener.fireTableEvent(this,
-                            (ArrayList<Object[]>) temp.get(1), CALENDAR_SHOW);
-        } catch (Exception e) {
-            error.launch(e, this.getClass());
-        }
-    }
-    
     public void refreshSingleCalendar(String id) {
         Long temp = null;
         try{
@@ -934,16 +664,6 @@ public class Kernel implements PropertyChangeListener {
         }
     }
 
-    private String getDay(int temp) {
-        if (temp == 0)
-            return "oggi";
-        else if (temp == 1)
-            return "domani";
-        else if (temp == -1)
-            return "ieri";
-        return null;
-    }
-
     public void openFolder(String dir) {
         if (prop.isLocalFolder()) {
             try {
@@ -973,85 +693,6 @@ public class Kernel implements PropertyChangeListener {
             refreshTask.cancel(true);
         else if (importTaskList!=null && importTaskList.getState()==SwingWorker.StateValue.STARTED)
             importTaskList.cancel(true);
-    }
-
-    /**
-     * Stampa il messaggio di alert invocando il metodo fire opportuno
-     * 
-     * @param msg
-     *            testo da stampare
-     */
-    private void printAlert(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT, true);
-    }
-
-    private void printSynology(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.SYNOLOGY, true);
-    }
-
-    private void printOk(String msg) {
-        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
-    }
-    
-    private boolean loginItasaHttp(){
-        boolean login = false;
-        if (httpItasa==null){
-            try {
-                httpItasa = new HttpItasa(Integer.parseInt(prop.getHttpTimeout())*1000);
-                if (httpItasa.testConnectItasa(prop.getItasaUsername(), prop.getItasaPassword())){
-                    httpItasa.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
-                    login = true;
-                } else
-                    httpItasa = null;
-            } catch (ClientProtocolException ex) {
-                ex.printStackTrace();
-                httpItasa = null;
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                httpItasa = null;
-            }
-        } else 
-            login = true;
-        return login;
-    }
-
-    private boolean loginItasaAPI(String username, String pwd) {
-        boolean login = false;
-        if (user==null){
-            try {
-                user = new ItasaOnline().login(username, pwd);
-                login = true;
-            } catch (JDOMException ex) {
-                error.launch(ex, this.getClass());
-            } catch (IOException ex) {
-                error.launch(ex, this.getClass());
-            } catch (ItasaException ex) {
-                printAlert("Login itasa API: " + ex.getMessage());
-            } catch (Exception ex) {
-                error.launch(ex, this.getClass());
-            }
-        } else 
-            login = true;
-        return login;
-    }
-    
-    private boolean loginItasaXmlRPC(){
-        boolean login = false;
-        if (xmlrpc==null){
-            try {
-                xmlrpc = new XmlRPC();
-                if (xmlrpc.testConn(prop.getItasaUsername(), prop.getItasaPassword()))
-                    login = true;
-            } catch (MalformedURLException ex) {
-                ex.printStackTrace();
-                xmlrpc = null;
-            } catch (XmlRpcException ex) {
-                ex.printStackTrace();
-                xmlrpc = null;
-            } 
-        } else 
-            login = true;
-        return login;
     }
     
     public void checkLoginItasaAPI(String username, String pwd) {
@@ -1282,21 +923,6 @@ public class Kernel implements PropertyChangeListener {
         }
     }
     
-    private String downloadImage(String link) throws MalformedURLException, 
-                                                                    IOException{
-        String[] split = link.split("/");
-        String temp = split[split.length-1].replaceAll(":", "");
-        temp = temp.replaceAll("%20", " ");
-        String file = ResourceLocator.getThumbnailShows() + temp;
-        File dir = new File(ResourceLocator.getThumbnailShows());
-        if (!dir.exists())
-            dir.mkdir();
-        File f = new File(file);
-        if (!f.exists())
-            Io.downloadSingle(new URL(link.replaceAll(" ", "%20")).openStream(), f);
-        return file;
-    }
-    
     public void openWebsite(String url) {
         try {
             SystemFileManager.browse(url);
@@ -1405,13 +1031,408 @@ public class Kernel implements PropertyChangeListener {
             SubtitleThread st = new SubtitleThread(n.getSubtitles(), TASKPANE_NEWS, false);
             Thread t = new Thread(st, "Thread Subtitle");
             t.start();
-            ManageListener.fireEditorPaneEvent(this, n.getHtmlNews(), TASKPANE_NEWS, null);
+            ManageListener.fireEditorPaneEvent(this, n.getHtmlNews(), n.getTitle(), 
+                                                    n.getSubmitted(), TASKPANE_NEWS);
         } catch (JDOMException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public void saveChat(String name, Document doc) {
+        try {
+            String time = "_" + Common.dateToStringDate(Common.actualDate());
+            File f = new File(ResourceLocator.getWorkspace() + "irc_log/" + name + time + ".html");
+            if (!f.getParentFile().exists())
+                f.getParentFile().mkdir();
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(f));
+            StyledDocument sd = (StyledDocument)doc;
+            new HTMLEditorKit().write(out, sd, sd.getStartPosition().getOffset(), sd.getLength());
+            out.flush();
+            out.close();
+            printOk("Log chat salvato in " + f.getAbsolutePath());
+        } catch (BadLocationException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            error.launch(ex, getClass());
+        }
+    }
+    
+    private String getDay(int temp) {
+        if (temp == 0)
+            return "oggi";
+        else if (temp == 1)
+            return "domani";
+        else if (temp == -1)
+            return "ieri";
+        return null;
+    }
+
+    /**Stampa il messaggio di alert invocando il metodo fire opportuno
+     * 
+     * @param msg testo da stampare
+     */
+    private void printAlert(String msg) {
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.ALERT, true);
+    }
+
+    private void printOk(String msg) {
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.OK, true);
+    }
+    
+    private void printSynology(String msg) {
+        ManageListener.fireTextPaneEvent(this, msg, TextPaneEvent.SYNOLOGY, true);
+    }
+    
+    private boolean loginItasaHttp(){
+        boolean login = false;
+        if (httpItasa==null){
+            try {
+                httpItasa = new HttpItasa(Integer.parseInt(prop.getHttpTimeout())*1000);
+                if (httpItasa.testConnectItasa(prop.getItasaUsername(), prop.getItasaPassword())){
+                    httpItasa.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
+                    login = true;
+                } else
+                    httpItasa = null;
+            } catch (ClientProtocolException ex) {
+                ex.printStackTrace();
+                httpItasa = null;
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                httpItasa = null;
+            }
+        } else 
+            login = true;
+        return login;
+    }
+
+    private boolean loginItasaAPI(String username, String pwd) {
+        boolean login = false;
+        if (user==null){
+            try {
+                user = new ItasaOnline().login(username, pwd);
+                login = true;
+            } catch (JDOMException ex) {
+                error.launch(ex, this.getClass());
+            } catch (IOException ex) {
+                error.launch(ex, this.getClass());
+            } catch (ItasaException ex) {
+                printAlert("Login itasa API: " + ex.getMessage());
+            } catch (Exception ex) {
+                error.launch(ex, this.getClass());
+            }
+        } else 
+            login = true;
+        return login;
+    }
+    
+    private boolean loginItasaXmlRPC(){
+        boolean login = false;
+        if (xmlrpc==null){
+            try {
+                xmlrpc = new XmlRPC();
+                if (xmlrpc.testConn(prop.getItasaUsername(), prop.getItasaPassword()))
+                    login = true;
+            } catch (MalformedURLException ex) {
+                ex.printStackTrace();
+                xmlrpc = null;
+            } catch (XmlRpcException ex) {
+                ex.printStackTrace();
+                xmlrpc = null;
+            } 
+        } else 
+            login = true;
+        return login;
+    }
+    
+    @SuppressWarnings("unchecked")
+    private void fireCalendar(){
+        try {
+            xmlCalendar = new Calendar(FILE_CALENDAR, true);
+            ArrayList temp = xmlCalendar.readingDocument();
+            tsIdCalendar = (TreeSet) temp.get(0);
+            if (tsIdCalendar.size() > 0)
+                ManageListener.fireTableEvent(this,
+                            (ArrayList<Object[]>) temp.get(1), CALENDAR_SHOW);
+        } catch (Exception e) {
+            error.launch(e, this.getClass());
+        }
+    }
+    
+    private String downloadImage(String link) throws MalformedURLException, IOException{
+        String[] split = link.split("/");
+        String temp = split[split.length-1].replaceAll(":", "");
+        temp = temp.replaceAll("%20", " ");
+        String file = ResourceLocator.getThumbnailShows() + temp;
+        File dir = new File(ResourceLocator.getThumbnailShows());
+        if (!dir.exists())
+            dir.mkdir();
+        File f = new File(file);
+        if (!f.exists())
+            Io.downloadSingle(new URL(link.replaceAll(" ", "%20")).openStream(), f);
+        return file;
+    }
+    
+    private Object[] setArray(TvRage t, Object[] show, boolean status) throws 
+                                    ConnectException, JDOMException, IOException{
+        Object[] array = t.readingEpisodeList_byID(show[0].toString(),
+                show[2].toString());
+        array[0] = show[0];
+        array[1] = show[1];
+        if (status)
+            array[2] = Common.getStatus((String) show[3]);
+        else
+            array[2] = show[3];
+        array[3] = show[4];
+        return array;
+    }
+    
+    /**esegue le operazioni di aggiornamento sotto timer
+     * 
+     * @param delay tempo in secondi per il timer
+     */
+    private void runTimer(int delay) {
+        timer = new Timer();
+        try {
+            timer.scheduleAtFixedRate(new TimerTask()  {
+                @Override
+                public void run() {
+                    boolean icontray = false;
+                    prop.setLastDateTimeRefresh(Common.actualTime());
+                    if (runItasaRss(false,true))
+                        icontray = true;
+                    if (runSubsfactory(false))
+                        icontray = true;
+                    if (prop.isTorrentOption() && runTorrent(false))
+                        icontray = true;
+                    if (prop.isItasaBlog() && runItasaBlog(false))
+                        icontray = true;
+                    if (prop.isItasaPM() && runItasaPM(false))
+                        icontray = true;
+                    if (prop.isItasaNews() && runItasaNews(false))
+                        icontray = true;
+                    if ((icontray) && (prop.isEnableNotifyAudioRss())) {
+                        try {
+                            AudioPlay.playFeedWav();
+                        } catch (UnsupportedAudioFileException ex) {
+                            error.launch(ex, getClass());
+                        } catch (LineUnavailableException ex) {
+                            error.launch(ex, getClass());
+                        } catch (IOException ex) {
+                            error.launch(ex, getClass(), null);
+                        }
+                    }
+                    String msg = countItasa + ":" + countMyitasa + ":" + countBlog + 
+                            ":" + countEztv + ":" + countBtchat + ":" + countSubsf + 
+                            ":" + countMysubsf + ":" + countPM + ":" + countNews;
+                    ManageListener.fireFrameEvent(this, icontray, msg);
+                }// end run
+            }, delay, delay);
+        } catch (IllegalStateException ex) {
+            error.launch(ex, getClass());
+        }
+    }
+
+    /**Esegue la parte rss itasa
+     * 
+     * @param first primo lancio
+     * @return true se ci sono nuovi feed, false altrimenti
+     */
+    private boolean runItasaRss(boolean first, boolean autoloaddownload) {
+        boolean status = false;
+        countItasa = 0;
+        countMyitasa = 0;
+        
+        if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
+            RssThread rt = new RssThread(lastItasa, prop.getItasaFeedURL(), ITASA);
+            Thread t = new Thread(rt, ITASA);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (rt.getCount()>0){
+                lastItasa = rt.getLastDate();
+                if (!first){
+                    status = true;
+                    countItasa = rt.getCount();
+                }
+            }
+        }
+        if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
+            if (first && prop.isAutoLoadDownloadMyItasa())
+                lastMyItasa = prop.getLastDateTimeRefresh();
+            RssThread rt;
+            if (first && !autoloaddownload)
+                rt = new RssThread(lastMyItasa, prop.getMyitasaFeedURL(), MYITASA, 
+                        loginItasaHttp(), autoloaddownload, first, mapRules, 
+                                                        httpItasa, xmlReminder);
+            else
+                rt = new RssThread(lastMyItasa, prop.getMyitasaFeedURL(), MYITASA, 
+                        loginItasaHttp(), prop.isAutoDownloadMyItasa(), first, mapRules, 
+                                                        httpItasa, xmlReminder);
+            Thread t = new Thread(rt, MYITASA);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (rt.getCount()>0){
+                lastMyItasa = rt.getLastDate();
+                if (!first){
+                    status = true;
+                    countMyitasa = rt.getCount();
+                }
+            }
+        }
+        return status;
+    }
+    
+    private boolean runItasaBlog(boolean first) {
+        boolean status = false;
+        String url = "http://feeds.feedburner.com/itasa-blog";
+        countBlog = 0;
+        RssBlogThread rt = new RssBlogThread(lastBlog, url);
+        Thread t = new Thread(rt, BLOG);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        if (rt.getCount()>0){
+            lastBlog = rt.getLastDate();
+            if (!first){
+                status = true;
+                countBlog = rt.getCount();
+            }
+        }
+        return status;
+    }
+    
+    private boolean runItasaPM(boolean first){
+        boolean status = false;
+        if (!first && loginItasaXmlRPC()){
+            try {
+                countPM = xmlrpc.getMessage();
+                if (countPM > 0){
+                    status = true;
+                    ManageListener.fireTextPaneEvent(this,
+                                    "Hai " + countPM + " messaggi privati",
+                                    TextPaneEvent.ITASA_PM, true);
+                }
+            } catch (XmlRpcException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return status;
+    }
+
+    /**Esegue la parte rss subsfactory
+     * 
+     * @param first primo lancio
+     * @return true se ci sono nuovi feed, false altrimenti
+     */
+    private boolean runSubsfactory(boolean first) {
+        boolean status = false;
+        countSubsf = 0;
+        countMysubsf = 0;
+        if (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL())) {
+            RssThread rt = new RssThread(lastSubsf, prop.getSubsfactoryFeedURL(), SUBSF);
+            Thread t = new Thread(rt, SUBSF);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (rt.getCount()>0){
+                lastSubsf = rt.getLastDate();
+                if (!first){
+                    status = true;
+                    countSubsf = rt.getCount();
+                }
+            }
+        }
+        if (Lang.verifyTextNotNull(prop.getMySubsfactoryFeedUrl())) {
+            RssThread rt = new RssThread(lastMySubsf, 
+                                        prop.getMySubsfactoryFeedUrl(), MYSUBSF);
+            Thread t = new Thread(rt, MYSUBSF);
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+            if (rt.getCount()>0){
+                lastMySubsf = rt.getLastDate();
+                if (!first){
+                    status = true;
+                    countMysubsf = rt.getCount();
+                }
+            }
+        }
+        return status;
+    }
+
+    /**Esegue la parte rss torrent
+     * 
+     * @param first primo lancio
+     * @return true se ci sono nuovi feed, false altrimenti
+     */
+    private boolean runTorrent(boolean first) {
+        boolean status = false;
+        countBtchat = 0;
+        countEztv = 0;
+        RssThread rtE = new RssThread(lastEztv, RSS_TORRENT_EZTV, EZTV);
+        RssThread rtB = new RssThread(lastBtchat, RSS_TORRENT_BTCHAT, BTCHAT);
+        Thread tE = new Thread(rtE, EZTV);
+        Thread tB = new Thread(rtB, BTCHAT);
+        tE.start();
+        tB.start();
+        try {
+            tE.join();
+            tB.join();
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+        if (rtE.getCount()>0){
+            lastEztv = rtE.getLastDate();
+            if (!first){
+                status = true;
+                countEztv = rtE.getCount();
+            }
+        }
+        if (rtB.getCount()>0){
+            lastBtchat = rtB.getLastDate();
+            if (!first){
+                status = true;
+                countBtchat = rtB.getCount();
+            }
+        }
+        return status;
+    }
+    
+    private void parseCalendarICS(){
+        IcsThread it = new IcsThread(ITASA_CALENDAR_ICS);
+        Thread t = new Thread(it, "ItasaCalendarIcs");
+        t.start();
+    }
+    
+    private void checkPath(File f) throws IOException{
+        if (!f.exists()){
+            File old = new File(f.getName());
+            if (old.exists()){
+                File dir = new File(f.getParent());
+                if (!dir.exists())
+                    dir.mkdir();
+                Io.moveFile(old, f.getParent());
+            }
         }
     }
 
@@ -1468,9 +1489,8 @@ public class Kernel implements PropertyChangeListener {
         }
         
         private void importShow(String name, TvRage t, TreeSet<Object> ts, ArrayList<Object[]> al) 
-                                                throws JDOMException, IOException{
-            ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(
-                                                                name, true, false);
+                                                throws JDOMException, IOException, ConnectException{
+            ArrayList<Object[]> temp = t.readingDetailedSearch_byShow(name, true, false);
             if (temp != null) {
                 Object[] show = temp.get(0);
                 if (!ts.contains(show[0])) {
@@ -1517,7 +1537,7 @@ public class Kernel implements PropertyChangeListener {
                             array = setArray(t, t.showInfo_byID(id), true);
                         } catch (TvrageException te){
                             array = setArrayException();
-                        }
+                        } 
                         if (debug_flag)
                             System.out.println(id + " " + array[1]);
                         xmlClone.removeShowTv(index.intValue() - 1);
@@ -1532,7 +1552,7 @@ public class Kernel implements PropertyChangeListener {
                         array = setArray(t, t.showInfo_byID(id), true);
                     } catch (TvrageException te){
                         array = setArrayException();
-                    }
+                    } 
                     xmlClone.removeShowTv(row-1);
                     xmlClone.addShowTV(array);
                     setProgress(++progress);
@@ -1620,3 +1640,19 @@ public class Kernel implements PropertyChangeListener {
         }
     }//end class ImportTaskList
 } //END class Kernel
+
+/*TODO:json synoid?
+    private String getSynoId(InputStream is) {
+        String id = null;
+         * JSONValue value = JSONParser.parse(jSon); JSONArray arr =
+         * value.isArray(); for (int i = 0; i < arr.size(); i++) { JSONObject
+         * obj = arr.get(I).isObject(); if (obj != null)
+         * recordList.add(getProductAsRecord(obj, false)); }
+         * record.setAttribute("id", JSONUtil.getLong("id", prodObj));
+         * record.setAttribute("code", JSONUtil.getString("code", prodObj));
+         * record.setAttribute("name", JSONUtil.getString("name", prodObj));
+         * record.setAttribute("creationDate", JSONUtil.getDate("creationDate",
+         * prodObj));
+        return id;
+    }
+*/

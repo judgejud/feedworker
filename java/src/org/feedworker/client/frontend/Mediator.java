@@ -55,7 +55,7 @@ public class Mediator {
         Application app = FeedWorkerClient.getApplication();
         return app.getName() + " revision "
                 //+ app.getBuildNumber() + " by "
-                + "486 by " + app.getAuthor();
+                + "488 by " + app.getAuthor();
     }
     
     ManageException getError(){

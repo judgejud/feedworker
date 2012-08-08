@@ -23,6 +23,7 @@ CORREZIONI:
 *correggere il comparator negli show, con il tooltip della label che non corrisponde
 irc segnalare il fatto che per il privato l'utente è andato...
 migliorare il fire alla reminder considerando la regola delete.
+Connessione al server irc irc.azzurra.org in corso... Error #433: Nickname is already in use.
 
 PUNTI INTERROGATIVI
 myitasa?

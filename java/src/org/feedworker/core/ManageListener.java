@@ -155,6 +155,16 @@ public class ManageListener {
         }
     }
     
+    public static synchronized void fireEditorPaneEvent(Object from, String html, 
+                                                        String title, String rev, String dest) {
+        EditorPaneEvent event = new EditorPaneEvent(from, html, title, rev, dest);
+        Iterator listeners = listenerEditorPane.iterator();
+        while (listeners.hasNext()) {
+            EditorPaneEventListener myel = (EditorPaneEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
     public static synchronized void fireComboBoxEvent(Object from, Object[] array) {
         ComboboxEvent event = new ComboboxEvent(from, array);
         Iterator listeners = listenerComboBox.iterator();
@@ -164,8 +174,16 @@ public class ManageListener {
         }
     }
     
-    public static synchronized void fireListEvent(Object from, String dest, 
-                                                                Object[][] array) {
+    public static synchronized void fireListEvent(Object from, String dest, Object[][] array) {
+        ListEvent event = new ListEvent(from, dest, array);
+        Iterator listeners = listenerList.iterator();
+        while (listeners.hasNext()) {
+            ListEventListener myel = (ListEventListener) listeners.next();
+            myel.objReceived(event);
+        }
+    }
+    
+    public static synchronized void fireListEvent(Object from, String dest, ArrayList<Object[]> array) {
         ListEvent event = new ListEvent(from, dest, array);
         Iterator listeners = listenerList.iterator();
         while (listeners.hasNext()) {
@@ -185,16 +203,6 @@ public class ManageListener {
     
     public static synchronized void fireListIrcEvent(Object from, String dest, String oper, Object[] nicks) {
         ListEvent event = new ListEvent(from, dest, oper, nicks);
-        Iterator listeners = listenerList.iterator();
-        while (listeners.hasNext()) {
-            ListEventListener myel = (ListEventListener) listeners.next();
-            myel.objReceived(event);
-        }
-    }
-    
-    public static synchronized void fireListEvent(Object from, String dest, 
-                                                    ArrayList<Object[]> array) {
-        ListEvent event = new ListEvent(from, dest, array);
         Iterator listeners = listenerList.iterator();
         while (listeners.hasNext()) {
             ListEventListener myel = (ListEventListener) listeners.next();

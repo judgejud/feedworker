@@ -49,8 +49,8 @@ public class taskpaneNews extends JScrollPane implements EditorPaneEventListener
         jepNews.setOpaque(false);
         jepNews.setEditable(false);
         
-        jbAlert = new JXButton("test");
-        jbAlert.setToolTipText("");
+        jbAlert = new JXButton(core.getIconEmail());
+        jbAlert.setToolTipText("Invia un messaggio al revisore per eventuali correzioni");
         jbAlert.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
         jbAlert.addMouseListener(new MouseAdapter() {
             @Override
@@ -80,19 +80,22 @@ public class taskpaneNews extends JScrollPane implements EditorPaneEventListener
             }
         });
         
-        JXPanel jpButton = new JXPanel();
-        jpButton.add(jbDown);
-        jpButton.add(jbClean);
-        
         jtSub = new tableResultSearchSub(getName());
         JScrollPane jsp = new JScrollPane(jtSub);
         jsp.setPreferredSize(new Dimension(900, 150));
         
+        JXPanel jpButton = new JXPanel();
+        jpButton.add(jbAlert);
+        
         taskNews = new JXTaskPane();
         taskNews.setTitle("Info News");
-        taskNews.add(jbAlert);
+        taskNews.add(jpButton);
         taskNews.add(jepNews);
 
+        jpButton = new JXPanel();
+        jpButton.add(jbDown);
+        jpButton.add(jbClean);
+        
         taskSubtitle = new JXTaskPane();
         taskSubtitle.setTitle("Sottotitoli");
         taskSubtitle.add(jpButton);
