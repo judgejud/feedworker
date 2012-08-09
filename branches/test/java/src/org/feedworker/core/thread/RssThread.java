@@ -95,10 +95,13 @@ public class RssThread implements Runnable{
                                             TextPaneEvent.FEED_MYITASA, true);
                                 } else if (from.equals(core.SUBSF)) {
                                     ManageListener.fireTextPaneEvent(this,
-                                            "Nuovo/i feed " + from,
+                                        "Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_SUBSF,true);
                                 } else if (from.equals(core.MYSUBSF)) {
-                                    ManageListener.fireTextPaneEvent(this,
+                                    if (matrice.get(i)[2].toString().startsWith("No such pipe"))
+                                        matrice.remove(i);
+                                    else
+                                        ManageListener.fireTextPaneEvent(this,
                                             "Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_MYSUBSF, true);
                                 } else if (from.equals(core.EZTV)) {
