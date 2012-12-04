@@ -26,6 +26,7 @@ import com.sun.syndication.io.ParsingFeedException;
 import jcifs.smb.SmbException;
 
 import org.jdom.JDOMException;
+
 import org.xml.sax.SAXException;
 /**
  * Stampa nella textpane i messaggi d'errore se è un messaggio d'errore "rosso"
