@@ -100,6 +100,7 @@ public class Kernel implements PropertyChangeListener {
             "http://www.italiansubs.net/index.php?option=com_info&Itemid=12&idserie=";
     private final String ITASA_CALENDAR_ICS =
                         "http://www.italiansubs.net/icalendar/calendars/itasa.ics";
+    private final File PATH_XML = ResourceLocator.getPATH_XML();
     private final File FILE_RULE = ResourceLocator.getFILE_RULE();
     private final File FILE_CALENDAR = ResourceLocator.getFILE_CALENDAR();
     private final File FILE_REMINDER = ResourceLocator.getFILE_REMINDER();
@@ -816,6 +817,8 @@ public class Kernel implements PropertyChangeListener {
      * o le preleva dall'xml nel caso in cui ci sono problemi vari con itasa
      */
     public void loadItasaSeries() {
+        if (!PATH_XML.exists())
+            PATH_XML.mkdir();
         if (mapShowItasa==null){
             itasa = new ItasaOnline();
             try {
@@ -830,6 +833,7 @@ public class Kernel implements PropertyChangeListener {
                     error.launch(ex1, getClass());
                 }
             } catch (IOException ex) {
+                System.out.println("ciao");
                 error.launch(ex, getClass());
             } catch (ItasaException ex) {
                 printAlert(ex.getMessage());

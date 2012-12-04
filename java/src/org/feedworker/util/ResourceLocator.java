@@ -13,6 +13,7 @@ import org.jfacility.java.lang.SystemProperty;
  */
 public class ResourceLocator {
 
+    private static final File PATH_XML = new File("xml" + File.separator);
     private static final File FILE_RULE = new File("xml" + File.separator + "rules.xml");
     private static final File FILE_CALENDAR = new File("xml" + File.separator + "calendar.xml");
     private static final File FILE_REMINDER = new File("xml" + File.separator + "reminder.xml");
@@ -92,5 +93,9 @@ public class ResourceLocator {
 
     public static File getFILE_RULE() {
         return FILE_RULE;
+    }
+
+    public static File getPATH_XML() {
+        return PATH_XML;
     }
 }// end class
