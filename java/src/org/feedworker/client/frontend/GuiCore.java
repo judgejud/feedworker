@@ -373,11 +373,12 @@ public class GuiCore {
             String mailTO,  String smtp, boolean paneLog, boolean paneSearch, 
             boolean paneSetting, boolean paneSubDest, boolean paneReminder, 
             boolean reminder, String googleUser, String googlePwd, String googleCalendar, 
-            boolean paneTorrent, boolean paneCalendar, boolean torrentOption, 
-            boolean paneShow, boolean blog, boolean paneBlog, boolean itasapm, 
-            boolean paneCalendarDay, boolean calendarDay, boolean paneIrc, String ircNick, 
-            String ircPwd, boolean itasaRss, boolean myItasaRss, boolean itasaNews, 
-            boolean noDuplicateAll, boolean noDuplicateSingle, String ircServer) {
+            boolean paneTorrent, boolean paneCalendar, boolean paneShow, boolean blog, 
+            boolean paneBlog, boolean itasapm, boolean paneCalendarDay, boolean calendarDay, 
+            boolean paneIrc, String ircNick, String ircPwd, boolean itasaRss, 
+            boolean myItasaRss, boolean itasaNews, boolean noDuplicateAll, 
+            boolean noDuplicateSingle, String ircServer, boolean eztv, boolean btchat,
+            boolean karmorra, boolean mykarmorra, String urlMyKarmorra) {
                 
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -386,10 +387,11 @@ public class GuiCore {
                 sambaUser, sambaPwd)) {
             save = true;
             if (save)
-                save = checkSaveItasa(itasaRss, itasa, myItasaRss, myitasa, itasaUser, itasaPwd);
+                save = checkSaveItasa(itasaRss, itasa, myItasaRss, myitasa, itasaUser, 
+                                        itasaPwd, itasapm);
             if (prop.isSubsfactoryOption() && save)
                 save = checkSaveSubsf(subsf, mySubsf);
-            if (prop.isTorrentOption() && save && !Lang.verifyTextNotNull(torrentDest))
+            if ((eztv || btchat || karmorra || mykarmorra) && save && !Lang.verifyTextNotNull(torrentDest))
                 proxy.printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai "
                     + "scaricare .torrent");
         }
@@ -400,7 +402,7 @@ public class GuiCore {
             setPropItasa(itasa, myitasa, itasaUser, itasaPwd, autoMyitasa, autoLoadMyItasa, 
                         blog, itasapm, calendarDay, itasaRss, myItasaRss, itasaNews);
             setPropSubsf(subsf, mySubsf);
-            setPropTorrent(torrentDest, torrentOption);
+            setPropTorrent(torrentDest, eztv, btchat, karmorra, mykarmorra, urlMyKarmorra);
             setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
                             paneReminder, paneTorrent, paneCalendar, paneShow, 
@@ -704,9 +706,14 @@ public class GuiCore {
         prop.setEnablePaneIrc(irc);
     }
     
-    private void setPropTorrent(String dest, boolean option){
+    private void setPropTorrent(String dest, boolean eztv, boolean btchat, boolean karmorra, 
+                                boolean mykarmorra, String urlMyKarmorra){
         prop.setTorrentDestinationFolder(dest);
-        prop.setTorrentOption(option);
+        prop.setTorrentEztvOption(eztv);
+        prop.setTorrentBtchatOption(btchat);
+        prop.setTorrentKarmorraOption(karmorra);
+        prop.setTorrentMyKarmorraOption(mykarmorra);
+        prop.setTorrentUrlMyKarmorra(urlMyKarmorra);
     }
     
     private void setPropIrc(String nick, String pwd, String server){
@@ -761,8 +768,9 @@ public class GuiCore {
      *
      * @return booleano che le impostazioni sono ok
      */
+    //TODO: inserire controllo itasapm con user e pwd
     private boolean checkSaveItasa(boolean itasaRss, String itasa, boolean myitasaRss, 
-                                        String myitasa, String user, String pwd) {
+                                        String myitasa, String user, String pwd, boolean pm) {
         boolean check = true;
         try {
             //if (!Lang.verifyTextNotNull(itasa) && !Lang.verifyTextNotNull(myitasa)) {

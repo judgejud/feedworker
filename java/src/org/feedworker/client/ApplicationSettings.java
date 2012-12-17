@@ -26,16 +26,16 @@ public class ApplicationSettings {
             cifsShareLocation, cifsSharePath, cifsShareUsername,
             cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, mySubsfactoryFeedUrl,
             httpTimeout, mailTO, mailSMTP, googleUser, googlePwd, googleCalendar, 
-            ircNick, ircPwd, ircServer;
-    private boolean subsfactoryOption, torrentOption, 
-            autoDownloadMyItasa, enableNotifyAudioRss, enableNotifyAudioSub, 
+            ircNick, ircPwd, ircServer, torrentUrlMyKarmorra;
+    private boolean subsfactoryOption, autoDownloadMyItasa, enableNotifyAudioRss, enableNotifyAudioSub, 
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
             enableNotifyMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
             enablePaneSearchSubItasa, enablePaneReminder, reminderOption, enablePaneTorrent,
             enablePaneCalendar, enableNotifySms, enablePaneShow, itasaBlog, enablePaneBlog, 
             itasaPM, calendarDay, enablePaneCalendarDay, enablePaneIrc, itasaNews, 
-            showNoDuplicateAll, showNoDuplicateSingle;
+            showNoDuplicateAll, showNoDuplicateSingle, torrentEztvOption, torrentBtchatOption,
+            torrentKarmorraOption, torrentMyKarmorraOption;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -82,9 +82,12 @@ public class ApplicationSettings {
                 setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
                 setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
                 //TORRENT
-                setTorrentOption(getBooleanDecryptedValue("TORRENT"));
-                setTorrentDestinationFolder(
-                                getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
+                setTorrentEztvOption(getBooleanDecryptedValue("TORRENT_BTCHAT"));
+                setTorrentBtchatOption(getBooleanDecryptedValue("TORRENT_EZTV"));
+                setTorrentKarmorraOption(getBooleanDecryptedValue("TORRENT_KARMORRA"));
+                setTorrentMyKarmorraOption(getBooleanDecryptedValue("TORRENT_MYKARMORRA"));
+                setTorrentUrlMyKarmorra(getDecryptedValue("TORRENT_URL_MYKARMORRA"));
+                setTorrentDestinationFolder(getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
                 //SAMBA-CIFS
                 setCifsSharePath(getDecryptedValue("CIFS_SHARE_PATH"));
                 setCifsShareDomain(getDecryptedValue("CIFS_SHARE_DOMAIN"));
@@ -214,9 +217,12 @@ public class ApplicationSettings {
 
     public void writeTorrentSettings() {
         try {
-            propertiesCrypting("TORRENT_DESTINATION_FOLDER",
-                    torrentDestinationFolder);
-            propertiesCrypting("TORRENT", torrentOption);
+            propertiesCrypting("TORRENT_DESTINATION_FOLDER", torrentDestinationFolder);
+            propertiesCrypting("TORRENT_EZTV", torrentEztvOption);
+            propertiesCrypting("TORRENT_BTCHAT", torrentBtchatOption);
+            propertiesCrypting("TORRENT_KARMORRA", torrentKarmorraOption);
+            propertiesCrypting("TORRENT_MYKARMORRA", torrentMyKarmorraOption);
+            propertiesCrypting("TORRENT_URL_MYKARMORRA", torrentUrlMyKarmorra);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -383,14 +389,6 @@ public class ApplicationSettings {
 
     public void setEnableNotifySms(boolean enableNotifySms) {
         this.enableNotifySms = enableNotifySms;
-    }
-
-    public boolean isTorrentOption() {
-        return torrentOption;
-    }
-
-    public void setTorrentOption(boolean hasTorrentOption) {
-        this.torrentOption = hasTorrentOption;
     }
 
     public String getLastDateTimeRefresh() {
@@ -810,5 +808,45 @@ public class ApplicationSettings {
 
     public void setIrcServer(String ircServer) {
         this.ircServer = ircServer;
+    }
+
+    public String getTorrentUrlMyKarmorra() {
+        return torrentUrlMyKarmorra;
+    }
+
+    public void setTorrentUrlMyKarmorra(String torrentUrlMyKarmorra) {
+        this.torrentUrlMyKarmorra = torrentUrlMyKarmorra;
+    }
+
+    public boolean isTorrentEztvOption() {
+        return torrentEztvOption;
+    }
+
+    public void setTorrentEztvOption(boolean torrentEztvOption) {
+        this.torrentEztvOption = torrentEztvOption;
+    }
+
+    public boolean isTorrentBtchatOption() {
+        return torrentBtchatOption;
+    }
+
+    public void setTorrentBtchatOption(boolean torrentBtchatOption) {
+        this.torrentBtchatOption = torrentBtchatOption;
+    }
+
+    public boolean isTorrentKarmorraOption() {
+        return torrentKarmorraOption;
+    }
+
+    public void setTorrentKarmorraOption(boolean torrentKarmorraOption) {
+        this.torrentKarmorraOption = torrentKarmorraOption;
+    }
+
+    public boolean isTorrentMyKarmorraOption() {
+        return torrentMyKarmorraOption;
+    }
+
+    public void setTorrentMyKarmorraOption(boolean torrentMyKarmorraOption) {
+        this.torrentMyKarmorraOption = torrentMyKarmorraOption;
     }
 }// end class

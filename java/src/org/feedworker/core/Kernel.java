@@ -94,7 +94,8 @@ public class Kernel implements PropertyChangeListener {
     public final String OPERATION_PROGRESS_SHOW = "ProgressShow";
     public final String OPERATION_PROGRESS_INCREMENT = "ProgressIncrement";
     // PRIVATE FINAL VARIABLES
-    private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
+    private final String RSS_TORRENT_EZTV = "http://rss.thepiratebay.se/user/d17c6a45441ce0bc0c057f19057f95e1";
+    private final String RSS_TORRENT_KARMORRA = "http://showrss.karmorra.info/feeds/all.rss";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
     private final String LINK_SCHEDA_ITASA =
             "http://www.italiansubs.net/index.php?option=com_info&Itemid=12&idserie=";
@@ -257,7 +258,8 @@ public class Kernel implements PropertyChangeListener {
             runItasaRss(true, autoloaddownload);
             if (prop.isSubsfactoryOption())
                 runSubsfactory(true);
-            if (prop.isTorrentOption())
+            if (prop.isTorrentEztvOption() || prop.isTorrentBtchatOption() || 
+                    prop.isTorrentKarmorraOption() || prop.isTorrentMyKarmorraOption())
                 runTorrent(true);
             if (prop.isItasaBlog())
                 runItasaBlog(true);
@@ -394,7 +396,8 @@ public class Kernel implements PropertyChangeListener {
         runItasaRss(false, true);
         if (prop.isSubsfactoryOption())
             runSubsfactory(false);
-        if (prop.isTorrentOption())
+        if (prop.isTorrentEztvOption() || prop.isTorrentBtchatOption() || 
+                    prop.isTorrentKarmorraOption() || prop.isTorrentMyKarmorraOption())
             runTorrent(false);
         if (prop.isItasaBlog())
             runItasaBlog(false);
@@ -1210,7 +1213,8 @@ public class Kernel implements PropertyChangeListener {
                         icontray = true;
                     if (runSubsfactory(false))
                         icontray = true;
-                    if (prop.isTorrentOption() && runTorrent(false))
+                    if ((prop.isTorrentEztvOption() || prop.isTorrentBtchatOption() || 
+                            prop.isTorrentKarmorraOption() || prop.isTorrentMyKarmorraOption()) && runTorrent(false))
                         icontray = true;
                     if (prop.isItasaBlog() && runItasaBlog(false))
                         icontray = true;

@@ -687,8 +687,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         }
     }
 
-    /**risponde all'evento di cambiare lo stato (abilitato/disabilitato) dei
-     * bottoni
+    /**risponde all'evento di cambiare lo stato (abilitato/disabilitato) dei bottoni
      * 
      * @param e stato
      */
@@ -696,8 +695,9 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jpItasaRss.setButtonEnabled(e);
         if (prop.isSubsfactoryOption())
             jpSubsfactory.setEnableButton(e);
-        if (prop.isTorrentOption())
-            jpTorrent.setButtonEnabled(e);
+        //TODO ???
+        //if (prop.isTorrentOption())
+        //    jpTorrent.setButtonEnabled(e);
     }
 
     /**verifica se il pannello non è presente e lo aggiunge stabilendo la visibilità
