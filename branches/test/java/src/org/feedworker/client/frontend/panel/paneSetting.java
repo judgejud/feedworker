@@ -26,17 +26,19 @@ public class paneSetting extends paneAbstract {
     private JCheckBox jcbDestination, jcbRunIconized, jcbDownloadMyitasaStartup, 
             jcbReminder, jcbPaneSubDest, jcbPaneLog, jcbPaneSetting, 
             jcbPaneSearchSubItasa, jcbPaneReminder, jcbPaneTorrent, jcbPaneCalendar, 
-            jcbPaneShow, jcbTorrent, jcbPaneBlog, jcbItasaBlog, jcbItasaPM, 
+            jcbPaneShow, jcbTorrentEztv, jcbTorrentBtchat, jcbTorrentKarmorra, 
+            jcbTorrentMyKarmorra, jcbPaneBlog, jcbItasaBlog, jcbItasaPM, 
             jcbPaneCalendarDay, jcbCalendarDay, jcbPaneIrc, jcbItasaRss, jcbMyItasaRss,
             jcbItasaNews, jcbShowNoDuplicateAll, jcbShowNoDuplicateSingle;
     private JButton jbDestSub;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf, 
             jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp,
-            jtfGoogleUser, jtfGoogleCalendar, jtfIrcServer, jtfIrcNick;
+            jtfGoogleUser, jtfGoogleCalendar, jtfIrcServer, jtfIrcNick, jtfTorrentMyKarmorra;
     private JPasswordField jpfSamba, jpfItasa, jpfGoogle, jpfIrc;
     private ButtonGroup bgLocalSamba, bgDownItasa;
     private ApplicationSettings prop;
+    private JPopupMenu menu;
 
     private paneSetting() {
         super("Settings");
@@ -53,6 +55,17 @@ public class paneSetting extends paneAbstract {
     
     @Override
     void initializePanel() {
+        menu = new JPopupMenu("Popup");
+        JMenuItem jmiPaste = new JMenuItem("Incolla");
+        jmiPaste.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPopupMenu j = (JPopupMenu) ((JMenuItem) e.getSource()).getParent();
+                core.setPasteClipboard((JTextField) j.getInvoker());
+            }
+        });
+        menu.add(jmiPaste);
+        
         JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
         tpcWest.add(initTaskPaneGeneral());
         tpcWest.add(initTaskPaneSamba());
@@ -109,13 +122,15 @@ public class paneSetting extends paneAbstract {
                 jcbReminder.isSelected(), jtfGoogleUser.getText(), 
                 new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), 
                 jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected(), 
-                jcbTorrent.isSelected(), jcbPaneShow.isSelected(), jcbItasaBlog.isSelected(), 
+                jcbPaneShow.isSelected(), jcbItasaBlog.isSelected(), 
                 jcbPaneBlog.isSelected(), jcbItasaPM.isSelected(), 
                 jcbPaneCalendarDay.isSelected(), jcbCalendarDay.isSelected(), jcbPaneIrc.isSelected(),
                 jtfIrcNick.getText(), new String(jpfIrc.getPassword()), jcbItasaRss.isSelected(), 
                 jcbMyItasaRss.isSelected(), jcbItasaNews.isSelected(), 
                 jcbShowNoDuplicateAll.isSelected(), jcbShowNoDuplicateSingle.isSelected(),
-                jtfIrcServer.getText());
+                jtfIrcServer.getText(), jcbTorrentEztv.isSelected(), jcbTorrentBtchat.isSelected(),
+                jcbTorrentKarmorra.isSelected(), jcbTorrentMyKarmorra.isSelected(), 
+                jtfTorrentMyKarmorra.getText());
             }
         });
         
@@ -240,18 +255,7 @@ public class paneSetting extends paneAbstract {
     }
 
     /** inizializza il pannello dei settaggi itasa */
-    private JXTaskPane initTaskPaneItalianSubs() {
-        final JPopupMenu menu = new JPopupMenu("Popup");
-        JMenuItem jmiPaste = new JMenuItem("Incolla");
-        jmiPaste.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JPopupMenu j = (JPopupMenu) ((JMenuItem) e.getSource()).getParent();
-                core.setPasteClipboard((JTextField) j.getInvoker());
-            }
-        });
-        menu.add(jmiPaste);
-        
+    private JXTaskPane initTaskPaneItalianSubs() {        
         jcbItasaNews = new JCheckBox("Abilita news Itasa");
         jcbItasaRss = new JCheckBox("Abilita rss Itasa");
         jtfRssItasa = new JTextField(25);
@@ -377,7 +381,19 @@ public class paneSetting extends paneAbstract {
 
     /** inizializzo il pannello settaggi torrent */
     private JXTaskPane initTaskPaneTorrent() {
-        jcbTorrent = new JCheckBox("Abilita feed torrent");
+        jcbTorrentEztv = new JCheckBox("Abilita feed torrent eztv");
+        jcbTorrentBtchat = new JCheckBox("Abilita feed torrent bt-chat");
+        jcbTorrentKarmorra = new JCheckBox("Abilita feed torrent karmorra");
+        jcbTorrentMyKarmorra = new JCheckBox("Abilita feed torrent karmorra personalizzato");
+        jtfTorrentMyKarmorra = new JTextField(30);
+        jtfTorrentMyKarmorra.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent ev) {
+                if (ev.isPopupTrigger())
+                    menu.show(ev.getComponent(), ev.getX(), ev.getY());
+            }
+        });
+        //http://showrss.karmorra.info/feeds/all.rss
         jtfDestTorrent = new JTextField(25);
         JButton jbDestTorrent = new JButton("Seleziona directory");
         jbDestTorrent.setToolTipText("Seleziona la directory per i "
@@ -393,10 +409,15 @@ public class paneSetting extends paneAbstract {
         temp.add(jbDestTorrent);
         temp.add(jtfDestTorrent);
         
+        
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Torrent");
         task.setCollapsed(true);
-        task.add(jcbTorrent);
+        task.add(jcbTorrentEztv);
+        task.add(jcbTorrentBtchat);
+        task.add(jcbTorrentKarmorra);
+        task.add(jcbTorrentMyKarmorra);
+        task.add(jtfTorrentMyKarmorra);
         task.add(temp);
         return task;
     }
@@ -595,7 +616,11 @@ public class paneSetting extends paneAbstract {
     }
 
     private void settingsTorrentValue() {
-        jcbTorrent.setSelected(prop.isTorrentOption());
+        jcbTorrentEztv.setSelected(prop.isTorrentEztvOption());
+        jcbTorrentBtchat.setSelected(prop.isTorrentBtchatOption());
+        jcbTorrentKarmorra.setSelected(prop.isTorrentKarmorraOption());
+        jcbTorrentMyKarmorra.setSelected(prop.isTorrentMyKarmorraOption());
+        jtfTorrentMyKarmorra.setText(prop.getTorrentUrlMyKarmorra());
         jtfDestTorrent.setText(prop.getTorrentDestinationFolder());
     }
     

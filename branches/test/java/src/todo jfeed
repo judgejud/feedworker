@@ -24,6 +24,8 @@ CORREZIONI:
 irc segnalare il fatto che per il privato l'utente è andato...
 migliorare il fire alla reminder considerando la regola delete.
 Connessione al server irc irc.azzurra.org in corso... Error #433: Nickname is already in use.
+se è attiva l'opzione del controllo messaggi privati, verificare che ci siano user e pwd 
+
 
 PUNTI INTERROGATIVI
 myitasa?
