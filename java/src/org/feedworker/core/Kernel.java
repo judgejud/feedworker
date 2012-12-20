@@ -79,6 +79,8 @@ public class Kernel implements PropertyChangeListener {
     public final String SUBSF = "Subsf";
     public final String EZTV = "Eztv";
     public final String BTCHAT = "Btchat";
+    public final String KARMORRA = "Karmorra";
+    public final String MYKARMORRA = "MyKarmorra";
     public final String MYITASA = "MyItasa";
     public final String MYSUBSF = "MySubsf";
     public final String BLOG = "Blog";
@@ -113,10 +115,12 @@ public class Kernel implements PropertyChangeListener {
     private static boolean debug_flag;
     private static String[] lastDates;
     // PRIVATE VARIABLES
-    private String lastItasa=null, lastMyItasa=null, lastSubsf=null,
-            lastEztv=null, lastBtchat=null, lastMySubsf=null, lastBlog=null;
+    private String lastItasa=null, lastMyItasa=null, lastSubsf=null, lastEztv=null, 
+            lastBtchat=null, lastMySubsf=null, lastBlog=null, lastKarmorra=null, 
+            lastMyKarmorra=null;
     private int countItasa, countMyitasa, countSubsf, countMysubsf, countEztv, 
-            countBtchat, countBlog, countPM, lastNewsID=0, countNews;
+            countBtchat, countBlog, countPM, lastNewsID=0, countNews, countKarmorra,
+            countMyKarmorra;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private Timer timer;
     private TreeMap<KeyRule, ValueRule> mapRules;
@@ -1394,35 +1398,86 @@ public class Kernel implements PropertyChangeListener {
      * @return true se ci sono nuovi feed, false altrimenti
      */
     private boolean runTorrent(boolean first) {
+        ArrayList<String> torrent = new ArrayList<>();
         boolean status = false;
+        RssThread rtE = null, rtB = null, rtK = null, rtMk = null;
+        Thread tE = null, tB = null, tK = null, tMk = null;
         countBtchat = 0;
         countEztv = 0;
-        RssThread rtE = new RssThread(lastEztv, RSS_TORRENT_EZTV, EZTV);
-        RssThread rtB = new RssThread(lastBtchat, RSS_TORRENT_BTCHAT, BTCHAT);
-        Thread tE = new Thread(rtE, EZTV);
-        Thread tB = new Thread(rtB, BTCHAT);
-        tE.start();
-        tB.start();
+        countKarmorra = 0;
+        countMyKarmorra = 0;
+        if (prop.isTorrentEztvOption()){
+            if (first)
+                torrent.add(EZTV);
+            rtE = new RssThread(lastEztv, RSS_TORRENT_EZTV, EZTV);
+            tE = new Thread(rtE, EZTV);
+            tE.start();
+        }
+        if (prop.isTorrentBtchatOption()){
+            if (first)
+                torrent.add(BTCHAT);
+            rtB = new RssThread(lastBtchat, RSS_TORRENT_BTCHAT, BTCHAT);
+            tB = new Thread(rtB, BTCHAT);
+            tB.start();
+        }
+        if (prop.isTorrentKarmorraOption()){
+            if (first)
+                torrent.add(KARMORRA);
+            rtK = new RssThread(lastKarmorra, RSS_TORRENT_KARMORRA, KARMORRA);
+            tK = new Thread(rtK, KARMORRA);
+            tK.start();
+        }
+        if (prop.isTorrentMyKarmorraOption()){
+            if (first)
+                torrent.add(MYKARMORRA);
+            rtMk = new RssThread(lastMyKarmorra, prop.getTorrentUrlMyKarmorra(), MYKARMORRA);
+            tMk = new Thread(rtMk, MYKARMORRA);
+            tMk.start();
+        }
+        if (first && torrent.size()>0){
+            //fire jframe to 
+        }
         try {
-            tE.join();
-            tB.join();
+            if (prop.isTorrentEztvOption())
+                tE.join();
+            if (prop.isTorrentBtchatOption())
+                tB.join();
+            if (prop.isTorrentKarmorraOption())
+                tK.join();
+            if (prop.isTorrentMyKarmorraOption())
+                tMk.join();
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
-        if (rtE.getCount()>0){
+        if (prop.isTorrentEztvOption() && rtE.getCount()>0){
             lastEztv = rtE.getLastDate();
             if (!first){
                 status = true;
                 countEztv = rtE.getCount();
             }
         }
-        if (rtB.getCount()>0){
+        if (prop.isTorrentBtchatOption() && rtB.getCount()>0){
             lastBtchat = rtB.getLastDate();
             if (!first){
                 status = true;
                 countBtchat = rtB.getCount();
             }
         }
+        if (prop.isTorrentKarmorraOption() && rtK.getCount()>0){
+            lastKarmorra = rtK.getLastDate();
+            if (!first){
+                status = true;
+                countKarmorra = rtK.getCount();
+            }
+        }
+        if (prop.isTorrentMyKarmorraOption() && rtMk.getCount()>0){
+            lastMyKarmorra = rtMk.getLastDate();
+            if (!first){
+                status = true;
+                countMyKarmorra = rtMk.getCount();
+            }
+        }
+        
         return status;
     }
     

@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
 import org.feedworker.client.frontend.table.tableRss;
+import org.jdesktop.swingx.JXTaskPaneContainer;
 /**
  * 
  * @author luca
@@ -15,14 +16,14 @@ public class paneTorrent extends paneAbstract {
 
     private static paneTorrent jpanel = null;
     private JButton jbDown, jbCopyLinks, jbClean, jbFireNas;
-    private tableRss jtTorrent1, jtTorrent2;
+    private tableRss[] jtTorrent;
 
     private paneTorrent() {
         super("Torrent");
         initializePanel();
         initializeButtons();
-        core.setTableListener(jtTorrent1);
-        core.setTableListener(jtTorrent2);
+        //core.setTableListener(jtTorrent1);
+        //core.setTableListener(jtTorrent2);
     }
 
     public static paneTorrent getPanel() {
@@ -33,21 +34,22 @@ public class paneTorrent extends paneAbstract {
 
     @Override
     void initializePanel() {
-        jtTorrent1 = new tableRss(proxy.getEztv());
-        jtTorrent1.setTitleDescriptionColumn("Descrizione Torrent EZTV");
-        JScrollPane jsp1 = new JScrollPane(jtTorrent1);
-        jsp1.setPreferredSize(TABLE_SCROLL_SIZE);
-        jsp1.setAutoscrolls(true);
+        JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
+        JXTaskPaneContainer tpcEast = new JXTaskPaneContainer();
+        
+        
+        
+        
 
-        jtTorrent2 = new tableRss(proxy.getBtchat());
-        jtTorrent2.setTitleDescriptionColumn("Descrizione Torrent BTCHAT");
-        JScrollPane jsp2 = new JScrollPane(jtTorrent2);
-        jsp2.setPreferredSize(TABLE_SCROLL_SIZE);
-        jsp2.setAutoscrolls(true);
+        //jtTorrent2 = new tableRss(proxy.getBtchat());
+        //jtTorrent2.setTitleDescriptionColumn("Descrizione Torrent BTCHAT");
+        //JScrollPane jsp2 = new JScrollPane(jtTorrent2);
+        //jsp2.setPreferredSize(TABLE_SCROLL_SIZE);
+        //jsp2.setAutoscrolls(true);
         
         jpCenter.add(jsp1);
         jpCenter.add(RIGID_AREA);
-        jpCenter.add(jsp2);
+        //jpCenter.add(jsp2);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class paneTorrent extends paneAbstract {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (jbDown.isEnabled()){
-                    core.downloadTorrent(jtTorrent1, jtTorrent2);
+                    core.downloadTorrent(jtTorrent);
                     cleanTables();
                 }
             }
@@ -73,7 +75,7 @@ public class paneTorrent extends paneAbstract {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (jbCopyLinks.isEnabled())
-                    core.copyLinkTorrent(jtTorrent1, jtTorrent2);
+                    core.copyLinkTorrent(jtTorrent);
             }
         });
 
@@ -95,7 +97,7 @@ public class paneTorrent extends paneAbstract {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (jbFireNas.isEnabled())
-                     core.fireTorrentToNas(jtTorrent1, jtTorrent2);
+                     core.fireTorrentToNas(jtTorrent);
             }
         });
         
@@ -115,7 +117,7 @@ public class paneTorrent extends paneAbstract {
     }
     
     private void cleanTables(){
-        core.cleanSelect(jtTorrent1,3);
-        core.cleanSelect(jtTorrent2,3);
+        for (int i=0; i<jtTorrent.length; i++)
+            core.cleanSelect(jtTorrent[i],3);
     }
 }

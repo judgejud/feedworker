@@ -1,5 +1,6 @@
 package org.feedworker.client.frontend.events;
 
+import java.util.ArrayList;
 import java.util.EventObject;
 
 /**
@@ -12,6 +13,7 @@ public class FrameEvent extends EventObject {
     private int max;
     private boolean icontray;
     private String[][] menu;
+    private ArrayList<String> torrent;
 
     public FrameEvent(Object source, String oper) {
         super(source);
@@ -22,6 +24,12 @@ public class FrameEvent extends EventObject {
         super(source);
         operaz = oper;
         max = num;
+    }
+
+    public FrameEvent(Object source, String operaz, ArrayList<String> torrent) {
+        super(source);
+        this.operaz = operaz;
+        this.torrent = torrent;
     }
     
     /**Costruttore
@@ -58,5 +66,9 @@ public class FrameEvent extends EventObject {
 
     public String getMsg() {
         return msg;
+    }
+
+    public ArrayList<String> getTorrent() {
+        return torrent;
     }
 }

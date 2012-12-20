@@ -79,7 +79,6 @@ public class paneSetting extends paneAbstract {
             tpcEast.add(initTaskPaneSubsfactory());
         tpcEast.add(initTaskPaneTorrent());
         tpcEast.add(initTaskPaneAlert());
-        
 
         JScrollPane jspWest = new JScrollPane(tpcWest);
         jspWest.setPreferredSize(TABLE_SCROLL_SIZE);
