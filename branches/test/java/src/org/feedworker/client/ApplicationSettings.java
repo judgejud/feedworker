@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import org.feedworker.exception.ManageException;
 import org.feedworker.util.ResourceLocator;
+
 import org.jfacility.javax.crypto.DesEncrypter;
 
 public class ApplicationSettings {
@@ -27,6 +28,7 @@ public class ApplicationSettings {
             cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, mySubsfactoryFeedUrl,
             httpTimeout, mailTO, mailSMTP, googleUser, googlePwd, googleCalendar, 
             ircNick, ircPwd, ircServer, torrentUrlMyKarmorra;
+    private int torrentCount;
     private boolean subsfactoryOption, autoDownloadMyItasa, enableNotifyAudioRss, enableNotifyAudioSub, 
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
@@ -88,6 +90,7 @@ public class ApplicationSettings {
                 setTorrentMyKarmorraOption(getBooleanDecryptedValue("TORRENT_MYKARMORRA"));
                 setTorrentUrlMyKarmorra(getDecryptedValue("TORRENT_URL_MYKARMORRA"));
                 setTorrentDestinationFolder(getDecryptedValue("TORRENT_DESTINATION_FOLDER"));
+                setTorrentCount(getIntDecryptedValue("TORRENT_COUNT"));
                 //SAMBA-CIFS
                 setCifsSharePath(getDecryptedValue("CIFS_SHARE_PATH"));
                 setCifsShareDomain(getDecryptedValue("CIFS_SHARE_DOMAIN"));
@@ -162,6 +165,14 @@ public class ApplicationSettings {
     private boolean getBooleanDecryptedValue(String property){
         return Boolean.parseBoolean(getDecryptedValue(property));
     }
+    
+    private int getIntDecryptedValue(String property){
+        try{
+            return Integer.parseInt(getDecryptedValue(property));
+        }catch(NumberFormatException nfe){
+            return -1;
+        }
+    }
 
     public void writeGeneralSettings() {
         try {
@@ -223,6 +234,7 @@ public class ApplicationSettings {
             propertiesCrypting("TORRENT_KARMORRA", torrentKarmorraOption);
             propertiesCrypting("TORRENT_MYKARMORRA", torrentMyKarmorraOption);
             propertiesCrypting("TORRENT_URL_MYKARMORRA", torrentUrlMyKarmorra);
+            propertiesCrypting("TORRENT_COUNT", torrentCount);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -323,6 +335,12 @@ public class ApplicationSettings {
                                     throws GeneralSecurityException, IOException {
         properties.setProperty(propertyEncrypter.encrypt(property),
                                                     valueEncrypter.encrypt(value));
+    }
+    
+    private void propertiesCrypting(String property, int value)
+                                    throws GeneralSecurityException, IOException {
+        properties.setProperty(propertyEncrypter.encrypt(property),
+                                        valueEncrypter.encrypt(String.valueOf(value)));
     }
 
     // Write properties file.
@@ -848,5 +866,13 @@ public class ApplicationSettings {
 
     public void setTorrentMyKarmorraOption(boolean torrentMyKarmorraOption) {
         this.torrentMyKarmorraOption = torrentMyKarmorraOption;
+    }
+
+    public int getTorrentCount() {
+        return torrentCount;
+    }
+
+    public void setTorrentCount(int torrentCount) {
+        this.torrentCount = torrentCount;
     }
 }// end class

@@ -106,6 +106,14 @@ public class Mediator {
     public String getBtchat() {
         return core.BTCHAT;
     }
+    
+    public String getKarmorra() {
+        return core.KARMORRA;
+    }
+    
+    public String getMyKarmorra() {
+        return core.MYKARMORRA;
+    }
 
     public String getNameTableSubtitleDest() {
         return core.SUBTITLE_DEST;

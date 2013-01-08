@@ -6,7 +6,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
+import org.feedworker.client.ApplicationSettings;
 import org.feedworker.client.frontend.table.tableRss;
+
+import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 /**
  * 
@@ -17,9 +20,12 @@ public class paneTorrent extends paneAbstract {
     private static paneTorrent jpanel = null;
     private JButton jbDown, jbCopyLinks, jbClean, jbFireNas;
     private tableRss[] jtTorrent;
+    private ApplicationSettings prop;
+    private JXTaskPaneContainer tpcWest, tpcEast;
 
     private paneTorrent() {
         super("Torrent");
+        prop = proxy.getSettings();
         initializePanel();
         initializeButtons();
         //core.setTableListener(jtTorrent1);
@@ -34,22 +40,76 @@ public class paneTorrent extends paneAbstract {
 
     @Override
     void initializePanel() {
-        JXTaskPaneContainer tpcWest = new JXTaskPaneContainer();
-        JXTaskPaneContainer tpcEast = new JXTaskPaneContainer();
-        
-        
-        
-        
-
-        //jtTorrent2 = new tableRss(proxy.getBtchat());
-        //jtTorrent2.setTitleDescriptionColumn("Descrizione Torrent BTCHAT");
-        //JScrollPane jsp2 = new JScrollPane(jtTorrent2);
-        //jsp2.setPreferredSize(TABLE_SCROLL_SIZE);
-        //jsp2.setAutoscrolls(true);
-        
-        jpCenter.add(jsp1);
-        jpCenter.add(RIGID_AREA);
-        //jpCenter.add(jsp2);
+        if (prop.getTorrentCount()>0){
+            tpcWest = new JXTaskPaneContainer();
+            JScrollPane jspWest = new JScrollPane(tpcWest);
+            jspWest.setPreferredSize(TABLE_SCROLL_SIZE);
+            jspWest.setAutoscrolls(true);
+            jpCenter.add(jspWest);
+            if (prop.getTorrentCount()>1){
+                tpcEast = new JXTaskPaneContainer();
+                JScrollPane jspEast = new JScrollPane(tpcEast);
+                jspEast.setPreferredSize(TABLE_SCROLL_SIZE);
+                jspEast.setAutoscrolls(true);
+                jpCenter.add(RIGID_AREA);
+                jpCenter.add(jspEast);
+            }
+            initializeTables();
+        }
+    }
+    
+    private void initializeTables(){
+        JXTaskPane[] jtp = new JXTaskPane[prop.getTorrentCount()];
+        jtTorrent = new tableRss[prop.getTorrentCount()];
+        boolean east = false;
+        int count=-1;
+        if (prop.isTorrentEztvOption()){
+            jtp[++count] = new JXTaskPane();
+            jtTorrent[count] = new tableRss(proxy.getEztv());
+            jtp[count].add(jtTorrent[count]);
+            jtp[count].setTitle(proxy.getEztv());
+            tpcWest.add(jtp[count]);
+            east=true;
+        }
+        if (prop.isTorrentBtchatOption()){
+            jtp[++count] = new JXTaskPane();
+            jtTorrent[count] = new tableRss(proxy.getBtchat());
+            jtp[count].add(jtTorrent[count]);
+            jtp[count].setTitle(proxy.getBtchat());
+            if (east) {
+                tpcEast.add(jtp[count]);
+                east=false;
+            } else {
+                tpcWest.add(jtp[count]);
+                east=true;
+            }
+        }
+        if (prop.isTorrentKarmorraOption()){
+            jtp[++count] = new JXTaskPane();
+            jtTorrent[count] = new tableRss(proxy.getKarmorra());
+            jtp[count].add(jtTorrent[count]);
+            jtp[count].setTitle(proxy.getKarmorra());
+            if (east) {
+                tpcEast.add(jtp[count]);
+                east=false;
+            } else {
+                tpcWest.add(jtp[count]);
+                east=true;
+            }
+        }
+        if (prop.isTorrentMyKarmorraOption()){
+            jtp[++count] = new JXTaskPane();
+            jtTorrent[count] = new tableRss(proxy.getMyKarmorra());
+            jtp[count].add(jtTorrent[count]);
+            jtp[count].setTitle(proxy.getMyKarmorra());
+            if (east) {
+                tpcEast.add(jtp[count]);
+                east=false;
+            } else {
+                tpcWest.add(jtp[count]);
+                east=true;
+            }
+        }
     }
 
     @Override
@@ -61,7 +121,7 @@ public class paneTorrent extends paneAbstract {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (jbDown.isEnabled()){
-                    core.downloadTorrent(jtTorrent);
+                    //core.downloadTorrent(jtTorrent);
                     cleanTables();
                 }
             }
@@ -74,8 +134,9 @@ public class paneTorrent extends paneAbstract {
         jbCopyLinks.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                if (jbCopyLinks.isEnabled())
-                    core.copyLinkTorrent(jtTorrent);
+                //TODO
+                //if (jbCopyLinks.isEnabled())
+                    //core.copyLinkTorrent(jtTorrent);
             }
         });
 
@@ -96,8 +157,9 @@ public class paneTorrent extends paneAbstract {
         jbFireNas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                if (jbFireNas.isEnabled())
-                     core.fireTorrentToNas(jtTorrent);
+                //TODO
+                //if (jbFireNas.isEnabled())
+                //     core.fireTorrentToNas(jtTorrent);
             }
         });
         

@@ -708,12 +708,22 @@ public class GuiCore {
     
     private void setPropTorrent(String dest, boolean eztv, boolean btchat, boolean karmorra, 
                                 boolean mykarmorra, String urlMyKarmorra){
+        int count = 0;
+        if (eztv)
+            count++;
+        if (btchat)
+            count++;
+        if (karmorra)
+            count++;
+        if (mykarmorra)
+            count++;
         prop.setTorrentDestinationFolder(dest);
         prop.setTorrentEztvOption(eztv);
         prop.setTorrentBtchatOption(btchat);
         prop.setTorrentKarmorraOption(karmorra);
         prop.setTorrentMyKarmorraOption(mykarmorra);
         prop.setTorrentUrlMyKarmorra(urlMyKarmorra);
+        prop.setTorrentCount(count);
     }
     
     private void setPropIrc(String nick, String pwd, String server){
