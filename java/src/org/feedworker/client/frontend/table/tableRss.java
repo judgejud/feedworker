@@ -1,7 +1,6 @@
 package org.feedworker.client.frontend.table;
 
 //IMPORT JAVA
-import org.feedworker.client.frontend.component.labelCellColorRenderer;
 import java.awt.Color;
 import java.awt.Component;
 
@@ -10,9 +9,10 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import org.feedworker.client.frontend.component.labelCellColorRenderer;
 import org.feedworker.client.frontend.events.TableEvent;
-import org.jfacility.javax.swing.Swing;
 
+import org.jfacility.javax.swing.Swing;
 /**
  * 
  * @author luca
