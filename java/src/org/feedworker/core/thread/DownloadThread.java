@@ -62,7 +62,6 @@ public class DownloadThread implements Runnable {
         boolean sub = false;
         try {
             for (int i = 0; i < als.size(); i++) {
-                //HttpEntity entity = http.requestGetEntity(als.get(i), itasa);
                 HttpEntity entity = http.requestGetEntity(als.get(i));
                 if (entity != null) {
                     if (entity.getContentLength() != -1) {

@@ -84,8 +84,8 @@ public class ApplicationSettings {
                 setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
                 setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
                 //TORRENT
-                setTorrentEztvOption(getBooleanDecryptedValue("TORRENT_BTCHAT"));
-                setTorrentBtchatOption(getBooleanDecryptedValue("TORRENT_EZTV"));
+                setTorrentEztvOption(getBooleanDecryptedValue("TORRENT_EZTV")); 
+                setTorrentBtchatOption(getBooleanDecryptedValue("TORRENT_BTCHAT"));
                 setTorrentKarmorraOption(getBooleanDecryptedValue("TORRENT_KARMORRA"));
                 setTorrentMyKarmorraOption(getBooleanDecryptedValue("TORRENT_MYKARMORRA"));
                 setTorrentUrlMyKarmorra(getDecryptedValue("TORRENT_URL_MYKARMORRA"));

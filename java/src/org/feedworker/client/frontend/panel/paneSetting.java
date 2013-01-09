@@ -380,7 +380,7 @@ public class paneSetting extends paneAbstract {
 
     /** inizializzo il pannello settaggi torrent */
     private JXTaskPane initTaskPaneTorrent() {
-        jcbTorrentEztv = new JCheckBox("Abilita feed torrent eztv");
+        jcbTorrentEztv = new JCheckBox("Abilita feed magnet eztv");
         jcbTorrentBtchat = new JCheckBox("Abilita feed torrent bt-chat");
         jcbTorrentKarmorra = new JCheckBox("Abilita feed torrent karmorra");
         jcbTorrentMyKarmorra = new JCheckBox("Abilita feed torrent karmorra personalizzato");

@@ -189,18 +189,15 @@ public class GuiCore {
      * @param jt1 tabella1
      * @param jt2 tabella2
      */
-    public void copyLinkTorrent(JTable jt1, JTable jt2) {
+    public void copyLinkTorrent(JTable[] tables) {
         String text = "";
-        for (int i = 0; i < jt1.getRowCount(); i++) {
-            if (jt1.getValueAt(i, 3) == Boolean.TRUE) {
-                text += jt1.getValueAt(i, 0).toString() + "\n";
-                jt1.setValueAt(false, i, 3);
-            }
-        }
-        for (int i = 0; i < jt2.getRowCount(); i++) {
-            if (jt2.getValueAt(i, 3) == Boolean.TRUE) {
-                text += jt2.getValueAt(i, 0).toString() + "\n";
-                jt2.setValueAt(false, i, 3);
+        for (int i=0; i<tables.length; i++){
+            JTable jt = tables[i];
+            for (int j = 0; j < jt.getRowCount(); j++) {
+                if (jt.getValueAt(j, 3) == Boolean.TRUE) {
+                    text += jt.getValueAt(j, 0).toString() + "\n";
+                    jt.setValueAt(false, j, 3);
+                }
             }
         }
         copy(text);
@@ -247,10 +244,11 @@ public class GuiCore {
         }
     }
     
-    public void downloadTorrent(JTable jt1, JTable jt2) {
+    public void downloadTorrent(JTable[] jt) {
         if (Lang.verifyTextNotNull(prop.getTorrentDestinationFolder())) {
-            ArrayList<String> alLinks = addLinks(jt1,3);
-            alLinks.addAll(addLinks(jt2,3));
+            ArrayList<String> alLinks = new ArrayList<String>();
+            for (int i=0; i<jt.length; i++)
+                alLinks.addAll(addLinks(jt[i],3));
             if (alLinks.size() > 0)
                 proxy.downloadTorrent(alLinks);
             else
@@ -321,18 +319,15 @@ public class GuiCore {
      * @param jt1 tabella1
      * @param jt2 tabella2
      */
-    public void fireTorrentToNas(JTable jt1, JTable jt2) {
+    public void fireTorrentToNas(JTable[] tables) {
         ArrayList<String> al = new ArrayList<String>();
-        for (int i = 0; i < jt1.getRowCount(); i++) {
-            if (jt1.getValueAt(i, 3) == Boolean.TRUE) {
-                al.add(jt1.getValueAt(i, 0).toString());
-                jt1.setValueAt(false, i, 3);
-            }
-        }
-        for (int i = 0; i < jt2.getRowCount(); i++) {
-            if (jt2.getValueAt(i, 3) == Boolean.TRUE) {
-                al.add(jt2.getValueAt(i, 0).toString());
-                jt2.setValueAt(false, i, 3);
+        for (int j=0; j<tables.length; j++){
+            JTable jt = tables[j];
+            for (int i = 0; i < jt.getRowCount(); i++) {
+                if (jt.getValueAt(i, 3) == Boolean.TRUE) {
+                    al.add(jt.getValueAt(i, 0).toString());
+                    jt.setValueAt(false, i, 3);
+                }
             }
         }
         if (al.size() > 0)
