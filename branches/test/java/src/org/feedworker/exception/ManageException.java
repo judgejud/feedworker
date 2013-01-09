@@ -38,11 +38,6 @@ public class ManageException {
     // VARIABLES PRIVATE STATIC
     private static ManageException core = null;
 
-    /**
-     * restituisce l'istanza corrente
-     *
-     * @return istanza manageexception
-     */
     public static ManageException getIstance() {
         if (core == null)
             core = new ManageException();
@@ -57,12 +52,6 @@ public class ManageException {
         printError(e, c);
     }
 
-    /**Analizza l'errore feedexception
-     *
-     * @param ex Feedexception
-     * @param c classe di provenienza
-     * @param text eventuale testo da stampare
-     */
     public void launch(FeedException ex, Class c, String text) {
         String msg = ex.getMessage();
         String err01 = "Invalid XML: Error on line";
@@ -73,12 +62,6 @@ public class ManageException {
         }
     }
 
-    /**
-     * Analizza l'errore GeneralSecurityException
-     *
-     * @param ex GeneralSecurityException
-     * @param c classe di provenienza
-     */
     public void launch(GeneralSecurityException ex, Class c) {
         printError(ex, c);
     }
@@ -87,22 +70,12 @@ public class ManageException {
         printError(ex, c);
     }
 
-    /**Analizza l'errore IllegalArgumentException
-     *
-     * @param ex IllegalArgumentException
-     * @param c classe di provenienza
-     */
     public void launch(IllegalArgumentException ex, Class c) {
         String msg = ex.getMessage();
         String error01 = "Name may not be null";
         printError(ex, c);
     }
 
-    /**Analizza l'errore IllegalStateException
-     *
-     * @param ex IllegalStateException
-     * @param c classe di provenienza
-     */
     public void launch(IllegalStateException ex, Class c) {
         String msg = ex.getMessage();
         String error01 = "Manager is shut down.";
@@ -139,16 +112,6 @@ public class ManageException {
         printError(ex, c);
     }
 
-    /**
-     * Analizza l'errore IOException
-     *
-     * @param ex
-     *            IOException
-     * @param c
-     *            classe di provenienza
-     * @param text
-     *            eventuale testo da stampare
-     */
     public void launch(IOException ex, Class c, String text) {
         String msg = ex.getMessage();
         String error01 = "The system cannot find the path specified.";
@@ -180,26 +143,10 @@ public class ManageException {
             printError(ex, c);
     }
 
-    /**
-     * Analizza l'errore GeneralSecurityException
-     *
-     * @param ex
-     *            GeneralSecurityException
-     * @param c
-     *            classe di provenienza
-     */
     public void launch(JDOMException ex, Class c) {
         printError(ex, c);
     }
 
-    /**
-     * Analizza l'errore GeneralSecurityException
-     *
-     * @param ex
-     *            GeneralSecurityException
-     * @param c
-     *            classe di provenienza
-     */
     public void launch(LineUnavailableException ex, Class c) {
         String msg = ex.getMessage();
         String error01 = "Audio Device Unavailable";
@@ -210,16 +157,6 @@ public class ManageException {
         }
     }
 
-    /**
-     * Analizza l'errore MalformedURLException
-     *
-     * @param ex
-     *            MalformedURLException
-     * @param c
-     *            classe di provenienza
-     * @param text
-     *            eventuale testo da stampare
-     */
     public void launch(MalformedURLException ex, Class c, String text) {
         String msg = ex.getMessage();
         String error01 = "no protocol:";
@@ -235,16 +172,6 @@ public class ManageException {
         }
     }
 
-    /**
-     * Analizza l'errore NumberFormatException
-     *
-     * @param ex
-     *            NumberFormatException
-     * @param c
-     *            classe di provenienza
-     * @param text
-     *            eventuale testo da stampare
-     */
     public void launch(NumberFormatException ex, Class c, String text) {
         String msg = ex.getMessage();
         String error01 = "For input string:";
@@ -255,20 +182,10 @@ public class ManageException {
         }
     }
 
-    /**Analizza l'errore ParseException
-     *
-     * @param ex ParseException
-     * @param c classe di provenienza
-     */
     public void launch(ParseException ex, Class c) {
         printError(ex, c);
     }
 
-    /**Analizza l'errore ParseException
-     *
-     * @param ex ParseException
-     * @param c classe di provenienza
-     */
     public void launch(ParsingFeedException ex, Class c, String text) {
         String error01 = "Invalid XML: Error on line";
         String msg = ex.getMessage();
@@ -287,12 +204,6 @@ public class ManageException {
         printError(ex, c);
     }
 
-    /** Analizza l'errore SmbException
-     *
-     * @param ex SmbException
-     * @param c classe di provenienza
-     * @param text eventuale testo da stampare
-     */
     public void launch(SmbException ex, Class c, String text) {
         String msg = ex.getMessage();
         String error01 = "The system cannot find the file specified.";
@@ -314,13 +225,7 @@ public class ManageException {
         else
             printError(ex, c);
     }
-    
-    /**Analizza l'errore IndexOutOfBoundsException
-     *
-     * @param ex IndexOutOfBoundsException
-     * @param c classe di provenienza
-     * @param text eventuale testo da stampare
-     */
+
     public void launch(IndexOutOfBoundsException ex, Class c, boolean flag_itasa) {
         String msg = ex.getMessage();
         String error01 = "String index out of range: -1";
@@ -332,14 +237,6 @@ public class ManageException {
             printError(ex, c);
     }
 
-    /**
-     * Analizza l'errore UnsupportedAudioFileException
-     *
-     * @param ex
-     *            UnsupportedAudioFileException
-     * @param c
-     *            classe di provenienza
-     */
     public void launch(UnsupportedAudioFileException ex, Class c) {
         printError(ex, c);
     }
@@ -348,14 +245,6 @@ public class ManageException {
         printError(ex, c);
     }
 
-    /**
-     * Analizza l'errore UnsupportedLookAndFeelException
-     *
-     * @param ex
-     *            UnsupportedLookAndFeelException
-     * @param c
-     *            classe di provenienza
-     */
     public void launch(UnsupportedLookAndFeelException ex, Class c) {
         printError(ex, c);
     }
@@ -368,11 +257,6 @@ public class ManageException {
         printError(ex, c);
     }
 
-    /** Analizza l'errore ZipException
-     *
-     * @param ex ZipException
-     * @param c  classe di provenienza
-     */
     public void launch(ZipException ex, Class c) {
         printError(ex, c);
     }
@@ -383,7 +267,6 @@ public class ManageException {
 
     private void printError(Exception e, Class c) {
         ManageListener.fireTextPaneEvent(this, e.getMessage(), TextPaneEvent.ERROR, true);
-        //Logging.getIstance().printClass(c);
         Logging.getIstance().printError(e);
     }
     

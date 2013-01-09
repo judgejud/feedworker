@@ -32,18 +32,24 @@ public class DownloadTorrentThread implements Runnable{
         HttpOther http = new HttpOther(connection_Timeout);
         try {
             for (int i = 0; i < links.size(); i++) {
-                InputStream is = http.getTorrent(links.get(i));
-                if (is != null) {
-                    File f = new File(prop.getTorrentDestinationFolder()
-                            + File.separator + http.getNameFile());
-                    Io.downloadSingle(is, f);
-                    ManageListener.fireTextPaneEvent(this,
-                            "Scaricato: " + http.getNameFile(),
-                            TextPaneEvent.TORRENT, true);
-                } else
+                String link = links.get(i);
+                if (!link.startsWith("magnet")){
+                    InputStream is = http.getTorrent(link);
+                    if (is != null) {
+                        File f = new File(prop.getTorrentDestinationFolder()
+                                + File.separator + http.getNameFile());
+                        Io.downloadSingle(is, f);
+                        ManageListener.fireTextPaneEvent(this,
+                                "Scaricato: " + http.getNameFile(),
+                                TextPaneEvent.TORRENT, true);
+                    } else
+                        ManageListener.fireTextPaneEvent(this, 
+                                "Non posso gestire " + link.split(".")[1], 
+                                TextPaneEvent.ALERT, true);
+                } else 
                     ManageListener.fireTextPaneEvent(this, 
-                            "Non posso gestire " + links.get(i).split(".")[1], 
-                            TextPaneEvent.ALERT, true);
+                        "Non posso scaricare link magnet, puoi però effetuare la copia dei link", 
+                        TextPaneEvent.ALERT, true);
             }
         } catch (IOException ex) {
             ManageException.getIstance().launch(ex, getClass(), null);

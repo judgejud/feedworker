@@ -26,6 +26,7 @@ public class HttpOther extends HttpAbstract{
     private final String TORRENT_ZOINK = "http://torrent.zoink.it/";
     private final String TORRENT_BTCHAT = "http://www.bt-chat.com/";
     private final String TORRENT_MININOVA = "http://www.mininova.org/";
+    private final String TORRENT_KARMORRA = "http://showrss.karmorra.info/";
     private final String TAG_SUBSF = "<td align=\"center\" class=\"functions\" width=\"100%\"><a href";
     //private CookieStore cookies;
 
@@ -84,25 +85,26 @@ public class HttpOther extends HttpAbstract{
         return entity;
     }
 
-    public InputStream getTorrent(String oldUrl) throws IOException {
+    public InputStream getTorrent(String oldUrl) throws IOException, NullPointerException {
         InputStream is = null;
-        if (oldUrl.substring(0, TORRENT_ZOINK.length()).equalsIgnoreCase(
-                TORRENT_ZOINK)) {
+        if (oldUrl.startsWith(TORRENT_ZOINK)) {
             namefile = oldUrl.substring(TORRENT_ZOINK.length());
             get = new HttpGet(convertUrlEncoding(oldUrl));
             response = client.execute(get);
             is = response.getEntity().getContent();
-        } else if (oldUrl.substring(0, TORRENT_MININOVA.length()).equalsIgnoreCase(TORRENT_MININOVA)) {
+        } else if (oldUrl.startsWith(TORRENT_MININOVA)) {
             String url = oldUrl.replace("tor", "get");
             get = new HttpGet(url);
             response = client.execute(get);
             getAttachement(response.getAllHeaders(), TORRENT_MININOVA);
             is = response.getEntity().getContent();
-        } else if (oldUrl.substring(0, TORRENT_BTCHAT.length()).equalsIgnoreCase(TORRENT_BTCHAT)) {
+        } else if (oldUrl.startsWith(TORRENT_BTCHAT)) {
             get = new HttpGet(oldUrl);
             response = client.execute(get);
             getAttachement(response.getAllHeaders(), TORRENT_BTCHAT);
             is = response.getEntity().getContent();
+        } else if (oldUrl.startsWith(TORRENT_KARMORRA)) {
+            //TODO
         }
         return is;
     }

@@ -28,8 +28,8 @@ public class paneTorrent extends paneAbstract {
         prop = proxy.getSettings();
         initializePanel();
         initializeButtons();
-        //core.setTableListener(jtTorrent1);
-        //core.setTableListener(jtTorrent2);
+        for (int i=0; i<prop.getTorrentCount();i++)
+            core.setTableListener(jtTorrent[i]);
     }
 
     public static paneTorrent getPanel() {
@@ -66,7 +66,8 @@ public class paneTorrent extends paneAbstract {
         if (prop.isTorrentEztvOption()){
             jtp[++count] = new JXTaskPane();
             jtTorrent[count] = new tableRss(proxy.getEztv());
-            jtp[count].add(jtTorrent[count]);
+            jtTorrent[count].setTitleDescriptionColumn("Descrizione Magnet EZTV");
+            jtp[count].add(new JScrollPane(jtTorrent[count]));
             jtp[count].setTitle(proxy.getEztv());
             tpcWest.add(jtp[count]);
             east=true;
@@ -74,7 +75,8 @@ public class paneTorrent extends paneAbstract {
         if (prop.isTorrentBtchatOption()){
             jtp[++count] = new JXTaskPane();
             jtTorrent[count] = new tableRss(proxy.getBtchat());
-            jtp[count].add(jtTorrent[count]);
+            jtTorrent[count].setTitleDescriptionColumn("Descrizione Torrent Btchat");
+            jtp[count].add(new JScrollPane(jtTorrent[count]));
             jtp[count].setTitle(proxy.getBtchat());
             if (east) {
                 tpcEast.add(jtp[count]);
@@ -87,7 +89,8 @@ public class paneTorrent extends paneAbstract {
         if (prop.isTorrentKarmorraOption()){
             jtp[++count] = new JXTaskPane();
             jtTorrent[count] = new tableRss(proxy.getKarmorra());
-            jtp[count].add(jtTorrent[count]);
+            jtTorrent[count].setTitleDescriptionColumn("Descrizione Torrent Karmorra");
+            jtp[count].add(new JScrollPane(jtTorrent[count]));
             jtp[count].setTitle(proxy.getKarmorra());
             if (east) {
                 tpcEast.add(jtp[count]);
@@ -100,15 +103,13 @@ public class paneTorrent extends paneAbstract {
         if (prop.isTorrentMyKarmorraOption()){
             jtp[++count] = new JXTaskPane();
             jtTorrent[count] = new tableRss(proxy.getMyKarmorra());
-            jtp[count].add(jtTorrent[count]);
+            jtTorrent[count].setTitleDescriptionColumn("Descrizione Torrent my Karmorra");
+            jtp[count].add(new JScrollPane(jtTorrent[count]));
             jtp[count].setTitle(proxy.getMyKarmorra());
-            if (east) {
+            if (east) 
                 tpcEast.add(jtp[count]);
-                east=false;
-            } else {
+            else
                 tpcWest.add(jtp[count]);
-                east=true;
-            }
         }
     }
 
@@ -121,7 +122,7 @@ public class paneTorrent extends paneAbstract {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 if (jbDown.isEnabled()){
-                    //core.downloadTorrent(jtTorrent);
+                    core.downloadTorrent(jtTorrent);
                     cleanTables();
                 }
             }
@@ -134,9 +135,8 @@ public class paneTorrent extends paneAbstract {
         jbCopyLinks.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                //TODO
-                //if (jbCopyLinks.isEnabled())
-                    //core.copyLinkTorrent(jtTorrent);
+                if (jbCopyLinks.isEnabled())
+                    core.copyLinkTorrent(jtTorrent);
             }
         });
 
@@ -157,9 +157,8 @@ public class paneTorrent extends paneAbstract {
         jbFireNas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                //TODO
-                //if (jbFireNas.isEnabled())
-                //     core.fireTorrentToNas(jtTorrent);
+                if (jbFireNas.isEnabled())
+                    core.fireTorrentToNas(jtTorrent);
             }
         });
         
