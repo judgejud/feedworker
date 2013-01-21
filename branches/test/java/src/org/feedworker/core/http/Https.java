@@ -53,8 +53,7 @@ public class Https {
     }
     
     public String getLocationRedirect(String url) throws Exception {
-        URL u = new URL(url);
-        HttpsURLConnection conn = (HttpsURLConnection) u.openConnection();
+        HttpsURLConnection conn = (HttpsURLConnection) new URL(url).openConnection();
         conn.setHostnameVerifier(new HostnameVerifier() {
             @Override
             public boolean verify(String arg0, SSLSession arg1) {
