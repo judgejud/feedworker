@@ -52,6 +52,7 @@ public class DownloadTorrentThread implements Runnable{
                         TextPaneEvent.ALERT, true);
             }
         } catch (IOException ex) {
+            ex.printStackTrace();
             ManageException.getIstance().launch(ex, getClass(), null);
         }
         http.closeClient();

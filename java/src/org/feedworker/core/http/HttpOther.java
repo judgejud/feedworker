@@ -10,12 +10,18 @@ import java.util.List;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.ProtocolException;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 
 /**Gestisce le interazioni http lato client (metodi post e get)
  * 
@@ -99,12 +105,22 @@ public class HttpOther extends HttpAbstract{
             getAttachement(response.getAllHeaders(), TORRENT_MININOVA);
             is = response.getEntity().getContent();
         } else if (oldUrl.startsWith(TORRENT_BTCHAT)) {
+            System.out.println(oldUrl);
             get = new HttpGet(oldUrl);
+            System.out.println("get");
             response = client.execute(get);
+            System.out.println("response");
             getAttachement(response.getAllHeaders(), TORRENT_BTCHAT);
+            System.out.println("getAttachement");
             is = response.getEntity().getContent();
+            System.out.println("getEntity");
         } else if (oldUrl.startsWith(TORRENT_KARMORRA)) {
-            //TODO
+            get = new HttpGet(oldUrl);
+            try{
+                response = client.execute(get);
+            } catch(ClientProtocolException e){
+                is = getTorrent(e.getCause().getMessage().split(": ")[1]);
+            }
         }
         return is;
     }
