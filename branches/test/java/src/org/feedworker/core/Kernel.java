@@ -1148,10 +1148,10 @@ public class Kernel implements PropertyChangeListener {
                 if (xmlrpc.testConn(prop.getItasaUsername(), prop.getItasaPassword()))
                     login = true;
             } catch (MalformedURLException ex) {
-                ex.printStackTrace();
+                error.launch(ex, getClass());
                 xmlrpc = null;
             } catch (XmlRpcException ex) {
-                ex.printStackTrace();
+                error.launch(ex, getClass());
                 xmlrpc = null;
             } 
         } else 
@@ -1398,7 +1398,7 @@ public class Kernel implements PropertyChangeListener {
      * @return true se ci sono nuovi feed, false altrimenti
      */
     private boolean runTorrent(boolean first) {
-        ArrayList<String> torrent = new ArrayList<>();
+        ArrayList<String> torrent = new ArrayList<String>();
         boolean status = false;
         RssThread rtE = null, rtB = null, rtK = null, rtMk = null;
         Thread tE = null, tB = null, tK = null, tMk = null;

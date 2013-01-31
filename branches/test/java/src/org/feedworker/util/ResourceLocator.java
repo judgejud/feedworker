@@ -22,6 +22,7 @@ public class ResourceLocator {
     private static final File FILE_LINK_ITASA = new File("xml" + File.separator + "link_itasa.xml");
     private static final String RESOURCES = "/org/feedworker/resource/";
     private static final String EMOTICONS = RESOURCES + "emoticon/";
+    private static final String ICONS = RESOURCES + "icon/";
     private static final String THUMBNAIL_SHOW = "thumbnail";
     private static String curDir;
 
@@ -54,6 +55,10 @@ public class ResourceLocator {
      */
     public static String getResourcePath() {
         return RESOURCES;
+    }
+    
+    public static String getIconPath() {
+        return ICONS;
     }
 
     public static String getEmoticonPath() {

@@ -116,9 +116,9 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jpIrc = paneIrc.getPanel();
         jpPlayer = panePlayer.getPanel();
         
-        mainJTP.addTab("Itasa News", jpItasaNews);
-        mainJTP.addTab("Itasa Rss", jpItasaRss);
-        mainJTP.addTab("Player Video", jpPlayer);
+        checkAddTab(jpItasaNews, false, null);
+        checkAddTab(jpItasaRss, false, null);
+        checkAddTab(jpPlayer, false, null);
         if (prop.isSubsfactoryOption()) {
             jpSubsfactory = paneSubsfactory.getPanel();
             checkAddTab(jpSubsfactory, false, null);
@@ -211,14 +211,25 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
             }
         });
         fileJM.add(jmiPrintLastDateRefresh);
-
+        
+        JMenuItem jmiCloseWithout = new JMenuItem(" Esci senza salvare ");
+        jmiCloseWithout.setToolTipText("Esci dal programma senza salvare la data di aggiornamento");
+        jmiCloseWithout.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                WindowEvent we = new WindowEvent(frameMain.this, WindowEvent.WINDOW_CLOSING);
+                we.setSource(new JMenuItem("exit no save"));
+                frameMain.this.dispatchEvent(we);
+            }
+        });
+        fileJM.add(jmiCloseWithout);
+        
         JMenuItem closeJMI = new JMenuItem(" Esci ");
         closeJMI.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                WindowEvent we = new WindowEvent(frameMain.this,
-                        WindowEvent.WINDOW_CLOSING);
-                we.setSource(new JMenuItem());
+                WindowEvent we = new WindowEvent(frameMain.this, WindowEvent.WINDOW_CLOSING);
+                we.setSource(new JMenuItem("exit"));
                 frameMain.this.dispatchEvent(we);
             }
         });
@@ -238,7 +249,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
     private JMenu jMenuSerial(){
         JMenu jmSerial = new JMenu(" Serial tv ");
         
-        JMenuItem jmiPrintToday = new JMenuItem(" Stampa oggi ");        
+        JMenuItem jmiPrintToday = new JMenuItem(" Visualizza odierni ");
         jmiPrintToday.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -246,7 +257,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
             }
         });
         
-        JMenuItem jmiPrintTomorrow = new JMenuItem(" Stampa domani ");        
+        JMenuItem jmiPrintTomorrow = new JMenuItem(" Visualizza domani ");
         jmiPrintTomorrow.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -254,7 +265,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
             }
         });
         
-        JMenuItem jmiPrintYesterday = new JMenuItem(" Stampa ieri ");
+        JMenuItem jmiPrintYesterday = new JMenuItem(" Visualizza ieri ");
         jmiPrintYesterday.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -360,16 +371,43 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
             }
         });
         
+        JMenuItem jmiWindowItasaRss = new JMenuItem(" Itasa RSS ");
+        jmiWindowItasaRss.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpItasaRss, true, null);
+            }
+        });
+        
+        JMenuItem jmiWindowItasaNews = new JMenuItem(" Itasa News ");
+        jmiWindowItasaNews.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpItasaNews, true, null);
+            }
+        });
+        
+        JMenuItem jmiWindowSubsfactory = new JMenuItem(" Subsfactory ");
+        jmiWindowSubsfactory.addActionListener(new ActionListener()  {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkAddTab(jpSubsfactory, true, null);
+            }
+        });
+        
         jmWindowTab.add(jmiWindowBlog);
         jmWindowTab.add(jmiWindowCalendarDay);
         jmWindowTab.add(jmiWindowCalendarShow);
         jmWindowTab.add(jmiWindowIrc);
+        jmWindowTab.add(jmiWindowItasaNews);
+        jmWindowTab.add(jmiWindowItasaRss);
         jmWindowTab.add(jmiWindowLog);
         jmWindowTab.add(jmiWindowReminder);
         jmWindowTab.add(jmiWindowSearch);
         jmWindowTab.add(jmiWindowSetting);
         jmWindowTab.add(jmiWindowShow);
         jmWindowTab.add(jmiWindowSubDest);
+        jmWindowTab.add(jmiWindowSubsfactory);
         jmWindowTab.add(jmiWindowTorrent);
         
         return jmWindowTab;

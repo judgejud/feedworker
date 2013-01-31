@@ -58,7 +58,7 @@ public class GuiCore {
     private final String IMAGE_CLEAN2 = "clean2.png";
     private final String IMAGE_CLONE = "clone.png";
     private final String IMAGE_CLOSE = "close.png";
-    private final String IMAGE_COPY_LINK = "clipboard.png";
+    private final String IMAGE_CLIPBOARD = "clipboard.png";
     private final String IMAGE_DOWNLOAD = "download.png";
     private final String IMAGE_EMAIL = "email.png";
     private final String IMAGE_FOLDER = "folder.png";
@@ -78,7 +78,7 @@ public class GuiCore {
     private final String IMAGE_TAB_ADD = "tab_add.png";
     private final String IMAGE_TAB_DEL = "tab_del.png";
     private final String IMAGE_TAB_EDIT = "tab_edit.png";
-    private final String IMAGE_UNDO = "undo1.png";
+    private final String IMAGE_UNDO = "undo.png";
     private final String IMAGE_WWW = "www.png";
     private final String IMAGE_CONNECT_IRC = "irc.png";
     private final String IMAGE_DISCONNECT = "disconnect.png";
@@ -487,7 +487,7 @@ public class GuiCore {
     }
     
     public ImageIcon getIconCopy() {
-        return Common.getResourceImageButton(IMAGE_COPY_LINK);
+        return Common.getResourceImageButton(IMAGE_CLIPBOARD);
     }
     
     public ImageIcon getIconDownload() {
