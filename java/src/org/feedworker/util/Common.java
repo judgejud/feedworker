@@ -183,8 +183,13 @@ public class Common {
                 ResourceLocator.convertStringToURL(getResourcePath(name)));
     }
     
+    private static ImageIcon getIconButton(String name){
+        return new ImageIcon(
+                ResourceLocator.convertStringToURL(ResourceLocator.getIconPath() + name));
+    }
+    
     public static ImageIcon getResourceImageButton(String name) {
-        return Swing.scaleImageARGB(getImage(name), 24, 24);
+        return Swing.scaleImageARGB(getIconButton(name), 24, 24);
     }
 
     public static Image getResourceImage(String name) {

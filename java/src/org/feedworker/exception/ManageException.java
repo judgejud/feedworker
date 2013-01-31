@@ -24,6 +24,7 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 
 import jcifs.smb.SmbException;
+import org.apache.xmlrpc.XmlRpcException;
 
 import org.jdom.JDOMException;
 
@@ -50,6 +51,14 @@ public class ManageException {
 
     public void launch(Exception e, Class c) {
         printError(e, c);
+    }
+    
+    public void launch(XmlRpcException e, Class c) {
+        String msg = e.getMessage();
+        if (msg.startsWith("È necessario inserire un nome utente."))
+            printAlert("Login al forum Errore: " + msg, true);
+        else
+            printError(e, c);
     }
 
     public void launch(FeedException ex, Class c, String text) {

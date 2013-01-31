@@ -29,7 +29,8 @@ public class paneSetting extends paneAbstract {
             jcbPaneShow, jcbTorrentEztv, jcbTorrentBtchat, jcbTorrentKarmorra, 
             jcbTorrentMyKarmorra, jcbPaneBlog, jcbItasaBlog, jcbItasaPM, 
             jcbPaneCalendarDay, jcbCalendarDay, jcbPaneIrc, jcbItasaRss, jcbMyItasaRss,
-            jcbItasaNews, jcbShowNoDuplicateAll, jcbShowNoDuplicateSingle;
+            jcbItasaNews, jcbShowNoDuplicateAll, jcbShowNoDuplicateSingle, jcbPaneItasaNews,
+            jcbPaneItasaRss, jcbPaneSubsfactory;
     private JButton jbDestSub;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf, 
@@ -501,13 +502,17 @@ public class paneSetting extends paneAbstract {
         jcbPaneCalendarDay = new JCheckBox("Calendar Day");
         jcbPaneCalendar = new JCheckBox("Calendar Show");
         jcbPaneIrc = new JCheckBox("Irc"); 
+        jcbPaneItasaNews = new JCheckBox("Itasa News");
+        jcbPaneItasaRss = new JCheckBox("Itasa RSS");
         jcbPaneLog = new JCheckBox("Log");
         jcbPaneReminder = new JCheckBox("Reminder");
         jcbPaneSearchSubItasa = new JCheckBox("Search Subtitle Itasa");
         jcbPaneSetting = new JCheckBox("Setting");
         jcbPaneShow = new JCheckBox("Show");
+        jcbPaneSubsfactory = new JCheckBox("Subsfactory");
         jcbPaneSubDest = new JCheckBox("Subtitle Destination");
         jcbPaneTorrent = new JCheckBox("Torrent");
+        
         
         JXTaskPane task = new JXTaskPane();
         task.setTitle("Visible Pane at Startup");
@@ -516,11 +521,14 @@ public class paneSetting extends paneAbstract {
         task.add(jcbPaneCalendarDay);
         task.add(jcbPaneCalendar);
         task.add(jcbPaneIrc);
+        task.add(jcbPaneItasaNews);
+        task.add(jcbPaneItasaRss);
         task.add(jcbPaneLog);
         task.add(jcbPaneReminder);
         task.add(jcbPaneSearchSubItasa);
         task.add(jcbPaneSetting);
         task.add(jcbPaneShow);
+        task.add(jcbPaneSubsfactory);
         task.add(jcbPaneSubDest);
         task.add(jcbPaneTorrent);
         return task;
@@ -652,12 +660,15 @@ public class paneSetting extends paneAbstract {
         jcbPaneCalendarDay.setSelected(prop.isEnablePaneCalendarDay());
         jcbPaneCalendar.setSelected(prop.isEnablePaneCalendar());
         jcbPaneIrc.setSelected(prop.isEnablePaneIrc());
+        jcbPaneItasaNews.setSelected(prop.isEnablePaneItasaNews());
+        jcbPaneItasaRss.setSelected(prop.isEnablePaneItasaRSS());
         jcbPaneLog.setSelected(prop.isEnablePaneLog());
         jcbPaneReminder.setSelected(prop.isEnablePaneReminder());
         jcbPaneSearchSubItasa.setSelected(prop.isEnablePaneSearchSubItasa());
         jcbPaneSetting.setSelected(prop.isEnablePaneSetting());
         jcbPaneShow.setSelected(prop.isEnablePaneShow());
         jcbPaneSubDest.setSelected(prop.isEnablePaneSubDestination());
+        jcbPaneSubsfactory.setSelected(prop.isEnablePaneSubsfactory());
         jcbPaneTorrent.setSelected(prop.isEnablePaneTorrent());
     }
 }

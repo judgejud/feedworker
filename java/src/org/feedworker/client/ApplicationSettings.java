@@ -37,7 +37,8 @@ public class ApplicationSettings {
             enablePaneCalendar, enableNotifySms, enablePaneShow, itasaBlog, enablePaneBlog, 
             itasaPM, calendarDay, enablePaneCalendarDay, enablePaneIrc, itasaNews, 
             showNoDuplicateAll, showNoDuplicateSingle, torrentEztvOption, torrentBtchatOption,
-            torrentKarmorraOption, torrentMyKarmorraOption;
+            torrentKarmorraOption, torrentMyKarmorraOption, enablePaneItasaNews, 
+            enablePaneItasaRSS, enablePaneSubsfactory;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -79,7 +80,7 @@ public class ApplicationSettings {
                 setItasaPM(getBooleanDecryptedValue("ITASA_PM"));
                 setItasaNews(getBooleanDecryptedValue("ITASA_NEWS"));
                 setCalendarDay(getBooleanDecryptedValue("CALENDAR_DAY"));
-                //SUBSFATORY
+                //SUBSFACTORY
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
                 setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
                 setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
@@ -111,6 +112,9 @@ public class ApplicationSettings {
                 setEnablePaneBlog(getBooleanDecryptedValue("ENABLE_PANE_BLOG"));
                 setEnablePaneCalendarDay(getBooleanDecryptedValue("ENABLE_PANE_CALENDAR_DAY"));
                 setEnablePaneIrc(getBooleanDecryptedValue("ENABLE_PANE_IRC"));
+                setEnablePaneItasaNews(getBooleanDecryptedValue("ENABLE_PANE_ITASA_NEWS"));
+                setEnablePaneItasaRSS(getBooleanDecryptedValue("ENABLE_PANE_ITASA_RSS"));
+                setEnablePaneSubsfactory(getBooleanDecryptedValue("ENABLE_PANE_SUBSFACTORY"));
                 //ADVISOR SETTINGS
                 setMailTO(getDecryptedValue("MAIL_TO"));
                 setMailSMTP(getDecryptedValue("MAIL_SMTP"));
@@ -305,6 +309,9 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_PANE_BLOG", enablePaneBlog);
             propertiesCrypting("ENABLE_PANE_CALENDAR_DAY", enablePaneCalendarDay);
             propertiesCrypting("ENABLE_PANE_IRC", enablePaneIrc);
+            propertiesCrypting("ENABLE_PANE_ITASA_NEWS", enablePaneItasaNews);
+            propertiesCrypting("ENABLE_PANE_ITASA_RSS", enablePaneItasaRSS);
+            propertiesCrypting("ENABLE_PANE_SUBSFACTORY", enablePaneSubsfactory);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -874,5 +881,29 @@ public class ApplicationSettings {
 
     public void setTorrentCount(int torrentCount) {
         this.torrentCount = torrentCount;
+    }
+
+    public boolean isEnablePaneItasaNews() {
+        return enablePaneItasaNews;
+    }
+
+    public void setEnablePaneItasaNews(boolean enablePaneItasaNews) {
+        this.enablePaneItasaNews = enablePaneItasaNews;
+    }
+
+    public boolean isEnablePaneItasaRSS() {
+        return enablePaneItasaRSS;
+    }
+
+    public void setEnablePaneItasaRSS(boolean enablePaneItasaRSS) {
+        this.enablePaneItasaRSS = enablePaneItasaRSS;
+    }
+
+    public boolean isEnablePaneSubsfactory() {
+        return enablePaneSubsfactory;
+    }
+
+    public void setEnablePaneSubsfactory(boolean enablePaneSubsfactory) {
+        this.enablePaneSubsfactory = enablePaneSubsfactory;
     }
 }// end class
