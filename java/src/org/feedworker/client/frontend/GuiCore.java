@@ -373,7 +373,8 @@ public class GuiCore {
             boolean paneIrc, String ircNick, String ircPwd, boolean itasaRss, 
             boolean myItasaRss, boolean itasaNews, boolean noDuplicateAll, 
             boolean noDuplicateSingle, String ircServer, boolean eztv, boolean btchat,
-            boolean karmorra, boolean mykarmorra, String urlMyKarmorra) {
+            boolean karmorra, boolean mykarmorra, String urlMyKarmorra, boolean paneITasaNews, 
+            boolean paneITasaRss, boolean paneSubsfactory) {
                 
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -401,7 +402,8 @@ public class GuiCore {
             setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
                             paneReminder, paneTorrent, paneCalendar, paneShow, 
-                            paneBlog, paneCalendarDay, paneIrc);
+                            paneBlog, paneCalendarDay, paneIrc, paneITasaNews, 
+                            paneITasaRss, paneSubsfactory);
             setPropIrc(ircNick, ircPwd, ircServer);
             setPropShow(noDuplicateAll, noDuplicateSingle);
             kernel.writeProp();
@@ -687,7 +689,8 @@ public class GuiCore {
     private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
                                     boolean subdest, boolean reminder, boolean torrent,
                                     boolean calendar, boolean show, boolean blog, 
-                                    boolean calendarDay, boolean irc){
+                                    boolean calendarDay, boolean irc, boolean itasaNews,
+                                    boolean itasaRss, boolean subsfactory){
         prop.setEnablePaneCalendar(calendar);
         prop.setEnablePaneLog(log);
         prop.setEnablePaneSearchSubItasa(search);
@@ -699,6 +702,9 @@ public class GuiCore {
         prop.setEnablePaneBlog(blog);
         prop.setEnablePaneCalendarDay(calendarDay);
         prop.setEnablePaneIrc(irc);
+        prop.setEnablePaneItasaNews(itasaNews);
+        prop.setEnablePaneItasaRSS(itasaRss);
+        prop.setEnablePaneSubsfactory(subsfactory);
     }
     
     private void setPropTorrent(String dest, boolean eztv, boolean btchat, boolean karmorra, 

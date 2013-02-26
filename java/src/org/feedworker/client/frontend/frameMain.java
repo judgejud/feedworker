@@ -115,14 +115,15 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jpCalendarDay = paneCalendarDay.getPanel();
         jpIrc = paneIrc.getPanel();
         jpPlayer = panePlayer.getPanel();
+        jpSubsfactory = paneSubsfactory.getPanel();
         
-        checkAddTab(jpItasaNews, false, null);
-        checkAddTab(jpItasaRss, false, null);
+        if (prop.isEnablePaneItasaNews())
+            checkAddTab(jpItasaNews, false, null);
+        if (prop.isEnablePaneItasaNews())
+            checkAddTab(jpItasaRss, false, null);
         checkAddTab(jpPlayer, false, null);
-        if (prop.isSubsfactoryOption()) {
-            jpSubsfactory = paneSubsfactory.getPanel();
+        if (prop.isEnablePaneSubsfactory())
             checkAddTab(jpSubsfactory, false, null);
-        }
         if (prop.isEnablePaneTorrent())
             checkAddTab(jpTorrent, false, null);
         if (prop.isEnablePaneBlog())

@@ -130,7 +130,8 @@ public class paneSetting extends paneAbstract {
                 jcbShowNoDuplicateAll.isSelected(), jcbShowNoDuplicateSingle.isSelected(),
                 jtfIrcServer.getText(), jcbTorrentEztv.isSelected(), jcbTorrentBtchat.isSelected(),
                 jcbTorrentKarmorra.isSelected(), jcbTorrentMyKarmorra.isSelected(), 
-                jtfTorrentMyKarmorra.getText());
+                jtfTorrentMyKarmorra.getText(), jcbPaneItasaNews.isSelected(), 
+                jcbPaneItasaRss.isSelected(), jcbPaneSubsfactory.isSelected());
             }
         });
         
@@ -158,6 +159,8 @@ public class paneSetting extends paneAbstract {
         jrbDirLocal.setSelected(true);
         jrbDirSamba = new JRadioButton("HD Samba");
         jcbDestination = new JCheckBox("Abilita Destinazione personalizzata");
+        jcbDestination.setToolTipText("Una volta abilitata per pter configurare "
+                    + "le regole puoi usare il pannello subtitle destination");
         jcbReminder = new JCheckBox("Abilita Reminder");
         jtfDestSub = new JTextField(20);
         jbDestSub = new JButton("Seleziona");
