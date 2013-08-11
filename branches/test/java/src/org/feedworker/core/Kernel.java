@@ -840,8 +840,13 @@ public class Kernel implements PropertyChangeListener {
                     error.launch(ex1, getClass());
                 }
             } catch (IOException ex) {
-                System.out.println("ciao");
-                error.launch(ex, getClass());
+                try {
+                    mapShowItasa = new ItasaOffline(FILE_ITASA, true).initializeReader();
+                } catch (JDOMException ex1) {
+                    error.launch(ex1, getClass());
+                } catch (IOException ex1) {
+                    error.launch(ex1, getClass());
+                }
             } catch (ItasaException ex) {
                 printAlert(ex.getMessage());
             } catch (Exception ex) {
