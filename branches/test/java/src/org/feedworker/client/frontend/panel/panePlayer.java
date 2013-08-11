@@ -2,7 +2,7 @@ package org.feedworker.client.frontend.panel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.media.Player;
+//import javax.media.Player;
 import javax.swing.JButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jfacility.javax.swing.Swing;
@@ -12,7 +12,7 @@ import org.jfacility.javax.swing.Swing;
  */
 public class panePlayer extends paneAbstract{
     private static panePlayer jpanel;
-    private Player player;
+//    private Player player;
     private FileNameExtensionFilter fnfe = new FileNameExtensionFilter("Video file", "avi", "mp4", "mkv");
 
     private panePlayer() {
