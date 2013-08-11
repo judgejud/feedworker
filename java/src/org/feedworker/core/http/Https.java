@@ -1,6 +1,7 @@
 package org.feedworker.core.http;
 //IMPORT JAVA
 import java.io.InputStream;
+import java.net.SocketException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -37,7 +38,7 @@ public class Https {
         return https;
     }
     // Now you can access an https URL without having the certificate in the truststore
-    public InputStream connection(String url) throws Exception {
+    public InputStream connection(String url) throws SocketException, Exception {
         URL u = new URL(url);
         HttpsURLConnection conn = (HttpsURLConnection) u.openConnection();
         conn.setRequestProperty("User-Agent", "FeedWorker 448");
