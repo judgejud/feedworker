@@ -93,9 +93,4 @@ public class GCalNotifierSms {
         insertedEntry.getReminder().add(reminder);
         insertedEntry.update();
     }
-    /*
-    public static void main(String[] args) {
-        send("judgejud@gmail.com", "pincopallino", "judge judge", "ciao");
-    }
-    */
 }
