@@ -1,6 +1,7 @@
 package org.feedworker.xml;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
