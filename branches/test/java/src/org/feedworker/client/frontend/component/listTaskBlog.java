@@ -431,7 +431,7 @@ class LiveTaskPaneProvider extends ComponentProvider<JXTaskPane> implements
         jep.setContentType("text/html");
         jep.setText(model.getText());
         jep.setFont(new Font("Arial", Font.PLAIN, 13));
-        jep.setPreferredSize(new Dimension(900,180));
+        jep.setPreferredSize(new Dimension(900,210));
         jep.setEditable(false);
         final String url = model.getUrl();
         JButton jbBrowse = new JButton(GuiCore.getInstance().getIconWWW());
