@@ -56,6 +56,7 @@ public class FeedWorkerClient {
 
             feedWorker.setName("FeedWorker");
             feedWorker.setAuthor("Luka Judge");
+            
             feedWorker.setIcon(Common.getResourceIcon(ICON_FILENAME));
             feedWorker.enableSingleInstance(true);
 
