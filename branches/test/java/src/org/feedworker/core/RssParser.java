@@ -92,7 +92,8 @@ public class RssParser {
                     structuredEntry[1] = Common.dateTimeString(rawDate);
                     structuredEntry[2] = title;
                     structuredEntry[3] = rawEntry.getAuthor();
-                    structuredEntry[4] = rawEntry.getDescription().getValue();
+                    String token[] = rawEntry.getDescription().getValue().split("<br/>");
+                    structuredEntry[4] = token[token.length-1];
                     list.add(structuredEntry);
                 }
             }
