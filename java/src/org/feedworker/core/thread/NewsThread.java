@@ -1,6 +1,7 @@
 package org.feedworker.core.thread;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 
 import org.feedworker.client.frontend.events.TextPaneEvent;
@@ -34,6 +35,8 @@ public class NewsThread implements Runnable{
                 ManageListener.fireListEvent(this, "ItasaNews", array);
             }
         } catch (JDOMException ex) {
+            ManageException.getIstance().launch(ex, getClass());
+        } catch (ConnectException ex) {
             ManageException.getIstance().launch(ex, getClass());
         } catch (IOException ex) {
             ManageException.getIstance().launch(ex, getClass());
