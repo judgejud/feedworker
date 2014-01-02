@@ -1,7 +1,8 @@
 package org.feedworker.xml;
 
 import java.io.IOException;
-import java.net.SocketException;
+import java.io.InputStream;
+import java.net.ConnectException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -307,7 +308,8 @@ public class ItasaOnline extends AbstractQueryXML{
         return showsName;
     }
     
-    public ArrayList<Object[]> newsList(int idStart) throws JDOMException, IOException, Exception{
+    public ArrayList<Object[]> newsList(int idStart) throws JDOMException, ConnectException, 
+                                                        IOException, Exception{
         ArrayList<String> params = new ArrayList<String>();
         connectHttps(composeUrl(URL_NEWS, params));
         checkStatus();
@@ -413,9 +415,10 @@ public class ItasaOnline extends AbstractQueryXML{
     }
     
     private void connectHttps(String url) throws JDOMParseException, JDOMException, 
-                                                        IOException, Exception {
+                                                ConnectException, IOException, Exception {
         try {
-            document = new SAXBuilder().build(Https.getInstance().connection(url));
+            InputStream is = Https.getInstance().connection(url);
+            document = new SAXBuilder().build(is);
         } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();
         } catch (KeyManagementException ex) {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
+import java.net.SocketException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
@@ -24,10 +25,9 @@ import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.ParsingFeedException;
 
 import jcifs.smb.SmbException;
+
 import org.apache.xmlrpc.XmlRpcException;
-
 import org.jdom.JDOMException;
-
 import org.xml.sax.SAXException;
 /**
  * Stampa nella textpane i messaggi d'errore se è un messaggio d'errore "rosso"
@@ -48,17 +48,22 @@ public class ManageException {
     public void launch(ClassNotFoundException ex, Class c) {
         printError(ex, c);
     }
+    
+    public void launch(ConnectException ex, Class c) {
+        String msg = ex.getMessage();
+        String error01 = "Connection timed out: connect";
+        String error02 = "Bad Gateway";
+        
+        if (msg.equals(error01))
+            printAlert("Timeout di connessione, riprovare", true);
+        else if (msg.equals(error02))
+            printAlert("Errore http 502 Gateway non valido", true);
+        else
+            printError(ex, c);
+    }
 
     public void launch(Exception e, Class c) {
         printError(e, c);
-    }
-    
-    public void launch(XmlRpcException e, Class c) {
-        String msg = e.getMessage();
-        if (msg.startsWith("È necessario inserire un nome utente."))
-            printAlert("Login al forum Errore: " + msg, true);
-        else
-            printError(e, c);
     }
 
     public void launch(FeedException ex, Class c, String text) {
@@ -95,16 +100,21 @@ public class ManageException {
         }
     }
     
-    public void launch(ConnectException ex, Class c) {
+    public void launch(IndexOutOfBoundsException ex, Class c, boolean flag_itasa) {
         String msg = ex.getMessage();
-        String error01 = "Connection timed out: connect";
-        if (msg.equals(error01)) {
-            printAlert("Timeout di connessione, riprovare", true);
-        } else {
+        String error01 = "String index out of range: -1";
+        //TODO: gestire l'eventuale errore del numero dei sub downloadati
+        if (flag_itasa && msg.equals(error01))
+            printAlert("Bisogna essere registrati ad italiansubs per scaricare i sottotitoli. "
+                    + "Controlla username e/o password", true);
+        else
             printError(ex, c);
-        }
     }
 
+    public void launch(InstantiationException ex, Class c) {
+        printError(ex, c);
+    }
+    
     public void launch(IOException ex, Class c) {
         String msg = ex.getMessage();
         String error01 = "Failed to open file://" + 
@@ -115,10 +125,6 @@ public class ManageException {
                     + "l'esistenza del path o i permessi per accedervi ", true);
         else
             printError(ex, c);
-    }
-
-    public void launch(InstantiationException ex, Class c) {
-        printError(ex, c);
     }
 
     public void launch(IOException ex, Class c, String text) {
@@ -234,16 +240,9 @@ public class ManageException {
         else
             printError(ex, c);
     }
-
-    public void launch(IndexOutOfBoundsException ex, Class c, boolean flag_itasa) {
-        String msg = ex.getMessage();
-        String error01 = "String index out of range: -1";
-        //TODO: gestire l'eventuale errore del numero dei sub downloadati
-        if (flag_itasa && msg.equals(error01))
-            printAlert("Bisogna essere registrati ad italiansubs per scaricare i sottotitoli. "
-                    + "Controlla username e/o password", true);
-        else
-            printError(ex, c);
+    
+    public void launch(SocketException ex, Class c) {
+        printError(ex, c);
     }
 
     public void launch(UnsupportedAudioFileException ex, Class c) {
@@ -261,7 +260,15 @@ public class ManageException {
     public void launch(URISyntaxException ex, Class c) {
         printError(ex, c);
     }
-
+    
+    public void launch(XmlRpcException e, Class c) {
+        String msg = e.getMessage();
+        if (msg.startsWith("È necessario inserire un nome utente."))
+            printAlert("Login al forum Errore: " + msg, true);
+        else
+            printError(e, c);
+    }
+    
     public void launch(XPathExpressionException ex, Class c){
         printError(ex, c);
     }
