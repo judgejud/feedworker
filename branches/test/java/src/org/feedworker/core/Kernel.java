@@ -96,8 +96,9 @@ public class Kernel implements PropertyChangeListener {
     public final String OPERATION_PROGRESS_SHOW = "ProgressShow";
     public final String OPERATION_PROGRESS_INCREMENT = "ProgressIncrement";
     // PRIVATE FINAL VARIABLES
-    private final String RSS_TORRENT_EZTV = "http://rss.thepiratebay.se/user/d17c6a45441ce0bc0c057f19057f95e1";
-    private final String RSS_TORRENT_KARMORRA = "http://showrss.karmorra.info/feeds/all.rss";
+    //private final String RSS_TORRENT_EZTV = "http://rss.thepiratebay.se/user/d17c6a45441ce0bc0c057f19057f95e1";
+    private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
+    private final String RSS_TORRENT_SHOWRSS = "http://showrss.info/feeds/all.rss";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
     private final String LINK_SCHEDA_ITASA =
             "http://www.italiansubs.net/index.php?option=com_info&Itemid=12&idserie=";
@@ -1428,7 +1429,7 @@ public class Kernel implements PropertyChangeListener {
         if (prop.isTorrentKarmorraOption()){
             if (first)
                 torrent.add(KARMORRA);
-            rtK = new RssThread(lastKarmorra, RSS_TORRENT_KARMORRA, KARMORRA);
+            rtK = new RssThread(lastKarmorra, RSS_TORRENT_SHOWRSS, KARMORRA);
             tK = new Thread(rtK, KARMORRA);
             tK.start();
         }
