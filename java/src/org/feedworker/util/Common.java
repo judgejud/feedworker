@@ -83,7 +83,11 @@ public class Common {
      * @return stringa dd/MM/yyyy HH:mm:ss
      */
     public static String dateTimeString(Date d) {
-        return sdfDateTime.format(d);
+        try{
+            return sdfDateTime.format(d);
+        } catch(NullPointerException npe){
+            return "";
+        }
     }
 
     /**

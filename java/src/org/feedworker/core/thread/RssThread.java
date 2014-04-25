@@ -97,13 +97,13 @@ public class RssThread implements Runnable{
                                     ManageListener.fireTextPaneEvent(this,
                                         "Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_SUBSF,true);
-                                } else if (from.equals(core.MYSUBSF)) {
+                                } else if (from.equals(core.TV24)) {
                                     if (matrice.get(i)[2].toString().startsWith("No such pipe"))
                                         matrice.remove(i);
                                     else
                                         ManageListener.fireTextPaneEvent(this,
                                             "Nuovo/i feed " + from,
-                                            TextPaneEvent.FEED_MYSUBSF, true);
+                                            TextPaneEvent.FEED_TV24, true);
                                 } else if (from.equals(core.EZTV)) {
                                     ManageListener.fireTextPaneEvent(this,
                                             "Nuovo/i feed " + from,
@@ -112,6 +112,14 @@ public class RssThread implements Runnable{
                                     ManageListener.fireTextPaneEvent(this,
                                             "Nuovo/i feed " + from,
                                             TextPaneEvent.FEED_BTCHAT, true);
+                                } else if (from.equals(core.KARMORRA)) {
+                                    ManageListener.fireTextPaneEvent(this,
+                                            "Nuovo/i feed " + from,
+                                            TextPaneEvent.FEED_KARMORRA, true);
+                                } else if (from.equals(core.MYKARMORRA)) {
+                                    ManageListener.fireTextPaneEvent(this,
+                                            "Nuovo/i feed " + from,
+                                            TextPaneEvent.FEED_MYKARMORRA, true);
                                 }
                                 continua = false;
                             }

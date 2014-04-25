@@ -25,11 +25,11 @@ public class ApplicationSettings {
             subtitleDestinationFolder, refreshInterval, lastDateTimeRefresh,
             applicationLookAndFeel, torrentDestinationFolder,
             cifsShareLocation, cifsSharePath, cifsShareUsername,
-            cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, mySubsfactoryFeedUrl,
+            cifsSharePassword, cifsShareDomain, subsfactoryFeedURL, tv24FeedUrl,
             httpTimeout, mailTO, mailSMTP, googleUser, googlePwd, googleCalendar, 
             ircNick, ircPwd, ircServer, torrentUrlMyKarmorra;
     private int torrentCount;
-    private boolean subsfactoryOption, autoDownloadMyItasa, enableNotifyAudioRss, enableNotifyAudioSub, 
+    private boolean otherSubsOption, autoDownloadMyItasa, enableNotifyAudioRss, enableNotifyAudioSub, 
             applicationFirstTimeUsed, localFolder, enableIconizedRun, 
             enableRunAtStartup, enableAdvancedDownload, autoLoadDownloadMyItasa, 
             enableNotifyMail, enablePaneLog, enablePaneSetting, enablePaneSubDestination, 
@@ -38,7 +38,7 @@ public class ApplicationSettings {
             itasaPM, calendarDay, enablePaneCalendarDay, enablePaneIrc, itasaNews, 
             showNoDuplicateAll, showNoDuplicateSingle, torrentEztvOption, torrentBtchatOption,
             torrentKarmorraOption, torrentMyKarmorraOption, enablePaneItasaNews, 
-            enablePaneItasaRSS, enablePaneSubsfactory;
+            enablePaneItasaRSS, enablePaneOtherSubs;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -80,10 +80,10 @@ public class ApplicationSettings {
                 setItasaPM(getBooleanDecryptedValue("ITASA_PM"));
                 setItasaNews(getBooleanDecryptedValue("ITASA_NEWS"));
                 setCalendarDay(getBooleanDecryptedValue("CALENDAR_DAY"));
-                //SUBSFACTORY
+                //OTHERSUBS
+                setOtherSubsOption(getBooleanDecryptedValue("OTHERSUBS_OPTION"));
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
-                setSubfactoryOption(getBooleanDecryptedValue("SUBSFACTORY"));
-                setMySubsfactoryFeedUrl(getDecryptedValue("MYSUBSFACTORY_FEED_URL"));
+                setTv24FeedUrl(getDecryptedValue("TV24_FEED_URL"));
                 //TORRENT
                 setTorrentEztvOption(getBooleanDecryptedValue("TORRENT_EZTV")); 
                 setTorrentBtchatOption(getBooleanDecryptedValue("TORRENT_BTCHAT"));
@@ -114,7 +114,7 @@ public class ApplicationSettings {
                 setEnablePaneIrc(getBooleanDecryptedValue("ENABLE_PANE_IRC"));
                 setEnablePaneItasaNews(getBooleanDecryptedValue("ENABLE_PANE_ITASA_NEWS"));
                 setEnablePaneItasaRSS(getBooleanDecryptedValue("ENABLE_PANE_ITASA_RSS"));
-                setEnablePaneSubsfactory(getBooleanDecryptedValue("ENABLE_PANE_SUBSFACTORY"));
+                setEnablePaneOtherSubs(getBooleanDecryptedValue("ENABLE_PANE_OTHERSUBS"));
                 //ADVISOR SETTINGS
                 setMailTO(getDecryptedValue("MAIL_TO"));
                 setMailSMTP(getDecryptedValue("MAIL_SMTP"));
@@ -219,10 +219,11 @@ public class ApplicationSettings {
         }
     }// end write
 
-    public void writeSubsfactorySettings() {
+    public void writeOtherSubsSettings() {
         try {
+            propertiesCrypting("OTHERSUBS_OPTION", otherSubsOption);
             propertiesCrypting("SUBSFACTORY_FEED_URL", subsfactoryFeedURL);
-            propertiesCrypting("MYSUBSFACTORY_FEED_URL", mySubsfactoryFeedUrl);
+            propertiesCrypting("TV24_FEED_URL", tv24FeedUrl);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -311,7 +312,7 @@ public class ApplicationSettings {
             propertiesCrypting("ENABLE_PANE_IRC", enablePaneIrc);
             propertiesCrypting("ENABLE_PANE_ITASA_NEWS", enablePaneItasaNews);
             propertiesCrypting("ENABLE_PANE_ITASA_RSS", enablePaneItasaRSS);
-            propertiesCrypting("ENABLE_PANE_SUBSFACTORY", enablePaneSubsfactory);
+            propertiesCrypting("ENABLE_PANE_OTHERSUBS", enablePaneOtherSubs);
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
         } catch (IOException e) {
@@ -356,7 +357,7 @@ public class ApplicationSettings {
     }
 
     private void loadDefaultSettings() {
-        subsfactoryOption = true;
+        otherSubsOption = true;
         applicationFirstTimeUsed = true;
         applicationLookAndFeel = "Synthetica Standard";
         enablePaneLog = true;
@@ -364,7 +365,7 @@ public class ApplicationSettings {
         try {
             propertiesCrypting("IS_APPLICATION_FIRST_TIME_USED",
                     applicationFirstTimeUsed);
-            propertiesCrypting("SUBSFACTORY", subsfactoryOption);
+            propertiesCrypting("OTHERSUBS_OPTION", otherSubsOption);
             storeSettings();
         } catch (GeneralSecurityException e) {
             error.launch(e, getClass());
@@ -512,12 +513,12 @@ public class ApplicationSettings {
         this.subtitleDestinationFolder = subtitleDestinationFolder;
     }
 
-    public boolean isSubsfactoryOption() {
-        return subsfactoryOption;
+    public boolean isOtherSubsOption() {
+        return otherSubsOption;
     }
 
-    private void setSubfactoryOption(boolean subsfactoryOption) {
-        this.subsfactoryOption = subsfactoryOption;
+    private void setOtherSubsOption(boolean option) {
+        this.otherSubsOption = option;
     }
 
     public String getSettingsFilename() {
@@ -635,12 +636,12 @@ public class ApplicationSettings {
         this.autoLoadDownloadMyItasa = flag;
     }
 
-    public String getMySubsfactoryFeedUrl() {
-        return mySubsfactoryFeedUrl;
+    public String getTv24FeedUrl() {
+        return tv24FeedUrl;
     }
 
-    public void setMySubsfactoryFeedUrl(String mySubsfactoryFeedUrl) {
-        this.mySubsfactoryFeedUrl = mySubsfactoryFeedUrl;
+    public void setTv24FeedUrl(String feedUrl) {
+        this.tv24FeedUrl = feedUrl;
     }
 
     public boolean isEnablePaneLog() {
@@ -899,11 +900,11 @@ public class ApplicationSettings {
         this.enablePaneItasaRSS = enablePaneItasaRSS;
     }
 
-    public boolean isEnablePaneSubsfactory() {
-        return enablePaneSubsfactory;
+    public boolean isEnablePaneOtherSubs() {
+        return enablePaneOtherSubs;
     }
 
-    public void setEnablePaneSubsfactory(boolean enablePaneSubsfactory) {
-        this.enablePaneSubsfactory = enablePaneSubsfactory;
+    public void setEnablePaneOtherSubs(boolean enablePane) {
+        this.enablePaneOtherSubs = enablePane;
     }
 }// end class

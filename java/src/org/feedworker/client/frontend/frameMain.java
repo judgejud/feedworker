@@ -57,7 +57,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
     private paneItasaRss jpItasaRss;
     private paneItasaNews jpItasaNews;
     private paneTorrent jpTorrent;
-    private paneSubsfactory jpSubsfactory;
+    private paneOtherSub jpOtherSubs;
     private paneLog jpLog;
     private paneSearchSubItasa jpSearch;
     private paneStatusBar statusBar;
@@ -115,15 +115,15 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jpCalendarDay = paneCalendarDay.getPanel();
         jpIrc = paneIrc.getPanel();
         jpPlayer = panePlayer.getPanel();
-        jpSubsfactory = paneSubsfactory.getPanel();
+        jpOtherSubs = paneOtherSub.getPanel();
         
         if (prop.isEnablePaneItasaNews())
             checkAddTab(jpItasaNews, false, null);
         if (prop.isEnablePaneItasaNews())
             checkAddTab(jpItasaRss, false, null);
         checkAddTab(jpPlayer, false, null);
-        if (prop.isEnablePaneSubsfactory())
-            checkAddTab(jpSubsfactory, false, null);
+        if (prop.isEnablePaneOtherSubs())
+            checkAddTab(jpOtherSubs, false, null);
         if (prop.isEnablePaneTorrent())
             checkAddTab(jpTorrent, false, null);
         if (prop.isEnablePaneBlog())
@@ -392,7 +392,7 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmiWindowSubsfactory.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
-                checkAddTab(jpSubsfactory, true, null);
+                checkAddTab(jpOtherSubs, true, null);
             }
         });
         
@@ -732,8 +732,8 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
      */
     protected void changeEnabledButton(boolean e) {
         jpItasaRss.setButtonEnabled(e);
-        if (prop.isSubsfactoryOption())
-            jpSubsfactory.setEnableButton(e);
+        if (prop.isOtherSubsOption())
+            jpOtherSubs.setEnableButton(e);
         //TODO ???
         //if (prop.isTorrentOption())
         //    jpTorrent.setButtonEnabled(e);

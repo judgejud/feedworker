@@ -26,8 +26,9 @@ public class textLog extends JTextPane implements TextPaneEventListener {
     // PRIVATE
     private StyledDocument mysd;
     private Style styleOK, styleError, styleAlert, styleSub, styleTorrent,
-            styleFeedItasa, styleFeedMyItasa, styleFeedSubsf, styleFeedMySubsf,
-            styleFeedEztv, styleFeedBtchat, styleSynology, styleDaySerial, styleItasaBlog, 
+            styleFeedItasa, styleFeedMyItasa, styleFeedSubsf, styleFeedTv24,
+            styleFeedEztv, styleFeedBtchat, styleFeedKarmorra, styleFeedMyKarmorra, 
+            styleSynology, styleDaySerial, styleItasaBlog, 
             styleItasaPM, styleItasaNews;
     
     private boolean flag_msg_normal;
@@ -52,11 +53,13 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         styleFeedItasa = mysd.addStyle("StyleFeedItasa", null);
         styleFeedMyItasa = mysd.addStyle("StyleFeedMyItasa", null);
         styleFeedSubsf = mysd.addStyle("StyleFeedSubsf", null);
-        styleFeedMySubsf = mysd.addStyle("StyleFeedMySubsf", null);
+        styleFeedTv24 = mysd.addStyle("StyleFeedTv24", null);
         styleFeedEztv = mysd.addStyle("StyleFeedEztv", null);
         styleFeedBtchat = mysd.addStyle("StyleFeedBtchat", null);
+        styleFeedKarmorra = mysd.addStyle("StyleFeedKarmorra", null);
+        styleFeedMyKarmorra = mysd.addStyle("StyleFeedMyKarmorra", null);
         styleSub = mysd.addStyle("StyleSub", null);
-        styleTorrent = mysd.addStyle("StyleTorrent", null);
+        styleFeedKarmorra = mysd.addStyle("StyleTorrent", null);
         styleSynology = mysd.addStyle("StyleSynology", null);
         styleDaySerial = mysd.addStyle("StyleDaySerial", null);
         styleItasaBlog = mysd.addStyle("StyleItasaBlog", null);
@@ -64,8 +67,7 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         styleItasaNews = mysd.addStyle("StyleItasaNews", null);
         // Italic
         StyleConstants.setItalic(styleFeedMyItasa, true);
-        StyleConstants.setItalic(styleFeedMySubsf, true);
-        StyleConstants.setItalic(styleFeedBtchat, true);
+        StyleConstants.setItalic(styleFeedMyKarmorra, true);
         StyleConstants.setItalic(styleItasaPM, true);
         // Bold
         // StyleConstants.setBold(style, false);
@@ -76,9 +78,11 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         StyleConstants.setFontFamily(styleFeedItasa, "SansSerif");
         StyleConstants.setFontFamily(styleFeedMyItasa, "SansSerif");
         StyleConstants.setFontFamily(styleFeedSubsf, "SansSerif");
-        StyleConstants.setFontFamily(styleFeedMySubsf, "SansSerif");
+        StyleConstants.setFontFamily(styleFeedTv24, "SansSerif");
         StyleConstants.setFontFamily(styleFeedEztv, "SansSerif");
         StyleConstants.setFontFamily(styleFeedBtchat, "SansSerif");
+        StyleConstants.setFontFamily(styleFeedKarmorra, "SansSerif");
+        StyleConstants.setFontFamily(styleFeedMyKarmorra, "SansSerif");
         StyleConstants.setFontFamily(styleSub, "SansSerif");
         StyleConstants.setFontFamily(styleTorrent, "SansSerif");
         StyleConstants.setFontFamily(styleSynology, "SansSerif");
@@ -93,7 +97,7 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         StyleConstants.setFontSize(styleFeedItasa, dim);
         StyleConstants.setFontSize(styleFeedMyItasa, dim);
         StyleConstants.setFontSize(styleFeedSubsf, dim);
-        StyleConstants.setFontSize(styleFeedMySubsf, dim);
+        StyleConstants.setFontSize(styleFeedTv24, dim);
         StyleConstants.setFontSize(styleFeedEztv, dim);
         StyleConstants.setFontSize(styleFeedBtchat, dim);
         StyleConstants.setFontSize(styleSub, dim);
@@ -110,9 +114,11 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         StyleConstants.setForeground(styleFeedItasa, Color.cyan);
         StyleConstants.setForeground(styleFeedMyItasa, Color.cyan);
         StyleConstants.setForeground(styleFeedSubsf, HELIOTROPE);
-        StyleConstants.setForeground(styleFeedMySubsf, HELIOTROPE);
-        StyleConstants.setForeground(styleFeedEztv, Color.gray);
+        StyleConstants.setForeground(styleFeedTv24, Color.orange);
+        StyleConstants.setForeground(styleFeedEztv, Color.darkGray);
         StyleConstants.setForeground(styleFeedBtchat, Color.gray);
+        StyleConstants.setForeground(styleFeedKarmorra, Color.lightGray);
+        StyleConstants.setForeground(styleFeedMyKarmorra, Color.lightGray);
         StyleConstants.setForeground(styleSub, Color.white);
         StyleConstants.setForeground(styleTorrent, Color.magenta);
         StyleConstants.setForeground(styleSynology, GOLD);
@@ -181,8 +187,8 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         append(msg, styleFeedSubsf);
     }
 
-    private void appendFeedMySubsf(String msg) {
-        append(msg, styleFeedMySubsf);
+    private void appendFeedTv24(String msg) {
+        append(msg, styleFeedTv24);
     }
 
     /**
@@ -203,6 +209,26 @@ public class textLog extends JTextPane implements TextPaneEventListener {
      */
     private void appendFeedBtchat(String msg) {
         append(msg, styleFeedBtchat);
+    }
+    
+    /**
+     * Aggiunge alla textpane il testo con stile FEED TORRENT2
+     *
+     * @param msg
+     *            testo da aggiungere
+     */
+    private void appendFeedKarmorra(String msg) {
+        append(msg, styleFeedKarmorra);
+    }
+    
+    /**
+     * Aggiunge alla textpane il testo con stile FEED TORRENT2
+     *
+     * @param msg
+     *            testo da aggiungere
+     */
+    private void appendFeedMyKarmorra(String msg) {
+        append(msg, styleFeedMyKarmorra);
     }
 
     /**
@@ -279,12 +305,16 @@ public class textLog extends JTextPane implements TextPaneEventListener {
                 appendFeedMyItasa(evt.getMsg());
             else if (evt.getType().equals(TextPaneEvent.FEED_SUBSF))
                 appendFeedSubsf(evt.getMsg());
-            else if (evt.getType().equals(TextPaneEvent.FEED_MYSUBSF))
-                appendFeedMySubsf(evt.getMsg());
+            else if (evt.getType().equals(TextPaneEvent.FEED_TV24))
+                appendFeedTv24(evt.getMsg());
             else if (evt.getType().equals(TextPaneEvent.FEED_EZTV))
                 appendFeedEztv(evt.getMsg());
             else if (evt.getType().equals(TextPaneEvent.FEED_BTCHAT))
                 appendFeedBtchat(evt.getMsg());
+            else if (evt.getType().equals(TextPaneEvent.FEED_KARMORRA))
+                appendFeedKarmorra(evt.getMsg());
+            else if (evt.getType().equals(TextPaneEvent.FEED_MYKARMORRA))
+                appendFeedMyKarmorra(evt.getMsg());
             else if (evt.getType().equals(TextPaneEvent.SYNOLOGY))
                 appendSynology(evt.getMsg());
             else if (evt.getType().equals(TextPaneEvent.DAY_SERIAL))
