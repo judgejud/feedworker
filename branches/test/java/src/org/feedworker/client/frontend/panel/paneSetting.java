@@ -34,7 +34,7 @@ public class paneSetting extends paneAbstract {
     private JButton jbDestSub;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf, 
-            jtfDestTorrent, jtfItasaUser, jtfRssMySubsf, jtfMailTo, jtfMailSmtp,
+            jtfDestTorrent, jtfItasaUser, jtfRssTv24, jtfMailTo, jtfMailSmtp,
             jtfGoogleUser, jtfGoogleCalendar, jtfIrcServer, jtfIrcNick, jtfTorrentMyKarmorra;
     private JPasswordField jpfSamba, jpfItasa, jpfGoogle, jpfIrc;
     private ButtonGroup bgLocalSamba, bgDownItasa;
@@ -76,8 +76,8 @@ public class paneSetting extends paneAbstract {
         
         JXTaskPaneContainer tpcEast = new JXTaskPaneContainer();
         tpcEast.add(initTaskPaneItalianSubs());
-        if (prop.isSubsfactoryOption())
-            tpcEast.add(initTaskPaneSubsfactory());
+        if (prop.isOtherSubsOption())
+            tpcEast.add(initTaskPaneOtherSubs());
         tpcEast.add(initTaskPaneTorrent());
         tpcEast.add(initTaskPaneAlert());
 
@@ -115,7 +115,7 @@ public class paneSetting extends paneAbstract {
                 jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
                 new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
                 jcbDownloadMyitasaStartup.isSelected(), jtfRssSubsf.getText(), 
-                jtfRssMySubsf.getText(), jtfDestTorrent.getText(), jtfMailTo.getText(),
+                jtfRssTv24.getText(), jtfDestTorrent.getText(), jtfMailTo.getText(),
                 jtfMailSmtp.getText(), jcbPaneLog.isSelected(), 
                 jcbPaneSearchSubItasa.isSelected(), jcbPaneSetting.isSelected(), 
                 jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected(), 
@@ -426,19 +426,19 @@ public class paneSetting extends paneAbstract {
     }
 
     /** inizializzo il pannello settaggi subsfactory */
-    private JXTaskPane initTaskPaneSubsfactory() {
+    private JXTaskPane initTaskPaneOtherSubs() {
         jtfRssSubsf = new JTextField(25);
-        jtfRssMySubsf = new JTextField(25);
+        jtfRssTv24 = new JTextField(25);
         
         JXTaskPane task = new JXTaskPane();
-        task.setTitle("Subsfactory");
+        task.setTitle("OtherSubs");
         task.setCollapsed(true);
         
         task.add(new JLabel("Indirizzo RSS Subsfactory"));
         task.add(jtfRssSubsf);
         
-        task.add(new JLabel("Indirizzo RSS Subsf personalizzato"));
-        task.add(jtfRssMySubsf);
+        task.add(new JLabel("Indirizzo RSS Tv24"));
+        task.add(jtfRssTv24);
         return task;
     }
     
@@ -574,8 +574,8 @@ public class paneSetting extends paneAbstract {
         settingsTorrentValue();
         settingsIrcValue();
         settingsShowValue();
-        if (prop.isSubsfactoryOption())
-            settingsSubsfactoryValue();
+        if (prop.isOtherSubsOption())
+            settingsOtherSubsValue();
     }
 
     /* Popola le impostazioni con il properties caricato */
@@ -645,9 +645,9 @@ public class paneSetting extends paneAbstract {
         jcbShowNoDuplicateSingle.setSelected(prop.isShowNoDuplicateSingle());
     }
 
-    private void settingsSubsfactoryValue() {
+    private void settingsOtherSubsValue() {
         jtfRssSubsf.setText(prop.getSubsfactoryFeedURL());
-        jtfRssMySubsf.setText(prop.getMySubsfactoryFeedUrl());
+        jtfRssTv24.setText(prop.getTv24FeedUrl());
     }
    
     private void settingsAlertValue(){
@@ -671,7 +671,7 @@ public class paneSetting extends paneAbstract {
         jcbPaneSetting.setSelected(prop.isEnablePaneSetting());
         jcbPaneShow.setSelected(prop.isEnablePaneShow());
         jcbPaneSubDest.setSelected(prop.isEnablePaneSubDestination());
-        jcbPaneSubsfactory.setSelected(prop.isEnablePaneSubsfactory());
+        jcbPaneSubsfactory.setSelected(prop.isEnablePaneOtherSubs());
         jcbPaneTorrent.setSelected(prop.isEnablePaneTorrent());
     }
 }

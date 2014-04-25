@@ -55,7 +55,7 @@ public class Mediator {
         Application app = FeedWorkerClient.getApplication();
         return app.getName() + " revision "
                 //+ app.getBuildNumber() + " by "
-                + "510 by " 
+                + "511 by " 
                 + app.getAuthor();
     }
     
@@ -87,8 +87,8 @@ public class Mediator {
         return core.SUBSF;
     }
 
-    public String getMySubsf() {
-        return core.MYSUBSF;
+    public String getTv24() {
+        return core.TV24;
     }
 
     /**

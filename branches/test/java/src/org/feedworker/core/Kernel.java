@@ -77,12 +77,12 @@ public class Kernel implements PropertyChangeListener {
     // PUBLIC FINAL VARIABLES
     public final String ITASA = "Itasa";
     public final String SUBSF = "Subsf";
+    public final String TV24 = "Tv24";
     public final String EZTV = "Eztv";
     public final String BTCHAT = "Btchat";
     public final String KARMORRA = "Karmorra";
     public final String MYKARMORRA = "MyKarmorra";
     public final String MYITASA = "MyItasa";
-    public final String MYSUBSF = "MySubsf";
     public final String BLOG = "Blog";
     public final String ITASA_PM = "Itasa_PM";
     public final String SEARCH_TV = "SearchTV";
@@ -117,9 +117,9 @@ public class Kernel implements PropertyChangeListener {
     private static String[] lastDates;
     // PRIVATE VARIABLES
     private String lastItasa=null, lastMyItasa=null, lastSubsf=null, lastEztv=null, 
-            lastBtchat=null, lastMySubsf=null, lastBlog=null, lastKarmorra=null, 
+            lastBtchat=null, lastTv24=null, lastBlog=null, lastKarmorra=null, 
             lastMyKarmorra=null;
-    private int countItasa, countMyitasa, countSubsf, countMysubsf, countEztv, 
+    private int countItasa, countMyitasa, countSubsf, countTv24, countEztv, 
             countBtchat, countBlog, countPM, lastNewsID=0, countNews, countKarmorra,
             countMyKarmorra;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
@@ -249,8 +249,8 @@ public class Kernel implements PropertyChangeListener {
         prop.writeTorrentSettings();
         prop.writeIrcSettings();
         prop.writeShowSettings();
-        if (prop.isSubsfactoryOption())
-            prop.writeSubsfactorySettings();
+        if (prop.isOtherSubsOption())
+            prop.writeOtherSubsSettings();
         if (prop.isApplicationFirstTimeUsed())
             prop.writeApplicationFirstTimeUsedFalse();
         prop.writeGeneralSettings();
@@ -261,8 +261,8 @@ public class Kernel implements PropertyChangeListener {
         if (!prop.isApplicationFirstTimeUsed()) {
             String temp = Common.actualTime();
             runItasaRss(true, autoloaddownload);
-            if (prop.isSubsfactoryOption())
-                runSubsfactory(true);
+            if (prop.isOtherSubsOption())
+                runOtherSubs(true);
             if (prop.isTorrentEztvOption() || prop.isTorrentBtchatOption() || 
                     prop.isTorrentKarmorraOption() || prop.isTorrentMyKarmorraOption())
                 runTorrent(true);
@@ -399,8 +399,8 @@ public class Kernel implements PropertyChangeListener {
     public void bruteRefreshRSS() {
         printOk("Timer in fase di reinizializzazione.");
         runItasaRss(false, true);
-        if (prop.isSubsfactoryOption())
-            runSubsfactory(false);
+        if (prop.isOtherSubsOption())
+            runOtherSubs(false);
         if (prop.isTorrentEztvOption() || prop.isTorrentBtchatOption() || 
                     prop.isTorrentKarmorraOption() || prop.isTorrentMyKarmorraOption())
             runTorrent(false);
@@ -1221,7 +1221,7 @@ public class Kernel implements PropertyChangeListener {
                     prop.setLastDateTimeRefresh(Common.actualTime());
                     if (runItasaRss(false,true))
                         icontray = true;
-                    if (runSubsfactory(false))
+                    if (runOtherSubs(false))
                         icontray = true;
                     if ((prop.isTorrentEztvOption() || prop.isTorrentBtchatOption() || 
                             prop.isTorrentKarmorraOption() || prop.isTorrentMyKarmorraOption()) && runTorrent(false))
@@ -1245,7 +1245,7 @@ public class Kernel implements PropertyChangeListener {
                     }
                     String msg = countItasa + ":" + countMyitasa + ":" + countBlog + 
                             ":" + countEztv + ":" + countBtchat + ":" + countSubsf + 
-                            ":" + countMysubsf + ":" + countPM + ":" + countNews;
+                            ":" + countTv24 + ":" + countPM + ":" + countNews;
                     ManageListener.fireFrameEvent(this, icontray, msg);
                 }// end run
             }, delay, delay);
@@ -1356,10 +1356,10 @@ public class Kernel implements PropertyChangeListener {
      * @param first primo lancio
      * @return true se ci sono nuovi feed, false altrimenti
      */
-    private boolean runSubsfactory(boolean first) {
+    private boolean runOtherSubs(boolean first) {
         boolean status = false;
         countSubsf = 0;
-        countMysubsf = 0;
+        countTv24 = 0;
         if (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL())) {
             RssThread rt = new RssThread(lastSubsf, prop.getSubsfactoryFeedURL(), SUBSF);
             Thread t = new Thread(rt, SUBSF);
@@ -1377,10 +1377,10 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
         }
-        if (Lang.verifyTextNotNull(prop.getMySubsfactoryFeedUrl())) {
-            RssThread rt = new RssThread(lastMySubsf, 
-                                        prop.getMySubsfactoryFeedUrl(), MYSUBSF);
-            Thread t = new Thread(rt, MYSUBSF);
+        if (Lang.verifyTextNotNull(prop.getTv24FeedUrl())) {
+            RssThread rt = new RssThread(lastTv24, 
+                                        prop.getTv24FeedUrl(), TV24);
+            Thread t = new Thread(rt, TV24);
             t.start();
             try {
                 t.join();
@@ -1388,10 +1388,10 @@ public class Kernel implements PropertyChangeListener {
                 ex.printStackTrace();
             }
             if (rt.getCount()>0){
-                lastMySubsf = rt.getLastDate();
+                lastTv24 = rt.getLastDate();
                 if (!first){
                     status = true;
-                    countMysubsf = rt.getCount();
+                    countTv24 = rt.getCount();
                 }
             }
         }

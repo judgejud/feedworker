@@ -11,37 +11,37 @@ import org.feedworker.client.frontend.table.tableRss;
  * 
  * @author luca
  */
-public class paneSubsfactory extends paneAbstract {
+public class paneOtherSub extends paneAbstract {
 
-    private static paneSubsfactory jpanel = null;
+    private static paneOtherSub jpanel = null;
     private JButton jbDown, jbClean;
-    private tableRss jtSubsf, jtMySubsf;
+    private tableRss jtSubsf, jtTv24;
 
-    private paneSubsfactory() {
-        super("Subsfactory");
+    private paneOtherSub() {
+        super("OtherSub");
         initializePanel();
         initializeButtons();
         core.setTableListener(jtSubsf);
-        core.setTableListener(jtMySubsf);
+        core.setTableListener(jtTv24);
     }
 
-    public static paneSubsfactory getPanel() {
+    public static paneOtherSub getPanel() {
         if (jpanel == null)
-            jpanel = new paneSubsfactory();
+            jpanel = new paneOtherSub();
         return jpanel;
     }
 
     @Override
     void initializePanel() {
         jtSubsf = new tableRss(proxy.getSubsf());
-        jtMySubsf = new tableRss(proxy.getMySubsf());
+        jtTv24 = new tableRss(proxy.getTv24());
 
         JScrollPane jScrollTable1 = new JScrollPane(jtSubsf);
         jScrollTable1.setMinimumSize(TABLE_SCROLL_SIZE);
         jScrollTable1.setPreferredSize(TABLE_SCROLL_SIZE);
         jScrollTable1.setAutoscrolls(true);
         
-        JScrollPane jScrollTable2 = new JScrollPane(jtMySubsf);
+        JScrollPane jScrollTable2 = new JScrollPane(jtTv24);
         jScrollTable2.setMinimumSize(TABLE_SCROLL_SIZE);
         jScrollTable2.setPreferredSize(TABLE_SCROLL_SIZE);
         jScrollTable2.setAutoscrolls(true);
@@ -79,15 +79,17 @@ public class paneSubsfactory extends paneAbstract {
     }
 
     private void jbDownMouseClicked() {
+        /*
         if (jbDown.isEnabled()) {
             core.downloadSub(jtSubsf, jtMySubsf, false, false,3);
             jbCleanMouseClicked();
         }
+        */
     }
     
     private void jbCleanMouseClicked(){
-        core.cleanSelect(jtSubsf,3);
-        core.cleanSelect(jtMySubsf,3);
+        core.cleanSelect(jtSubsf, 3);
+        core.cleanSelect(jtTv24, 3);
     }
 
     public void setEnableButton(boolean e) {

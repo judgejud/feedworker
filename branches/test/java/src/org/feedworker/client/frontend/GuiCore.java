@@ -364,7 +364,7 @@ public class GuiCore {
             String time, String timeout,
             boolean advancedDownload, boolean runIconized, String itasa,
             String myitasa, String itasaUser, String itasaPwd, boolean autoMyitasa,
-            boolean autoLoadMyItasa, String subsf, String mySubsf, String torrentDest,
+            boolean autoLoadMyItasa, String subsf, String tv24, String torrentDest,
             String mailTO,  String smtp, boolean paneLog, boolean paneSearch, 
             boolean paneSetting, boolean paneSubDest, boolean paneReminder, 
             boolean reminder, String googleUser, String googlePwd, String googleCalendar, 
@@ -385,8 +385,8 @@ public class GuiCore {
             if (save)
                 save = checkSaveItasa(itasaRss, itasa, myItasaRss, myitasa, itasaUser, 
                                         itasaPwd, itasapm);
-            if (prop.isSubsfactoryOption() && save)
-                save = checkSaveSubsf(subsf, mySubsf);
+            if (prop.isOtherSubsOption() && save)
+                save = checkSaveOtherSubs(subsf, tv24);
             if ((eztv || btchat || karmorra || mykarmorra) && save && !Lang.verifyTextNotNull(torrentDest))
                 proxy.printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai "
                     + "scaricare .torrent");
@@ -397,7 +397,7 @@ public class GuiCore {
                     advancedDownload, runIconized, reminder);
             setPropItasa(itasa, myitasa, itasaUser, itasaPwd, autoMyitasa, autoLoadMyItasa, 
                         blog, itasapm, calendarDay, itasaRss, myItasaRss, itasaNews);
-            setPropSubsf(subsf, mySubsf);
+            setPropOtherSub(subsf, tv24);
             setPropTorrent(torrentDest, eztv, btchat, karmorra, mykarmorra, urlMyKarmorra);
             setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
@@ -466,6 +466,281 @@ public class GuiCore {
         }
         if (save)
             proxy.saveList(map);
+    }
+    
+    void checkMenuNotify(int i, boolean value) {
+        boolean check = true;
+        if (i==2){
+            if (!Lang.verifyTextNotNull(prop.getMailTO())||
+                    !Lang.verifyTextNotNull(prop.getMailSMTP())) {
+                check = false;
+                proxy.printAlert("Per usare le notifiche email devono essere "
+                        + "impostati i campi MailTO & SMTP");
+            }
+        }
+        if (i==3){
+            if (!Lang.verifyTextNotNull(prop.getGoogleUser())||
+                    !Lang.verifyTextNotNull(prop.getGooglePwd()) || 
+                    !Lang.verifyTextNotNull(prop.getGoogleCalendar())) {
+                check = false;
+                proxy.printAlert("Per usare le notifiche sms devono essere "
+                        + "impostati i campi Google User Password Calendar");
+            }
+        }
+        if (check)
+            proxy.setPropNotify(i,value);
+    }
+    
+    void invokeBackup(Component parent) {
+        String name = Swing.getFile(parent, "Creare il file zip per il backup",
+                fnfeZIP, new File(SystemProperty.getUserDir() + File.separator));
+        if (name != null)
+            proxy.backup(name);
+    }
+    
+    private void setPropGlobal(boolean dirLocal, String destSub,
+            String sambaDomain, String sambaIP, String sambaDir,
+            String sambaUser, String sambaPwd, String time,
+            String timeout, boolean advancedDownload,
+            boolean runIconized, boolean reminder) {
+        prop.setLocalFolder(dirLocal);
+        prop.setSubtitleDestinationFolder(destSub);
+        prop.setRefreshInterval(time);
+        prop.setCifsShareDomain(sambaDomain);
+        prop.setCifsShareLocation(sambaIP);
+        prop.setCifsSharePath(sambaDir);
+        prop.setCifsShareUsername(sambaUser);
+        prop.setCifsSharePassword(sambaPwd);
+        prop.setHttpTimeout(timeout);
+        prop.setEnableAdvancedDownload(advancedDownload);
+        prop.setEnableIconizedRun(runIconized);
+        prop.setReminderOption(reminder);
+    }
+
+    private void setPropItasa(String itasa, String myitasa, String user,
+            String pwd, boolean auto, boolean autoload, boolean blog, boolean pm, 
+            boolean cal, boolean itasaRss, boolean myItasaRss, boolean news) {
+        prop.setItasaFeedURL(itasa);
+        prop.setMyitasaFeedURL(myitasa);
+        prop.setItasaUsername(user);
+        prop.setItasaPassword(pwd);
+        prop.setAutoDownloadMyItasa(auto);
+        prop.setAutoLoadDownloadMyItasa(autoload);
+        prop.setItasaBlog(blog);
+        prop.setItasaPM(pm);
+        prop.setCalendarDay(cal);
+        prop.setItasaNews(news);
+        
+    }
+    
+    private void setPropOtherSub(String subsf, String tv24){
+        prop.setSubsfactoryFeedURL(subsf);
+        prop.setTv24FeedUrl(tv24);
+    }
+    
+    private void setPropAdvisor(String mailTO, String smtp, String googleUser,
+            String googlePwd, String googleCalendar){
+        prop.setMailTO(mailTO);
+        prop.setMailSMTP(smtp);
+        prop.setGoogleUser(googleUser);
+        prop.setGooglePwd(googlePwd);
+        prop.setGoogleCalendar(googleCalendar);
+    }
+    
+    private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
+                                    boolean subdest, boolean reminder, boolean torrent,
+                                    boolean calendar, boolean show, boolean blog, 
+                                    boolean calendarDay, boolean irc, boolean itasaNews,
+                                    boolean itasaRss, boolean othersubs){
+        prop.setEnablePaneCalendar(calendar);
+        prop.setEnablePaneLog(log);
+        prop.setEnablePaneSearchSubItasa(search);
+        prop.setEnablePaneSetting(setting);
+        prop.setEnablePaneSubDestination(subdest);
+        prop.setEnablePaneReminder(reminder);
+        prop.setEnablePaneTorrent(torrent);
+        prop.setEnablePaneShow(show);
+        prop.setEnablePaneBlog(blog);
+        prop.setEnablePaneCalendarDay(calendarDay);
+        prop.setEnablePaneIrc(irc);
+        prop.setEnablePaneItasaNews(itasaNews);
+        prop.setEnablePaneItasaRSS(itasaRss);
+        prop.setEnablePaneOtherSubs(othersubs);
+    }
+    
+    private void setPropTorrent(String dest, boolean eztv, boolean btchat, boolean karmorra, 
+                                boolean mykarmorra, String urlMyKarmorra){
+        int count = 0;
+        if (eztv)
+            count++;
+        if (btchat)
+            count++;
+        if (karmorra)
+            count++;
+        if (mykarmorra)
+            count++;
+        prop.setTorrentDestinationFolder(dest);
+        prop.setTorrentEztvOption(eztv);
+        prop.setTorrentBtchatOption(btchat);
+        prop.setTorrentKarmorraOption(karmorra);
+        prop.setTorrentMyKarmorraOption(mykarmorra);
+        prop.setTorrentUrlMyKarmorra(urlMyKarmorra);
+        prop.setTorrentCount(count);
+    }
+    
+    private void setPropIrc(String nick, String pwd, String server){
+        prop.setIrcNick(nick);
+        prop.setIrcPwd(pwd);
+        prop.setIrcServer(server);
+    }
+    
+    private void setPropShow(boolean all, boolean single){
+        prop.setShowNoDuplicateAll(all);
+        prop.setShowNoDuplicateSingle(single);
+    }
+    
+    /**Aggiunge i link corrispondenti al true della colonna download nell'arraylist
+     *
+     * @param jt jtable su cui operare
+     * @return Arraylist di stringhe
+     */
+    private ArrayList<String> addLinks(JTable jt, int col) {
+        ArrayList<String> alLinks = new ArrayList<String>();
+        for (int i = 0; i < jt.getRowCount(); i++) {
+            if (jt.getValueAt(i, col) == Boolean.TRUE)
+                alLinks.add(jt.getValueAt(i, 0).toString());
+        }
+        return alLinks;
+    }
+
+    /**verifica impostazioni subsf
+     *
+     * @return booleano che le impostazioni sono ok
+     */
+    private boolean checkSaveOtherSubs(String subsf, String tv24) {
+        boolean check = true;
+        try {
+            if (Lang.verifyTextNotNull(subsf))
+                check = proxy.testRss(subsf, "subsfactory");
+        } catch (MalformedURLException e) {
+            proxy.getError().launch(e, getClass(), "subsfactory");
+            check = false;
+        }
+        try {
+            if (check && Lang.verifyTextNotNull(tv24))
+                check = proxy.testRss(tv24, "tv24");
+        } catch (MalformedURLException e) {
+            proxy.getError().launch(e, getClass(), "tv24");
+            check = false;
+        }
+        return check;
+    }
+
+    /**verifica impostazioni itasa
+     *
+     * @return booleano che le impostazioni sono ok
+     */
+    //TODO: inserire controllo itasapm con user e pwd
+    private boolean checkSaveItasa(boolean itasaRss, String itasa, boolean myitasaRss, 
+                                        String myitasa, String user, String pwd, boolean pm) {
+        boolean check = true;
+        try {
+            //if (!Lang.verifyTextNotNull(itasa) && !Lang.verifyTextNotNull(myitasa)) {
+            //if ((itasaRss && !Lang.verifyTextNotNull(itasa)) || (myitasaRss && !Lang.verifyTextNotNull(myitasa))) {
+            if ((itasaRss && itasa.isEmpty()) || (myitasaRss && myitasa.isEmpty())) {
+                printAlert("Avviso: Non immettendo link RSS itasa e/o myitasa " + 
+                        "non potrai usare i feed italiansubs");
+            } else {
+                if (itasaRss && Lang.verifyTextNotNull(itasa))
+                    check = proxy.testRss(itasa, "itasa");
+                if (check) {
+                    if (Lang.verifyTextNotNull(myitasa))
+                        check = proxy.testRss(myitasa, "myitasa");
+                    if (check) {
+                        if (!Lang.verifyTextNotNull(user))
+                            printAlert("Avviso: senza Username Itasa non " + 
+                                    "potrai scaricare i subs");
+                        else if (!Lang.verifyTextNotNull(new String(pwd)))
+                            printAlert("Avviso: senza Password Itasa non " +
+                                    "potrai scaricare i subs");
+                    }
+                }
+            }
+        } catch (MalformedURLException ex) {
+            proxy.getError().launch(ex, getClass(), "Itasa");
+            check = false;
+        }
+        return check;
+    }
+
+    private boolean checkSaveGlobal(boolean dirLocal, String destSub,
+            String sambaDomain, String sambaIP, String sambaDir,
+            String sambaUser, String sambaPwd) {
+        boolean check = false;
+        if (dirLocal) {
+            if (!Lang.verifyTextNotNull(destSub))
+                printAlert("INPUT OBBLIGATORIO: La Destinazione Locale non può "
+                                                                + "essere vuota.");
+            else
+                check = true;
+        } else { // SAMBA selected
+            if (!Lang.verifyTextNotNull(sambaDomain))
+                printAlert("INPUT OBBLIGATORIO: Il Dominio Samba non può essere vuoto.");
+            else if (!Lang.verifyTextNotNull(sambaIP))
+                printAlert("INPUT OBBLIGATORIO: L'ip Samba non può essere vuoto.");
+            else if (!Lang.verifyTextNotNull(sambaDir))
+                printAlert("INPUT OBBLIGATORIO: La cartella condivisa Samba non può essere "
+                        + "vuota.");
+            else if (!Lang.verifyTextNotNull(sambaUser))
+                printAlert("INPUT OBBLIGATORIO: L'utente Samba non può essere vuoto.");
+            else if (!Lang.verifyTextNotNull(sambaPwd))
+                printAlert("INPUT OBBLIGATORIO: La password Samba non può essere vuota.");
+            else if (!proxy.testSamba(sambaIP, sambaDir, sambaDomain, sambaUser, sambaPwd))
+                printAlert("Impossibile connettermi al server/dir condivisa Samba");
+            else
+                check = true;
+        }
+        return check;
+    }
+    
+    private void printAlert(String msg){
+        proxy.printAlert(msg);
+    }
+
+    public void checkQueryIrc(String name) {
+        ManageListener.fireTabbedPaneEvent(this, name, "query");
+    }
+    
+    public void copy(String text){
+        if (!text.equalsIgnoreCase("")) {
+            AWT.setClipboard(text);
+            proxy.printOk("testo/link copiato/i nella clipboard");
+        }
+    }
+    
+    public void copySeasonEpisode(TableModel tm){
+        String text = "";
+        for (int i=0; i<tm.getRowCount(); i++)
+            text += tm.getValueAt(i, 1) + " \"" + tm.getValueAt(i, 3) + "\" " +
+                    tm.getValueAt(i, 2) +"\n";
+        copy(text);
+    }
+    
+    public boolean isJava17(){
+        JVM jvm = new JVM();
+        return jvm.isOrLater(17);
+    }
+    
+    public void setPasteClipboard(JTextField text){
+        String temp = "";
+        try {
+            temp = AWT.getClipboard();
+        } catch (UnsupportedFlavorException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        text.setText(temp);
     }
     
     public ImageIcon getIconAdd() {
@@ -605,280 +880,5 @@ public class GuiCore {
     
     String getOperationEnableButton() {
         return ENABLE_BUTTON;
-    }
-    
-    void checkMenuNotify(int i, boolean value) {
-        boolean check = true;
-        if (i==2){
-            if (!Lang.verifyTextNotNull(prop.getMailTO())||
-                    !Lang.verifyTextNotNull(prop.getMailSMTP())) {
-                check = false;
-                proxy.printAlert("Per usare le notifiche email devono essere "
-                        + "impostati i campi MailTO & SMTP");
-            }
-        }
-        if (i==3){
-            if (!Lang.verifyTextNotNull(prop.getGoogleUser())||
-                    !Lang.verifyTextNotNull(prop.getGooglePwd()) || 
-                    !Lang.verifyTextNotNull(prop.getGoogleCalendar())) {
-                check = false;
-                proxy.printAlert("Per usare le notifiche sms devono essere "
-                        + "impostati i campi Google User Password Calendar");
-            }
-        }
-        if (check)
-            proxy.setPropNotify(i,value);
-    }
-    
-    void invokeBackup(Component parent) {
-        String name = Swing.getFile(parent, "Creare il file zip per il backup",
-                fnfeZIP, new File(SystemProperty.getUserDir() + File.separator));
-        if (name != null)
-            proxy.backup(name);
-    }
-    
-    private void setPropGlobal(boolean dirLocal, String destSub,
-            String sambaDomain, String sambaIP, String sambaDir,
-            String sambaUser, String sambaPwd, String time,
-            String timeout, boolean advancedDownload,
-            boolean runIconized, boolean reminder) {
-        prop.setLocalFolder(dirLocal);
-        prop.setSubtitleDestinationFolder(destSub);
-        prop.setRefreshInterval(time);
-        prop.setCifsShareDomain(sambaDomain);
-        prop.setCifsShareLocation(sambaIP);
-        prop.setCifsSharePath(sambaDir);
-        prop.setCifsShareUsername(sambaUser);
-        prop.setCifsSharePassword(sambaPwd);
-        prop.setHttpTimeout(timeout);
-        prop.setEnableAdvancedDownload(advancedDownload);
-        prop.setEnableIconizedRun(runIconized);
-        prop.setReminderOption(reminder);
-    }
-
-    private void setPropItasa(String itasa, String myitasa, String user,
-            String pwd, boolean auto, boolean autoload, boolean blog, boolean pm, 
-            boolean cal, boolean itasaRss, boolean myItasaRss, boolean news) {
-        prop.setItasaFeedURL(itasa);
-        prop.setMyitasaFeedURL(myitasa);
-        prop.setItasaUsername(user);
-        prop.setItasaPassword(pwd);
-        prop.setAutoDownloadMyItasa(auto);
-        prop.setAutoLoadDownloadMyItasa(autoload);
-        prop.setItasaBlog(blog);
-        prop.setItasaPM(pm);
-        prop.setCalendarDay(cal);
-        prop.setItasaNews(news);
-        
-    }
-    
-    private void setPropSubsf(String subsf, String mySubsf){
-        prop.setSubsfactoryFeedURL(subsf);
-        prop.setMySubsfactoryFeedUrl(mySubsf);
-    }
-    
-    private void setPropAdvisor(String mailTO, String smtp, String googleUser,
-            String googlePwd, String googleCalendar){
-        prop.setMailTO(mailTO);
-        prop.setMailSMTP(smtp);
-        prop.setGoogleUser(googleUser);
-        prop.setGooglePwd(googlePwd);
-        prop.setGoogleCalendar(googleCalendar);
-    }
-    
-    private void setPropVisiblePane(boolean log, boolean search, boolean setting, 
-                                    boolean subdest, boolean reminder, boolean torrent,
-                                    boolean calendar, boolean show, boolean blog, 
-                                    boolean calendarDay, boolean irc, boolean itasaNews,
-                                    boolean itasaRss, boolean subsfactory){
-        prop.setEnablePaneCalendar(calendar);
-        prop.setEnablePaneLog(log);
-        prop.setEnablePaneSearchSubItasa(search);
-        prop.setEnablePaneSetting(setting);
-        prop.setEnablePaneSubDestination(subdest);
-        prop.setEnablePaneReminder(reminder);
-        prop.setEnablePaneTorrent(torrent);
-        prop.setEnablePaneShow(show);
-        prop.setEnablePaneBlog(blog);
-        prop.setEnablePaneCalendarDay(calendarDay);
-        prop.setEnablePaneIrc(irc);
-        prop.setEnablePaneItasaNews(itasaNews);
-        prop.setEnablePaneItasaRSS(itasaRss);
-        prop.setEnablePaneSubsfactory(subsfactory);
-    }
-    
-    private void setPropTorrent(String dest, boolean eztv, boolean btchat, boolean karmorra, 
-                                boolean mykarmorra, String urlMyKarmorra){
-        int count = 0;
-        if (eztv)
-            count++;
-        if (btchat)
-            count++;
-        if (karmorra)
-            count++;
-        if (mykarmorra)
-            count++;
-        prop.setTorrentDestinationFolder(dest);
-        prop.setTorrentEztvOption(eztv);
-        prop.setTorrentBtchatOption(btchat);
-        prop.setTorrentKarmorraOption(karmorra);
-        prop.setTorrentMyKarmorraOption(mykarmorra);
-        prop.setTorrentUrlMyKarmorra(urlMyKarmorra);
-        prop.setTorrentCount(count);
-    }
-    
-    private void setPropIrc(String nick, String pwd, String server){
-        prop.setIrcNick(nick);
-        prop.setIrcPwd(pwd);
-        prop.setIrcServer(server);
-    }
-    
-    private void setPropShow(boolean all, boolean single){
-        prop.setShowNoDuplicateAll(all);
-        prop.setShowNoDuplicateSingle(single);
-    }
-    
-    /**Aggiunge i link corrispondenti al true della colonna download nell'arraylist
-     *
-     * @param jt jtable su cui operare
-     * @return Arraylist di stringhe
-     */
-    private ArrayList<String> addLinks(JTable jt, int col) {
-        ArrayList<String> alLinks = new ArrayList<String>();
-        for (int i = 0; i < jt.getRowCount(); i++) {
-            if (jt.getValueAt(i, col) == Boolean.TRUE)
-                alLinks.add(jt.getValueAt(i, 0).toString());
-        }
-        return alLinks;
-    }
-
-    /**verifica impostazioni subsf
-     *
-     * @return booleano che le impostazioni sono ok
-     */
-    private boolean checkSaveSubsf(String subsf, String mySubsf) {
-        boolean check = true;
-        if (!Lang.verifyTextNotNull(subsf) && !Lang.verifyTextNotNull(mySubsf))
-            proxy.printAlert("Avviso: Non immettendo link RSS Subsfactory non potrai " + 
-                    "usare i feed Subsfactory");
-        else {
-            try {
-                if (Lang.verifyTextNotNull(subsf))
-                    check = proxy.testRss(subsf, "subsfactory");
-                if (check && Lang.verifyTextNotNull(mySubsf))
-                    check = proxy.testRss(mySubsf, "mysubsfactory");
-            } catch (MalformedURLException e) {
-                proxy.getError().launch(e, getClass(), "subsfactory");
-                check = false;
-            }
-        }
-        return check;
-    }
-
-    /**verifica impostazioni itasa
-     *
-     * @return booleano che le impostazioni sono ok
-     */
-    //TODO: inserire controllo itasapm con user e pwd
-    private boolean checkSaveItasa(boolean itasaRss, String itasa, boolean myitasaRss, 
-                                        String myitasa, String user, String pwd, boolean pm) {
-        boolean check = true;
-        try {
-            //if (!Lang.verifyTextNotNull(itasa) && !Lang.verifyTextNotNull(myitasa)) {
-            //if ((itasaRss && !Lang.verifyTextNotNull(itasa)) || (myitasaRss && !Lang.verifyTextNotNull(myitasa))) {
-            if ((itasaRss && itasa.isEmpty()) || (myitasaRss && myitasa.isEmpty())) {
-                printAlert("Avviso: Non immettendo link RSS itasa e/o myitasa " + 
-                        "non potrai usare i feed italiansubs");
-            } else {
-                if (itasaRss && Lang.verifyTextNotNull(itasa))
-                    check = proxy.testRss(itasa, "itasa");
-                if (check) {
-                    if (Lang.verifyTextNotNull(myitasa))
-                        check = proxy.testRss(myitasa, "myitasa");
-                    if (check) {
-                        if (!Lang.verifyTextNotNull(user))
-                            printAlert("Avviso: senza Username Itasa non " + 
-                                    "potrai scaricare i subs");
-                        else if (!Lang.verifyTextNotNull(new String(pwd)))
-                            printAlert("Avviso: senza Password Itasa non " +
-                                    "potrai scaricare i subs");
-                    }
-                }
-            }
-        } catch (MalformedURLException ex) {
-            proxy.getError().launch(ex, getClass(), "Itasa");
-            check = false;
-        }
-        return check;
-    }
-
-    private boolean checkSaveGlobal(boolean dirLocal, String destSub,
-            String sambaDomain, String sambaIP, String sambaDir,
-            String sambaUser, String sambaPwd) {
-        boolean check = false;
-        if (dirLocal) {
-            if (!Lang.verifyTextNotNull(destSub))
-                printAlert("INPUT OBBLIGATORIO: La Destinazione Locale non può "
-                                                                + "essere vuota.");
-            else
-                check = true;
-        } else { // SAMBA selected
-            if (!Lang.verifyTextNotNull(sambaDomain))
-                printAlert("INPUT OBBLIGATORIO: Il Dominio Samba non può essere vuoto.");
-            else if (!Lang.verifyTextNotNull(sambaIP))
-                printAlert("INPUT OBBLIGATORIO: L'ip Samba non può essere vuoto.");
-            else if (!Lang.verifyTextNotNull(sambaDir))
-                printAlert("INPUT OBBLIGATORIO: La cartella condivisa Samba non può essere "
-                        + "vuota.");
-            else if (!Lang.verifyTextNotNull(sambaUser))
-                printAlert("INPUT OBBLIGATORIO: L'utente Samba non può essere vuoto.");
-            else if (!Lang.verifyTextNotNull(sambaPwd))
-                printAlert("INPUT OBBLIGATORIO: La password Samba non può essere vuota.");
-            else if (!proxy.testSamba(sambaIP, sambaDir, sambaDomain, sambaUser, sambaPwd))
-                printAlert("Impossibile connettermi al server/dir condivisa Samba");
-            else
-                check = true;
-        }
-        return check;
-    }
-    
-    private void printAlert(String msg){
-        proxy.printAlert(msg);
-    }
-
-    public void checkQueryIrc(String name) {
-        ManageListener.fireTabbedPaneEvent(this, name, "query");
-    }
-    
-    public void copy(String text){
-        if (!text.equalsIgnoreCase("")) {
-            AWT.setClipboard(text);
-            proxy.printOk("testo/link copiato/i nella clipboard");
-        }
-    }
-    
-    public void copySeasonEpisode(TableModel tm){
-        String text = "";
-        for (int i=0; i<tm.getRowCount(); i++)
-            text += tm.getValueAt(i, 1) + " \"" + tm.getValueAt(i, 3) + "\" " +
-                    tm.getValueAt(i, 2) +"\n";
-        copy(text);
-    }
-    
-    public boolean isJava17(){
-        JVM jvm = new JVM();
-        return jvm.isOrLater(17);
-    }
-    
-    public void setPasteClipboard(JTextField text){
-        String temp = "";
-        try {
-            temp = AWT.getClipboard();
-        } catch (UnsupportedFlavorException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        text.setText(temp);
     }
 }

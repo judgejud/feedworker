@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
 
 import org.feedworker.client.frontend.table.tableCalendar;
@@ -16,6 +17,7 @@ public class paneCalendarShow extends paneAbstract{
 
     private static paneCalendarShow jpanel = null;
     private tableCalendar jtable;
+    private JTabbedPane tabpane;
 
     private paneCalendarShow(){
         super("");
@@ -32,10 +34,12 @@ public class paneCalendarShow extends paneAbstract{
 
     @Override
     void initializePanel() {
+        tabpane = new JTabbedPane();
         jtable = new tableCalendar(getName());
         JScrollPane jScrollTable1 = new JScrollPane(jtable);
         jScrollTable1.setAutoscrolls(true);
-        jpCenter.add(jScrollTable1);
+        tabpane.addTab(getName(), jScrollTable1);
+        jpCenter.add(tabpane);
         core.setTableListener(jtable);
     }
 
