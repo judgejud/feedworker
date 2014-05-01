@@ -37,6 +37,7 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String PARAM_PASSWORD = "password=";
     private final String PARAM_QUERY = "q=";
     private final String PARAM_SHOW_ID = "show_id=";
+    private final String PARAM_SUBTITLE_ID = "subtitle_id=";
     private final String PARAM_USERNAME = "username=";
     private final String PARAM_VERSION = "version=";
 
@@ -102,6 +103,7 @@ public class ItasaOnline extends AbstractQueryXML{
     private final String URL_SHOW_THUMBNAIL = 
                                     URL_BASE + "/shows/" + STRING_REPLACE + "/folderThumb?";    
     private final String URL_SHOW_LIST = URL_BASE + "/shows/?";
+    private final String URL_SUBTITLE_DOWNLOAD = URL_BASE + "/subtitles/download?"; //
     private final String URL_SUBTITLE_SEARCH = URL_BASE + "/subtitles/search?"; //
     private final String URL_SUBTITLE_SINGLE = 
                                 URL_BASE + "/subtitles/" + STRING_REPLACE + "?"; 
@@ -441,18 +443,26 @@ public class ItasaOnline extends AbstractQueryXML{
     private boolean isStatusFail(){
         return status.equals(STATUS_FAIL);
     }
-/*    
+    
+    public String getUrlDownloadSubById(String id, String auth) throws ConnectException, Exception{
+        ArrayList<String> params = new ArrayList<String>();
+        params.add(PARAM_SUBTITLE_ID + id);
+        params.add(PARAM_AUTHCODE + auth);
+        return Https.getInstance().getLocationRedirect(composeUrl(URL_SUBTITLE_DOWNLOAD, params));
+    }
+    
     public static void main (String[] args){
         ItasaOnline i = new ItasaOnline();
         try {
-            //ItasaUser iu = i.login("judge", "qwerty");
+            ItasaUser iu = i.login("judge", "qwerty");
             if (iu.isMyitasa()){
-                i.myItasaLastSub(iu.getAuthcode());
-                i.myItasaShows(iu.getAuthcode());
+                //i.myItasaLastSub(iu.getAuthcode());
+                //i.myItasaShows(iu.getAuthcode());
+                String u = i.getUrlDownloadSubById("43087", iu.getAuthcode());
             }
             //i.showList();
             //i.showSingle("1363", true);
-            i.subtitleSingle("20000");
+            //i.subtitleSingle("20000");
             //https://api.italiansubs.net/api/rest/subtitles/20000?apikey=436e566f3d09b217cf687fa5bad5effc
             //i.subtitleListByIdShow(1363,"720p",1);
             //https://api.italiansubs.net/api/rest/subtitles?apikey=436e566f3d09b217cf687fa5bad5effc&show_id=1363&version=720p&page=1
@@ -473,5 +483,5 @@ public class ItasaOnline extends AbstractQueryXML{
             ex.printStackTrace();
         }
     }
-    */
+    
 }

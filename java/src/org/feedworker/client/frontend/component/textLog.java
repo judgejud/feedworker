@@ -59,7 +59,7 @@ public class textLog extends JTextPane implements TextPaneEventListener {
         styleFeedKarmorra = mysd.addStyle("StyleFeedKarmorra", null);
         styleFeedMyKarmorra = mysd.addStyle("StyleFeedMyKarmorra", null);
         styleSub = mysd.addStyle("StyleSub", null);
-        styleFeedKarmorra = mysd.addStyle("StyleTorrent", null);
+        styleTorrent = mysd.addStyle("StyleTorrent", null);
         styleSynology = mysd.addStyle("StyleSynology", null);
         styleDaySerial = mysd.addStyle("StyleDaySerial", null);
         styleItasaBlog = mysd.addStyle("StyleItasaBlog", null);

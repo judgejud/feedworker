@@ -144,6 +144,7 @@ public class RssThread implements Runnable{
                     ManageListener.fireTableEvent(this, matrice, from);
                     lastDate = (String) matrice.get(0)[1];
                 }
+                ft.delete();
             }
         } catch (ParseException ex) {
             error.launch(ex, getClass());
@@ -183,9 +184,9 @@ public class RssThread implements Runnable{
         if (loginItasa){
             DownloadThread dt = null;
             if (first)
-                dt = new DownloadThread(map, xml, links, http, false);
+                dt = new DownloadThread(map, xml, links, http, false, false, null, null);
             else
-                dt = new DownloadThread(map, xml, links, http, true);
+                dt = new DownloadThread(map, xml, links, http, true, false, null, null);
             Thread t = new Thread(dt, "AutoItasa");
             t.start();
         } else {

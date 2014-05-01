@@ -61,9 +61,7 @@ public abstract class HttpAbstract {
             EntityUtils.consume(entity);
     }
     
-    public abstract HttpEntity requestGetEntity(String link) throws 
-                                            IndexOutOfBoundsException, IOException;
+    public abstract HttpEntity requestGetEntity(String link) throws IndexOutOfBoundsException, IOException;
     
-    protected abstract void getAttachement(Header[] head, String from) throws 
-                                                        IndexOutOfBoundsException;
+    protected abstract void getAttachement(Header[] head, String from) throws IndexOutOfBoundsException;
 }// end Http
