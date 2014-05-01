@@ -3,8 +3,11 @@ package org.feedworker.core.thread;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipException;
 
 import javax.mail.MessagingException;
@@ -31,6 +34,8 @@ import org.jfacility.Util;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
+import org.feedworker.object.ItasaUser;
+import org.feedworker.xml.ItasaOnline;
 /**
  * 
  * @author luca
@@ -38,31 +43,42 @@ import org.apache.http.client.ClientProtocolException;
 public class DownloadThread implements Runnable {
     
     private ArrayList<String> als;
-    private boolean autoItasa;
+    private boolean autoItasa, id;
     private ApplicationSettings prop = ApplicationSettings.getIstance();
     private ManageException error = ManageException.getIstance();
     private TreeMap<KeyRule, ValueRule> mapRules;
     private Reminder xmlReminder;
     private HttpAbstract http;
+    private ItasaOnline itasa;
+    private String auth;
     
     public DownloadThread(TreeMap<KeyRule, ValueRule> map, Reminder xml, 
-                            ArrayList<String> _als, HttpAbstract _http, boolean _autoitasa) {
+                            ArrayList<String> _als, HttpAbstract _http, boolean _autoitasa, 
+                            boolean _id, ItasaOnline iol, String code) {
         als = _als;        
         http = _http;
         mapRules = map;
         xmlReminder = xml;
         autoItasa = _autoitasa;
+        id = _id;
+        itasa = iol;
+        auth = code;
     }
 
+    //TODO gestire id
     @Override
     public void run() {
         ArrayList<File> alFile = new ArrayList<File>();
         ArrayList<Object[]> alReminder = new ArrayList<Object[]>();
         ArrayList<String> alNotify = new ArrayList<String>();
+        HttpEntity entity;
         boolean sub = false;
         try {
             for (int i = 0; i < als.size(); i++) {
-                HttpEntity entity = http.requestGetEntity(als.get(i));
+                if (id)
+                    entity = ((HttpItasa)http).getDownload(itasa.getUrlDownloadSubById(als.get(i), auth));
+                else
+                    entity = http.requestGetEntity(als.get(i));
                 if (entity != null) {
                     if (entity.getContentLength() != -1) {
                         String n = http.getNameFile();
@@ -93,8 +109,12 @@ public class DownloadThread implements Runnable {
             error.launch(ex, this.getClass());
         } catch (StringIndexOutOfBoundsException ex) {
             error.launch(ex, this.getClass(), http instanceof HttpItasa);
+        } catch (ConnectException ex) {
+            ex.printStackTrace();
         } catch (IOException ex) {
             error.launch(ex, this.getClass(), null);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         if (alFile.size()>0){
             OperationFileThread oft = new OperationFileThread(mapRules, alFile);

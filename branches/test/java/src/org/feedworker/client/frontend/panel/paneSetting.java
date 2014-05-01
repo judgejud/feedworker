@@ -30,7 +30,7 @@ public class paneSetting extends paneAbstract {
             jcbTorrentMyKarmorra, jcbPaneBlog, jcbItasaBlog, jcbItasaPM, 
             jcbPaneCalendarDay, jcbCalendarDay, jcbPaneIrc, jcbItasaRss, jcbMyItasaRss,
             jcbItasaNews, jcbShowNoDuplicateAll, jcbShowNoDuplicateSingle, jcbPaneItasaNews,
-            jcbPaneItasaRss, jcbPaneSubsfactory;
+            jcbPaneItasaRss, jcbPaneOtherSubs;
     private JButton jbDestSub;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf, 
@@ -106,32 +106,61 @@ public class paneSetting extends paneAbstract {
         jbSaveSettings.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                core.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(),
-                jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(), 
-                jtfSambaUser.getText(), new String(jpfSamba.getPassword()),
-                jcbMinuti.getSelectedItem().toString(), 
-                jcbTimeout.getSelectedItem().toString(),
-                jcbDestination.isSelected(), jcbRunIconized.isSelected(),
-                jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), 
+                /*
+                System.out.println(jrbDirLocal.isSelected());
+                System.out.println(jtfDestSub.getText());
+                System.out.println(jtfSambaDomain.getText());
+                System.out.println(jtfSambaIP.getText());
+                System.out.println(jtfSambaDir.getText()); //5
+                System.out.println(jtfSambaUser.getText());
+                System.out.println(jpfSamba.getPassword());
+                System.out.println(jcbMinuti.getSelectedItem());
+                System.out.println(jcbTimeout.getSelectedItem());//9
+                System.out.println(jcbDestination.isSelected());
+                System.out.println(jcbRunIconized.isSelected());
+                System.out.println(jtfRssItasa.getText());
+                System.out.println(jtfRssMyItasa.getText());
+                System.out.println(jtfItasaUser.getText()); //14
+                System.out.println(jpfItasa.getPassword());
+                System.out.println(jrbDownAuto.isSelected());
+                System.out.println(jcbDownloadMyitasaStartup.isSelected());
+                System.out.println(jtfRssSubsf.getText()); //18
+                System.out.println(jtfRssTv24.getText());
+                System.out.println(jtfDestTorrent.getText());
+                System.out.println(jtfMailTo.getText());
+                System.out.println(jtfMailSmtp.getText());
+                System.out.println(jcbPaneLog.isSelected());//23
+                System.out.println(jcbPaneSearchSubItasa.isSelected());
+                System.out.println(jcbPaneSetting.isSelected());
+                System.out.println(jcbPaneSubDest.isSelected());
+                System.out.println(jcbPaneReminder.isSelected());//27
+                System.out.println();
+                */
+                core.saveSettings(jrbDirLocal.isSelected(), jtfDestSub.getText(), 
+                jtfSambaDomain.getText(), jtfSambaIP.getText(), jtfSambaDir.getText(), //5
+                jtfSambaUser.getText(), new String(jpfSamba.getPassword()), 
+                jcbMinuti.getSelectedItem().toString(), jcbTimeout.getSelectedItem().toString(), //9
+                jcbDestination.isSelected(), jcbRunIconized.isSelected(), 
+                jtfRssItasa.getText(), jtfRssMyItasa.getText(), jtfItasaUser.getText(), //14
                 new String(jpfItasa.getPassword()), jrbDownAuto.isSelected(),
-                jcbDownloadMyitasaStartup.isSelected(), jtfRssSubsf.getText(), 
-                jtfRssTv24.getText(), jtfDestTorrent.getText(), jtfMailTo.getText(),
-                jtfMailSmtp.getText(), jcbPaneLog.isSelected(), 
+                jcbDownloadMyitasaStartup.isSelected(), jtfRssSubsf.getText(), //18
+                jtfRssTv24.getText(), jtfDestTorrent.getText(), jtfMailTo.getText(), 
+                jtfMailSmtp.getText(), jcbPaneLog.isSelected(), //23
                 jcbPaneSearchSubItasa.isSelected(), jcbPaneSetting.isSelected(), 
-                jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected(), 
+                jcbPaneSubDest.isSelected(), jcbPaneReminder.isSelected(), //27
                 jcbReminder.isSelected(), jtfGoogleUser.getText(), 
-                new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), 
+                new String(jpfGoogle.getPassword()), jtfGoogleCalendar.getText(), //31
                 jcbPaneTorrent.isSelected(), jcbPaneCalendar.isSelected(), 
-                jcbPaneShow.isSelected(), jcbItasaBlog.isSelected(), 
+                jcbPaneShow.isSelected(), jcbItasaBlog.isSelected(), //35
                 jcbPaneBlog.isSelected(), jcbItasaPM.isSelected(), 
-                jcbPaneCalendarDay.isSelected(), jcbCalendarDay.isSelected(), jcbPaneIrc.isSelected(),
+                jcbPaneCalendarDay.isSelected(), jcbCalendarDay.isSelected(), jcbPaneIrc.isSelected(), //40
                 jtfIrcNick.getText(), new String(jpfIrc.getPassword()), jcbItasaRss.isSelected(), 
                 jcbMyItasaRss.isSelected(), jcbItasaNews.isSelected(), 
                 jcbShowNoDuplicateAll.isSelected(), jcbShowNoDuplicateSingle.isSelected(),
                 jtfIrcServer.getText(), jcbTorrentEztv.isSelected(), jcbTorrentBtchat.isSelected(),
                 jcbTorrentKarmorra.isSelected(), jcbTorrentMyKarmorra.isSelected(), 
                 jtfTorrentMyKarmorra.getText(), jcbPaneItasaNews.isSelected(), 
-                jcbPaneItasaRss.isSelected(), jcbPaneSubsfactory.isSelected());
+                jcbPaneItasaRss.isSelected(), jcbPaneOtherSubs.isSelected());
             }
         });
         
@@ -386,8 +415,8 @@ public class paneSetting extends paneAbstract {
     private JXTaskPane initTaskPaneTorrent() {
         jcbTorrentEztv = new JCheckBox("Abilita feed magnet eztv");
         jcbTorrentBtchat = new JCheckBox("Abilita feed torrent bt-chat");
-        jcbTorrentKarmorra = new JCheckBox("Abilita feed torrent karmorra");
-        jcbTorrentMyKarmorra = new JCheckBox("Abilita feed torrent karmorra personalizzato");
+        jcbTorrentKarmorra = new JCheckBox("Abilita feed torrent showrss");
+        jcbTorrentMyKarmorra = new JCheckBox("Abilita feed torrent showrss personalizzato");
         jtfTorrentMyKarmorra = new JTextField(30);
         jtfTorrentMyKarmorra.addMouseListener(new MouseAdapter() {
             @Override
@@ -396,7 +425,6 @@ public class paneSetting extends paneAbstract {
                     menu.show(ev.getComponent(), ev.getX(), ev.getY());
             }
         });
-        //http://showrss.karmorra.info/feeds/all.rss
         jtfDestTorrent = new JTextField(25);
         JButton jbDestTorrent = new JButton("Seleziona directory");
         jbDestTorrent.setToolTipText("Seleziona la directory per i "
@@ -508,11 +536,11 @@ public class paneSetting extends paneAbstract {
         jcbPaneItasaNews = new JCheckBox("Itasa News");
         jcbPaneItasaRss = new JCheckBox("Itasa RSS");
         jcbPaneLog = new JCheckBox("Log");
+        jcbPaneOtherSubs = new JCheckBox("OtherSubs");
         jcbPaneReminder = new JCheckBox("Reminder");
         jcbPaneSearchSubItasa = new JCheckBox("Search Subtitle Itasa");
         jcbPaneSetting = new JCheckBox("Setting");
         jcbPaneShow = new JCheckBox("Show");
-        jcbPaneSubsfactory = new JCheckBox("Subsfactory");
         jcbPaneSubDest = new JCheckBox("Subtitle Destination");
         jcbPaneTorrent = new JCheckBox("Torrent");
         
@@ -527,11 +555,11 @@ public class paneSetting extends paneAbstract {
         task.add(jcbPaneItasaNews);
         task.add(jcbPaneItasaRss);
         task.add(jcbPaneLog);
+        task.add(jcbPaneOtherSubs);
         task.add(jcbPaneReminder);
         task.add(jcbPaneSearchSubItasa);
         task.add(jcbPaneSetting);
         task.add(jcbPaneShow);
-        task.add(jcbPaneSubsfactory);
         task.add(jcbPaneSubDest);
         task.add(jcbPaneTorrent);
         return task;
@@ -671,7 +699,7 @@ public class paneSetting extends paneAbstract {
         jcbPaneSetting.setSelected(prop.isEnablePaneSetting());
         jcbPaneShow.setSelected(prop.isEnablePaneShow());
         jcbPaneSubDest.setSelected(prop.isEnablePaneSubDestination());
-        jcbPaneSubsfactory.setSelected(prop.isEnablePaneOtherSubs());
+        jcbPaneOtherSubs.setSelected(prop.isEnablePaneOtherSubs());
         jcbPaneTorrent.setSelected(prop.isEnablePaneTorrent());
     }
 }

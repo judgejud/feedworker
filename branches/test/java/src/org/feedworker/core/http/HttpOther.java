@@ -54,8 +54,7 @@ public class HttpOther extends HttpAbstract{
     }
 
     @Override
-    public HttpEntity requestGetEntity(String link) throws IndexOutOfBoundsException, 
-                                                                    IOException {
+    public HttpEntity requestGetEntity(String link) throws IndexOutOfBoundsException, IOException {
         long lenght = -1;
         int temp = 0;
         while (lenght == -1) {

@@ -96,7 +96,6 @@ public class Kernel implements PropertyChangeListener {
     public final String OPERATION_PROGRESS_SHOW = "ProgressShow";
     public final String OPERATION_PROGRESS_INCREMENT = "ProgressIncrement";
     // PRIVATE FINAL VARIABLES
-    //private final String RSS_TORRENT_EZTV = "http://rss.thepiratebay.se/user/d17c6a45441ce0bc0c057f19057f95e1";
     private final String RSS_TORRENT_EZTV = "http://ezrss.it/feed/";
     private final String RSS_TORRENT_SHOWRSS = "http://showrss.info/feeds/all.rss";
     private final String RSS_TORRENT_BTCHAT = "http://rss.bt-chat.com/?cat=9";
@@ -168,15 +167,13 @@ public class Kernel implements PropertyChangeListener {
         DownloadThread dt = null;
         if (itasa && loginItasaHttp()){
             if (id){
-                String url = "http://www.italiansubs.net/index.php?option=com_remository&"
-                        + "Itemid=6&func=fileinfo&id=";
-                for (int i=0; i<als.size(); i++)
-                    als.set(i, url+als.get(i));
-            }
-            dt = new DownloadThread(mapRules, xmlReminder, als, httpItasa, false);
+                if (loginItasaAPI(prop.getItasaUsername(), prop.getItasaPassword()))
+                    dt = new DownloadThread(mapRules, xmlReminder, als, httpItasa, false, true, this.itasa, user.getAuthcode());
+            } else
+                dt = new DownloadThread(mapRules, xmlReminder, als, httpItasa, false, false, null, null);
         } else if (!itasa){
             HttpOther http = new HttpOther(Lang.stringToInt(prop.getHttpTimeout())*1000);
-            dt = new DownloadThread(mapRules, xmlReminder, als, http, false);
+            dt = new DownloadThread(mapRules, xmlReminder, als, http, false, false, null, null);
         } else if (httpItasa==null)
             printAlert("Non posso procedere al download per problemi di login ad itasa, "
                     + "controllare user e password");
@@ -1108,7 +1105,8 @@ public class Kernel implements PropertyChangeListener {
         boolean login = false;
         if (httpItasa==null){
             try {
-                httpItasa = new HttpItasa(Integer.parseInt(prop.getHttpTimeout())*1000);
+                int time = Integer.parseInt(prop.getHttpTimeout())*1000;
+                httpItasa = new HttpItasa(time);
                 if (httpItasa.testConnectItasa(prop.getItasaUsername(), prop.getItasaPassword())){
                     httpItasa.connectItasa(prop.getItasaUsername(), prop.getItasaPassword());
                     login = true;

@@ -49,11 +49,12 @@ public class HttpItasa extends HttpAbstract{
      */
     public void connectItasa(String user, String pwd) throws UnsupportedEncodingException,
                                             ClientProtocolException, IOException {
-        
+        client.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.BROWSER_COMPATIBILITY);
         response = client.execute(setPostItasa(user, pwd));
         entity = response.getEntity();
+        cookies = client.getCookieStore();
         consumeEntity();
-        getCookiesItasa();
+        //getCookiesItasa();
     } // end doPost
     
     /**
@@ -107,13 +108,8 @@ public class HttpItasa extends HttpAbstract{
             String url = readInputStreamURL(entity.getContent(), TAG_ITASA, 2);
             consumeEntity();
             if (url != null) {
-                get = new HttpGet(url);
-                client.setCookieStore(cookies);
-                response = client.execute(get);
-                entity = response.getEntity();
+                getDownload(url);
                 lenght = entity.getContentLength();
-                if (lenght != -1)
-                        getAttachement(response.getAllHeaders(), ADDRESS_ITASA);
                 get = null;
                 response = null;
                 if (temp == 26)
@@ -127,13 +123,21 @@ public class HttpItasa extends HttpAbstract{
     }
 
     private void getCookiesItasa() throws IOException {
-        client.getParams().setParameter(ClientPNames.COOKIE_POLICY,
-                CookiePolicy.BROWSER_COMPATIBILITY);
         get = new HttpGet(ADDRESS_ITASA);
         response = client.execute(get);
         entity = response.getEntity();
         consumeEntity();
         cookies = client.getCookieStore();
+    }
+    
+    public HttpEntity getDownload(String url) throws IOException{
+        get = new HttpGet(url);
+        client.setCookieStore(cookies);
+        response = client.execute(get);
+        entity = response.getEntity();
+        if (entity.getContentLength() != -1)
+            getAttachement(response.getAllHeaders(), ADDRESS_ITASA);
+        return entity;
     }
 
     private String readInputStreamURL(InputStream is, String tag, int start)
