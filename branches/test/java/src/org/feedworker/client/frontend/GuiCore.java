@@ -50,7 +50,8 @@ import org.jfacility.javax.swing.Swing;
  */
 public class GuiCore {
     private final String ENABLE_BUTTON = "enableButton";
-    private final String IMAGE_FEED_NEW = "feed2.png";
+    private final String IMAGE_FEED_NEW = "rss_feed.png";
+    private final String IMAGE_FEED_MYITASA = "rss_myitasa.png";
     private final String IMAGE_FEED_NORMAL = "ApplicationIcon.png";
     //private final String IMAGE_FEED_NORMAL = "feed1.png";
     private final String IMAGE_ADD = "add.png";
@@ -868,6 +869,10 @@ public class GuiCore {
     
     Image getIconFeedNew() {
         return Common.getResourceIcon(IMAGE_FEED_NEW);
+    }
+    
+    Image getIconFeedMyItasa() {
+        return Common.getResourceIcon(IMAGE_FEED_MYITASA);
     }
     
     Image getIconFeedNormal() {
