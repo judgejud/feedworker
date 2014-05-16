@@ -18,7 +18,7 @@ public class EnhancedSystemTray {
 
     private static EnhancedSystemTray systemTray = null;
     private Window owner;
-    private Image iconNormal, iconNew;
+    private Image iconNormal, iconNew, iconMyItasa;
     private TrayIcon trayIcon;
     private Mediator proxy = Mediator.getIstance();
     private int itasa, myitasa, eztv, btchat, subsf, blog, mysubsf, itasaPM, itasaNews;
@@ -28,6 +28,7 @@ public class EnhancedSystemTray {
         this.owner = owner;
         iconNormal = GuiCore.getInstance().getIconFeedNormal();
         iconNew = GuiCore.getInstance().getIconFeedNew();
+        iconMyItasa = GuiCore.getInstance().getIconFeedMyItasa();
         trayIcon = new TrayIcon(owner, iconNormal);
         trayIcon.setJPopuMenu(createJPopupMenu());
         trayIcon.setToolTip(" FeedWorker ");
@@ -141,6 +142,9 @@ public class EnhancedSystemTray {
             msg += "Nuovi feed btchat: " + btchat + "\n";
         trayIcon.displayMessage("FeedWorker", msg, MessageType.INFO);
         trayIcon.setToolTip(msg);
-        trayIcon.setImage(iconNew);
+        if (myitasa>0)
+            trayIcon.setImage(iconMyItasa);
+        else
+            trayIcon.setImage(iconNew);
     }
 }
