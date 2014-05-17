@@ -38,7 +38,8 @@ public class ApplicationSettings {
             itasaPM, calendarDay, enablePaneCalendarDay, enablePaneIrc, itasaNews, 
             showNoDuplicateAll, showNoDuplicateSingle, torrentEztvOption, torrentBtchatOption,
             torrentKarmorraOption, torrentMyKarmorraOption, enablePaneItasaNews, 
-            enablePaneItasaRSS, enablePaneOtherSubs;
+            enablePaneItasaRSS, enablePaneOtherSubs, enableItasaRss, enableMyItasaRss, 
+            enableSubsfactoryRSS, enableTv24RSS;
     private Properties properties;
     private DesEncrypter propertyEncrypter, valueEncrypter;
     private ManageException error = ManageException.getIstance();
@@ -68,7 +69,9 @@ public class ApplicationSettings {
                             getBooleanDecryptedValue("ENABLE_ADVANCED_DOWNLOAD"));
                 setEnableIconizedRun(getBooleanDecryptedValue("ENABLE_ICONIZED_RUN"));
                 //ITASA
+                setItasaRss(getBooleanDecryptedValue("ENABLE_ITASA_RSS"));
                 setItasaFeedURL(getDecryptedValue("ITASA_FEED_URL"));
+                setMyItasaRss(getBooleanDecryptedValue("ENABLE_MYITASA_RSS"));
                 setMyitasaFeedURL(getDecryptedValue("MYITASA_FEED_URL"));
                 setItasaUsername(getDecryptedValue("ITASA_USERNAME"));
                 setItasaPassword(getDecryptedValue("ITASA_PASSWORD"));
@@ -81,6 +84,8 @@ public class ApplicationSettings {
                 setItasaNews(getBooleanDecryptedValue("ITASA_NEWS"));
                 setCalendarDay(getBooleanDecryptedValue("CALENDAR_DAY"));
                 //OTHERSUBS
+                setEnableSubsfactoryRSS(getBooleanDecryptedValue("ENABLE_SUBSFACTORY_RSS"));
+                setEnableTv24RSS(getBooleanDecryptedValue("ENABLE_TV24_RSS"));
                 setOtherSubsOption(getBooleanDecryptedValue("OTHERSUBS_OPTION"));
                 setSubsfactoryFeedURL(getDecryptedValue("SUBSFACTORY_FEED_URL"));
                 setTv24FeedUrl(getDecryptedValue("TV24_FEED_URL"));
@@ -202,7 +207,9 @@ public class ApplicationSettings {
 
     public void writeItasaSettings() {
         try {
+            propertiesCrypting("ENABLE_ITASA_RSS", enableItasaRss);
             propertiesCrypting("ITASA_FEED_URL", itasaFeedURL);
+            propertiesCrypting("ENABLE_MYITASA_RSS", enableMyItasaRss);
             propertiesCrypting("MYITASA_FEED_URL", myitasaFeedURL);
             propertiesCrypting("ITASA_USERNAME", itasaUsername);
             propertiesCrypting("ITASA_PASSWORD", itasaPassword);
@@ -222,6 +229,8 @@ public class ApplicationSettings {
     public void writeOtherSubsSettings() {
         try {
             propertiesCrypting("OTHERSUBS_OPTION", otherSubsOption);
+            propertiesCrypting("ENABLE_SUBSFACTORY_RSS", enableSubsfactoryRSS);
+            propertiesCrypting("ENABLE_TV24_RSS", enableTv24RSS);
             propertiesCrypting("SUBSFACTORY_FEED_URL", subsfactoryFeedURL);
             propertiesCrypting("TV24_FEED_URL", tv24FeedUrl);
         } catch (GeneralSecurityException e) {
@@ -636,7 +645,7 @@ public class ApplicationSettings {
         this.autoLoadDownloadMyItasa = flag;
     }
 
-    public String getTv24FeedUrl() {
+    public String getTv24FeedURL() {
         return tv24FeedUrl;
     }
 
@@ -906,5 +915,37 @@ public class ApplicationSettings {
 
     public void setEnablePaneOtherSubs(boolean enablePane) {
         this.enablePaneOtherSubs = enablePane;
+    }
+
+    public boolean isEnableItasaRss() {
+        return enableItasaRss;
+    }
+
+    public void setItasaRss(boolean enableItasaRss) {
+        this.enableItasaRss = enableItasaRss;
+    }
+
+    public boolean isEnableMyItasaRss() {
+        return enableMyItasaRss;
+    }
+
+    public void setMyItasaRss(boolean enableMyItasaRss) {
+        this.enableMyItasaRss = enableMyItasaRss;
+    }
+
+    public boolean isEnableSubsfactoryRSS() {
+        return enableSubsfactoryRSS;
+    }
+
+    public void setEnableSubsfactoryRSS(boolean enableSubsfactoryRSS) {
+        this.enableSubsfactoryRSS = enableSubsfactoryRSS;
+    }
+
+    public boolean isEnableTv24RSS() {
+        return enableTv24RSS;
+    }
+
+    public void setEnableTv24RSS(boolean enableTv24RSS) {
+        this.enableTv24RSS = enableTv24RSS;
     }
 }// end class
