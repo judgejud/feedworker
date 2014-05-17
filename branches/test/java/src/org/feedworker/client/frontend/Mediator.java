@@ -55,7 +55,7 @@ public class Mediator {
         Application app = FeedWorkerClient.getApplication();
         return app.getName() + " revision "
                 //+ app.getBuildNumber() + " by "
-                + "512 by " 
+                + "514 by " 
                 + app.getAuthor();
     }
     
@@ -168,17 +168,20 @@ public class Mediator {
      */
     boolean testRss(String link, String from) throws MalformedURLException {
         boolean passed = false;
-        new URL(link);
-        try {
-            new RssParser(link);
-            passed = true;
-        } catch (FeedException ex) {
-            error.launch(ex, getClass(), from);
-        } catch (IllegalArgumentException ex) {
-            error.launch(ex, getClass());
-        } catch (IOException ex) {
-            error.launch(ex, getClass(), null);
-        }
+        if (link.startsWith("http://") || link.startsWith("www.")){
+            new URL(link);
+            try {
+                new RssParser(link);
+                passed = true;
+            } catch (FeedException ex) {
+                error.launch(ex, getClass(), from);
+            } catch (IllegalArgumentException ex) {
+                error.launch(ex, getClass());
+            } catch (IOException ex) {
+                error.launch(ex, getClass(), null);
+            }
+        } else
+            printAlert("gli url devono cominciare con http:// o www. rivedere il protocollo usato");
         return passed;
     }
 

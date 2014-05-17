@@ -187,13 +187,11 @@ public class GuiCore {
 
     /** Copia nella clipboard i link torrent selezionati
      *
-     * @param jt1 tabella1
-     * @param jt2 tabella2
+     * @param tables
      */
     public void copyLinkTorrent(JTable[] tables) {
         String text = "";
-        for (int i=0; i<tables.length; i++){
-            JTable jt = tables[i];
+        for (JTable jt : tables) {
             for (int j = 0; j < jt.getRowCount(); j++) {
                 if (jt.getValueAt(j, 3) == Boolean.TRUE) {
                     text += jt.getValueAt(j, 0).toString() + "\n";
@@ -363,8 +361,8 @@ public class GuiCore {
     public boolean saveSettings(boolean dirLocal, String destSub, String sambaDomain,
             String sambaIP, String sambaDir, String sambaUser, String sambaPwd,
             String time, String timeout,
-            boolean advancedDownload, boolean runIconized, String itasa,
-            String myitasa, String itasaUser, String itasaPwd, boolean autoMyitasa,
+            boolean advancedDownload, boolean runIconized, String itasaUrl,
+            String myitasaUrl, String itasaUser, String itasaPwd, boolean autoMyitasa,
             boolean autoLoadMyItasa, String subsf, String tv24, String torrentDest,
             String mailTO,  String smtp, boolean paneLog, boolean paneSearch, 
             boolean paneSetting, boolean paneSubDest, boolean paneReminder, 
@@ -384,11 +382,24 @@ public class GuiCore {
                 sambaUser, sambaPwd)) {
             save = true;
             if (save)
-                save = checkSaveItasa(itasaRss, itasa, myItasaRss, myitasa, itasaUser, 
+                save = checkSaveItasa(itasaRss, itasaUrl, myItasaRss, myitasaUrl, itasaUser, 
                                         itasaPwd, itasapm);
             if (prop.isOtherSubsOption() && save)
                 save = checkSaveOtherSubs(subsf, tv24);
-            if ((eztv || btchat || karmorra || mykarmorra) && save && !Lang.verifyTextNotNull(torrentDest))
+            if (save && mykarmorra){
+                if (Lang.verifyTextNotNull(urlMyKarmorra))
+                    try {
+                        save = proxy.testRss(urlMyKarmorra.toLowerCase(), "myKarmorra");
+                    } catch (MalformedURLException ex) {
+                        proxy.getError().launch(ex, getClass(), "myKarmorra");
+                        save = false;
+                    }
+                else {
+                    proxy.printAlert("Immettere l'url per il feed myKarmorra");
+                    save = false;
+                }
+            } 
+            if (save && (eztv || btchat || karmorra || mykarmorra) && !Lang.verifyTextNotNull(torrentDest))
                 proxy.printAlert("Avviso: Non immettendo la Destinazione dei Torrent non potrai "
                     + "scaricare .torrent");
         }
@@ -396,7 +407,7 @@ public class GuiCore {
             setPropGlobal(dirLocal, destSub, sambaDomain, sambaIP, sambaDir,
                     sambaUser, sambaPwd, time, timeout, 
                     advancedDownload, runIconized, reminder);
-            setPropItasa(itasa, myitasa, itasaUser, itasaPwd, autoMyitasa, autoLoadMyItasa, 
+            setPropItasa(itasaUrl, myitasaUrl, itasaUser, itasaPwd, autoMyitasa, autoLoadMyItasa, 
                         blog, itasapm, calendarDay, itasaRss, myItasaRss, itasaNews);
             setPropOtherSub(subsf, tv24);
             setPropTorrent(torrentDest, eztv, btchat, karmorra, mykarmorra, urlMyKarmorra);
@@ -531,6 +542,7 @@ public class GuiCore {
         prop.setItasaPM(pm);
         prop.setCalendarDay(cal);
         prop.setItasaNews(news);
+        
         
     }
     

@@ -30,7 +30,7 @@ public class paneSetting extends paneAbstract {
             jcbTorrentMyKarmorra, jcbPaneBlog, jcbItasaBlog, jcbItasaPM, 
             jcbPaneCalendarDay, jcbCalendarDay, jcbPaneIrc, jcbItasaRss, jcbMyItasaRss,
             jcbItasaNews, jcbShowNoDuplicateAll, jcbShowNoDuplicateSingle, jcbPaneItasaNews,
-            jcbPaneItasaRss, jcbPaneOtherSubs;
+            jcbPaneItasaRss, jcbPaneOtherSubs, jcbSubsfactory, jcbTv24;
     private JButton jbDestSub;
     private JTextField jtfDestSub, jtfSambaDomain, jtfSambaIP, jtfSambaDir,
             jtfSambaUser, jtfRssItasa, jtfRssMyItasa, jtfRssSubsf, 
@@ -290,7 +290,17 @@ public class paneSetting extends paneAbstract {
     private JXTaskPane initTaskPaneItalianSubs() {        
         jcbItasaNews = new JCheckBox("Abilita news Itasa");
         jcbItasaRss = new JCheckBox("Abilita rss Itasa");
+        jcbItasaRss.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jcbItasaRss.isSelected())
+                    jtfRssItasa.setEditable(true);
+                else
+                    jtfRssItasa.setEditable(false);
+            }
+        });
         jtfRssItasa = new JTextField(25);
+        jtfRssItasa.setToolTipText("Immettere l'url per il feed rss Itasa");
         jtfRssItasa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent ev) {
@@ -298,9 +308,16 @@ public class paneSetting extends paneAbstract {
                     menu.show(ev.getComponent(), ev.getX(), ev.getY());
             }
         });
-            
-        jtfRssItasa.setToolTipText("Immettere l'url per il feed rss Itasa");
         jcbMyItasaRss = new JCheckBox("Abilita rss myItasa");
+        jcbMyItasaRss.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jcbMyItasaRss.isSelected())
+                    jtfRssMyItasa.setEditable(true);
+                else
+                    jtfRssMyItasa.setEditable(false);
+            }
+        });
         jtfRssMyItasa = new JTextField(25);
         jtfRssMyItasa.addMouseListener(new MouseAdapter() {
             @Override
@@ -417,6 +434,15 @@ public class paneSetting extends paneAbstract {
         jcbTorrentBtchat = new JCheckBox("Abilita feed torrent bt-chat");
         jcbTorrentKarmorra = new JCheckBox("Abilita feed torrent showrss");
         jcbTorrentMyKarmorra = new JCheckBox("Abilita feed torrent showrss personalizzato");
+        jcbTorrentMyKarmorra.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jcbTorrentMyKarmorra.isSelected())
+                    jtfTorrentMyKarmorra.setEditable(true);
+                else
+                    jtfTorrentMyKarmorra.setEditable(false);
+            }
+        });
         jtfTorrentMyKarmorra = new JTextField(30);
         jtfTorrentMyKarmorra.addMouseListener(new MouseAdapter() {
             @Override
@@ -455,17 +481,37 @@ public class paneSetting extends paneAbstract {
 
     /** inizializzo il pannello settaggi subsfactory */
     private JXTaskPane initTaskPaneOtherSubs() {
+        jcbSubsfactory = new JCheckBox("Abilita RSS Subsfactory");
+        jcbSubsfactory.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jcbSubsfactory.isSelected())
+                    jtfRssSubsf.setEditable(true);
+                else
+                    jtfRssSubsf.setEditable(false);
+            }
+        });
+        jcbTv24 = new JCheckBox("Abilita RSS Tv24");
+        jcbTv24.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (jcbTv24.isSelected())
+                    jtfRssTv24.setEditable(true);
+                else
+                    jtfRssTv24.setEditable(false);
+            }
+        });
         jtfRssSubsf = new JTextField(25);
+        jtfRssSubsf.setToolTipText("Immettere l'url per il feed Tv24");
         jtfRssTv24 = new JTextField(25);
+        jtfRssSubsf.setToolTipText("Immettere l'url per il feed Subsfactory");
         
         JXTaskPane task = new JXTaskPane();
         task.setTitle("OtherSubs");
         task.setCollapsed(true);
-        
-        task.add(new JLabel("Indirizzo RSS Subsfactory"));
+        task.add(jcbSubsfactory);
         task.add(jtfRssSubsf);
-        
-        task.add(new JLabel("Indirizzo RSS Tv24"));
+        task.add(jcbTv24);
         task.add(jtfRssTv24);
         return task;
     }
@@ -628,8 +674,14 @@ public class paneSetting extends paneAbstract {
 
     private void settingsItasaValue() {
         jcbItasaNews.setSelected(prop.isItasaNews());
+        jcbItasaRss.setSelected(prop.isEnableItasaRss());
         jtfRssItasa.setText(prop.getItasaFeedURL());
+        if (!jcbItasaRss.isSelected())
+            jtfRssItasa.setEditable(false);
+        jcbMyItasaRss.setSelected(prop.isEnableMyItasaRss());
         jtfRssMyItasa.setText(prop.getMyitasaFeedURL());
+        if (!jcbMyItasaRss.isSelected())
+            jtfRssMyItasa.setEditable(false);
         jtfItasaUser.setText(prop.getItasaUsername());
         jpfItasa.setText(prop.getItasaPassword());
         jrbDownAuto.setSelected(prop.isAutoDownloadMyItasa());
@@ -660,6 +712,8 @@ public class paneSetting extends paneAbstract {
         jcbTorrentMyKarmorra.setSelected(prop.isTorrentMyKarmorraOption());
         jtfTorrentMyKarmorra.setText(prop.getTorrentUrlMyKarmorra());
         jtfDestTorrent.setText(prop.getTorrentDestinationFolder());
+        if (!jcbTorrentMyKarmorra.isSelected())
+            jtfTorrentMyKarmorra.setEditable(false);
     }
     
     private void settingsIrcValue() {
@@ -674,8 +728,14 @@ public class paneSetting extends paneAbstract {
     }
 
     private void settingsOtherSubsValue() {
+        jcbSubsfactory.setSelected(prop.isEnableTv24RSS());
+        if (!jcbSubsfactory.isSelected())
+            jtfRssSubsf.setEditable(false);
+        jcbTv24.setSelected(prop.isEnableTv24RSS());
+        if (!jcbTv24.isSelected())
+            jtfRssTv24.setEditable(false);
         jtfRssSubsf.setText(prop.getSubsfactoryFeedURL());
-        jtfRssTv24.setText(prop.getTv24FeedUrl());
+        jtfRssTv24.setText(prop.getTv24FeedURL());
     }
    
     private void settingsAlertValue(){

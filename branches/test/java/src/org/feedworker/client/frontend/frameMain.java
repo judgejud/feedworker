@@ -388,8 +388,8 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
             }
         });
         
-        JMenuItem jmiWindowSubsfactory = new JMenuItem(" Subsfactory ");
-        jmiWindowSubsfactory.addActionListener(new ActionListener()  {
+        JMenuItem jmiWindowOtherSubs = new JMenuItem(" Other Subs ");
+        jmiWindowOtherSubs.addActionListener(new ActionListener()  {
             @Override
             public void actionPerformed(ActionEvent e) {
                 checkAddTab(jpOtherSubs, true, null);
@@ -403,12 +403,12 @@ public class frameMain extends JXFrame implements WindowListener, FrameEventList
         jmWindowTab.add(jmiWindowItasaNews);
         jmWindowTab.add(jmiWindowItasaRss);
         jmWindowTab.add(jmiWindowLog);
+        jmWindowTab.add(jmiWindowOtherSubs);
         jmWindowTab.add(jmiWindowReminder);
         jmWindowTab.add(jmiWindowSearch);
         jmWindowTab.add(jmiWindowSetting);
         jmWindowTab.add(jmiWindowShow);
         jmWindowTab.add(jmiWindowSubDest);
-        jmWindowTab.add(jmiWindowSubsfactory);
         jmWindowTab.add(jmiWindowTorrent);
         
         return jmWindowTab;

@@ -1375,9 +1375,9 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
         }
-        if (Lang.verifyTextNotNull(prop.getTv24FeedUrl())) {
+        if (Lang.verifyTextNotNull(prop.getTv24FeedURL())) {
             RssThread rt = new RssThread(lastTv24, 
-                                        prop.getTv24FeedUrl(), TV24);
+                                        prop.getTv24FeedURL(), TV24);
             Thread t = new Thread(rt, TV24);
             t.start();
             try {
