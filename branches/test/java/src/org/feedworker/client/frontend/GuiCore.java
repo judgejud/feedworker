@@ -373,7 +373,8 @@ public class GuiCore {
             boolean myItasaRss, boolean itasaNews, boolean noDuplicateAll, 
             boolean noDuplicateSingle, String ircServer, boolean eztv, boolean btchat,
             boolean karmorra, boolean mykarmorra, String urlMyKarmorra, boolean paneITasaNews, 
-            boolean paneITasaRss, boolean paneSubsfactory) {
+            boolean paneITasaRss, boolean paneSubsfactory, boolean subsfactoryRss, 
+            boolean tv24Rss) {
                 
         String oldMin = prop.getRefreshInterval();
         boolean first = prop.isApplicationFirstTimeUsed();
@@ -385,7 +386,7 @@ public class GuiCore {
                 save = checkSaveItasa(itasaRss, itasaUrl, myItasaRss, myitasaUrl, itasaUser, 
                                         itasaPwd, itasapm);
             if (prop.isOtherSubsOption() && save)
-                save = checkSaveOtherSubs(subsf, tv24);
+                save = checkSaveOtherSubs(subsfactoryRss, subsf, tv24Rss, tv24);
             if (save && mykarmorra){
                 if (Lang.verifyTextNotNull(urlMyKarmorra))
                     try {
@@ -409,7 +410,7 @@ public class GuiCore {
                     advancedDownload, runIconized, reminder);
             setPropItasa(itasaUrl, myitasaUrl, itasaUser, itasaPwd, autoMyitasa, autoLoadMyItasa, 
                         blog, itasapm, calendarDay, itasaRss, myItasaRss, itasaNews);
-            setPropOtherSub(subsf, tv24);
+            setPropOtherSub(subsfactoryRss, subsf, tv24Rss, tv24);
             setPropTorrent(torrentDest, eztv, btchat, karmorra, mykarmorra, urlMyKarmorra);
             setPropAdvisor(mailTO, smtp, googleUser, googlePwd, googleCalendar);
             setPropVisiblePane(paneLog, paneSearch, paneSetting, paneSubDest, 
@@ -542,12 +543,14 @@ public class GuiCore {
         prop.setItasaPM(pm);
         prop.setCalendarDay(cal);
         prop.setItasaNews(news);
-        
-        
+        prop.setItasaRss(itasaRss);
+        prop.setMyItasaRss(myItasaRss);
     }
     
-    private void setPropOtherSub(String subsf, String tv24){
+    private void setPropOtherSub(boolean rssSub, String subsf, boolean rssTv, String tv24){
+        prop.setEnableSubsfactoryRSS(rssSub);
         prop.setSubsfactoryFeedURL(subsf);
+        prop.setEnableTv24RSS(rssTv);
         prop.setTv24FeedUrl(tv24);
     }
     
@@ -630,17 +633,17 @@ public class GuiCore {
      *
      * @return booleano che le impostazioni sono ok
      */
-    private boolean checkSaveOtherSubs(String subsf, String tv24) {
+    private boolean checkSaveOtherSubs(boolean rssSubs, String subsf, boolean rssTv, String tv24) {
         boolean check = true;
         try {
-            if (Lang.verifyTextNotNull(subsf))
+            if (rssSubs && Lang.verifyTextNotNull(subsf))
                 check = proxy.testRss(subsf, "subsfactory");
         } catch (MalformedURLException e) {
             proxy.getError().launch(e, getClass(), "subsfactory");
             check = false;
         }
         try {
-            if (check && Lang.verifyTextNotNull(tv24))
+            if (check && rssTv && Lang.verifyTextNotNull(tv24))
                 check = proxy.testRss(tv24, "tv24");
         } catch (MalformedURLException e) {
             proxy.getError().launch(e, getClass(), "tv24");

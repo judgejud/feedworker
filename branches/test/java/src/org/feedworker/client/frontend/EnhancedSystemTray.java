@@ -21,7 +21,8 @@ public class EnhancedSystemTray {
     private Image iconNormal, iconNew, iconMyItasa;
     private TrayIcon trayIcon;
     private Mediator proxy = Mediator.getIstance();
-    private int itasa, myitasa, eztv, btchat, subsf, blog, mysubsf, itasaPM, itasaNews;
+    private int itasa, myitasa, eztv, btchat, subsf, blog, tv24, itasaPM, itasaNews,
+            karmorra, mykarmorra;
     private String msg;
 
     private EnhancedSystemTray(Window owner) {
@@ -46,9 +47,11 @@ public class EnhancedSystemTray {
             eztv = 0;
             btchat = 0;
             subsf = 0;
-            mysubsf = 0;
+            tv24 = 0;
             itasaPM = 0;
             itasaNews = 0;
+            karmorra = 0;
+            mykarmorra = 0;
         } catch (AWTException e) {
             proxy.printError(e);
         }
@@ -94,32 +97,39 @@ public class EnhancedSystemTray {
 
     public void notifyIncomingFeed(String _msg) {
         String[] split = _msg.split(":");
+        int i=0;
         try {
-            itasa += Integer.parseInt(split[0]);
+            itasa += Integer.parseInt(split[i++]);
         } catch (NumberFormatException npe){}
         try {
-            myitasa += Integer.parseInt(split[1]);
+            myitasa += Integer.parseInt(split[i++]);
         } catch (NumberFormatException npe){}
         try {
-            blog += Integer.parseInt(split[2]);
+            blog += Integer.parseInt(split[i++]);
         } catch (NumberFormatException npe){}
         try {
-            eztv += Integer.parseInt(split[3]);
+            eztv += Integer.parseInt(split[i++]);
         } catch (NumberFormatException npe){}
         try {
-            btchat += Integer.parseInt(split[4]);
+            btchat += Integer.parseInt(split[i++]);
         } catch (NumberFormatException npe){}
         try {
-            subsf += Integer.parseInt(split[5]);
+            subsf += Integer.parseInt(split[i++]);
         } catch (NumberFormatException npe){}
         try {
-            mysubsf += Integer.parseInt(split[6]);
+            tv24 += Integer.parseInt(split[i++]);
         } catch (NumberFormatException npe){}
         try {
-            itasaPM = Integer.parseInt(split[7]);
+            itasaPM = Integer.parseInt(split[i++]);
         } catch (NumberFormatException npe){}
         try {
-            itasaNews += Integer.parseInt(split[8]);
+            itasaNews += Integer.parseInt(split[i++]);
+        } catch (NumberFormatException npe){}
+        try {
+            karmorra += Integer.parseInt(split[i++]);
+        } catch (NumberFormatException npe){}
+        try {
+            mykarmorra += Integer.parseInt(split[i++]);
         } catch (NumberFormatException npe){}
         msg = "";
         if (itasa>0)
@@ -134,12 +144,16 @@ public class EnhancedSystemTray {
             msg += "Nuovi Messaggi privati: " + itasaPM + "\n";
         if (subsf>0)
             msg += "Nuovi feed subsfactory: " + subsf + "\n";
-        if (mysubsf>0)
-            msg += "Nuovi feed mySubsfactory: " + mysubsf + "\n";
+        if (tv24>0)
+            msg += "Nuovi feed tv24: " + tv24 + "\n";
         if (eztv>0)
             msg += "Nuovi feed eztv: " + eztv + "\n";
         if (btchat>0)
             msg += "Nuovi feed btchat: " + btchat + "\n";
+        if (karmorra>0)
+            msg += "Nuovi feed karmorra: " + karmorra + "\n";
+        if (mykarmorra>0)
+            msg += "Nuovi feed mykarmorra: " + mykarmorra + "\n";
         trayIcon.displayMessage("FeedWorker", msg, MessageType.INFO);
         trayIcon.setToolTip(msg);
         if (myitasa>0)

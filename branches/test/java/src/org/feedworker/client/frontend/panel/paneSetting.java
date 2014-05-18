@@ -160,7 +160,8 @@ public class paneSetting extends paneAbstract {
                 jtfIrcServer.getText(), jcbTorrentEztv.isSelected(), jcbTorrentBtchat.isSelected(),
                 jcbTorrentKarmorra.isSelected(), jcbTorrentMyKarmorra.isSelected(), 
                 jtfTorrentMyKarmorra.getText(), jcbPaneItasaNews.isSelected(), 
-                jcbPaneItasaRss.isSelected(), jcbPaneOtherSubs.isSelected());
+                jcbPaneItasaRss.isSelected(), jcbPaneOtherSubs.isSelected(), 
+                jcbSubsfactory.isSelected(), jcbTv24.isSelected());
             }
         });
         
@@ -503,8 +504,22 @@ public class paneSetting extends paneAbstract {
         });
         jtfRssSubsf = new JTextField(25);
         jtfRssSubsf.setToolTipText("Immettere l'url per il feed Tv24");
+        jtfRssSubsf.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent ev) {
+                if (ev.isPopupTrigger())
+                    menu.show(ev.getComponent(), ev.getX(), ev.getY());
+            }
+        });
         jtfRssTv24 = new JTextField(25);
-        jtfRssSubsf.setToolTipText("Immettere l'url per il feed Subsfactory");
+        jtfRssTv24.setToolTipText("Immettere l'url per il feed Tv24");
+        jtfRssTv24.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent ev) {
+                if (ev.isPopupTrigger())
+                    menu.show(ev.getComponent(), ev.getX(), ev.getY());
+            }
+        });
         
         JXTaskPane task = new JXTaskPane();
         task.setTitle("OtherSubs");

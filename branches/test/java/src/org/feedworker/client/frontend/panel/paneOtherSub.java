@@ -34,7 +34,9 @@ public class paneOtherSub extends paneAbstract {
     @Override
     void initializePanel() {
         jtSubsf = new tableRss(proxy.getSubsf());
+        jtSubsf.setTitleDescriptionColumn("Sottotitolo Subsfactory");
         jtTv24 = new tableRss(proxy.getTv24());
+        jtTv24.setTitleDescriptionColumn("Sottotitolo Tv24");
 
         JScrollPane jScrollTable1 = new JScrollPane(jtSubsf);
         jScrollTable1.setMinimumSize(TABLE_SCROLL_SIZE);
