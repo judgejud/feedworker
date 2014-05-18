@@ -1243,7 +1243,8 @@ public class Kernel implements PropertyChangeListener {
                     }
                     String msg = countItasa + ":" + countMyitasa + ":" + countBlog + 
                             ":" + countEztv + ":" + countBtchat + ":" + countSubsf + 
-                            ":" + countTv24 + ":" + countPM + ":" + countNews;
+                            ":" + countTv24 + ":" + countPM + ":" + countNews + ":" +
+                            countKarmorra + ":" + countMyKarmorra;
                     ManageListener.fireFrameEvent(this, icontray, msg);
                 }// end run
             }, delay, delay);
@@ -1262,7 +1263,7 @@ public class Kernel implements PropertyChangeListener {
         countItasa = 0;
         countMyitasa = 0;
         
-        if (Lang.verifyTextNotNull(prop.getItasaFeedURL())) {
+        if (prop.isEnableItasaRss()) {
             RssThread rt = new RssThread(lastItasa, prop.getItasaFeedURL(), ITASA);
             Thread t = new Thread(rt, ITASA);
             t.start();
@@ -1279,7 +1280,7 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
         }
-        if (Lang.verifyTextNotNull(prop.getMyitasaFeedURL())) {
+        if (prop.isEnableMyItasaRss()) {
             if (first && prop.isAutoLoadDownloadMyItasa())
                 lastMyItasa = prop.getLastDateTimeRefresh();
             RssThread rt;
@@ -1358,7 +1359,7 @@ public class Kernel implements PropertyChangeListener {
         boolean status = false;
         countSubsf = 0;
         countTv24 = 0;
-        if (Lang.verifyTextNotNull(prop.getSubsfactoryFeedURL())) {
+        if (prop.isEnableSubsfactoryRSS()) {
             RssThread rt = new RssThread(lastSubsf, prop.getSubsfactoryFeedURL(), SUBSF);
             Thread t = new Thread(rt, SUBSF);
             t.start();
@@ -1375,7 +1376,7 @@ public class Kernel implements PropertyChangeListener {
                 }
             }
         }
-        if (Lang.verifyTextNotNull(prop.getTv24FeedURL())) {
+        if (prop.isEnableTv24RSS()) {
             RssThread rt = new RssThread(lastTv24, 
                                         prop.getTv24FeedURL(), TV24);
             Thread t = new Thread(rt, TV24);
